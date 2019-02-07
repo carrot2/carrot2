@@ -12,11 +12,7 @@
 
 package org.carrot2.dcs;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -159,7 +155,7 @@ public final class RestProcessorServlet extends HttpServlet
             public void handle(HttpServletRequest request, HttpServletResponse response) throws Exception
             {
                 response.setContentType(MIME_JSON_UTF8);
-                EXAMPLE_OUTPUT.serializeJson(response.getWriter(), null, true, true, true);
+                serializeJson(response.getWriter(), EXAMPLE_OUTPUT, null, false);
             }
         });
         put("status", new CommandAction() {
@@ -556,8 +552,7 @@ public final class RestProcessorServlet extends HttpServlet
             else if (OutputFormat.JSON.equals(requestModel.outputFormat))
             {
                 response.setContentType(MIME_JSON_UTF8);
-                result.serializeJson(response.getWriter(), requestModel.jsonCallback,
-                    !requestModel.clustersOnly, true);
+                serializeJson(response.getWriter(), result, requestModel.jsonCallback, requestModel.clustersOnly);
             }
             else
             {
@@ -726,5 +721,11 @@ public final class RestProcessorServlet extends HttpServlet
         }
     
         super.destroy();
+    }
+
+    private void serializeJson(PrintWriter writer, ProcessingResult exampleOutput, String jsonCallback, boolean clustersOnly)
+        throws IOException
+    {
+        throw new IOException("TODO: implement me.");
     }
 }

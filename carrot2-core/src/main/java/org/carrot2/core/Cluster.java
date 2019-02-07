@@ -37,11 +37,6 @@ import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Commit;
 import org.simpleframework.xml.core.Persist;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 /**
  * A cluster (group) of {@link Document}s. Each cluster has a human-readable label
  * consisting of one or more phrases, a list of documents it contains and a list of its
@@ -49,14 +44,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  * {@link #OTHER_TOPICS}. This class is <strong>not</strong> thread-safe.
  */
 @Root(name = "group", strict = false)
-@JsonAutoDetect(
-    creatorVisibility  = JsonAutoDetect.Visibility.NONE,
-    fieldVisibility    = JsonAutoDetect.Visibility.NONE,
-    getterVisibility   = JsonAutoDetect.Visibility.NONE,
-    isGetterVisibility = JsonAutoDetect.Visibility.NONE,
-    setterVisibility   = JsonAutoDetect.Visibility.NONE)
-@JsonSerialize()
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public final class Cluster
 {
     /**
@@ -207,7 +194,6 @@ public final class Cluster
      * 
      * @return phrases describing this cluster
      */
-    @JsonProperty
     public List<String> getPhrases()
     {
         return phrasesView;
@@ -226,7 +212,6 @@ public final class Cluster
     /**
      * For JSON serialization only.
      */
-    @JsonProperty("clusters")
     private List<Cluster> getSubclustersForSerialization()
     {
         return subclustersView.isEmpty() ? null : subclustersView;
@@ -424,7 +409,6 @@ public final class Cluster
     /**
      * Returns this cluster's {@value #SCORE} field.
      */
-    @JsonProperty
     @Attribute(required = false)
     public Double getScore()
     {
@@ -504,7 +488,6 @@ public final class Cluster
     /**
      * For serialization only.
      */
-    @JsonProperty
     @Attribute(required = false)
     private int getSize()
     {
@@ -527,7 +510,6 @@ public final class Cluster
      * 
      * @see ProcessingResult
      */
-    @JsonProperty
     public Integer getId()
     {
         return id;
@@ -890,7 +872,6 @@ public final class Cluster
     /**
      * For JSON serialization only.
      */
-    @JsonProperty("documents")
     private List<String> getDocumentIds()
     {
         return documents.stream().map(doc -> doc.getStringId()).collect(Collectors.toList());
@@ -899,7 +880,6 @@ public final class Cluster
     /**
      * For JSON and XML serialization only.
      */
-    @JsonProperty("attributes")
     private Map<String, Object> getOtherAttributes()
     {
         final Map<String, Object> otherAttributes = new HashMap<>(attributesView);

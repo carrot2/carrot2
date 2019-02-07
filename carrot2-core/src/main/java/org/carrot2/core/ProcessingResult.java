@@ -23,10 +23,6 @@ import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.*;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 /**
  * Encapsulates the results of processing. Provides access to the values of attributes
  * collected after processing and utility methods for obtaining processed documents (
@@ -369,121 +365,6 @@ public final class ProcessingResult
     public static ProcessingResult deserialize(InputStream input) throws Exception
     {
         return new Persister().read(ProcessingResult.class, input);
-    }
-
-    /**
-     * Serializes this processing result as JSON to the provided <code>writer</code>. The
-     * output includes all documents, clusters and other attributes.
-     * <p>
-     * This method is not thread-safe, external synchronization must be applied if needed.
-     * </p>
-     * 
-     * @param writer the writer to serialize this processing result to. The writer will
-     *            <strong>not</strong> be closed.
-     * @throws IOException in case of any problems with serialization
-     */
-    public void serializeJson(Writer writer) throws IOException
-    {
-        serializeJson(writer, null);
-    }
-
-    /**
-     * Serializes this processing result as JSON to the provided <code>writer</code>. The
-     * output includes all documents, clusters and other attributes.
-     * <p>
-     * This method is not thread-safe, external synchronization must be applied if needed.
-     * </p>
-     * 
-     * @param writer the writer to serialize this processing result to. The writer will
-     *            <strong>not</strong> be closed.
-     * @param callback JavaScript function name in which to wrap the JSON response or
-     *            <code>null</code>.
-     * @throws IOException in case of any problems with serialization
-     */
-    public void serializeJson(Writer writer, String callback) throws IOException
-    {
-        serializeJson(writer, callback, true, true);
-    }
-
-    /**
-     * Serializes this processing result as JSON to the provided <code>writer</code>.
-     * Documents and clusters can be included or skipped in the output as requested. Other
-     * attributes are always included.
-     * <p>
-     * This method is not thread-safe, external synchronization must be applied if needed.
-     * </p>
-     * 
-     * @param writer the writer to serialize this processing result to. The writer will
-     *            <strong>not</strong> be closed.
-     * @param callback JavaScript function name in which to wrap the JSON response or
-     *            <code>null</code>.
-     * @param saveDocuments if <code>false</code>, documents will not be serialized.
-     * @param saveClusters if <code>false</code>, clusters will not be serialized
-     * @throws IOException in case of any problems with serialization
-     */
-    public void serializeJson(Writer writer, String callback, boolean saveDocuments,
-        boolean saveClusters) throws IOException
-    {
-        serializeJson(writer, callback, false, saveDocuments, saveClusters);
-    }
-
-    /**
-     * Serializes this processing result as JSON to the provided <code>writer</code>.
-     * <p>
-     * This method is not thread-safe, external synchronization must be applied if needed.
-     * </p>
-     * 
-     * @param writer the writer to serialize this processing result to. The writer will
-     *            <strong>not</strong> be closed.
-     * @param callback JavaScript function name in which to wrap the JSON response or
-     *            <code>null</code>.
-     * @param indent if <code>true</code>, the output JSON will be pretty-printed
-     * @param saveDocuments if <code>false</code>, documents will not be serialized.
-     * @param saveClusters if <code>false</code>, clusters will not be serialized
-     * @throws IOException in case of any problems with serialization
-     */
-    public void serializeJson(Writer writer, String callback, boolean indent,
-        boolean saveDocuments, boolean saveClusters) throws IOException
-    {
-        serializeJson(writer, callback, indent, saveDocuments, saveClusters, true);
-    }
-
-    /**
-     * Serializes this processing result as JSON to the provided <code>writer</code>.
-     * Documents, clusters and other attributes can be included or skipped in the output
-     * as requested.
-     * 
-     * @param writer the writer to serialize this processing result to. The writer will
-     *            <strong>not</strong> be closed.
-     * @param callback JavaScript function name in which to wrap the JSON response or
-     *            <code>null</code>.
-     * @param indent if <code>true</code>, the output JSON will be pretty-printed
-     * @param saveDocuments if <code>false</code>, documents will not be serialized.
-     * @param saveClusters if <code>false</code>, clusters will not be serialized
-     * @param saveOtherAttributes if <code>false</code>, other attributes will not be
-     *            serialized
-     * @throws IOException in case of any problems with serialization
-     */
-    public void serializeJson(Writer writer, String callback, boolean indent,
-        boolean saveDocuments, boolean saveClusters, boolean saveOtherAttributes)
-        throws IOException
-    {
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.getFactory().disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-
-        if (StringUtils.isNotBlank(callback))
-        {
-            writer.write(callback + "(");
-        }
-        final Map<String, Object> attrs = prepareAttributesForSerialization(
-            saveDocuments, saveClusters, saveOtherAttributes);
-
-        mapper.writeValue(writer, attrs);
-        if (StringUtils.isNotBlank(callback))
-        {
-            writer.write(");");
-        }
     }
 
     /**

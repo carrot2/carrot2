@@ -25,10 +25,6 @@ project("carrot2-core") {
   apply plugin: 'java-library'
 
   dependencies {
-    api "com.fasterxml.jackson.core:jackson-core:2.8.11"
-    api "com.fasterxml.jackson.core:jackson-annotations:2.8.11"
-    api "com.fasterxml.jackson.core:jackson-databind:2.8.11"
-
     api("org.simpleframework:simple-xml:2.7.1") {
       exclude group: 'stax'
       exclude group: 'xpp3'

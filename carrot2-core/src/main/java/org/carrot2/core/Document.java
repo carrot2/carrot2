@@ -30,25 +30,12 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 /**
  * A document that to be processed by the framework. Each document is a collection of
  * fields carrying different bits of information, e.g. {@link #TITLE} or
  * {@link #CONTENT_URL}.
  */
 @Root(name = "document")
-@JsonAutoDetect(
-    creatorVisibility  = JsonAutoDetect.Visibility.NONE,
-    fieldVisibility    = JsonAutoDetect.Visibility.NONE,
-    getterVisibility   = JsonAutoDetect.Visibility.NONE,
-    isGetterVisibility = JsonAutoDetect.Visibility.NONE,
-    setterVisibility   = JsonAutoDetect.Visibility.NONE)
-@JsonSerialize()
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public final class Document implements Cloneable
 {
     /** Field name for the title of the document. */
@@ -231,7 +218,6 @@ public final class Document implements Cloneable
      * 
      * @return identifier of this document, possibly <code>null</code>
      */
-    @JsonProperty("id")
     public String getStringId()
     {
         return id;
@@ -240,7 +226,6 @@ public final class Document implements Cloneable
     /**
      * Returns this document's {@link #TITLE} field.
      */
-    @JsonProperty
     @Element(required = false)
     public String getTitle()
     {
@@ -262,7 +247,6 @@ public final class Document implements Cloneable
     /**
      * Returns this document's {@link #SUMMARY} field.
      */
-    @JsonProperty("snippet")
     @Element(name = "snippet", required = false)
     public String getSummary()
     {
@@ -284,7 +268,6 @@ public final class Document implements Cloneable
     /**
      * Returns this document's {@link #CONTENT_URL} field.
      */
-    @JsonProperty("url")
     @Element(name = "url", required = false)
     public String getContentUrl()
     {
@@ -306,7 +289,6 @@ public final class Document implements Cloneable
     /**
      * Returns this document's {@link #SOURCES} field.
      */
-    @JsonProperty
     @ElementList(entry = "source", required = false)
     public List<String> getSources()
     {
@@ -367,7 +349,6 @@ public final class Document implements Cloneable
         return setField(SCORE, score);
     }
 
-    @JsonProperty("language")
     @Attribute(required = false, name = "language")
     private String getLanguageIsoCode()
     {
@@ -400,7 +381,6 @@ public final class Document implements Cloneable
     /**
      * For JSON and XML serialization only.
      */
-    @JsonProperty("fields")
     private Map<String, Object> getOtherFields()
     {
         final Map<String, Object> otherFields;

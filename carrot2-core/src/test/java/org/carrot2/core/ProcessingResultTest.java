@@ -29,12 +29,6 @@ import org.carrot2.util.tests.CarrotTestCase;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import static org.junit.Assert.*;
 
 /**
@@ -245,77 +239,6 @@ public class ProcessingResultTest extends CarrotTestCase
     }
 
     @Test
-    public void testJsonSerializationAll() throws IOException
-    {
-        final ProcessingResult result = prepareProcessingResult();
-        final JsonNode root = getJsonRootNode(result, null, true, true, true);
-
-        checkJsonQuery(root);
-        checkJsonClusters(result, root);
-        checkJsonDocuments(result, root);
-        Assertions.assertThat(root.get("results")).isNotNull();
-    }
-
-    @Test
-    public void testJsonSerializationWithCallback() throws IOException
-    {
-        final String callback = "callback";
-        final ProcessingResult result = prepareProcessingResult();
-
-        final StringWriter json = new StringWriter();
-        result.serializeJson(json, callback, true, true);
-        final String jsonString = json.toString();
-
-        Assertions.assertThat(jsonString).startsWith(callback + "(").endsWith(");");
-
-        final String data = jsonString.substring(callback.length() + 1,
-            jsonString.length() - 2);
-        final JsonNode root = getJsonRootNode(data);
-
-        checkJsonQuery(root);
-        checkJsonClusters(result, root);
-        checkJsonDocuments(result, root);
-        Assertions.assertThat(root.get("results")).isNotNull();
-    }
-
-    @Test
-    public void testJsonSerializationDocumentsOnly() throws IOException
-    {
-        final ProcessingResult result = prepareProcessingResult();
-        final JsonNode root = getJsonRootNode(result, null, true, false, false);
-
-        checkJsonQuery(root);
-        checkJsonDocuments(result, root);
-        Assertions.assertThat(root.get("clusters")).isNull();
-        Assertions.assertThat(root.get("results")).isNull();
-    }
-
-    @Test
-    public void testJsonSerializationClustersOnly() throws IOException
-    {
-        final ProcessingResult result = prepareProcessingResult();
-        final JsonNode root = getJsonRootNode(result, null, false, true, false);
-
-        checkJsonQuery(root);
-        checkJsonClusters(result, root);
-        Assertions.assertThat(root.get("documents")).isNull();
-        Assertions.assertThat(root.get("results")).isNull();
-    }
-
-    
-    @Test
-    public void testJsonSerializationAttributesOnly() throws IOException
-    {
-        final ProcessingResult result = prepareProcessingResult();
-        final JsonNode root = getJsonRootNode(result, null, false, false, true);
-        
-        checkJsonQuery(root);
-        Assertions.assertThat(root.get("documents")).isNull();
-        Assertions.assertThat(root.get("clusters")).isNull();
-        Assertions.assertThat(root.get("results")).isNotNull();
-    }
-    
-    @Test
     public void testNoFalseJunkGroupAttribute() throws Exception
     {
         Cluster a, b, c;
@@ -337,59 +260,6 @@ public class ProcessingResultTest extends CarrotTestCase
         assertThat((Object) a.getAttribute(Cluster.OTHER_TOPICS)).isNull();
         assertThat((Object) b.getAttribute(Cluster.OTHER_TOPICS)).isNull();
         assertThat((Object) c.getAttribute(Cluster.OTHER_TOPICS)).isEqualTo(Boolean.TRUE);
-    }
-
-    private void checkJsonQuery(final JsonNode root)
-    {
-        Assertions.assertThat(root.get("query").textValue()).isEqualTo("query");
-    }
-
-    private void checkJsonClusters(final ProcessingResult result, final JsonNode root)
-    {
-        final JsonNode clusters = root.get("clusters");
-        Assertions.assertThat(clusters).isNotNull();
-        final ArrayList<JsonNode> clusterNodes = new ArrayList<>();
-        clusters.elements().forEachRemaining(c -> clusterNodes.add(c));
-        Assertions.assertThat(clusterNodes).hasSize(result.getClusters().size());
-    }
-
-    private void checkJsonDocuments(final ProcessingResult result, final JsonNode root)
-    {
-        final JsonNode documents = root.get("documents");
-        Assertions.assertThat(documents).isNotNull();
-        final ArrayList<JsonNode> documentNodes = new ArrayList<>();
-        documents.elements().forEachRemaining(c -> documentNodes.add(c));
-        Assertions.assertThat(documentNodes).hasSize(result.getDocuments().size());
-    }
-
-    private JsonNode getJsonRootNode(final ProcessingResult result, String callback,
-        boolean saveDocuments, boolean saveClusters, boolean saveAttributes) throws IOException,
-        JsonParseException
-    {
-        return getJsonRootNode(getJsonString(result, callback, saveDocuments,
-            saveClusters, saveAttributes));
-    }
-
-    private String getJsonString(final ProcessingResult result, String callback,
-        boolean saveDocuments, boolean saveClusters, boolean saveAttributes) throws IOException
-    {
-        final StringWriter json = new StringWriter() {
-          @Override
-          public void close() throws IOException {
-            throw new IOException("Should not be calling close.");
-          }
-        };
-        result.serializeJson(json, callback, false, saveDocuments, saveClusters, saveAttributes);
-        return json.toString();
-    }
-
-    private JsonNode getJsonRootNode(final String jsonString) throws IOException,
-        JsonParseException
-    {
-        final JsonParser jsonParser = new JsonFactory().createParser(new StringReader(jsonString));
-        final ObjectMapper mapper = new ObjectMapper();
-        final JsonNode root = mapper.readTree(jsonParser);
-        return root;
     }
 
     private void checkSerializationDeserialization(boolean documentsDeserialized,

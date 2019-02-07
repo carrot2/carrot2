@@ -26,21 +26,11 @@ import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Commit;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * A local filesystem resource. This loader provides cached content of
  * returned resources and closes the underlying stream handle in {@link #open()}.
  */
 @Root(name = "file-resource")
-@JsonAutoDetect(
-    creatorVisibility  = JsonAutoDetect.Visibility.NONE,
-    fieldVisibility    = JsonAutoDetect.Visibility.NONE,
-    getterVisibility   = JsonAutoDetect.Visibility.NONE,
-    isGetterVisibility = JsonAutoDetect.Visibility.NONE,
-    setterVisibility   = JsonAutoDetect.Visibility.NONE)
 public final class FileResource implements IResource
 {
     /**
@@ -107,7 +97,6 @@ public final class FileResource implements IResource
         file = Paths.get(info);
     }
 
-    @JsonIgnore
     @Deprecated
     public File getFile()
     {
@@ -124,7 +113,6 @@ public final class FileResource implements IResource
         }
     }
 
-    @JsonProperty
     private String getAbsolutePath()
     {
         return info;
