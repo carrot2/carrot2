@@ -16,8 +16,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.carrot2.util.annotations.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -197,7 +197,7 @@ public final class ResourceLookup
     @Override
     public int hashCode()
     {
-        return ArrayUtils.hashCode(this.locators);
+        return Objects.hash((Object[]) this.locators);
     }
 
     @Override

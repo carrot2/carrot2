@@ -18,9 +18,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.ReflectionUtils;
+import org.carrot2.util.StringUtils;
 import org.simpleframework.xml.*;
 
 /**

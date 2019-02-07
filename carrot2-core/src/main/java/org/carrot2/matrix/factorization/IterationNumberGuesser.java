@@ -14,7 +14,6 @@ package org.carrot2.matrix.factorization;
 
 import java.util.*;
 
-import org.apache.commons.lang3.StringUtils;
 import org.carrot2.mahout.math.matrix.*;
 import org.carrot2.matrix.factorization.seeding.KMeansSeedingStrategyFactory;
 import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategyFactory;
@@ -39,12 +38,6 @@ public class IterationNumberGuesser
 
         /** High, long processing */
         HIGH;
-
-        @Override
-        public String toString()
-        {
-            return StringUtils.capitalize(name().toLowerCase());
-        }
     }
 
     /** Coefficients for all known combinations of input parameters */

@@ -17,12 +17,10 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.ReflectionUtils;
+import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.AttributeValueSet;
 import org.carrot2.util.attribute.AttributeValueSets;
@@ -279,7 +277,7 @@ public class ProcessingComponentDescriptor
         attributeSets = new AttributeValueSets();
 
         IResource resource = null;
-        if (!StringUtils.isBlank(attributeSetsResource))
+        if (StringUtils.isNotBlank(attributeSetsResource))
         {
             // Try to load from the directly provided resource name
             resource = resourceLookup.getFirst(attributeSetsResource);
@@ -330,11 +328,5 @@ public class ProcessingComponentDescriptor
                 "Component unavailable: " + componentClassName, e);
             this.initializationException = e;
         }
-    }
-
-    @Override
-    public String toString()
-    {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
 }

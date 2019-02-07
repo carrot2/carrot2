@@ -43,39 +43,42 @@ public enum LanguageCode
     // document sources.
     //
     
-    ARABIC ("ar"),
-    BULGARIAN ("bg"),
-    CZECH ("cs"),
-    CHINESE_SIMPLIFIED ("zh_cn"),
-    CROATIAN("hr"),
-    DANISH ("da"),
-    DUTCH ("nl"),
-    ENGLISH ("en"),
-    ESTONIAN ("et"),
-    FINNISH ("fi"),
-    FRENCH ("fr"),
-    GERMAN ("de"),
-    GREEK ("el"),  
-    HUNGARIAN ("hu"),
-    HINDI("hi"),
-    ITALIAN ("it"),
-    IRISH ("ga"), // (Gaelic)
-    JAPANESE ("ja"),
-    KOREAN ("ko"),
-    LATVIAN ("lv"),
-    LITHUANIAN ("lt"),
-    MALTESE ("mt"),
-    NORWEGIAN ("no"),
-    POLISH ("pl"),
-    PORTUGUESE ("pt"),
-    ROMANIAN ("ro"),
-    RUSSIAN ("ru"),
-    SLOVAK ("sk"),
-    SLOVENE ("sl"),
-    SPANISH ("es"),
-    SWEDISH ("sv"),
-    THAI ("th"),
-    TURKISH ("tr");
+    ARABIC ("ar", "Arabic"),
+    BULGARIAN ("bg", "Bulgarian"),
+    CZECH ("cs", "Czech"),
+    CHINESE_SIMPLIFIED ("zh_cn", "Simplified Chinese"),
+    CROATIAN("hr", "Croatian"),
+    DANISH ("da", "Danish"),
+    DUTCH ("nl", "Dutch"),
+    ENGLISH ("en", "English"),
+    ESTONIAN ("et", "Estonian"),
+    FINNISH ("fi", "Finnish"),
+    FRENCH ("fr", "French"),
+    GERMAN ("de", "German"),
+    GREEK ("el", "Greek"),
+    HUNGARIAN ("hu", "Hungarian"),
+    HINDI("hi", "Hindi"),
+    ITALIAN ("it", "Italian"),
+    IRISH ("ga", "Gaelic"), // (Gaelic)
+    JAPANESE ("ja", "Japanese"),
+    KOREAN ("ko", "Korean"),
+    LATVIAN ("lv", "Latvian"),
+    LITHUANIAN ("lt", "Lithuanian"),
+    MALTESE ("mt", "Maltese"),
+    NORWEGIAN ("no", "Norwegian"),
+    POLISH ("pl", "Polish"),
+    PORTUGUESE ("pt", "Portuguese"),
+    ROMANIAN ("ro", "Romanian"),
+    RUSSIAN ("ru", "Russian"),
+    SLOVAK ("sk", "Slovak"),
+    SLOVENE ("sl", "Slovene"),
+    SPANISH ("es", "Spanish"),
+    SWEDISH ("sv", "Swedish"),
+    THAI ("th", "Thai"),
+    TURKISH ("tr", "Turkish");
+
+    /** Human-friendly name. */
+    private final String humanName;
 
     /**
      * ISO 639-1 code for this language. An underscore may separate additional country/region
@@ -132,10 +135,11 @@ public enum LanguageCode
     /**
      * 
      */
-    private LanguageCode(String isoCode)
+    private LanguageCode(String isoCode, String humanName)
     {
         this.isoCode = isoCode;
         this.locale = new Locale(isoCode);
+        this.humanName = humanName;
     }
 
     /**
@@ -182,8 +186,6 @@ public enum LanguageCode
     }
 
     @Override
-    public String toString()
-    {
-        return StringUtils.identifierToHumanReadable(name());
-    }
-}
+    public String toString() {
+        return humanName;
+    }}

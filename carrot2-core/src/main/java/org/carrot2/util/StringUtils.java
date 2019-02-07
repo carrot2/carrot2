@@ -17,8 +17,6 @@ import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.text.WordUtils;
-
 /**
  * 
  */
@@ -56,11 +54,6 @@ public final class StringUtils
         return stringBuilder.toString();
     }
 
-    public static String splitCamelCase(String camelCaseString)
-    {
-        return CAMEL_CASE_FRAGMENT.matcher(camelCaseString).replaceAll("$0 ").trim();
-    }
-
     public static String urlEncodeWrapException(String string, String encoding)
     {
         try
@@ -73,16 +66,6 @@ public final class StringUtils
         }
     }
 
-    public static String removeHtmlTags(String string)
-    {
-        return HTML_TAG_PATTERN.matcher(string).replaceAll("");
-    }
-
-    public static String identifierToHumanReadable(String string)
-    {
-        return WordUtils.capitalizeFully(string.replace('_', ' '));
-    }
-    
     /**
      * Join a list of non-null objects with <code>delim</code> and return it
      * as a string.
@@ -104,5 +87,14 @@ public final class StringUtils
   public static boolean isNullOrEmpty(String s)
   {
         return s == null || s.isEmpty();
+  }
+
+  public static boolean isNotBlank(String s)
+  {
+        return s != null && !s.trim().isEmpty();
+  }
+
+  public static boolean isEmpty(String s) {
+        return  s == null || s.isEmpty();
   }
 }

@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.attribute.Init;
@@ -30,6 +29,7 @@ import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.ExceptionUtils;
+import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
@@ -133,7 +133,7 @@ public final class Tokenizer
                 final String fieldName = fieldNames[i];
                 final String fieldValue = doc.getField(fieldName);
 
-                if (!StringUtils.isEmpty(fieldValue))
+                if (!StringUtils.isNullOrEmpty(fieldValue))
                 {
                     try
                     {

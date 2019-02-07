@@ -14,7 +14,6 @@ package org.carrot2.clustering.synthetic;
 
 import java.util.*;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.IClusteringAlgorithm;
@@ -226,7 +225,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
                 .toLowerCase();
 
             final String [] splitUrl = urlMainPart.split("\\.");
-            ArrayUtils.reverse(splitUrl);
+            Collections.reverse(Arrays.asList(splitUrl));
             urlParts[i] = splitUrl;
         }
 

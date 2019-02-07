@@ -28,7 +28,7 @@ import com.carrotsearch.hppc.*;
 /**
  * Document preprocessing context provides low-level (usually integer-coded) data
  * structures useful for further processing.
- * 
+ *
  * <p><img src="doc-files/preprocessing-arrays.png"
  *      alt="Internals of PreprocessingContext"></p>
  */
@@ -114,7 +114,7 @@ public final class PreprocessingContext
          * would be creating an <code>AllDocuments</code> holder and keep there an array
          * of start token indexes for each document and then refactor the model building code
          * to do a binary search to determine the document index given token index. This is
-         * likely to be a significant performance hit because model building code accesses 
+         * likely to be a significant performance hit because model building code accesses
          * the documentIndex array pretty much randomly (in the suffix order), so we'd be
          * doing twice-the-number-of-tokens binary searches. Unless there's some other
          * data structure that can help us here.
@@ -156,44 +156,50 @@ public final class PreprocessingContext
             }
 
             StringWriter sw = new StringWriter();
-            TabularOutput t = new TabularOutput(sw);
-            t.flushEvery(Integer.MAX_VALUE);
 
-            t.addColumn("#");
-            t.addColumn("token").alignLeft();
-            t.addColumn("type");
-            t.addColumn("fieldIndex");
-            t.addColumn("=>field").alignLeft();
-            t.addColumn("docIdx");
-            t.addColumn("wordIdx");
-            t.addColumn("=>word").alignLeft();
-
-            for (int i = 0; i < image.length; i++, t.nextRow())
             {
-                t.rowData(
-                    i,
-                    image[i] == null ? "<null>" : new String(image[i]),
-                    type[i],
-                    fieldIndex[i],
-                    fieldIndex[i] >= 0 ? allFields.name[fieldIndex[i]] : null,
-                    documentIndex[i],
-                    wordIndex[i],
-                    wordIndex[i] >= 0 ? new String(allWords.image[wordIndex[i]]) : null);
+                TabularOutput t = TabularOutput.to(sw)
+                    .noAutoFlush()
+                    .addColumn("#")
+                    .addColumn("token", (spec) -> spec.alignLeft())
+                    .addColumn("type")
+                    .addColumn("fieldIndex")
+                    .addColumn("=>field", (spec) -> spec.alignLeft())
+                    .addColumn("docIdx")
+                    .addColumn("wordIdx")
+                    .addColumn("=>word", (spec) -> spec.alignLeft())
+                    .build();
+
+                for (int i = 0; i < image.length; i++, t.nextRow()) {
+                    t.append(
+                        i,
+                        image[i] == null ? "<null>" : new String(image[i]),
+                        type[i],
+                        fieldIndex[i],
+                        fieldIndex[i] >= 0 ? allFields.name[fieldIndex[i]] : null,
+                        documentIndex[i],
+                        wordIndex[i],
+                        wordIndex[i] >= 0 ? new String(allWords.image[wordIndex[i]]) : null);
+                    t.nextRow();
+                }
+                t.flush();
             }
 
             if (suffixOrder != null)
             {
-                t = new TabularOutput(sw);
-                t.addColumn("#");
-                t.addColumn("sa");
-                t.addColumn("lcp");
-                t.addColumn("=>words").alignLeft();
+                TabularOutput t = TabularOutput.to(sw)
+                    .noAutoFlush()
+                    .addColumn("#")
+                    .addColumn("sa")
+                    .addColumn("lcp")
+                    .addColumn("=>words", (spec) -> spec.alignLeft())
+                    .build();
 
                 sw.append("\n");
                 final StringBuilder suffixImage = new StringBuilder();
                 for (int i = 0; i < suffixOrder.length; i++, t.nextRow())
                 {
-                    t.rowData(
+                    t.append(
                         i,
                         suffixOrder[i],
                         lcp[i]);
@@ -206,13 +212,14 @@ public final class PreprocessingContext
                         if (++j == max && j != wordIndex.length)
                             suffixImage.append(" [...]");
                     }
-                    t.rowData(suffixImage.toString());
+                    t.append(suffixImage.toString());
+                    t.nextRow();
                     suffixImage.setLength(0);
                 }
                 sw.append("\n");
+                t.flush();
             }
 
-            t.flush();
             sw.append("\n");
             return sw.toString();
         }
@@ -236,7 +243,7 @@ public final class PreprocessingContext
          * This array is produced by {@link Tokenizer}.
          */
         public String [] name;
-        
+
         /** For debugging purposes. */
         @Override
         public String toString()
@@ -245,17 +252,18 @@ public final class PreprocessingContext
             {
                 return UNINITIALIZED;
             }
-            
+
             StringWriter sw = new StringWriter();
-            TabularOutput t = new TabularOutput(sw);
-            t.flushEvery(Integer.MAX_VALUE);
-            t.addColumn("#");
-            t.addColumn("name").format("%-10s").alignLeft();
+            TabularOutput t = TabularOutput.to(sw)
+                .noAutoFlush()
+                .addColumn("#")
+                .addColumn("name", spec -> spec.format("%-10s").alignLeft())
+                .build();
 
             int i = 0;
             for (String n : name)
             {
-                t.rowData(i++, n).nextRow();
+                t.append(i++, n).nextRow();
             }
 
             t.flush();
@@ -354,36 +362,38 @@ public final class PreprocessingContext
             }
             
             StringWriter sw = new StringWriter();
-            TabularOutput t = new TabularOutput(sw);
-            t.flushEvery(Integer.MAX_VALUE);
-            t.addColumn("#");
-            t.addColumn("image").alignLeft();
-            t.addColumn("type");
-            t.addColumn("tf");
-            t.addColumn("tfByDocument").alignLeft();
-            t.addColumn("fieldIndices");
+            TabularOutput.Builder builder = TabularOutput.to(sw)
+                .noAutoFlush()
+                .addColumn("#")
+                .addColumn("image", spec -> spec.alignLeft())
+                .addColumn("type")
+                .addColumn("tf")
+                .addColumn("tfByDocument", spec -> spec.alignLeft())
+                .addColumn("fieldIndices");
 
             if (stemIndex != null)
             {
-                t.addColumn("stemIndex");
-                t.addColumn("=>stem").alignLeft();
+                builder.addColumn("stemIndex");
+                builder.addColumn("=>stem", spec -> spec.alignLeft());
             }
+
+            TabularOutput t = builder.build();
 
             for (int i = 0; i < image.length; i++, t.nextRow())
             {
-                t.rowData(
+                t.append(
                     i,
                     image[i] == null ? "<null>" : new String(image[i]),
                     type[i],
                     tf[i],
                     SparseArray.sparseToString(tfByDocument[i]));
 
-                t.rowData(Arrays.toString(toFieldIndexes(fieldIndices[i])).replace(" ", ""));
+                t.append(Arrays.toString(toFieldIndexes(fieldIndices[i])).replace(" ", ""));
 
                 if (stemIndex != null)
                 {
-                    t.rowData(stemIndex[i]);
-                    t.rowData(new String(allStems.image[stemIndex[i]]));
+                    t.append(stemIndex[i]);
+                    t.append(new String(allStems.image[stemIndex[i]]));
                 }
             }
 
@@ -465,19 +475,20 @@ public final class PreprocessingContext
             }
             
             StringWriter sw = new StringWriter();
-            TabularOutput t = new TabularOutput(sw);
-            t.flushEvery(Integer.MAX_VALUE);
-            t.addColumn("#");
-            t.addColumn("stem");
-            t.addColumn("mostFrqWord");
-            t.addColumn("=>mostFrqWord").alignLeft();
-            t.addColumn("tf");
-            t.addColumn("tfByDocument").alignLeft();
-            t.addColumn("fieldIndices");
+            TabularOutput t = TabularOutput.to(sw)
+                .noAutoFlush()
+                .addColumn("#")
+                .addColumn("stem")
+                .addColumn("mostFrqWord")
+                .addColumn("=>mostFrqWord", spec -> spec.alignLeft())
+                .addColumn("tf")
+                .addColumn("tfByDocument", spec -> spec.alignLeft())
+                .addColumn("fieldIndices")
+                .build();
 
             for (int i = 0; i < image.length; i++, t.nextRow())
             {
-                t.rowData(
+                t.append(
                     i,
                     image[i] == null ? "<null>" : new String(image[i]),
                     mostFrequentOriginalWordIndex[i],
@@ -485,6 +496,7 @@ public final class PreprocessingContext
                     tf[i],
                     SparseArray.sparseToString(tfByDocument[i]),
                     Arrays.toString(toFieldIndexes(fieldIndices[i])).replace(" ", ""));
+                t.nextRow();
             }
 
             t.flush();
@@ -543,22 +555,24 @@ public final class PreprocessingContext
             }
 
             StringWriter sw = new StringWriter();
-            TabularOutput t = new TabularOutput(sw);
-            t.flushEvery(Integer.MAX_VALUE);
-            t.addColumn("#");
-            t.addColumn("wordIndices");
-            t.addColumn("=>words").alignLeft();
-            t.addColumn("tf");
-            t.addColumn("tfByDocument").alignLeft();
+            TabularOutput t = TabularOutput.to(sw)
+                .noAutoFlush()
+                .addColumn("#")
+                .addColumn("wordIndices")
+                .addColumn("=>words", spec -> spec.alignLeft())
+                .addColumn("tf")
+                .addColumn("tfByDocument", spec -> spec.alignLeft())
+                .build();
 
             for (int i = 0; i < wordIndices.length; i++, t.nextRow())
             {
-                t.rowData(
+                t.append(
                     i,
                     Arrays.toString(wordIndices[i]).replace(" ", ""),
                     getPhrase(i),
                     tf[i],
                     SparseArray.sparseToString(tfByDocument[i]));
+                t.nextRow();
             }
 
             t.flush();
@@ -639,20 +653,22 @@ public final class PreprocessingContext
                 return UNINITIALIZED;
 
             StringWriter sw = new StringWriter();
-            TabularOutput t = new TabularOutput(sw);
-            t.flushEvery(Integer.MAX_VALUE);
-            t.addColumn("#");
-            t.addColumn("featureIdx");
-            t.addColumn("=>feature").alignLeft();
-            t.addColumn("documentIdx").alignLeft();
+            TabularOutput t = TabularOutput.to(sw)
+                .noAutoFlush()
+                .addColumn("#")
+                .addColumn("featureIdx")
+                .addColumn("=>feature", spec -> spec.alignLeft())
+                .addColumn("documentIdx", spec -> spec.alignLeft())
+                .build();
 
             for (int i = 0; i < featureIndex.length; i++, t.nextRow())
             {
-                t.rowData(
+                t.append(
                     i,
                     featureIndex[i],
                     getLabel(i),
                     documentIndices != null ? documentIndices[i].toString().replace(" ", "") : "");
+                t.nextRow();
             }
 
             t.flush();
