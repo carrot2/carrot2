@@ -43,7 +43,7 @@ import org.carrot2.util.attribute.Bindable;
 @Bindable(prefix = "PreprocessingPipeline")
 public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline
 {
-    /**
+  /**
      * Phrase extractor used by the algorithm, contains bindable attributes.
      */
     public final PhraseExtractor phraseExtractor = new PhraseExtractor();

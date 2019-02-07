@@ -101,4 +101,8 @@ public final class StringUtils
         return b.toString();
     }
 
+  public static boolean isNullOrEmpty(String s)
+  {
+        return s == null || s.isEmpty();
+  }
 }

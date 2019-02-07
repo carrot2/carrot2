@@ -15,7 +15,7 @@ package org.carrot2.core;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -31,7 +31,7 @@ public class DocumentTest extends CarrotTestCase
         final Document d2 = new Document();
         final Document d3 = new Document();
 
-        Document.assignDocumentIds(Lists.newArrayList(d1, d2, d3));
+        Document.assignDocumentIds(Arrays.asList(d1, d2, d3));
         assertThat(d1.id).isEqualTo("0");
         assertThat(d2.id).isEqualTo("1");
         assertThat(d3.id).isEqualTo("2");
@@ -49,7 +49,7 @@ public class DocumentTest extends CarrotTestCase
         final Document d5 = new Document();
 
         try {
-            Document.assignDocumentIds(Lists.newArrayList(d1, d2, d3, d4, d5));
+            Document.assignDocumentIds(Arrays.asList(d1, d2, d3, d4, d5));
             fail();
         } catch (IllegalArgumentException e) {
             // expected.
@@ -63,7 +63,7 @@ public class DocumentTest extends CarrotTestCase
         d1.id = "2";
         final Document d2 = new Document();
         try {
-            Document.assignDocumentIds(Lists.newArrayList(d1, d2));
+            Document.assignDocumentIds(Arrays.asList(d1, d2));
             fail();
         } catch (IllegalArgumentException e) {
             // expected.

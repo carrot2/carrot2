@@ -17,6 +17,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Processing;
@@ -40,10 +41,6 @@ import org.carrot2.util.pool.SoftUnboundedPool;
 import org.carrot2.util.resource.IResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.carrot2.shaded.guava.common.base.Predicate;
-import org.carrot2.shaded.guava.common.collect.ImmutableSet;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * An {@link IProcessingComponentManager} that pools instances of processing components.
@@ -197,15 +194,12 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
                 // @Init attributes have already been bound above.
                 try
                 {
-                    final Predicate<Field> predicate = new Predicate<Field>()
-                    {
-                        public boolean apply(Field field)
-                        {
-                            return field.getAnnotation(Input.class) != null
-                                && (field.getAnnotation(Processing.class) != null && field
-                                    .getAnnotation(Init.class) == null);
-                        }
+                    final Predicate<Field> predicate = (field) -> {
+                        return field.getAnnotation(Input.class) != null
+                            && (field.getAnnotation(Processing.class) != null && field
+                            .getAnnotation(Init.class) == null);
                     };
+
                     checkNonPrimitiveInstances(component, initAttrs, predicate);
                     AttributeBinder.set(component, initAttrs, false, predicate);
                 }
@@ -260,21 +254,21 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
         private static final Logger log = LoggerFactory
             .getLogger(NonPrimitiveInputAttributesCheck.class);
 
-        static final Set<Class<?>> ALLOWED_PLAIN_TYPES = ImmutableSet.<Class<?>> of(
+        static final Set<Class<?>> ALLOWED_PLAIN_TYPES = new HashSet<>(Arrays.asList(
             Boolean.class, Byte.class, Short.class, Integer.class, Long.class,
             Float.class, Double.class, Character.class, File.class, String.class,
-            Calendar.class, Date.class);
+            Calendar.class, Date.class));
 
-        static final Set<Class<?>> ALLOWED_ASSIGNABLE_TYPES = ImmutableSet.<Class<?>> of(
-            Enum.class, IResource.class, Collection.class, Map.class);
+        static final Set<Class<?>> ALLOWED_ASSIGNABLE_TYPES = new HashSet<>(Arrays.asList(
+            Enum.class, IResource.class, Collection.class, Map.class));
 
         // A number of safe typically used classes
-        static final Set<String> ALLOWED_PLAIN_TYPES_BY_NAME = ImmutableSet.of(
+        static final Set<String> ALLOWED_PLAIN_TYPES_BY_NAME = new HashSet<>(Arrays.asList(
             "org.apache.lucene.store.FSDirectory",
             "org.apache.lucene.store.RAMDirectory",
             "org.apache.lucene.store.MMapDirectory",
             "org.apache.lucene.store.SimpleFSDirectory",
-            "org.apache.lucene.store.SimpleFSDirectory");
+            "org.apache.lucene.store.SimpleFSDirectory"));
 
         private final Map<String, Object> values;
 

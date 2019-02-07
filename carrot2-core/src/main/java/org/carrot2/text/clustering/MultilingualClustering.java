@@ -31,7 +31,9 @@ import org.slf4j.LoggerFactory;
 @Bindable(prefix = "MultilingualClustering")
 public class MultilingualClustering
 {
-    /** {@link Group} name. */
+  public static final String ATTR_LANGUAGE_AGGREGATION_STRATEGY = "languageAggregationStrategy";
+
+  /** {@link Group} name. */
     private static final String MULTILINGUAL_CLUSTERING = "Multilingual clustering";
 
     /**
@@ -97,7 +99,7 @@ public class MultilingualClustering
      */
     @Input
     @Processing
-    @Attribute
+    @Attribute(key = ATTR_LANGUAGE_AGGREGATION_STRATEGY)
     @Required
     @Group(MULTILINGUAL_CLUSTERING)
     @Level(AttributeLevel.MEDIUM)

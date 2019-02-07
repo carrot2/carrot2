@@ -16,9 +16,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.resource.IResource;
@@ -29,10 +30,6 @@ import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Commit;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.TreeStrategy;
-
-import org.carrot2.shaded.guava.common.collect.Iterables;
-import org.carrot2.shaded.guava.common.collect.Iterators;
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * A set of {@link IProcessingComponent}s used in Carrot2 applications.
@@ -96,7 +93,11 @@ public class ProcessingComponentSuite
      */
     public List<ProcessingComponentDescriptor> getComponents()
     {
-        return Lists.newArrayList(Iterables.concat(sources, algorithms, otherComponents));
+        List<ProcessingComponentDescriptor> out = new ArrayList<>();
+        out.addAll(sources);
+        out.addAll(algorithms);
+        out.addAll(otherComponents);
+        return out;
     }
 
     /**
@@ -187,20 +188,14 @@ public class ProcessingComponentSuite
      */
     public List<ProcessingComponentDescriptor> removeUnavailableComponents()
     {
-        ArrayList<ProcessingComponentDescriptor> failed = new ArrayList<>();
-        ProcessingComponentDescriptor p;
-        for (Iterator<? extends ProcessingComponentDescriptor> i = Iterators.concat(
-            sources.iterator(), algorithms.iterator()); i.hasNext();)
-        {
-            p = i.next();
-            if (!p.isComponentAvailable())
-            {
-                failed.add(p);
-                i.remove();
-            }
-        }
+        List<ProcessingComponentDescriptor> unavailable = Stream.concat(sources.stream(), algorithms.stream())
+            .filter(p -> !p.isComponentAvailable())
+            .collect(Collectors.toList());
 
-        return failed;
+        sources.removeAll(unavailable);
+        algorithms.removeAll(unavailable);
+
+        return unavailable;
     }
 
     /**

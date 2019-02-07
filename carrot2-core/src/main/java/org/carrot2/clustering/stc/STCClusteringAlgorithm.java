@@ -66,7 +66,10 @@ import com.carrotsearch.hppc.IntStack;
 public final class STCClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
-    /** {@link Group} name. */
+  public static final String ATTR_MIN_BASE_CLUSTER_SCORE = "minBaseClusterScore";
+  public static final String ATTR_MAX_CLUSTERS = "maxClusters";
+
+  /** {@link Group} name. */
     private final static String BASE_CLUSTERS = "Base clusters";
     /** {@link Group} name. */
     private final static String MERGING_AND_OUTPUT = "Merging and output";
@@ -128,7 +131,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      */
     @Processing
     @Input
-    @Attribute
+    @Attribute(key = ATTR_MIN_BASE_CLUSTER_SCORE)
     @DoubleRange(min = 0, max = 10)
     @Level(AttributeLevel.ADVANCED)
     @Group(BASE_CLUSTERS)
@@ -162,7 +165,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      */
     @Processing
     @Input
-    @Attribute
+    @Attribute(key = ATTR_MAX_CLUSTERS)
     @IntRange(min = 1)
     @Level(AttributeLevel.BASIC)
     @Group(MERGING_AND_OUTPUT)

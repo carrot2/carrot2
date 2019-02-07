@@ -15,6 +15,7 @@ package org.carrot2.core.test;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Function;
 
 import org.carrot2.core.Controller;
 import org.carrot2.core.Document;
@@ -26,8 +27,6 @@ import org.carrot2.util.attribute.BindableMetadata;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;
-
-import org.carrot2.shaded.guava.common.base.Function;
 
 import static org.junit.Assert.*;
 
@@ -136,45 +135,4 @@ public abstract class DocumentSourceTestBase<T extends IDocumentSource> extends
                 + builder.toString());
         }
     }
-
-    /**
-     * Transforms {@link Document}s to their individual fields.
-     */
-    protected static class DocumentToFieldTransformer implements
-        Function<Document, Object>
-    {
-        /** Field name */
-        private final String fieldName;
-
-        /**
-         * Builds a transformer with the provided field name.
-         */
-        public DocumentToFieldTransformer(String fieldName)
-        {
-            this.fieldName = fieldName;
-        }
-
-        public Object apply(Document document)
-        {
-            return document.getField(fieldName);
-        }
-    }
-
-    /**
-     * Transforms {@link Document}s to their titles.
-     */
-    protected static final DocumentToFieldTransformer DOCUMENT_TO_TITLE = new DocumentToFieldTransformer(
-        Document.TITLE);
-
-    /**
-     * Transforms {@link Document}s to their summaries.
-     */
-    protected static final DocumentToFieldTransformer DOCUMENT_TO_SUMMARY = new DocumentToFieldTransformer(
-        Document.SUMMARY);
-
-    /**
-     * Transforms {@link Document}s to their content URLs.
-     */
-    protected static final DocumentToFieldTransformer DOCUMENT_TO_CONTENT_URL = new DocumentToFieldTransformer(
-        Document.CONTENT_URL);
 }

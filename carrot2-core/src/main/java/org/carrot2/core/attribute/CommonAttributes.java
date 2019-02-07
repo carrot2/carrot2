@@ -31,7 +31,10 @@ import org.carrot2.util.attribute.Output;
 @Bindable
 public final class CommonAttributes
 {
-    // No instances.
+  public static final String ATTR_DOCUMENTS = "documents";
+  public static final String ATTR_CLUSTERS = "clusters";
+
+  // No instances.
     private CommonAttributes()
     {
         // no instances.
@@ -83,7 +86,7 @@ public final class CommonAttributes
      */
     @Input
     @Output
-    @Attribute(key = "documents")
+    @Attribute(key = ATTR_DOCUMENTS)
     @Label("Documents")
     @Level(AttributeLevel.BASIC)
     @Group(DefaultGroups.DOCUMENTS)
@@ -93,7 +96,7 @@ public final class CommonAttributes
      * Clusters created by the clustering algorithm.
      */
     @Output
-    @Attribute(key = "clusters")
+    @Attribute(key = ATTR_CLUSTERS)
     @Label("Clusters")
     @Level(AttributeLevel.BASIC)
     @Group(DefaultGroups.RESULT_INFO)

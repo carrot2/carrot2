@@ -53,6 +53,10 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
 @Bindable(prefix = "PreprocessingPipeline")
 public class BasicPreprocessingPipeline implements IPreprocessingPipeline
 {
+    public static final String ATTR_LEXICAL_DATA_FACTORY = "lexicalDataFactory";
+    public static final String ATTR_STEMMER_FACTORY = "stemmerFactory";
+    public static final String ATTR_TOKENIZER_FACTORY = "tokenizerFactory";
+
     /**
      * Tokenizer used by the algorithm, contains bindable attributes.
      */
@@ -80,7 +84,7 @@ public class BasicPreprocessingPipeline implements IPreprocessingPipeline
     @Init
     @Processing
     @Internal
-    @Attribute
+    @Attribute(key = ATTR_TOKENIZER_FACTORY)
     @ImplementingClasses(classes = {}, strict = false)
     @Level(AttributeLevel.ADVANCED)
     @Group(DefaultGroups.PREPROCESSING)
@@ -93,7 +97,7 @@ public class BasicPreprocessingPipeline implements IPreprocessingPipeline
     @Init
     @Processing
     @Internal
-    @Attribute
+    @Attribute(key = ATTR_STEMMER_FACTORY)
     @ImplementingClasses(classes = {}, strict = false)
     @Level(AttributeLevel.ADVANCED)
     @Group(DefaultGroups.PREPROCESSING)
@@ -107,7 +111,7 @@ public class BasicPreprocessingPipeline implements IPreprocessingPipeline
     @Init
     @Processing
     @Internal
-    @Attribute
+    @Attribute(key = ATTR_LEXICAL_DATA_FACTORY)
     @ImplementingClasses(classes = {}, strict = false)
     @Level(AttributeLevel.ADVANCED)
     @Group(DefaultGroups.PREPROCESSING)

@@ -22,12 +22,9 @@ import org.carrot2.text.preprocessing.PreprocessingComponentTestBase;
 import org.carrot2.text.preprocessing.TestLexicalDataFactory;
 import org.carrot2.text.preprocessing.TestStemmerFactory;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
-import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipelineDescriptor;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
 import org.junit.Before;
-
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * A base class for tests requiring that the main term-document document matrix is built.
@@ -51,10 +48,9 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
         
         Map<String,Object> attrs = new HashMap<>();
 
-        CompletePreprocessingPipelineDescriptor.attributeBuilder(attrs)
-            .lexicalDataFactory(createLexicalDataFactory())
-            .stemmerFactory(createStemmerFactory())
-            .tokenizerFactory(createTokenizerFactory());
+        attrs.put(CompletePreprocessingPipeline.ATTR_LEXICAL_DATA_FACTORY, createLexicalDataFactory());
+        attrs.put(CompletePreprocessingPipeline.ATTR_STEMMER_FACTORY, createStemmerFactory());
+        attrs.put(CompletePreprocessingPipeline.ATTR_TOKENIZER_FACTORY, createTokenizerFactory());
 
         AttributeBinder.set(preprocessingPipeline, attrs, Input.class, Init.class);
 

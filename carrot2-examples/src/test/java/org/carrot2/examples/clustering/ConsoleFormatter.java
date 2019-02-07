@@ -19,7 +19,7 @@ import java.util.Map;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.core.attribute.CommonAttributesDescriptor;
+import org.carrot2.core.attribute.CommonAttributes;
 
 /**
  * Simple console formatter for dumping {@link ProcessingResult}.
@@ -61,8 +61,8 @@ public class ConsoleFormatter
     {
         System.out.println("Attributes:");
 
-        String DOCUMENTS_ATTRIBUTE = CommonAttributesDescriptor.Keys.DOCUMENTS;
-        String CLUSTERS_ATTRIBUTE = CommonAttributesDescriptor.Keys.CLUSTERS;
+        String DOCUMENTS_ATTRIBUTE = CommonAttributes.ATTR_DOCUMENTS;
+        String CLUSTERS_ATTRIBUTE = CommonAttributes.ATTR_CLUSTERS;
         for (final Map.Entry<String, Object> attribute : attributes.entrySet())
         {
             if (!DOCUMENTS_ATTRIBUTE.equals(attribute.getKey())

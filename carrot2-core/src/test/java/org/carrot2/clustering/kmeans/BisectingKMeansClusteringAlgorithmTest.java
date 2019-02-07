@@ -13,6 +13,7 @@
 package org.carrot2.clustering.kmeans;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,12 +23,9 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.test.ClusteringAlgorithmTestBase;
 import org.carrot2.core.test.SampleDocumentData;
 import org.carrot2.core.test.assertions.Carrot2CoreAssertions;
+import org.carrot2.text.clustering.MultilingualClustering;
 import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
-import org.carrot2.text.clustering.MultilingualClusteringDescriptor;
 import org.junit.Test;
-
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Sets;
 
 import static org.junit.Assert.*;
 
@@ -51,8 +49,8 @@ public class BisectingKMeansClusteringAlgorithmTest extends
         documents.add(new Document("WordB . WordB"));
         documents.add(new Document("WordC . WordC"));
 
-        BisectingKMeansClusteringAlgorithmDescriptor.attributeBuilder(
-            processingAttributes).labelCount(1).partitionCount(3);
+        processingAttributes.put(BisectingKMeansClusteringAlgorithm.ATTR_LABEL_COUNT, 1);
+        processingAttributes.put(BisectingKMeansClusteringAlgorithm.ATTR_PARTITION_COUNT, 3);
         final List<Cluster> clusters = cluster(documents).getClusters();
 
         assertNotNull(clusters);
@@ -65,15 +63,14 @@ public class BisectingKMeansClusteringAlgorithmTest extends
     @Test
     public void testMultilingualSplit() throws Exception
     {
-        BisectingKMeansClusteringAlgorithmDescriptor.attributeBuilder(processingAttributes)
-            .labelCount(1).partitionCount(3);
-
-        MultilingualClusteringDescriptor.attributeBuilder(processingAttributes)
-            .languageAggregationStrategy(LanguageAggregationStrategy.FLATTEN_NONE);
+        processingAttributes.put(BisectingKMeansClusteringAlgorithm.ATTR_LABEL_COUNT, 1);
+        processingAttributes.put(BisectingKMeansClusteringAlgorithm.ATTR_PARTITION_COUNT, 3);
+        processingAttributes.put(MultilingualClustering.ATTR_LANGUAGE_AGGREGATION_STRATEGY,
+            LanguageAggregationStrategy.FLATTEN_NONE);
 
         final ProcessingResult pr = cluster(SampleDocumentData.DOCUMENTS_SALSA_MULTILINGUAL);
         final List<Cluster> clusters = pr.getClusters();
-        final Set<String> clusterNames = Sets.newHashSet();
+        final Set<String> clusterNames = new HashSet<>();
         for (Cluster c : clusters) {
             clusterNames.add(c.getLabel());
         }

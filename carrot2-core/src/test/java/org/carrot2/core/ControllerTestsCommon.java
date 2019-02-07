@@ -502,12 +502,6 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         }
     }
 
-    public static <K, V> Map<K, V> mapOf(K k, V v) {
-        HashMap<K, V> map = new HashMap<>();
-        map.put(k, v);
-        return map;
-    }
-
     @Test
     public void testEmptyStatsInNewController()
     {

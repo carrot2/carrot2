@@ -15,10 +15,7 @@ package org.carrot2.util.tests;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.fest.assertions.AssertExtension;
 import org.fest.assertions.Assertions;
@@ -153,4 +150,18 @@ public class CarrotTestCase extends RandomizedTest
     public static StringAssert assertThat(String actual) { return Assertions.assertThat(actual); }
     public static <T extends AssertExtension> T assertThat(T assertion) { return Assertions.assertThat(assertion); }
     public static ThrowableAssert assertThat(Throwable actual) { return Assertions.assertThat(actual); }
+
+
+    public static <K, V> Map<K, V> mapOf(K k, V v) {
+        HashMap<K, V> map = new HashMap<>();
+        map.put(k, v);
+        return map;
+    }
+
+    public static <K, V> Map<K, V> mapOf(K k1, V v1, K k2, V v2) {
+        HashMap<K, V> map = new HashMap<>();
+        map.put(k1, v1);
+        map.put(k2, v2);
+        return map;
+    }
 }

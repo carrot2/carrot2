@@ -27,7 +27,6 @@ import org.carrot2.core.ProcessingComponentBase;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.shaded.guava.common.collect.ImmutableMap;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.attribute.Attribute;
@@ -128,7 +127,7 @@ public class DefaultLexicalDataFactoryTest extends CarrotTestCase
         final Controller ctrl1 = ControllerFactory.createPooling();
         final ILexicalData data1;
         {
-            ctrl1.init(ImmutableMap.<String, Object> of(
+            ctrl1.init(mapOf(
                 resourceLookupKey, 
                 new ResourceLookup(new DirLocator(tempDir1), classpathLocator)));
 
@@ -143,7 +142,7 @@ public class DefaultLexicalDataFactoryTest extends CarrotTestCase
         final Controller ctrl2 = ControllerFactory.createPooling();
         final ILexicalData data2;
         {
-            ctrl2.init(ImmutableMap.<String, Object> of(
+            ctrl2.init(mapOf(
                 resourceLookupKey, 
                 new ResourceLookup(new DirLocator(tempDir1), classpathLocator)));
 
@@ -163,7 +162,7 @@ public class DefaultLexicalDataFactoryTest extends CarrotTestCase
         Files.write(tempDir1.resolve("stopwords.en"), "uniqueb".getBytes(StandardCharsets.UTF_8));
 
         final ILexicalData data3 = ctrl1.process(
-            ImmutableMap.<String, Object> of(reloadResourcesKey, true), TestComponent.class)
+            mapOf(reloadResourcesKey, true), TestComponent.class)
                 .getAttribute("english");
 
         assertNotSame(data1, data3);
@@ -201,14 +200,14 @@ public class DefaultLexicalDataFactoryTest extends CarrotTestCase
         // Create pooling controller, use tempDir1
         final Controller ctrl1 = ControllerFactory.createPooling();
         {
-            ctrl1.init(ImmutableMap.<String, Object> of(
+            ctrl1.init(mapOf(
                 resourceLookupKey, 
                 new ResourceLookup(new DirLocator(tempDir1), classpathLocator),
                 resourceReloadKey,
                 true));
     
             final ProcessingResult result = ctrl1.process(
-                Collections.<String, Object> emptyMap(), TestComponent.class);
+                Collections.emptyMap(), TestComponent.class);
             final ILexicalData data = result.getAttribute("english");
 
             assertTrue(data.isCommonWord(new MutableCharArray("uniquea")));
@@ -218,11 +217,11 @@ public class DefaultLexicalDataFactoryTest extends CarrotTestCase
         // Create pooling controller, use tempDir2
         final Controller ctrl2 = ControllerFactory.createPooling();
         {
-            ctrl2.init(ImmutableMap.<String, Object> of(resourceLookupKey, 
+            ctrl2.init(mapOf(resourceLookupKey,
                 new ResourceLookup(new DirLocator(tempDir2), classpathLocator)));
     
             final ProcessingResult result = ctrl2.process(
-                Collections.<String, Object> emptyMap(), TestComponent.class);
+                Collections.emptyMap(), TestComponent.class);
             final ILexicalData data = result.getAttribute("english");
 
             assertFalse(data.isCommonWord(new MutableCharArray("uniquea")));
@@ -232,7 +231,7 @@ public class DefaultLexicalDataFactoryTest extends CarrotTestCase
         // Now, reuse the first controller, nothing should change.
         {
             final ProcessingResult result = ctrl1.process(
-                Collections.<String, Object> emptyMap(), TestComponent.class);
+                Collections.emptyMap(), TestComponent.class);
             final ILexicalData data = result.getAttribute("english");
 
             assertTrue(data.isCommonWord(new MutableCharArray("uniquea")));

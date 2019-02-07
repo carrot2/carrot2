@@ -12,6 +12,7 @@
 
 package org.carrot2.clustering.stc;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,9 +26,6 @@ import org.carrot2.core.test.SampleDocumentData;
 import org.carrot2.text.preprocessing.CaseNormalizer;
 import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Test;
-
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.io.Resources;
 
 import static org.junit.Assert.*;
 
@@ -100,8 +98,7 @@ public class STCClusteringAlgorithmTest extends
         documents.add(new Document("good programming makes you feel better"));
 
         // Lower base cluster score.
-        STCClusteringAlgorithmDescriptor.attributeBuilder(processingAttributes)
-            .minBaseClusterScore(0);
+        processingAttributes.put(STCClusteringAlgorithm.ATTR_MIN_BASE_CLUSTER_SCORE, 0);
 
         ProcessingResult pr = cluster(documents);
         Set<String> clusterLabels = collectClusterLabels(pr);
@@ -115,12 +112,12 @@ public class STCClusteringAlgorithmTest extends
     @Test
     public void testCarrot1008() throws Exception
     {
-        ProcessingResult pr = ProcessingResult.deserialize(
-            Resources.asByteSource(
-                Resources.getResource(this.getClass(), "CARROT-1008.xml")).openBufferedStream());
+        ProcessingResult pr;
+        try (InputStream is = getClass().getResourceAsStream("CARROT-1008.xml")) {
+            pr = ProcessingResult.deserialize(is);
+        }
 
-        STCClusteringAlgorithmDescriptor.attributeBuilder(processingAttributes)
-            .maxClusters(30);
+        processingAttributes.put(STCClusteringAlgorithm.ATTR_MAX_CLUSTERS, 30);
 
         pr = cluster(pr.getDocuments());
 

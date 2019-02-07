@@ -15,6 +15,7 @@ package org.carrot2.text.clustering;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.carrot2.core.*;
 import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStrategy;
@@ -22,9 +23,6 @@ import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.carrot2.shaded.guava.common.base.Function;
-import org.carrot2.shaded.guava.common.base.Predicate;
-import org.carrot2.shaded.guava.common.collect.*;
 
 /**
  *
@@ -152,10 +150,10 @@ public class MultilingualClusteringTest extends CarrotTestCase
         final Cluster co = new Cluster("Other Topics").addDocuments(
             documents.subList(0, 4)).setOtherTopics(true);
 
-        final List<Cluster> expectedClusters = Lists.newArrayList(c1, co);
+        final List<Cluster> expectedClusters = Arrays.asList(c1, co);
 
-        check(documents, expectedClusters, Lists.newArrayList(LanguageCode.POLISH,
-            LanguageCode.GERMAN), LanguageAggregationStrategy.FLATTEN_ALL);
+        check(documents, expectedClusters,
+            Arrays.asList(LanguageCode.POLISH, LanguageCode.GERMAN), LanguageAggregationStrategy.FLATTEN_ALL);
     }
     
     @Test
@@ -170,9 +168,9 @@ public class MultilingualClusteringTest extends CarrotTestCase
         final Cluster co = new Cluster("Other Topics").addDocuments(
             documents.get(0)).setOtherTopics(true);
         
-        final List<Cluster> expectedClusters = Lists.newArrayList(c1, c2, co);
+        final List<Cluster> expectedClusters = Arrays.asList(c1, c2, co);
         
-        check(documents, expectedClusters, Lists.newArrayList(LanguageCode.GERMAN), 
+        check(documents, expectedClusters, Arrays.asList(LanguageCode.GERMAN),
             LanguageAggregationStrategy.CLUSTER_IN_MAJORITY_LANGUAGE);
     }
 
@@ -189,9 +187,9 @@ public class MultilingualClusteringTest extends CarrotTestCase
         final Cluster cl = new Cluster("Other Languages").addSubclusters(new Cluster(
             "Polish").addDocuments(documents.subList(0, 3)));
 
-        final List<Cluster> expectedClusters = Lists.newArrayList(c1, co, cl);
+        final List<Cluster> expectedClusters = Arrays.asList(c1, co, cl);
 
-        check(documents, expectedClusters, Lists.newArrayList(LanguageCode.POLISH,
+        check(documents, expectedClusters, Arrays.asList(LanguageCode.POLISH,
             LanguageCode.GERMAN), LanguageAggregationStrategy.FLATTEN_MAJOR_LANGUAGE);
     }
 
@@ -208,9 +206,9 @@ public class MultilingualClusteringTest extends CarrotTestCase
 
         final Cluster cp = new Cluster("Polish").addDocuments(documents.subList(0, 3));
 
-        final List<Cluster> expectedClusters = Lists.newArrayList(cp, cg);
+        final List<Cluster> expectedClusters = Arrays.asList(cp, cg);
 
-        check(documents, expectedClusters, Lists.newArrayList(LanguageCode.POLISH,
+        check(documents, expectedClusters, Arrays.asList(LanguageCode.POLISH,
             LanguageCode.GERMAN), LanguageAggregationStrategy.FLATTEN_NONE);
     }
     
@@ -226,9 +224,9 @@ public class MultilingualClusteringTest extends CarrotTestCase
         
         final Cluster cp = new Cluster("Polish").addDocuments(documents.subList(0, 3));
         
-        final List<Cluster> expectedClusters = Lists.newArrayList(cp, cn);
+        final List<Cluster> expectedClusters = Arrays.asList(cp, cn);
         
-        check(documents, expectedClusters, Lists.newArrayList(LanguageCode.POLISH,
+        check(documents, expectedClusters, Arrays.asList(LanguageCode.POLISH,
             LanguageCode.NORWEGIAN), LanguageAggregationStrategy.FLATTEN_MAJOR_LANGUAGE);
     }
     
@@ -242,9 +240,9 @@ public class MultilingualClusteringTest extends CarrotTestCase
         final Cluster co = new Cluster("Other Topics").addDocuments(
             documents).setOtherTopics(true);
         
-        final List<Cluster> expectedClusters = Lists.newArrayList(co);
+        final List<Cluster> expectedClusters = Arrays.asList(co);
         
-        check(documents, expectedClusters, Lists.newArrayList(LanguageCode.POLISH),
+        check(documents, expectedClusters, Arrays.asList(LanguageCode.POLISH),
             LanguageAggregationStrategy.CLUSTER_IN_MAJORITY_LANGUAGE);
     }
     
@@ -279,9 +277,9 @@ public class MultilingualClusteringTest extends CarrotTestCase
         final Cluster co = new Cluster("Other Topics").addDocuments(documents.get(0))
             .setOtherTopics(true);
 
-        final List<Cluster> expectedClusters = Lists.newArrayList(c1, c2, co);
+        final List<Cluster> expectedClusters = Arrays.asList(c1, c2, co);
 
-        check(documents, expectedClusters, Lists.newArrayList(clusteringLanguage),
+        check(documents, expectedClusters, Arrays.asList(clusteringLanguage),
             strategy);
     }
 
@@ -293,9 +291,9 @@ public class MultilingualClusteringTest extends CarrotTestCase
         final Cluster co = new Cluster("Other Topics").addDocuments(documents.get(0),
             documents.get(1), documents.get(2)).setOtherTopics(true);
 
-        final List<Cluster> expectedClusters = Lists.newArrayList(co);
+        final List<Cluster> expectedClusters = Arrays.asList(co);
 
-        check(documents, expectedClusters, Lists.newArrayList(LanguageCode.NORWEGIAN),
+        check(documents, expectedClusters, Arrays.asList(LanguageCode.NORWEGIAN),
             strategy);
     }
 
@@ -318,14 +316,9 @@ public class MultilingualClusteringTest extends CarrotTestCase
      */
     private static List<Document> documentsWithLanguages(LanguageCode... languages)
     {
-        return Lists.newArrayList(Lists.transform(Arrays.asList(languages),
-            new Function<LanguageCode, Document>()
-            {
-                public Document apply(LanguageCode language)
-                {
-                    return new Document().setLanguage(language);
-                }
-            }));
+        return Arrays.asList(languages).stream()
+            .map(lang -> new Document().setLanguage(lang))
+            .collect(Collectors.toList());
     }
 
     /**
@@ -334,7 +327,7 @@ public class MultilingualClusteringTest extends CarrotTestCase
     private static class TestMultilingualClusteringAlgorithm implements
         IMonolingualClusteringAlgorithm
     {
-        private Set<LanguageCode> clusteringLanguages = Sets.newHashSet();
+        private Set<LanguageCode> clusteringLanguages = new HashSet<>();
 
         public List<Cluster> process(List<Document> documents, LanguageCode language)
         {
@@ -364,14 +357,7 @@ public class MultilingualClusteringTest extends CarrotTestCase
 
                 Cluster.appendOtherTopics(documents, clusters);
 
-                return Lists.newArrayList(Collections2.filter(clusters,
-                    new Predicate<Cluster>()
-                    {
-                        public boolean apply(Cluster cluster)
-                        {
-                            return !cluster.getDocuments().isEmpty();
-                        }
-                    }));
+                return clusters.stream().filter(cluster -> !cluster.getDocuments().isEmpty()).collect(Collectors.toList());
             }
             return clusters;
         }

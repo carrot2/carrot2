@@ -14,8 +14,6 @@ package org.carrot2.core;
 
 import java.util.*;
 
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * Represents a specific configuration of a {@link IProcessingComponent}.
  */
@@ -68,8 +66,8 @@ public class ProcessingComponentConfiguration
     static Map<String, ProcessingComponentConfiguration> indexByComponentId(
         ProcessingComponentConfiguration... configurations)
     {
-        final HashMap<String, ProcessingComponentConfiguration> componentIdToConfiguration = Maps
-            .newHashMapWithExpectedSize(configurations.length);
+        final HashMap<String, ProcessingComponentConfiguration> componentIdToConfiguration =
+            new HashMap<>(configurations.length);
         for (ProcessingComponentConfiguration configuration : configurations)
         {
             if (componentIdToConfiguration.put(configuration.componentId, configuration) != null)

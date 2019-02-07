@@ -39,9 +39,6 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.core.Commit;
 
-import org.carrot2.shaded.guava.common.base.Function;
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * Descriptor of a {@link IProcessingComponent} being part of a
  * {@link ProcessingComponentSuite}.
@@ -332,24 +329,6 @@ public class ProcessingComponentDescriptor
             org.slf4j.LoggerFactory.getLogger(this.getClass()).warn(
                 "Component unavailable: " + componentClassName, e);
             this.initializationException = e;
-        }
-    }
-
-    /**
-     * Transforms a {@link ProcessingComponentDescriptor} to its identifier.
-     */
-    public static final class ProcessingComponentDescriptorToId implements
-        Function<ProcessingComponentDescriptor, String>
-    {
-        public static final ProcessingComponentDescriptorToId INSTANCE = new ProcessingComponentDescriptorToId();
-
-        private ProcessingComponentDescriptorToId()
-        {
-        }
-
-        public String apply(ProcessingComponentDescriptor descriptor)
-        {
-            return descriptor.id;
         }
     }
 

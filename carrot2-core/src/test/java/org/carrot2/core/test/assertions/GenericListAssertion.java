@@ -12,14 +12,12 @@
 
 package org.carrot2.core.test.assertions;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import org.fest.assertions.Condition;
 import org.fest.assertions.ItemGroupAssert;
-
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Sets;
 
 /**
  * A simple base class for generic list asserts.
@@ -72,13 +70,13 @@ public class GenericListAssertion<S, E> extends ItemGroupAssert<S, List<E>>
     @Override
     protected List<Object> actualAsList()
     {
-        return Lists.<Object> newArrayList(actual);
+        return Collections.singletonList(actual);
     }
 
     @Override
     protected Set<Object> actualAsSet()
     {
-        return Sets.<Object> newHashSet(actual);
+        return Collections.singleton(actual);
     }
 
     @Override

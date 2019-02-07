@@ -20,11 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.CloseableUtils;
@@ -38,8 +34,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 import static org.junit.Assert.*;
 
@@ -245,8 +239,7 @@ public class ProcessingResultTest extends CarrotTestCase
         clusterB.setAttribute(Cluster.SCORE, 0.55);
         clusterB.addDocuments(documents.get(1), documents.get(2));
 
-        assertThatClusters(clusters).isEquivalentTo(
-            Lists.newArrayList(clusterA, clusterB));
+        assertThatClusters(clusters).isEquivalentTo(Arrays.asList(clusterA, clusterB));
         Assertions.assertThat(deserialized.getAttributes().get(AttributeNames.QUERY))
             .isEqualTo(query);
     }
@@ -355,7 +348,8 @@ public class ProcessingResultTest extends CarrotTestCase
     {
         final JsonNode clusters = root.get("clusters");
         Assertions.assertThat(clusters).isNotNull();
-        final ArrayList<JsonNode> clusterNodes = Lists.newArrayList(clusters.elements());
+        final ArrayList<JsonNode> clusterNodes = new ArrayList<>();
+        clusters.elements().forEachRemaining(c -> clusterNodes.add(c));
         Assertions.assertThat(clusterNodes).hasSize(result.getClusters().size());
     }
 
@@ -363,7 +357,8 @@ public class ProcessingResultTest extends CarrotTestCase
     {
         final JsonNode documents = root.get("documents");
         Assertions.assertThat(documents).isNotNull();
-        final ArrayList<JsonNode> documentNodes = Lists.newArrayList(documents.elements());
+        final ArrayList<JsonNode> documentNodes = new ArrayList<>();
+        documents.elements().forEachRemaining(c -> documentNodes.add(c));
         Assertions.assertThat(documentNodes).hasSize(result.getDocuments().size());
     }
 
@@ -406,6 +401,8 @@ public class ProcessingResultTest extends CarrotTestCase
         sourceProcessingResult.serialize(outputStream, documentsDeserialized,
             clustersDeserialized, attributesDeserialized);
         CloseableUtils.close(outputStream);
+
+        System.out.println(new String(outputStream.toByteArray()));
 
         final ProcessingResult deserialized = ProcessingResult
             .deserialize(new ByteArrayInputStream(outputStream.toByteArray()));
@@ -450,22 +447,22 @@ public class ProcessingResultTest extends CarrotTestCase
 
     private ProcessingResult prepareProcessingResult()
     {
-        final List<Document> documents = Lists.newArrayList(new Document("Test title 1",
-            "Test snippet 1", "http://test1.com"), new Document("Test title 2",
-            "Test snippet 2", "http://test2.com/test"), new Document("Test title 3",
-            "Test snippet 3. Some more words and <b>html</b>", "http://test2.com"),
+        final List<Document> documents = Arrays.asList(
+            new Document("Test title 1", "Test snippet 1", "http://test1.com"),
+            new Document("Test title 2", "Test snippet 2", "http://test2.com/test"),
+            new Document("Test title 3", "Test snippet 3. Some more words and <b>html</b>", "http://test2.com"),
             new Document("Other", "Other", "Other"));
         final Map<String, Object> attributes = new HashMap<>();
         attributes.put(AttributeNames.DOCUMENTS, documents);
 
         final Document document = documents.get(0);
-        document.setSources(Lists.newArrayList("s1", "s2"));
+        document.setSources(new ArrayList<>(Arrays.asList("s1", "s2")));
         document.setField("testString", "test");
         document.setField("testInteger", 10);
         document.setField("testDouble", 10.3);
         document.setField("testBoolean", true);
         document.setLanguage(LanguageCode.POLISH);
-        document.setSources(Lists.newArrayList("s1", "s2"));
+        document.setSources(new ArrayList<>(Arrays.asList("s1", "s2")));
         Document.assignDocumentIds(documents);
 
         final Cluster clusterA = new Cluster();
@@ -491,7 +488,7 @@ public class ProcessingResultTest extends CarrotTestCase
         clusterO.addPhrases(Cluster.OTHER_TOPICS_LABEL);
         clusterO.addDocuments(documents.get(3));
 
-        final List<Cluster> clusters = Lists.newArrayList(clusterA, clusterB, clusterO);
+        final List<Cluster> clusters = Arrays.asList(clusterA, clusterB, clusterO);
         attributes.put(AttributeNames.CLUSTERS, clusters);
 
         attributes.put(AttributeNames.QUERY, "query");

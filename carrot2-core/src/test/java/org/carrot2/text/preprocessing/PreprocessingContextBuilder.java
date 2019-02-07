@@ -24,9 +24,6 @@ import org.carrot2.text.linguistic.IStemmerFactory;
 import org.carrot2.text.preprocessing.pipeline.*;
 import org.carrot2.util.attribute.*;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * Preprocessing context builder for tests.
  */

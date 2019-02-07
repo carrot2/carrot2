@@ -44,17 +44,11 @@ import org.apache.log4j.PatternLayout;
 import org.carrot2.core.Controller;
 import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.Document;
-import org.carrot2.core.IClusteringAlgorithm;
-import org.carrot2.core.IDocumentSource;
-import org.carrot2.core.IProcessingComponent;
 import org.carrot2.core.ProcessingComponentConfiguration;
 import org.carrot2.core.ProcessingComponentSuite;
 import org.carrot2.core.ProcessingException;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.dcs.DcsRequestModel.OutputFormat;
-import org.carrot2.shaded.guava.common.collect.ImmutableMap;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.AttributeBinder;
@@ -129,10 +123,6 @@ public final class RestProcessorServlet extends HttpServlet
 
     private transient Templates xsltTemplates;
 
-    /**
-     * Disable log file appender configured in {@link #getLogAppender(HttpServletRequest)}
-     * . The appender is enabled by default, but disabled for tests.
-     */
     private boolean disableLogFileAppender = Boolean.getBoolean(DISABLE_LOGFILE_APPENDER);
 
     /**
@@ -290,10 +280,10 @@ public final class RestProcessorServlet extends HttpServlet
             }
         }
 
-        controller.init(
-            ImmutableMap.<String, Object> of(resourceLookupAttrKey, new ResourceLookup(locators)), 
-            configurations);
+        HashMap<String, Object> initAttrs = new HashMap<>();
+        initAttrs.put(resourceLookupAttrKey, new ResourceLookup(locators));
 
+        controller.init(initAttrs, configurations);
         config.logger.info("DCS request processor started.");
     }
 

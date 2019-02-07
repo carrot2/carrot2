@@ -73,7 +73,11 @@ import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase implements
     IClusteringAlgorithm
 {
-    /** {@link Group} name. */
+  public static final String ATTR_CLUSTER_COUNT = "clusterCount";
+  public static final String ATTR_LABEL_COUNT = "labelCount";
+  public static final String ATTR_PARTITION_COUNT = "partitionCount";
+
+  /** {@link Group} name. */
     private final static String GROUP_KMEANS = "K-means";
     
     @Processing
@@ -95,7 +99,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
      */
     @Processing
     @Input
-    @Attribute
+    @Attribute(key = ATTR_CLUSTER_COUNT)
     @IntRange(min = 2)
     @Group(DefaultGroups.CLUSTERS)
     @Level(AttributeLevel.BASIC)
@@ -136,7 +140,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
      */
     @Processing
     @Input
-    @Attribute
+    @Attribute(key = ATTR_PARTITION_COUNT)
     @IntRange(min = 2, max = 10)
     @Group(GROUP_KMEANS)
     @Level(AttributeLevel.BASIC)
@@ -148,7 +152,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
      */
     @Processing
     @Input
-    @Attribute
+    @Attribute(key = ATTR_LABEL_COUNT)
     @IntRange(min = 1, max = 10)
     @Group(DefaultGroups.CLUSTERS)
     @Level(AttributeLevel.BASIC)

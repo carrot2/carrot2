@@ -17,9 +17,6 @@ import java.util.*;
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
 
-import org.carrot2.shaded.guava.common.collect.ImmutableList;
-import org.carrot2.shaded.guava.common.collect.Lists;
-
 /**
  * A set of sample documents returned for the query <i>data mining</i>. This set is
  * hard-coded so that no other external components are needed to run tests (i.e., circular
@@ -1247,7 +1244,7 @@ public final class SampleDocumentData
     public final static List<Document> DOCUMENTS_SALSA_MULTILINGUAL;
     static
     {
-        DOCUMENTS_SALSA_MULTILINGUAL = ImmutableList.of(
+        DOCUMENTS_SALSA_MULTILINGUAL = Arrays.asList(
 
             new Document(
               "© Salsa Cycles 2009",
@@ -3245,7 +3242,7 @@ public final class SampleDocumentData
     public final static List<List<Document>> ALL;
     static
     {
-        ALL = ImmutableList.of(
+        ALL = Arrays.asList(
             DOCUMENTS_DATA_MINING, DOCUMENTS_DAWID, DOCUMENTS_SALSA_MULTILINGUAL);
         List<Document> flattened = new ArrayList<>();
         for (List<Document> sub : ALL) {

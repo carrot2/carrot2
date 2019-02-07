@@ -26,7 +26,6 @@ import org.simpleframework.xml.core.*;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.carrot2.shaded.guava.common.collect.*;
 
 /**
  * Encapsulates the results of processing. Provides access to the values of attributes
@@ -187,7 +186,7 @@ public final class ProcessingResult
 
             if (getDocuments() != null)
             {
-                documents = Lists.newArrayList(getDocuments());
+                documents = new ArrayList<>(getDocuments());
             }
             else
             {
@@ -196,7 +195,7 @@ public final class ProcessingResult
 
             if (getClusters() != null)
             {
-                clusters = Lists.newArrayList(getClusters());
+                clusters = new ArrayList<>(getClusters());
             }
             else
             {

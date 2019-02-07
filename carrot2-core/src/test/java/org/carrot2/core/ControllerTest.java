@@ -20,7 +20,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
-import org.carrot2.shaded.guava.common.collect.ImmutableMap;
+
+import java.util.Collections;
 
 /**
  * Runs matrix tests on {@link Controller} in all realistic configurations.
@@ -46,7 +47,7 @@ public class ControllerTest
             try
             {
                 controller = new Controller();
-                controller.process(ImmutableMap.<String, Object> of(), ComponentWithInitParameter.class);
+                controller.process(Collections.emptyMap(), ComponentWithInitParameter.class);
             }
             finally
             {
@@ -139,7 +140,7 @@ public class ControllerTest
             {
                 controller = new Controller();
                 controller.init();
-                controller.process(ImmutableMap.<String, Object> of(), designator);
+                controller.process(Collections.emptyMap(), designator);
             }
             finally
             {
