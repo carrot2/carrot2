@@ -12,11 +12,8 @@
 
 package org.carrot2.core;
 
-import java.io.*;
 import java.util.*;
-
 import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.util.MapUtils;
 
 /**
  * Encapsulates the results of processing. Provides access to the values of attributes

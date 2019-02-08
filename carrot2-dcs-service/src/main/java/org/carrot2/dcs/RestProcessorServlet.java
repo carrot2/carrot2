@@ -106,11 +106,7 @@ public final class RestProcessorServlet extends HttpServlet
 
     private transient DcsConfig config;
 
-    private transient ProcessingComponentSuite componentSuite;
-
     private transient Controller controller;
-
-    private String defaultAlgorithmId;
 
     private transient Templates xsltTemplates;
 
@@ -226,22 +222,11 @@ public final class RestProcessorServlet extends HttpServlet
                     "Suite file not found in servlet context's /WEB-INF/suites: "
                         + config.componentSuiteResource);
             }
-
-            // TODO: ProcessingComponentSuite.deserialize(suiteResource, suitesLookup);
-            ArrayList<ProcessingComponentDescriptor> algorithms = new ArrayList<>();
-            componentSuite = new ProcessingComponentSuite(new ArrayList<>(), algorithms);
         }
         catch (Exception e)
         {
             throw new ServletException("Could initialize component suite.", e);
         }
-
-        // Initialize defaults.
-        if (componentSuite.getAlgorithms().size() == 0)
-        {
-            throw new ServletException("Component suite has no algorithms.");
-        }
-        defaultAlgorithmId = componentSuite.getAlgorithms().get(0).getId();
 
         controller = ControllerFactory.createPooling();
 
@@ -255,7 +240,9 @@ public final class RestProcessorServlet extends HttpServlet
         // Allow multiple resource lookup paths for different component configurations.
         String resourceLookupAttrKey = AttributeUtils.getKey(DefaultLexicalDataFactory.class, "resourceLookup");
         String altResourceLookupAttrKey = "dcs.resource-lookup";
-        ProcessingComponentConfiguration [] configurations = componentSuite.getComponentConfigurations();
+        // TODO: add configurations of components.
+        ProcessingComponentConfiguration [] configurations =
+            new ProcessingComponentConfiguration[] {};
         for (int i = 0; i < configurations.length; i++) {
             ProcessingComponentConfiguration config = configurations[i];
             Object location = config.attributes.get(altResourceLookupAttrKey);
@@ -496,11 +483,6 @@ public final class RestProcessorServlet extends HttpServlet
         // Attributes provided in the POST parameters
         processingAttributes.putAll(attributeBinderActionBind.remainingValues);
 
-        if (StringUtils.isEmpty(requestModel.algorithm))
-        {
-            requestModel.algorithm = defaultAlgorithmId;
-        }
-
         // We need either sourceId or direct document feed
         List<Document> documents = (input != null ? input.getDocuments() : null);
         if (requestModel.source == null && documents == null)
@@ -728,12 +710,6 @@ public final class RestProcessorServlet extends HttpServlet
     }
 
     private static ProcessingResult deserialize(InputStream is) throws IOException
-    {
-      throw new IOException(); // TODO: implement me.
-    }
-
-    private void serialize(ProcessingComponentSuite componentSuite, ServletOutputStream os)
-      throws IOException
     {
       throw new IOException(); // TODO: implement me.
     }

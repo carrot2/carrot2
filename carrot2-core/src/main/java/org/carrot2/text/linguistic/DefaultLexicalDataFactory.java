@@ -103,7 +103,7 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
     @Attribute(key = "resource-lookup", inherit = true)
     @ImplementingClasses(classes = {}, strict = false)
     @AspectModified("Substituted with an assembly lookup in .NET release")
-    public ResourceLookup resourceLookup = new ResourceLookup(CONTEXT_CLASS_LOADER);
+    public  ResourceLookup resourceLookup = new ResourceLookup(CONTEXT_CLASS_LOADER);
 
     /**
      * The main logic for acquiring a shared {@link ILexicalData} instance.

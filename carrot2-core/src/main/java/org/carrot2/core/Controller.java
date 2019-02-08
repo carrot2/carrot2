@@ -76,19 +76,6 @@ public final class Controller implements Closeable
     private ProcessingStatistics statistics = new ProcessingStatistics();
 
     /**
-     * Creates a simple controller with no processing component pooling and no results
-     * caching. A controller with equivalent configuration can be obtained from
-     * {@link ControllerFactory#createSimple()}, see that method for more information. For
-     * more controller configurations, also see {@link ControllerFactory}.
-     * 
-     * @see ControllerFactory
-     */
-    Controller()
-    {
-        this(new SimpleProcessingComponentManager());
-    }
-
-    /**
      * Creates a controller with a custom {@link IProcessingComponentManager}, for experts
      * only. Use {@link ControllerFactory} to obtain controllers in typical
      * configurations.

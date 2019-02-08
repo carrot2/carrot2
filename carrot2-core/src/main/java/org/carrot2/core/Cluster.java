@@ -28,7 +28,7 @@ import org.carrot2.util.StringUtils;
  * A cluster (group) of {@link Document}s. Each cluster has a human-readable label
  * consisting of one or more phrases, a list of documents it contains and a list of its
  * subclusters. Optionally, additional attributes can be associated with a cluster, e.g.
- * {@link #OTHER_TOPICS}. This class is <strong>not</strong> thread-safe.
+ * marker flags like {@link #OTHER_TOPICS}. This class is <strong>not</strong> thread-safe.
  */
 public final class Cluster
 {
@@ -164,14 +164,6 @@ public final class Cluster
     }
 
     /**
-     * For JSON serialization only.
-     */
-    private List<Cluster> getSubclustersForSerialization()
-    {
-        return subclustersView.isEmpty() ? null : subclustersView;
-    }
-
-    /**
      * Returns all documents contained in this cluster. The returned list is unmodifiable.
      * 
      * @return documents contained in this cluster
@@ -195,8 +187,7 @@ public final class Cluster
     {
         if (allDocuments == null)
         {
-            allDocuments = new ArrayList<Document>(collectAllDocuments(this,
-                new LinkedHashSet<Document>()));
+            allDocuments = new ArrayList<>(collectAllDocuments(this, new LinkedHashSet<>()));
         }
 
         return allDocuments;

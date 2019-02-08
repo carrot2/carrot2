@@ -46,7 +46,7 @@ public class ControllerTest
             Controller controller = null;
             try
             {
-                controller = new Controller();
+                controller = ControllerFactory.createSimple();
                 controller.process(Collections.emptyMap(), ComponentWithInitParameter.class);
             }
             finally
@@ -91,7 +91,7 @@ public class ControllerTest
             Controller controller = null;
             try
             {
-                controller = new Controller();
+                controller = ControllerFactory.createSimple();
                 controller.init();
                 controller.init();
             }
@@ -104,7 +104,7 @@ public class ControllerTest
         @Test
         public void testMultipleDisposal()
         {
-            final Controller controller = new Controller();
+            final Controller controller = ControllerFactory.createSimple();
             try {
               controller.init();
               controller.dispose();
@@ -138,7 +138,7 @@ public class ControllerTest
             Controller controller = null;
             try
             {
-                controller = new Controller();
+                controller = ControllerFactory.createSimple();
                 controller.init();
                 controller.process(Collections.emptyMap(), designator);
             }
@@ -156,23 +156,6 @@ public class ControllerTest
         public Controller getSimpleController()
         {
             return ControllerFactory.createSimple();
-        }
-    }
-
-    @Bindable
-    public static class TestProcessingComponent1 extends ProcessingComponentBase
-    {
-        @Override
-        public void process() throws ProcessingException
-        {
-            try
-            {
-                Thread.sleep(Long.MAX_VALUE);
-            }
-            catch (InterruptedException e)
-            {
-                // fall through.
-            }
         }
     }
 

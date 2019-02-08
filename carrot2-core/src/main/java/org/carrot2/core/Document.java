@@ -41,20 +41,6 @@ public final class Document implements Cloneable
     public static final String CONTENT_URL = "url";
 
     /**
-     * Click URL. The URL that should be placed in the anchor to the document instead of
-     * the value returned in {@link #CONTENT_URL}.
-     */
-    public static final String CLICK_URL = "click-url";
-
-    /**
-     * Field name for an URL pointing to the thumbnail image associated with the document.
-     */
-    public static final String THUMBNAIL_URL = "thumbnail-url";
-
-    /** Document size. */
-    public static final String SIZE = "size";
-
-    /**
      * Document score. The semantics of the score depends on the specific document source.
      * Some document sources may not provide document scores at all.
      */
@@ -73,19 +59,6 @@ public final class Document implements Cloneable
      * outside of the list defined in {@link LanguageCode}.
      */
     public static final String LANGUAGE = "language";
-
-    /**
-     * Identifiers of reference clustering partitions this document belongs to. Currently,
-     * this field is used only to calculate various clustering quality metrics. In the
-     * future, clustering algorithms may be able to use values of this field to increase
-     * the quality of clustering.
-     * <p>
-     * Value type: <code>Collection&lt;Object&gt;</code>. There is no constraint on the
-     * actual type of the partition identifier in the collection. Identifiers are assumed
-     * to correctly implement the {@link #equals(Object)} and {@link #hashCode()} methods.
-     * </p>
-     */
-    public static final String PARTITIONS = "partitions";
 
     /** Fields of this document */
     private final Map<String, Object> fields = new HashMap<>();
@@ -173,33 +146,6 @@ public final class Document implements Cloneable
     }
 
     /**
-     * @deprecated please use {@link #getStringId()} instead. Currently, this method
-     *             attempts to parse the string identifier returned by
-     *             {@link #getStringId()} into an integer.
-     * @throws NumberFormatException if the identifier could not be converted to an integer
-     *             number
-     */
-    public Integer getId()
-    {
-        try {
-            return id != null ? Integer.parseInt(id) : null;
-        } catch (NumberFormatException e) {
-            throw new NumberFormatException("Could not parse document identifier as an integer: " + id);
-        }
-    }
-
-    /**
-     * Identifier of this document. The semantics of the identifier varies depending on
-     * the {@link IDocumentSource} that produced the documents.
-     * <p>
-     * When processing documents produced by Carrot2-provided {@link IDocumentSource}, the
-     * framework generates unique integer identifiers for all the documents. However, when
-     * XML document sets are loaded using the
-     * {@link ProcessingResult#deserialize(java.io.InputStream)} or
-     * {@link ProcessingResult#deserialize(CharSequence)} methods, the original document
-     * identifiers are preserved, which means they may be non-unique or not present at all.
-     * </p>
-     * 
      * @return identifier of this document, possibly <code>null</code>
      */
     public String getStringId()
@@ -243,25 +189,6 @@ public final class Document implements Cloneable
     public Document setSummary(String summary)
     {
         return setField(SUMMARY, summary);
-    }
-
-    /**
-     * Returns this document's {@link #CONTENT_URL} field.
-     */
-    public String getContentUrl()
-    {
-        return getField(CONTENT_URL);
-    }
-
-    /**
-     * Sets this document's {@link #CONTENT_URL} field.
-     * 
-     * @param contentUrl content URL to set
-     * @return this document for convenience
-     */
-    public Document setContentUrl(String contentUrl)
-    {
-        return setField(CONTENT_URL, contentUrl);
     }
 
     /**
