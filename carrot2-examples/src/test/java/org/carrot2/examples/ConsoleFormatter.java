@@ -20,6 +20,7 @@ import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributes;
+import org.carrot2.util.StringUtils;
 
 /**
  * Simple console formatter for dumping {@link ProcessingResult}.
@@ -104,16 +105,13 @@ public class ConsoleFormatter
         System.out.printf(indent + "[%2s] ", document.getStringId());
         System.out.println((Object) document.getField(Document.TITLE));
         final String url = document.getField(Document.CONTENT_URL);
-        if (isNotBlank(url))
+        if (StringUtils.isNotBlank(url))
         {
             System.out.println(indent + "     " + url);
         }
         System.out.println();
     }
 
-    private static boolean isNotBlank(String s) {
-        return s != null && !s.trim().isEmpty();
-    }
 
     private static void displayCluster(final int level, String tag, Cluster cluster,
         int maxNumberOfDocumentsToShow, ClusterDetailsFormatter clusterDetailsFormatter)

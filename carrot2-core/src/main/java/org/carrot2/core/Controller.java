@@ -39,13 +39,7 @@ import org.carrot2.util.attribute.Output;
  * {@link #dispose()} should be called after all threads leave
  * {@link #process(Map, Class...)} and {@link #process(Map, Object...)}.
  * </p>
- * <p>
- * Notice for {@link IProcessingComponent} developers: if data caching is used, values of
- * {@link Output} attributes produced by the components whose output is to be cached
- * (e.g., the {@link Document} instances in case {@link IDocumentSource} output is cached)
- * may be accessed concurrently and therefore must be thread-safe.
- * </p>
- * 
+ *
  * @see ControllerFactory
  */
 public final class Controller implements Closeable
@@ -101,7 +95,6 @@ public final class Controller implements Closeable
      */
     public Controller(IProcessingComponentManager componentManager)
     {
-        HttpAuthHub.setupAuthenticator();
         this.componentManager = componentManager;
     }
 
@@ -161,35 +154,6 @@ public final class Controller implements Closeable
 
         componentManager.init(context, attributes, configurations);
         return this;
-    }
-
-    /**
-     * Convenience method for performing processing with the provided query and number of
-     * results. The typical use cases for this method is fetching the specified number of
-     * results from an {@link IDocumentSource} and, optionally, clustering them with an
-     * {@link IClusteringAlgorithm}.
-     * <p>
-     * For a method allowing to pass more attributes, see: {@link #process(Map, Class...)}.
-     * </p>
-     * 
-     * @param query the query to use during processing
-     * @param results the number of results to fetch. If <code>null</code> is provided,
-     *            the default number of results will be requested.
-     * @param processingComponentClasses classes of components to perform processing in
-     *            the order they should be arranged in the pipeline. Each provided class
-     *            must implement {@link IProcessingComponent}.
-     * @return results of the processing
-     */
-    public ProcessingResult process(String query, Integer results,
-        Class<?>... processingComponentClasses) throws ProcessingException
-    {
-        final Map<String, Object> attributes = new HashMap<>();
-        attributes.put(AttributeNames.QUERY, query);
-        if (results != null)
-        {
-            attributes.put(AttributeNames.RESULTS, results);
-        }
-        return process(attributes, processingComponentClasses);
     }
 
     /**

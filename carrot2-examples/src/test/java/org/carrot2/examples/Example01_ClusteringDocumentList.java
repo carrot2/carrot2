@@ -30,7 +30,6 @@ import org.junit.Test;
  */
 public class Example01_ClusteringDocumentList
 {
-    // [[[start:clustering-document-list]]]
     /* A few example documents, normally you would need at least 200 for reasonable clusters. */
     private final String [][] data = new String [][] {
         {
@@ -67,8 +66,7 @@ public class Example01_ClusteringDocumentList
     @Test
     public void clusterByUrl()
     {
-        /* [[[start:clustering-document-list-intro]]]
-         * 
+        /*
          * <div>
          * <p>
          * The easiest way to get started with Carrot2 is to cluster a collection
@@ -88,11 +86,8 @@ public class Example01_ClusteringDocumentList
          * the documents being clustered, you should also provide it to Carrot2 to get better clusters.
          * </p>
          * </div>
-         * 
-         * [[[end:clustering-document-list-intro]]]
          */
 
-        // [[[start:clustering-document-list]]]
         /* Prepare input documents */
         final List<Document> documents = Arrays.stream(data)
             .map(row -> new Document(row[1], row[2], row[0]))
@@ -106,7 +101,6 @@ public class Example01_ClusteringDocumentList
             controller.process(documents, null, ByUrlClusteringAlgorithm.class).getClusters();
 
         ConsoleFormatter.displayClusters(clustersByDomain);
-        // [[[end:clustering-document-list]]]
     }
 
     @Test
