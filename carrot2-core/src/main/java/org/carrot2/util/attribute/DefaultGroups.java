@@ -25,8 +25,6 @@ public final class DefaultGroups
     public static final String QUERY = "Search query";
     public static final String RESULT_INFO = "Search result information";
     public static final String DOCUMENTS = "Documents";
-    public static final String SOURCE_PAGING = "Data source paging";
-    public static final String FILTERING = "Filtering";
     public static final String PREPROCESSING = "Preprocessing";
     public static final String PHRASE_EXTRACTION = "Phrase extraction";
 }

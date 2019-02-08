@@ -10,29 +10,25 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.examples.clustering;
+package org.carrot2.examples;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
+import org.carrot2.clustering.stc.STCClusteringAlgorithm;
 import org.carrot2.clustering.synthetic.ByUrlClusteringAlgorithm;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Controller;
 import org.carrot2.core.ControllerFactory;
 import org.carrot2.core.Document;
-import org.carrot2.core.IDocumentSource;
-import org.carrot2.core.ProcessingResult;
 import org.junit.Test;
 
 /**
  * This example shows how to cluster a set of documents available as an {@link List}.
- * This setting is particularly useful for quick experiments with custom data for which
- * there is no corresponding {@link IDocumentSource} implementation. For production use,
- * it's better to implement a {@link IDocumentSource} for the custom document source, so
- * that e.g., the {@link Controller} can cache its results, if needed.
  */
-public class ClusteringDocumentList
+public class Example01_ClusteringDocumentList
 {
     // [[[start:clustering-document-list]]]
     /* A few example documents, normally you would need at least 200 for reasonable clusters. */
@@ -96,12 +92,30 @@ public class ClusteringDocumentList
          * [[[end:clustering-document-list-intro]]]
          */
 
+        // [[[start:clustering-document-list]]]
         /* Prepare input documents */
-        final ArrayList<Document> documents = new ArrayList<>();
-        for (String [] row : data)
-        {
-            documents.add(new Document(row[1], row[2], row[0]));
-        }
+        final List<Document> documents = Arrays.stream(data)
+            .map(row -> new Document(row[1], row[2], row[0]))
+            .collect(Collectors.toList());
+
+        /* A controller to manage the processing pipeline. */
+        final Controller controller = ControllerFactory.createPooling();
+
+        /* Perform clustering by domain. In this case query is not useful, hence it is null. */
+        final List<Cluster> clustersByDomain =
+            controller.process(documents, null, ByUrlClusteringAlgorithm.class).getClusters();
+
+        ConsoleFormatter.displayClusters(clustersByDomain);
+        // [[[end:clustering-document-list]]]
+    }
+
+    @Test
+    public void clusterWithLingoAlgorithm()
+    {
+        /* Prepare input documents */
+        final List<Document> documents = Arrays.stream(data)
+            .map(row -> new Document(row[1], row[2], row[0]))
+            .collect(Collectors.toList());
 
         /* A controller to manage the processing pipeline. */
         final Controller controller = ControllerFactory.createPooling();
@@ -110,16 +124,30 @@ public class ClusteringDocumentList
          * Perform clustering by topic using the Lingo algorithm. Lingo can
          * take advantage of the original query, so we provide it along with the documents.
          */
-        final ProcessingResult byTopicClusters = controller.process(documents, "data mining", LingoClusteringAlgorithm.class);
-        final List<Cluster> clustersByTopic = byTopicClusters.getClusters();
+
+        final List<Cluster> clustersByTopic =
+            controller.process(documents, "data mining", LingoClusteringAlgorithm.class).getClusters();
+
         ConsoleFormatter.displayClusters(clustersByTopic);
+    }
 
-        /* Perform clustering by domain. In this case query is not useful, hence it is null. */
-        final ProcessingResult byDomainClusters = controller.process(documents, null,
-            ByUrlClusteringAlgorithm.class);
+    @Test
+    public void clusterWithStcAlgorithm()
+    {
+        /* Prepare input documents */
+        final List<Document> documents = Arrays.stream(data)
+            .map(row -> new Document(row[1], row[2], row[0]))
+            .collect(Collectors.toList());
 
-        final List<Cluster> clustersByDomain = byDomainClusters.getClusters();
-        ConsoleFormatter.displayClusters(clustersByDomain);
-        // [[[end:clustering-document-list]]]
+        /* A controller to manage the processing pipeline. */
+        final Controller controller = ControllerFactory.createPooling();
+
+        /*
+         * Perform clustering by topic using the STC algorithm.
+         */
+        final List<Cluster> clustersByTopic =
+            controller.process(documents, "data mining", STCClusteringAlgorithm.class).getClusters();
+
+        ConsoleFormatter.displayClusters(clustersByTopic);
     }
 }

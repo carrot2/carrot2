@@ -222,12 +222,6 @@ public abstract class ControllerTestsBase extends CarrotTestCase
             .isGreaterThan((long) (totalTime * (1 - tolerance) - 100 * tolerance));
 
         assertThat(
-            ((Long) (resultAttributes.get(AttributeNames.PROCESSING_TIME_SOURCE)))
-                .longValue()).as("Source time")
-            .isLessThan((long) (c1Time * (1 + tolerance) + 100 * tolerance))
-            .isGreaterThan((long) (c1Time * (1 - tolerance) - 100 * tolerance));
-
-        assertThat(
             ((Long) (resultAttributes.get(AttributeNames.PROCESSING_TIME_ALGORITHM)))
                 .longValue()).as("Algorithm time")
             .isLessThan((long) (c2Time * (1 + tolerance) + 100 * tolerance))
@@ -235,8 +229,7 @@ public abstract class ControllerTestsBase extends CarrotTestCase
     }
 
     @Bindable
-    public static class Component1 extends DelegatingProcessingComponent implements
-        IDocumentSource
+    public static class Component1 extends DelegatingProcessingComponent
     {
         @Init
         @Input
@@ -345,7 +338,7 @@ public abstract class ControllerTestsBase extends CarrotTestCase
 
     @Bindable
     public static class ComponentWithInputOutputAttributes1 extends
-        ProcessingComponentBase implements IDocumentSource
+        ProcessingComponentBase
     {
         @Processing
         @Input

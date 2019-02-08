@@ -56,11 +56,6 @@ public final class AttributeNames
     public static final String PROCESSING_TIME_TOTAL = "processing-time-total";
 
     /**
-     * @see CommonAttributesDescriptor.Keys#PROCESSING_TIME_SOURCE
-     */
-    public static final String PROCESSING_TIME_SOURCE = "processing-time-source";
-
-    /**
      * @see CommonAttributesDescriptor.Keys#PROCESSING_TIME_ALGORITHM
      */
     public static final String PROCESSING_TIME_ALGORITHM = "processing-time-algorithm";

@@ -512,8 +512,6 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         assertThat(statistics.goodQueries).isEqualTo(0);
         assertThat(statistics.algorithmTimeAverageInWindow).isEqualTo(0);
         assertThat(statistics.algorithmTimeMeasurementsInWindow).isEqualTo(0);
-        assertThat(statistics.sourceTimeAverageInWindow).isEqualTo(0);
-        assertThat(statistics.sourceTimeMeasurementsInWindow).isEqualTo(0);
         assertThat(statistics.totalTimeAverageInWindow).isEqualTo(0);
         assertThat(statistics.totalTimeMeasurementsInWindow).isEqualTo(0);
 
@@ -545,8 +543,6 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
         assertThat(statistics.goodQueries).isEqualTo(1);
         assertThat(statistics.algorithmTimeAverageInWindow).isGreaterThanOrEqualTo(halfDelay);
         assertThat(statistics.algorithmTimeMeasurementsInWindow).isEqualTo(1);
-        assertThat(statistics.sourceTimeAverageInWindow).isGreaterThanOrEqualTo(halfDelay);
-        assertThat(statistics.sourceTimeMeasurementsInWindow).isEqualTo(1);
         assertThat(statistics.totalTimeAverageInWindow).isGreaterThanOrEqualTo(2 * halfDelay);
         assertThat(statistics.totalTimeMeasurementsInWindow).isEqualTo(1);
 

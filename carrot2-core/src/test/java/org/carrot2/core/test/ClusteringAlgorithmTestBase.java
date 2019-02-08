@@ -21,15 +21,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.util.attribute.Bindable;
-import org.carrot2.util.attribute.BindableMetadata;
 import org.fest.assertions.Assertions;
 import org.junit.Assume;
 import org.junit.Ignore;
@@ -46,22 +42,6 @@ import static org.junit.Assert.*;
 public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm> 
     extends ProcessingComponentTestBase<T>
 {
-    /**
-     * Algorithms are bindable, so their metadata should always be available.
-     */
-    @Test
-    @Ignore
-    @Deprecated
-    public void testMetadataAvailable()
-    {
-        Class<? extends IClusteringAlgorithm> c = getComponentClass();
-        Assume.assumeTrue(c.getAnnotation(Bindable.class) != null);
-        
-        BindableMetadata metadata = BindableMetadata.forClassWithParents(c);
-        assertNotNull(metadata);
-        assertNotNull(metadata.getAttributeMetadata());
-    }
-
     /**
      * A test to check if the algorithm does not fail with no documents.
      */

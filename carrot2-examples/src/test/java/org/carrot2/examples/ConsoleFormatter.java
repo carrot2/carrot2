@@ -10,7 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.examples.clustering;
+package org.carrot2.examples;
 
 import java.text.NumberFormat;
 import java.util.Collection;

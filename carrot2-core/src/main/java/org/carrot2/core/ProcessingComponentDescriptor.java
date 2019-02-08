@@ -12,21 +12,14 @@
 
 package org.carrot2.core;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.core.attribute.Init;
-import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.ReflectionUtils;
-import org.carrot2.util.StringUtils;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.AttributeValueSet;
 import org.carrot2.util.attribute.AttributeValueSets;
-import org.carrot2.util.attribute.Bindable;
-import org.carrot2.util.attribute.BindableDescriptor;
-import org.carrot2.util.attribute.BindableDescriptorBuilder;
 import org.carrot2.util.attribute.Input;
 import org.carrot2.util.attribute.Output;
 import org.carrot2.util.attribute.Required;
@@ -62,11 +55,6 @@ public class ProcessingComponentDescriptor
     private String attributeSetsResource;
 
     private String attributeSetId;
-
-    /**
-     * Cached bindable descriptor for this component.
-     */
-    private BindableDescriptor bindableDescriptor;
 
     ProcessingComponentDescriptor()
     {
@@ -174,9 +162,7 @@ public class ProcessingComponentDescriptor
      * Creates a new initialized instance of the processing component corresponding to
      * this descriptor. The instance will be initialized with the {@link Init} attributes
      * from this descriptor's default attribute set. Checking whether all {@link Required}
-     * attribute have been provided will not be made, which, when attributes of
-     * {@link Bindable} are <code>null</code>, may cause {@link #getBindableDescriptor()}
-     * to return incomplete descriptor.
+     * attribute have been provided will not be made.
      * <p>
      * The instance may or may not be usable for processing because the
      * {@link IControllerContext} on which it is initialized is disposed before the value
@@ -219,22 +205,6 @@ public class ProcessingComponentDescriptor
         }
 
         return instance;
-    }
-
-    /**
-     * Builds and returns a {@link BindableDescriptor} for an instance of this
-     * descriptor's {@link IProcessingComponent}, with default {@link Init} attributes
-     * initialized with the default attribute set. If the default attribute set does not
-     * provide values for some required {@link Bindable} {@link Init} attributes, the
-     * returned descriptor may be incomplete.
-     */
-    public BindableDescriptor getBindableDescriptor()
-    {
-        if (bindableDescriptor == null)
-            throw new RuntimeException(
-                "Descriptor not available.", this.initializationException);
-
-        return bindableDescriptor;
     }
 
     /**

@@ -365,12 +365,6 @@ public final class Controller implements Closeable
                     final long time = componentStop - componentStart;
 
                     // Count only regular processing components, omit wrappers
-                    if (IDocumentSource.class
-                        .isAssignableFrom(configurations[i].componentClass))
-                    {
-                        addTime(AttributeNames.PROCESSING_TIME_SOURCE, time,
-                            resultAttributes);
-                    }
                     if (IClusteringAlgorithm.class
                         .isAssignableFrom(configurations[i].componentClass))
                     {
@@ -541,10 +535,6 @@ public final class Controller implements Closeable
         /** Queries that resulted in a processing exception */
         long goodQueries = 0;
 
-        /** Document source processing rolling average time */
-        RollingWindowAverage sourceTimeAverage = new RollingWindowAverage(
-            5 * RollingWindowAverage.MINUTE, 10 * RollingWindowAverage.SECOND);
-
         /** Clustering algorithm processing rolling average time */
         RollingWindowAverage algorithmTimeAverage = new RollingWindowAverage(
             5 * RollingWindowAverage.MINUTE, 10 * RollingWindowAverage.SECOND);
@@ -567,8 +557,6 @@ public final class Controller implements Closeable
 
                     final Map<String, Object> attributes = processingResult
                         .getAttributes();
-                    addTimeToAverage(attributes, AttributeNames.PROCESSING_TIME_SOURCE,
-                        sourceTimeAverage);
                     addTimeToAverage(attributes,
                         AttributeNames.PROCESSING_TIME_ALGORITHM, algorithmTimeAverage);
                     addTimeToAverage(attributes, AttributeNames.PROCESSING_TIME_TOTAL,
@@ -601,9 +589,6 @@ public final class Controller implements Closeable
                     algorithmTimeAverage.getCurrentAverage(),
                     algorithmTimeAverage.getUpdatesInWindow(),
                     algorithmTimeAverage.getWindowSizeMillis(),
-                    sourceTimeAverage.getCurrentAverage(),
-                    sourceTimeAverage.getUpdatesInWindow(),
-                    sourceTimeAverage.getWindowSizeMillis(),
                     totalTimeAverage.getCurrentAverage(),
                     totalTimeAverage.getUpdatesInWindow(),
                     totalTimeAverage.getWindowSizeMillis());

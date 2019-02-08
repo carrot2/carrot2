@@ -45,23 +45,6 @@ public final class ControllerStatistics
     public final long algorithmTimeWindowSize;
 
     /**
-     * Average document source processing time measured within the
-     * {@link #sourceTimeWindowSize}.
-     */
-    public final double sourceTimeAverageInWindow;
-
-    /**
-     * Number of document source processing time measurements within the
-     * {@link #sourceTimeWindowSize}.
-     */
-    public final long sourceTimeMeasurementsInWindow;
-
-    /**
-     * Document source average processing time measurement window, in milliseconds.
-     */
-    public final long sourceTimeWindowSize;
-
-    /**
      * Average total processing time measured within the {@link #totalTimeWindowSize}.
      */
     public final double totalTimeAverageInWindow;
@@ -79,8 +62,7 @@ public final class ControllerStatistics
 
     ControllerStatistics(long totalQueries, long goodQueries,
         double algorithmTimeAverageInWindow, long algorithmTimeMeasurementsInWindow,
-        long algorithmTimeWindowSize, double sourceTimeAverageInWindow,
-        long sourceTimeMeasurementsInWindow, long sourceTimeWindowSize,
+        long algorithmTimeWindowSize,
         double totalTimeAverageInWindow, long totalTimeMeasurementsInWindow,
         long totalTimeWindowSize)
     {
@@ -90,10 +72,6 @@ public final class ControllerStatistics
         this.algorithmTimeAverageInWindow = algorithmTimeAverageInWindow;
         this.algorithmTimeMeasurementsInWindow = algorithmTimeMeasurementsInWindow;
         this.algorithmTimeWindowSize = algorithmTimeWindowSize;
-
-        this.sourceTimeAverageInWindow = sourceTimeAverageInWindow;
-        this.sourceTimeMeasurementsInWindow = sourceTimeMeasurementsInWindow;
-        this.sourceTimeWindowSize = sourceTimeWindowSize;
 
         this.totalTimeAverageInWindow = totalTimeAverageInWindow;
         this.totalTimeMeasurementsInWindow = totalTimeMeasurementsInWindow;

@@ -22,6 +22,12 @@ allprojects {
       testOutputDir file('build/idea/classes/test')
     }
   }
+
+  gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+      options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+  }
 }
 
 ext {
@@ -49,6 +55,7 @@ project("carrot2-examples") {
 
   dependencies {
     implementation project(':carrot2-core')
+    testImplementation "org.slf4j:slf4j-simple:1.7.13"
   }
 }
 
