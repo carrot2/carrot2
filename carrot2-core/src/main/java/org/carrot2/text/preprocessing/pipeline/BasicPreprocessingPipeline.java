@@ -125,9 +125,9 @@ public class BasicPreprocessingPipeline implements IPreprocessingPipeline
     public PreprocessingContext preprocess(List<Document> documents, String query,
         LanguageCode language)
     {
-        final PreprocessingContext context = new PreprocessingContext(
-            LanguageModel.create(language, stemmerFactory, tokenizerFactory,
-                lexicalDataFactory));
+
+        LanguageModel langModel = LanguageModel.create(language, stemmerFactory, tokenizerFactory, lexicalDataFactory);
+        final PreprocessingContext context = new PreprocessingContext(langModel);
 
         tokenizer.tokenize(context, documents.iterator());
         caseNormalizer.normalize(context);

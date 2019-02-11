@@ -53,17 +53,8 @@ public abstract class LanguageModelTestBase extends CarrotTestCase
     public void testStemmerAvailable()
     {
         assertNotNull(languageModel.stemmer);
-        assertThat(languageModel.stemmer.getClass()).as("Stemmer class for: " + languageModel.languageCode)
+        assertThat(languageModel.stemmer.getClass()).as("Stemmer class for: " + getLanguageCode())
             .isNotEqualTo(IdentityStemmer.class);
-    }
-
-    /**
-     * 
-     */
-    @Test
-    public void testLanguageCode()
-    {
-        assertEquals(getLanguageCode(), languageModel.languageCode);
     }
 
     /**

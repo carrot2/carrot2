@@ -44,10 +44,13 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
     /** Word image to index mapping */
     protected Map<String, Integer> wordIndices;
 
+    protected LanguageCode language;
+
     @Before
     public void setUpPreprocessingInfrastructure()
     {
         this.documents = new ArrayList<>();
+        this.language = LanguageCode.ENGLISH;
         setupPreprocessingContext(null);
     }
 

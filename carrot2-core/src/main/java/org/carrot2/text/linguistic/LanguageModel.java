@@ -21,7 +21,7 @@ import org.carrot2.text.analysis.ITokenizer;
  */
 public final class LanguageModel
 {
-    public final LanguageCode languageCode;
+    private final LanguageCode languageCode;
     public final IStemmer stemmer;
     public final ITokenizer tokenizer;
     public final ILexicalData lexicalData;
@@ -39,7 +39,7 @@ public final class LanguageModel
 
     public static LanguageModel create(
         final LanguageCode languageCode,
-        final IStemmerFactory stemmerFactory, 
+        final IStemmerFactory stemmerFactory,
         final ITokenizerFactory tokenizerFactory,
         final ILexicalDataFactory lexicalDataFactory)
     {
