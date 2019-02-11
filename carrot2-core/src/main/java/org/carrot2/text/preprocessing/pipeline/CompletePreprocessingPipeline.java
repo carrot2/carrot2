@@ -12,38 +12,47 @@
 
 package org.carrot2.text.preprocessing.pipeline;
 
-import java.util.List;
-
 import org.carrot2.core.Document;
-import org.carrot2.core.LanguageCode;
-import org.carrot2.text.linguistic.LanguageModel;
-import org.carrot2.text.preprocessing.CaseNormalizer;
-import org.carrot2.text.preprocessing.DocumentAssigner;
-import org.carrot2.text.preprocessing.LabelFilterProcessor;
-import org.carrot2.text.preprocessing.LanguageModelStemmer;
-import org.carrot2.text.preprocessing.PhraseExtractor;
-import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.text.preprocessing.StopListMarker;
-import org.carrot2.text.preprocessing.Tokenizer;
-import org.carrot2.util.attribute.Bindable;
+import org.carrot2.text.analysis.ITokenizer;
+import org.carrot2.text.linguistic.ILexicalData;
+import org.carrot2.text.linguistic.IStemmer;
+import org.carrot2.text.preprocessing.*;
+
+import java.util.stream.Stream;
 
 /**
  * Performs a complete preprocessing on the provided documents. The preprocessing consists
  * of the following steps:
  * <ol>
- * <li>{@link Tokenizer#tokenize(PreprocessingContext)}</li>
- * <li>{@link CaseNormalizer#normalize(PreprocessingContext)}</li>
- * <li>{@link LanguageModelStemmer#stem(PreprocessingContext)}</li>
- * <li>{@link StopListMarker#mark(PreprocessingContext)}</li>
- * <li>{@link PhraseExtractor#extractPhrases(PreprocessingContext)}</li>
- * <li>{@link LabelFilterProcessor#process(PreprocessingContext)}</li>
- * <li>{@link DocumentAssigner#assign(PreprocessingContext)}</li>
+ * <li>{@link Tokenizer}</li>
+ * <li>{@link CaseNormalizer}</li>
+ * <li>{@link LanguageModelStemmer}</li>
+ * <li>{@link StopListMarker}</li>
+ * <li>{@link PhraseExtractor}</li>
+ * <li>{@link LabelFilterProcessor}</li>
+ * <li>{@link DocumentAssigner}</li>
  * </ol>
  */
-@Bindable(prefix = "PreprocessingPipeline")
-public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline
+public class CompletePreprocessingPipeline
 {
-  /**
+    public final Tokenizer tokenizer = new Tokenizer();
+
+    /**
+     * Case normalizer used by the algorithm, contains bindable attributes.
+     */
+    public final CaseNormalizer caseNormalizer = new CaseNormalizer();
+
+    /**
+     * Stemmer used by the algorithm, contains bindable attributes.
+     */
+    public final LanguageModelStemmer languageModelStemmer = new LanguageModelStemmer();
+
+    /**
+     * Stop list marker used by the algorithm, contains bindable attributes.
+     */
+    public final StopListMarker stopListMarker = new StopListMarker();
+
+    /**
      * Phrase extractor used by the algorithm, contains bindable attributes.
      */
     public final PhraseExtractor phraseExtractor = new PhraseExtractor();
@@ -58,24 +67,22 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline
      */
     public final DocumentAssigner documentAssigner = new DocumentAssigner();
 
-    @Override
-    public PreprocessingContext preprocess(List<Document> documents, String query,
-        LanguageCode language)
-    {
-        final PreprocessingContext context = new PreprocessingContext(
-            LanguageModel.create(language, stemmerFactory, tokenizerFactory,
-                lexicalDataFactory), documents, query);
+    public PreprocessingContext preprocess(Stream<Document> documents,
+                                           ITokenizer tokenizerImpl,
+                                           IStemmer stemmer,
+                                           ILexicalData lexicalData) {
+        final PreprocessingContext context = new PreprocessingContext();
 
-        tokenizer.tokenize(context);
+        tokenizer.tokenize(documents, context, tokenizerImpl);
+
         caseNormalizer.normalize(context);
-        languageModelStemmer.stem(context);
-        stopListMarker.mark(context);
+        languageModelStemmer.stem(context, stemmer);
+        stopListMarker.mark(context, lexicalData);
         phraseExtractor.extractPhrases(context);
-        labelFilterProcessor.process(context);
+        labelFilterProcessor.process(context, lexicalData);
         documentAssigner.assign(context);
 
         context.preprocessingFinished();
         return context;
-
     }
 }

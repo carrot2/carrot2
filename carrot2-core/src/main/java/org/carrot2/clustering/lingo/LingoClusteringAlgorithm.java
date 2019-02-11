@@ -27,12 +27,13 @@ import org.carrot2.core.attribute.CommonAttributes;
 import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
+import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.clustering.MultilingualClustering;
+import org.carrot2.text.linguistic.*;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
-import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline;
 import org.carrot2.text.vsm.ReducedVectorSpaceModelContext;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
@@ -127,7 +128,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Internal
     @ImplementingClasses(classes = {}, strict = false)
     @Level(AttributeLevel.ADVANCED)
-    public IPreprocessingPipeline preprocessingPipeline = new CompletePreprocessingPipeline();
+    public CompletePreprocessingPipeline preprocessingPipeline = new CompletePreprocessingPipeline();
 
     /**
      * Term-document matrix builder for the algorithm, contains bindable attributes.
@@ -188,32 +189,38 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     private void cluster(LanguageCode language)
     {
         // Preprocessing of documents
-        final PreprocessingContext context = preprocessingPipeline.preprocess(documents,
-            query, language);
+        ITokenizer tokenizer = new DefaultTokenizerFactory().getTokenizer(language);
+        IStemmer stemmer = new DefaultStemmerFactory().getStemmer(language);
+        ILexicalData lexicalData = new DefaultLexicalDataFactory().getLexicalData(language);
+
+        final PreprocessingContext context = preprocessingPipeline.preprocess(
+            documents.stream(),
+            tokenizer,
+            stemmer,
+            lexicalData);
 
         // Further processing only if there are words to process
         clusters = new ArrayList<>();
         if (context.hasLabels())
         {
             // Term-document matrix building and reduction
-            final VectorSpaceModelContext vsmContext = new VectorSpaceModelContext(
-                context);
+            final VectorSpaceModelContext vsmContext = new VectorSpaceModelContext();
             final ReducedVectorSpaceModelContext reducedVsmContext = new ReducedVectorSpaceModelContext(
                 vsmContext);
             LingoProcessingContext lingoContext = new LingoProcessingContext(
                 reducedVsmContext);
 
-            matrixBuilder.buildTermDocumentMatrix(vsmContext);
-            matrixBuilder.buildTermPhraseMatrix(vsmContext);
+            matrixBuilder.buildTermDocumentMatrix(vsmContext, context);
+            matrixBuilder.buildTermPhraseMatrix(vsmContext, context);
 
             matrixReducer.reduce(reducedVsmContext,
                 computeClusterCount(desiredClusterCountBase, documents.size()));
 
             // Cluster label building
-            clusterBuilder.buildLabels(lingoContext, matrixBuilder.termWeighting);
+            clusterBuilder.buildLabels(lingoContext, context, matrixBuilder.termWeighting);
 
             // Document assignment
-            clusterBuilder.assignDocuments(lingoContext);
+            clusterBuilder.assignDocuments(lingoContext, context);
 
             // Cluster merging
             clusterBuilder.merge(lingoContext);
@@ -234,7 +241,8 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
                 }
 
                 // Add label and score
-                cluster.addPhrases(labelFormatter.format(context, labelFeature));
+                boolean insertSpace = language.usesSpaceDelimiters();
+                cluster.addPhrases(labelFormatter.format(context, labelFeature, insertSpace));
                 cluster.setAttribute(Cluster.SCORE, clusterLabelScore[i]);
 
                 // Add documents

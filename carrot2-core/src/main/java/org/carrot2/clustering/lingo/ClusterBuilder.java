@@ -128,9 +128,8 @@ public class ClusterBuilder
     /**
      * Discovers labels for clusters.
      */
-    void buildLabels(LingoProcessingContext context, ITermWeighting termWeighting)
+    void buildLabels(LingoProcessingContext context, PreprocessingContext preprocessingContext, ITermWeighting termWeighting)
     {
-        final PreprocessingContext preprocessingContext = context.preprocessingContext;
         final VectorSpaceModelContext vsmContext = context.vsmContext;
         final DoubleMatrix2D reducedTdMatrix = context.reducedVsmContext.baseMatrix;
         final int [] wordsStemIndex = preprocessingContext.allWords.stemIndex;
@@ -139,7 +138,7 @@ public class ClusterBuilder
         final int [][] phrasesWordIndices = preprocessingContext.allPhrases.wordIndices;
         final BitSet [] labelsDocumentIndices = preprocessingContext.allLabels.documentIndices;
         final int wordCount = preprocessingContext.allWords.image.length;
-        final int documentCount = preprocessingContext.documents.size();
+        final int documentCount = preprocessingContext.documents;
 
         // tdMatrixStemIndex contains individual stems that appeared in AllLabels
         // but also stems that appeared only in phrases from AllLabels, but not
@@ -252,7 +251,7 @@ public class ClusterBuilder
         }
 
         // Assign labels to base vectors
-        labelAssigner.assignLabels(context, stemCos, filteredRowToStemIndex, phraseCos);
+        labelAssigner.assignLabels(context, preprocessingContext, stemCos, filteredRowToStemIndex, phraseCos);
     }
 
     private double getDocumentCountPenalty(int labelIndex, int documentCount,
@@ -265,13 +264,13 @@ public class ClusterBuilder
     /**
      * Assigns documents to cluster labels.
      */
-    void assignDocuments(LingoProcessingContext context)
+    void assignDocuments(LingoProcessingContext context, PreprocessingContext preprocessingContext)
     {
         final int [] clusterLabelFeatureIndex = context.clusterLabelFeatureIndex;
         final BitSet [] clusterDocuments = new BitSet [clusterLabelFeatureIndex.length];
 
-        final int [] labelsFeatureIndex = context.preprocessingContext.allLabels.featureIndex;
-        final BitSet [] documentIndices = context.preprocessingContext.allLabels.documentIndices;
+        final int [] labelsFeatureIndex = preprocessingContext.allLabels.featureIndex;
+        final BitSet [] documentIndices = preprocessingContext.allLabels.documentIndices;
         final IntIntHashMap featureValueToIndex = new IntIntHashMap();
 
         for (int i = 0; i < labelsFeatureIndex.length; i++)

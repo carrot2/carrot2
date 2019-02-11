@@ -25,7 +25,7 @@ public class LabelFormatter
     /**
      * Formats a cluster label for final rendering.
      */
-    public String format(PreprocessingContext context, int featureIndex)
+    public String format(PreprocessingContext context, int featureIndex, boolean insertSpace)
     {
         final char [][] wordsImage = context.allWords.image;
         final int [][] phrasesWordIndices = context.allPhrases.wordIndices;
@@ -39,7 +39,6 @@ public class LabelFormatter
         }
         else
         {
-            final boolean insertSpace = context.language.getLanguageCode().usesSpaceDelimiters();
             final int [] wordIndices = phrasesWordIndices[featureIndex - wordCount];
             final short [] termTypes = context.allWords.type;
             for (int i = 0; i < wordIndices.length; i++)

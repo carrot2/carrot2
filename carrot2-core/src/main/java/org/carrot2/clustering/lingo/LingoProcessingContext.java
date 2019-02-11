@@ -24,9 +24,6 @@ import com.carrotsearch.hppc.BitSet;
  */
 public class LingoProcessingContext
 {
-    /** Preprocessing context */
-    public final PreprocessingContext preprocessingContext;
-
     /** Vector space model context */
     public final VectorSpaceModelContext vsmContext;
 
@@ -46,6 +43,6 @@ public class LingoProcessingContext
     {
         this.reducedVsmContext = reducedVsmContext;
         this.vsmContext = reducedVsmContext.vsmContext;
-        this.preprocessingContext = vsmContext.preprocessingContext;
+
     }
 }

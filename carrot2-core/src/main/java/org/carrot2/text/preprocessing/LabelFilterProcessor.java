@@ -14,6 +14,7 @@ package org.carrot2.text.preprocessing;
 
 import java.util.Arrays;
 
+import org.carrot2.text.linguistic.ILexicalData;
 import org.carrot2.text.preprocessing.PreprocessingContext.*;
 import org.carrot2.text.preprocessing.filter.*;
 import org.carrot2.util.attribute.Bindable;
@@ -80,7 +81,7 @@ public class LabelFilterProcessor
     /**
      * Processes all filters declared as fields of this class.
      */
-    public void process(PreprocessingContext context)
+    public void process(PreprocessingContext context, ILexicalData lexicalData)
     {
         final int wordCount = context.allWords.image.length;
         final boolean [] acceptedStems = new boolean [context.allStems.image.length];
@@ -93,7 +94,9 @@ public class LabelFilterProcessor
         queryLabelFilter.filter(context, acceptedStems, acceptedPhrases);
         stopWordLabelFilter.filter(context, acceptedStems, acceptedPhrases);
         numericLabelFilter.filter(context, acceptedStems, acceptedPhrases);
-        stopLabelFilter.filter(context, acceptedStems, acceptedPhrases);
+        // TODO: insertSpace?!
+        boolean insertSpace = true;
+        stopLabelFilter.filter(context, lexicalData, insertSpace, acceptedStems, acceptedPhrases);
         completeLabelFilter.filter(context, acceptedStems, acceptedPhrases);
 
         final IntArrayList acceptedFeatures = new IntArrayList(acceptedStems.length

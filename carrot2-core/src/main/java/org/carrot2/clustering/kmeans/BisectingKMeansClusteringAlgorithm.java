@@ -28,6 +28,7 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.clustering.MultilingualClustering;
+import org.carrot2.text.linguistic.*;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
@@ -168,7 +169,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
     @Internal
     @ImplementingClasses(classes = {}, strict = false)
     @Level(AttributeLevel.ADVANCED)
-    public IPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
+    public BasicPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
 
     /**
      * Term-document matrix builder for the algorithm, contains bindable attributes.
@@ -219,8 +220,12 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
     protected void cluster(LanguageCode language)
     {
         // Preprocessing of documents
+        ITokenizer tokenizer = new DefaultTokenizerFactory().getTokenizer(language);
+        IStemmer stemmer = new DefaultStemmerFactory().getStemmer(language);
+        ILexicalData lexicalData = new DefaultLexicalDataFactory().getLexicalData(language);
+
         final PreprocessingContext preprocessingContext = 
-            preprocessingPipeline.preprocess(documents, null, language);
+            preprocessingPipeline.preprocess(documents.stream(), tokenizer, stemmer, lexicalData);
 
         // Add trivial AllLabels so that we can reuse the common TD matrix builder
         final int [] stemsMfow = preprocessingContext.allStems.mostFrequentOriginalWordIndex;
@@ -242,13 +247,11 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
         if (preprocessingContext.hasLabels())
         {
             // Term-document matrix building and reduction
-            final VectorSpaceModelContext vsmContext = new VectorSpaceModelContext(
-                preprocessingContext);
-            final ReducedVectorSpaceModelContext reducedVsmContext = new ReducedVectorSpaceModelContext(
-                vsmContext);
+            final VectorSpaceModelContext vsmContext = new VectorSpaceModelContext();
+            final ReducedVectorSpaceModelContext reducedVsmContext = new ReducedVectorSpaceModelContext(vsmContext);
 
-            matrixBuilder.buildTermDocumentMatrix(vsmContext);
-            matrixBuilder.buildTermPhraseMatrix(vsmContext);
+            matrixBuilder.buildTermDocumentMatrix(vsmContext, preprocessingContext);
+            matrixBuilder.buildTermPhraseMatrix(vsmContext, preprocessingContext);
 
             // Prepare rowIndex -> stemIndex mapping for labeling
             final IntIntHashMap rowToStemIndex = new IntIntHashMap();
@@ -258,7 +261,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
             }
 
             final DoubleMatrix2D tdMatrix;
-            if (useDimensionalityReduction && clusterCount * 2 < preprocessingContext.documents.size())
+            if (useDimensionalityReduction && clusterCount * 2 < preprocessingContext.documents)
             {
                 matrixReducer.reduce(reducedVsmContext, clusterCount * 2);
                 tdMatrix = reducedVsmContext.coefficientMatrix.viewDice();

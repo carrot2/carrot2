@@ -35,14 +35,13 @@ public final class StopListMarker
     /**
      * Marks stop words and saves the results to the <code>context</code>.
      */
-    public void mark(PreprocessingContext context)
+    public void mark(PreprocessingContext context, ILexicalData lexData)
     {
         final char [][] wordImages = context.allWords.image;
         final short [] types = context.allWords.type;
 
         final MutableCharArray mutableCharArray = new MutableCharArray("");
         char [] buffer = new char [128];
-        final ILexicalData lexData = context.language.getLexicalData();
 
         for (int i = 0; i < wordImages.length; i++)
         {

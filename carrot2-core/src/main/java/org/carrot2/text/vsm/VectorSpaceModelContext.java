@@ -24,9 +24,6 @@ import com.carrotsearch.hppc.IntIntHashMap;
  */
 public class VectorSpaceModelContext
 {
-    /** Preprocessing context for the underlying documents. */
-    public final PreprocessingContext preprocessingContext;
-
     /**
      * Term-document matrix. Rows of the matrix correspond to word stems, columns
      * correspond to the processed documents. For mapping between rows of this matrix and
@@ -61,12 +58,4 @@ public class VectorSpaceModelContext
      * </p>
      */
     public IntIntHashMap stemToRowIndex;
-
-    /**
-     * Creates a vector space model context with the provided preprocessing context.
-     */
-    public VectorSpaceModelContext(PreprocessingContext preprocessingContext)
-    {
-        this.preprocessingContext = preprocessingContext;
-    }
 }

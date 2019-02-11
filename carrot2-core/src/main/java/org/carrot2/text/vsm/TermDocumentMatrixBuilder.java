@@ -121,11 +121,9 @@ public class TermDocumentMatrixBuilder
      * Builds a term document matrix from data provided in the <code>context</code>,
      * stores the result in there.
      */
-    public void buildTermDocumentMatrix(VectorSpaceModelContext vsmContext)
+    public void buildTermDocumentMatrix(VectorSpaceModelContext vsmContext, PreprocessingContext preprocessingContext)
     {
-        final PreprocessingContext preprocessingContext = vsmContext.preprocessingContext;
-
-        final int documentCount = preprocessingContext.documents.size();
+        final int documentCount = preprocessingContext.documents;
         final int [] stemsTf = preprocessingContext.allStems.tf;
         final int [][] stemsTfByDocument = preprocessingContext.allStems.tfByDocument;
         final byte [] stemsFieldIndices = preprocessingContext.allStems.fieldIndices;
@@ -203,9 +201,8 @@ public class TermDocumentMatrixBuilder
      * the processing context contains no phrases,
      * {@link VectorSpaceModelContext#termPhraseMatrix} will remain <code>null</code>.
      */
-    public void buildTermPhraseMatrix(VectorSpaceModelContext context)
+    public void buildTermPhraseMatrix(VectorSpaceModelContext context, PreprocessingContext preprocessingContext)
     {
-        final PreprocessingContext preprocessingContext = context.preprocessingContext;
         final IntIntHashMap stemToRowIndex = context.stemToRowIndex;
         final int [] labelsFeatureIndex = preprocessingContext.allLabels.featureIndex;
         final int firstPhraseIndex = preprocessingContext.allLabels.firstPhraseIndex;
@@ -222,7 +219,7 @@ public class TermDocumentMatrixBuilder
             }
 
             final DoubleMatrix2D phraseMatrix = TermDocumentMatrixBuilder
-                .buildAlignedMatrix(context, phraseFeatureIndices, termWeighting);
+                .buildAlignedMatrix(context, preprocessingContext, phraseFeatureIndices, termWeighting);
             MatrixUtils.normalizeColumnL2(phraseMatrix, null);
             context.termPhraseMatrix = phraseMatrix.viewDice();
         }
@@ -254,7 +251,7 @@ public class TermDocumentMatrixBuilder
         final int wordCount = wordsStemIndex.length;
 
         final int [][] stemsTfByDocument = context.allStems.tfByDocument;
-        int documentCount = context.documents.size();
+        int documentCount = context.documents;
         final BitSet requiredStemIndices = new BitSet(labelsFeatureIndex.length);
 
         for (int i = 0; i < labelsFeatureIndex.length; i++)
@@ -303,7 +300,8 @@ public class TermDocumentMatrixBuilder
      * same term space as the original term-document matrix.
      */
     static DoubleMatrix2D buildAlignedMatrix(VectorSpaceModelContext vsmContext,
-        int [] featureIndex, ITermWeighting termWeighting)
+                                             PreprocessingContext preprocessingContext,
+                                             int [] featureIndex, ITermWeighting termWeighting)
     {
         final IntIntHashMap stemToRowIndex = vsmContext.stemToRowIndex;
         if (featureIndex.length == 0)
@@ -314,12 +312,11 @@ public class TermDocumentMatrixBuilder
         final DoubleMatrix2D phraseMatrix = new SparseDoubleMatrix2D(stemToRowIndex
             .size(), featureIndex.length);
 
-        final PreprocessingContext preprocessingContext = vsmContext.preprocessingContext;
         final int [] wordsStemIndex = preprocessingContext.allWords.stemIndex;
         final int [] stemsTf = preprocessingContext.allStems.tf;
         final int [][] stemsTfByDocument = preprocessingContext.allStems.tfByDocument;
         final int [][] phrasesWordIndices = preprocessingContext.allPhrases.wordIndices;
-        final int documentCount = preprocessingContext.documents.size();
+        final int documentCount = preprocessingContext.documents;
         final int wordCount = wordsStemIndex.length;
 
         for (int i = 0; i < featureIndex.length; i++)
