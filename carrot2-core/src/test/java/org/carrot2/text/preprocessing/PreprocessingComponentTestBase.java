@@ -39,7 +39,7 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
     protected String query;
 
     /** Documents each test sets up */
-    private List<Document> documents;
+    protected List<Document> documents;
 
     /** Word image to index mapping */
     protected Map<String, Integer> wordIndices;
@@ -54,15 +54,15 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
     protected void setupPreprocessingContext(String query)
     {
         this.query = query;
-        this.context = createPreprocessingContext(documents);
+        this.context = createPreprocessingContext();
     }
 
 
-    private PreprocessingContext createPreprocessingContext(final List<Document> documents)
+    private PreprocessingContext createPreprocessingContext()
     {
         return new PreprocessingContext(
             LanguageModel.create(LanguageCode.ENGLISH, createStemmerFactory(),
-                createTokenizerFactory(), createLexicalDataFactory()), documents);
+                createTokenizerFactory(), createLexicalDataFactory()));
     }
 
     /**
@@ -148,9 +148,9 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
     {
         final Tokenizer temporaryTokenizer = new Tokenizer();
         final CaseNormalizer temporaryCaseNormalizer = new CaseNormalizer();
-        final PreprocessingContext temporaryContext = createPreprocessingContext(documents);
+        final PreprocessingContext temporaryContext = createPreprocessingContext();
 
-        temporaryTokenizer.tokenize(temporaryContext);
+        temporaryTokenizer.tokenize(temporaryContext, documents.iterator());
         temporaryCaseNormalizer.normalize(temporaryContext);
 
         final char [][] images = temporaryContext.allWords.image;

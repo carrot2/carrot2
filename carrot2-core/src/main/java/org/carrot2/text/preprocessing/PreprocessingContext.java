@@ -36,13 +36,16 @@ public final class PreprocessingContext
 {
     /** Uninitialized structure constant. */
     private static final String UNINITIALIZED = "[uninitialized]\n";
-    /** A list of documents to process. */
-    public final List<Document> documents;
 
     /** Language model to be used */
     public final LanguageModel language;
 
     /**
+     * Count of documents processed by the tokenizer.
+     */
+    public int documentCount;
+
+  /**
      * Token interning cache. Token images are interned to save memory and allow reference
      * comparisons.
      */
@@ -52,14 +55,13 @@ public final class PreprocessingContext
      * Creates a preprocessing context for the provided <code>documents</code> and with
      * the provided <code>languageModel</code>.
      */
-    public PreprocessingContext(LanguageModel languageModel, List<Document> documents)
+    public PreprocessingContext(LanguageModel languageModel)
     {
-        this.documents = documents;
         this.language = languageModel;
     }
 
     /**
-     * Information about all tokens of the input {@link PreprocessingContext#documents}.
+     * Information about all tokens of the input documents.
      * Each element of each of the arrays corresponds to one individual token from the
      * input or a synthetic separator inserted between documents, fields and sentences.
      * Last element of this array is a special terminator entry.
@@ -96,7 +98,7 @@ public final class PreprocessingContext
 
         /**
          * Index of the document this token came from, points to elements of
-         * {@link PreprocessingContext#documents}. Equal to <code>-1</code> for document
+         * documents. Equal to <code>-1</code> for document
          * separators.
          * <p>
          * This array is produced by {@link Tokenizer}.
@@ -220,13 +222,13 @@ public final class PreprocessingContext
     }
 
     /**
-     * Information about all tokens of the input {@link PreprocessingContext#documents}.
+     * Information about all tokens of the input documents.
      */
     public final AllTokens allTokens = new AllTokens();
 
     /**
      * Information about all fields processed for the input
-     * {@link PreprocessingContext#documents}.
+     * documents.
      */
     public static class AllFields
     {
@@ -268,13 +270,13 @@ public final class PreprocessingContext
 
     /**
      * Information about all fields processed for the input
-     * {@link PreprocessingContext#documents}.
+     * documents.
      */
     public final AllFields allFields = new AllFields();
 
     /**
      * Information about all unique words found in the input
-     * {@link PreprocessingContext#documents}. An entry in each parallel array corresponds to one
+     * documents. An entry in each parallel array corresponds to one
      * conflated form of a word. For example, <em>data</em> and <em>DATA</em> will most likely become
      * a single entry in the words table. However, different grammatical forms of a single lemma
      * (like <em>computer</em> and <em>computers</em>) will have different entries in the
@@ -319,7 +321,7 @@ public final class PreprocessingContext
          * Term Frequency of the word for each document. The length of this array is equal
          * to the number of documents this word appeared in (Document Frequency)
          * multiplied by 2. Elements at even indices contain document indices pointing to
-         * {@link PreprocessingContext#documents}, elements at odd indices contain the
+         * documents, elements at odd indices contain the
          * frequency of the word in the document. For example, an array with 4 values:
          * <code>[2, 15, 138, 7]</code> means that the word appeared 15 times in document
          * at index 2 and 7 times in document at index 138.
@@ -399,13 +401,13 @@ public final class PreprocessingContext
 
     /**
      * Information about all unique words found in the input
-     * {@link PreprocessingContext#documents}.
+     * documents.
      */
     public final AllWords allWords = new AllWords();
 
     /**
      * Information about all unique stems found in the input
-     * {@link PreprocessingContext#documents}. Each entry in each array corresponds to one
+     * documents. Each entry in each array corresponds to one
      * base form different words can be transformed to by the {@link IStemmer} used while
      * processing. E.g. the English <em>mining</em> and <em>mine</em> will be aggregated
      * to one entry in the arrays, while they will have separate entries in
@@ -501,13 +503,13 @@ public final class PreprocessingContext
 
     /**
      * Information about all unique stems found in the input
-     * {@link PreprocessingContext#documents}.
+     * documents.
      */
     public final AllStems allStems = new AllStems();
 
     /**
      * Information about all frequently appearing sequences of words found in the input
-     * {@link PreprocessingContext#documents}. Each entry in each array corresponds to one
+     * documents. Each entry in each array corresponds to one
      * sequence.
      * <p>
      * All arrays in this class have the same length and values across different arrays
@@ -597,7 +599,7 @@ public final class PreprocessingContext
 
     /**
      * Information about all frequently appearing sequences of words found in the input
-     * {@link PreprocessingContext#documents}.
+     * documents.
      */
     public AllPhrases allPhrases = new AllPhrases();
 

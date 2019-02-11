@@ -125,7 +125,7 @@ public class TermDocumentMatrixBuilder
     {
         final PreprocessingContext preprocessingContext = vsmContext.preprocessingContext;
 
-        final int documentCount = preprocessingContext.documents.size();
+        final int documentCount = preprocessingContext.documentCount;
         final int [] stemsTf = preprocessingContext.allStems.tf;
         final int [][] stemsTfByDocument = preprocessingContext.allStems.tfByDocument;
         final byte [] stemsFieldIndices = preprocessingContext.allStems.fieldIndices;
@@ -254,7 +254,7 @@ public class TermDocumentMatrixBuilder
         final int wordCount = wordsStemIndex.length;
 
         final int [][] stemsTfByDocument = context.allStems.tfByDocument;
-        int documentCount = context.documents.size();
+        int documentCount = context.documentCount;
         final BitSet requiredStemIndices = new BitSet(labelsFeatureIndex.length);
 
         for (int i = 0; i < labelsFeatureIndex.length; i++)
@@ -319,7 +319,7 @@ public class TermDocumentMatrixBuilder
         final int [] stemsTf = preprocessingContext.allStems.tf;
         final int [][] stemsTfByDocument = preprocessingContext.allStems.tfByDocument;
         final int [][] phrasesWordIndices = preprocessingContext.allPhrases.wordIndices;
-        final int documentCount = preprocessingContext.documents.size();
+        final int documentCount = preprocessingContext.documentCount;
         final int wordCount = wordsStemIndex.length;
 
         for (int i = 0; i < featureIndex.length; i++)

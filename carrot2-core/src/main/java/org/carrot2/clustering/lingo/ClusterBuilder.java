@@ -139,7 +139,7 @@ public class ClusterBuilder
         final int [][] phrasesWordIndices = preprocessingContext.allPhrases.wordIndices;
         final BitSet [] labelsDocumentIndices = preprocessingContext.allLabels.documentIndices;
         final int wordCount = preprocessingContext.allWords.image.length;
-        final int documentCount = preprocessingContext.documents.size();
+        final int documentCount = preprocessingContext.documentCount;
 
         // tdMatrixStemIndex contains individual stems that appeared in AllLabels
         // but also stems that appeared only in phrases from AllLabels, but not

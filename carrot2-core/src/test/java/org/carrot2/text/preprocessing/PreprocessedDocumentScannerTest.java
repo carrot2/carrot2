@@ -103,7 +103,7 @@ public class PreprocessedDocumentScannerTest extends PreprocessingComponentTestB
         final CaseNormalizer caseNormalizer = new CaseNormalizer();
         final LanguageModelStemmer languageModelStemmer = new LanguageModelStemmer();
 
-        tokenizer.tokenize(context);
+        tokenizer.tokenize(context, documents.iterator());
         caseNormalizer.normalize(context);
         languageModelStemmer.stem(context, query);
 
@@ -138,7 +138,7 @@ public class PreprocessedDocumentScannerTest extends PreprocessingComponentTestB
         scanner.iterate(context);
 
         assertThat(actualDocumentRanges).as("documentRanges.size()").hasSize(
-            context.documents.size());
+            context.documentCount);
         assertThat(actualDocumentRanges).as("documentRanges").isEqualTo(
             expectedDocumentRanges);
         assertThat(actualFieldRanges).as("fieldRanges").isEqualTo(expectedFieldRanges);

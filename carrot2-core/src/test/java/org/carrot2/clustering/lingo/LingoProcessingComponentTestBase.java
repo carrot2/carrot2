@@ -33,6 +33,6 @@ public class LingoProcessingComponentTestBase extends ReducedTermDocumentMatrixB
     @Override
     protected int getDimensions()
     {
-        return LingoClusteringAlgorithm.computeClusterCount(desiredClusterCountBase, context.documents.size());
+        return LingoClusteringAlgorithm.computeClusterCount(desiredClusterCountBase, context.documentCount);
     }
 }

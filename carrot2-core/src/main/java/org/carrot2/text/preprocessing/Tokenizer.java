@@ -98,11 +98,8 @@ public final class Tokenizer
     /**
      * Performs tokenization and saves the results to the <code>context</code>.
      */
-    public void tokenize(PreprocessingContext context)
+    public void tokenize(PreprocessingContext context, Iterator<Document> docIterator)
     {
-        // Documents to tokenize
-        final List<Document> documents = context.documents;
-        
         // Fields to tokenize
         final String [] fieldNames = documentFields.toArray(new String [documentFields.size()]); 
 
@@ -117,13 +114,16 @@ public final class Tokenizer
         documentIndices = new IntArrayList();
         fieldIndices = new ByteArrayList();
 
-        final Iterator<Document> docIterator = documents.iterator();
         int documentIndex = 0;
         final ITokenizer ts = context.language.getTokenizer();
         final MutableCharArray wrapper = new MutableCharArray(CharArrayUtils.EMPTY_ARRAY);
 
         while (docIterator.hasNext())
         {
+            if (documentIndex > 0) {
+                addDocumentSeparator();
+            }
+
             final Document doc = docIterator.next();
 
             boolean hadTokens = false;
@@ -159,17 +159,13 @@ public final class Tokenizer
                 }
             }
 
-            if (docIterator.hasNext())
-            {
-                addDocumentSeparator();
-            }
-
             documentIndex++;
         }
 
         addTerminator();
 
         // Save results in the PreprocessingContext
+        context.documentCount = documentIndex;
         context.allTokens.documentIndex = documentIndices.toArray();
         context.allTokens.fieldIndex = fieldIndices.toArray();
         context.allTokens.image = images.toArray(new char [images.size()] []);

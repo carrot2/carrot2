@@ -193,7 +193,7 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
         createDocuments("", "aa . bb", "", "bb . cc", "", "aa . cc . cc");
 
         PreprocessingContext context = preprocessingPipeline.preprocess(
-            this.context.documents, 
+            this.documents,
             this.query,
             this.context.language.getLanguageCode());
 

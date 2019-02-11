@@ -82,7 +82,7 @@ public class DocumentAssigner
         final int [][] phrasesTfByDocument = context.allPhrases.tfByDocument;
         final int [][] phrasesWordIndices = context.allPhrases.wordIndices;
         final int wordCount = wordsStemIndex.length;
-        final int documentCount = context.documents.size();
+        final int documentCount = context.documentCount;
 
         final BitSet [] labelsDocumentIndices = new BitSet [labelsFeatureIndex.length];
 

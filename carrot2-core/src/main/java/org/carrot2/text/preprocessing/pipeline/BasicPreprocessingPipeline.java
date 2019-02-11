@@ -127,9 +127,9 @@ public class BasicPreprocessingPipeline implements IPreprocessingPipeline
     {
         final PreprocessingContext context = new PreprocessingContext(
             LanguageModel.create(language, stemmerFactory, tokenizerFactory,
-                lexicalDataFactory), documents);
+                lexicalDataFactory));
 
-        tokenizer.tokenize(context);
+        tokenizer.tokenize(context, documents.iterator());
         caseNormalizer.normalize(context);
         languageModelStemmer.stem(context, query);
         stopListMarker.mark(context);

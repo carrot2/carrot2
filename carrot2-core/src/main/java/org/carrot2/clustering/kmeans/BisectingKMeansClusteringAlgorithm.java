@@ -258,7 +258,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
             }
 
             final DoubleMatrix2D tdMatrix;
-            if (useDimensionalityReduction && clusterCount * 2 < preprocessingContext.documents.size())
+            if (useDimensionalityReduction && clusterCount * 2 < preprocessingContext.documentCount)
             {
                 matrixReducer.reduce(reducedVsmContext, clusterCount * 2);
                 tdMatrix = reducedVsmContext.coefficientMatrix.viewDice();
