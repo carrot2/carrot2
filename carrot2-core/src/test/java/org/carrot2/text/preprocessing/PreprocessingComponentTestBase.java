@@ -60,7 +60,9 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
 
     private PreprocessingContext createPreprocessingContext(String query, final List<Document> documents)
     {
-        return new PreprocessingContext();
+        return new PreprocessingContext(
+            LanguageModel.create(LanguageCode.ENGLISH, createStemmerFactory(),
+                createTokenizerFactory(), createLexicalDataFactory()), documents, query);
     }
 
     /**

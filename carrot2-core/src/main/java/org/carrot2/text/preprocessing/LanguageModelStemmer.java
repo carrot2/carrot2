@@ -23,7 +23,6 @@ import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.CharArrayComparators;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.CharArrayUtils;
-import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.Bindable;
 
 import com.carrotsearch.hppc.ByteArrayList;
@@ -48,15 +47,13 @@ import com.carrotsearch.hppc.sorting.IndirectSort;
 @Bindable(prefix = "LanguageModelStemmer")
 public final class LanguageModelStemmer
 {
-    // TODO: query hint parsing here?
-    @Attribute
-    public String queryHint;
-
     /**
      * Performs stemming and saves the results to the <code>context</code>.
      */
-    public void stem(PreprocessingContext context, IStemmer stemmer)
+    public void stem(PreprocessingContext context)
     {
+        final IStemmer stemmer = context.language.getStemmer();
+
         final char [][] wordImages = context.allWords.image;
         final char [][] stemImages = new char [wordImages.length] [];
 
@@ -88,7 +85,7 @@ public final class LanguageModelStemmer
             }
         }
 
-        addStemStatistics(context, stemImages, prepareQueryWords(queryHint, stemmer));
+        addStemStatistics(context, stemImages, prepareQueryWords(context.query, stemmer));
     }
 
     /**

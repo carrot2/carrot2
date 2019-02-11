@@ -14,16 +14,14 @@ package org.carrot2.examples;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.ServiceLoader;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
-import org.carrot2.clustering.lingo.LingoClusteringAlgorithm2;
 import org.carrot2.clustering.stc.STCClusteringAlgorithm;
-import org.carrot2.core.*;
-import org.carrot2.text.analysis.ITokenizer;
-import org.carrot2.text.linguistic.*;
+import org.carrot2.core.Cluster;
+import org.carrot2.core.Controller;
+import org.carrot2.core.ControllerFactory;
+import org.carrot2.core.Document;
 import org.junit.Test;
 
 /**
@@ -104,28 +102,5 @@ public class Example01_ClusteringDocumentList
             controller.process(documents, "data mining", STCClusteringAlgorithm.class).getClusters();
 
         ConsoleFormatter.displayClusters(clustersByTopic);
-    }
-
-
-    @Test
-    public void clusterWithLingo2Algorithm()
-    {
-        ServiceLoader<LanguageCode> load = ServiceLoader.load(LanguageCode.class);
-        load.iterator();
-
-        // StemmingComponentProvider p;
-        // Set<String> langs = p.supportedLanguageCodes();
-        // IStemmer stemmer = p.provide(String lang);
-
-        IStemmer stemmer = new DefaultStemmerFactory().getStemmer(LanguageCode.ENGLISH);
-        ITokenizer tokenizer = new DefaultTokenizerFactory().getTokenizer(LanguageCode.ENGLISH);
-        ILexicalData lexicalData = new DefaultLexicalDataFactory().getLexicalData(LanguageCode.ENGLISH);
-
-        LingoClusteringAlgorithm2 alg = new LingoClusteringAlgorithm2(tokenizer, stemmer, lexicalData);
-
-        Stream<Document> docStream = Arrays.asList(new Document("title", "content")).stream();
-        List<Cluster> clusters = alg.cluster(docStream);
-
-        ConsoleFormatter.displayClusters(clusters);
     }
 }

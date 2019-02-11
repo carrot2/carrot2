@@ -33,9 +33,10 @@ import com.carrotsearch.hppc.IntIntHashMap;
 @Bindable
 public class SimpleLabelAssigner implements ILabelAssigner
 {
-    public void assignLabels(LingoProcessingContext context, PreprocessingContext preprocessingContext, DoubleMatrix2D stemCos,
+    public void assignLabels(LingoProcessingContext context, DoubleMatrix2D stemCos,
         IntIntHashMap filteredRowToStemIndex, DoubleMatrix2D phraseCos)
     {
+        final PreprocessingContext preprocessingContext = context.preprocessingContext;
         final int firstPhraseIndex = preprocessingContext.allLabels.firstPhraseIndex;
         final int [] labelsFeatureIndex = preprocessingContext.allLabels.featureIndex;
         final int [] mostFrequentOriginalWordIndex = preprocessingContext.allStems.mostFrequentOriginalWordIndex;

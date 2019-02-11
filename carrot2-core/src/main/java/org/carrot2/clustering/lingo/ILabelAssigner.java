@@ -33,6 +33,6 @@ public interface ILabelAssigner
      *            stems in {@link PreprocessingContext#allStems}
      * @param phraseCos base vector -- phrase cosine matrix
      */
-    public void assignLabels(LingoProcessingContext context, PreprocessingContext preprocessingContext,
-                             DoubleMatrix2D stemCos, IntIntHashMap filteredRowToStemIndex, DoubleMatrix2D phraseCos);
+    public void assignLabels(LingoProcessingContext context, DoubleMatrix2D stemCos,
+        final IntIntHashMap filteredRowToStemIndex, DoubleMatrix2D phraseCos);
 }

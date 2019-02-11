@@ -31,7 +31,7 @@ import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.clustering.MultilingualClustering;
-import org.carrot2.text.linguistic.*;
+import org.carrot2.text.linguistic.ILexicalData;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
@@ -287,7 +287,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         BasicPreprocessingPipeline.class
     }, strict = false)
     @Level(AttributeLevel.ADVANCED)
-    public BasicPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
+    public IPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
 
     /**
      * Balance between cluster score and size during cluster sorting. Value equal to 0.0
@@ -330,9 +330,6 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      * Suffix tree and suffix tree input during {@link #process()}.
      */
     GeneralizedSuffixTree.SequenceBuilder sb;
-
-    // TODO: ugly!
-    private boolean joinWithSpace;
 
     /**
      * Helper class for computing merged cluster labels.
@@ -399,17 +396,12 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      */
     private void cluster(LanguageCode language)
     {
-        ITokenizer tokenizer = new DefaultTokenizerFactory().getTokenizer(language);
-        IStemmer stemmer = new DefaultStemmerFactory().getStemmer(language);
-        ILexicalData lexicalData = new DefaultLexicalDataFactory().getLexicalData(language);
-
-        this.joinWithSpace = language.usesSpaceDelimiters();
-        clusters = new ArrayList<>();
+        clusters = new ArrayList<Cluster>();
 
         /*
          * Step 1. Preprocessing: tokenization, stop word marking and stemming (if available).
          */
-        context = preprocessingPipeline.preprocess(documents.stream(), tokenizer, stemmer, lexicalData);
+        context = preprocessingPipeline.preprocess(documents, query, language);
 
         /*
          * Step 2: Create a generalized suffix tree from phrases in the input.
@@ -447,7 +439,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
          * Step 3: Find "base" clusters by looking up frequently recurring phrases in the 
          * generalized suffix tree.
          */
-        List<ClusterCandidate> baseClusters = createBaseClusters(sb, lexicalData);
+        List<ClusterCandidate> baseClusters = createBaseClusters(sb);
 
         /*
          * Step 4: Merge base clusters that overlap too much to form final clusters.
@@ -478,7 +470,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
      * each phrase, and extracting paths from those internal tree states, that occurred in
      * more than one document.
      */
-    private List<ClusterCandidate> createBaseClusters(SequenceBuilder sb, ILexicalData lexicalData)
+    private List<ClusterCandidate> createBaseClusters(SequenceBuilder sb)
     {
         /*
          * Collect all phrases that will form base clusters, 
@@ -557,6 +549,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         });
 
         j = 0;
+        ILexicalData lexicalData = context.language.getLexicalData();
         for (int max = candidates.size(), i = 0; i < max && j < maxBaseClusters; i++) 
         {
             ClusterCandidate cc = candidates.get(i);
@@ -1122,8 +1115,9 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
                 stopwords[k] = TokenTypeUtils.isCommon(tokenTypes[termIndex]);
             }
         }
-
-        return LabelFormatter.format(images, stopwords, joinWithSpace);
+        
+        return LabelFormatter.format(images, stopwords, 
+            context.language.getLanguageCode().usesSpaceDelimiters());
     }
 
     @SuppressWarnings("unused")

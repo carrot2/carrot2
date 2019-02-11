@@ -23,7 +23,7 @@ import org.carrot2.util.attribute.*;
  * files.
  */
 @Bindable(prefix = "StopLabelFilter")
-public class StopLabelFilter
+public class StopLabelFilter extends SingleLabelFilterBase
 {
     /**
      * Remove stop labels. Removes labels that are declared as stop labels in the
@@ -43,42 +43,33 @@ public class StopLabelFilter
      */
     public final LabelFormatter labelFormatter = new LabelFormatter();
 
-    public void filter(PreprocessingContext context,
-                       ILexicalData lexicalData,
-                       boolean insertSpace,
-                       boolean [] acceptedStems,
-                       boolean [] acceptedPhrases)
+    /*
+     * 
+     */
+    public ILexicalData lexicalData;
+
+    @Override
+    public void filter(PreprocessingContext context, boolean [] acceptedStems,
+        boolean [] acceptedPhrases)
     {
-        if (!isEnabled())
-        {
-            return;
-        }
+        lexicalData = context.language.getLexicalData();
 
-        final int [] mostFrequentOriginalWordIndex = context.allStems.mostFrequentOriginalWordIndex;
+        super.filter(context, acceptedStems, acceptedPhrases);
+    }
+    
+    @Override
+    public boolean acceptPhrase(PreprocessingContext context, int phraseIndex)
+    {
+        final String formatedLabel = labelFormatter.format(context, phraseIndex
+            + context.allWords.image.length);
+        return !lexicalData.isStopLabel(formatedLabel);
+    }
 
-        for (int stemIndex = 0; stemIndex < acceptedStems.length; stemIndex++)
-        {
-            if (acceptedStems[stemIndex])
-            {
-                int wordIndex = mostFrequentOriginalWordIndex[stemIndex];
-                final String formattedLabel = labelFormatter.format(context, wordIndex, insertSpace);
-                boolean accept = !lexicalData.isStopLabel(formattedLabel);
-
-                acceptedStems[stemIndex] = accept;
-            }
-        }
-
-        for (int phraseIndex = 0; phraseIndex < acceptedPhrases.length; phraseIndex++)
-        {
-            if (acceptedPhrases[phraseIndex])
-            {
-                final String formattedLabel = labelFormatter.format(
-                    context, phraseIndex + context.allWords.image.length, insertSpace);
-                boolean accept = !lexicalData.isStopLabel(formattedLabel);
-
-                acceptedPhrases[phraseIndex] = accept;
-            }
-        }
+    @Override
+    public boolean acceptWord(PreprocessingContext context, int wordIndex)
+    {
+        final String formattedLabel = labelFormatter.format(context, wordIndex);
+        return !lexicalData.isStopLabel(formattedLabel);
     }
 
     public boolean isEnabled()

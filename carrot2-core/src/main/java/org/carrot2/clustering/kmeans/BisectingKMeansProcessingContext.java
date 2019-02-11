@@ -24,6 +24,9 @@ import com.carrotsearch.hppc.BitSet;
  */
 public class BisectingKMeansProcessingContext
 {
+    /** Preprocessing context */
+    public final PreprocessingContext preprocessingContext;
+
     /** Vector space model context */
     public final VectorSpaceModelContext vsmContext;
 
@@ -43,5 +46,6 @@ public class BisectingKMeansProcessingContext
     {
         this.reducedVsmContext = reducedVsmContext;
         this.vsmContext = reducedVsmContext.vsmContext;
+        this.preprocessingContext = vsmContext.preprocessingContext;
     }
 }
