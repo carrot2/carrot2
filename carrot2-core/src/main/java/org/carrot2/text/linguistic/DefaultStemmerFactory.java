@@ -14,6 +14,7 @@ package org.carrot2.text.linguistic;
 
 import java.util.EnumMap;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.carrot2.core.LanguageCode;
 import org.carrot2.text.linguistic.lucene.ArabicStemmerAdapter;
@@ -24,7 +25,6 @@ import org.carrot2.text.linguistic.snowball.stemmers.*;
 import org.carrot2.util.annotations.ThreadSafe;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.factory.FallbackFactory;
-import org.carrot2.util.factory.IFactory;
 import org.carrot2.util.factory.NewClassInstanceFactory;
 import org.carrot2.util.factory.SingletonFactory;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public class DefaultStemmerFactory implements IStemmerFactory
 {
     private final static Logger logger = LoggerFactory.getLogger(DefaultStemmerFactory.class);
 
-    private final static EnumMap<LanguageCode, IFactory<IStemmer>> stemmerFactories;
+    private final static EnumMap<LanguageCode, Supplier<IStemmer>> stemmerFactories;
     
     /**
      * Functional verification for {@link IStemmer}.
@@ -59,16 +59,16 @@ public class DefaultStemmerFactory implements IStemmerFactory
     @Override
     public IStemmer getStemmer(LanguageCode languageCode)
     {
-        return stemmerFactories.get(languageCode).createInstance();
+        return stemmerFactories.get(languageCode).get();
     }
 
     /**
      * Create default stemmer factories.
      */
-    private static EnumMap<LanguageCode, IFactory<IStemmer>> createDefaultStemmers()
+    private static EnumMap<LanguageCode, Supplier<IStemmer>> createDefaultStemmers()
     {
-        final IFactory<IStemmer> identity = new SingletonFactory<>(new IdentityStemmer());
-        final EnumMap<LanguageCode, IFactory<IStemmer>> map = new EnumMap<>(LanguageCode.class);
+        final Supplier<IStemmer> identity = new SingletonFactory<>(new IdentityStemmer());
+        final EnumMap<LanguageCode, Supplier<IStemmer>> map = new EnumMap<>(LanguageCode.class);
 
         // Adapters to third-party libraries.
         map.put(LanguageCode.POLISH,     new NewClassInstanceFactory<>(MorfologikStemmerAdapter.class));
@@ -102,7 +102,7 @@ public class DefaultStemmerFactory implements IStemmerFactory
         {
             if (map.containsKey(lc))
             {
-                IFactory<IStemmer> factory = map.get(lc);
+                Supplier<IStemmer> factory = map.get(lc);
                 if (factory != identity)
                 {
                     factory = new FallbackFactory<>(
@@ -124,16 +124,13 @@ public class DefaultStemmerFactory implements IStemmerFactory
         return map;
     }
 
-    private static IFactory<IStemmer> snowball(final Class<? extends SnowballProgram> clazz) {
-      return new IFactory<IStemmer>() {
-        @Override
-        public IStemmer createInstance() {
+    private static Supplier<IStemmer> snowball(final Class<? extends SnowballProgram> clazz) {
+      return () -> {
           try {
-            return new SnowballStemmerAdapter(clazz.newInstance());
-          } catch (InstantiationException |IllegalAccessException e) {
-            throw new RuntimeException(e);
+              return new SnowballStemmerAdapter(clazz.newInstance());
+          } catch (InstantiationException | IllegalAccessException e) {
+              throw new RuntimeException(e);
           }
-        }
       };
     }
 }

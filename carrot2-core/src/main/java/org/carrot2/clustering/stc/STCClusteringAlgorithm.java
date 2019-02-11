@@ -549,7 +549,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         });
 
         j = 0;
-        ILexicalData lexicalData = context.language.getLexicalData();
+        ILexicalData lexicalData = context.language.lexicalData;
         for (int max = candidates.size(), i = 0; i < max && j < maxBaseClusters; i++) 
         {
             ClusterCandidate cc = candidates.get(i);
@@ -1117,7 +1117,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         }
         
         return LabelFormatter.format(images, stopwords, 
-            context.language.getLanguageCode().usesSpaceDelimiters());
+            context.language.usesSpaceDelimiters());
     }
 
     @SuppressWarnings("unused")

@@ -52,7 +52,7 @@ public class StopLabelFilter extends SingleLabelFilterBase
     public void filter(PreprocessingContext context, boolean [] acceptedStems,
         boolean [] acceptedPhrases)
     {
-        lexicalData = context.language.getLexicalData();
+        lexicalData = context.language.lexicalData;
 
         super.filter(context, acceptedStems, acceptedPhrases);
     }

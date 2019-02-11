@@ -115,7 +115,7 @@ public final class Tokenizer
         fieldIndices = new ByteArrayList();
 
         int documentIndex = 0;
-        final ITokenizer ts = context.language.getTokenizer();
+        final ITokenizer ts = context.language.tokenizer;
         final MutableCharArray wrapper = new MutableCharArray(CharArrayUtils.EMPTY_ARRAY);
 
         while (docIterator.hasNext())

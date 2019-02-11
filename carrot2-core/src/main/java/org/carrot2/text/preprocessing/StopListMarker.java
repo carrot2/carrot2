@@ -42,7 +42,7 @@ public final class StopListMarker
 
         final MutableCharArray mutableCharArray = new MutableCharArray("");
         char [] buffer = new char [128];
-        final ILexicalData lexData = context.language.getLexicalData();
+        final ILexicalData lexData = context.language.lexicalData;
 
         for (int i = 0; i < wordImages.length; i++)
         {

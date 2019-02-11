@@ -15,15 +15,16 @@ package org.carrot2.util.factory;
 import org.slf4j.Logger;
 
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 
 /**
  * Fallback to the first factory that returns a value.
  */
-public final class FallbackFactory<T> implements IFactory<T>
+public final class FallbackFactory<T> implements Supplier<T>
 {
-    private final IFactory<T> defaultFactory;
-    private final IFactory<T> fallbackFactory;
+    private final Supplier<T> defaultFactory;
+    private final Supplier<T> fallbackFactory;
     
     private final String failureMessage;
     private final Logger logger;
@@ -32,7 +33,7 @@ public final class FallbackFactory<T> implements IFactory<T>
     private final Predicate<T> verifier;
 
     public FallbackFactory(
-        IFactory<T> defaultFactory, IFactory<T> fallbackFactory, Predicate<T> verifier,
+        Supplier<T> defaultFactory, Supplier<T> fallbackFactory, Predicate<T> verifier,
         Logger logger, String failureMessage)
     {
         this.defaultFactory = defaultFactory;
@@ -46,18 +47,18 @@ public final class FallbackFactory<T> implements IFactory<T>
      * Creates an instance of <code>T</code>, making sure it is functional. 
      */
     @Override
-    public final T createInstance()
+    public final T get()
     {
         try
         {
-            T instance = defaultFactory.createInstance();
+            T instance = defaultFactory.get();
             if (verifier.test(instance))
             {
                 return instance;
             }
 
             logger.warn(failureMessage, "(false from predicate)");
-            return fallbackFactory.createInstance();
+            return fallbackFactory.get();
         }
         catch (Throwable t)
         {
@@ -66,7 +67,7 @@ public final class FallbackFactory<T> implements IFactory<T>
             else
                 logger.warn(failureMessage, t.toString());
 
-            return fallbackFactory.createInstance();
+            return fallbackFactory.get();
         }
     }
 }

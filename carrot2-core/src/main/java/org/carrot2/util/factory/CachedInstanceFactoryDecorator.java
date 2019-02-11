@@ -12,26 +12,27 @@
 
 package org.carrot2.util.factory;
 
+import java.util.function.Supplier;
+
 /**
  * A decorator that returns the first non-null instance returned 
  * by the delegate factory.
  */
-public final class CachedInstanceFactoryDecorator<T> implements IFactory<T>
+public final class CachedInstanceFactoryDecorator<T> implements Supplier<T>
 {
-    private IFactory<T> factory;
+    private Supplier<T> factory;
     private T instance;
 
-    public CachedInstanceFactoryDecorator(IFactory<T> factory)
+    public CachedInstanceFactoryDecorator(Supplier<T> factory)
     {
         this.factory = factory;
     }
 
     @Override
-    public T createInstance()
-    {
+    public T get() {
         if (instance == null)
         {
-            instance = factory.createInstance();
+            instance = factory.get();
         }
 
         return instance;

@@ -37,13 +37,13 @@ public class LanguageModelTest extends CarrotTestCase
 
         final LanguageModel model1 = LanguageModel.create(LanguageCode.ENGLISH,
             stemmerFactory, tokenizerFactory, lexicalDataFactory);
-        assertSame(model1.getStemmer(), model1.getStemmer());
+        assertSame(model1.stemmer, model1.stemmer);
 
         final LanguageModel model2 = LanguageModel.create(LanguageCode.ENGLISH,
             stemmerFactory, tokenizerFactory, lexicalDataFactory);
-        assertSame(model2.getStemmer(), model2.getStemmer());
+        assertSame(model2.stemmer, model2.stemmer);
 
-        assertNotSame(model1.getStemmer(), model2.getStemmer());
+        assertNotSame(model1.stemmer, model2.stemmer);
     }
 
     /**
@@ -60,12 +60,12 @@ public class LanguageModelTest extends CarrotTestCase
 
         final LanguageModel model1 = LanguageModel.create(LanguageCode.ENGLISH,
             stemmerFactory, tokenizerFactory, lexicalDataFactory);
-        assertSame(model1.getTokenizer(), model1.getTokenizer());
+        assertSame(model1.tokenizer, model1.tokenizer);
 
         final LanguageModel model2 = LanguageModel.create(LanguageCode.ENGLISH,
             stemmerFactory, tokenizerFactory, lexicalDataFactory);
-        assertSame(model2.getStemmer(), model2.getStemmer());
+        assertSame(model2.stemmer, model2.stemmer);
 
-        assertNotSame(model1.getTokenizer(), model2.getTokenizer());
+        assertNotSame(model1.tokenizer, model2.tokenizer);
     }
 }

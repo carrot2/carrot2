@@ -52,7 +52,7 @@ public final class LanguageModelStemmer
      */
     public void stem(PreprocessingContext context, String queryHint)
     {
-        final IStemmer stemmer = context.language.getStemmer();
+        final IStemmer stemmer = context.language.stemmer;
 
         final char [][] wordImages = context.allWords.image;
         final char [][] stemImages = new char [wordImages.length] [];

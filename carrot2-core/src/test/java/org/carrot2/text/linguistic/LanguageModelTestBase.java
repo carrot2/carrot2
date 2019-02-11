@@ -52,8 +52,8 @@ public abstract class LanguageModelTestBase extends CarrotTestCase
     @Test
     public void testStemmerAvailable()
     {
-        assertNotNull(languageModel.getStemmer());
-        assertThat(languageModel.getStemmer().getClass()).as("Stemmer class for: " + languageModel.getLanguageCode())
+        assertNotNull(languageModel.stemmer);
+        assertThat(languageModel.stemmer.getClass()).as("Stemmer class for: " + languageModel.languageCode)
             .isNotEqualTo(IdentityStemmer.class);
     }
 
@@ -63,7 +63,7 @@ public abstract class LanguageModelTestBase extends CarrotTestCase
     @Test
     public void testLanguageCode()
     {
-        assertEquals(getLanguageCode(), languageModel.getLanguageCode());
+        assertEquals(getLanguageCode(), languageModel.languageCode);
     }
 
     /**
@@ -73,7 +73,7 @@ public abstract class LanguageModelTestBase extends CarrotTestCase
     public void testStemming()
     {
         final String [][] testData = getStemmingTestData();
-        final IStemmer stemmer = languageModel.getStemmer();
+        final IStemmer stemmer = languageModel.stemmer;
 
         for (String [] pair : testData)
         {
@@ -93,13 +93,13 @@ public abstract class LanguageModelTestBase extends CarrotTestCase
         final String [] testData = getCommonWordsTestData();
         for (String word : testData)
         {
-            assertTrue(languageModel.getLexicalData().isCommonWord(
+            assertTrue(languageModel.lexicalData.isCommonWord(
                 new MutableCharArray(word)));
         }
     }
 
     /**
-     * Override and provide word pairs for {@link LanguageModel#getStemmer()} tests.
+     * Override and provide word pairs for {@link LanguageModel#stemmer} tests.
      * Sample data should follow this format:
      * 
      * <pre>

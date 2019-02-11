@@ -14,8 +14,6 @@ package org.carrot2.text.linguistic;
 
 import org.carrot2.core.LanguageCode;
 import org.carrot2.text.analysis.ITokenizer;
-import org.carrot2.util.factory.CachedInstanceFactoryDecorator;
-import org.carrot2.util.factory.IFactory;
 
 /**
  * A holder for all elements of a language model for a single language used internally by
@@ -23,20 +21,20 @@ import org.carrot2.util.factory.IFactory;
  */
 public final class LanguageModel
 {
-    private final LanguageCode languageCode;
-    private final IFactory<IStemmer> stemmerFactory;
-    private final IFactory<ITokenizer> tokenizerFactory;
-    private final IFactory<ILexicalData> lexicalDataFactory;
+    public final LanguageCode languageCode;
+    public final IStemmer stemmer;
+    public final ITokenizer tokenizer;
+    public final ILexicalData lexicalData;
 
-    LanguageModel(LanguageCode languageCode, IFactory<IStemmer> stemmerFactory,
-        IFactory<ITokenizer> tokenizerFactory, IFactory<ILexicalData> lexicalDataFactory)
+    LanguageModel(LanguageCode languageCode,
+                  IStemmer stemmer,
+                  ITokenizer tokenizer,
+                  ILexicalData lexicalData)
     {
         this.languageCode = languageCode;
-        this.stemmerFactory = new CachedInstanceFactoryDecorator<IStemmer>(stemmerFactory);
-        this.tokenizerFactory = new CachedInstanceFactoryDecorator<ITokenizer>(
-            tokenizerFactory);
-        this.lexicalDataFactory = new CachedInstanceFactoryDecorator<ILexicalData>(
-            lexicalDataFactory);
+        this.stemmer = stemmer;
+        this.tokenizer = tokenizer;
+        this.lexicalData = lexicalData;
     }
 
     public static LanguageModel create(
@@ -45,51 +43,13 @@ public final class LanguageModel
         final ITokenizerFactory tokenizerFactory,
         final ILexicalDataFactory lexicalDataFactory)
     {
-        // TODO: we could try to get rid of this extra layer of indirection here:
-        // eagerly create instances of language model elements and keep references
-        // to them rather than their factories. I'm not sure if the .NET API
-        // would work correctly in that case though.
-        return new LanguageModel(languageCode, new IFactory<IStemmer>()
-        {
-            @Override
-            public IStemmer createInstance()
-            {
-                return stemmerFactory.getStemmer(languageCode);
-            }
-        }, new IFactory<ITokenizer>()
-        {
-            @Override
-            public ITokenizer createInstance()
-            {
-                return tokenizerFactory.getTokenizer(languageCode);
-            }
-        }, new IFactory<ILexicalData>()
-        {
-            @Override
-            public ILexicalData createInstance()
-            {
-                return lexicalDataFactory.getLexicalData(languageCode);
-            }
-        });
+        return new LanguageModel(languageCode,
+            stemmerFactory.getStemmer(languageCode),
+            tokenizerFactory.getTokenizer(languageCode),
+            lexicalDataFactory.getLexicalData(languageCode));
     }
 
-    public LanguageCode getLanguageCode()
-    {
-        return languageCode;
-    }
-
-    public ILexicalData getLexicalData()
-    {
-        return lexicalDataFactory.createInstance();
-    }
-
-    public IStemmer getStemmer()
-    {
-        return stemmerFactory.createInstance();
-    }
-
-    public ITokenizer getTokenizer()
-    {
-        return tokenizerFactory.createInstance();
+    public boolean usesSpaceDelimiters() {
+        return languageCode.usesSpaceDelimiters();
     }
 }

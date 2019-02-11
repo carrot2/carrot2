@@ -12,10 +12,12 @@
 
 package org.carrot2.util.factory;
 
+import java.util.function.Supplier;
+
 /**
- * A {@link IFactory} that creates new instances of a given class.
+ * A {@link Supplier} that creates new instances of a given class.
  */
-public final class SingletonFactory<T> implements IFactory<T>
+public final class SingletonFactory<T> implements Supplier<T>
 {
     private final T singleton;
 
@@ -25,7 +27,7 @@ public final class SingletonFactory<T> implements IFactory<T>
     }
 
     @Override
-    public T createInstance()
+    public T get()
     {
         return singleton;
     }

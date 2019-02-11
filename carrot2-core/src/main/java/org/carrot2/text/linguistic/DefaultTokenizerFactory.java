@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.EnumMap;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.carrot2.core.LanguageCode;
 import org.carrot2.text.analysis.ExtendedWhitespaceTokenizer;
@@ -25,7 +26,6 @@ import org.carrot2.text.linguistic.lucene.ThaiTokenizerAdapter;
 import org.carrot2.util.annotations.ThreadSafe;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.factory.FallbackFactory;
-import org.carrot2.util.factory.IFactory;
 import org.carrot2.util.factory.NewClassInstanceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class DefaultTokenizerFactory implements ITokenizerFactory
     private final static Logger logger = LoggerFactory
         .getLogger(DefaultTokenizerFactory.class);
 
-    private final static EnumMap<LanguageCode, IFactory<ITokenizer>> tokenizerFactories;
+    private final static EnumMap<LanguageCode, Supplier<ITokenizer>> tokenizerFactories;
 
     /**
      * Functional verification for {@link ITokenizer}.
@@ -67,18 +67,18 @@ public class DefaultTokenizerFactory implements ITokenizerFactory
     @Override
     public ITokenizer getTokenizer(LanguageCode languageCode)
     {
-        return tokenizerFactories.get(languageCode).createInstance();
+        return tokenizerFactories.get(languageCode).get();
     }
 
     /**
      * Create default tokenizer factories.
      */
-    private static EnumMap<LanguageCode, IFactory<ITokenizer>> createDefaultTokenizers()
+    private static EnumMap<LanguageCode, Supplier<ITokenizer>> createDefaultTokenizers()
     {
-        EnumMap<LanguageCode, IFactory<ITokenizer>> map = new EnumMap<>(LanguageCode.class);
+        EnumMap<LanguageCode, Supplier<ITokenizer>> map = new EnumMap<>(LanguageCode.class);
 
         // By default, we use our own tokenizer for all languages.
-        IFactory<ITokenizer> whitespaceTokenizerFactory = new NewClassInstanceFactory<ITokenizer>(
+        Supplier<ITokenizer> whitespaceTokenizerFactory = new NewClassInstanceFactory<ITokenizer>(
             ExtendedWhitespaceTokenizer.class);
 
         for (LanguageCode lc : LanguageCode.values())
@@ -94,14 +94,14 @@ public class DefaultTokenizerFactory implements ITokenizerFactory
             new NewClassInstanceFactory<ITokenizer>(ThaiTokenizerAdapter.class));
         
         // Japanese is currently not supported. TODO: CARROT-903
-        map.put(LanguageCode.JAPANESE, new JapaneseUnsupportedStub());
+        map.put(LanguageCode.JAPANESE, () -> { throw new RuntimeException("Unsupported."); });
 
         // Decorate everything with a fallback tokenizer.
         for (LanguageCode lc : LanguageCode.values())
         {
             if (map.containsKey(lc))
             {
-                IFactory<ITokenizer> factory = map.get(lc);
+                Supplier<ITokenizer> factory = map.get(lc);
                 if (factory != whitespaceTokenizerFactory)
                 {
                     map.put(lc, new FallbackFactory<>(factory,
