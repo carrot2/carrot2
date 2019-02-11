@@ -94,7 +94,7 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase
         };
 
         desiredClusterCountBase = 10;
-        createPreprocessingContext("query word");
+        setupPreprocessingContext("query word");
         buildModelAndCheck(expectedFeatureIndex);
     }
 

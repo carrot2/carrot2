@@ -62,7 +62,8 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
     protected void buildTermDocumentMatrix()
     {
         context = preprocessingPipeline.preprocess(
-            context.documents, context.query, context.language.getLanguageCode());
+            context.documents, query,
+            context.language.getLanguageCode());
         
         vsmContext = new VectorSpaceModelContext(context);
         matrixBuilder.buildTermDocumentMatrix(vsmContext);

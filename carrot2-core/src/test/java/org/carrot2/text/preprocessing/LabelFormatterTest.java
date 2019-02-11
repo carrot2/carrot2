@@ -194,7 +194,7 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
     {
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
-        languageModelStemmer.stem(context);
+        languageModelStemmer.stem(context, query);
         phraseExtractor.extractPhrases(context);
         stopListMarker.mark(context);
         labelFilterProcessor.process(context);

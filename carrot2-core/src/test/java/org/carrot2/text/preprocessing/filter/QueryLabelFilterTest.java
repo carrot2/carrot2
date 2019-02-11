@@ -89,7 +89,7 @@ public class QueryLabelFilterTest extends LabelFilterTestBase
     private void check(String query, int [] expectedLabelsFeatureIndex,
         int expectedFirstPhraseIndex)
     {
-        createPreprocessingContext(query);
+        setupPreprocessingContext(query);
         check(expectedLabelsFeatureIndex, expectedFirstPhraseIndex);
     }
 }

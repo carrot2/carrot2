@@ -36,10 +36,6 @@ public final class PreprocessingContext
 {
     /** Uninitialized structure constant. */
     private static final String UNINITIALIZED = "[uninitialized]\n";
-
-    /** Query used to perform processing, may be <code>null</code> */
-    public final String query;
-
     /** A list of documents to process. */
     public final List<Document> documents;
 
@@ -56,10 +52,8 @@ public final class PreprocessingContext
      * Creates a preprocessing context for the provided <code>documents</code> and with
      * the provided <code>languageModel</code>.
      */
-    public PreprocessingContext(LanguageModel languageModel, List<Document> documents,
-        String query)
+    public PreprocessingContext(LanguageModel languageModel, List<Document> documents)
     {
-        this.query = query;
         this.documents = documents;
         this.language = languageModel;
     }

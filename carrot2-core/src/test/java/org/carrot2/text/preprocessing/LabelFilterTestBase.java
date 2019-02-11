@@ -75,7 +75,7 @@ public class LabelFilterTestBase extends PreprocessingComponentTestBase
     {
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
-        languageModelStemmer.stem(context);
+        languageModelStemmer.stem(context, this.query);
         phraseExtractor.extractPhrases(context);
         stopListMarker.mark(context);
         labelFilterProcessor.process(context);

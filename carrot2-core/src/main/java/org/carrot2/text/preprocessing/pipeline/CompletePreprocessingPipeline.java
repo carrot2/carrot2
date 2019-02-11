@@ -64,11 +64,11 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline
     {
         final PreprocessingContext context = new PreprocessingContext(
             LanguageModel.create(language, stemmerFactory, tokenizerFactory,
-                lexicalDataFactory), documents, query);
+                lexicalDataFactory), documents);
 
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
-        languageModelStemmer.stem(context);
+        languageModelStemmer.stem(context, query);
         stopListMarker.mark(context);
         phraseExtractor.extractPhrases(context);
         labelFilterProcessor.process(context);

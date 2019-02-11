@@ -50,7 +50,7 @@ public final class LanguageModelStemmer
     /**
      * Performs stemming and saves the results to the <code>context</code>.
      */
-    public void stem(PreprocessingContext context)
+    public void stem(PreprocessingContext context, String queryHint)
     {
         final IStemmer stemmer = context.language.getStemmer();
 
@@ -85,7 +85,7 @@ public final class LanguageModelStemmer
             }
         }
 
-        addStemStatistics(context, stemImages, prepareQueryWords(context.query, stemmer));
+        addStemStatistics(context, stemImages, prepareQueryWords(queryHint, stemmer));
     }
 
     /**

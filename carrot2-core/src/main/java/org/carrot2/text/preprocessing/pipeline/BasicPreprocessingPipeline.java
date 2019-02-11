@@ -44,10 +44,10 @@ import org.carrot2.util.attribute.constraint.ImplementingClasses;
  * Performs basic preprocessing steps on the provided documents. The preprocessing
  * consists of the following steps:
  * <ol>
- * <li>{@link Tokenizer#tokenize(PreprocessingContext)}</li>
- * <li>{@link CaseNormalizer#normalize(PreprocessingContext)}</li>
- * <li>{@link LanguageModelStemmer#stem(PreprocessingContext)}</li>
- * <li>{@link StopListMarker#mark(PreprocessingContext)}</li>
+ * <li>{@link Tokenizer}</li>
+ * <li>{@link CaseNormalizer}</li>
+ * <li>{@link LanguageModelStemmer}</li>
+ * <li>{@link StopListMarker}</li>
  * </ol>
  */
 @Bindable(prefix = "PreprocessingPipeline")
@@ -127,11 +127,11 @@ public class BasicPreprocessingPipeline implements IPreprocessingPipeline
     {
         final PreprocessingContext context = new PreprocessingContext(
             LanguageModel.create(language, stemmerFactory, tokenizerFactory,
-                lexicalDataFactory), documents, query);
+                lexicalDataFactory), documents);
 
         tokenizer.tokenize(context);
         caseNormalizer.normalize(context);
-        languageModelStemmer.stem(context);
+        languageModelStemmer.stem(context, query);
         stopListMarker.mark(context);
 
         context.preprocessingFinished();

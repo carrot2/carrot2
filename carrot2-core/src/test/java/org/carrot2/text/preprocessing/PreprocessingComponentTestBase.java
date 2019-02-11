@@ -36,6 +36,7 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
 {
     /** Preprocessing context for the component being tested */
     protected PreprocessingContext context;
+    protected String query;
 
     /** Documents each test sets up */
     private List<Document> documents;
@@ -46,23 +47,22 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
     @Before
     public void setUpPreprocessingInfrastructure()
     {
-        documents = new ArrayList<>();
-        createPreprocessingContext(null);
+        this.documents = new ArrayList<>();
+        setupPreprocessingContext(null);
     }
 
-    /**
-     * Creates the {@link PreprocessingContext} for tests.
-     */
-    protected void createPreprocessingContext(String query)
+    protected void setupPreprocessingContext(String query)
     {
-        context = createPreprocessingContext(query, documents);
+        this.query = query;
+        this.context = createPreprocessingContext(documents);
     }
 
-    private PreprocessingContext createPreprocessingContext(String query, final List<Document> documents)
+
+    private PreprocessingContext createPreprocessingContext(final List<Document> documents)
     {
         return new PreprocessingContext(
             LanguageModel.create(LanguageCode.ENGLISH, createStemmerFactory(),
-                createTokenizerFactory(), createLexicalDataFactory()), documents, query);
+                createTokenizerFactory(), createLexicalDataFactory()), documents);
     }
 
     /**
@@ -148,7 +148,7 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
     {
         final Tokenizer temporaryTokenizer = new Tokenizer();
         final CaseNormalizer temporaryCaseNormalizer = new CaseNormalizer();
-        final PreprocessingContext temporaryContext = createPreprocessingContext(null, documents);
+        final PreprocessingContext temporaryContext = createPreprocessingContext(documents);
 
         temporaryTokenizer.tokenize(temporaryContext);
         temporaryCaseNormalizer.normalize(temporaryContext);

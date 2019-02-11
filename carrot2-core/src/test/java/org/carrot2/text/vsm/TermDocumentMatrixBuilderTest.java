@@ -194,7 +194,7 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
 
         PreprocessingContext context = preprocessingPipeline.preprocess(
             this.context.documents, 
-            this.context.query, 
+            this.query,
             this.context.language.getLanguageCode());
 
         // The preprocessing pipeline will produce increasing indices in tfByDocument,
