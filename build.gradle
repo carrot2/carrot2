@@ -47,6 +47,8 @@ project("carrot2-core") {
     implementation "org.carrot2:morfologik-polish:2.1.5"
     implementation "org.apache.lucene:lucene-analyzers-common:5.5.5"
     implementation "org.apache.lucene:lucene-analyzers-smartcn:5.5.5"
+
+    testImplementation "com.fasterxml.jackson.core:jackson-databind:2.9.8"
   }
 }
 
