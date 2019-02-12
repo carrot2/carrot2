@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 @Bindable
 @ThreadSafe
-public class DefaultTokenizerFactory implements ITokenizerFactory
+public class DefaultTokenizerFactory
 {
     private final static Logger logger = LoggerFactory
         .getLogger(DefaultTokenizerFactory.class);
@@ -64,7 +64,6 @@ public class DefaultTokenizerFactory implements ITokenizerFactory
         tokenizerFactories = createDefaultTokenizers();
     }
 
-    @Override
     public ITokenizer getTokenizer(LanguageCode languageCode)
     {
         return tokenizerFactories.get(languageCode).get();

@@ -57,8 +57,7 @@ import com.carrotsearch.hppc.ObjectHashSet;
  * and merging: {@link #resourceLookup}, {@link #reloadResources}, 
  * {@link #mergeResources}.
  */
-@Bindable(inherit = LexicalDataLoader.class)
-public class DefaultLexicalDataFactory implements ILexicalDataFactory
+public class DefaultLexicalDataFactory
 {
     /** */
     final static Logger logger = LoggerFactory.getLogger(DefaultLexicalDataFactory.class);
@@ -71,12 +70,7 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
      * used to search for resources. 
      */
     private final static ResourceCache<HashMap<LanguageCode, ILexicalData>> cache 
-        = new ResourceCache<HashMap<LanguageCode, ILexicalData>>(resourceLoader);
-
-    @Processing
-    @Input
-    @Attribute(key = "reload-resources", inherit = true)
-    public boolean reloadResources = false;
+        = new ResourceCache<>(resourceLoader);
 
     /**
      * Merges stop words and stop labels from all known languages. If set to
@@ -108,7 +102,6 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
     /**
      * The main logic for acquiring a shared {@link ILexicalData} instance.
      */
-    @Override
     public ILexicalData getLexicalData(LanguageCode languageCode)
     {
         // If resource merging is in place, change the language code to null
@@ -119,11 +112,8 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
         }
 
         // Prepare cache key.
-        ILexicalData lexicalData = cache.get(resourceLookup, reloadResources).get(languageCode);
+        ILexicalData lexicalData = cache.get(resourceLookup, false).get(languageCode);
 
-        // Reset reload resources trigger.
-        reloadResources = false;
-        
         return lexicalData;
     }
 

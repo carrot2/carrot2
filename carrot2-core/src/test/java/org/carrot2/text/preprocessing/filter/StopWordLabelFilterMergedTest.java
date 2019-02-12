@@ -12,9 +12,7 @@
 
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
 import org.carrot2.text.linguistic.ILexicalData;
-import org.carrot2.text.linguistic.ILexicalDataFactory;
 import org.carrot2.text.linguistic.LanguageModels;
 import org.carrot2.text.preprocessing.LabelFilterProcessor;
 import org.carrot2.text.preprocessing.LabelFilterTestBase;

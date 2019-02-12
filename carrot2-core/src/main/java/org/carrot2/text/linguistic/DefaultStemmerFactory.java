@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 @Bindable
 @ThreadSafe
-public class DefaultStemmerFactory implements IStemmerFactory
+public class DefaultStemmerFactory
 {
     private final static Logger logger = LoggerFactory.getLogger(DefaultStemmerFactory.class);
 
@@ -55,8 +55,6 @@ public class DefaultStemmerFactory implements IStemmerFactory
         stemmerFactories = createDefaultStemmers();
     }
 
-
-    @Override
     public IStemmer getStemmer(LanguageCode languageCode)
     {
         return stemmerFactories.get(languageCode).get();
