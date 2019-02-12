@@ -55,7 +55,6 @@ project("carrot2-examples") {
 
   dependencies {
     implementation project(':carrot2-core')
-    testImplementation "org.slf4j:slf4j-simple:1.7.13"
   }
 }
 
@@ -143,5 +142,6 @@ configure(subprojects.findAll {[
     testImplementation "org.easytesting:fest-assert:1.4"
     testImplementation "org.easytesting:fest-mocks:1.0"
     testImplementation "org.easymock:easymock:3.0"
+    testImplementation "org.slf4j:slf4j-simple:1.7.13"
   }
 }

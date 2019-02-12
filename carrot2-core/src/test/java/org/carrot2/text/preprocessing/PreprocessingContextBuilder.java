@@ -20,7 +20,9 @@ import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.text.linguistic.ILexicalDataFactory;
+import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.linguistic.IStemmerFactory;
+import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.preprocessing.pipeline.*;
 import org.carrot2.util.attribute.*;
 
@@ -31,7 +33,7 @@ class PreprocessingContextBuilder
 {
     private String query;
     private ArrayList<Document> documents = new ArrayList<>();
-    private LanguageCode language = LanguageCode.ENGLISH;
+    private LanguageModel languageModel = new LanguageModel().resolve();
 
     private Map<String, Object> attributes = new HashMap<>();
     private IPreprocessingPipeline pipeline = new CompletePreprocessingPipeline();
@@ -82,18 +84,8 @@ class PreprocessingContextBuilder
         return this;
     }
 
-    public PreprocessingContextBuilder withStemmerFactory(IStemmerFactory stemmerFactory)
-    {
-        return setAttribute(
-            AttributeUtils.getKey(BasicPreprocessingPipeline.class, "stemmerFactory"),
-            stemmerFactory);
-    }
-
-    public PreprocessingContextBuilder withLexicalDataFactory(ILexicalDataFactory lexicalFactory)
-    {
-        return setAttribute(
-            AttributeUtils.getKey(BasicPreprocessingPipeline.class, "lexicalDataFactory"), 
-            lexicalFactory);
+    public void withStemmer(IStemmer stemmer) {
+        this.languageModel.stemmer = stemmer;
     }
 
     public PreprocessingContextBuilder withQuery(String query)
@@ -118,7 +110,7 @@ class PreprocessingContextBuilder
         try
         {
             AttributeBinder.set(pipeline, attributes, true);
-            return pipeline.preprocess(documents, query, language);
+            return pipeline.preprocess(documents, query, languageModel);
         }
         catch (AttributeBindingException e)
         {

@@ -30,8 +30,8 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
-import org.carrot2.text.clustering.MultilingualClustering;
 import org.carrot2.text.linguistic.ILexicalData;
+import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
@@ -279,15 +279,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     /**
      * Common preprocessing tasks handler.
      */
-    @Init
-    @Input
-    @Attribute
-    @Internal
-    @ImplementingClasses(classes = {
-        BasicPreprocessingPipeline.class
-    }, strict = false)
-    @Level(AttributeLevel.ADVANCED)
-    public IPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
+    public BasicPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
 
     /**
      * Balance between cluster score and size during cluster sorting. Value equal to 0.0
@@ -316,10 +308,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Group(DefaultGroups.CLUSTERS)
     public boolean mergeStemEquivalentBaseClusters = true;
 
-    /**
-     * A helper for performing multilingual clustering.
-     */
-    public final MultilingualClustering multilingualClustering = new MultilingualClustering();
+    public LanguageModel languageModel = new LanguageModel();
 
     /**
      * Stores the preprocessing context during {@link #process()}.
@@ -369,39 +358,12 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Override
     public void process() throws ProcessingException
     {
-        // There is a tiny trick here to support multilingual clustering without
-        // refactoring the whole component: we remember the original list of documents
-        // and invoke clustering for each language separately within the 
-        // IMonolingualClusteringAlgorithm implementation below. This is safe because
-        // processing components are not thread-safe by definition and 
-        // IMonolingualClusteringAlgorithm forbids concurrent execution by contract.
-        final List<Document> originalDocuments = documents;
-        clusters = multilingualClustering.process(documents,
-            new IMonolingualClusteringAlgorithm()
-            {
-                public List<Cluster> process(List<Document> documents,
-                    LanguageCode language)
-                {
-                    STCClusteringAlgorithm.this.documents = documents;
-                    STCClusteringAlgorithm.this.cluster(language);
-                    return STCClusteringAlgorithm.this.clusters;
-                }
-            });
-        documents = originalDocuments;
-    }
-
-    /**
-     * Performs the actual clustering with an assumption that all documents are written in
-     * one <code>language</code>.
-     */
-    private void cluster(LanguageCode language)
-    {
         clusters = new ArrayList<Cluster>();
 
         /*
          * Step 1. Preprocessing: tokenization, stop word marking and stemming (if available).
          */
-        context = preprocessingPipeline.preprocess(documents, query, language);
+        context = preprocessingPipeline.preprocess(documents, query, languageModel.resolve());
 
         /*
          * Step 2: Create a generalized suffix tree from phrases in the input.

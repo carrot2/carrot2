@@ -32,7 +32,7 @@ public class PhraseExtractorTest extends CarrotTestCase
     public void prepareContextBuilder()
     {
         contextBuilder = new PreprocessingContextBuilder();
-        contextBuilder.withStemmerFactory(new TestStemmerFactory());
+        contextBuilder.withStemmer(new TestStemmer());
     }
 
     // @formatter:off

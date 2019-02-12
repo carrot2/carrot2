@@ -20,7 +20,7 @@ import org.carrot2.text.linguistic.ILexicalDataFactory;
 import org.carrot2.text.linguistic.IStemmerFactory;
 import org.carrot2.text.preprocessing.PreprocessingComponentTestBase;
 import org.carrot2.text.preprocessing.TestLexicalDataFactory;
-import org.carrot2.text.preprocessing.TestStemmerFactory;
+import org.carrot2.text.preprocessing.TestStemmer;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
@@ -45,15 +45,11 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
     {
         preprocessingPipeline = new CompletePreprocessingPipeline();
         preprocessingPipeline.labelFilterProcessor.minLengthLabelFilter.enabled = false;
+
+        languageModel.stemmer = createStemmerFactory().getStemmer(super.languageModel.language);
+        languageModel.tokenizer = createTokenizerFactory().getTokenizer(super.languageModel.language);
+        languageModel.lexicalData = createLexicalDataFactory().getLexicalData(super.languageModel.language);
         
-        Map<String,Object> attrs = new HashMap<>();
-
-        attrs.put(CompletePreprocessingPipeline.ATTR_LEXICAL_DATA_FACTORY, createLexicalDataFactory());
-        attrs.put(CompletePreprocessingPipeline.ATTR_STEMMER_FACTORY, createStemmerFactory());
-        attrs.put(CompletePreprocessingPipeline.ATTR_TOKENIZER_FACTORY, createTokenizerFactory());
-
-        AttributeBinder.set(preprocessingPipeline, attrs, Input.class, Init.class);
-
         matrixBuilder = new TermDocumentMatrixBuilder();
         matrixBuilder.termWeighting = new TfTermWeighting();
         matrixBuilder.maxWordDf = 1.0;
@@ -64,7 +60,7 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
         context = preprocessingPipeline.preprocess(
             documents,
             query,
-            language);
+            languageModel);
         
         vsmContext = new VectorSpaceModelContext(context);
         matrixBuilder.buildTermDocumentMatrix(vsmContext);
@@ -74,7 +70,7 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
     @Override
     protected IStemmerFactory createStemmerFactory()
     {
-        return new TestStemmerFactory();
+        return (lang) -> new TestStemmer();
     }
 
     @Override

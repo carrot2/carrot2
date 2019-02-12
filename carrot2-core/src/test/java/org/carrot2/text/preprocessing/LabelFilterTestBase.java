@@ -90,6 +90,6 @@ public class LabelFilterTestBase extends PreprocessingComponentTestBase
     @Override
     protected IStemmerFactory createStemmerFactory()
     {
-        return new TestStemmerFactory();
+        return (lang) -> new TestStemmer();
     }
 }

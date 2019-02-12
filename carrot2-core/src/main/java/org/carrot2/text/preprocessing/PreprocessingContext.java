@@ -12,6 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
+import java.io.Closeable;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +33,7 @@ import com.carrotsearch.hppc.*;
  * <p><img src="doc-files/preprocessing-arrays.png"
  *      alt="Internals of PreprocessingContext"></p>
  */
-public final class PreprocessingContext
+public final class PreprocessingContext implements Closeable
 {
     /** Uninitialized structure constant. */
     private static final String UNINITIALIZED = "[uninitialized]\n";
@@ -750,7 +751,7 @@ public final class PreprocessingContext
      * This method should be invoked after all preprocessing contributors have been executed
      * to release temporary data structures. 
      */
-    public void preprocessingFinished()
+    public void close()
     {
         this.tokenCache = null;
     }

@@ -17,7 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Language-independent test cases for {@link LanguageModelStemmer}.
  */
 public class StemmerEnglishTest extends CarrotTestCase
 {

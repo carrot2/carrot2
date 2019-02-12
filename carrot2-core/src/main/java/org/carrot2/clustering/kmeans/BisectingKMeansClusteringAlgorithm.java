@@ -27,7 +27,7 @@ import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
-import org.carrot2.text.clustering.MultilingualClustering;
+import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
@@ -185,42 +185,14 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
      */
     public final LabelFormatter labelFormatter = new LabelFormatter();
 
-    /**
-     * A helper for performing multilingual clustering.
-     */
-    public final MultilingualClustering multilingualClustering = new MultilingualClustering();
+    public LanguageModel languageModel = new LanguageModel();
 
     @Override
     public void process() throws ProcessingException
     {
-        // There is a tiny trick here to support multilingual clustering without
-        // refactoring the whole component: we remember the original list of documents
-        // and invoke clustering for each language separately within the 
-        // IMonolingualClusteringAlgorithm implementation below. This is safe because
-        // processing components are not thread-safe by definition and 
-        // IMonolingualClusteringAlgorithm forbids concurrent execution by contract.
-        final List<Document> originalDocuments = documents;
-        clusters = multilingualClustering.process(documents,
-            new IMonolingualClusteringAlgorithm()
-            {
-                public List<Cluster> process(List<Document> documents, LanguageCode language)
-                {
-                    BisectingKMeansClusteringAlgorithm.this.documents = documents;
-                    BisectingKMeansClusteringAlgorithm.this.cluster(language);
-                    return BisectingKMeansClusteringAlgorithm.this.clusters;
-                }
-            });
-        documents = originalDocuments;
-    }
-
-    /**
-     * Perform clustering for a given language.
-     */
-    protected void cluster(LanguageCode language)
-    {
         // Preprocessing of documents
         final PreprocessingContext preprocessingContext = 
-            preprocessingPipeline.preprocess(documents, null, language);
+            preprocessingPipeline.preprocess(documents, null, languageModel.resolve());
 
         // Add trivial AllLabels so that we can reuse the common TD matrix builder
         final int [] stemsMfow = preprocessingContext.allStems.mostFrequentOriginalWordIndex;

@@ -41,9 +41,7 @@ public abstract class LanguageModelTestBase extends CarrotTestCase
     @Before
     public void setupLanguage()
     {
-        this.languageModel = LanguageModel.create(getLanguageCode(),
-            new DefaultStemmerFactory(), new DefaultTokenizerFactory(),
-            new DefaultLexicalDataFactory());
+        this.languageModel = new LanguageModel(getLanguageCode()).resolve();
     }
 
     /**

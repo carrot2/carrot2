@@ -13,43 +13,59 @@
 package org.carrot2.text.linguistic;
 
 import org.carrot2.core.LanguageCode;
+import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.analysis.ITokenizer;
+import org.carrot2.util.attribute.*;
 
 /**
  * A holder for all elements of a language model for a single language used internally by
  * content preprocessing components.
  */
+@Bindable
 public final class LanguageModel
 {
-    private final LanguageCode languageCode;
-    public final IStemmer stemmer;
-    public final ITokenizer tokenizer;
-    public final ILexicalData lexicalData;
+    @Input
+    @Processing
+    @Attribute(key = "MultilingualClustering.defaultLanguage")
+    @Required
+    @Level(AttributeLevel.MEDIUM)
+    public LanguageCode language;
 
-    LanguageModel(LanguageCode languageCode,
+    public ITokenizerFactory tokenizerFactory = new DefaultTokenizerFactory();
+    public IStemmerFactory stemmerFactory = new DefaultStemmerFactory();
+    public ILexicalDataFactory lexicalDataFactory = new DefaultLexicalDataFactory();
+
+    public IStemmer stemmer;
+    public ITokenizer tokenizer;
+    public ILexicalData lexicalData;
+
+    public LanguageModel() {
+        this(LanguageCode.ENGLISH);
+    }
+
+    public LanguageModel(LanguageCode language) {
+        this(language, null, null, null);
+    }
+
+    public LanguageModel(LanguageCode languageCode,
                   IStemmer stemmer,
                   ITokenizer tokenizer,
                   ILexicalData lexicalData)
     {
-        this.languageCode = languageCode;
+        this.language = languageCode;
         this.stemmer = stemmer;
         this.tokenizer = tokenizer;
         this.lexicalData = lexicalData;
     }
 
-    public static LanguageModel create(
-        final LanguageCode languageCode,
-        final IStemmerFactory stemmerFactory,
-        final ITokenizerFactory tokenizerFactory,
-        final ILexicalDataFactory lexicalDataFactory)
-    {
-        return new LanguageModel(languageCode,
-            stemmerFactory.getStemmer(languageCode),
-            tokenizerFactory.getTokenizer(languageCode),
-            lexicalDataFactory.getLexicalData(languageCode));
+    public LanguageModel resolve() {
+        return new LanguageModel(language,
+            stemmerFactory.getStemmer(language),
+            tokenizerFactory.getTokenizer(language),
+            lexicalDataFactory.getLexicalData(language));
     }
 
     public boolean usesSpaceDelimiters() {
-        return languageCode.usesSpaceDelimiters();
+        return language.usesSpaceDelimiters();
     }
 }

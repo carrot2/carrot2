@@ -44,13 +44,19 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
     /** Word image to index mapping */
     protected Map<String, Integer> wordIndices;
 
-    protected LanguageCode language;
+    protected LanguageModel languageModel;
 
     @Before
     public void setUpPreprocessingInfrastructure()
     {
         this.documents = new ArrayList<>();
-        this.language = LanguageCode.ENGLISH;
+
+        LanguageCode lang = LanguageCode.ENGLISH;
+        this.languageModel = new LanguageModel(
+            lang,
+            createStemmerFactory().getStemmer(lang),
+            createTokenizerFactory().getTokenizer(lang),
+            createLexicalDataFactory().getLexicalData(lang));
         setupPreprocessingContext(null);
     }
 
@@ -63,9 +69,7 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
 
     private PreprocessingContext createPreprocessingContext()
     {
-        return new PreprocessingContext(
-            LanguageModel.create(LanguageCode.ENGLISH, createStemmerFactory(),
-                createTokenizerFactory(), createLexicalDataFactory()));
+        return new PreprocessingContext(languageModel);
     }
 
     /**
