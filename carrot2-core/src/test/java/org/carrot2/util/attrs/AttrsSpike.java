@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class AttrsSpike {
 
@@ -49,38 +49,76 @@ public class AttrsSpike {
   }
 
   public static class ImplAttr<T extends Visitable> {
+    private List<Alias<T>> aliases;
     private T value;
     private Class<T> clazz;
 
-    public ImplAttr(Class<T> clazz, T value) {
+    public ImplAttr(Class<T> clazz, T value, List<Alias<T>> aliases) {
       this.value = value;
       this.clazz = clazz;
+      this.aliases = aliases;
     }
 
-    public void set(T value) {
+    public <E extends T> E set(E value) {
       this.value = value;
+      return value;
     }
 
     public T get() {
       return value;
     }
 
+    public String toClassAlias() {
+      Objects.requireNonNull(value);
+      return aliases.stream()
+          .filter(alias -> alias.isInstanceOf.test(value))
+          .map(alias -> alias.name)
+          .findFirst()
+          .orElse(value.getClass().getName());
+    }
+
+    public void setFromClassAlias(String name) {
+      set(aliases.stream()
+          .filter(alias -> Objects.equals(alias.name, name))
+          .map(alias -> alias.supplier)
+          .findFirst()
+          .orElse(() -> { throw new RuntimeException(); } )
+          .get());
+    }
+
+    public static class Alias<T> {
+      private final String name;
+      private final Predicate<T> isInstanceOf;
+      private final Supplier<T> supplier;
+
+      public Alias(String name, Predicate<T> isInstanceOf, Supplier<T> supplier) {
+        this.name = name;
+        this.supplier = supplier;
+        this.isInstanceOf = isInstanceOf;
+      }
+    }
+
     public static class Builder<T extends Visitable> {
       private Class<T> clazz;
       private T defaultValue;
+      private List<Alias> aliases = new ArrayList<>();
 
       public Builder(Class<T> clazz) {
         this.clazz = clazz;
       }
 
-      public Builder defaultValue(T value) {
+      public Builder<T> defaultValue(T value) {
         defaultValue = value;
         return this;
       }
 
+      public Builder<T> implAlias(String alias, Class<? extends T> clazz, Supplier<T> supplier) {
+        aliases.add(new Alias<T>(alias, (ob) -> clazz.isInstance(ob), supplier));
+        return this;
+      }
 
       public ImplAttr<T> build() {
-        return new ImplAttr(clazz, defaultValue);
+        return new ImplAttr(clazz, defaultValue, aliases);
       }
     }
 
@@ -102,9 +140,11 @@ public class AttrsSpike {
   }
 
   public static class IFaceImplB implements IFace {
+    public IntegerAttr foo = IntegerAttr.builder().build();
+
     @Override
     public void visit(AttrVisitor visitor) {
-      // No attrs.
+      visitor.visit("foo", foo);
     }
   }
 
@@ -114,10 +154,14 @@ public class AttrsSpike {
         .build();
 
     public ImplAttr<IFace> implAttr = ImplAttr.builder(IFace.class)
+        .implAlias("impl-a", IFaceImplA.class, () -> new IFaceImplA())
+        .implAlias("impl-b", IFaceImplB.class, () -> new IFaceImplB())
         .defaultValue(new IFaceImplA())
         .build();
 
     public ImplAttr<IFace> implAttr2 = ImplAttr.builder(IFace.class)
+        .implAlias("impl-a", IFaceImplA.class, () -> new IFaceImplA())
+        .implAlias("impl-b", IFaceImplB.class, () -> new IFaceImplB())
         .build();
 
     public void visit(AttrVisitor visitor) {
@@ -149,7 +193,7 @@ public class AttrsSpike {
       Visitable o = attrImpl.get();
       if (o != null) {
         Map<String, Object> submap = new LinkedHashMap<>();
-        submap.put("@class", o.getClass().getName());
+        submap.put("@type", attrImpl.toClassAlias());
         o.visit(new ToMapVisitor(submap));
         map.put(key, submap);
       } else {
@@ -176,16 +220,8 @@ public class AttrsSpike {
     public void visit(String key, ImplAttr<?> attrImpl) {
       if (map.containsKey(key)) {
         Map<String, Object> submap = Map.class.cast(map.get(key));
-        try {
-          Class<?> clazz = Class.forName((String) submap.get("@class"));
-          Visitable instance = attrImpl.clazz.cast(clazz.getConstructor().newInstance());
-          instance.visit(new FromMapVisitor(submap));
-          ((ImplAttr) attrImpl).set(instance);
-        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
-          throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-          throw new RuntimeException(e.getCause());
-        }
+        attrImpl.setFromClassAlias((String) submap.get("@type"));
+        attrImpl.get().visit(new FromMapVisitor(submap));
       }
     }
   }
@@ -195,8 +231,8 @@ public class AttrsSpike {
     Algorithm algorithm = new Algorithm();
     algorithm.attrInt.set(100);
 
-    IFaceImplB ifaceB = new IFaceImplB();
-    algorithm.implAttr2.set(ifaceB);
+    algorithm.implAttr2.set(new IFaceImplB())
+        .foo.set(10);
 
     Map<String, Object> map = asMap(algorithm);
     dump(map);
