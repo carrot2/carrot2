@@ -44,13 +44,6 @@ import org.carrot2.util.attribute.*;
 @Bindable(prefix = "PreprocessingPipeline")
 public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline
 {
-    @Input
-    @Processing
-    @Attribute
-    @Required
-    @Level(AttributeLevel.MEDIUM)
-    public LanguageCode language = LanguageCode.ENGLISH;
-
     /**
      * Phrase extractor used by the algorithm, contains bindable attributes.
      */
