@@ -12,46 +12,28 @@
 
 package org.carrot2.clustering.lingo;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.carrot2.core.Cluster;
-import org.carrot2.core.Document;
-import org.carrot2.core.IClusteringAlgorithm;
-import org.carrot2.core.LanguageCode;
-import org.carrot2.core.ProcessingComponentBase;
-import org.carrot2.core.ProcessingException;
+import com.carrotsearch.hppc.BitSet;
+import org.carrot2.core.*;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.CommonAttributes;
-import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
-import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.linguistic.LanguageModel;
+import org.carrot2.text.linguistic.LanguageModels;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
-import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline;
 import org.carrot2.text.vsm.ReducedVectorSpaceModelContext;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
-import org.carrot2.util.attribute.Attribute;
-import org.carrot2.util.attribute.AttributeLevel;
-import org.carrot2.util.attribute.Bindable;
-import org.carrot2.util.attribute.DefaultGroups;
-import org.carrot2.util.attribute.Group;
-import org.carrot2.util.attribute.Input;
-import org.carrot2.util.attribute.Label;
-import org.carrot2.util.attribute.Level;
-import org.carrot2.util.attribute.Output;
-import org.carrot2.util.attribute.Required;
+import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.DoubleRange;
-import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attribute.constraint.IntRange;
 
-import com.carrotsearch.hppc.BitSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Lingo clustering algorithm. Implementation as described in: <i> "Stanisław Osiński,
@@ -118,7 +100,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     @Group(DefaultGroups.CLUSTERS)
     public int desiredClusterCountBase = 30;
 
-    public LanguageModel languageModel = new LanguageModel();
+    public LanguageModel languageModel = LanguageModels.english();
 
     public final CompletePreprocessingPipeline preprocessingPipeline = new CompletePreprocessingPipeline();
 
@@ -150,7 +132,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
     {
         // Preprocessing of documents
         final PreprocessingContext context = preprocessingPipeline.preprocess(
-            documents, query, languageModel.resolve());
+            documents, query, languageModel);
 
         // Further processing only if there are words to process
         clusters = new ArrayList<>();

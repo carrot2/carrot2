@@ -32,6 +32,7 @@ import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.linguistic.ILexicalData;
 import org.carrot2.text.linguistic.LanguageModel;
+import org.carrot2.text.linguistic.LanguageModels;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
@@ -308,7 +309,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     @Group(DefaultGroups.CLUSTERS)
     public boolean mergeStemEquivalentBaseClusters = true;
 
-    public LanguageModel languageModel = new LanguageModel();
+    public LanguageModel languageModel = LanguageModels.english();
 
     /**
      * Stores the preprocessing context during {@link #process()}.
@@ -363,7 +364,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         /*
          * Step 1. Preprocessing: tokenization, stop word marking and stemming (if available).
          */
-        context = preprocessingPipeline.preprocess(documents, query, languageModel.resolve());
+        context = preprocessingPipeline.preprocess(documents, query, languageModel);
 
         /*
          * Step 2: Create a generalized suffix tree from phrases in the input.
@@ -1079,7 +1080,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
         }
         
         return LabelFormatter.format(images, stopwords, 
-            context.language.usesSpaceDelimiters());
+            context.language.lexicalData.usesSpaceDelimiters());
     }
 
     @SuppressWarnings("unused")

@@ -39,7 +39,7 @@ public class LabelFormatter
         }
         else
         {
-            final boolean insertSpace = context.language.usesSpaceDelimiters();
+            final boolean insertSpace = context.language.lexicalData.usesSpaceDelimiters();
             final int [] wordIndices = phrasesWordIndices[featureIndex - wordCount];
             final short [] termTypes = context.allWords.type;
             for (int i = 0; i < wordIndices.length; i++)

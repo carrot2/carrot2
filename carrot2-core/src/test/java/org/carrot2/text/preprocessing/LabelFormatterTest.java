@@ -45,14 +45,6 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
         labelFormatter = new LabelFormatter();
     }
 
-    @Override
-    protected ILexicalDataFactory createLexicalDataFactory()
-    {
-        final ILexicalDataFactory factory = super.createLexicalDataFactory();
-        ((DefaultLexicalDataFactory) factory).mergeResources = false;
-        return factory;
-    }
-
     @Test
     public void testSingleWordNotCapitalized()
     {

@@ -13,7 +13,9 @@
 package org.carrot2.text.preprocessing.filter;
 
 import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
+import org.carrot2.text.linguistic.ILexicalData;
 import org.carrot2.text.linguistic.ILexicalDataFactory;
+import org.carrot2.text.linguistic.LanguageModels;
 import org.carrot2.text.preprocessing.LabelFilterProcessor;
 import org.carrot2.text.preprocessing.LabelFilterTestBase;
 import org.junit.Test;
@@ -78,8 +80,8 @@ public class StopWordLabelFilterMergedTest extends LabelFilterTestBase
     }
 
     @Override
-    protected ILexicalDataFactory createLexicalDataFactory()
+    protected ILexicalData createLexicalData()
     {
-        return new DefaultLexicalDataFactory();
+        return LanguageModels.english().lexicalData;
     }
 }

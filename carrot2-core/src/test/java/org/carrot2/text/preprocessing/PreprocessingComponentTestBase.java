@@ -19,13 +19,8 @@ import java.util.Map;
 
 import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
-import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
-import org.carrot2.text.linguistic.DefaultStemmerFactory;
-import org.carrot2.text.linguistic.DefaultTokenizerFactory;
-import org.carrot2.text.linguistic.ILexicalDataFactory;
-import org.carrot2.text.linguistic.IStemmerFactory;
-import org.carrot2.text.linguistic.ITokenizerFactory;
-import org.carrot2.text.linguistic.LanguageModel;
+import org.carrot2.text.analysis.ITokenizer;
+import org.carrot2.text.linguistic.*;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
 
@@ -50,56 +45,35 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
     public void setUpPreprocessingInfrastructure()
     {
         this.documents = new ArrayList<>();
-
-        LanguageCode lang = LanguageCode.ENGLISH;
-        this.languageModel = new LanguageModel(
-            lang,
-            createStemmerFactory().getStemmer(lang),
-            createTokenizerFactory().getTokenizer(lang),
-            createLexicalDataFactory().getLexicalData(lang));
+        this.languageModel = new LanguageModel(createStemmer(), createTokenizer(), createLexicalData());
         setupPreprocessingContext(null);
     }
 
     protected void setupPreprocessingContext(String query)
     {
         this.query = query;
-        this.context = createPreprocessingContext();
-    }
-
-
-    private PreprocessingContext createPreprocessingContext()
-    {
-        return new PreprocessingContext(languageModel);
+        this.context = new PreprocessingContext(languageModel);
     }
 
     /**
-     * Creates the {@link ITokenizerFactory} to be used in tests. This implementation
-     * returns a new instance of {@link DefaultTokenizerFactory}, override to use a
-     * different factory.
      */
-    protected ITokenizerFactory createTokenizerFactory()
+    protected ITokenizer createTokenizer()
     {
-        return new DefaultTokenizerFactory();
+        return LanguageModels.english().tokenizer;
     }
 
     /**
-     * Creates the {@link IStemmerFactory} to be used in tests. This implementation
-     * returns a new instance of {@link DefaultStemmerFactory}, override to use a
-     * different factory.
      */
-    protected IStemmerFactory createStemmerFactory()
+    protected IStemmer createStemmer()
     {
-        return new DefaultStemmerFactory();
+        return LanguageModels.english().stemmer;
     }
 
     /**
-     * Creates the {@link ILexicalDataFactory} to be used in tests. This implementation
-     * returns a new instance of {@link DefaultLexicalDataFactory}, override to use a
-     * different factory.
      */
-    protected ILexicalDataFactory createLexicalDataFactory()
+    protected ILexicalData createLexicalData()
     {
-        return new DefaultLexicalDataFactory();
+        return LanguageModels.english().lexicalData;
     }
 
     /**
@@ -155,7 +129,7 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
     {
         final Tokenizer temporaryTokenizer = new Tokenizer();
         final CaseNormalizer temporaryCaseNormalizer = new CaseNormalizer();
-        final PreprocessingContext temporaryContext = createPreprocessingContext();
+        final PreprocessingContext temporaryContext = new PreprocessingContext(languageModel);
 
         temporaryTokenizer.tokenize(temporaryContext, documents.iterator());
         temporaryCaseNormalizer.normalize(temporaryContext);

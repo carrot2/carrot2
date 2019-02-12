@@ -12,10 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
-import org.carrot2.text.linguistic.DefaultStemmerFactory;
-import org.carrot2.text.linguistic.ILexicalDataFactory;
-import org.carrot2.text.linguistic.IStemmerFactory;
+import org.carrot2.text.linguistic.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -245,14 +242,14 @@ public class DocumentAssignerTest extends LabelFilterTestBase
     }
 
     @Override
-    protected ILexicalDataFactory createLexicalDataFactory()
+    protected ILexicalData createLexicalData()
     {
-        return new DefaultLexicalDataFactory();
+        return LanguageModels.english().lexicalData;
     }
 
     @Override
-    protected IStemmerFactory createStemmerFactory()
+    protected IStemmer createStemmer()
     {
-        return new DefaultStemmerFactory();
+        return LanguageModels.english().stemmer;
     }
 }

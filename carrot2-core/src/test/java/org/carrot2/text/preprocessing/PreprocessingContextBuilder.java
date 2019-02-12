@@ -12,19 +12,19 @@
 
 package org.carrot2.text.preprocessing;
 
+import org.carrot2.core.Document;
+import org.carrot2.core.attribute.AttributeNames;
+import org.carrot2.text.linguistic.IStemmer;
+import org.carrot2.text.linguistic.LanguageModel;
+import org.carrot2.text.linguistic.LanguageModels;
+import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
+import org.carrot2.text.preprocessing.pipeline.IPreprocessingPipeline;
+import org.carrot2.util.attribute.AttributeBinder;
+import org.carrot2.util.attribute.AttributeBindingException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.carrot2.core.Document;
-import org.carrot2.core.LanguageCode;
-import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.text.linguistic.ILexicalDataFactory;
-import org.carrot2.text.linguistic.IStemmer;
-import org.carrot2.text.linguistic.IStemmerFactory;
-import org.carrot2.text.linguistic.LanguageModel;
-import org.carrot2.text.preprocessing.pipeline.*;
-import org.carrot2.util.attribute.*;
 
 /**
  * Preprocessing context builder for tests.
@@ -33,7 +33,7 @@ class PreprocessingContextBuilder
 {
     private String query;
     private ArrayList<Document> documents = new ArrayList<>();
-    private LanguageModel languageModel = new LanguageModel().resolve();
+    private LanguageModel languageModel = LanguageModels.english();
 
     private Map<String, Object> attributes = new HashMap<>();
     private IPreprocessingPipeline pipeline = new CompletePreprocessingPipeline();

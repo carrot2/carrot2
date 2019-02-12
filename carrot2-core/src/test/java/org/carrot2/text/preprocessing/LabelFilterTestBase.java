@@ -12,8 +12,8 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.text.linguistic.ILexicalDataFactory;
-import org.carrot2.text.linguistic.IStemmerFactory;
+import org.carrot2.text.linguistic.ILexicalData;
+import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.preprocessing.filter.CompleteLabelFilter;
 import org.junit.Before;
 
@@ -82,14 +82,14 @@ public class LabelFilterTestBase extends PreprocessingComponentTestBase
     }
     
     @Override
-    protected ILexicalDataFactory createLexicalDataFactory()
+    protected ILexicalData createLexicalData()
     {
-        return new TestLexicalDataFactory();
+        return new TestLexicalData();
     }
 
     @Override
-    protected IStemmerFactory createStemmerFactory()
+    protected IStemmer createStemmer()
     {
-        return (lang) -> new TestStemmer();
+        return new TestStemmer();
     }
 }

@@ -28,6 +28,7 @@ import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.clustering.IMonolingualClusteringAlgorithm;
 import org.carrot2.text.linguistic.LanguageModel;
+import org.carrot2.text.linguistic.LanguageModels;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
@@ -185,14 +186,14 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
      */
     public final LabelFormatter labelFormatter = new LabelFormatter();
 
-    public LanguageModel languageModel = new LanguageModel();
+    public LanguageModel languageModel = LanguageModels.english();
 
     @Override
     public void process() throws ProcessingException
     {
         // Preprocessing of documents
         final PreprocessingContext preprocessingContext = 
-            preprocessingPipeline.preprocess(documents, null, languageModel.resolve());
+            preprocessingPipeline.preprocess(documents, null, languageModel);
 
         // Add trivial AllLabels so that we can reuse the common TD matrix builder
         final int [] stemsMfow = preprocessingContext.allStems.mostFrequentOriginalWordIndex;

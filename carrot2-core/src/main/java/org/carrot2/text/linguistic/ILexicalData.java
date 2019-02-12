@@ -33,4 +33,6 @@ public interface ILexicalData
      *         low-level tuning method.
      */
     public boolean isStopLabel(CharSequence formattedLabel);
+
+    public boolean usesSpaceDelimiters();
 }

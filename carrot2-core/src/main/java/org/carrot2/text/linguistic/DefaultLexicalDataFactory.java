@@ -147,10 +147,21 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
 
             mergedStopwords.addAll(stopwords);
             mergedStoplabels.addAll(stoplabels);
-            
-            resourceMap.put(languageCode, new DefaultLexicalData(stopwords, stoplabels));
+
+            boolean usesSpace = true;
+            switch (languageCode) {
+                case CHINESE_SIMPLIFIED:
+                case JAPANESE:
+                    usesSpace = false;
+                    break;
+            }
+
+            resourceMap.put(languageCode,
+                new DefaultLexicalData(stopwords, stoplabels, usesSpace));
         }
-        resourceMap.put(null, new DefaultLexicalData(mergedStopwords, mergedStoplabels));
+
+        // TODO: remove merged resources?
+        resourceMap.put(null, new DefaultLexicalData(mergedStopwords, mergedStoplabels, true));
 
         return resourceMap;
     }

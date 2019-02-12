@@ -13,6 +13,7 @@
 package org.carrot2.text.linguistic;
 
 import org.carrot2.core.LanguageCode;
+import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
@@ -41,7 +42,13 @@ public abstract class LanguageModelTestBase extends CarrotTestCase
     @Before
     public void setupLanguage()
     {
-        this.languageModel = new LanguageModel(getLanguageCode()).resolve();
+        LanguageCode langCode = getLanguageCode();
+
+        IStemmer stemmer = new DefaultStemmerFactory().getStemmer(langCode);
+        ITokenizer tokenizer = new DefaultTokenizerFactory().getTokenizer(langCode);
+        ILexicalData lexicalData = new DefaultLexicalDataFactory().getLexicalData(langCode);
+
+        this.languageModel = new LanguageModel(stemmer, tokenizer, lexicalData);
     }
 
     /**

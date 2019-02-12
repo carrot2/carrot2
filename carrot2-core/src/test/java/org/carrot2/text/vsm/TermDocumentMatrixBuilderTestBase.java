@@ -12,18 +12,11 @@
 
 package org.carrot2.text.vsm;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.carrot2.core.attribute.Init;
-import org.carrot2.text.linguistic.ILexicalDataFactory;
-import org.carrot2.text.linguistic.IStemmerFactory;
+import org.carrot2.text.linguistic.*;
 import org.carrot2.text.preprocessing.PreprocessingComponentTestBase;
-import org.carrot2.text.preprocessing.TestLexicalDataFactory;
+import org.carrot2.text.preprocessing.TestLexicalData;
 import org.carrot2.text.preprocessing.TestStemmer;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipeline;
-import org.carrot2.util.attribute.AttributeBinder;
-import org.carrot2.util.attribute.Input;
 import org.junit.Before;
 
 /**
@@ -46,10 +39,8 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
         preprocessingPipeline = new CompletePreprocessingPipeline();
         preprocessingPipeline.labelFilterProcessor.minLengthLabelFilter.enabled = false;
 
-        languageModel.stemmer = createStemmerFactory().getStemmer(super.languageModel.language);
-        languageModel.tokenizer = createTokenizerFactory().getTokenizer(super.languageModel.language);
-        languageModel.lexicalData = createLexicalDataFactory().getLexicalData(super.languageModel.language);
-        
+        languageModel = new LanguageModel(createStemmer(), createTokenizer(), createLexicalData());
+
         matrixBuilder = new TermDocumentMatrixBuilder();
         matrixBuilder.termWeighting = new TfTermWeighting();
         matrixBuilder.maxWordDf = 1.0;
@@ -68,14 +59,14 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
     }
 
     @Override
-    protected IStemmerFactory createStemmerFactory()
+    protected IStemmer createStemmer()
     {
-        return (lang) -> new TestStemmer();
+        return new TestStemmer();
     }
 
     @Override
-    protected ILexicalDataFactory createLexicalDataFactory()
+    protected ILexicalData createLexicalData()
     {
-        return new TestLexicalDataFactory();
+        return new TestLexicalData();
     }
 }

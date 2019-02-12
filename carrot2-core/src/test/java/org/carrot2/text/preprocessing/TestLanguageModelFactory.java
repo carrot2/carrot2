@@ -64,6 +64,11 @@ public final class TestLanguageModelFactory implements IStemmerFactory,
             {
                 return formattedLabel.toString().startsWith("stoplabel");
             }
+
+            @Override
+            public boolean usesSpaceDelimiters() {
+                return true;
+            }
         };
     }
 }

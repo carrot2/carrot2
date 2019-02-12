@@ -27,15 +27,18 @@ final class DefaultLexicalData implements ILexicalData
 {
     private final ObjectHashSet<MutableCharArray> stopwords;
     private final Pattern stoplabelPattern;
+    private final boolean usesSpaceDelimiters;
 
     /*
      * 
      */
     public DefaultLexicalData(ObjectHashSet<MutableCharArray> stopwords, 
-                              ArrayList<Pattern> stoplabels)
+                              ArrayList<Pattern> stoplabels,
+                              boolean usesSpaceDelimiters)
     {
         this.stopwords = stopwords;
         this.stoplabelPattern = union(stoplabels);
+        this.usesSpaceDelimiters = usesSpaceDelimiters;
     }
 
     /*
@@ -57,6 +60,11 @@ final class DefaultLexicalData implements ILexicalData
             return false;
 
         return stoplabelPattern.matcher(label).matches();
+    }
+
+    @Override
+    public boolean usesSpaceDelimiters() {
+        return usesSpaceDelimiters;
     }
 
     /**

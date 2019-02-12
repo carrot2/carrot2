@@ -12,7 +12,8 @@
 
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.text.linguistic.*;
+import org.carrot2.text.linguistic.ILexicalData;
+import org.carrot2.text.linguistic.LanguageModels;
 import org.carrot2.text.preprocessing.LabelFilterProcessor;
 import org.carrot2.text.preprocessing.LabelFilterTestBase;
 import org.junit.Test;
@@ -27,14 +28,6 @@ public class StopLabelFilterEnglishTest extends LabelFilterTestBase
     {
         filterProcessor.stopWordLabelFilter.enabled = true;
         filterProcessor.stopLabelFilter.enabled = true;
-    }
-
-    @Override
-    protected ILexicalDataFactory createLexicalDataFactory()
-    {
-        final DefaultLexicalDataFactory factory = new DefaultLexicalDataFactory();
-        factory.mergeResources = false;
-        return factory;
     }
 
     @Test
@@ -82,5 +75,10 @@ public class StopLabelFilterEnglishTest extends LabelFilterTestBase
         };
 
         check(expectedLabelsFeatureIndex);
+    }
+
+    @Override
+    protected ILexicalData createLexicalData() {
+        return LanguageModels.english().lexicalData;
     }
 }
