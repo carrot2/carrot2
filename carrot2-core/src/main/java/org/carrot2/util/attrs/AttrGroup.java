@@ -20,6 +20,12 @@ public final class AttrGroup {
     return attr;
   }
 
+  public AttrBoolean register(String key, AttrBoolean attr) {
+    checkNewKey(key);
+    attrs.put(key, (visitor) -> visitor.visit(key, attr));
+    return attr;
+  }
+
   private void checkNewKey(String key) {
     if (attrs.containsKey(key)) {
       throw new RuntimeException(String.format(Locale.ROOT,

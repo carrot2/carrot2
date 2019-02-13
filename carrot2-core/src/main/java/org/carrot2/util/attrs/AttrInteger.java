@@ -23,6 +23,20 @@ public class AttrInteger {
       return this;
     }
 
+    // TODO: add validation/ reporting?
+    public Builder min(int minInclusive) {
+      return this;
+    }
+
+    public Builder max(int maxInclusive) {
+      return this;
+    }
+
+    // TODO: add validation/ reporting?
+    public Builder label(String cluster_count) {
+      return this;
+    }
+
     public AttrInteger build() {
       return new AttrInteger(defaultValue);
     }

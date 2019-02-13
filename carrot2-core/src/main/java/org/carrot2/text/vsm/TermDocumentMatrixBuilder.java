@@ -37,13 +37,20 @@ import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
+import org.carrot2.util.attrs.AcceptingVisitor;
+import org.carrot2.util.attrs.AttrVisitor;
 
 /**
  * Builds a term document matrix based on the provided {@link PreprocessingContext}.
  */
 @Bindable(prefix = "TermDocumentMatrixBuilder")
-public class TermDocumentMatrixBuilder
+public class TermDocumentMatrixBuilder implements AcceptingVisitor
 {
+    @Override
+    public void accept(AttrVisitor visitor) {
+        // TODO: IMPLEMENT ME.
+    }
+
     /** {@link Group} name. */
     public static final String MATRIX_MODEL = "Matrix model";
 

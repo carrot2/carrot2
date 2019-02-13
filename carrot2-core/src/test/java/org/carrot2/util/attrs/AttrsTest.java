@@ -1,5 +1,6 @@
 package org.carrot2.util.attrs;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 
@@ -23,40 +24,16 @@ public class AttrsTest {
   }
 
   @Test
-  public void testDefaultsAndSyntax() {
-    InterfaceImpl1 defaultValue = new InterfaceImpl1();
-
-    class Component implements AcceptingVisitor {
-      private AttrGroup group = new AttrGroup();
-
-      public AttrInteger attrInt = group.register(
-          "attrInt", AttrInteger.builder()
-            .defaultValue(10)
-            .build());
-
-      public AttrObject<Interface> attrObject = group.register(
-          "attrObject",
-          AttrObject.builder(Interface.class)
-              .defaultValue(defaultValue)
-              .build());
-
-      @Override
-      public void accept(AttrVisitor visitor) {
-        group.visit(visitor);
-      }
-    }
-
-    Component c = new Component();
-    Assertions.assertThat(c.attrInt.get()).isEqualTo(10);
-    Assertions.assertThat(c.attrObject.get()).isSameAs(defaultValue);
-  }
-
-  @Test
   public void testExtractAndRestore() {
     InterfaceImpl1 defaultValue = new InterfaceImpl1();
 
     class Component implements AcceptingVisitor {
       private AttrGroup group = new AttrGroup();
+
+      public AttrBoolean attrBoolean = group.register(
+          "attrBool", AttrBoolean.builder()
+              .defaultValue(true)
+              .build());
 
       public AttrInteger attrInt = group.register(
           "attrInt", AttrInteger.builder()
@@ -68,6 +45,9 @@ public class AttrsTest {
           AttrObject.builder(Interface.class)
               .defaultValue(defaultValue)
               .build());
+
+      public InterfaceImpl1 attrDirectImpl = group.register(
+          "attrDirectImpl", new InterfaceImpl1());
 
       @Override
       public void accept(AttrVisitor visitor) {
@@ -82,10 +62,13 @@ public class AttrsTest {
     Component c1 = new Component();
     c1.attrInt.set(c1.attrInt.get() + 1);
     c1.attrObject.set(new InterfaceImpl1(),
-        (impl) -> impl.attrInt.set(10));
+        (impl) -> impl.attrInt.set(42));
+    c1.attrDirectImpl.attrInt.set(84);
 
     Component c2 = restore(Component.class, extract(c1, mapper), mapper);
     Assertions.assertThat(c2.attrInt.get()).isEqualTo(c1.attrInt.get());
+
+    System.out.println(extract(c1, mapper));
   }
 
   public static <E extends AcceptingVisitor> E restore(Class<? extends E> clazz,

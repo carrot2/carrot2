@@ -52,9 +52,16 @@ public final class Attrs {
     }
 
     @Override
-    public void visit(String key, AttrInteger attrInt) {
+    public void visit(String key, AttrInteger attr) {
       if (map.containsKey(key)) {
-        attrInt.set((Integer) map.get(key));
+        attr.set((Integer) map.get(key));
+      }
+    }
+
+    @Override
+    public void visit(String key, AttrBoolean attr) {
+      if (map.containsKey(key)) {
+        attr.set((Boolean) map.get(key));
       }
     }
 
@@ -81,9 +88,15 @@ public final class Attrs {
     }
 
     @Override
-    public void visit(String key, AttrInteger attrInt) {
+    public void visit(String key, AttrInteger attr) {
       ensureNoExistingKey(map, key);
-      map.put(key, attrInt.get());
+      map.put(key, attr.get());
+    }
+
+    @Override
+    public void visit(String key, AttrBoolean attr) {
+      ensureNoExistingKey(map, key);
+      map.put(key, attr.get());
     }
 
     private void ensureNoExistingKey(Map<?, ?> map, String key) {
@@ -98,11 +111,11 @@ public final class Attrs {
     @Override
     public void visit(String key, AttrObject<?> attrImpl) {
       ensureNoExistingKey(map, key);
-      AcceptingVisitor o = attrImpl.get();
-      if (o != null) {
+      AcceptingVisitor acceptingVisitor = attrImpl.get();
+      if (acceptingVisitor != null) {
         Map<String, Object> submap = new LinkedHashMap<>();
-        submap.put(KEY_TYPE, objectToClass.apply(o));
-        o.accept(new ToMapVisitor(submap, objectToClass));
+        submap.put(KEY_TYPE, objectToClass.apply(acceptingVisitor));
+        acceptingVisitor.accept(new ToMapVisitor(submap, objectToClass));
         map.put(key, submap);
       } else {
         map.put(key, null);
