@@ -46,9 +46,6 @@ public class AttrsTest {
               .defaultValue(defaultValue)
               .build());
 
-      public InterfaceImpl1 attrDirectImpl = group.register(
-          "attrDirectImpl", new InterfaceImpl1());
-
       @Override
       public void accept(AttrVisitor visitor) {
         group.visit(visitor);
@@ -63,7 +60,6 @@ public class AttrsTest {
     c1.attrInt.set(c1.attrInt.get() + 1);
     c1.attrObject.set(new InterfaceImpl1(),
         (impl) -> impl.attrInt.set(42));
-    c1.attrDirectImpl.attrInt.set(84);
 
     Component c2 = restore(Component.class, extract(c1, mapper), mapper);
     Assertions.assertThat(c2.attrInt.get()).isEqualTo(c1.attrInt.get());
