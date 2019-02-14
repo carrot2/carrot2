@@ -17,6 +17,7 @@ import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.preprocessing.*;
 import org.carrot2.util.attribute.Bindable;
 import org.carrot2.util.attrs.AttrComposite;
+import org.carrot2.util.attrs.AttrInteger;
 import org.carrot2.util.attrs.AttrObject;
 
 import java.util.List;
@@ -35,6 +36,18 @@ import java.util.List;
 public class BasicPreprocessingPipeline extends AttrComposite implements IPreprocessingPipeline
 {
     /**
+     * Word Document Frequency threshold. Words appearing in fewer than
+     * <code>dfThreshold</code> documents will be ignored.
+     */
+    public final AttrInteger dfThreshold =
+        attributes.register("dfThreshold", AttrInteger.builder()
+            .min(1)
+            .max(100)
+            .label("Word document frequency threshold")
+            .defaultValue(1)
+            .build());
+
+    /**
      * Tokenizer used by the algorithm, contains bindable attributes.
      */
     public final AttrObject<Tokenizer> tokenizer =
@@ -43,19 +56,19 @@ public class BasicPreprocessingPipeline extends AttrComposite implements IPrepro
             .build());
 
     /**
-     * Case normalizer used by the algorithm, contains bindable attributes.
+     * Case normalizer used by the algorithm.
      */
-    public final CaseNormalizer caseNormalizer = new CaseNormalizer();
+    protected final CaseNormalizer caseNormalizer = new CaseNormalizer();
 
     /**
-     * Stemmer used by the algorithm, contains bindable attributes.
+     * Stemmer used by the algorithm.
      */
-    public final LanguageModelStemmer languageModelStemmer = new LanguageModelStemmer();
+    protected final LanguageModelStemmer stemming = new LanguageModelStemmer();
 
     /**
      * Stop list marker used by the algorithm, contains bindable attributes.
      */
-    public final StopListMarker stopListMarker = new StopListMarker();
+    protected final StopListMarker stopListMarker = new StopListMarker();
 
     /**
      * Performs preprocessing on the provided list of documents. Results can be obtained
@@ -66,8 +79,8 @@ public class BasicPreprocessingPipeline extends AttrComposite implements IPrepro
     {
         try (PreprocessingContext context = new PreprocessingContext(langModel)) {
             tokenizer.get().tokenize(context, documents.iterator());
-            caseNormalizer.normalize(context);
-            languageModelStemmer.stem(context, query);
+            caseNormalizer.normalize(context, dfThreshold.get());
+            stemming.stem(context, query);
             stopListMarker.mark(context);
             return context;
         }

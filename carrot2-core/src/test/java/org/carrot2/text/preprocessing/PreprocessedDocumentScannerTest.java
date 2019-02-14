@@ -104,7 +104,7 @@ public class PreprocessedDocumentScannerTest extends PreprocessingComponentTestB
         final LanguageModelStemmer languageModelStemmer = new LanguageModelStemmer();
 
         tokenizer.tokenize(context, documents.iterator());
-        caseNormalizer.normalize(context);
+        caseNormalizer.normalize(context, 1);
         languageModelStemmer.stem(context, query);
 
         final List<List<Integer>> actualDocumentRanges = new ArrayList<>();

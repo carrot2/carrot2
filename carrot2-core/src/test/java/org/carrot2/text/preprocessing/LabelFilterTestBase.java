@@ -74,7 +74,7 @@ public class LabelFilterTestBase extends PreprocessingComponentTestBase
     protected void runPreprocessing()
     {
         tokenizer.tokenize(context, documents.iterator());
-        caseNormalizer.normalize(context);
+        caseNormalizer.normalize(context, 1);
         languageModelStemmer.stem(context, this.query);
         phraseExtractor.extractPhrases(context);
         stopListMarker.mark(context);

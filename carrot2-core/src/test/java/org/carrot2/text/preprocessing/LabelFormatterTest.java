@@ -185,7 +185,7 @@ public class LabelFormatterTest extends PreprocessingComponentTestBase
         String... expectedFormattedLabels)
     {
         tokenizer.tokenize(context, documents.iterator());
-        caseNormalizer.normalize(context);
+        caseNormalizer.normalize(context, 1);
         languageModelStemmer.stem(context, query);
         phraseExtractor.extractPhrases(context);
         stopListMarker.mark(context);

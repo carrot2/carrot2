@@ -125,8 +125,8 @@ public class BisectingKMeansClusteringAlgorithm2 extends AttrComposite implement
   /**
    * Preprocessing pipeline.
    */
-  public final AttrObject<IPreprocessingPipeline> preprocessingPipeline =
-      attributes.register("preprocessingPipeline", AttrObject.builder(IPreprocessingPipeline.class)
+  public final AttrObject<IPreprocessingPipeline> preprocessing =
+      attributes.register("preprocessing", AttrObject.builder(IPreprocessingPipeline.class)
           .defaultValue(new BasicPreprocessingPipeline())
           .build());
 
@@ -136,7 +136,7 @@ public class BisectingKMeansClusteringAlgorithm2 extends AttrComposite implement
   public void process(List<Document> documents, LanguageModel languageModel) throws ProcessingException {
     // Preprocessing of documents
     final PreprocessingContext preprocessingContext =
-        preprocessingPipeline.get().preprocess(documents, null, languageModel);
+        preprocessing.get().preprocess(documents, null, languageModel);
 
     // Add trivial AllLabels so that we can reuse the common TD matrix builder
     final int[] stemsMfow = preprocessingContext.allStems.mostFrequentOriginalWordIndex;

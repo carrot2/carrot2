@@ -171,8 +171,13 @@ public class CaseNormalizerTest extends PreprocessingContextTestBase
     @Test
     public void testDfThresholding()
     {
+        BasicPreprocessingPipeline pipeline = new BasicPreprocessingPipeline();
+        pipeline.dfThreshold.set(2);
+
+        contextBuilder = new PreprocessingContextBuilder()
+            .withPreprocessingPipeline(pipeline);
+
         PreprocessingContext ctx = contextBuilder
-            .setAttribute(AttributeUtils.getKey(CaseNormalizer.class, "dfThreshold"), 2)
             .newDoc("a b c", "d e f")
             .newDoc("a c", "a")
             .buildContext();

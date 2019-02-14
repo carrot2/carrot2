@@ -21,13 +21,15 @@ public final class Attrs {
   }
 
   public static Map<String, Object> toMap(AcceptingVisitor composite, Function<Object, String> classToName) {
-
     LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
     Wrapper wrapped = new Wrapper();
     wrapped.value.set(composite);
     wrapped.accept(new ToMapVisitor(map, classToName));
-    return (Map<String, Object>) map.get(KEY_WRAPPED);
+
+    @SuppressWarnings("unchecked")
+    Map<String, Object> sub = (Map<String, Object>) map.get(KEY_WRAPPED);
+    return sub;
   }
 
   public static <E extends AcceptingVisitor> E fromMap(Class<? extends E> clazz,
@@ -85,7 +87,9 @@ public final class Attrs {
     @Override
     public void visit(String key, AttrObject<?> attr) {
       if (map.containsKey(key)) {
-        Map<String, Object> submap = new HashMap<>((Map<String, Object>) map.get(key));
+        @SuppressWarnings("unchecked")
+        Map<String, Object> submap = (Map<String, Object>) map.get(key);
+        submap = new HashMap<>(submap);
         String type = (String) submap.remove(KEY_TYPE);
         attr.castSet(classToInstance.apply(type))
             .accept(new FromMapVisitor(submap, classToInstance));

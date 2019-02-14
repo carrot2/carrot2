@@ -64,8 +64,8 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline
     {
         try (PreprocessingContext context = new PreprocessingContext(languageModel)) {
           tokenizer.get().tokenize(context, documents.iterator());
-          caseNormalizer.normalize(context);
-          languageModelStemmer.stem(context, query);
+          caseNormalizer.normalize(context, dfThreshold.get());
+          stemming.stem(context, query);
           stopListMarker.mark(context);
           phraseExtractor.extractPhrases(context);
           labelFilterProcessor.process(context);

@@ -12,10 +12,9 @@
 
 package org.carrot2.text.preprocessing;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
+import com.carrotsearch.hppc.ByteArrayList;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.sorting.IndirectSort;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.linguistic.IStemmer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllStems;
@@ -23,11 +22,10 @@ import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.CharArrayComparators;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.CharArrayUtils;
-import org.carrot2.util.attribute.Bindable;
 
-import com.carrotsearch.hppc.ByteArrayList;
-import com.carrotsearch.hppc.IntArrayList;
-import com.carrotsearch.hppc.sorting.IndirectSort;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Applies stemming to words and calculates a number of frequency statistics for stems.
@@ -44,7 +42,6 @@ import com.carrotsearch.hppc.sorting.IndirectSort;
  * 
  * This class requires that {@link Tokenizer} and {@link CaseNormalizer} be invoked first.
  */
-@Bindable(prefix = "LanguageModelStemmer")
 public final class LanguageModelStemmer
 {
     /**

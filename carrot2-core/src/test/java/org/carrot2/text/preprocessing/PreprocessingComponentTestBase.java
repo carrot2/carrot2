@@ -21,6 +21,7 @@ import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.linguistic.*;
+import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipeline;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
 
@@ -127,12 +128,8 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
      */
     protected void prepareWordIndices()
     {
-        final Tokenizer temporaryTokenizer = new Tokenizer();
-        final CaseNormalizer temporaryCaseNormalizer = new CaseNormalizer();
-        final PreprocessingContext temporaryContext = new PreprocessingContext(languageModel);
-
-        temporaryTokenizer.tokenize(temporaryContext, documents.iterator());
-        temporaryCaseNormalizer.normalize(temporaryContext);
+        final PreprocessingContext temporaryContext =
+            new BasicPreprocessingPipeline().preprocess(documents, null, languageModel);
 
         final char [][] images = temporaryContext.allWords.image;
         wordIndices = new HashMap<>();

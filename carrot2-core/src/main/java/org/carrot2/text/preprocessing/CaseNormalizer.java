@@ -12,31 +12,16 @@
 
 package org.carrot2.text.preprocessing;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.carrot2.core.attribute.Processing;
+import com.carrotsearch.hppc.*;
+import com.carrotsearch.hppc.sorting.IndirectSort;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.CharArrayComparators;
-import org.carrot2.util.attribute.Attribute;
-import org.carrot2.util.attribute.AttributeLevel;
-import org.carrot2.util.attribute.Bindable;
-import org.carrot2.util.attribute.DefaultGroups;
-import org.carrot2.util.attribute.Group;
-import org.carrot2.util.attribute.Input;
-import org.carrot2.util.attribute.Label;
-import org.carrot2.util.attribute.Level;
-import org.carrot2.util.attribute.constraint.IntRange;
 
-import com.carrotsearch.hppc.BitSet;
-import com.carrotsearch.hppc.ByteArrayList;
-import com.carrotsearch.hppc.IntArrayList;
-import com.carrotsearch.hppc.IntStack;
-import com.carrotsearch.hppc.ShortArrayList;
-import com.carrotsearch.hppc.sorting.IndirectSort;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Performs case normalization and calculates a number of frequency statistics for words.
@@ -56,26 +41,11 @@ import com.carrotsearch.hppc.sorting.IndirectSort;
  * <p>
  * This class requires that {@link Tokenizer} be invoked first.
  */
-@Bindable(prefix = "CaseNormalizer")
-public final class CaseNormalizer
-{
-    /**
-     * Word Document Frequency threshold. Words appearing in fewer than
-     * <code>dfThreshold</code> documents will be ignored.
-     */
-    @Processing
-    @Input
-    @Attribute
-    @IntRange(min = 1, max = 100)
-    @Label("Word document frequency threshold")
-    @Level(AttributeLevel.ADVANCED)
-    @Group(DefaultGroups.PREPROCESSING)
-    public int dfThreshold = 1;
-
+public final class CaseNormalizer {
     /**
      * Performs normalization and saves the results to the <code>context</code>.
      */
-    public void normalize(PreprocessingContext context)
+    public void normalize(PreprocessingContext context, int dfThreshold)
     {
         // Local references to already existing arrays
         final char [][] tokenImages = context.allTokens.image;
@@ -181,7 +151,7 @@ public final class CaseNormalizer
                 // we need add some data about it to the arrays
                 
                 // wordDocuments.size() may contain duplicate entries from the same document, 
-                // but this check is faster than deduping, so we do it first.  
+                // but this check is faster than deduping, so we do it first.
                 if (wordDocuments.size() >= dfThreshold)
                 {
                     // Flatten the list of documents this term occurred in.

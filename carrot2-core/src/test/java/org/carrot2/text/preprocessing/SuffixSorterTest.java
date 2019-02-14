@@ -163,7 +163,7 @@ public class SuffixSorterTest extends PreprocessingComponentTestBase
     private void checkAsserts(int [] expectedSuffixOrder, int [] expectedLcpArray)
     {
         tokenizer.tokenize(context, this.documents.iterator());
-        caseNormalizer.normalize(context);
+        caseNormalizer.normalize(context, 1);
         suffixSorter.suffixSort(context);
 
         assertThat(context.allTokens.suffixOrder).as("allTokens.suffixOrder").isEqualTo(

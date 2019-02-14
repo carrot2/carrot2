@@ -29,7 +29,6 @@ import org.carrot2.util.attribute.Bindable;
  * <p>
  * This class requires that {@link Tokenizer} and {@link CaseNormalizer} be invoked first.
  */
-@Bindable(prefix = "StopListMarker")
 public final class StopListMarker
 {
     /**

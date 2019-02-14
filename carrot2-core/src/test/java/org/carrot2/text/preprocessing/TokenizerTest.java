@@ -89,7 +89,7 @@ public class TokenizerTest extends PreprocessingContextTestBase
 
         contextBuilder = new PreprocessingContextBuilder()
             .withPreprocessingPipeline(pipeline);
-        
+
         PreprocessingContext ctx = contextBuilder
             .newDoc(
                 fv("field1", "data mining"),
