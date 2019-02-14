@@ -18,6 +18,7 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.attrs.AcceptingVisitor;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * A preprocessing pipeline filling in {@link PreprocessingContext} with the required data.

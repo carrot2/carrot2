@@ -40,6 +40,7 @@ import org.carrot2.text.vsm.VectorSpaceModelContext;
 import org.carrot2.util.attrs.*;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * A very simple implementation of bisecting k-means clustering. Unlike other algorithms
@@ -47,7 +48,7 @@ import java.util.*;
  * cluster). On the other hand, the clusters are labeled only with individual words that
  * may not always fully correspond to all documents in the cluster.
  */
-public class BisectingKMeansClusteringAlgorithm2 extends AttrComposite implements AcceptingVisitor {
+public class BisectingKMeansClusteringAlgorithm2 extends AttrComposite implements ClusteringAlgorithm {
   /**
    * The number of clusters to create. The algorithm will create at most the specified
    * number of clusters.
@@ -130,10 +131,9 @@ public class BisectingKMeansClusteringAlgorithm2 extends AttrComposite implement
           .defaultValue(new BasicPreprocessingPipeline())
           .build());
 
-  /**
-   *
-   */
-  public void process(List<Document> documents, LanguageModel languageModel) throws ProcessingException {
+  /** */
+  @Override
+  public List<Cluster> cluster(List<Document> documents, LanguageModel languageModel) {
     // Preprocessing of documents
     final PreprocessingContext preprocessingContext =
         preprocessing.get().preprocess(documents, null, languageModel);
@@ -228,6 +228,8 @@ public class BisectingKMeansClusteringAlgorithm2 extends AttrComposite implement
 
     Collections.sort(clusters, Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR);
     Cluster.appendOtherTopics(documents, clusters);
+
+    return clusters;
   }
 
   private static final Comparator<IntArrayList> BY_SIZE_DESCENDING = (o1, o2) -> o2.size() - o1.size();

@@ -25,14 +25,14 @@ public interface ILexicalData
      *         ignored in information retrieval tasks. Depending on the implementation,
      *         <code>word</code> may be lower-cased internally.
      */
-    public boolean isCommonWord(MutableCharArray word);
+    boolean isCommonWord(MutableCharArray word);
 
     /**
      * @return Returns <code>true</code> if the <code>formattedLabel</code> has been
      *         declared a stop label (meaningless) in this language. This is a very
      *         low-level tuning method.
      */
-    public boolean isStopLabel(CharSequence formattedLabel);
+    boolean isStopLabel(CharSequence formattedLabel);
 
-    public boolean usesSpaceDelimiters();
+    boolean usesSpaceDelimiters();
 }

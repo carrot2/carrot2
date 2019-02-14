@@ -12,29 +12,21 @@
 
 package org.carrot2.core.test;
 
-import static org.carrot2.core.test.SampleDocumentData.DOCUMENTS_DATA_MINING;
-import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
-
-import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.stream.Collectors;
-
-import org.carrot2.core.*;
-import org.carrot2.core.attribute.AttributeNames;
-import org.carrot2.util.attribute.Bindable;
-import org.fest.assertions.Assertions;
-import org.junit.Assume;
-import org.junit.Ignore;
-import org.junit.Test;
-
 import com.carrotsearch.randomizedtesting.annotations.Nightly;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
+import org.carrot2.core.*;
+import org.carrot2.core.attribute.AttributeNames;
+import org.fest.assertions.Assertions;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
+
+import static org.carrot2.core.test.SampleDocumentData.DOCUMENTS_DATA_MINING;
+import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Simple baseline tests that apply to all clustering algorithms.
