@@ -32,7 +32,7 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase
         clusterBuilder = new ClusterBuilder();
         clusterBuilder.labelAssigner = new SimpleLabelAssigner();
         reducer = new TermDocumentMatrixReducer();
-        reducer.factorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
+        reducer.factorizationFactory.set(new LocalNonnegativeMatrixFactorizationFactory());
         desiredClusterCountBase = 25;
     }
 

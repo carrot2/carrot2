@@ -12,16 +12,28 @@
 
 package org.carrot2.matrix.factorization;
 
+import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategy;
 import org.carrot2.matrix.factorization.seeding.ISeedingStrategyFactory;
 import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategyFactory;
+import org.carrot2.util.attrs.AttrComposite;
+import org.carrot2.util.attrs.AttrEnum;
 
 /**
  * A factory for {@link IMatrixFactorization}s.
  */
-public abstract class IterativeMatrixFactorizationFactory implements
-    IMatrixFactorizationFactory
+public abstract class IterativeMatrixFactorizationFactory extends AttrComposite implements IMatrixFactorizationFactory
 {
+    /**
+     * Factorization quality. The number of iterations of matrix factorization to perform.
+     * The higher the required quality, the more time-consuming clustering.
+     */
+    public final AttrEnum<IterationNumberGuesser.FactorizationQuality> factorizationQuality =
+        attributes.register("factorizationFactory", AttrEnum.builder(IterationNumberGuesser.FactorizationQuality.class)
+            .label("Factorization quality")
+            .defaultValue(IterationNumberGuesser.FactorizationQuality.HIGH)
+            .build());
+
     /** The number of base vectors */
     protected int k;
 
@@ -44,8 +56,7 @@ public abstract class IterativeMatrixFactorizationFactory implements
     protected ISeedingStrategyFactory seedingFactory;
 
     /** Default matrix seeding strategy factory */
-    protected final static ISeedingStrategyFactory DEFAULT_SEEDING_FACTORY = new RandomSeedingStrategyFactory(
-        0);
+    protected final static ISeedingStrategyFactory DEFAULT_SEEDING_FACTORY = new RandomSeedingStrategyFactory(0);
 
     /** Order base vectors according to their 'activity' */
     protected boolean ordered;
@@ -148,5 +159,12 @@ public abstract class IterativeMatrixFactorizationFactory implements
     public void setOrdered(boolean ordered)
     {
         this.ordered = ordered;
+    }
+
+    public void estimateIterationsNumber(int dimensions, DoubleMatrix2D termDocumentMatrix) {
+        setK(dimensions);
+        // TODO: this delegation is a bit awkward; should be pulled up to individual impls.?
+        IterationNumberGuesser.setEstimatedIterationsNumber(
+            this, termDocumentMatrix, factorizationQuality.get());
     }
 }

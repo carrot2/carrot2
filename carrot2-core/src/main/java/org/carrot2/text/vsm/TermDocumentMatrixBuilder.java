@@ -12,72 +12,48 @@
 
 package org.carrot2.text.vsm;
 
+import com.carrotsearch.hppc.BitSet;
+import com.carrotsearch.hppc.IntIntHashMap;
+import com.carrotsearch.hppc.sorting.IndirectComparator;
+import com.carrotsearch.hppc.sorting.IndirectSort;
 import org.carrot2.core.Document;
-import org.carrot2.core.attribute.Internal;
-import org.carrot2.core.attribute.Processing;
 import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
 import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 import org.carrot2.mahout.math.matrix.impl.SparseDoubleMatrix2D;
 import org.carrot2.matrix.MatrixUtils;
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.attribute.Attribute;
-import org.carrot2.util.attribute.AttributeLevel;
-import org.carrot2.util.attribute.Bindable;
-import org.carrot2.util.attribute.DefaultGroups;
-import org.carrot2.util.attribute.Group;
-import org.carrot2.util.attribute.Input;
-import org.carrot2.util.attribute.Level;
-import org.carrot2.util.attribute.Required;
-import org.carrot2.util.attribute.constraint.DoubleRange;
-import org.carrot2.util.attribute.constraint.ImplementingClasses;
-import org.carrot2.util.attribute.constraint.IntRange;
-
-import com.carrotsearch.hppc.BitSet;
-import com.carrotsearch.hppc.IntIntHashMap;
-import com.carrotsearch.hppc.sorting.IndirectComparator;
-import com.carrotsearch.hppc.sorting.IndirectSort;
-import org.carrot2.util.attrs.AcceptingVisitor;
-import org.carrot2.util.attrs.AttrVisitor;
+import org.carrot2.util.attrs.AttrComposite;
+import org.carrot2.util.attrs.AttrDouble;
+import org.carrot2.util.attrs.AttrInteger;
+import org.carrot2.util.attrs.AttrObject;
 
 /**
  * Builds a term document matrix based on the provided {@link PreprocessingContext}.
  */
-@Bindable(prefix = "TermDocumentMatrixBuilder")
-public class TermDocumentMatrixBuilder implements AcceptingVisitor
+public class TermDocumentMatrixBuilder extends AttrComposite
 {
-    @Override
-    public void accept(AttrVisitor visitor) {
-        // TODO: IMPLEMENT ME.
-    }
-
-    /** {@link Group} name. */
-    public static final String MATRIX_MODEL = "Matrix model";
-
     /**
      * Title word boost. Gives more weight to words that appeared in
      * {@link org.carrot2.core.Document#TITLE} fields.
      */
-    @Input
-    @Processing
-    @Attribute
-    @DoubleRange(min = 0, max = 10)
-    @Level(AttributeLevel.MEDIUM)
-    @Group(DefaultGroups.LABELS)
-    public double titleWordsBoost = 2.0;
+    public final AttrDouble titleWordsBoost = attributes.register(
+        "titleWordsBoost", AttrDouble.builder()
+            .label("Title word boost")
+            .min(0)
+            .max(10)
+            .defaultValue(2)
+            .build());
 
     /**
      * Maximum matrix size. The maximum number of the term-document matrix elements. The
      * larger the size, the more accurate, time- and memory-consuming clustering.
      */
-    @Input
-    @Processing
-    @Attribute
-    @IntRange(min = 50 * 100)
-    @Internal(configuration = true)
-    @Level(AttributeLevel.ADVANCED)
-    @Group(MATRIX_MODEL)
-    public int maximumMatrixSize = 250 * 150;
+    public final AttrInteger maximumMatrixSize = attributes.register(
+        "maximumMatrixSize", AttrInteger.builder()
+            .min(50 * 100)
+            .defaultValue(250 * 150)
+            .build());
 
     /**
      * Maximum word document frequency. The maximum document frequency allowed for words
@@ -99,30 +75,21 @@ public class TermDocumentMatrixBuilder implements AcceptingVisitor
      * e.g. <code>0.1</code> or <code>0.05</code>.
      * </p>
      */
-    @Input
-    @Processing
-    @Attribute
-    @DoubleRange(min = 0.00, max = 1.0)
-    @Level(AttributeLevel.ADVANCED)
-    @Group(MATRIX_MODEL)
-    public double maxWordDf = 0.9;
+    public final AttrDouble maxWordDf = attributes.register(
+        "maxWordDf", AttrDouble.builder()
+            .min(0)
+            .max(1)
+            .defaultValue(0.9)
+            .build());
 
     /**
      * Term weighting. The method for calculating weight of words in the term-document
      * matrices.
      */
-    @Input
-    @Processing
-    @Attribute
-    @Required
-    @ImplementingClasses(classes =
-    {
-        LogTfIdfTermWeighting.class, LinearTfIdfTermWeighting.class,
-        TfTermWeighting.class
-    }, strict = false)
-    @Level(AttributeLevel.ADVANCED)
-    @Group(MATRIX_MODEL)
-    public ITermWeighting termWeighting = new LogTfIdfTermWeighting();
+    public final AttrObject<ITermWeighting> termWeighting = attributes.register(
+        "termWeighting", AttrObject.builder(ITermWeighting.class)
+            .defaultValue(new LogTfIdfTermWeighting())
+            .build());
 
     /**
      * Builds a term document matrix from data provided in the <code>context</code>,
@@ -161,6 +128,7 @@ public class TermDocumentMatrixBuilder implements AcceptingVisitor
 
         // Sort stems by weight, so that stems get included in the matrix in the order
         // of frequency
+        final ITermWeighting termWeighting = this.termWeighting.get();
         final double [] stemsWeight = new double [stemsToInclude.length];
         for (int i = 0; i < stemsToInclude.length; i++)
         {
@@ -173,7 +141,7 @@ public class TermDocumentMatrixBuilder implements AcceptingVisitor
             new IndirectComparator.DescendingDoubleComparator(stemsWeight));
 
         // Calculate the number of terms we can include to fulfill the max matrix size
-        final int maxRows = maximumMatrixSize / documentCount;
+        final int maxRows = maximumMatrixSize.get() / documentCount;
         final DoubleMatrix2D tdMatrix = new DenseDoubleMatrix2D(Math.min(maxRows,
             stemsToInclude.length), documentCount);
 
@@ -229,7 +197,7 @@ public class TermDocumentMatrixBuilder implements AcceptingVisitor
             }
 
             final DoubleMatrix2D phraseMatrix = TermDocumentMatrixBuilder
-                .buildAlignedMatrix(context, phraseFeatureIndices, termWeighting);
+                .buildAlignedMatrix(context, phraseFeatureIndices, termWeighting.get());
             MatrixUtils.normalizeColumnL2(phraseMatrix, null);
             context.termPhraseMatrix = phraseMatrix.viewDice();
         }
@@ -242,7 +210,7 @@ public class TermDocumentMatrixBuilder implements AcceptingVisitor
     {
         if ((fieldIndices & (1 << titleFieldIndex)) != 0)
         {
-            return titleWordsBoost;
+            return titleWordsBoost.get();
         }
 
         return 1;
@@ -264,13 +232,14 @@ public class TermDocumentMatrixBuilder implements AcceptingVisitor
         int documentCount = context.documentCount;
         final BitSet requiredStemIndices = new BitSet(labelsFeatureIndex.length);
 
+        double maxWordDf = this.maxWordDf.get();
         for (int i = 0; i < labelsFeatureIndex.length; i++)
         {
             final int featureIndex = labelsFeatureIndex[i];
             if (featureIndex < wordCount)
             {
                 addStemIndex(wordsStemIndex, documentCount, stemsTfByDocument,
-                    requiredStemIndices, featureIndex);
+                    requiredStemIndices, featureIndex, maxWordDf);
             }
             else
             {
@@ -281,7 +250,7 @@ public class TermDocumentMatrixBuilder implements AcceptingVisitor
                     if (!TokenTypeUtils.isCommon(wordsTypes[wordIndex]))
                     {
                         addStemIndex(wordsStemIndex, documentCount, stemsTfByDocument,
-                            requiredStemIndices, wordIndex);
+                            requiredStemIndices, wordIndex, maxWordDf);
                     }
                 }
             }
@@ -295,7 +264,7 @@ public class TermDocumentMatrixBuilder implements AcceptingVisitor
      */
     private void addStemIndex(final int [] wordsStemIndex, int documentCount,
         int [][] stemsTfByDocument, final BitSet requiredStemIndices,
-        final int featureIndex)
+        final int featureIndex, double maxWordDf)
     {
         final int stemIndex = wordsStemIndex[featureIndex];
         final int df = stemsTfByDocument[stemIndex].length / 2;

@@ -7,7 +7,7 @@ public class AttrInteger {
     this.value = value;
   }
 
-  public void set(int value) {
+  public void set(Integer value) {
     this.value = value;
   }
 

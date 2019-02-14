@@ -63,7 +63,7 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline
     public PreprocessingContext preprocess(List<Document> documents, String query, LanguageModel languageModel)
     {
         try (PreprocessingContext context = new PreprocessingContext(languageModel)) {
-          tokenizer.tokenize(context, documents.iterator());
+          tokenizer.get().tokenize(context, documents.iterator());
           caseNormalizer.normalize(context);
           languageModelStemmer.stem(context, query);
           stopListMarker.mark(context);

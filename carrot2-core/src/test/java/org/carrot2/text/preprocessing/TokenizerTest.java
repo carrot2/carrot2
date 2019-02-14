@@ -84,8 +84,13 @@ public class TokenizerTest extends PreprocessingContextTestBase
     @Test
     public void testEmptyField()
     {
+        BasicPreprocessingPipeline pipeline = new BasicPreprocessingPipeline();
+        pipeline.tokenizer.get().documentFields.set("field1", "field2", "field3");
+
+        contextBuilder = new PreprocessingContextBuilder()
+            .withPreprocessingPipeline(pipeline);
+        
         PreprocessingContext ctx = contextBuilder
-            .setAttribute(AttributeUtils.getKey(Tokenizer.class, "documentFields"), Arrays.asList("field1", "field2", "field3"))
             .newDoc(
                 fv("field1", "data mining"),
                 fv("field2", ""),

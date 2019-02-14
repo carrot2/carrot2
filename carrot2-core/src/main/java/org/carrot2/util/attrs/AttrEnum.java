@@ -1,36 +1,33 @@
 package org.carrot2.util.attrs;
 
-import java.util.function.Consumer;
+import java.util.Locale;
 
-public class AttrObject<T extends AcceptingVisitor> {
+public class AttrEnum<T extends Enum<T>> {
   private T value;
   private Class<T> clazz;
 
-  AttrObject(Class<T> clazz, T value) {
+  AttrEnum(Class<T> clazz, T value) {
+    if (!clazz.isEnum()) {
+      throw new RuntimeException(String.format(Locale.ROOT,
+          "Expected an enum class: %s",  clazz.getSimpleName()));
+    }
     this.value = value;
     this.clazz = clazz;
   }
 
   public void set(T value) {
-    set(value, (v) -> {});
-  }
-
-  public <E extends T> E set(E value, Consumer<E> closure) {
     this.value = value;
-    closure.accept(value);
-    return value;
   }
 
-  T castSet(Object t) {
-    set(clazz.cast(t));
-    return get();
+  void set(String name) {
+    set(name == null ? null : Enum.valueOf(clazz, name));
   }
 
   public T get() {
     return value;
   }
 
-  public static class Builder<T extends AcceptingVisitor> {
+  public static class Builder<T extends Enum<T>> {
     private Class<T> clazz;
     private T defaultValue;
 
@@ -48,12 +45,12 @@ public class AttrObject<T extends AcceptingVisitor> {
       return this;
     }
 
-    public AttrObject<T> build() {
-      return new AttrObject(clazz, defaultValue);
+    public AttrEnum<T> build() {
+      return new AttrEnum(clazz, defaultValue);
     }
   }
 
-  public static <T extends AcceptingVisitor> Builder<T> builder(Class<T> clazz) {
+  public static <T extends Enum<T>> Builder<T> builder(Class<T> clazz) {
     return new Builder(clazz);
   }
 }

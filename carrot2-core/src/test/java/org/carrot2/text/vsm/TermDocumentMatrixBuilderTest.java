@@ -158,7 +158,7 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
             }
         };
 
-        matrixBuilder.maximumMatrixSize = 3 * 2;
+        matrixBuilder.maximumMatrixSize.set(3 * 2);
         check(expectedTdMatrixElements, expectedTdMatrixStemIndices);
     }
 

@@ -12,13 +12,14 @@
 
 package org.carrot2.matrix.factorization;
 
-import org.carrot2.mahout.math.matrix.*;
+import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
+import org.carrot2.util.attrs.AttrComposite;
 
 /**
  * Factory for {@link PartialSingularValueDecomposition}s.
  */
-public class PartialSingularValueDecompositionFactory implements
-    IMatrixFactorizationFactory
+public class PartialSingularValueDecompositionFactory extends AttrComposite
+    implements IMatrixFactorizationFactory
 {
     /** The desired number of base vectors */
     protected int k;

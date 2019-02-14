@@ -42,8 +42,8 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
         languageModel = new LanguageModel(createStemmer(), createTokenizer(), createLexicalData());
 
         matrixBuilder = new TermDocumentMatrixBuilder();
-        matrixBuilder.termWeighting = new TfTermWeighting();
-        matrixBuilder.maxWordDf = 1.0;
+        matrixBuilder.termWeighting.set(new TfTermWeighting());
+        matrixBuilder.maxWordDf.set(1.0);
     }
 
     protected void buildTermDocumentMatrix()

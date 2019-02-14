@@ -16,6 +16,8 @@ import org.carrot2.core.Document;
 import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.preprocessing.*;
 import org.carrot2.util.attribute.Bindable;
+import org.carrot2.util.attrs.AttrComposite;
+import org.carrot2.util.attrs.AttrObject;
 
 import java.util.List;
 
@@ -29,13 +31,16 @@ import java.util.List;
  * <li>{@link StopListMarker}</li>
  * </ol>
  */
-@Bindable(prefix = "PreprocessingPipeline")
-public class BasicPreprocessingPipeline implements IPreprocessingPipeline
+@Bindable
+public class BasicPreprocessingPipeline extends AttrComposite implements IPreprocessingPipeline
 {
     /**
      * Tokenizer used by the algorithm, contains bindable attributes.
      */
-    public final Tokenizer tokenizer = new Tokenizer();
+    public final AttrObject<Tokenizer> tokenizer =
+        attributes.register("tokenizer", AttrObject.builder(Tokenizer.class)
+            .defaultValue(new Tokenizer())
+            .build());
 
     /**
      * Case normalizer used by the algorithm, contains bindable attributes.
@@ -60,7 +65,7 @@ public class BasicPreprocessingPipeline implements IPreprocessingPipeline
     public PreprocessingContext preprocess(List<Document> documents, String query, LanguageModel langModel)
     {
         try (PreprocessingContext context = new PreprocessingContext(langModel)) {
-            tokenizer.tokenize(context, documents.iterator());
+            tokenizer.get().tokenize(context, documents.iterator());
             caseNormalizer.normalize(context);
             languageModelStemmer.stem(context, query);
             stopListMarker.mark(context);

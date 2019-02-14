@@ -7,7 +7,7 @@ public class AttrBoolean {
     this.value = value;
   }
 
-  public void set(boolean value) {
+  public void set(Boolean value) {
     this.value = value;
   }
 

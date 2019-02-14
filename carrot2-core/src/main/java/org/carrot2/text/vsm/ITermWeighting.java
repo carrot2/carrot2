@@ -12,13 +12,14 @@
 
 package org.carrot2.text.vsm;
 
+import org.carrot2.util.attrs.AcceptingVisitor;
+
 /**
  * Calculates term weights for the term-document matrix.
  * 
  * @see TermDocumentMatrixBuilder
  */
-public interface ITermWeighting
-{
+public interface ITermWeighting extends AcceptingVisitor {
     /**
      * Calculates the weight of a term for a single document.
      * 
@@ -26,6 +27,5 @@ public interface ITermWeighting
      * @param documentFrequency the number of documents containing the term
      * @param documentCount total number of documents
      */
-    public double calculateTermWeight(int termFrequency, int documentFrequency,
-        int documentCount);
+    double calculateTermWeight(int termFrequency, int documentFrequency, int documentCount);
 }

@@ -54,7 +54,24 @@ public final class Attrs {
     @Override
     public void visit(String key, AttrInteger attr) {
       if (map.containsKey(key)) {
-        attr.set((Integer) map.get(key));
+        Object value = map.get(key);
+        if (value != null) {
+          attr.set((Integer) map.get(key));
+        } else {
+          attr.set(null);
+        }
+      }
+    }
+
+    @Override
+    public void visit(String key, AttrDouble attr) {
+      if (map.containsKey(key)) {
+        Number number = (Number) map.get(key);
+        if (number != null) {
+          attr.set(number.doubleValue());
+        } else {
+          attr.set(null);
+        }
       }
     }
 
@@ -66,13 +83,26 @@ public final class Attrs {
     }
 
     @Override
-    public void visit(String key, AttrObject<?> attrImpl) {
+    public void visit(String key, AttrObject<?> attr) {
       if (map.containsKey(key)) {
         Map<String, Object> submap = new HashMap<>((Map<String, Object>) map.get(key));
         String type = (String) submap.remove(KEY_TYPE);
-        attrImpl
-            .castSet(classToInstance.apply(type))
+        attr.castSet(classToInstance.apply(type))
             .accept(new FromMapVisitor(submap, classToInstance));
+      }
+    }
+
+    @Override
+    public void visit(String key, AttrEnum<? extends Enum<?>> attr) {
+      if (map.containsKey(key)) {
+        attr.set((String) map.get(key));
+      }
+    }
+
+    @Override
+    public void visit(String key, AttrStringArray attr) {
+      if (map.containsKey(key)) {
+        attr.set((String[]) map.get(key));
       }
     }
   }
@@ -94,18 +124,15 @@ public final class Attrs {
     }
 
     @Override
-    public void visit(String key, AttrBoolean attr) {
+    public void visit(String key, AttrDouble attr) {
       ensureNoExistingKey(map, key);
       map.put(key, attr.get());
     }
 
-    private void ensureNoExistingKey(Map<?, ?> map, String key) {
-      if (map.containsKey(key)) {
-        throw new RuntimeException(String.format(Locale.ROOT,
-            "Could not serialize key '%s' because it already exists in the map with value: %s",
-            key,
-            map.get(key)));
-      }
+    @Override
+    public void visit(String key, AttrBoolean attr) {
+      ensureNoExistingKey(map, key);
+      map.put(key, attr.get());
     }
 
     @Override
@@ -119,6 +146,27 @@ public final class Attrs {
         map.put(key, submap);
       } else {
         map.put(key, null);
+      }
+    }
+
+    @Override
+    public void visit(String key, AttrEnum<? extends Enum<?>> attr) {
+      ensureNoExistingKey(map, key);
+      map.put(key, attr.get() != null ? attr.get().name() : null);
+    }
+
+    @Override
+    public void visit(String key, AttrStringArray attr) {
+      ensureNoExistingKey(map, key);
+      map.put(key, attr.get());
+    }
+
+    private void ensureNoExistingKey(Map<?, ?> map, String key) {
+      if (map.containsKey(key)) {
+        throw new RuntimeException(String.format(Locale.ROOT,
+            "Could not serialize key '%s' because it already exists in the map with value: %s",
+            key,
+            map.get(key)));
       }
     }
   }

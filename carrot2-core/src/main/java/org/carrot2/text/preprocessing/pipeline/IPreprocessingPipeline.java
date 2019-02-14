@@ -15,13 +15,14 @@ package org.carrot2.text.preprocessing.pipeline;
 import org.carrot2.core.Document;
 import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.text.preprocessing.PreprocessingContext;
+import org.carrot2.util.attrs.AcceptingVisitor;
 
 import java.util.List;
 
 /**
  * A preprocessing pipeline filling in {@link PreprocessingContext} with the required data.
  */
-public interface IPreprocessingPipeline
+public interface IPreprocessingPipeline extends AcceptingVisitor
 {
     /**
      * Performs preprocessing on the provided list of documents, creating a new preprocessing

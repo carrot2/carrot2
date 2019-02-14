@@ -153,7 +153,7 @@ public class LingoClusteringAlgorithm extends ProcessingComponentBase implements
                 computeClusterCount(desiredClusterCountBase, documents.size()));
 
             // Cluster label building
-            clusterBuilder.buildLabels(lingoContext, matrixBuilder.termWeighting);
+            clusterBuilder.buildLabels(lingoContext, matrixBuilder.termWeighting.get());
 
             // Document assignment
             clusterBuilder.assignDocuments(lingoContext);

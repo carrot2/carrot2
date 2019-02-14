@@ -1,6 +1,6 @@
 package org.carrot2.util.attrs;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import org.carrot2.core.Document;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 
@@ -23,6 +23,12 @@ public class AttrsTest {
     }
   }
 
+  public enum EnumClass {
+    VALUE1,
+    VALUE2,
+    VALUE3;
+  }
+
   @Test
   public void testExtractAndRestore() {
     InterfaceImpl1 defaultValue = new InterfaceImpl1();
@@ -35,15 +41,52 @@ public class AttrsTest {
               .defaultValue(true)
               .build());
 
+      public AttrBoolean attrBooleanNoValue = group.register(
+          "attrBoolNoValue", AttrBoolean.builder()
+              .build());
+
       public AttrInteger attrInt = group.register(
           "attrInt", AttrInteger.builder()
               .defaultValue(10)
+              .build());
+
+      public AttrInteger attrIntNoValue = group.register(
+          "attrIntNoValue", AttrInteger.builder()
+              .build());
+
+      public AttrDouble attrDouble = group.register(
+          "attrDouble", AttrDouble.builder()
+              .defaultValue(36.6)
+              .build());
+
+      public AttrDouble attrDoubleNoValue = group.register(
+          "attrDoubleNoValue", AttrDouble.builder()
               .build());
 
       public AttrObject<Interface> attrObject = group.register(
           "attrObject",
           AttrObject.builder(Interface.class)
               .defaultValue(defaultValue)
+              .build());
+
+      public AttrEnum<EnumClass> attrEnum = group.register(
+          "attrEnum",
+          AttrEnum.builder(EnumClass.class)
+              .defaultValue(EnumClass.VALUE1)
+              .build());
+
+      public AttrEnum<EnumClass> attrEnumNoValue = group.register(
+          "attrEnumNoValue",
+          AttrEnum.builder(EnumClass.class)
+              .build());
+
+      public final AttrStringArray attrStringArray =
+          group.register("attrStringArray", AttrStringArray.builder()
+              .defaultValue("foo", "bar", "baz")
+              .build());
+
+      public final AttrStringArray attrStringArrayNoValue =
+          group.register("attrStringArrayNoValue", AttrStringArray.builder()
               .build());
 
       @Override
@@ -58,8 +101,10 @@ public class AttrsTest {
 
     Component c1 = new Component();
     c1.attrInt.set(c1.attrInt.get() + 1);
+    c1.attrDouble.set(Math.PI);
     c1.attrObject.set(new InterfaceImpl1(),
         (impl) -> impl.attrInt.set(42));
+    c1.attrEnum.set(EnumClass.VALUE2);
 
     Component c2 = restore(Component.class, extract(c1, mapper), mapper);
     Assertions.assertThat(c2.attrInt.get()).isEqualTo(c1.attrInt.get());

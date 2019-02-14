@@ -199,8 +199,7 @@ public class IterationNumberGuesser
         if (coefficients != null)
         {
             double columns = Math.sqrt(A.rows() * A.columns() / 2.8);
-            if (columns < 50 || columns > 400 || factory.getK() < 5
-                || factory.getK() > 50)
+            if (columns < 50 || columns > 400 || factory.getK() < 5 || factory.getK() > 50)
             {
                 // That's probably beyond our simplistic model
                 return false;
@@ -210,7 +209,6 @@ public class IterationNumberGuesser
                 int iterations = (int) (columns * coefficients[0] + factory.getK()
                     * coefficients[1] + coefficients[2]);
                 factory.setMaxIterations((int) (iterations * 0.6));
-
                 return true;
             }
         }

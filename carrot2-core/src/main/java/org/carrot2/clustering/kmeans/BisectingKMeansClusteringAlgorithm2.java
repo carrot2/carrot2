@@ -22,8 +22,6 @@ import com.carrotsearch.hppc.sorting.IndirectSort;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingException;
-import org.carrot2.core.attribute.Init;
-import org.carrot2.core.attribute.Internal;
 import org.carrot2.mahout.math.function.Functions;
 import org.carrot2.mahout.math.matrix.DoubleMatrix1D;
 import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
@@ -39,11 +37,6 @@ import org.carrot2.text.vsm.ReducedVectorSpaceModelContext;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
-import org.carrot2.util.attribute.Attribute;
-import org.carrot2.util.attribute.AttributeLevel;
-import org.carrot2.util.attribute.Input;
-import org.carrot2.util.attribute.Level;
-import org.carrot2.util.attribute.constraint.ImplementingClasses;
 import org.carrot2.util.attrs.*;
 
 import java.util.*;
@@ -54,14 +47,12 @@ import java.util.*;
  * cluster). On the other hand, the clusters are labeled only with individual words that
  * may not always fully correspond to all documents in the cluster.
  */
-public class BisectingKMeansClusteringAlgorithm2 implements AcceptingVisitor {
-  private final AttrGroup group = new AttrGroup();
-
+public class BisectingKMeansClusteringAlgorithm2 extends AttrComposite implements AcceptingVisitor {
   /**
    * The number of clusters to create. The algorithm will create at most the specified
    * number of clusters.
    */
-  public final AttrInteger clusterCount = group.register(
+  public final AttrInteger clusterCount = attributes.register(
       "clusterCount", AttrInteger.builder()
           .label("Cluster count")
           .min(2)
@@ -71,7 +62,7 @@ public class BisectingKMeansClusteringAlgorithm2 implements AcceptingVisitor {
   /**
    * The maximum number of k-means iterations to perform.
    */
-  public final AttrInteger maxIterations = group.register(
+  public final AttrInteger maxIterations = attributes.register(
       "maxIterations", AttrInteger.builder()
           .label("Maximum iterations")
           .min(1)
@@ -82,7 +73,7 @@ public class BisectingKMeansClusteringAlgorithm2 implements AcceptingVisitor {
    * Partition count. The number of partitions to create at each k-means clustering
    * iteration.
    */
-  public final AttrInteger partitionCount = group.register(
+  public final AttrInteger partitionCount = attributes.register(
       "partitionCount", AttrInteger.builder()
           .label("Partition count")
           .min(2)
@@ -93,7 +84,7 @@ public class BisectingKMeansClusteringAlgorithm2 implements AcceptingVisitor {
   /**
    * Label count. The minimum number of labels to return for each cluster.
    */
-  public final AttrInteger labelCount = group.register(
+  public final AttrInteger labelCount = attributes.register(
       "labelCount", AttrInteger.builder()
           .label("Label count")
           .min(1)
@@ -109,7 +100,7 @@ public class BisectingKMeansClusteringAlgorithm2 implements AcceptingVisitor {
    * If <code>false</code>, the k-means will
    * be performed directly on the original term-document matrix.
    */
-  public final AttrBoolean useDimensionalityReduction = group.register(
+  public final AttrBoolean useDimensionalityReduction = attributes.register(
       "useDimensionalityReduction", AttrBoolean.builder()
           .label("Use dimensionality reduction")
           .defaultValue(true)
@@ -119,25 +110,25 @@ public class BisectingKMeansClusteringAlgorithm2 implements AcceptingVisitor {
    * Term-document matrix builder for the algorithm, contains bindable attributes.
    */
   public final AttrObject<TermDocumentMatrixBuilder> matrixBuilder =
-      group.register("matrixBuilder", AttrObject.builder(TermDocumentMatrixBuilder.class)
+      attributes.register("matrixBuilder", AttrObject.builder(TermDocumentMatrixBuilder.class)
           .defaultValue(new TermDocumentMatrixBuilder())
           .build());
 
   /**
    * Term-document matrix reducer for the algorithm, contains bindable attributes.
    */
-  public final TermDocumentMatrixReducer matrixReducer = new TermDocumentMatrixReducer();
+  public final AttrObject<TermDocumentMatrixReducer> matrixReducer =
+      attributes.register("matrixReducer", AttrObject.builder(TermDocumentMatrixReducer.class)
+          .defaultValue(new TermDocumentMatrixReducer())
+          .build());
 
   /**
-   * Common preprocessing tasks handler.
+   * Preprocessing pipeline.
    */
-  @Init
-  @Input
-  @Attribute
-  @Internal
-  @ImplementingClasses(classes = {}, strict = false)
-  @Level(AttributeLevel.ADVANCED)
-  public IPreprocessingPipeline preprocessingPipeline = new BasicPreprocessingPipeline();
+  public final AttrObject<IPreprocessingPipeline> preprocessingPipeline =
+      attributes.register("preprocessingPipeline", AttrObject.builder(IPreprocessingPipeline.class)
+          .defaultValue(new BasicPreprocessingPipeline())
+          .build());
 
   /**
    *
@@ -145,7 +136,7 @@ public class BisectingKMeansClusteringAlgorithm2 implements AcceptingVisitor {
   public void process(List<Document> documents, LanguageModel languageModel) throws ProcessingException {
     // Preprocessing of documents
     final PreprocessingContext preprocessingContext =
-        preprocessingPipeline.preprocess(documents, null, languageModel);
+        preprocessingPipeline.get().preprocess(documents, null, languageModel);
 
     // Add trivial AllLabels so that we can reuse the common TD matrix builder
     final int[] stemsMfow = preprocessingContext.allStems.mostFrequentOriginalWordIndex;
@@ -181,7 +172,7 @@ public class BisectingKMeansClusteringAlgorithm2 implements AcceptingVisitor {
 
       final DoubleMatrix2D tdMatrix;
       if (useDimensionalityReduction.get() && clusterCount.get() * 2 < preprocessingContext.documentCount) {
-        matrixReducer.reduce(reducedVsmContext, clusterCount.get() * 2);
+        matrixReducer.get().reduce(reducedVsmContext, clusterCount.get() * 2);
         tdMatrix = reducedVsmContext.coefficientMatrix.viewDice();
       } else {
         tdMatrix = vsmContext.termDocumentMatrix;
@@ -366,10 +357,5 @@ public class BisectingKMeansClusteringAlgorithm2 implements AcceptingVisitor {
     }
 
     return result;
-  }
-
-  @Override
-  public void accept(AttrVisitor visitor) {
-    group.visit(visitor);
   }
 }

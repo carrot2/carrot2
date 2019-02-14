@@ -12,17 +12,11 @@
 
 package org.carrot2.text.preprocessing;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
+import com.carrotsearch.hppc.ByteArrayList;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.ShortArrayList;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingException;
-import org.carrot2.core.attribute.Init;
 import org.carrot2.text.analysis.ITokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
@@ -30,18 +24,13 @@ import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.ExceptionUtils;
 import org.carrot2.util.StringUtils;
-import org.carrot2.util.attribute.Attribute;
-import org.carrot2.util.attribute.AttributeLevel;
-import org.carrot2.util.attribute.Bindable;
-import org.carrot2.util.attribute.DefaultGroups;
-import org.carrot2.util.attribute.Group;
-import org.carrot2.util.attribute.Input;
-import org.carrot2.util.attribute.Label;
-import org.carrot2.util.attribute.Level;
+import org.carrot2.util.attrs.AttrComposite;
+import org.carrot2.util.attrs.AttrStringArray;
 
-import com.carrotsearch.hppc.ByteArrayList;
-import com.carrotsearch.hppc.IntArrayList;
-import com.carrotsearch.hppc.ShortArrayList;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Performs tokenization of documents.
@@ -54,22 +43,14 @@ import com.carrotsearch.hppc.ShortArrayList;
  * <li>{@link AllTokens#type}</li>
  * </ul>
  */
-@Bindable(prefix = "Tokenizer")
-public final class Tokenizer
-{
+public final class Tokenizer extends AttrComposite {
     /**
      * Textual fields of documents that should be tokenized and parsed for clustering.
      */
-    @Init
-    @Input
-    @Attribute
-    @Label("Document fields")
-    @Level(AttributeLevel.ADVANCED)
-    @Group(DefaultGroups.PREPROCESSING)
-    public Collection<String> documentFields = Arrays.asList(new String []
-    {
-        Document.TITLE, Document.SUMMARY
-    });
+    public final AttrStringArray documentFields =
+        attributes.register("documentFields", AttrStringArray.builder()
+            .defaultValue(Document.TITLE, Document.SUMMARY)
+            .build());
 
     /**
      * Token images.
@@ -101,8 +82,7 @@ public final class Tokenizer
     public void tokenize(PreprocessingContext context, Iterator<Document> docIterator)
     {
         // Fields to tokenize
-        final String [] fieldNames = documentFields.toArray(new String [documentFields.size()]); 
-
+        String[] fieldNames = documentFields.get();
         if (fieldNames.length > 8)
         {
             throw new ProcessingException("Maximum number of tokenized fields is 8.");

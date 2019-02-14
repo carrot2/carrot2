@@ -30,7 +30,7 @@ public class ClusterDocumentAssignerTest extends LingoProcessingComponentTestBas
     {
         clusterBuilder = new ClusterBuilder();
         clusterBuilder.labelAssigner = new SimpleLabelAssigner();
-        reducer.factorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
+        reducer.factorizationFactory.set(new LocalNonnegativeMatrixFactorizationFactory());
     }
 
     @Test

@@ -17,13 +17,11 @@ import org.carrot2.mahout.math.matrix.*;
 /**
  * A factory for {@link NonnegativeMatrixFactorizationED}s.
  */
-public class NonnegativeMatrixFactorizationEDFactory extends
-    IterativeMatrixFactorizationFactory
+public class NonnegativeMatrixFactorizationEDFactory extends IterativeMatrixFactorizationFactory
 {
     public IMatrixFactorization factorize(DoubleMatrix2D A)
     {
-        NonnegativeMatrixFactorizationED factorization = new NonnegativeMatrixFactorizationED(
-            A);
+        NonnegativeMatrixFactorizationED factorization = new NonnegativeMatrixFactorizationED(A);
         factorization.setK(k);
         factorization.setMaxIterations(maxIterations);
         factorization.setStopThreshold(stopThreshold);

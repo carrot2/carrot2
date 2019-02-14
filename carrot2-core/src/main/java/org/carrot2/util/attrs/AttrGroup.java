@@ -14,6 +14,12 @@ public final class AttrGroup {
     return attr;
   }
 
+  public <T extends Enum<T>> AttrEnum<T> register(String key, AttrEnum<T> attr) {
+    checkNewKey(key);
+    attrs.put(key, (visitor) -> visitor.visit(key, attr));
+    return attr;
+  }
+
   public AttrInteger register(String key, AttrInteger attr) {
     checkNewKey(key);
     attrs.put(key, (visitor) -> visitor.visit(key, attr));
@@ -21,6 +27,18 @@ public final class AttrGroup {
   }
 
   public AttrBoolean register(String key, AttrBoolean attr) {
+    checkNewKey(key);
+    attrs.put(key, (visitor) -> visitor.visit(key, attr));
+    return attr;
+  }
+
+  public AttrDouble register(String key, AttrDouble attr) {
+    checkNewKey(key);
+    attrs.put(key, (visitor) -> visitor.visit(key, attr));
+    return attr;
+  }
+
+  public AttrStringArray register(String key, AttrStringArray attr) {
     checkNewKey(key);
     attrs.put(key, (visitor) -> visitor.visit(key, attr));
     return attr;
