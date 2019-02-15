@@ -19,19 +19,19 @@ import com.carrotsearch.hppc.cursors.IntCursor;
 import com.carrotsearch.hppc.cursors.IntIntCursor;
 import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
-import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.Cluster;
+import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.LanguageComponents;
+import org.carrot2.language.Tokenizer;
 import org.carrot2.mahout.math.function.Functions;
 import org.carrot2.mahout.math.matrix.DoubleMatrix1D;
 import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
 import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix1D;
 import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix2D;
-import org.carrot2.language.Tokenizer;
+import org.carrot2.text.preprocessing.BasicPreprocessingPipeline;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.text.preprocessing.BasicPreprocessingPipeline;
 import org.carrot2.text.vsm.ReducedVectorSpaceModelContext;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
@@ -39,7 +39,6 @@ import org.carrot2.text.vsm.VectorSpaceModelContext;
 import org.carrot2.util.attrs.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
