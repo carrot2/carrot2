@@ -15,7 +15,7 @@ package org.carrot2.text.preprocessing;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.language.LexicalData;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
-import org.carrot2.text.util.MutableCharArray;
+import org.carrot2.util.MutableCharArray;
 import org.carrot2.util.CharArrayUtils;
 
 /**

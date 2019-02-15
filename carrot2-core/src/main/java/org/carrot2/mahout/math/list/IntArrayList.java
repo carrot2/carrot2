@@ -1,5 +1,6 @@
 /* Imported from Mahout. */package org.carrot2.mahout.math.list;
 
+import org.carrot2.mahout.math.Arithmetic;
 import org.carrot2.mahout.math.function.IntProcedure;
 
 
@@ -252,7 +253,7 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
 
     double N = (double) other.size();
     double M = (double) mySize;
-    if ((N + M) * org.carrot2.mahout.collections.Arithmetic.log2(N) < M * N) {
+    if ((N + M) * Arithmetic.log2(N) < M * N) {
       // it is faster to sort other before searching in it
       IntArrayList sortedList = (IntArrayList) other.clone();
       sortedList.quickSort();
@@ -318,7 +319,7 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
 
     double N = (double) other.size();
     double M = (double) mySize;
-    if ((N + M) * org.carrot2.mahout.collections.Arithmetic.log2(N) < M * N) {
+    if ((N + M) * Arithmetic.log2(N) < M * N) {
       // it is faster to sort other before searching in it
       IntArrayList sortedList = (IntArrayList) other.clone();
       sortedList.quickSort();

@@ -19,8 +19,8 @@ import org.carrot2.language.Tokenizer;
 import org.carrot2.language.Stemmer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllStems;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
-import org.carrot2.text.util.CharArrayComparators;
-import org.carrot2.text.util.MutableCharArray;
+import org.carrot2.util.CharArrayComparators;
+import org.carrot2.util.MutableCharArray;
 import org.carrot2.util.CharArrayUtils;
 
 import java.util.ArrayList;

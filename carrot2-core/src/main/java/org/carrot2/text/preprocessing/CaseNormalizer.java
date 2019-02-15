@@ -17,7 +17,7 @@ import com.carrotsearch.hppc.sorting.IndirectSort;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
-import org.carrot2.text.util.CharArrayComparators;
+import org.carrot2.util.CharArrayComparators;
 
 import java.util.ArrayList;
 import java.util.Arrays;

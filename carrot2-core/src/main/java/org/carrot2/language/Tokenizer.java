@@ -19,7 +19,7 @@ import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.preprocessing.LanguageModelStemmer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.preprocessing.StopListMarker;
-import org.carrot2.text.util.MutableCharArray;
+import org.carrot2.util.MutableCharArray;
 
 /**
  * Splits input characters into tokens representing e.g. words, digits, acronyms,

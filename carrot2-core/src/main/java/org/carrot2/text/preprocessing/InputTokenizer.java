@@ -14,13 +14,12 @@ package org.carrot2.text.preprocessing;
 
 import com.carrotsearch.hppc.ByteArrayList;
 import com.carrotsearch.hppc.IntArrayList;
-import com.carrotsearch.hppc.ObjectIntHashMap;
 import com.carrotsearch.hppc.ShortArrayList;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
-import org.carrot2.text.util.MutableCharArray;
+import org.carrot2.util.MutableCharArray;
 import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.attrs.AttrComposite;
@@ -29,7 +28,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 

@@ -1,4 +1,4 @@
-/* Imported from Mahout. */package org.carrot2.mahout.collections;
+/* Imported from Mahout. */package org.carrot2.mahout.math;
 
 
 public class Arithmetic extends Constants {

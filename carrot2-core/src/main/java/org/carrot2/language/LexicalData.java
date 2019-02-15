@@ -12,7 +12,7 @@
 
 package org.carrot2.language;
 
-import org.carrot2.text.util.MutableCharArray;
+import org.carrot2.util.MutableCharArray;
 
 /**
  * Provides additional miscellaneous lexical information for a given language.

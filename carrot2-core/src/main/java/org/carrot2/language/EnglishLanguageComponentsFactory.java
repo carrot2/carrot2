@@ -1,8 +1,8 @@
 package org.carrot2.language;
 
 import com.carrotsearch.hppc.ObjectHashSet;
-import org.carrot2.text.linguistic.snowball.stemmers.EnglishStemmer;
-import org.carrot2.text.util.MutableCharArray;
+import org.carrot2.language.snowball.EnglishStemmer;
+import org.carrot2.util.MutableCharArray;
 import org.carrot2.util.ClassRelativeResourceLoader;
 import org.carrot2.util.ResourceLookup;
 

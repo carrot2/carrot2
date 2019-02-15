@@ -17,7 +17,6 @@
 
 package org.carrot2.mahout.math;
 
-import org.carrot2.mahout.common.RandomUtils;
 import org.carrot2.mahout.math.function.DoubleDoubleFunction;
 import org.carrot2.mahout.math.function.DoubleFunction;
 import org.carrot2.mahout.math.function.Functions;

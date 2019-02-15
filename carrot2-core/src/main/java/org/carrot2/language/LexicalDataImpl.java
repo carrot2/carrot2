@@ -13,7 +13,7 @@
 package org.carrot2.language;
 
 import com.carrotsearch.hppc.ObjectHashSet;
-import org.carrot2.text.util.MutableCharArray;
+import org.carrot2.util.MutableCharArray;
 
 import java.util.regex.Pattern;
 

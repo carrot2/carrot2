@@ -29,7 +29,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  */
 
-package org.carrot2.text.linguistic.snowball;
+package org.carrot2.language.snowball;
 
 import org.carrot2.mahout.math.Arrays;
 

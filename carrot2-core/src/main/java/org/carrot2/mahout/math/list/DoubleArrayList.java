@@ -1,5 +1,6 @@
 /* Imported from Mahout. */package org.carrot2.mahout.math.list;
 
+import org.carrot2.mahout.math.Arithmetic;
 import org.carrot2.mahout.math.function.DoubleProcedure;
 
 
@@ -222,7 +223,7 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
 
     double N = (double) other.size();
     double M = (double) mySize;
-    if ((N + M) * org.carrot2.mahout.collections.Arithmetic.log2(N) < M * N) {
+    if ((N + M) * Arithmetic.log2(N) < M * N) {
       // it is faster to sort other before searching in it
       DoubleArrayList sortedList = (DoubleArrayList) other.clone();
       sortedList.quickSort();
@@ -288,7 +289,7 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
 
     double N = (double) other.size();
     double M = (double) mySize;
-    if ((N + M) * org.carrot2.mahout.collections.Arithmetic.log2(N) < M * N) {
+    if ((N + M) * Arithmetic.log2(N) < M * N) {
       // it is faster to sort other before searching in it
       DoubleArrayList sortedList = (DoubleArrayList) other.clone();
       sortedList.quickSort();

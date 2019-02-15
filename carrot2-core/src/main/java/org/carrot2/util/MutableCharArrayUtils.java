@@ -10,9 +10,7 @@
  * http://www.carrot2.org/carrot2.LICENSE
  */
 
-package org.carrot2.text.util;
-
-import org.carrot2.util.CharArrayUtils;
+package org.carrot2.util;
 
 /**
  * Various utility methods operating on a {@link MutableCharArray}.

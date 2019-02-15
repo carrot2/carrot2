@@ -1,4 +1,4 @@
-package org.carrot2.text.util;
+package org.carrot2.util;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

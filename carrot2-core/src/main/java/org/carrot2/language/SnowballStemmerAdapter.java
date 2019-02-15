@@ -14,8 +14,8 @@ package org.carrot2.language;
 
 import java.util.Arrays;
 
-import org.carrot2.text.linguistic.snowball.SnowballProgram;
-import org.carrot2.text.util.MutableCharArray;
+import org.carrot2.language.snowball.SnowballProgram;
+import org.carrot2.util.MutableCharArray;
 
 /**
  * An adapter converting Snowball programs into {@link Stemmer} interface.

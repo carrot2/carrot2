@@ -19,8 +19,8 @@ import java.util.Arrays;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.language.Stemmer;
-import org.carrot2.text.util.MutableCharArray;
-import org.carrot2.text.util.TabularOutput;
+import org.carrot2.util.MutableCharArray;
+import org.carrot2.util.TabularOutput;
 
 import com.carrotsearch.hppc.*;
 
