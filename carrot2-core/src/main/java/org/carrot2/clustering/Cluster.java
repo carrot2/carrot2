@@ -14,6 +14,7 @@ package org.carrot2.clustering;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A cluster is a named group of related {@link Document}s.
@@ -22,11 +23,11 @@ public class Cluster<T> {
     /** Labels describing this cluster's documents. */
     private List<String> labels = new ArrayList<>();
 
-    /** Subclusters of this cluster, if any. */
-    private List<Cluster> subclusters = new ArrayList<>();
-
     /** Documents contained in this cluster. */
     private List<T> documents = new ArrayList<>();
+
+    /** Subclusters of this cluster, if any. */
+    private List<Cluster> subclusters = new ArrayList<>();
 
     private Double score;
 
@@ -97,5 +98,26 @@ public class Cluster<T> {
     public Cluster setScore(Double score) {
         this.score = score;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null &&
+            getClass().equals(obj.getClass()) &&
+            equals((Cluster<?>) obj);
+    }
+
+    private boolean equals(Cluster<?> that) {
+        return Objects.equals(this.labels, that.labels) &&
+               Objects.equals(this.documents, that.documents) &&
+               Objects.equals(this.subclusters, that.subclusters) &&
+               Objects.equals(this.score, that.score);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            labels, documents, subclusters, score
+        );
     }
 }

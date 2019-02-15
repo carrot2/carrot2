@@ -13,8 +13,9 @@
 package org.carrot2.clustering.kmeans;
 
 import org.assertj.core.api.Assertions;
-import org.carrot2.AbstractTest;
 import org.carrot2.clustering.Cluster;
+import org.carrot2.clustering.ClusteringAlgorithm;
+import org.carrot2.clustering.ClusteringAlgorithmTestBase;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactory;
@@ -26,7 +27,11 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class BisectingKMeansClusteringAlgorithmTest extends AbstractTest {
+public class BisectingKMeansClusteringAlgorithmTest extends ClusteringAlgorithmTestBase {
+  @Override
+  protected ClusteringAlgorithm algorithm() {
+    return new BisectingKMeansClusteringAlgorithm();
+  }
 
   @Test
   public void smokeTest() {

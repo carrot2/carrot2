@@ -16,10 +16,8 @@ import org.assertj.core.api.Assertions;
 import org.carrot2.AbstractTest;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactory;
-import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -28,7 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class ClusteringAlgorithmTest extends AbstractTest {
+public class StreamingClusteringAlgorithmApiTest extends AbstractTest {
   @Test
   public void testStreamingInterface() {
     class Doc implements Document {
