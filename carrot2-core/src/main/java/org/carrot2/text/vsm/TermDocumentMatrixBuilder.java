@@ -16,7 +16,7 @@ import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
-import org.carrot2.core.Document;
+import org.carrot2.clustering.Document;
 import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
 import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 import org.carrot2.mahout.math.matrix.impl.SparseDoubleMatrix2D;
@@ -34,8 +34,7 @@ import org.carrot2.util.attrs.AttrObject;
 public class TermDocumentMatrixBuilder extends AttrComposite
 {
     /**
-     * Title word boost. Gives more weight to words that appeared in
-     * {@link org.carrot2.core.Document#TITLE} fields.
+     * Title word boost. Gives more weight to words that appeared in title fields.
      */
     public final AttrDouble titleWordsBoost = attributes.register(
         "titleWordsBoost", AttrDouble.builder()
@@ -116,7 +115,7 @@ public class TermDocumentMatrixBuilder extends AttrComposite
         final String [] fieldsName = preprocessingContext.allFields.name;
         for (int i = 0; i < fieldsName.length; i++)
         {
-            if (Document.TITLE.equals(fieldsName[i]))
+            if ("title".equals(fieldsName[i]))
             {
                 titleFieldIndex = i;
                 break;

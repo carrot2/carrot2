@@ -12,7 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.text.analysis.ITokenizer;
+import org.carrot2.language.Tokenizer;
 import org.carrot2.util.IntArrayPredicateIterator;
 
 import com.carrotsearch.hppc.predicates.ShortPredicate;
@@ -24,18 +24,18 @@ public class PreprocessedDocumentScanner
 {
     /** Predicate for splitting on document separator. */
     public static final ShortPredicate ON_DOCUMENT_SEPARATOR = 
-        equalTo(ITokenizer.TF_SEPARATOR_DOCUMENT);
+        equalTo(Tokenizer.TF_SEPARATOR_DOCUMENT);
 
     /** Predicate for splitting on field separator. */
     public static final ShortPredicate ON_FIELD_SEPARATOR = 
-        equalTo(ITokenizer.TF_SEPARATOR_FIELD);
+        equalTo(Tokenizer.TF_SEPARATOR_FIELD);
 
     /** Predicate for splitting on sentence separator. */
     public static final ShortPredicate ON_SENTENCE_SEPARATOR = new ShortPredicate()
     {
         public boolean apply(short tokenType)
         {
-            return (tokenType & ITokenizer.TF_SEPARATOR_SENTENCE) != 0;
+            return (tokenType & Tokenizer.TF_SEPARATOR_SENTENCE) != 0;
         }
     };
 

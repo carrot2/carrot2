@@ -15,8 +15,8 @@ package org.carrot2.text.preprocessing;
 import com.carrotsearch.hppc.ByteArrayList;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.sorting.IndirectSort;
-import org.carrot2.text.analysis.ITokenizer;
-import org.carrot2.text.linguistic.IStemmer;
+import org.carrot2.language.Tokenizer;
+import org.carrot2.language.Stemmer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllStems;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.CharArrayComparators;
@@ -37,10 +37,10 @@ import java.util.Set;
  * <li>{@link AllStems#mostFrequentOriginalWordIndex}</li>
  * <li>{@link AllStems#tf}</li>
  * <li>{@link AllStems#tfByDocument}</li>
- * <li>{@link AllWords#type} is populated with {@link ITokenizer#TF_QUERY_WORD}</li>
+ * <li>{@link AllWords#type} is populated with {@link Tokenizer#TF_QUERY_WORD}</li>
  * </ul>
  * 
- * This class requires that {@link Tokenizer} and {@link CaseNormalizer} be invoked first.
+ * This class requires that {@link InputTokenizer} and {@link CaseNormalizer} be invoked first.
  */
 public final class LanguageModelStemmer
 {
@@ -49,7 +49,7 @@ public final class LanguageModelStemmer
      */
     public void stem(PreprocessingContext context, String queryHint)
     {
-        final IStemmer stemmer = context.language.stemmer;
+        final Stemmer stemmer = context.languageComponents.stemmer;
 
         final char [][] wordImages = context.allWords.image;
         final char [][] stemImages = new char [wordImages.length] [];
@@ -153,7 +153,7 @@ public final class LanguageModelStemmer
             stemIndexesArray[orderIndex] = stemIndex;
             if (inQuery)
             {
-                wordsType[orderIndex] |= ITokenizer.TF_QUERY_WORD;
+                wordsType[orderIndex] |= Tokenizer.TF_QUERY_WORD;
             }
 
             // Now check if token image is changing
@@ -203,7 +203,7 @@ public final class LanguageModelStemmer
         fieldIndexList.add(fieldIndices);
         if (inQuery)
         {
-            wordsType[stemImagesOrder[stemImagesOrder.length - 1]] |= ITokenizer.TF_QUERY_WORD;
+            wordsType[stemImagesOrder[stemImagesOrder.length - 1]] |= Tokenizer.TF_QUERY_WORD;
         }
 
         // Convert lists to arrays and store them in allStems
@@ -239,7 +239,7 @@ public final class LanguageModelStemmer
         }
     }
 
-    private Set<MutableCharArray> prepareQueryWords(String query, IStemmer stemmer)
+    private Set<MutableCharArray> prepareQueryWords(String query, Stemmer stemmer)
     {
         final Set<MutableCharArray> queryWords = new HashSet<>();
 

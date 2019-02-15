@@ -14,14 +14,11 @@ package org.carrot2.text.preprocessing;
 
 import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.util.CharArrayUtils;
-import org.carrot2.util.attribute.Bindable;
 
 /**
  * Formats cluster labels for final rendering.
  */
-@Bindable
-public class LabelFormatter
-{
+public class LabelFormatter {
     /**
      * Formats a cluster label for final rendering.
      */
@@ -39,7 +36,7 @@ public class LabelFormatter
         }
         else
         {
-            final boolean insertSpace = context.language.lexicalData.usesSpaceDelimiters();
+            final boolean insertSpace = context.languageComponents.lexicalData.usesSpaceDelimiters();
             final int [] wordIndices = phrasesWordIndices[featureIndex - wordCount];
             final short [] termTypes = context.allWords.type;
             for (int i = 0; i < wordIndices.length; i++)

@@ -1,0 +1,43 @@
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2019, Dawid Weiss, Stanisław Osiński.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
+
+package org.carrot2.language;
+
+import org.carrot2.text.util.MutableCharArray;
+
+/**
+ * Provides additional miscellaneous lexical information for a given language.
+ */
+public interface LexicalData {
+  /**
+   * @return Returns <code>true</code> if <code>word</code> is common (meaningless) in
+   * this language. Such words are referred to as "stop words" and are usually
+   * ignored in information retrieval tasks. Depending on the implementation,
+   * <code>word</code> may be lower-cased internally.
+   */
+  default boolean isCommonWord(MutableCharArray word) {
+    return false;
+  }
+
+  /**
+   * @return Returns <code>true</code> if the <code>formattedLabel</code> has been
+   * declared a stop label (meaningless) in this language. This is a very
+   * low-level tuning method.
+   */
+  default boolean isStopLabel(CharSequence formattedLabel) {
+    return false;
+  }
+
+  default boolean usesSpaceDelimiters() {
+    return true;
+  }
+}

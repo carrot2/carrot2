@@ -12,12 +12,11 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.text.analysis.ITokenizer;
-import org.carrot2.text.linguistic.ILexicalData;
+import org.carrot2.language.Tokenizer;
+import org.carrot2.language.LexicalData;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.util.CharArrayUtils;
-import org.carrot2.util.attribute.Bindable;
 
 /**
  * Marks stop words based on the current language model.
@@ -27,7 +26,7 @@ import org.carrot2.util.attribute.Bindable;
  * <li>{@link AllWords#type}</li>
  * </ul>
  * <p>
- * This class requires that {@link Tokenizer} and {@link CaseNormalizer} be invoked first.
+ * This class requires that {@link InputTokenizer} and {@link CaseNormalizer} be invoked first.
  */
 public final class StopListMarker
 {
@@ -41,7 +40,7 @@ public final class StopListMarker
 
         final MutableCharArray mutableCharArray = new MutableCharArray("");
         char [] buffer = new char [128];
-        final ILexicalData lexData = context.language.lexicalData;
+        final LexicalData lexData = context.languageComponents.lexicalData;
 
         for (int i = 0; i < wordImages.length; i++)
         {
@@ -52,7 +51,7 @@ public final class StopListMarker
             mutableCharArray.reset(buffer, 0, word.length);
             if (lexData.isCommonWord(mutableCharArray))
             {
-                types[i] |= ITokenizer.TF_COMMON_WORD;
+                types[i] |= Tokenizer.TF_COMMON_WORD;
             }
         }
     }

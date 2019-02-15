@@ -1,9 +1,9 @@
 package org.carrot2.util.attrs;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Locale;
-import java.util.Map;
+import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
+
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.function.Function;
 
 public final class Attrs {
@@ -109,6 +109,13 @@ public final class Attrs {
         attr.set((String[]) map.get(key));
       }
     }
+
+    @Override
+    public void visit(String key, AttrString attr) {
+      if (map.containsKey(key)) {
+        attr.set((String) map.get(key));
+      }
+    }
   }
 
   private static class ToMapVisitor implements AttrVisitor {
@@ -165,6 +172,12 @@ public final class Attrs {
       map.put(key, attr.get());
     }
 
+    @Override
+    public void visit(String key, AttrString attr) {
+      ensureNoExistingKey(map, key);
+      map.put(key, attr.get());
+    }
+
     private void ensureNoExistingKey(Map<?, ?> map, String key) {
       if (map.containsKey(key)) {
         throw new RuntimeException(String.format(Locale.ROOT,
@@ -173,5 +186,39 @@ public final class Attrs {
             map.get(key)));
       }
     }
+  }
+
+  public static String toPrettyString(AcceptingVisitor ob) {
+    Map<String, Object> map = Attrs.toMap(ob, JvmNameMapper.INSTANCE::toName);
+    StringBuilder builder = new StringBuilder();
+    StringBuilder indent = new StringBuilder();
+    appendMap(map, builder, indent);
+    return builder.toString();
+  }
+
+  private static void appendMap(Map<String, Object> map, StringBuilder builder, StringBuilder indent) {
+    map.forEach((k, v) -> {
+      builder.append(indent).append(k).append(": ");
+      if (Map.class.isInstance(v)) {
+        builder.append("{\n");
+
+        int len = indent.length();
+        indent.append("  ");
+        appendMap(Map.class.cast(v), builder, indent.append(" "));
+        indent.setLength(len);
+
+        builder.append(indent);
+        builder.append("}");
+      } else if (v != null && v.getClass().isArray()) {
+        if (v instanceof Object[]) {
+          builder.append(Arrays.toString((Object[]) v));
+        } else {
+          throw new RuntimeException("Unexpected array type: " + v);
+        }
+      } else {
+        builder.append(v);
+      }
+      builder.append("\n");
+    });
   }
 }

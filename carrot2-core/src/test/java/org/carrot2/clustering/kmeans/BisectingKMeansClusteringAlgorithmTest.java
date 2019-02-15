@@ -12,46 +12,59 @@
 
 package org.carrot2.clustering.kmeans;
 
-import org.carrot2.core.Cluster;
-import org.carrot2.core.Document;
-import org.carrot2.core.test.ClusteringAlgorithmTestBase;
-import org.carrot2.core.test.assertions.Carrot2CoreAssertions;
+import org.assertj.core.api.Assertions;
+import org.carrot2.AbstractTest;
+import org.carrot2.clustering.Cluster;
+import org.carrot2.clustering.Document;
+import org.carrot2.language.LanguageComponents;
+import org.carrot2.language.TestsLanguageComponentsFactory;
+import org.carrot2.util.attrs.Attrs;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class BisectingKMeansClusteringAlgorithmTest extends
-    ClusteringAlgorithmTestBase<BisectingKMeansClusteringAlgorithm>
-{
+public class BisectingKMeansClusteringAlgorithmTest extends AbstractTest {
+  private class TestDocument implements Document {
+    private String title;
+
+    public TestDocument(String title) {
+      this.title = title;
+    }
+
     @Override
-    public Class<BisectingKMeansClusteringAlgorithm> getComponentClass()
-    {
-        return BisectingKMeansClusteringAlgorithm.class;
+    public void visitFields(BiConsumer<String, String> fieldConsumer) {
+      fieldConsumer.accept("title", title);
     }
+  }
 
-    @Test
-    public void smokeTest()
-    {
-        final List<Document> documents = new ArrayList<>();
-        documents.add(new Document("WordA . WordA"));
-        documents.add(new Document("WordB . WordB"));
-        documents.add(new Document("WordC . WordC"));
-        documents.add(new Document("WordA . WordA"));
-        documents.add(new Document("WordB . WordB"));
-        documents.add(new Document("WordC . WordC"));
+  @Test
+  public void smokeTest() {
+    final List<Document> documents = Arrays.asList(
+        new TestDocument("WordA . WordA"),
+        new TestDocument("WordB . WordB"),
+        new TestDocument("WordC . WordC"),
+        new TestDocument("WordA . WordA"),
+        new TestDocument("WordB . WordB"),
+        new TestDocument("WordC . WordC"));
 
-        processingAttributes.put(BisectingKMeansClusteringAlgorithm.ATTR_LABEL_COUNT, 1);
-        processingAttributes.put(BisectingKMeansClusteringAlgorithm.ATTR_PARTITION_COUNT, 3);
-        final List<Cluster> clusters = cluster(documents).getClusters();
+    BisectingKMeansClusteringAlgorithm algorithm = new BisectingKMeansClusteringAlgorithm();
+    algorithm.labelCount.set(1);
+    algorithm.partitionCount.set(3);
 
-        assertNotNull(clusters);
-        assertEquals(3, clusters.size());
-        Carrot2CoreAssertions.assertThat(clusters.get(0)).hasLabel("WordA");
-        Carrot2CoreAssertions.assertThat(clusters.get(1)).hasLabel("WordB");
-        Carrot2CoreAssertions.assertThat(clusters.get(2)).hasLabel("WordC");
-    }
+    final List<Cluster> clusters = algorithm.cluster(documents,
+        LanguageComponents.get(TestsLanguageComponentsFactory.NAME));
+
+    System.out.println(Attrs.toPrettyString(algorithm));
+
+    assertNotNull(clusters);
+    assertEquals(3, clusters.size());
+    Assertions.assertThat(clusters.get(0).getLabels()).containsExactly("WordA");
+    Assertions.assertThat(clusters.get(1).getLabels()).containsExactly("WordB");
+    Assertions.assertThat(clusters.get(2).getLabels()).containsExactly("WordC");
+  }
 }

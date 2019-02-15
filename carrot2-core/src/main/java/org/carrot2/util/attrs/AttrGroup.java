@@ -38,6 +38,12 @@ public final class AttrGroup {
     return attr;
   }
 
+  public AttrString register(String key, AttrString attr) {
+    checkNewKey(key);
+    attrs.put(key, (visitor) -> visitor.visit(key, attr));
+    return attr;
+  }
+
   public AttrStringArray register(String key, AttrStringArray attr) {
     checkNewKey(key);
     attrs.put(key, (visitor) -> visitor.visit(key, attr));

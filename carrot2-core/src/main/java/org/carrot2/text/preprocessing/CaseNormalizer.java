@@ -14,7 +14,7 @@ package org.carrot2.text.preprocessing;
 
 import com.carrotsearch.hppc.*;
 import com.carrotsearch.hppc.sorting.IndirectSort;
-import org.carrot2.text.analysis.ITokenizer;
+import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.util.CharArrayComparators;
@@ -39,9 +39,9 @@ import java.util.List;
  * <li>{@link AllWords#tfByDocument}</li>
  * </ul>
  * <p>
- * This class requires that {@link Tokenizer} be invoked first.
+ * This class requires that {@link InputTokenizer} be invoked first.
  */
-public final class CaseNormalizer {
+final class CaseNormalizer {
     /**
      * Performs normalization and saves the results to the <code>context</code>.
      */
@@ -221,8 +221,8 @@ public final class CaseNormalizer {
      */
     private boolean isNotIndexed(final int tokenType)
     {
-        return tokenType == ITokenizer.TT_PUNCTUATION
-            || tokenType == ITokenizer.TT_FULL_URL
-            || (tokenType & ITokenizer.TF_SEPARATOR_SENTENCE) != 0;
+        return tokenType == Tokenizer.TT_PUNCTUATION
+            || tokenType == Tokenizer.TT_FULL_URL
+            || (tokenType & Tokenizer.TF_SEPARATOR_SENTENCE) != 0;
     }
 }

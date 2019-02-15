@@ -15,12 +15,10 @@ package org.carrot2.text.preprocessing;
 import java.io.Closeable;
 import java.io.StringWriter;
 import java.util.Arrays;
-import java.util.List;
 
-import org.carrot2.core.Document;
-import org.carrot2.text.analysis.ITokenizer;
-import org.carrot2.text.linguistic.IStemmer;
-import org.carrot2.text.linguistic.LanguageModel;
+import org.carrot2.language.LanguageComponents;
+import org.carrot2.language.Tokenizer;
+import org.carrot2.language.Stemmer;
 import org.carrot2.text.util.MutableCharArray;
 import org.carrot2.text.util.TabularOutput;
 
@@ -39,7 +37,7 @@ public final class PreprocessingContext implements Closeable
     private static final String UNINITIALIZED = "[uninitialized]\n";
 
     /** Language model to be used */
-    public final LanguageModel language;
+    public final LanguageComponents languageComponents;
 
     /**
      * Count of documents processed by the tokenizer.
@@ -56,9 +54,9 @@ public final class PreprocessingContext implements Closeable
      * Creates a preprocessing context for the provided <code>documents</code> and with
      * the provided <code>languageModel</code>.
      */
-    public PreprocessingContext(LanguageModel languageModel)
+    public PreprocessingContext(LanguageComponents languageComponents)
     {
-        this.language = languageModel;
+        this.languageComponents = languageComponents;
     }
 
     /**
@@ -74,18 +72,18 @@ public final class PreprocessingContext implements Closeable
     {
         /**
          * Token image as it appears in the input. On positions where {@link #type} is
-         * equal to one of {@link ITokenizer#TF_TERMINATOR},
-         * {@link ITokenizer#TF_SEPARATOR_DOCUMENT} or
-         * {@link ITokenizer#TF_SEPARATOR_FIELD} , image is <code>null</code>.
+         * equal to one of {@link Tokenizer#TF_TERMINATOR},
+         * {@link Tokenizer#TF_SEPARATOR_DOCUMENT} or
+         * {@link Tokenizer#TF_SEPARATOR_FIELD} , image is <code>null</code>.
          * <p>
-         * This array is produced by {@link Tokenizer}.
+         * This array is produced by {@link InputTokenizer}.
          */
         public char [][] image;
 
         /**
-         * Token's {@link ITokenizer} bit flags.
+         * Token's {@link Tokenizer} bit flags.
          * <p>
-         * This array is produced by {@link Tokenizer}.
+         * This array is produced by {@link InputTokenizer}.
          */
         public short [] type;
 
@@ -93,7 +91,7 @@ public final class PreprocessingContext implements Closeable
          * Document field the token came from. The index points to arrays in
          * {@link AllFields}, equal to <code>-1</code> for document and field separators.
          * <p>
-         * This array is produced by {@link Tokenizer}.
+         * This array is produced by {@link InputTokenizer}.
          */
         public byte [] fieldIndex;
 
@@ -102,7 +100,7 @@ public final class PreprocessingContext implements Closeable
          * documents. Equal to <code>-1</code> for document
          * separators.
          * <p>
-         * This array is produced by {@link Tokenizer}.
+         * This array is produced by {@link InputTokenizer}.
          * </p>
          * <p>
          * This array is accessed in in {@link CaseNormalizer} and {@link PhraseExtractor}
@@ -121,7 +119,7 @@ public final class PreprocessingContext implements Closeable
 
         /**
          * A pointer to {@link AllWords} arrays for this token. Equal to <code>-1</code>
-         * for document, field and {@link ITokenizer#TT_PUNCTUATION} tokens (including
+         * for document, field and {@link Tokenizer#TT_PUNCTUATION} tokens (including
          * sentence separators).
          * <p>
          * This array is produced by {@link CaseNormalizer}.
@@ -237,7 +235,7 @@ public final class PreprocessingContext implements Closeable
          * Name of the document field. Entries of {@link AllTokens#fieldIndex} point to
          * this array.
          * <p>
-         * This array is produced by {@link Tokenizer}.
+         * This array is produced by {@link InputTokenizer}.
          */
         public String [] name;
 
@@ -306,7 +304,7 @@ public final class PreprocessingContext implements Closeable
          * This array is produced by {@link CaseNormalizer}.
          * This array is modified by {@link LanguageModelStemmer}.
          * 
-         * @see ITokenizer
+         * @see Tokenizer
          */
         public short [] type;
 
@@ -409,7 +407,7 @@ public final class PreprocessingContext implements Closeable
     /**
      * Information about all unique stems found in the input
      * documents. Each entry in each array corresponds to one
-     * base form different words can be transformed to by the {@link IStemmer} used while
+     * base form different words can be transformed to by the {@link Stemmer} used while
      * processing. E.g. the English <em>mining</em> and <em>mine</em> will be aggregated
      * to one entry in the arrays, while they will have separate entries in
      * {@link AllWords}.
@@ -420,7 +418,7 @@ public final class PreprocessingContext implements Closeable
     public class AllStems
     {
         /**
-         * Stem image as produced by the {@link IStemmer}, may not correspond to any
+         * Stem image as produced by the {@link Stemmer}, may not correspond to any
          * correct word.
          * <p>
          * This array is produced by {@link LanguageModelStemmer}.

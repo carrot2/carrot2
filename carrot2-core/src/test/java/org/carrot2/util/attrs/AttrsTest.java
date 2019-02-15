@@ -1,12 +1,14 @@
 package org.carrot2.util.attrs;
 
-import org.carrot2.core.Document;
-import org.fest.assertions.Assertions;
+import org.assertj.core.api.Assertions;
+import org.carrot2.AbstractTest;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-public class AttrsTest {
+public class AttrsTest extends AbstractTest {
   public interface Interface extends AcceptingVisitor {
   }
 
@@ -63,6 +65,15 @@ public class AttrsTest {
           "attrDoubleNoValue", AttrDouble.builder()
               .build());
 
+      public AttrString attrString = group.register(
+          "attrString", AttrString.builder()
+              .defaultValue("foo")
+              .build());
+
+      public AttrString attrStringNoValue = group.register(
+          "attrStringNoValue", AttrString.builder()
+              .build());
+
       public AttrObject<Interface> attrObject = group.register(
           "attrObject",
           AttrObject.builder(Interface.class)
@@ -109,7 +120,7 @@ public class AttrsTest {
     Component c2 = restore(Component.class, extract(c1, mapper), mapper);
     Assertions.assertThat(c2.attrInt.get()).isEqualTo(c1.attrInt.get());
 
-    System.out.println(extract(c1, mapper));
+    System.out.println(Attrs.toPrettyString(c1));
   }
 
   public static <E extends AcceptingVisitor> E restore(Class<? extends E> clazz,

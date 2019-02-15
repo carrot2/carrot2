@@ -6,8 +6,6 @@ if (GradleVersion.current() < GradleVersion.version(minimumGradleVersion)) {
     throw new GradleException("Gradle ${minimumGradleVersion}+ is required (use local ./gradlew for wrapper).")
 }
 
-
-
 allprojects {
   apply plugin: 'idea'
   version = '4.0'
@@ -40,13 +38,27 @@ ext {
 project("carrot2-core") {
   apply plugin: 'java-library'
 
+  configurations {
+    jflex
+  }
+
   dependencies {
     api "org.slf4j:slf4j-api:1.7.13"
-
     implementation "com.carrotsearch:hppc:0.8.1"
-    implementation "org.carrot2:morfologik-polish:2.1.5"
-    implementation "org.apache.lucene:lucene-analyzers-common:5.5.5"
-    implementation "org.apache.lucene:lucene-analyzers-smartcn:5.5.5"
+    jflex "de.jflex:jflex:1.5.1"
+  }
+
+  task jflex(type: JavaExec) {
+    description = "Regenerate JFlex Java scanners."
+    group       = "Build"
+
+    classpath {
+      configurations.jflex
+    }
+    main = "jflex.Main"
+    args "-nobak", "--noinputstreamctor"
+    args "-d", file('src/main/java/org/carrot2/language')
+    args file('src/main/jflex/org/carrot2/language/ExtendedWhitespaceTokenizerImpl.jflex')
   }
 }
 
@@ -139,9 +151,7 @@ configure(subprojects.findAll {[
   dependencies {
     testImplementation "com.carrotsearch.randomizedtesting:randomizedtesting-runner:2.7.2"
     testImplementation "junit:junit:4.12"
-    testImplementation "org.easytesting:fest-assert:1.4"
-    testImplementation "org.easytesting:fest-mocks:1.0"
-    testImplementation "org.easymock:easymock:3.0"
+    testImplementation "org.assertj:assertj-core:3.11.1"
     testImplementation "org.slf4j:slf4j-simple:1.7.13"
   }
 }
