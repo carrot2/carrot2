@@ -4,6 +4,7 @@ import com.carrotsearch.randomizedtesting.RandomizedTest;
 import com.carrotsearch.randomizedtesting.annotations.Nightly;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
 import org.carrot2.AbstractTest;
+import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactory;
 import org.junit.Test;
@@ -15,7 +16,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -40,11 +40,8 @@ public abstract class ClusteringAlgorithmTestBase extends AbstractTest {
   @Test
   public void testDocumentsWithoutContent() {
     List<Document> documents = IntStream.range(0, randomIntBetween(1, 100))
-        .mapToObj(i -> new Document() {
-          @Override
-          public void visitFields(BiConsumer<String, String> fieldConsumer) {
-            // No fields.
-          }
+        .mapToObj(i -> (Document) fieldConsumer -> {
+          // No fields.
         })
         .collect(Collectors.toList());
 
@@ -59,9 +56,13 @@ public abstract class ClusteringAlgorithmTestBase extends AbstractTest {
   public void testClusteringSampleDataSet() {
     List<Cluster<Document>> clusters = algorithm().cluster(
         SampleDocumentData.DOCUMENTS_DATA_MINING.stream(),
-        testLanguageModel());
+        LanguageComponents.get(EnglishLanguageComponentsFactory.NAME));
     assertThat(clusters.size())
         .isGreaterThan(0);
+
+    for (Cluster<?> c : clusters) {
+      System.out.println(c.getLabels());
+    }
   }
 
 

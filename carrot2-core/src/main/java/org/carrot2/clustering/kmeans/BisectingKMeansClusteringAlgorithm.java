@@ -93,7 +93,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
           .build());
 
   /**
-   * Label count. The minimum number of labels to return for each cluster.
+   *
    */
   public final AttrString queryHint = attributes.register(
       "queryHint", AttrString.builder()
@@ -115,7 +115,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
           .build());
 
   /**
-   * Term-document matrix builder for the algorithm, contains bindable attributes.
+   * Term-document matrix builder for the algorithm.
    */
   public final AttrObject<TermDocumentMatrixBuilder> matrixBuilder =
       attributes.register("matrixBuilder", AttrObject.builder(TermDocumentMatrixBuilder.class)
@@ -123,7 +123,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
           .build());
 
   /**
-   * Term-document matrix reducer for the algorithm, contains bindable attributes.
+   * Term-document matrix reducer for the algorithm.
    */
   public final AttrObject<TermDocumentMatrixReducer> matrixReducer =
       attributes.register("matrixReducer", AttrObject.builder(TermDocumentMatrixReducer.class)

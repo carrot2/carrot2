@@ -36,8 +36,8 @@ public class BasicPreprocessingPipeline extends AttrComposite {
    * Word Document Frequency threshold. Words appearing in fewer than
    * <code>dfThreshold</code> documents will be ignored.
    */
-  public final AttrInteger dfThreshold =
-      attributes.register("dfThreshold", AttrInteger.builder()
+  public final AttrInteger wordDfThreshold =
+      attributes.register("wordDfThreshold", AttrInteger.builder()
           .min(1)
           .max(100)
           .label("Word document frequency threshold")
@@ -74,7 +74,7 @@ public class BasicPreprocessingPipeline extends AttrComposite {
   public PreprocessingContext preprocess(Stream<? extends Document> documents, String query, LanguageComponents langModel) {
     try (PreprocessingContext context = new PreprocessingContext(langModel)) {
       tokenizer.get().tokenize(context, documents);
-      caseNormalizer.normalize(context, dfThreshold.get());
+      caseNormalizer.normalize(context, wordDfThreshold.get());
       stemming.stem(context, query);
       stopListMarker.mark(context);
       return context;

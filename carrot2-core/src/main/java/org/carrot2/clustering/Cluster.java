@@ -64,6 +64,11 @@ public class Cluster<T> {
         return this;
     }
 
+    public Cluster addLabel(String label) {
+        labels.add(label);
+        return this;
+    }
+
     /**
      * Adds document to this cluster.
      */
