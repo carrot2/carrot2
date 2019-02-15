@@ -16,6 +16,7 @@ import org.assertj.core.api.Assertions;
 import org.carrot2.AbstractTest;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.Document;
+import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactory;
 import org.carrot2.util.attrs.Attrs;
@@ -23,28 +24,15 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class BisectingKMeansClusteringAlgorithmTest extends AbstractTest {
-  private class TestDocument implements Document {
-    private String title;
-
-    public TestDocument(String title) {
-      this.title = title;
-    }
-
-    @Override
-    public void visitFields(BiConsumer<String, String> fieldConsumer) {
-      fieldConsumer.accept("title", title);
-    }
-  }
 
   @Test
   public void smokeTest() {
-    final List<Document> documents = Arrays.asList(
+    final List<TestDocument> documents = Arrays.asList(
         new TestDocument("WordA . WordA"),
         new TestDocument("WordB . WordB"),
         new TestDocument("WordC . WordC"),
@@ -56,10 +44,8 @@ public class BisectingKMeansClusteringAlgorithmTest extends AbstractTest {
     algorithm.labelCount.set(1);
     algorithm.partitionCount.set(3);
 
-    final List<Cluster> clusters = algorithm.cluster(documents,
+    final List<Cluster<TestDocument>> clusters = algorithm.cluster(documents.stream(),
         LanguageComponents.get(TestsLanguageComponentsFactory.NAME));
-
-    System.out.println(Attrs.toPrettyString(algorithm));
 
     assertNotNull(clusters);
     assertEquals(3, clusters.size());

@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * A cluster is a named group of related {@link Document}s.
  */
-public final class Cluster {
+public class Cluster<T> {
     /** Labels describing this cluster's documents. */
     private List<String> labels = new ArrayList<>();
 
@@ -26,7 +26,7 @@ public final class Cluster {
     private List<Cluster> subclusters = new ArrayList<>();
 
     /** Documents contained in this cluster. */
-    private List<Document> documents = new ArrayList<>();
+    private List<T> documents = new ArrayList<>();
 
     private Double score;
 
@@ -50,7 +50,7 @@ public final class Cluster {
     /**
      * Returns all documents that belong directly to this cluster.
      */
-    public List<Document> getDocuments() {
+    public List<T> getDocuments() {
         return documents;
     }
 
@@ -66,12 +66,12 @@ public final class Cluster {
     /**
      * Adds document to this cluster.
      */
-    public Cluster addDocuments(Iterable<Document> documents) {
+    public Cluster addDocuments(Iterable<? extends T> documents) {
         documents.forEach(doc -> this.documents.add(doc));
         return this;
     }
 
-    public Cluster addDocument(Document document) {
+    public Cluster addDocument(T document) {
         this.documents.add(document);
         return this;
     }

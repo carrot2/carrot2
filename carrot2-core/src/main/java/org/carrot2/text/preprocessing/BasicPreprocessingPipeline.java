@@ -19,6 +19,7 @@ import org.carrot2.util.attrs.AttrInteger;
 import org.carrot2.util.attrs.AttrObject;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Performs basic preprocessing steps on the provided documents. The preprocessing
@@ -70,9 +71,9 @@ public class BasicPreprocessingPipeline extends AttrComposite {
    * Performs preprocessing on the provided list of documents. Results can be obtained
    * from the returned {@link PreprocessingContext}.
    */
-  public PreprocessingContext preprocess(List<Document> documents, String query, LanguageComponents langModel) {
+  public PreprocessingContext preprocess(Stream<? extends Document> documents, String query, LanguageComponents langModel) {
     try (PreprocessingContext context = new PreprocessingContext(langModel)) {
-      tokenizer.get().tokenize(context, documents.iterator());
+      tokenizer.get().tokenize(context, documents);
       caseNormalizer.normalize(context, dfThreshold.get());
       stemming.stem(context, query);
       stopListMarker.mark(context);

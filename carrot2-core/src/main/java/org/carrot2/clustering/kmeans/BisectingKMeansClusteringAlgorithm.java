@@ -39,6 +39,8 @@ import org.carrot2.text.vsm.VectorSpaceModelContext;
 import org.carrot2.util.attrs.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A very simple implementation of bisecting k-means clustering. Unlike other algorithms
@@ -137,12 +139,13 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
           .defaultValue(new BasicPreprocessingPipeline())
           .build());
 
-  /** */
   @Override
-  public List<Cluster> cluster(List<Document> documents, LanguageComponents languageModel) {
+  public <T extends Document> List<Cluster<T>> cluster(Stream<? extends T> docStream, LanguageComponents languageComponents) {
+    List<T> documents = new ArrayList<>();
+
     // Preprocessing of documents
     final PreprocessingContext preprocessingContext =
-        preprocessing.get().preprocess(documents, queryHint.get(), languageModel);
+        preprocessing.get().preprocess(docStream.peek(doc -> documents.add(doc)), queryHint.get(), languageComponents);
 
     // Add trivial AllLabels so that we can reuse the common TD matrix builder
     final int[] stemsMfow = preprocessingContext.allStems.mostFrequentOriginalWordIndex;
@@ -158,7 +161,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
     preprocessingContext.allLabels.firstPhraseIndex = -1;
 
     // Further processing only if there are words to process
-    ArrayList<Cluster> clusters = new ArrayList<>();
+    ArrayList<Cluster<T>> clusters = new ArrayList<>();
     if (preprocessingContext.hasLabels()) {
       // Term-document matrix building and reduction
       final VectorSpaceModelContext vsmContext = new VectorSpaceModelContext(

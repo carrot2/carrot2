@@ -14,6 +14,7 @@ package org.carrot2.text.preprocessing;
 
 import com.carrotsearch.hppc.ByteArrayList;
 import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.ObjectIntHashMap;
 import com.carrotsearch.hppc.ShortArrayList;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.Tokenizer;
@@ -29,6 +30,8 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  * Performs tokenization of documents.
@@ -42,155 +45,150 @@ import java.util.Iterator;
  * </ul>
  */
 final class InputTokenizer extends AttrComposite {
-    /**
-     * Token images.
-     */
-    private ArrayList<char []> images;
+  /**
+   * Token images.
+   */
+  private ArrayList<char[]> images;
 
-    /**
-     * An array of token types.
-     */
-    private ShortArrayList tokenTypes;
+  /**
+   * An array of token types.
+   */
+  private ShortArrayList tokenTypes;
 
-    /**
-     * An array of document indexes.
-     */
-    private IntArrayList documentIndices;
+  /**
+   * An array of document indexes.
+   */
+  private IntArrayList documentIndices;
 
-    /**
-     * An array of field indexes.
-     * 
-     * @see AllFields
-     */
-    private ByteArrayList fieldIndices;
+  /**
+   * An array of field indexes.
+   *
+   * @see AllFields
+   */
+  private ByteArrayList fieldIndices;
 
-    /**
-     * Performs tokenization and saves the results to the <code>context</code>.
-     */
-    public void tokenize(PreprocessingContext context, Iterator<Document> docIterator) {
-        images = new ArrayList<>();
-        tokenTypes = new ShortArrayList();
-        documentIndices = new IntArrayList();
-        fieldIndices = new ByteArrayList();
+  private static class FieldValue {
+    String field;
+    String value;
 
-        int documentIndex = 0;
-        final Tokenizer ts = context.languageComponents.tokenizer;
-        final MutableCharArray wrapper = new MutableCharArray(CharArrayUtils.EMPTY_ARRAY);
+    public FieldValue(String fieldName, String fieldValue) {
+      this.field = fieldName;
+      this.value = fieldValue;
+    }
+  }
 
-        HashMap<String, Integer> fieldIndexes = new HashMap<>();
-        class FieldValue {
-            String field;
-            String value;
+  /**
+   * Performs tokenization and saves the results to the <code>context</code>.
+   */
+  public void tokenize(PreprocessingContext context, Stream<? extends Document> docStream) {
+    images = new ArrayList<>();
+    tokenTypes = new ShortArrayList();
+    documentIndices = new IntArrayList();
+    fieldIndices = new ByteArrayList();
 
-            public FieldValue(String fieldName, String fieldValue) {
-                this.field = fieldName;
-                this.value = fieldValue;
-            }
-        }
-        ArrayList<FieldValue> fields = new ArrayList<>();
+    int documentIndex = 0;
+    final Tokenizer ts = context.languageComponents.tokenizer;
+    final MutableCharArray wrapper = new MutableCharArray(CharArrayUtils.EMPTY_ARRAY);
 
-        while (docIterator.hasNext())
-        {
+    HashMap<String, Integer> fieldIndexes = new HashMap<>();
+    ArrayList<FieldValue> fields = new ArrayList<>();
+    docStream
+        .peek(new Consumer<Document>() {
+          private int documentIndex = 0;
+
+          @Override
+          public void accept(Document doc) {
             if (documentIndex > 0) {
-                addDocumentSeparator();
+              addDocumentSeparator();
             }
 
-            final Document doc = docIterator.next();
             fields.clear();
             doc.visitFields((fieldName, fieldValue) -> {
-                if (!StringUtils.isNullOrEmpty(fieldValue)) {
-                    fields.add(new FieldValue(fieldName, fieldValue));
-                }
+              if (!StringUtils.isNullOrEmpty(fieldValue)) {
+                fields.add(new FieldValue(fieldName, fieldValue));
+              }
             });
 
             boolean hadTokens = false;
             for (FieldValue fv : fields) {
-                final int fieldIndex = fieldIndexes.computeIfAbsent(fv.field, (k) -> fieldIndexes.size());
-                if (fieldIndex > Byte.MAX_VALUE) {
-                    throw new RuntimeException("Too many fields (>" + fieldIndex + ")");
-                }
-                final String fieldValue = fv.value;
+              final int fieldIndex = fieldIndexes.computeIfAbsent(fv.field, (k) -> fieldIndexes.size());
+              if (fieldIndex > Byte.MAX_VALUE) {
+                throw new RuntimeException("Too many fields (>" + fieldIndex + ")");
+              }
+              final String fieldValue = fv.value;
 
-                if (!StringUtils.isNullOrEmpty(fieldValue)) {
-                    try
-                    {
-                        short tokenType;
+              if (!StringUtils.isNullOrEmpty(fieldValue)) {
+                try {
+                  short tokenType;
 
-                        ts.reset(new StringReader(fieldValue));
-                        if ((tokenType = ts.nextToken()) != Tokenizer.TT_EOF)
-                        {
-                            if (hadTokens) addFieldSeparator(documentIndex);
-                            do
-                            {
-                                ts.setTermBuffer(wrapper);
-                                add(documentIndex, (byte) fieldIndex, context.intern(wrapper), tokenType);
-                            } while ((tokenType = ts.nextToken()) != Tokenizer.TT_EOF);
-                            hadTokens = true;
-                        }
-                    }
-                    catch (IOException e)
-                    {
-                        // Not possible (StringReader above)?
-                        throw new RuntimeException(e);
-                    }
+                  ts.reset(new StringReader(fieldValue));
+                  if ((tokenType = ts.nextToken()) != Tokenizer.TT_EOF) {
+                    if (hadTokens) addFieldSeparator(documentIndex);
+                    do {
+                      ts.setTermBuffer(wrapper);
+                      add(documentIndex, (byte) fieldIndex, context.intern(wrapper), tokenType);
+                    } while ((tokenType = ts.nextToken()) != Tokenizer.TT_EOF);
+                    hadTokens = true;
+                  }
+                } catch (IOException e) {
+                  throw new RuntimeException(e);
                 }
+              }
             }
 
             documentIndex++;
-        }
+          }
+        })
+        .count();
 
-        addTerminator();
+    addTerminator();
 
-        String [] fieldNames = new String [fieldIndexes.size()];
-        fieldIndexes.forEach((field, index) -> fieldNames[index] = field);
+    String[] fieldNames = new String[fieldIndexes.size()];
+    fieldIndexes.forEach((field, index) -> fieldNames[index] = field);
 
-        // Save results in the PreprocessingContext
-        context.documentCount = documentIndex;
-        context.allTokens.documentIndex = documentIndices.toArray();
-        context.allTokens.fieldIndex = fieldIndices.toArray();
-        context.allTokens.image = images.toArray(new char [images.size()] []);
-        context.allTokens.type = tokenTypes.toArray();
-        context.allFields.name = fieldNames;
+    // Save results in the PreprocessingContext
+    context.documentCount = documentIndex;
+    context.allTokens.documentIndex = documentIndices.toArray();
+    context.allTokens.fieldIndex = fieldIndices.toArray();
+    context.allTokens.image = images.toArray(new char[images.size()][]);
+    context.allTokens.type = tokenTypes.toArray();
+    context.allFields.name = fieldNames;
 
-        // Clean up
-        images = null;
-        fieldIndices = null;
-        tokenTypes = null;
-        documentIndices = null;
-    }
+    // Clean up
+    images = null;
+    fieldIndices = null;
+    tokenTypes = null;
+    documentIndices = null;
+  }
 
-    /**
-     * Adds a special terminating token required at the very end of all documents.
-     */
-    void addTerminator()
-    {
-        add(-1, (byte) -1, null, Tokenizer.TF_TERMINATOR);
-    }
+  /**
+   * Adds a special terminating token required at the very end of all documents.
+   */
+  void addTerminator() {
+    add(-1, (byte) -1, null, Tokenizer.TF_TERMINATOR);
+  }
 
-    /**
-     * Adds a document separator to the lists.
-     */
-    void addDocumentSeparator()
-    {
-        add(-1, (byte) -1, null, Tokenizer.TF_SEPARATOR_DOCUMENT);
-    }
+  /**
+   * Adds a document separator to the lists.
+   */
+  void addDocumentSeparator() {
+    add(-1, (byte) -1, null, Tokenizer.TF_SEPARATOR_DOCUMENT);
+  }
 
-    /**
-     * Adds a field separator to the lists.
-     */
-    void addFieldSeparator(int documentIndex)
-    {
-        add(documentIndex, (byte) -1, null, Tokenizer.TF_SEPARATOR_FIELD);
-    }
+  /**
+   * Adds a field separator to the lists.
+   */
+  void addFieldSeparator(int documentIndex) {
+    add(documentIndex, (byte) -1, null, Tokenizer.TF_SEPARATOR_FIELD);
+  }
 
-    /**
-     * Adds custom token code to the sequence. May be used to add separator constants.
-     */
-    void add(int documentIndex, byte fieldIndex, char [] image, short tokenTypeCode)
-    {
-        documentIndices.add(documentIndex);
-        fieldIndices.add(fieldIndex);
-        images.add(image);
-        tokenTypes.add(tokenTypeCode);
-    }
+  /**
+   * Adds custom token code to the sequence. May be used to add separator constants.
+   */
+  void add(int documentIndex, byte fieldIndex, char[] image, short tokenTypeCode) {
+    documentIndices.add(documentIndex);
+    fieldIndices.add(fieldIndex);
+    images.add(image);
+    tokenTypes.add(tokenTypeCode);
+  }
 }
