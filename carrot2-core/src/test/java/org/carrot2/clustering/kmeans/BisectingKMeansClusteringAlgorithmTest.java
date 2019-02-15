@@ -15,11 +15,9 @@ package org.carrot2.clustering.kmeans;
 import org.assertj.core.api.Assertions;
 import org.carrot2.AbstractTest;
 import org.carrot2.clustering.Cluster;
-import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactory;
-import org.carrot2.util.attrs.Attrs;
 import org.junit.Test;
 
 import java.util.Arrays;

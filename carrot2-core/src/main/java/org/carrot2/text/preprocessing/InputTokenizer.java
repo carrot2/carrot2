@@ -91,53 +91,52 @@ final class InputTokenizer extends AttrComposite {
     HashMap<String, Integer> fieldIndexes = new HashMap<>();
     ArrayList<FieldValue> fields = new ArrayList<>();
     docStream
-        .peek(new Consumer<Document>() {
-          private int documentIndex = 0;
+      .forEach(new Consumer<Document>() {
+        private int documentIndex = 0;
 
-          @Override
-          public void accept(Document doc) {
-            if (documentIndex > 0) {
-              addDocumentSeparator();
-            }
-
-            fields.clear();
-            doc.visitFields((fieldName, fieldValue) -> {
-              if (!StringUtils.isNullOrEmpty(fieldValue)) {
-                fields.add(new FieldValue(fieldName, fieldValue));
-              }
-            });
-
-            boolean hadTokens = false;
-            for (FieldValue fv : fields) {
-              final int fieldIndex = fieldIndexes.computeIfAbsent(fv.field, (k) -> fieldIndexes.size());
-              if (fieldIndex > Byte.MAX_VALUE) {
-                throw new RuntimeException("Too many fields (>" + fieldIndex + ")");
-              }
-              final String fieldValue = fv.value;
-
-              if (!StringUtils.isNullOrEmpty(fieldValue)) {
-                try {
-                  short tokenType;
-
-                  ts.reset(new StringReader(fieldValue));
-                  if ((tokenType = ts.nextToken()) != Tokenizer.TT_EOF) {
-                    if (hadTokens) addFieldSeparator(documentIndex);
-                    do {
-                      ts.setTermBuffer(wrapper);
-                      add(documentIndex, (byte) fieldIndex, context.intern(wrapper), tokenType);
-                    } while ((tokenType = ts.nextToken()) != Tokenizer.TT_EOF);
-                    hadTokens = true;
-                  }
-                } catch (IOException e) {
-                  throw new RuntimeException(e);
-                }
-              }
-            }
-
-            documentIndex++;
+        @Override
+        public void accept(Document doc) {
+          if (documentIndex > 0) {
+            addDocumentSeparator();
           }
-        })
-        .count();
+
+          fields.clear();
+          doc.visitFields((fieldName, fieldValue) -> {
+            if (!StringUtils.isNullOrEmpty(fieldValue)) {
+              fields.add(new FieldValue(fieldName, fieldValue));
+            }
+          });
+
+          boolean hadTokens = false;
+          for (FieldValue fv : fields) {
+            final int fieldIndex = fieldIndexes.computeIfAbsent(fv.field, (k) -> fieldIndexes.size());
+            if (fieldIndex > Byte.MAX_VALUE) {
+              throw new RuntimeException("Too many fields (>" + fieldIndex + ")");
+            }
+            final String fieldValue = fv.value;
+
+            if (!StringUtils.isNullOrEmpty(fieldValue)) {
+              try {
+                short tokenType;
+
+                ts.reset(new StringReader(fieldValue));
+                if ((tokenType = ts.nextToken()) != Tokenizer.TT_EOF) {
+                  if (hadTokens) addFieldSeparator(documentIndex);
+                  do {
+                    ts.setTermBuffer(wrapper);
+                    add(documentIndex, (byte) fieldIndex, context.intern(wrapper), tokenType);
+                  } while ((tokenType = ts.nextToken()) != Tokenizer.TT_EOF);
+                  hadTokens = true;
+                }
+              } catch (IOException e) {
+                throw new RuntimeException(e);
+              }
+            }
+          }
+
+          documentIndex++;
+        }
+      });
 
     addTerminator();
 
