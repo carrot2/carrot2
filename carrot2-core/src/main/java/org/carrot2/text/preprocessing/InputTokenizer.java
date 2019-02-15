@@ -84,14 +84,13 @@ final class InputTokenizer extends AttrComposite {
     documentIndices = new IntArrayList();
     fieldIndices = new ByteArrayList();
 
-    int documentIndex = 0;
     final Tokenizer ts = context.languageComponents.tokenizer;
     final MutableCharArray wrapper = new MutableCharArray(CharArrayUtils.EMPTY_ARRAY);
 
     HashMap<String, Integer> fieldIndexes = new HashMap<>();
     ArrayList<FieldValue> fields = new ArrayList<>();
-    docStream
-      .forEach(new Consumer<Document>() {
+    long docCount = docStream
+      .peek(new Consumer<Document>() {
         private int documentIndex = 0;
 
         @Override
@@ -136,7 +135,8 @@ final class InputTokenizer extends AttrComposite {
 
           documentIndex++;
         }
-      });
+      })
+      .count();
 
     addTerminator();
 
@@ -144,7 +144,7 @@ final class InputTokenizer extends AttrComposite {
     fieldIndexes.forEach((field, index) -> fieldNames[index] = field);
 
     // Save results in the PreprocessingContext
-    context.documentCount = documentIndex;
+    context.documentCount = Math.toIntExact(docCount);
     context.allTokens.documentIndex = documentIndices.toArray();
     context.allTokens.fieldIndex = fieldIndices.toArray();
     context.allTokens.image = images.toArray(new char[images.size()][]);

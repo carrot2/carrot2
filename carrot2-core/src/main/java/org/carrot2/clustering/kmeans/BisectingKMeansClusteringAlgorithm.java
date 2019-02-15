@@ -147,8 +147,6 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
     final PreprocessingContext preprocessingContext =
         preprocessing.get().preprocess(docStream.peek(doc -> documents.add(doc)), queryHint.get(), languageComponents);
 
-    System.out.println(documents.size());
-
     // Add trivial AllLabels so that we can reuse the common TD matrix builder
     final int[] stemsMfow = preprocessingContext.allStems.mostFrequentOriginalWordIndex;
     final short[] wordsType = preprocessingContext.allWords.type;
