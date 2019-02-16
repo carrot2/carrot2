@@ -149,11 +149,11 @@ public final class Attrs {
     @Override
     public void visit(String key, AttrObject<?> attrImpl) {
       ensureNoExistingKey(map, key);
-      AcceptingVisitor acceptingVisitor = attrImpl.get();
-      if (acceptingVisitor != null) {
+      AcceptingVisitor value = attrImpl.get();
+      if (value != null) {
         Map<String, Object> submap = new LinkedHashMap<>();
-        submap.put(KEY_TYPE, objectToClass.apply(acceptingVisitor));
-        acceptingVisitor.accept(new ToMapVisitor(submap, objectToClass));
+        submap.put(KEY_TYPE, objectToClass.apply(value));
+        value.accept(new ToMapVisitor(submap, objectToClass));
         map.put(key, submap);
       } else {
         map.put(key, null);

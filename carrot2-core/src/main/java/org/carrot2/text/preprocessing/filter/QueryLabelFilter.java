@@ -12,66 +12,48 @@
 
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.core.attribute.Processing;
-import org.carrot2.text.analysis.ITokenizer;
+import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.attribute.Attribute;
-import org.carrot2.util.attribute.AttributeLevel;
-import org.carrot2.util.attribute.Bindable;
-import org.carrot2.util.attribute.DefaultGroups;
-import org.carrot2.util.attribute.Group;
-import org.carrot2.util.attribute.Input;
-import org.carrot2.util.attribute.Label;
-import org.carrot2.util.attribute.Level;
+import org.carrot2.util.attrs.AttrBoolean;
 
 /**
  * Accepts labels that do not consist only of query words.
  */
-@Bindable(prefix = "QueryLabelFilter")
-public class QueryLabelFilter extends SingleLabelFilterBase
-{
-    /**
-     * Remove query words. Removes labels that consist only of words contained in the
-     * query.
-     */
-    @Input
-    @Processing
-    @Attribute
-    @Label("Remove query words")
-    @Level(AttributeLevel.BASIC)
-    @Group(DefaultGroups.LABELS)    
-    public boolean enabled = true;
+public class QueryLabelFilter extends SingleLabelFilterBase {
 
-    @Override
-    public boolean acceptPhrase(PreprocessingContext context, int phraseIndex)
-    {
-        final int [] wordIndices = context.allPhrases.wordIndices[phraseIndex];
-        final short [] flag = context.allWords.type;
+  /**
+   * Remove query words. Removes labels that consist only of words contained in the
+   * query.
+   */
+  public AttrBoolean enabled = attributes.register("enabled", AttrBoolean.builder()
+      .label("Remove query words")
+      .defaultValue(true)
+      .build());
 
-        for (int i = 0; i < wordIndices.length; i++)
-        {
-            if (!isQueryWord(flag[wordIndices[i]]))
-            {
-                return true;
-            }
-        }
+  @Override
+  public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {
+    final int[] wordIndices = context.allPhrases.wordIndices[phraseIndex];
+    final short[] flag = context.allWords.type;
 
-        return false;
+    for (int i = 0; i < wordIndices.length; i++) {
+      if (!isQueryWord(flag[wordIndices[i]])) {
+        return true;
+      }
     }
 
-    @Override
-    public boolean acceptWord(PreprocessingContext context, int wordIndex)
-    {
-        return !isQueryWord(context.allWords.type[wordIndex]);
-    }
+    return false;
+  }
 
-    private final boolean isQueryWord(short flag)
-    {
-        return (flag & ITokenizer.TF_QUERY_WORD) != 0;
-    }
+  @Override
+  public boolean acceptWord(PreprocessingContext context, int wordIndex) {
+    return !isQueryWord(context.allWords.type[wordIndex]);
+  }
 
-    public boolean isEnabled()
-    {
-        return enabled;
-    }
+  private final boolean isQueryWord(short flag) {
+    return (flag & Tokenizer.TF_QUERY_WORD) != 0;
+  }
+
+  public boolean isEnabled() {
+    return enabled.get();
+  }
 }

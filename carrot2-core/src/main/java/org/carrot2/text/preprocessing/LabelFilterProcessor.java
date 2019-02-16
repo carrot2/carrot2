@@ -24,6 +24,7 @@ import org.carrot2.text.preprocessing.filter.QueryLabelFilter;
 import org.carrot2.text.preprocessing.filter.StopLabelFilter;
 import org.carrot2.text.preprocessing.filter.StopWordLabelFilter;
 import org.carrot2.util.attrs.AttrComposite;
+import org.carrot2.util.attrs.AttrObject;
 
 import java.util.Arrays;
 
@@ -44,104 +45,110 @@ import java.util.Arrays;
  * {@link StopListMarker} and {@link PhraseExtractor} be invoked first.
  */
 public class LabelFilterProcessor extends AttrComposite {
-    // For the time being we include filters as instance fields here. If there is a need
-    // to add custom label filters as parameters, we'll need to come up with something.
+  // For the time being we include filters as instance fields here. If there is a need
+  // to add custom label filters as parameters, we'll need to come up with something.
 
-    /**
-     * Query word label filter for this processor.
-     */
-    public QueryLabelFilter queryLabelFilter = new QueryLabelFilter();
+  /**
+   * Query word label filter for this processor.
+   */
+  AttrObject<QueryLabelFilter> queryLabelFilter = attributes.register("queryLabelFilter", AttrObject.builder(QueryLabelFilter.class)
+      .defaultValue(new QueryLabelFilter())
+      .build());
 
-    /**
-     * Stop word label filter for this processor.
-     */
-    public StopWordLabelFilter stopWordLabelFilter = new StopWordLabelFilter();
+  /**
+   * Stop word label filter for this processor.
+   */
+  AttrObject<StopWordLabelFilter> stopWordLabelFilter = attributes.register("stopWordLabelFilter", AttrObject.builder(StopWordLabelFilter.class)
+      .defaultValue(new StopWordLabelFilter())
+      .build());
 
-    /**
-     * Numeric label filter for this processor.
-     */
-    public NumericLabelFilter numericLabelFilter = new NumericLabelFilter();
+  /**
+   * Numeric label filter for this processor.
+   */
+  AttrObject<NumericLabelFilter> numericLabelFilter = attributes.register("numericLabelFilter", AttrObject.builder(NumericLabelFilter.class)
+      .defaultValue(new NumericLabelFilter())
+      .build());
 
-    /**
-     * Truncated phrase filter for this processor.
-     */
-    public CompleteLabelFilter completeLabelFilter = new CompleteLabelFilter();
+  /**
+   * Truncated phrase filter for this processor.
+   */
+  AttrObject<CompleteLabelFilter> completeLabelFilter = attributes.register("completeLabelFilter", AttrObject.builder(CompleteLabelFilter.class)
+      .defaultValue(new CompleteLabelFilter())
+      .build());
 
-    /**
-     * Min length label filter.
-     */
-    public MinLengthLabelFilter minLengthLabelFilter = new MinLengthLabelFilter();
+  /**
+   * Min length label filter.
+   */
+  AttrObject<MinLengthLabelFilter> minLengthLabelFilter = attributes.register("minLengthLabelFilter", AttrObject.builder(MinLengthLabelFilter.class)
+      .defaultValue(new MinLengthLabelFilter())
+      .build());
 
-    /**
-     * Genitive length label filter.
-     */
-    public GenitiveLabelFilter genitiveLabelFilter = new GenitiveLabelFilter();
+  /**
+   * Genitive length label filter.
+   */
+  AttrObject<GenitiveLabelFilter> genitiveLabelFilter = attributes.register("genitiveLabelFilter", AttrObject.builder(GenitiveLabelFilter.class)
+      .defaultValue(new GenitiveLabelFilter())
+      .build());
 
-    /**
-     * Stop label filter.
-     */
-    public StopLabelFilter stopLabelFilter = new StopLabelFilter();
+  /**
+   * Stop label filter.
+   */
+  AttrObject<StopLabelFilter> stopLabelFilter = attributes.register("stopLabelFilter", AttrObject.builder(StopLabelFilter.class)
+      .defaultValue(new StopLabelFilter())
+      .build());
 
-    /**
-     * Processes all filters declared as fields of this class.
-     */
-    public void process(PreprocessingContext context)
-    {
-        final int wordCount = context.allWords.image.length;
-        final boolean [] acceptedStems = new boolean [context.allStems.image.length];
-        final boolean [] acceptedPhrases = new boolean [context.allPhrases.tf.length];
-        Arrays.fill(acceptedStems, true);
-        Arrays.fill(acceptedPhrases, true);
+  /**
+   * Processes all filters declared as fields of this class.
+   */
+  public void process(PreprocessingContext context) {
+    final int wordCount = context.allWords.image.length;
+    final boolean[] acceptedStems = new boolean[context.allStems.image.length];
+    final boolean[] acceptedPhrases = new boolean[context.allPhrases.tf.length];
+    Arrays.fill(acceptedStems, true);
+    Arrays.fill(acceptedPhrases, true);
 
-        minLengthLabelFilter.filter(context, acceptedStems, acceptedPhrases);
-        genitiveLabelFilter.filter(context, acceptedStems, acceptedPhrases);
-        queryLabelFilter.filter(context, acceptedStems, acceptedPhrases);
-        stopWordLabelFilter.filter(context, acceptedStems, acceptedPhrases);
-        numericLabelFilter.filter(context, acceptedStems, acceptedPhrases);
-        stopLabelFilter.filter(context, acceptedStems, acceptedPhrases);
-        completeLabelFilter.filter(context, acceptedStems, acceptedPhrases);
+    minLengthLabelFilter.get().filter(context, acceptedStems, acceptedPhrases);
+    genitiveLabelFilter.get().filter(context, acceptedStems, acceptedPhrases);
+    queryLabelFilter.get().filter(context, acceptedStems, acceptedPhrases);
+    stopWordLabelFilter.get().filter(context, acceptedStems, acceptedPhrases);
+    numericLabelFilter.get().filter(context, acceptedStems, acceptedPhrases);
+    stopLabelFilter.get().filter(context, acceptedStems, acceptedPhrases);
+    completeLabelFilter.get().filter(context, acceptedStems, acceptedPhrases);
 
-        final IntArrayList acceptedFeatures = new IntArrayList(acceptedStems.length
-            + acceptedPhrases.length);
+    final IntArrayList acceptedFeatures = new IntArrayList(acceptedStems.length
+        + acceptedPhrases.length);
 
-        final int [] mostFrequentOriginalWordIndex = context.allStems.mostFrequentOriginalWordIndex;
-        for (int i = 0; i < acceptedStems.length; i++)
-        {
-            if (acceptedStems[i])
-            {
-                acceptedFeatures.add(mostFrequentOriginalWordIndex[i]);
-            }
-        }
-
-        for (int i = 0; i < acceptedPhrases.length; i++)
-        {
-            if (acceptedPhrases[i])
-            {
-                acceptedFeatures.add(i + wordCount);
-            }
-        }
-
-        context.allLabels.featureIndex = acceptedFeatures.toArray();
-        updateFirstPhraseIndex(context);
+    final int[] mostFrequentOriginalWordIndex = context.allStems.mostFrequentOriginalWordIndex;
+    for (int i = 0; i < acceptedStems.length; i++) {
+      if (acceptedStems[i]) {
+        acceptedFeatures.add(mostFrequentOriginalWordIndex[i]);
+      }
     }
-    
-    static void updateFirstPhraseIndex(PreprocessingContext context)
-    {
-        final int wordCount = context.allWords.image.length;
-        final int [] labelsFeatureIndex = context.allLabels.featureIndex;
 
-        // In theory we could do a binary search here, but the effort of writing
-        // a customized version may not be worth the gain
-        int firstPhraseIndex = -1;
-        for (int i = 0; i < labelsFeatureIndex.length; i++)
-        {
-            if (labelsFeatureIndex[i] >= wordCount)
-            {
-                firstPhraseIndex = i;
-                break;
-            }
-        }
-
-        context.allLabels.firstPhraseIndex = firstPhraseIndex;
+    for (int i = 0; i < acceptedPhrases.length; i++) {
+      if (acceptedPhrases[i]) {
+        acceptedFeatures.add(i + wordCount);
+      }
     }
+
+    context.allLabels.featureIndex = acceptedFeatures.toArray();
+    updateFirstPhraseIndex(context);
+  }
+
+  static void updateFirstPhraseIndex(PreprocessingContext context) {
+    final int wordCount = context.allWords.image.length;
+    final int[] labelsFeatureIndex = context.allLabels.featureIndex;
+
+    // In theory we could do a binary search here, but the effort of writing
+    // a customized version may not be worth the gain
+    int firstPhraseIndex = -1;
+    for (int i = 0; i < labelsFeatureIndex.length; i++) {
+      if (labelsFeatureIndex[i] >= wordCount) {
+        firstPhraseIndex = i;
+        break;
+      }
+    }
+
+    context.allLabels.firstPhraseIndex = firstPhraseIndex;
+  }
 }

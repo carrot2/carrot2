@@ -12,55 +12,50 @@
 
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.core.attribute.Processing;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.attribute.*;
+import org.carrot2.util.attrs.AttrBoolean;
+import org.carrot2.util.attrs.AttrInteger;
 
 /**
  * Accepts labels whose length in characters is greater or equal to the provided value.
  */
-@Bindable(prefix = "MinLengthLabelFilter")
-public class MinLengthLabelFilter extends SingleLabelFilterBase
-{
-    /**
-     * Remove labels shorter than 3 characters. Removes labels whose total length in
-     * characters, including spaces, is less than 3.
-     */
-    @Input
-    @Processing
-    @Attribute
-    @Label("Remove short labels")
-    @Level(AttributeLevel.BASIC)
-    @Group(DefaultGroups.LABELS)    
-    public boolean enabled = true;
+public class MinLengthLabelFilter extends SingleLabelFilterBase {
+  /**
+   * Remove labels shorter than a given number of characters. Removes labels whose total length in
+   * characters, including spaces, is less than the given length.
+   */
+  public AttrBoolean enabled = attributes.register("enabled", AttrBoolean.builder()
+      .label("Remove short labels")
+      .defaultValue(true)
+      .build());
 
-    private final static int MIN_LENGTH = 3;
+  public AttrInteger minLength = attributes.register("minLength", AttrInteger.builder()
+      .label("Minimum label length (inclusive)")
+      .defaultValue(3)
+      .build());
 
-    @Override
-    public boolean acceptPhrase(PreprocessingContext context, int phraseIndex)
-    {
-        final int [] wordIndices = context.allPhrases.wordIndices[phraseIndex];
-        char [][] wordImage = context.allWords.image;
+  @Override
+  public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {
+    final int[] wordIndices = context.allPhrases.wordIndices[phraseIndex];
+    char[][] wordImage = context.allWords.image;
+    int minLength = this.minLength.get();
 
-        int wordIndex = 0;
-        int length = wordImage[wordIndices[wordIndex++]].length;
-        while (length < MIN_LENGTH && wordIndex < wordIndices.length)
-        {
-            length += wordImage[wordIndices[wordIndex]].length + 1 /* space */;
-            wordIndex++;
-        }
-
-        return length >= MIN_LENGTH;
+    int wordIndex = 0;
+    int length = wordImage[wordIndices[wordIndex++]].length;
+    while (length < minLength && wordIndex < wordIndices.length) {
+      length += wordImage[wordIndices[wordIndex]].length + 1 /* space */;
+      wordIndex++;
     }
 
-    @Override
-    public boolean acceptWord(PreprocessingContext context, int wordIndex)
-    {
-        return context.allWords.image[wordIndex].length >= MIN_LENGTH;
-    }
+    return length >= minLength;
+  }
 
-    public boolean isEnabled()
-    {
-        return enabled;
-    }
+  @Override
+  public boolean acceptWord(PreprocessingContext context, int wordIndex) {
+    return context.allWords.image[wordIndex].length >= minLength.get();
+  }
+
+  public boolean isEnabled() {
+    return enabled.get();
+  }
 }

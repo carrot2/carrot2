@@ -7,11 +7,15 @@ import org.carrot2.AbstractTest;
 import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactory;
+import org.carrot2.util.attrs.AcceptingVisitor;
+import org.carrot2.util.attrs.Attrs;
+import org.carrot2.util.attrs.JvmNameMapper;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,7 +27,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class ClusteringAlgorithmTestBase extends AbstractTest {
-  protected abstract ClusteringAlgorithm algorithm();
+  protected abstract <T extends ClusteringAlgorithm & AcceptingVisitor> T algorithm();
 
   protected LanguageComponents testLanguageModel() {
     return LanguageComponents.get(TestsLanguageComponentsFactory.NAME);
@@ -65,6 +69,14 @@ public abstract class ClusteringAlgorithmTestBase extends AbstractTest {
     }
   }
 
+  @Test
+  public void testAttrGetAndSet() {
+    AcceptingVisitor algorithm = algorithm();
+    Map<String, Object> map = Attrs.toMap(algorithm, JvmNameMapper.INSTANCE::toName);
+    Attrs.fromMap(AcceptingVisitor.class, map, JvmNameMapper.INSTANCE::fromName);
+
+    System.out.println(Attrs.toPrettyString(algorithm));
+  }
 
   /**
    * Runs the algorithm concurrently, verifying stability of results.

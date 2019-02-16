@@ -19,62 +19,49 @@ import java.util.stream.Collectors;
 /**
  * Filters out phrases that are not left complete.
  */
-class RightCompleteLabelFilter extends CompleteLabelFilterBase
-{
-    int [] createLcp(List<LabelIndexWithCodes> phraseCodes)
-    {
-        int [] lcpArray = new int [phraseCodes.size()];
-        for (int i = 0; i < phraseCodes.size() - 1; i++)
-        {
-            int [] codes = phraseCodes.get(i).getCodes();
-            int [] nextCodes = phraseCodes.get(i + 1).getCodes();
+class RightCompleteLabelFilter extends CompleteLabelFilterBase {
+  int[] createLcp(List<LabelIndexWithCodes> phraseCodes) {
+    int[] lcpArray = new int[phraseCodes.size()];
+    for (int i = 0; i < phraseCodes.size() - 1; i++) {
+      int[] codes = phraseCodes.get(i).getCodes();
+      int[] nextCodes = phraseCodes.get(i + 1).getCodes();
 
-            int minLength = Math.min(codes.length, nextCodes.length);
-            for (int j = 0; j < minLength; j++)
-            {
-                if (codes[j] != nextCodes[j])
-                {
-                    break;
-                }
-
-                lcpArray[i]++;
-            }
+      int minLength = Math.min(codes.length, nextCodes.length);
+      for (int j = 0; j < minLength; j++) {
+        if (codes[j] != nextCodes[j]) {
+          break;
         }
 
-        lcpArray[lcpArray.length - 1] = -1;
-
-        return lcpArray;
+        lcpArray[i]++;
+      }
     }
 
-    List<LabelIndexWithCodes> sortPhraseCodes(List<LabelIndexWithCodes> phrasesWithCodes)
-    {
-        return phrasesWithCodes.stream().sorted((o1, o2) -> {
-            int [] codesA = o1.getCodes();
-            int [] codesB = o2.getCodes();
+    lcpArray[lcpArray.length - 1] = -1;
 
-            int minLength = Math.min(codesA.length, codesB.length);
-            for (int i = 0; i < minLength; i++)
-            {
-                if (codesA[i] < codesB[i])
-                {
-                    return -1;
-                }
-                else if (codesA[i] > codesB[i])
-                {
-                    return 1;
-                }
-            }
+    return lcpArray;
+  }
 
-            if (codesA.length < codesB.length)
-            {
-                return -1;
-            }
-            else if (codesA.length > codesB.length)
-            {
-                return 1;
-            }
+  List<LabelIndexWithCodes> sortPhraseCodes(List<LabelIndexWithCodes> phrasesWithCodes) {
+    return phrasesWithCodes.stream().sorted((o1, o2) -> {
+      int[] codesA = o1.getCodes();
+      int[] codesB = o2.getCodes();
 
-            return 0;
-        }).collect(Collectors.toList());
-    }
+      int minLength = Math.min(codesA.length, codesB.length);
+      for (int i = 0; i < minLength; i++) {
+        if (codesA[i] < codesB[i]) {
+          return -1;
+        } else if (codesA[i] > codesB[i]) {
+          return 1;
+        }
+      }
+
+      if (codesA.length < codesB.length) {
+        return -1;
+      } else if (codesA.length > codesB.length) {
+        return 1;
+      }
+
+      return 0;
+    }).collect(Collectors.toList());
+  }
 }

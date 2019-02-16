@@ -15,6 +15,7 @@ package org.carrot2.text.preprocessing;
 import com.carrotsearch.hppc.ByteArrayList;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.ShortArrayList;
+import jdk.internal.util.xml.impl.Input;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
@@ -42,7 +43,8 @@ import java.util.stream.Stream;
  * <li>{@link AllTokens#type}</li>
  * </ul>
  */
-final class InputTokenizer extends AttrComposite {
+// TODO: make this package-private once we have serialization aliases.
+public final class InputTokenizer extends AttrComposite {
   /**
    * Token images.
    */
