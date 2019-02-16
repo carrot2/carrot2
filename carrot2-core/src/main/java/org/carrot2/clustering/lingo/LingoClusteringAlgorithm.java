@@ -17,7 +17,6 @@ import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.LanguageComponents;
-import org.carrot2.text.preprocessing.BasicPreprocessingPipeline;
 import org.carrot2.text.preprocessing.CompletePreprocessingPipeline;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
