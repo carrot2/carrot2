@@ -15,13 +15,12 @@ package org.carrot2.text.preprocessing;
 import com.carrotsearch.hppc.ByteArrayList;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.ShortArrayList;
-import jdk.internal.util.xml.impl.Input;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
-import org.carrot2.util.MutableCharArray;
 import org.carrot2.util.CharArrayUtils;
+import org.carrot2.util.MutableCharArray;
 import org.carrot2.util.StringUtils;
 import org.carrot2.util.attrs.AttrComposite;
 
