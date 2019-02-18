@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -284,13 +285,13 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
    */
   @Override
   public <T extends Document> List<Cluster<T>> cluster(Stream<? extends T> docStream, LanguageComponents languageComponents) {
-    List<T> documents = new ArrayList<>();
+    List<T> documents = docStream.collect(Collectors.toList());
     List<Cluster<T>> clusters = new ArrayList<>();
 
     /*
      * Step 1. Preprocessing: tokenization, stop word marking and stemming (if available).
      */
-    context = preprocessing.get().preprocess(docStream.peek(doc -> documents.add(doc)), queryHint.get(), languageComponents);
+    context = preprocessing.get().preprocess(documents.stream(), queryHint.get(), languageComponents);
 
     /*
      * Step 2: Create a generalized suffix tree from phrases in the input.

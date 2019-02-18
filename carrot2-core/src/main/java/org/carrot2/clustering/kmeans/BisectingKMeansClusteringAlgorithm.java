@@ -39,6 +39,7 @@ import org.carrot2.text.vsm.VectorSpaceModelContext;
 import org.carrot2.util.attrs.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -140,11 +141,11 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
 
   @Override
   public <T extends Document> List<Cluster<T>> cluster(Stream<? extends T> docStream, LanguageComponents languageComponents) {
-    List<T> documents = new ArrayList<>();
+    List<T> documents = docStream.collect(Collectors.toList());
 
     // Preprocessing of documents
     final PreprocessingContext preprocessingContext =
-        preprocessing.get().preprocess(docStream.peek(doc -> documents.add(doc)), queryHint.get(), languageComponents);
+        preprocessing.get().preprocess(documents.stream(), queryHint.get(), languageComponents);
 
     // Add trivial AllLabels so that we can reuse the common TD matrix builder
     final int[] stemsMfow = preprocessingContext.allStems.mostFrequentOriginalWordIndex;

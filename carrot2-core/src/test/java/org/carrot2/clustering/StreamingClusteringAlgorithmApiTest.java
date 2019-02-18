@@ -18,6 +18,7 @@ import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactory;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -51,8 +52,9 @@ public class StreamingClusteringAlgorithmApiTest extends AbstractTest {
       @Override
       public <T extends Document> List<Cluster<T>> cluster(Stream<? extends T> documents,
                                                            LanguageComponents languageComponents) {
-        List<? extends T> docs = documents
-            .peek(doc -> {
+        List<T> docs = new ArrayList<>();
+        documents
+            .forEachOrdered(doc -> {
               HashSet<String> fields = new HashSet<>();
               doc.visitFields((field, value) -> {
                 Assertions.assertThat(field).isNotNull();
@@ -60,8 +62,9 @@ public class StreamingClusteringAlgorithmApiTest extends AbstractTest {
                 fields.add(field);
               });
               Assertions.assertThat(fields).containsOnly("id", "field");
-            })
-            .collect(Collectors.toList());
+
+              docs.add(doc);
+            });
 
         Cluster<T> root = new Cluster<>();
         root.addDocuments(docs);

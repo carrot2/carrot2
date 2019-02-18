@@ -32,6 +32,7 @@ import org.carrot2.util.attrs.AttrString;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -117,11 +118,11 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
      */
     @Override
     public <T extends Document> List<Cluster<T>> cluster(Stream<? extends T> docStream, LanguageComponents languageComponents) {
-        List<T> documents = new ArrayList<>();
+        List<T> documents = docStream.collect(Collectors.toList());
 
         // Preprocessing of documents
         final PreprocessingContext context =
-            preprocessing.get().preprocess(docStream.peek(doc -> documents.add(doc)), queryHint.get(), languageComponents);
+            preprocessing.get().preprocess(documents.stream(), queryHint.get(), languageComponents);
 
         // Further processing only if there are words to process
         List<Cluster<T>> clusters = new ArrayList<>();

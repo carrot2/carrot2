@@ -15,6 +15,7 @@ package org.carrot2.text.preprocessing;
 import com.carrotsearch.hppc.ByteArrayList;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.ShortArrayList;
+import com.carrotsearch.hppc.cursors.IntCursor;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
@@ -28,7 +29,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
@@ -90,12 +90,11 @@ public final class InputTokenizer extends AttrComposite {
 
     HashMap<String, Integer> fieldIndexes = new HashMap<>();
     ArrayList<FieldValue> fields = new ArrayList<>();
-    long docCount = docStream
-      .peek(new Consumer<Document>() {
-        private int documentIndex = 0;
 
-        @Override
-        public void accept(Document doc) {
+    IntCursor docCount = new IntCursor();
+    docStream
+      .forEachOrdered((doc) -> {
+          int documentIndex = docCount.value;
           if (documentIndex > 0) {
             addDocumentSeparator();
           }
@@ -134,10 +133,8 @@ public final class InputTokenizer extends AttrComposite {
             }
           }
 
-          documentIndex++;
-        }
-      })
-      .count();
+          docCount.value++;
+        });
 
     addTerminator();
 
@@ -145,7 +142,7 @@ public final class InputTokenizer extends AttrComposite {
     fieldIndexes.forEach((field, index) -> fieldNames[index] = field);
 
     // Save results in the PreprocessingContext
-    context.documentCount = Math.toIntExact(docCount);
+    context.documentCount = docCount.value;
     context.allTokens.documentIndex = documentIndices.toArray();
     context.allTokens.fieldIndex = fieldIndices.toArray();
     context.allTokens.image = images.toArray(new char[images.size()][]);
