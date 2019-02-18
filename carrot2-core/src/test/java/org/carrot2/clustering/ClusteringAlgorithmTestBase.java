@@ -6,7 +6,7 @@ import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
 import org.carrot2.AbstractTest;
 import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
-import org.carrot2.language.TestsLanguageComponentsFactory;
+import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
 import org.carrot2.util.attrs.AcceptingVisitor;
 import org.carrot2.util.attrs.Attrs;
 import org.carrot2.util.attrs.JvmNameMapper;
@@ -30,7 +30,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
   protected abstract T algorithm();
 
   protected LanguageComponents testLanguageModel() {
-    return LanguageComponents.get(TestsLanguageComponentsFactory.NAME);
+    return LanguageComponents.get(TestsLanguageComponentsFactoryVariant1.NAME);
   }
 
   /**

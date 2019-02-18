@@ -1,6 +1,6 @@
 package org.carrot2.language;
 
-public class TestsLanguageComponentsFactory implements LanguageComponentsFactory {
+public class TestsLanguageComponentsFactoryVariant1 implements LanguageComponentsFactory {
   public static final String NAME = "_tests_language_";
 
   @Override

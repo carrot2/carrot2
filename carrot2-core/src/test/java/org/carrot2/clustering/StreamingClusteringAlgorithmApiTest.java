@@ -15,7 +15,7 @@ package org.carrot2.clustering;
 import org.assertj.core.api.Assertions;
 import org.carrot2.AbstractTest;
 import org.carrot2.language.LanguageComponents;
-import org.carrot2.language.TestsLanguageComponentsFactory;
+import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ public class StreamingClusteringAlgorithmApiTest extends AbstractTest {
         .mapToObj(c -> new Doc(c, "doc:" + c))
         .collect(Collectors.toList());
 
-    List<Cluster<Doc>> cluster = ca.cluster(input.stream(), LanguageComponents.get(TestsLanguageComponentsFactory.NAME));
+    List<Cluster<Doc>> cluster = ca.cluster(input.stream(), LanguageComponents.get(TestsLanguageComponentsFactoryVariant1.NAME));
     Assertions.assertThat(cluster).hasSize(1);
     Assertions.assertThat(cluster.get(0).getDocuments())
         .containsExactlyElementsOf(input);

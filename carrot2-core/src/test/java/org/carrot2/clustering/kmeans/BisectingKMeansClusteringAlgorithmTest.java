@@ -18,7 +18,7 @@ import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.ClusteringAlgorithmTestBase;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
-import org.carrot2.language.TestsLanguageComponentsFactory;
+import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -48,7 +48,7 @@ public class BisectingKMeansClusteringAlgorithmTest extends ClusteringAlgorithmT
     algorithm.partitionCount.set(3);
 
     final List<Cluster<TestDocument>> clusters = algorithm.cluster(documents.stream(),
-        LanguageComponents.get(TestsLanguageComponentsFactory.NAME));
+        LanguageComponents.get(TestsLanguageComponentsFactoryVariant1.NAME));
 
     assertNotNull(clusters);
     assertEquals(3, clusters.size());

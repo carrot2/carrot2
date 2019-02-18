@@ -51,49 +51,49 @@ public class LabelFilterProcessor extends AttrComposite {
   /**
    * Query word label filter for this processor.
    */
-  AttrObject<QueryLabelFilter> queryLabelFilter = attributes.register("queryLabelFilter", AttrObject.builder(QueryLabelFilter.class)
+  public AttrObject<QueryLabelFilter> queryLabelFilter = attributes.register("queryLabelFilter", AttrObject.builder(QueryLabelFilter.class)
       .defaultValue(new QueryLabelFilter())
       .build());
 
   /**
    * Stop word label filter for this processor.
    */
-  AttrObject<StopWordLabelFilter> stopWordLabelFilter = attributes.register("stopWordLabelFilter", AttrObject.builder(StopWordLabelFilter.class)
+  public AttrObject<StopWordLabelFilter> stopWordLabelFilter = attributes.register("stopWordLabelFilter", AttrObject.builder(StopWordLabelFilter.class)
       .defaultValue(new StopWordLabelFilter())
       .build());
 
   /**
    * Numeric label filter for this processor.
    */
-  AttrObject<NumericLabelFilter> numericLabelFilter = attributes.register("numericLabelFilter", AttrObject.builder(NumericLabelFilter.class)
+  public AttrObject<NumericLabelFilter> numericLabelFilter = attributes.register("numericLabelFilter", AttrObject.builder(NumericLabelFilter.class)
       .defaultValue(new NumericLabelFilter())
       .build());
 
   /**
    * Truncated phrase filter for this processor.
    */
-  AttrObject<CompleteLabelFilter> completeLabelFilter = attributes.register("completeLabelFilter", AttrObject.builder(CompleteLabelFilter.class)
+  public AttrObject<CompleteLabelFilter> completeLabelFilter = attributes.register("completeLabelFilter", AttrObject.builder(CompleteLabelFilter.class)
       .defaultValue(new CompleteLabelFilter())
       .build());
 
   /**
    * Min length label filter.
    */
-  AttrObject<MinLengthLabelFilter> minLengthLabelFilter = attributes.register("minLengthLabelFilter", AttrObject.builder(MinLengthLabelFilter.class)
+  public AttrObject<MinLengthLabelFilter> minLengthLabelFilter = attributes.register("minLengthLabelFilter", AttrObject.builder(MinLengthLabelFilter.class)
       .defaultValue(new MinLengthLabelFilter())
       .build());
 
   /**
    * Genitive length label filter.
    */
-  AttrObject<GenitiveLabelFilter> genitiveLabelFilter = attributes.register("genitiveLabelFilter", AttrObject.builder(GenitiveLabelFilter.class)
+  public AttrObject<GenitiveLabelFilter> genitiveLabelFilter = attributes.register("genitiveLabelFilter", AttrObject.builder(GenitiveLabelFilter.class)
       .defaultValue(new GenitiveLabelFilter())
       .build());
 
   /**
    * Stop label filter.
    */
-  AttrObject<StopLabelFilter> stopLabelFilter = attributes.register("stopLabelFilter", AttrObject.builder(StopLabelFilter.class)
+  public AttrObject<StopLabelFilter> stopLabelFilter = attributes.register("stopLabelFilter", AttrObject.builder(StopLabelFilter.class)
       .defaultValue(new StopLabelFilter())
       .build());
 

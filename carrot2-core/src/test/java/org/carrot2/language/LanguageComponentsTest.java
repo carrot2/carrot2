@@ -16,12 +16,13 @@ import org.assertj.core.api.Assertions;
 import org.carrot2.AbstractTest;
 import org.junit.Test;
 
-public class LanguageModelsTest extends AbstractTest {
+public class LanguageComponentsTest extends AbstractTest {
   @Test
   public void testDefaultLanguageModels() {
     Assertions.assertThat(LanguageComponents.languages())
         .containsOnly(
-            TestsLanguageComponentsFactory.NAME,
+            TestsLanguageComponentsFactoryVariant1.NAME,
+            TestsLanguageComponentsFactoryVariant2.NAME,
             EnglishLanguageComponentsFactory.NAME
         );
 
