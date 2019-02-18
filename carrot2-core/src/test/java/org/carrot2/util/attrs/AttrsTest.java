@@ -3,8 +3,6 @@ package org.carrot2.util.attrs;
 import org.assertj.core.api.Assertions;
 import org.carrot2.AbstractTest;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
