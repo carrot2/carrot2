@@ -218,9 +218,8 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
         }
       }
 
-      for (int i = 0; i < rawClusters.size(); i++) {
-        final Cluster cluster = new Cluster();
-        final IntArrayList rawCluster = rawClusters.get(i);
+      for (IntArrayList rawCluster : rawClusters) {
+        final Cluster<T> cluster = new Cluster<>();
         if (rawCluster.size() > 1) {
           cluster.addLabels(getLabels(rawCluster,
               vsmContext.termDocumentMatrix, rowToStemIndex,

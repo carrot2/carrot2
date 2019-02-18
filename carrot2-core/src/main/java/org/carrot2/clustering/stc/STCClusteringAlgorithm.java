@@ -23,7 +23,7 @@ import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.LexicalData;
 import org.carrot2.language.Tokenizer;
-import org.carrot2.text.analysis.TokenTypeUtils;
+import org.carrot2.language.TokenTypeUtils;
 import org.carrot2.text.preprocessing.BasicPreprocessingPipeline;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
@@ -848,7 +848,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     final ArrayList<T> docs = new ArrayList<>(documents.size());
     final ArrayList<String> phrases = new ArrayList<>(3);
     for (ClusterCandidate c : candidates) {
-      final Cluster c2 = new Cluster();
+      final Cluster<T> c2 = new Cluster<>();
       c2.addLabels(collectPhrases(phrases, c));
       c2.addDocuments(collectDocuments(documents, docs, c.documents));
       c2.setScore((double) c.score);

@@ -49,11 +49,11 @@ public class AttrObject<T extends AcceptingVisitor> {
     }
 
     public AttrObject<T> build() {
-      return new AttrObject(clazz, defaultValue);
+      return new AttrObject<>(clazz, defaultValue);
     }
   }
 
   public static <T extends AcceptingVisitor> Builder<T> builder(Class<T> clazz) {
-    return new Builder(clazz);
+    return new Builder<>(clazz);
   }
 }

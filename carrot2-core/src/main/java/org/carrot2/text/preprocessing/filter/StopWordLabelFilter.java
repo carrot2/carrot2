@@ -15,7 +15,7 @@ package org.carrot2.text.preprocessing.filter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.attrs.AttrBoolean;
 
-import static org.carrot2.text.analysis.TokenTypeUtils.isCommon;
+import static org.carrot2.language.TokenTypeUtils.isCommon;
 
 /**
  * Accepts words that are not stop words and phrases that do not start nor end in a stop

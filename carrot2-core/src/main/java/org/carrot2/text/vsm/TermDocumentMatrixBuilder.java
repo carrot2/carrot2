@@ -16,12 +16,11 @@ import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
-import org.carrot2.clustering.Document;
+import org.carrot2.language.TokenTypeUtils;
 import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
 import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix2D;
 import org.carrot2.mahout.math.matrix.impl.SparseDoubleMatrix2D;
 import org.carrot2.matrix.MatrixUtils;
-import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.attrs.AttrComposite;
 import org.carrot2.util.attrs.AttrDouble;
@@ -191,8 +190,7 @@ public class TermDocumentMatrixBuilder extends AttrComposite
                 - firstPhraseIndex];
             for (int featureIndex = 0; featureIndex < phraseFeatureIndices.length; featureIndex++)
             {
-                phraseFeatureIndices[featureIndex] = labelsFeatureIndex[featureIndex
-                    + firstPhraseIndex];
+                phraseFeatureIndices[featureIndex] = labelsFeatureIndex[featureIndex + firstPhraseIndex];
             }
 
             final DoubleMatrix2D phraseMatrix = TermDocumentMatrixBuilder

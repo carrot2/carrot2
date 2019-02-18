@@ -12,7 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.text.analysis.TokenTypeUtils;
+import org.carrot2.language.TokenTypeUtils;
 import org.carrot2.util.CharArrayUtils;
 
 /**

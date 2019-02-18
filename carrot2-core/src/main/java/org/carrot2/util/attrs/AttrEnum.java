@@ -46,11 +46,11 @@ public class AttrEnum<T extends Enum<T>> {
     }
 
     public AttrEnum<T> build() {
-      return new AttrEnum(clazz, defaultValue);
+      return new AttrEnum<>(clazz, defaultValue);
     }
   }
 
   public static <T extends Enum<T>> Builder<T> builder(Class<T> clazz) {
-    return new Builder(clazz);
+    return new Builder<>(clazz);
   }
 }

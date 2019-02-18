@@ -159,7 +159,7 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
             final double [] clusterLabelScore = lingoContext.clusterLabelScore;
             for (int i = 0; i < clusterLabelIndex.length; i++)
             {
-                final Cluster cluster = new Cluster();
+                final Cluster<T> cluster = new Cluster<>();
 
                 final int labelFeature = clusterLabelIndex[i];
                 if (labelFeature < 0)

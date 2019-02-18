@@ -14,7 +14,7 @@ package org.carrot2.text.preprocessing;
 
 import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntArrayList;
-import org.carrot2.text.analysis.TokenTypeUtils;
+import org.carrot2.language.TokenTypeUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.util.attrs.AttrBoolean;
 import org.carrot2.util.attrs.AttrComposite;
@@ -144,8 +144,7 @@ public class DocumentAssigner extends AttrComposite {
                     newDocumentIndices.add(labelsDocumentIndices[i]);
                 }
             }
-            context.allLabels.documentIndices = newDocumentIndices
-                .toArray(new BitSet [newDocumentIndices.size()]);
+            context.allLabels.documentIndices = newDocumentIndices.toArray(new BitSet[0]);
             context.allLabels.featureIndex = newFeatureIndex.toArray();
             LabelFilterProcessor.updateFirstPhraseIndex(context);
         }

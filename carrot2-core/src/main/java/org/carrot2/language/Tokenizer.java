@@ -15,7 +15,6 @@ package org.carrot2.language;
 import java.io.IOException;
 import java.io.Reader;
 
-import org.carrot2.text.analysis.TokenTypeUtils;
 import org.carrot2.text.preprocessing.LanguageModelStemmer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.preprocessing.StopListMarker;

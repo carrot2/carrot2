@@ -7,17 +7,17 @@ import java.util.function.Supplier;
 public class AliasMapper implements ClassNameMapper {
   public static class Alias<T> {
     private final String name;
-    private final Predicate<T> isInstanceOf;
+    private final Predicate<Object> isInstanceOf;
     private final Supplier<T> supplier;
 
-    public Alias(String name, Predicate<T> isInstanceOf, Supplier<T> supplier) {
+    public Alias(String name, Predicate<Object> isInstanceOf, Supplier<T> supplier) {
       this.name = name;
       this.supplier = supplier;
       this.isInstanceOf = isInstanceOf;
     }
   }
 
-  private final Map<String, Alias> aliases = new LinkedHashMap<>();
+  private final Map<String, Alias<?>> aliases = new LinkedHashMap<>();
 
   public <T> AliasMapper alias(String alias, Class<? extends T> exactClass, Supplier<T> supplier) {
     Objects.requireNonNull(exactClass);

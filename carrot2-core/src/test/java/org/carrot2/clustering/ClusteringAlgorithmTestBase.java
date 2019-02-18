@@ -26,8 +26,8 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class ClusteringAlgorithmTestBase extends AbstractTest {
-  protected abstract <T extends ClusteringAlgorithm & AcceptingVisitor> T algorithm();
+public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm & AcceptingVisitor> extends AbstractTest {
+  protected abstract T algorithm();
 
   protected LanguageComponents testLanguageModel() {
     return LanguageComponents.get(TestsLanguageComponentsFactory.NAME);

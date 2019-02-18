@@ -199,12 +199,14 @@ public final class Attrs {
   private static void appendMap(Map<String, Object> map, StringBuilder builder, StringBuilder indent) {
     map.forEach((k, v) -> {
       builder.append(indent).append(k).append(": ");
-      if (Map.class.isInstance(v)) {
+      if (v instanceof Map) {
         builder.append("{\n");
 
         int len = indent.length();
         indent.append("  ");
-        appendMap(Map.class.cast(v), builder, indent.append(" "));
+        @SuppressWarnings("unchecked")
+        Map<String, Object> vMap = (Map<String, Object>) v;
+        appendMap(vMap, builder, indent.append(" "));
         indent.setLength(len);
 
         builder.append(indent);

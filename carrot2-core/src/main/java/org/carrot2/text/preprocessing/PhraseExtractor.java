@@ -116,8 +116,7 @@ public class PhraseExtractor {
                 else
                 {
                     int [] wordIndexes = new int [(mostFrequentOriginal.to - mostFrequentOriginal.from)];
-                    for (int j = 0; j < wordIndexes.length; j++)
-                    {
+                    for (int j = 0; j < wordIndexes.length; j++) {
                         wordIndexes[j] = wordIndexesArray[mostFrequentOriginal.from + j];
                     }
                     phraseWordIndexes.add(wordIndexes);
