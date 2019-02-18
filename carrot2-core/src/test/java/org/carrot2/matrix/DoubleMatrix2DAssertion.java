@@ -67,7 +67,7 @@ public class DoubleMatrix2DAssertion
         assertThat(actualMatrix).isNotNull();
         assertThat(actualMatrix.rows()).as("rows").isEqualTo(values.length);
 
-        final Offset deltaObject = Offset.offset(delta);
+        final Offset<Double> deltaObject = Offset.offset(delta);
         for (int row = 0; row < values.length; row++)
         {
             assertThat(actualMatrix.columns()).as("columns")
