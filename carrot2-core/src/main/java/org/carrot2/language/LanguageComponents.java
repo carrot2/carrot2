@@ -38,7 +38,10 @@ public class LanguageComponents {
     checkInitialized();
     LanguageComponentsFactory factory = factories.get(name);
     if (factory == null) {
-      throw new RuntimeException("Language components not available for language: " + name);
+      throw new RuntimeException(String.format(Locale.ROOT,
+          "Language components not available for language: %s [available: %s]",
+          name,
+          factories().map(f -> f.name()).collect(Collectors.joining(", "))));
     }
     return new LanguageComponents(
         factory.createStemmer(),

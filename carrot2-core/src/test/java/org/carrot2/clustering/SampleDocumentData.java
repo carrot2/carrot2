@@ -13,7 +13,6 @@
 package org.carrot2.clustering;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 
 /**
  * A set of sample documents returned for the query <i>data mining</i>. This set is
@@ -21,21 +20,6 @@ import java.util.function.BiConsumer;
  * dependency between the XML input component and the core).
  */
 public final class SampleDocumentData {
-  private static class SampleDocument implements Document {
-    private final LinkedHashMap<String, String> fields;
-
-    public SampleDocument(String url, String title, String snippet) {
-      this.fields = new LinkedHashMap<>();
-      fields.put("url", url);
-      fields.put("title", title);
-      fields.put("snippet", snippet);
-    }
-
-    @Override
-    public void visitFields(BiConsumer<String, String> fieldConsumer) {
-      fields.forEach(fieldConsumer);
-    }
-  }
 
   public final static List<Document> DOCUMENTS_DATA_MINING;
 
@@ -638,9 +622,13 @@ public final class SampleDocumentData {
         }
     };
 
-    final ArrayList<Document> documents = new ArrayList<Document>();
+    final ArrayList<Document> documents = new ArrayList<>();
     for (String[] row : data) {
-      documents.add(new SampleDocument(row[1], row[2], row[0]));
+      FieldMapDocument doc = new FieldMapDocument();
+      doc.addField("url", row[0]);
+      doc.addField("title", row[1]);
+      doc.addField("snippet", row[2]);
+      documents.add(doc);
     }
 
     DOCUMENTS_DATA_MINING = Collections.unmodifiableList(documents);
@@ -1243,9 +1231,13 @@ public final class SampleDocumentData {
             },
         };
 
-    final ArrayList<Document> documents = new ArrayList<Document>();
+    final ArrayList<Document> documents = new ArrayList<>();
     for (String[] row : data) {
-      documents.add(new SampleDocument(row[1], row[2], row[0]));
+      FieldMapDocument doc = new FieldMapDocument();
+      doc.addField("url", row[0]);
+      doc.addField("title", row[1]);
+      doc.addField("snippet", row[2]);
+      documents.add(doc);
     }
 
     DOCUMENTS_DAWID = Collections.unmodifiableList(documents);
