@@ -14,6 +14,7 @@ package org.carrot2.text.preprocessing;
 
 import org.carrot2.AbstractTest;
 import org.carrot2.clustering.Document;
+import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant2;
 import org.carrot2.text.preprocessing.filter.CompleteLabelFilter;
@@ -40,7 +41,6 @@ public class LabelFilterTestBase extends AbstractTest {
   private LanguageModelStemmer languageModelStemmer = new LanguageModelStemmer();
   private PhraseExtractor phraseExtractor = new PhraseExtractor(1);
   private StopListMarker stopListMarker = new StopListMarker();
-  private String query;
 
   @Before
   public void setUpPreprocessingComponents() {
@@ -62,7 +62,7 @@ public class LabelFilterTestBase extends AbstractTest {
     check(documents, expectedLabelsFeatureIndex, -1);
   }
 
-  protected void check(Stream<? extends Document> documents, int[] expectedLabelsFeatureIndex, int expectedFirstPhraseIndex) {
+  protected PreprocessingContext check(Stream<? extends Document> documents, int[] expectedLabelsFeatureIndex, int expectedFirstPhraseIndex) {
     LanguageComponents langComponents = LanguageComponents.get(TestsLanguageComponentsFactoryVariant2.NAME);
     PreprocessingContext context = runPreprocessing(documents, langComponents);
 
@@ -70,9 +70,15 @@ public class LabelFilterTestBase extends AbstractTest {
         .isEqualTo(expectedLabelsFeatureIndex);
     assertThat(context.allLabels.firstPhraseIndex).as("allLabels.firstPhraseIndex")
         .isEqualTo(expectedFirstPhraseIndex);
+
+    return context;
   }
 
   protected PreprocessingContext runPreprocessing(Stream<? extends Document> documents, LanguageComponents langComponents) {
+    return runPreprocessing(documents, langComponents, null);
+  }
+
+  protected PreprocessingContext runPreprocessing(Stream<? extends Document> documents, LanguageComponents langComponents, String query) {
     PreprocessingContext context = new PreprocessingContext(langComponents);
     tokenizer.tokenize(context, documents);
     caseNormalizer.normalize(context, 1);
@@ -81,5 +87,14 @@ public class LabelFilterTestBase extends AbstractTest {
     stopListMarker.mark(context);
     labelFilterProcessor.process(context);
     return context;
+  }
+
+  protected PreprocessingContextAssert preprocess(TestDocument... docs) {
+    return preprocess(null, LanguageComponents.get(TestsLanguageComponentsFactoryVariant2.NAME), docs);
+  }
+
+  protected PreprocessingContextAssert preprocess(String query, LanguageComponents langComponents, TestDocument... docs) {
+    PreprocessingContext ctx = runPreprocessing(Stream.of(docs), langComponents, query);
+    return PreprocessingContextAssert.assertThat(ctx);
   }
 }

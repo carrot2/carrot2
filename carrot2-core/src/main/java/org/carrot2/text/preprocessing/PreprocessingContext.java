@@ -671,14 +671,19 @@ public final class PreprocessingContext implements Closeable
             return sw.toString();
         }
 
-        private CharSequence getLabel(int index)
+        public CharSequence getLabel(int index)
         {
             final int wordsSize = allWords.image.length;
             if (featureIndex[index] < wordsSize)
                 return new String(allWords.image[featureIndex[index]]);
             else
                 return allPhrases.getPhrase(featureIndex[index] - wordsSize);
-        }        
+        }
+
+        public int size()
+        {
+            return featureIndex.length;
+        }
     }
 
     /**

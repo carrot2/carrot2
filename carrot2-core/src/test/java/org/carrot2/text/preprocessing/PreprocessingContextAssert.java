@@ -27,7 +27,7 @@ import com.carrotsearch.hppc.procedures.IntIntProcedure;
 /**
  * Fest-style assertions on the content of {@link PreprocessingContext}.
  */
-class PreprocessingContextAssert {
+public class PreprocessingContextAssert {
   /**
    * missing word constant.
    */
@@ -120,6 +120,18 @@ class PreprocessingContextAssert {
     List<String> result = new ArrayList<>();
     for (int i = context.allPhrases.wordIndices.length; --i >= 0; ) {
       result.add(context.allPhrases.getPhrase(i).toString());
+    }
+    Collections.shuffle(result);
+    return result;
+  }
+
+  public List<String> labelImages() {
+    Assertions.assertThat(context.allLabels.featureIndex)
+        .describedAs("the context's allPhrases is not properly initialized.").isNotNull();
+
+    List<String> result = new ArrayList<>();
+    for (int i = context.allLabels.size(); --i >= 0; ) {
+      result.add(context.allLabels.getLabel(i).toString());
     }
     Collections.shuffle(result);
     return result;
