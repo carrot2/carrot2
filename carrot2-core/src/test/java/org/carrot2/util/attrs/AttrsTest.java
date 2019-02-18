@@ -31,7 +31,6 @@ public class AttrsTest extends AbstractTest {
 
   @Test
   public void testExtractAndRestore() {
-    InterfaceImpl1 defaultValue = new InterfaceImpl1();
 
     class Component implements AcceptingVisitor {
       private AttrGroup group = new AttrGroup();
@@ -75,7 +74,7 @@ public class AttrsTest extends AbstractTest {
       public AttrObject<Interface> attrObject = group.register(
           "attrObject",
           AttrObject.builder(Interface.class)
-              .defaultValue(defaultValue)
+              .defaultValue(new InterfaceImpl1())
               .build());
 
       public AttrEnum<EnumClass> attrEnum = group.register(
