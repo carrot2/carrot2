@@ -97,9 +97,20 @@ public class AttrsTest extends AbstractTest {
           group.register("attrStringArrayNoValue", AttrStringArray.builder()
               .build());
 
+      public InterfaceImpl1 attrConstantImpl = new InterfaceImpl1();
+      public InterfaceImpl1 attrConstantImplNoValue;
+
       @Override
       public void accept(AttrVisitor visitor) {
         group.visit(visitor);
+
+        visitor.visit("attrConstantImpl",
+            attrConstantImpl,
+            () -> attrConstantImpl = new InterfaceImpl1());
+
+        visitor.visit("attrConstantImplNoValue",
+            attrConstantImplNoValue,
+            () -> attrConstantImplNoValue = new InterfaceImpl1());
       }
     }
 
@@ -113,6 +124,8 @@ public class AttrsTest extends AbstractTest {
     c1.attrObject.set(new InterfaceImpl1(),
         (impl) -> impl.attrInt.set(42));
     c1.attrEnum.set(EnumClass.VALUE2);
+
+    c1.attrConstantImpl.attrInt.set(42);
 
     Component c2 = restore(Component.class, extract(c1, mapper), mapper);
     Assertions.assertThat(c2.attrInt.get()).isEqualTo(c1.attrInt.get());

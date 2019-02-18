@@ -1,10 +1,13 @@
 package org.carrot2.util.attrs;
 
-import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
-
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public final class Attrs {
   private final static String KEY_TYPE = "@type";
@@ -49,7 +52,7 @@ public final class Attrs {
 
     public FromMapVisitor(Map<String, Object> map,
                           Function<String, Object> classToInstance) {
-      this.map = map;
+      this.map = Objects.requireNonNull(map);
       this.classToInstance = classToInstance;
     }
 
@@ -93,6 +96,24 @@ public final class Attrs {
         String type = (String) submap.remove(KEY_TYPE);
         attr.castSet(classToInstance.apply(type))
             .accept(new FromMapVisitor(submap, classToInstance));
+      }
+    }
+
+    @Override
+    public <T extends AcceptingVisitor> void visit(String key, T value, Supplier<T> creator) {
+      if (map.containsKey(key)) {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> submap = (Map<String, Object>) map.get(key);
+        if (submap == null) {
+          if (value != null) {
+            throw new RuntimeException("Clearing of constant impl. fields not implemented.");
+          }
+        } else {
+          if (value == null) {
+            value = creator.get();
+          }
+          value.accept(new FromMapVisitor(submap, classToInstance));
+        }
       }
     }
 
@@ -153,6 +174,18 @@ public final class Attrs {
       if (value != null) {
         Map<String, Object> submap = new LinkedHashMap<>();
         submap.put(KEY_TYPE, objectToClass.apply(value));
+        value.accept(new ToMapVisitor(submap, objectToClass));
+        map.put(key, submap);
+      } else {
+        map.put(key, null);
+      }
+    }
+
+    @Override
+    public <T extends AcceptingVisitor> void visit(String key, T value, Supplier<T> creator) {
+      ensureNoExistingKey(map, key);
+      if (value != null) {
+        Map<String, Object> submap = new LinkedHashMap<>();
         value.accept(new ToMapVisitor(submap, objectToClass));
         map.put(key, submap);
       } else {
