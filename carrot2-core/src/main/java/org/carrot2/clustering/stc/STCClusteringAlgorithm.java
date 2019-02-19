@@ -235,11 +235,16 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
           .defaultValue(true)
           .build());
 
-  public final AttrObject<BasicPreprocessingPipeline> preprocessing =
-      attributes.register("preprocessing", AttrObject.builder(BasicPreprocessingPipeline.class)
-          .defaultValue(new BasicPreprocessingPipeline())
-          .build());
-
+  /**
+   * Preprocessing pipeline.
+   */
+  public BasicPreprocessingPipeline preprocessing = new BasicPreprocessingPipeline();
+  {
+    attributes.register("preprocessing",
+        () -> preprocessing,
+        (v) -> preprocessing = v,
+        () -> new BasicPreprocessingPipeline());
+  }
 
   /**
    * Helper class for computing merged cluster labels.
@@ -291,7 +296,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     /*
      * Step 1. Preprocessing: tokenization, stop word marking and stemming (if available).
      */
-    context = preprocessing.get().preprocess(documents.stream(), queryHint.get(), languageComponents);
+    context = preprocessing.preprocess(documents.stream(), queryHint.get(), languageComponents);
 
     /*
      * Step 2: Create a generalized suffix tree from phrases in the input.

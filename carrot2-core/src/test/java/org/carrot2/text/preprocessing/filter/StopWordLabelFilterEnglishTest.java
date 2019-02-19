@@ -27,8 +27,8 @@ import org.junit.Test;
 public class StopWordLabelFilterEnglishTest extends LabelFilterTestBase {
   @Override
   protected void initializeFilters(LabelFilterProcessor filterProcessor) {
-    filterProcessor.completeLabelFilter.get().enabled.set(true);
-    filterProcessor.stopWordLabelFilter.get().enabled.set(true);
+    filterProcessor.completeLabelFilter.enabled.set(true);
+    filterProcessor.stopWordLabelFilter.enabled.set(true);
   }
 
   @Test

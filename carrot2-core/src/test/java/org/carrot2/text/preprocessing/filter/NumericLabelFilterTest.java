@@ -25,7 +25,7 @@ import org.junit.Test;
 public class NumericLabelFilterTest extends LabelFilterTestBase {
   @Override
   protected void initializeFilters(LabelFilterProcessor filterProcessor) {
-    filterProcessor.numericLabelFilter.get().enabled.set(true);
+    filterProcessor.numericLabelFilter.enabled.set(true);
   }
 
   @Test

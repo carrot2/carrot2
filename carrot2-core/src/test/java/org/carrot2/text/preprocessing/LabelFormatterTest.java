@@ -76,7 +76,7 @@ public class LabelFormatterTest extends AbstractTest {
   public void testSingleStopWord() {
     Stream<TestDocument> documents = Stream.of(
         new TestDocument("for", "for"));
-    labelFilterProcessor.stopWordLabelFilter.get().enabled.set(false);
+    labelFilterProcessor.stopWordLabelFilter.enabled.set(false);
     final String expectedLabel = "For";
 
     checkFullPreprocessing(documents, langComponents, expectedLabel);

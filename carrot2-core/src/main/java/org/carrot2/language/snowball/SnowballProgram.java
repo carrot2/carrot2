@@ -420,12 +420,6 @@ public abstract class SnowballProgram {
         bra > ket ||
         ket > limit) {
       throw new IllegalArgumentException("faulty slice operation: bra=" + bra + ",ket=" + ket + ",limit=" + limit);
-      // FIXME: report error somehow.
-      /*
-      fprintf(stderr, "faulty slice operation:\n");
-      debug(z, -1, 0);
-      exit(1);
-      */
     }
   }
 

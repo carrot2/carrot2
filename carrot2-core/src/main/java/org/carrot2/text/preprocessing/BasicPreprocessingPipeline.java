@@ -16,7 +16,6 @@ import org.carrot2.clustering.Document;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.attrs.AttrComposite;
 import org.carrot2.attrs.AttrInteger;
-import org.carrot2.attrs.AttrObject;
 
 import java.util.stream.Stream;
 
@@ -46,10 +45,7 @@ public class BasicPreprocessingPipeline extends AttrComposite {
   /**
    * Tokenizer used by the algorithm, contains bindable attributes.
    */
-  public final AttrObject<InputTokenizer> tokenizer =
-      attributes.register("tokenizer", AttrObject.builder(InputTokenizer.class)
-          .defaultValue(new InputTokenizer())
-          .build());
+  protected final InputTokenizer tokenizer = new InputTokenizer();
 
   /**
    * Case normalizer used by the algorithm.
@@ -72,7 +68,7 @@ public class BasicPreprocessingPipeline extends AttrComposite {
    */
   public PreprocessingContext preprocess(Stream<? extends Document> documents, String query, LanguageComponents langModel) {
     try (PreprocessingContext context = new PreprocessingContext(langModel)) {
-      tokenizer.get().tokenize(context, documents);
+      tokenizer.tokenize(context, documents);
       caseNormalizer.normalize(context, wordDfThreshold.get());
       stemming.stem(context, query);
       stopListMarker.mark(context);

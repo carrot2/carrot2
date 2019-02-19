@@ -25,9 +25,9 @@ import org.junit.Test;
 public class CompleteLabelFilterTest extends LabelFilterTestBase {
   @Override
   protected void initializeFilters(LabelFilterProcessor filterProcessor) {
-    filterProcessor.stopWordLabelFilter.get().enabled.set(true);
-    filterProcessor.completeLabelFilter.get().enabled.set(true);
-    filterProcessor.completeLabelFilter.get().labelOverrideThreshold.set(0.5);
+    filterProcessor.stopWordLabelFilter.enabled.set(true);
+    filterProcessor.completeLabelFilter.enabled.set(true);
+    filterProcessor.completeLabelFilter.labelOverrideThreshold.set(0.5);
   }
 
   @Test
@@ -60,7 +60,7 @@ public class CompleteLabelFilterTest extends LabelFilterTestBase {
 
   @Test
   public void testFuzzyOverrideApplied() {
-    labelFilterProcessor.completeLabelFilter.get().labelOverrideThreshold.set(0.3);
+    labelFilterProcessor.completeLabelFilter.labelOverrideThreshold.set(0.3);
     PreprocessingContextAssert a = preprocess(new TestDocument("aa bb cc . aa bb cc . aa bb cc . aa bb cc . aa bb cc dd . aa bb cc dd"));
     Assertions.assertThat(a.labelImages())
         .containsOnly("aa bb cc dd");

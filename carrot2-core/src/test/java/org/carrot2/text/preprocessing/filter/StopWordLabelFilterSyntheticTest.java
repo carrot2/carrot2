@@ -25,7 +25,7 @@ import org.junit.Test;
 public class StopWordLabelFilterSyntheticTest extends LabelFilterTestBase {
   @Override
   protected void initializeFilters(LabelFilterProcessor filterProcessor) {
-    filterProcessor.stopWordLabelFilter.get().enabled.set(true);
+    filterProcessor.stopWordLabelFilter.enabled.set(true);
   }
 
   @Test

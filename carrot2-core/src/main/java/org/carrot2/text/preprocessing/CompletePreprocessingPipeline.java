@@ -48,10 +48,13 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline {
   /**
    * Label filter processor used by the algorithm, contains bindable attributes.
    */
-  public final AttrObject<LabelFilterProcessor> labelFilterProcessor = attributes.register("labelFilterProcessor",
-      AttrObject.builder(LabelFilterProcessor.class)
-          .defaultValue(new LabelFilterProcessor())
-          .build());
+  public LabelFilterProcessor labelFilters = new LabelFilterProcessor();
+  {
+    attributes.register("labelFilters",
+        () -> labelFilters,
+        (v) -> labelFilters = v,
+        () -> new LabelFilterProcessor());
+  }
 
   /**
    * Document assigner used by the algorithm, contains bindable attributes.
@@ -63,12 +66,12 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline {
 
   public PreprocessingContext preprocess(Stream<? extends Document> documents, String query, LanguageComponents langModel) {
     try (PreprocessingContext context = new PreprocessingContext(langModel)) {
-      tokenizer.get().tokenize(context, documents);
+      tokenizer.tokenize(context, documents);
       caseNormalizer.normalize(context, wordDfThreshold.get());
       stemming.stem(context, query);
       stopListMarker.mark(context);
       new PhraseExtractor(phraseDfThreshold.get()).extractPhrases(context);
-      labelFilterProcessor.get().process(context);
+      labelFilters.process(context);
       documentAssigner.get().assign(context);
       return context;
     }

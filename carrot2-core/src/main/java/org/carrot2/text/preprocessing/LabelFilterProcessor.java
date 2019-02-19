@@ -16,17 +16,12 @@ import com.carrotsearch.hppc.IntArrayList;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllPhrases;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
-import org.carrot2.text.preprocessing.filter.CompleteLabelFilter;
-import org.carrot2.text.preprocessing.filter.GenitiveLabelFilter;
-import org.carrot2.text.preprocessing.filter.MinLengthLabelFilter;
-import org.carrot2.text.preprocessing.filter.NumericLabelFilter;
-import org.carrot2.text.preprocessing.filter.QueryLabelFilter;
-import org.carrot2.text.preprocessing.filter.StopLabelFilter;
-import org.carrot2.text.preprocessing.filter.StopWordLabelFilter;
+import org.carrot2.text.preprocessing.filter.*;
 import org.carrot2.attrs.AttrComposite;
 import org.carrot2.attrs.AttrObject;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * Applies basic filtering to words and phrases to produce candidates for cluster labels.
@@ -51,51 +46,79 @@ public class LabelFilterProcessor extends AttrComposite {
   /**
    * Query word label filter for this processor.
    */
-  public AttrObject<QueryLabelFilter> queryLabelFilter = attributes.register("queryLabelFilter", AttrObject.builder(QueryLabelFilter.class)
-      .defaultValue(new QueryLabelFilter())
-      .build());
+  public QueryLabelFilter queryLabelFilter = new QueryLabelFilter();
+  {
+    attributes.register("queryLabelFilter",
+        () -> queryLabelFilter,
+        (v) -> queryLabelFilter = v,
+        () -> new QueryLabelFilter());
+  }
 
   /**
    * Stop word label filter for this processor.
    */
-  public AttrObject<StopWordLabelFilter> stopWordLabelFilter = attributes.register("stopWordLabelFilter", AttrObject.builder(StopWordLabelFilter.class)
-      .defaultValue(new StopWordLabelFilter())
-      .build());
+  public StopWordLabelFilter stopWordLabelFilter = new StopWordLabelFilter();
+  {
+    attributes.register("stopWordLabelFilter",
+        () -> stopWordLabelFilter,
+        (v) -> stopWordLabelFilter = v,
+        () -> new StopWordLabelFilter());
+  }
 
   /**
    * Numeric label filter for this processor.
    */
-  public AttrObject<NumericLabelFilter> numericLabelFilter = attributes.register("numericLabelFilter", AttrObject.builder(NumericLabelFilter.class)
-      .defaultValue(new NumericLabelFilter())
-      .build());
+  public NumericLabelFilter numericLabelFilter = new NumericLabelFilter();
+  {
+    attributes.register("numericLabelFilter",
+        () -> numericLabelFilter,
+        (v) -> numericLabelFilter = v,
+        () -> new NumericLabelFilter());
+  }
 
   /**
    * Truncated phrase filter for this processor.
    */
-  public AttrObject<CompleteLabelFilter> completeLabelFilter = attributes.register("completeLabelFilter", AttrObject.builder(CompleteLabelFilter.class)
-      .defaultValue(new CompleteLabelFilter())
-      .build());
+  public CompleteLabelFilter completeLabelFilter = new CompleteLabelFilter();
+  {
+    attributes.register("completeLabelFilter",
+        () -> completeLabelFilter,
+        (v) -> completeLabelFilter = v,
+        () -> new CompleteLabelFilter());
+  }
 
   /**
    * Min length label filter.
    */
-  public AttrObject<MinLengthLabelFilter> minLengthLabelFilter = attributes.register("minLengthLabelFilter", AttrObject.builder(MinLengthLabelFilter.class)
-      .defaultValue(new MinLengthLabelFilter())
-      .build());
+  public MinLengthLabelFilter minLengthLabelFilter = new MinLengthLabelFilter();
+  {
+    attributes.register("minLengthLabelFilter",
+        () -> minLengthLabelFilter,
+        (v) -> minLengthLabelFilter = v,
+        () -> new MinLengthLabelFilter());
+  }
 
   /**
    * Genitive length label filter.
    */
-  public AttrObject<GenitiveLabelFilter> genitiveLabelFilter = attributes.register("genitiveLabelFilter", AttrObject.builder(GenitiveLabelFilter.class)
-      .defaultValue(new GenitiveLabelFilter())
-      .build());
+  public GenitiveLabelFilter genitiveLabelFilter = new GenitiveLabelFilter();
+  {
+    attributes.register("genitiveLabelFilter",
+        () -> genitiveLabelFilter,
+        (v) -> genitiveLabelFilter = v,
+        () -> new GenitiveLabelFilter());
+  }
 
   /**
    * Stop label filter.
    */
-  public AttrObject<StopLabelFilter> stopLabelFilter = attributes.register("stopLabelFilter", AttrObject.builder(StopLabelFilter.class)
-      .defaultValue(new StopLabelFilter())
-      .build());
+  public StopLabelFilter stopLabelFilter = new StopLabelFilter();
+  {
+    attributes.register("stopLabelFilter",
+        () -> stopLabelFilter,
+        (v) -> stopLabelFilter = v,
+        () -> new StopLabelFilter());
+  }
 
   /**
    * Processes all filters declared as fields of this class.
@@ -107,16 +130,21 @@ public class LabelFilterProcessor extends AttrComposite {
     Arrays.fill(acceptedStems, true);
     Arrays.fill(acceptedPhrases, true);
 
-    minLengthLabelFilter.get().filter(context, acceptedStems, acceptedPhrases);
-    genitiveLabelFilter.get().filter(context, acceptedStems, acceptedPhrases);
-    queryLabelFilter.get().filter(context, acceptedStems, acceptedPhrases);
-    stopWordLabelFilter.get().filter(context, acceptedStems, acceptedPhrases);
-    numericLabelFilter.get().filter(context, acceptedStems, acceptedPhrases);
-    stopLabelFilter.get().filter(context, acceptedStems, acceptedPhrases);
-    completeLabelFilter.get().filter(context, acceptedStems, acceptedPhrases);
+    Stream.of(
+        minLengthLabelFilter,
+        genitiveLabelFilter,
+        queryLabelFilter,
+        stopWordLabelFilter,
+        numericLabelFilter,
+        stopLabelFilter,
+        completeLabelFilter)
+    .forEachOrdered((ILabelFilter filter) -> {
+      if (filter != null) {
+        filter.filter(context, acceptedStems, acceptedPhrases);
+      }
+    });
 
-    final IntArrayList acceptedFeatures = new IntArrayList(acceptedStems.length
-        + acceptedPhrases.length);
+    final IntArrayList acceptedFeatures = new IntArrayList(acceptedStems.length + acceptedPhrases.length);
 
     final int[] mostFrequentOriginalWordIndex = context.allStems.mostFrequentOriginalWordIndex;
     for (int i = 0; i < acceptedStems.length; i++) {

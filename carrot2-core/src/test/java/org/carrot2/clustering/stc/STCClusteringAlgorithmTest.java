@@ -41,7 +41,7 @@ public class STCClusteringAlgorithmTest extends ClusteringAlgorithmTestBase {
   @Test
   public void testClusteringWithDfThreshold() {
     STCClusteringAlgorithm algorithm = algorithm();
-    algorithm.preprocessing.get().wordDfThreshold.set(20);
+    algorithm.preprocessing.wordDfThreshold.set(20);
 
     List<Cluster<Document>> clusters = algorithm.cluster(SampleDocumentData.DOCUMENTS_DATA_MINING.stream(),
         LanguageComponents.get(EnglishLanguageComponentsFactory.NAME));

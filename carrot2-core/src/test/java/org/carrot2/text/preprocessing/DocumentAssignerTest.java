@@ -33,8 +33,8 @@ public class DocumentAssignerTest extends LabelFilterTestBase {
 
   @Override
   protected void initializeFilters(LabelFilterProcessor filterProcessor) {
-    filterProcessor.stopWordLabelFilter.get().enabled.set(true);
-    filterProcessor.completeLabelFilter.get().enabled.set(true);
+    filterProcessor.stopWordLabelFilter.enabled.set(true);
+    filterProcessor.completeLabelFilter.enabled.set(true);
   }
 
   @Test

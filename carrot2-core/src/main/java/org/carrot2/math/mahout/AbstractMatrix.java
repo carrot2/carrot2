@@ -317,8 +317,6 @@ public abstract class AbstractMatrix implements Matrix {
     if (rows == 2) {
       return getQuick(0, 0) * getQuick(1, 1) - getQuick(0, 1) * getQuick(1, 0);
     } else {
-      // TODO: this really should just be one line:
-      // TODO: new CholeskyDecomposition(this).getL().viewDiagonal().aggregate(Functions.TIMES)
       int sign = 1;
       double ret = 0;
 

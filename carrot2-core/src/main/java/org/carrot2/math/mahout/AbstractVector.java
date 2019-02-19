@@ -175,7 +175,6 @@ public abstract class AbstractVector implements Vector {
       throw new CardinalityException(size, that.size());
     }
 
-    // TODO: check the numNonDefault elements to further optimize
     Vector result = like().assign(this);
     Iterator<Element> iter = that.iterateNonZero();
     while (iter.hasNext()) {
@@ -287,7 +286,7 @@ public abstract class AbstractVector implements Vector {
       it = v.iterateNonZero();
       randomlyAccessed = this;
       d += lengthSquared;
-    } else { // TODO: could be further optimized, figure out which one is smaller, etc
+    } else {
       it = iterateNonZero();
       randomlyAccessed = v;
       d += v.getLengthSquared();

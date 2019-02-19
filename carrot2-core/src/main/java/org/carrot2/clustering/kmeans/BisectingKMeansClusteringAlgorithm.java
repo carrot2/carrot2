@@ -118,26 +118,35 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
   /**
    * Term-document matrix builder for the algorithm.
    */
-  public final AttrObject<TermDocumentMatrixBuilder> matrixBuilder =
-      attributes.register("matrixBuilder", AttrObject.builder(TermDocumentMatrixBuilder.class)
-          .defaultValue(new TermDocumentMatrixBuilder())
-          .build());
+  public TermDocumentMatrixBuilder matrixBuilder = new TermDocumentMatrixBuilder();
+  {
+    attributes.register("matrixBuilder",
+        () -> matrixBuilder,
+        (v) -> matrixBuilder = v,
+        () -> new TermDocumentMatrixBuilder());
+  }
 
   /**
    * Term-document matrix reducer for the algorithm.
    */
-  public final AttrObject<TermDocumentMatrixReducer> matrixReducer =
-      attributes.register("matrixReducer", AttrObject.builder(TermDocumentMatrixReducer.class)
-          .defaultValue(new TermDocumentMatrixReducer())
-          .build());
+  public TermDocumentMatrixReducer matrixReducer = new TermDocumentMatrixReducer();
+  {
+    attributes.register("matrixReducer",
+        () -> matrixReducer,
+        (v) -> matrixReducer = v,
+        () -> new TermDocumentMatrixReducer());
+  }
 
   /**
    * Preprocessing pipeline.
    */
-  public final AttrObject<BasicPreprocessingPipeline> preprocessing =
-      attributes.register("preprocessing", AttrObject.builder(BasicPreprocessingPipeline.class)
-          .defaultValue(new BasicPreprocessingPipeline())
-          .build());
+  public BasicPreprocessingPipeline preprocessing = new BasicPreprocessingPipeline();
+  {
+    attributes.register("preprocessing",
+        () -> preprocessing,
+        (v) -> preprocessing = v,
+        () -> new BasicPreprocessingPipeline());
+  }
 
   @Override
   public <T extends Document> List<Cluster<T>> cluster(Stream<? extends T> docStream, LanguageComponents languageComponents) {
@@ -145,7 +154,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
 
     // Preprocessing of documents
     final PreprocessingContext preprocessingContext =
-        preprocessing.get().preprocess(documents.stream(), queryHint.get(), languageComponents);
+        preprocessing.preprocess(documents.stream(), queryHint.get(), languageComponents);
 
     // Add trivial AllLabels so that we can reuse the common TD matrix builder
     final int[] stemsMfow = preprocessingContext.allStems.mostFrequentOriginalWordIndex;
@@ -169,7 +178,6 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
       final ReducedVectorSpaceModelContext reducedVsmContext = new ReducedVectorSpaceModelContext(
           vsmContext);
 
-      TermDocumentMatrixBuilder matrixBuilder = this.matrixBuilder.get();
       matrixBuilder.buildTermDocumentMatrix(vsmContext);
       matrixBuilder.buildTermPhraseMatrix(vsmContext);
 
@@ -181,7 +189,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
 
       final DoubleMatrix2D tdMatrix;
       if (useDimensionalityReduction.get() && clusterCount.get() * 2 < preprocessingContext.documentCount) {
-        matrixReducer.get().reduce(reducedVsmContext, clusterCount.get() * 2);
+        matrixReducer.reduce(reducedVsmContext, clusterCount.get() * 2);
         tdMatrix = reducedVsmContext.coefficientMatrix.viewDice();
       } else {
         tdMatrix = vsmContext.termDocumentMatrix;

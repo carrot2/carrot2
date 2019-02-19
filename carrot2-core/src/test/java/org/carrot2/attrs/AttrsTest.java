@@ -33,84 +33,88 @@ public class AttrsTest extends AbstractTest {
   public void testExtractAndRestore() {
 
     class Component implements AcceptingVisitor {
-      private AttrGroup group = new AttrGroup();
+      private AttrGroup attrs = new AttrGroup();
 
-      public AttrBoolean attrBoolean = group.register(
+      public AttrBoolean attrBoolean = attrs.register(
           "attrBool", AttrBoolean.builder()
               .defaultValue(true)
               .build());
 
-      public AttrBoolean attrBooleanNoValue = group.register(
+      public AttrBoolean attrBooleanNoValue = attrs.register(
           "attrBoolNoValue", AttrBoolean.builder()
               .build());
 
-      public AttrInteger attrInt = group.register(
+      public AttrInteger attrInt = attrs.register(
           "attrInt", AttrInteger.builder()
               .defaultValue(10)
               .build());
 
-      public AttrInteger attrIntNoValue = group.register(
+      public AttrInteger attrIntNoValue = attrs.register(
           "attrIntNoValue", AttrInteger.builder()
               .build());
 
-      public AttrDouble attrDouble = group.register(
+      public AttrDouble attrDouble = attrs.register(
           "attrDouble", AttrDouble.builder()
               .defaultValue(36.6)
               .build());
 
-      public AttrDouble attrDoubleNoValue = group.register(
+      public AttrDouble attrDoubleNoValue = attrs.register(
           "attrDoubleNoValue", AttrDouble.builder()
               .build());
 
-      public AttrString attrString = group.register(
+      public AttrString attrString = attrs.register(
           "attrString", AttrString.builder()
               .defaultValue("foo")
               .build());
 
-      public AttrString attrStringNoValue = group.register(
+      public AttrString attrStringNoValue = attrs.register(
           "attrStringNoValue", AttrString.builder()
               .build());
 
-      public AttrObject<Interface> attrObject = group.register(
+      public AttrObject<Interface> attrObject = attrs.register(
           "attrObject",
           AttrObject.builder(Interface.class)
               .defaultValue(new InterfaceImpl1())
               .build());
 
-      public AttrEnum<EnumClass> attrEnum = group.register(
+      public AttrEnum<EnumClass> attrEnum = attrs.register(
           "attrEnum",
           AttrEnum.builder(EnumClass.class)
               .defaultValue(EnumClass.VALUE1)
               .build());
 
-      public AttrEnum<EnumClass> attrEnumNoValue = group.register(
+      public AttrEnum<EnumClass> attrEnumNoValue = attrs.register(
           "attrEnumNoValue",
           AttrEnum.builder(EnumClass.class)
               .build());
 
       public final AttrStringArray attrStringArray =
-          group.register("attrStringArray", AttrStringArray.builder()
+          attrs.register("attrStringArray", AttrStringArray.builder()
               .defaultValue("foo", "bar", "baz")
               .build());
 
       public final AttrStringArray attrStringArrayNoValue =
-          group.register("attrStringArrayNoValue", AttrStringArray.builder()
+          attrs.register("attrStringArrayNoValue", AttrStringArray.builder()
               .build());
 
       public InterfaceImpl1 attrConstantImpl = new InterfaceImpl1();
       public InterfaceImpl1 attrConstantImplNoValue;
 
+      {
+        attrs.register("attrConstantImpl",
+            () -> attrConstantImpl,
+            (val) -> attrConstantImpl = val,
+            () -> new InterfaceImpl1());
+
+        attrs.register("attrConstantImplNoValue",
+            () -> attrConstantImplNoValue,
+            (val) -> attrConstantImplNoValue = val,
+            () -> new InterfaceImpl1());
+      }
+
       @Override
       public void accept(AttrVisitor visitor) {
-        group.visit(visitor);
-
-        visitor.visit("attrConstantImpl",
-            attrConstantImpl,
-            () -> attrConstantImpl = new InterfaceImpl1());
-
-        visitor.visit("attrConstantImplNoValue",
-            attrConstantImplNoValue,
-            () -> attrConstantImplNoValue = new InterfaceImpl1());
+        attrs.visit(visitor);
       }
     }
 

@@ -47,7 +47,7 @@ public class TermDocumentMatrixBuilderTestBase extends AbstractTest {
   @Before
   public void setUpMatrixBuilder() throws Exception {
     preprocessingPipeline = new CompletePreprocessingPipeline();
-    preprocessingPipeline.labelFilterProcessor.get().minLengthLabelFilter.get().enabled.set(false);
+    preprocessingPipeline.labelFilters.minLengthLabelFilter.enabled.set(false);
 
     matrixBuilder = new TermDocumentMatrixBuilder();
     matrixBuilder.termWeighting.set(new TfTermWeighting());

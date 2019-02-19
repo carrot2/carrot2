@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -100,20 +101,19 @@ public final class Attrs {
     }
 
     @Override
-    public <T extends AcceptingVisitor> void visit(String key, T value, Supplier<T> creator) {
+    public <T extends AcceptingVisitor> void visit(String key, T value, Consumer<T> setter, Supplier<T> newInstance) {
       if (map.containsKey(key)) {
         @SuppressWarnings("unchecked")
         Map<String, Object> submap = (Map<String, Object>) map.get(key);
         if (submap == null) {
-          if (value != null) {
-            throw new RuntimeException("Clearing of constant impl. fields not implemented.");
-          }
+          setter.accept(null);
         } else {
           if (value == null) {
-            value = creator.get();
+            value = newInstance.get();
           }
           value.accept(new FromMapVisitor(submap, classToInstance));
         }
+        setter.accept(value);
       }
     }
 
@@ -182,11 +182,11 @@ public final class Attrs {
     }
 
     @Override
-    public <T extends AcceptingVisitor> void visit(String key, T value, Supplier<T> creator) {
+    public <T extends AcceptingVisitor> void visit(String key, T currentValue, Consumer<T> setter, Supplier<T> newInstance) {
       ensureNoExistingKey(map, key);
-      if (value != null) {
+      if (currentValue != null) {
         Map<String, Object> submap = new LinkedHashMap<>();
-        value.accept(new ToMapVisitor(submap, objectToClass));
+        currentValue.accept(new ToMapVisitor(submap, objectToClass));
         map.put(key, submap);
       } else {
         map.put(key, null);

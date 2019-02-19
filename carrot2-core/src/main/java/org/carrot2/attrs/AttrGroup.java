@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public final class AttrGroup {
   private Map<String, Consumer<AttrVisitor>> attrs = new LinkedHashMap<>();
@@ -48,6 +49,11 @@ public final class AttrGroup {
     checkNewKey(key);
     attrs.put(key, (visitor) -> visitor.visit(key, attr));
     return attr;
+  }
+
+  public <T extends AcceptingVisitor> void register(String key, Supplier<T> getter, Consumer<T> setter, Supplier<T> newInstance) {
+    checkNewKey(key);
+    attrs.put(key, (visitor) -> visitor.visit(key, getter.get(), setter, newInstance));
   }
 
   private void checkNewKey(String key) {

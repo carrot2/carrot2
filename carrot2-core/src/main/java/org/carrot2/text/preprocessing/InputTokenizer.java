@@ -43,7 +43,7 @@ import java.util.stream.Stream;
  * </ul>
  */
 // TODO: make this package-private once we have serialization aliases.
-public final class InputTokenizer extends AttrComposite {
+public final class InputTokenizer {
   /**
    * Token images.
    */
