@@ -23,6 +23,12 @@ public class AttrsTest extends AbstractTest {
     }
   }
 
+  public static class InterfaceImpl2 extends AttrComposite implements Interface {
+    public AttrString attrString = attributes.register(
+        "attrString", AttrString.builder()
+            .defaultValue("baz"));
+  }
+
   public enum EnumClass {
     VALUE1,
     VALUE2,
@@ -94,7 +100,14 @@ public class AttrsTest extends AbstractTest {
       public InterfaceImpl1 attrConstantImpl = new InterfaceImpl1();
       public InterfaceImpl1 attrConstantImplNoValue;
 
+      public Interface attrInterface;
+
       {
+        attrs.register("attrInterface",
+            () -> attrInterface,
+            (val) -> attrInterface = val,
+            () -> new InterfaceImpl2());
+
         attrs.register("attrConstantImpl",
             () -> attrConstantImpl,
             (val) -> attrConstantImpl = val,
@@ -124,11 +137,12 @@ public class AttrsTest extends AbstractTest {
     c1.attrEnum.set(EnumClass.VALUE2);
 
     c1.attrConstantImpl.attrInt.set(42);
+    c1.attrInterface = new InterfaceImpl1();
+    System.out.println(Attrs.toPrettyString(c1));
 
     Component c2 = restore(Component.class, extract(c1, mapper), mapper);
     Assertions.assertThat(c2.attrInt.get()).isEqualTo(c1.attrInt.get());
-
-    System.out.println(Attrs.toPrettyString(c1));
+    Assertions.assertThat(c2.attrInterface).isInstanceOf(InterfaceImpl1.class);
   }
 
   public static <E extends AcceptingVisitor> E restore(Class<? extends E> clazz,

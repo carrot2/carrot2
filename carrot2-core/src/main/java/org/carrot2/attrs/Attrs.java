@@ -101,14 +101,18 @@ public final class Attrs {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends AcceptingVisitor> void visit(String key, T value, Consumer<T> setter, Supplier<T> newInstance) {
       if (map.containsKey(key)) {
-        @SuppressWarnings("unchecked")
         Map<String, Object> submap = (Map<String, Object>) map.get(key);
         if (submap == null) {
-          setter.accept(null);
+          value = null;
         } else {
-          if (value == null) {
+          submap = new HashMap<>(submap);
+          if (submap.containsKey(KEY_TYPE)) {
+            String type = (String) submap.remove(KEY_TYPE);
+            value = (T) classToInstance.apply(type);
+          } else {
             value = newInstance.get();
           }
           value.accept(new FromMapVisitor(submap, classToInstance));
@@ -186,6 +190,9 @@ public final class Attrs {
       ensureNoExistingKey(map, key);
       if (currentValue != null) {
         Map<String, Object> submap = new LinkedHashMap<>();
+        if (newInstance.get().getClass() != currentValue.getClass()) {
+          submap.put(KEY_TYPE, objectToClass.apply(currentValue));
+        }
         currentValue.accept(new ToMapVisitor(submap, objectToClass));
         map.put(key, submap);
       } else {
