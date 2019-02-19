@@ -17,112 +17,106 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * A cluster is a named group of related {@link Document}s.
+ * A cluster is a named group of somehow related entities.
  */
 public class Cluster<T> {
-    /** Labels describing this cluster's documents. */
-    private List<String> labels = new ArrayList<>();
+  /**
+   * Labels describing this cluster's documents.
+   */
+  private List<String> labels = new ArrayList<>();
 
-    /** Documents contained in this cluster. */
-    private List<T> documents = new ArrayList<>();
+  /**
+   * Documents contained in this cluster.
+   */
+  private List<T> documents = new ArrayList<>();
 
-    /** Subclusters of this cluster, if any. */
-    private List<Cluster> subclusters = new ArrayList<>();
+  /**
+   * Subclusters of this cluster, if any.
+   */
+  private List<Cluster> subclusters = new ArrayList<>();
 
-    private Double score;
+  /**
+   * This cluster's "score", interpretation left to algorithms.
+   */
+  private Double score;
 
-    /**
-     * Creates a {@link Cluster} with an empty label, no documents and no subclusters.
-     */
-    public Cluster() {
-    }
+  /**
+   *
+   * @return
+   */
+  public List<String> getLabels() {
+    return labels;
+  }
 
-    public List<String> getLabels() {
-        return labels;
-    }
+  /**
+   * Add a single label to this cluster.
+   */
+  public Cluster addLabel(String label) {
+    labels.add(label);
+    return this;
+  }
 
-    /**
-     * Returns all subclusters of this cluster.
-     */
-    public List<Cluster> getSubclusters() {
-        return subclusters;
-    }
+  /**
+   * Returns all documents that belong directly to this cluster.
+   */
+  public List<T> getDocuments() {
+    return documents;
+  }
 
-    /**
-     * Returns all documents that belong directly to this cluster.
-     */
-    public List<T> getDocuments() {
-        return documents;
-    }
+  /**
+   * Add a single document to this cluster.
+   */
+  public Cluster addDocument(T document) {
+    this.documents.add(document);
+    return this;
+  }
 
-    /**
-     * Adds phrases to the description of this cluster.
-     */
-    public Cluster addLabels(Iterable<String> labels)
-    {
-        labels.forEach(label -> this.labels.add(label));
-        return this;
-    }
+  /**
+   * Returns all subclusters of this cluster.
+   */
+  public List<Cluster> getSubclusters() {
+    return subclusters;
+  }
 
-    public Cluster addLabel(String label) {
-        labels.add(label);
-        return this;
-    }
+  /**
+   * Adds subclusters to this cluster.
+   */
+  public Cluster addSubcluster(Cluster cluster) {
+    this.subclusters.add(cluster);
+    return this;
+  }
 
-    /**
-     * Adds document to this cluster.
-     */
-    public Cluster addDocuments(Iterable<? extends T> documents) {
-        documents.forEach(doc -> this.documents.add(doc));
-        return this;
-    }
+  /**
+   * Returns this cluster's score or null, if not available.
+   */
+  public Double getScore() {
+    return score;
+  }
 
-    public Cluster addDocument(T document) {
-        this.documents.add(document);
-        return this;
-    }
+  /**
+   * Sets this cluster's score.
+   */
+  public Cluster setScore(Double score) {
+    this.score = score;
+    return this;
+  }
 
-    /**
-     * Adds children clusters to this cluster.
-     */
-    public Cluster addClusters(Iterable<Cluster> clusters) {
-        clusters.forEach(cluster -> this.subclusters.add(cluster));
-        return this;
-    }
+  @Override
+  public boolean equals(Object obj) {
+    return obj != null &&
+        getClass().equals(obj.getClass()) &&
+        equals((Cluster<?>) obj);
+  }
 
-    /**
-     * Returns this cluster's score, if available.
-     */
-    public Double getScore() {
-        return score;
-    }
+  private boolean equals(Cluster<?> that) {
+    return Objects.equals(this.labels, that.labels) &&
+        Objects.equals(this.documents, that.documents) &&
+        Objects.equals(this.subclusters, that.subclusters) &&
+        Objects.equals(this.score, that.score);
+  }
 
-    /**
-     * Sets this cluster's score.
-     */
-    public Cluster setScore(Double score) {
-        this.score = score;
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj != null &&
-            getClass().equals(obj.getClass()) &&
-            equals((Cluster<?>) obj);
-    }
-
-    private boolean equals(Cluster<?> that) {
-        return Objects.equals(this.labels, that.labels) &&
-               Objects.equals(this.documents, that.documents) &&
-               Objects.equals(this.subclusters, that.subclusters) &&
-               Objects.equals(this.score, that.score);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-            labels, documents, subclusters, score
-        );
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(labels, documents, subclusters, score);
+  }
 }

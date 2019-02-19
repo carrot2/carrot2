@@ -23,8 +23,8 @@ import org.carrot2.text.preprocessing.filter.NumericLabelFilter;
 import org.carrot2.text.preprocessing.filter.QueryLabelFilter;
 import org.carrot2.text.preprocessing.filter.StopLabelFilter;
 import org.carrot2.text.preprocessing.filter.StopWordLabelFilter;
-import org.carrot2.util.attrs.AttrComposite;
-import org.carrot2.util.attrs.AttrObject;
+import org.carrot2.attrs.AttrComposite;
+import org.carrot2.attrs.AttrObject;
 
 import java.util.Arrays;
 

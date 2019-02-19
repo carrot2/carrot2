@@ -13,8 +13,8 @@
 package org.carrot2.text.preprocessing.filter;
 
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.attrs.AttrBoolean;
-import org.carrot2.util.attrs.AttrInteger;
+import org.carrot2.attrs.AttrBoolean;
+import org.carrot2.attrs.AttrInteger;
 
 /**
  * Accepts labels whose length in characters is greater or equal to the provided value.

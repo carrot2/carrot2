@@ -13,9 +13,9 @@
 package org.carrot2.clustering.lingo;
 
 import com.carrotsearch.hppc.IntIntHashMap;
-import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
+import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.attrs.AcceptingVisitor;
+import org.carrot2.attrs.AcceptingVisitor;
 
 /**
  * Assigns labels to base vectors obtained from the factorization.

@@ -13,7 +13,7 @@
 package org.carrot2.text.preprocessing.filter;
 
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.attrs.AttrComposite;
+import org.carrot2.attrs.AttrComposite;
 
 /**
  * A base for {@link ILabelFilter} implementations that handle each label independently.

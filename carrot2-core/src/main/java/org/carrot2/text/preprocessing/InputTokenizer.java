@@ -23,7 +23,7 @@ import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.MutableCharArray;
 import org.carrot2.util.StringUtils;
-import org.carrot2.util.attrs.AttrComposite;
+import org.carrot2.attrs.AttrComposite;
 
 import java.io.IOException;
 import java.io.StringReader;

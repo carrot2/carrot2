@@ -13,6 +13,8 @@
 package org.carrot2.clustering.lingo;
 
 import org.assertj.core.api.Assertions;
+import org.carrot2.clustering.Cluster;
+import org.carrot2.clustering.Document;
 import org.carrot2.clustering.*;
 import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;

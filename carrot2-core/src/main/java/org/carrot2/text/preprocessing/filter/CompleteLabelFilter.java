@@ -13,9 +13,9 @@
 package org.carrot2.text.preprocessing.filter;
 
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.attrs.AttrBoolean;
-import org.carrot2.util.attrs.AttrComposite;
-import org.carrot2.util.attrs.AttrDouble;
+import org.carrot2.attrs.AttrBoolean;
+import org.carrot2.attrs.AttrComposite;
+import org.carrot2.attrs.AttrDouble;
 
 /**
  * A filter that removes "incomplete" labels.

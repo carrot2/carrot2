@@ -24,11 +24,11 @@ import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.Tokenizer;
-import org.carrot2.mahout.math.function.Functions;
-import org.carrot2.mahout.math.matrix.DoubleMatrix1D;
-import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
-import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix1D;
-import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix2D;
+import org.carrot2.math.mahout.function.Functions;
+import org.carrot2.math.mahout.matrix.DoubleMatrix1D;
+import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
+import org.carrot2.math.mahout.matrix.impl.DenseDoubleMatrix1D;
+import org.carrot2.math.mahout.matrix.impl.DenseDoubleMatrix2D;
 import org.carrot2.text.preprocessing.BasicPreprocessingPipeline;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
@@ -36,7 +36,7 @@ import org.carrot2.text.vsm.ReducedVectorSpaceModelContext;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
-import org.carrot2.util.attrs.*;
+import org.carrot2.attrs.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -94,7 +94,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
           .build());
 
   /**
-   *
+   * Query terms used to retrieve documents. The query is used as a hint to avoid trivial clusters.
    */
   public final AttrString queryHint = attributes.register(
       "queryHint", AttrString.builder()
@@ -221,10 +221,11 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
       for (IntArrayList rawCluster : rawClusters) {
         final Cluster<T> cluster = new Cluster<>();
         if (rawCluster.size() > 1) {
-          cluster.addLabels(getLabels(rawCluster,
+          getLabels(cluster,
+              rawCluster,
               vsmContext.termDocumentMatrix, rowToStemIndex,
               preprocessingContext.allStems.mostFrequentOriginalWordIndex,
-              preprocessingContext.allWords.image));
+              preprocessingContext.allWords.image);
           for (int j = 0; j < rawCluster.size(); j++) {
             cluster.addDocument(documents.get(rawCluster.get(j)));
           }
@@ -241,7 +242,8 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
 
   private static final Comparator<IntArrayList> BY_SIZE_DESCENDING = (o1, o2) -> o2.size() - o1.size();
 
-  private List<String> getLabels(IntArrayList documents,
+  private void getLabels(Cluster<?> cluster,
+                                 IntArrayList documents,
                                  DoubleMatrix2D termDocumentMatrix, IntIntHashMap rowToStemIndex,
                                  int[] mostFrequentOriginalWordIndex, char[][] wordImage) {
     // Prepare a centroid. If dimensionality reduction was used,
@@ -252,8 +254,6 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
     for (IntCursor d : documents) {
       centroid.assign(termDocumentMatrix.viewColumn(d.value), Functions.PLUS);
     }
-
-    final List<String> labels = new ArrayList<>(labelCount.get());
 
     final int[] order = IndirectSort.mergesort(0, centroid.size(),
         new IndirectComparator() {
@@ -268,16 +268,9 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
 
     for (int i = 0; i < centroid.size(); i++) {
       if (centroid.getQuick(i) >= minValueForLabel) {
-        labels.add(LabelFormatter.format(new char[][]
-            {
-                wordImage[mostFrequentOriginalWordIndex[rowToStemIndex.get(i)]]
-            }, new boolean[]
-            {
-                false
-            }, false));
+        cluster.addLabel(LabelFormatter.format(wordImage[mostFrequentOriginalWordIndex[rowToStemIndex.get(i)]], false));
       }
     }
-    return labels;
   }
 
   /**

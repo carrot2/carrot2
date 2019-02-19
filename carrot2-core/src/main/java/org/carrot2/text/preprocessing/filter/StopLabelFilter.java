@@ -15,7 +15,7 @@ package org.carrot2.text.preprocessing.filter;
 import org.carrot2.language.LexicalData;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.attrs.AttrBoolean;
+import org.carrot2.attrs.AttrBoolean;
 
 /**
  * Accepts labels that are not declared as stop labels in the stoplabels.&lt;lang&gt;

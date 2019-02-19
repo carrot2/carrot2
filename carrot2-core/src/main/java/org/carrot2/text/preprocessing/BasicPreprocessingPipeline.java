@@ -14,11 +14,10 @@ package org.carrot2.text.preprocessing;
 
 import org.carrot2.clustering.Document;
 import org.carrot2.language.LanguageComponents;
-import org.carrot2.util.attrs.AttrComposite;
-import org.carrot2.util.attrs.AttrInteger;
-import org.carrot2.util.attrs.AttrObject;
+import org.carrot2.attrs.AttrComposite;
+import org.carrot2.attrs.AttrInteger;
+import org.carrot2.attrs.AttrObject;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 /**

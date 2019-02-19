@@ -13,7 +13,7 @@
 package org.carrot2.text.preprocessing.filter;
 
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.attrs.AttrBoolean;
+import org.carrot2.attrs.AttrBoolean;
 
 import java.util.stream.Stream;
 

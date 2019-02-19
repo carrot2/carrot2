@@ -15,7 +15,7 @@ package org.carrot2.clustering.lingo;
 import org.assertj.core.api.Assertions;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
-import org.carrot2.matrix.factorization.LocalNonnegativeMatrixFactorizationFactory;
+import org.carrot2.math.matrix.LocalNonnegativeMatrixFactorizationFactory;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.TfTermWeighting;
 import org.junit.Before;

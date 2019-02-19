@@ -7,9 +7,9 @@ import org.carrot2.AbstractTest;
 import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
-import org.carrot2.util.attrs.AcceptingVisitor;
-import org.carrot2.util.attrs.Attrs;
-import org.carrot2.util.attrs.JvmNameMapper;
+import org.carrot2.attrs.AcceptingVisitor;
+import org.carrot2.attrs.Attrs;
+import org.carrot2.attrs.JvmNameMapper;
 import org.junit.Test;
 
 import java.util.ArrayList;

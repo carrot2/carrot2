@@ -12,15 +12,15 @@
 
 package org.carrot2.text.vsm;
 
-import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
-import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix2D;
-import org.carrot2.matrix.MatrixUtils;
-import org.carrot2.matrix.factorization.IMatrixFactorization;
-import org.carrot2.matrix.factorization.IMatrixFactorizationFactory;
-import org.carrot2.matrix.factorization.IterativeMatrixFactorizationFactory;
-import org.carrot2.matrix.factorization.NonnegativeMatrixFactorizationEDFactory;
-import org.carrot2.util.attrs.AttrComposite;
-import org.carrot2.util.attrs.AttrObject;
+import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
+import org.carrot2.math.mahout.matrix.impl.DenseDoubleMatrix2D;
+import org.carrot2.math.matrix.MatrixUtils;
+import org.carrot2.math.matrix.IMatrixFactorization;
+import org.carrot2.math.matrix.IMatrixFactorizationFactory;
+import org.carrot2.math.matrix.IterativeMatrixFactorizationFactory;
+import org.carrot2.math.matrix.NonnegativeMatrixFactorizationEDFactory;
+import org.carrot2.attrs.AttrComposite;
+import org.carrot2.attrs.AttrObject;
 
 /**
  * Reduces the dimensionality of a term-document matrix using a matrix factorization

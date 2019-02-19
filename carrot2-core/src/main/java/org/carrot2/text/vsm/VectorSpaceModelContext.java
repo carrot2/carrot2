@@ -12,7 +12,7 @@
 
 package org.carrot2.text.vsm;
 
-import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
+import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllStems;

@@ -12,7 +12,7 @@
 
 package org.carrot2.text.vsm;
 
-import org.carrot2.util.attrs.AcceptingVisitor;
+import org.carrot2.attrs.AcceptingVisitor;
 
 /**
  * Calculates term weights for the term-document matrix.

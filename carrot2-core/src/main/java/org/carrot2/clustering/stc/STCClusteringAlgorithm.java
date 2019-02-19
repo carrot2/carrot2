@@ -27,12 +27,12 @@ import org.carrot2.language.TokenTypeUtils;
 import org.carrot2.text.preprocessing.BasicPreprocessingPipeline;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.attrs.AttrBoolean;
-import org.carrot2.util.attrs.AttrComposite;
-import org.carrot2.util.attrs.AttrDouble;
-import org.carrot2.util.attrs.AttrInteger;
-import org.carrot2.util.attrs.AttrObject;
-import org.carrot2.util.attrs.AttrString;
+import org.carrot2.attrs.AttrBoolean;
+import org.carrot2.attrs.AttrComposite;
+import org.carrot2.attrs.AttrDouble;
+import org.carrot2.attrs.AttrInteger;
+import org.carrot2.attrs.AttrObject;
+import org.carrot2.attrs.AttrString;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -846,17 +846,15 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     // Adapt to Carrot2 classes, counting used documents on the way.
     final BitSet all = new BitSet(documents.size());
     final ArrayList<T> docs = new ArrayList<>(documents.size());
-    final ArrayList<String> phrases = new ArrayList<>(3);
     for (ClusterCandidate c : candidates) {
       final Cluster<T> c2 = new Cluster<>();
-      c2.addLabels(collectPhrases(phrases, c));
-      c2.addDocuments(collectDocuments(documents, docs, c.documents));
+      collectPhrases(c, c2);
+      collectDocuments(documents, docs, c.documents).forEach(document -> c2.addDocument(document));
       c2.setScore((double) c.score);
       clusters.add(c2);
 
       all.or(c.documents);
       docs.clear();
-      phrases.clear();
     }
 
     // TODO: sort
@@ -866,12 +864,10 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   /**
    * Collect phrases from a cluster.
    */
-  private List<String> collectPhrases(List<String> l, ClusterCandidate c) {
-    assert l != null;
+  private void collectPhrases(ClusterCandidate c, Cluster<?> cluster) {
     for (int[] phraseIndexes : c.phrases) {
-      l.add(buildLabel(phraseIndexes));
+      cluster.addLabel(buildLabel(phraseIndexes));
     }
-    return l;
   }
 
   /**

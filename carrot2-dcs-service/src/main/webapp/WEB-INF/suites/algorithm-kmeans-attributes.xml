@@ -67,11 +67,11 @@
       </attribute>
       <attribute key="TermDocumentMatrixReducer.factorizationFactory">
         <value>
-          <wrapper class="org.carrot2.matrix.factorization.NonnegativeMatrixFactorizationEDFactory"/>
+          <wrapper class="org.carrot2.math.matrix.NonnegativeMatrixFactorizationEDFactory"/>
         </value>
       </attribute>
       <attribute key="TermDocumentMatrixReducer.factorizationQuality">
-        <value type="org.carrot2.matrix.factorization.IterationNumberGuesser$FactorizationQuality" value="HIGH"/>
+        <value type="org.carrot2.math.matrix.IterationNumberGuesser$FactorizationQuality" value="HIGH"/>
       </attribute>
       <attribute key="Tokenizer.documentFields">
         <value>

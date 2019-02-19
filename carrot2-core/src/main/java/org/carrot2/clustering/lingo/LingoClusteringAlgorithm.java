@@ -24,11 +24,11 @@ import org.carrot2.text.vsm.ReducedVectorSpaceModelContext;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
-import org.carrot2.util.attrs.AttrComposite;
-import org.carrot2.util.attrs.AttrDouble;
-import org.carrot2.util.attrs.AttrInteger;
-import org.carrot2.util.attrs.AttrObject;
-import org.carrot2.util.attrs.AttrString;
+import org.carrot2.attrs.AttrComposite;
+import org.carrot2.attrs.AttrDouble;
+import org.carrot2.attrs.AttrInteger;
+import org.carrot2.attrs.AttrObject;
+import org.carrot2.attrs.AttrString;
 
 import java.util.ArrayList;
 import java.util.List;

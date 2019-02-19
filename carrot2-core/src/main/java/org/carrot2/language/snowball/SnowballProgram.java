@@ -31,7 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package org.carrot2.language.snowball;
 
-import org.carrot2.mahout.math.Arrays;
+import org.carrot2.math.mahout.Arrays;
 
 /**
  * This is the rev 502 of the Snowball SVN trunk,

@@ -51,11 +51,11 @@
       </attribute>
       <attribute key="LingoClusteringAlgorithm.factorizationFactory">
         <value>
-          <wrapper class="org.carrot2.matrix.factorization.NonnegativeMatrixFactorizationEDFactory"/>
+          <wrapper class="org.carrot2.math.matrix.NonnegativeMatrixFactorizationEDFactory"/>
         </value>
       </attribute>
       <attribute key="LingoClusteringAlgorithm.factorizationQuality">
-        <value type="org.carrot2.matrix.factorization.IterationNumberGuesser$FactorizationQuality" value="HIGH"/>
+        <value type="org.carrot2.math.matrix.IterationNumberGuesser$FactorizationQuality" value="HIGH"/>
       </attribute>
       <attribute key="LingoClusteringAlgorithm.labelAssigner">
         <value>

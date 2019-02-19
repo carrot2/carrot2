@@ -12,7 +12,7 @@
 
 package org.carrot2.text.vsm;
 
-import org.carrot2.util.attrs.AttrComposite;
+import org.carrot2.attrs.AttrComposite;
 
 /**
  * Calculates term-document matrix element values based on Log Inverse Term Frequency.

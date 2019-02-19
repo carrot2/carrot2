@@ -14,7 +14,7 @@ package org.carrot2.clustering.lingo;
 
 import org.carrot2.clustering.Document;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.text.vsm.ReducedTermDocumentMatrixBuilderTestBase;
+import org.carrot2.text.preprocessing.ReducedTermDocumentMatrixBuilderTestBase;
 
 import java.util.stream.Stream;
 

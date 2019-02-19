@@ -16,9 +16,9 @@ import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntArrayList;
 import org.carrot2.language.TokenTypeUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
-import org.carrot2.util.attrs.AttrBoolean;
-import org.carrot2.util.attrs.AttrComposite;
-import org.carrot2.util.attrs.AttrInteger;
+import org.carrot2.attrs.AttrBoolean;
+import org.carrot2.attrs.AttrComposite;
+import org.carrot2.attrs.AttrInteger;
 
 import java.util.ArrayList;
 

@@ -17,15 +17,15 @@ import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
 import org.carrot2.language.TokenTypeUtils;
-import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
-import org.carrot2.mahout.math.matrix.impl.DenseDoubleMatrix2D;
-import org.carrot2.mahout.math.matrix.impl.SparseDoubleMatrix2D;
-import org.carrot2.matrix.MatrixUtils;
+import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
+import org.carrot2.math.mahout.matrix.impl.DenseDoubleMatrix2D;
+import org.carrot2.math.mahout.matrix.impl.SparseDoubleMatrix2D;
+import org.carrot2.math.matrix.MatrixUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.util.attrs.AttrComposite;
-import org.carrot2.util.attrs.AttrDouble;
-import org.carrot2.util.attrs.AttrInteger;
-import org.carrot2.util.attrs.AttrObject;
+import org.carrot2.attrs.AttrComposite;
+import org.carrot2.attrs.AttrDouble;
+import org.carrot2.attrs.AttrInteger;
+import org.carrot2.attrs.AttrObject;
 
 /**
  * Builds a term document matrix based on the provided {@link PreprocessingContext}.

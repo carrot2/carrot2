@@ -15,10 +15,10 @@ package org.carrot2.clustering.lingo;
 import com.carrotsearch.hppc.DoubleArrayList;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.IntIntHashMap;
-import org.carrot2.mahout.math.matrix.DoubleMatrix2D;
+import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.Pair;
-import org.carrot2.util.attrs.AttrComposite;
+import org.carrot2.attrs.AttrComposite;
 
 /**
  * Assigns unique labels to each base vector using a greedy algorithm. For each base

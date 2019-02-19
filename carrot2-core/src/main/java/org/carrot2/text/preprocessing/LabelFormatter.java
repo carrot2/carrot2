@@ -59,8 +59,7 @@ public class LabelFormatter {
    *                      character, if <code>false</code>, no extra characters will be inserted
    *                      between label tokens.
    */
-  public static String format(char[][] image, boolean[] stopWord,
-                              boolean joinWithSpace) {
+  public static String format(char[][] image, boolean[] stopWord, boolean joinWithSpace) {
     final StringBuilder label = new StringBuilder();
     if (image.length == 1) {
       appendFormatted(label, image[0], true, stopWord[0]);
@@ -73,6 +72,12 @@ public class LabelFormatter {
       }
     }
 
+    return label.toString();
+  }
+
+  public static String format(char[] image, boolean stopWord) {
+    final StringBuilder label = new StringBuilder();
+    appendFormatted(label, image, true, stopWord);
     return label.toString();
   }
 

@@ -1,7 +1,5 @@
 package org.carrot2.util;
 
-import org.carrot2.util.ResourceLookup;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
