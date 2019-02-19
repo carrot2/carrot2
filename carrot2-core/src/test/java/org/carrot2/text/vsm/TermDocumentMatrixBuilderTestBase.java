@@ -39,6 +39,8 @@ public class TermDocumentMatrixBuilderTestBase extends AbstractTest {
 
   protected CompletePreprocessingPipeline preprocessingPipeline;
 
+  protected String queryHint;
+
   @Before
   public void setUpMatrixBuilder() throws Exception {
     preprocessingPipeline = new CompletePreprocessingPipeline();
@@ -49,14 +51,16 @@ public class TermDocumentMatrixBuilderTestBase extends AbstractTest {
     matrixBuilder.maxWordDf.set(1.0);
   }
 
-  protected void buildTermDocumentMatrix(Stream<? extends Document> documents) {
+  protected PreprocessingContext buildTermDocumentMatrix(Stream<? extends Document> documents) {
     LanguageComponents languageComponents = LanguageComponents.get(TestsLanguageComponentsFactoryVariant2.NAME);
 
-    PreprocessingContext context = preprocessingPipeline.preprocess(documents, null, languageComponents);
+    PreprocessingContext context = preprocessingPipeline.preprocess(documents, queryHint, languageComponents);
 
     vsmContext = new VectorSpaceModelContext(context);
     matrixBuilder.buildTermDocumentMatrix(vsmContext);
     matrixBuilder.buildTermPhraseMatrix(vsmContext);
+
+    return context;
   }
 
   protected static Stream<TestDocument> createDocumentsWithTitles(String... content) {

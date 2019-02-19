@@ -13,6 +13,7 @@
 package org.carrot2.text.vsm;
 
 import org.carrot2.clustering.Document;
+import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.junit.Before;
 
 import java.util.stream.Stream;
@@ -30,11 +31,11 @@ public abstract class ReducedTermDocumentMatrixBuilderTestBase extends TermDocum
   }
 
   protected void buildReducedTermDocumentMatrix(Stream<? extends Document> documents) {
-    buildTermDocumentMatrix(documents);
+    PreprocessingContext ctx = buildTermDocumentMatrix(documents);
 
     reducedVsmContext = new ReducedVectorSpaceModelContext(vsmContext);
-    reducer.reduce(reducedVsmContext, getDimensions());
+    reducer.reduce(reducedVsmContext, getDimensions(ctx));
   }
 
-  abstract protected int getDimensions();
+  abstract protected int getDimensions(PreprocessingContext ctx);
 }
