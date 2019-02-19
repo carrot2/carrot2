@@ -28,11 +28,10 @@ public class GenitiveLabelFilter extends SingleLabelFilterBase {
    */
   public AttrBoolean enabled = attributes.register("enabled", AttrBoolean.builder()
       .label("Remove labels ending in genitive form")
-      .defaultValue(true)
-      .build());
+      .defaultValue(true));
 
   private final static char[][] ENDINGS = Stream.of("'s", "`s", "s'", "s`")
-      .map(v -> v.toCharArray())
+      .map(String::toCharArray)
       .toArray(char[][]::new);
 
   @Override

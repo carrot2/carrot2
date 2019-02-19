@@ -15,7 +15,7 @@ public class AttrsTest extends AbstractTest {
 
     public AttrInteger attrInt = group.register(
         "attrInt", AttrInteger.builder()
-            .build());
+            .defaultValue(null));
 
     @Override
     public void accept(AttrVisitor visitor) {
@@ -37,39 +37,35 @@ public class AttrsTest extends AbstractTest {
 
       public AttrBoolean attrBoolean = attrs.register(
           "attrBool", AttrBoolean.builder()
-              .defaultValue(true)
-              .build());
+              .defaultValue(true));
 
       public AttrBoolean attrBooleanNoValue = attrs.register(
           "attrBoolNoValue", AttrBoolean.builder()
-              .build());
+              .defaultValue(null));
 
       public AttrInteger attrInt = attrs.register(
           "attrInt", AttrInteger.builder()
-              .defaultValue(10)
-              .build());
+              .defaultValue(10));
 
       public AttrInteger attrIntNoValue = attrs.register(
           "attrIntNoValue", AttrInteger.builder()
-              .build());
+              .defaultValue(null));
 
       public AttrDouble attrDouble = attrs.register(
           "attrDouble", AttrDouble.builder()
-              .defaultValue(36.6)
-              .build());
+              .defaultValue(36.6));
 
       public AttrDouble attrDoubleNoValue = attrs.register(
           "attrDoubleNoValue", AttrDouble.builder()
-              .build());
+              .defaultValue(null));
 
       public AttrString attrString = attrs.register(
           "attrString", AttrString.builder()
-              .defaultValue("foo")
-              .build());
+              .defaultValue("foo"));
 
       public AttrString attrStringNoValue = attrs.register(
           "attrStringNoValue", AttrString.builder()
-              .build());
+              .defaultValue(null));
 
       public AttrObject<Interface> attrObject = attrs.register(
           "attrObject",
@@ -80,22 +76,20 @@ public class AttrsTest extends AbstractTest {
       public AttrEnum<EnumClass> attrEnum = attrs.register(
           "attrEnum",
           AttrEnum.builder(EnumClass.class)
-              .defaultValue(EnumClass.VALUE1)
-              .build());
+              .defaultValue(EnumClass.VALUE1));
 
       public AttrEnum<EnumClass> attrEnumNoValue = attrs.register(
           "attrEnumNoValue",
           AttrEnum.builder(EnumClass.class)
-              .build());
+              .defaultValue(null));
 
       public final AttrStringArray attrStringArray =
           attrs.register("attrStringArray", AttrStringArray.builder()
-              .defaultValue("foo", "bar", "baz")
-              .build());
+              .defaultValue("foo", "bar", "baz"));
 
       public final AttrStringArray attrStringArrayNoValue =
           attrs.register("attrStringArrayNoValue", AttrStringArray.builder()
-              .build());
+              .defaultValue(null));
 
       public InterfaceImpl1 attrConstantImpl = new InterfaceImpl1();
       public InterfaceImpl1 attrConstantImplNoValue;

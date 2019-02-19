@@ -28,8 +28,7 @@ public class StopWordLabelFilter extends SingleLabelFilterBase {
    */
   public AttrBoolean enabled = attributes.register("enabled", AttrBoolean.builder()
       .label("Remove leading and trailing stop words")
-      .defaultValue(true)
-      .build());
+      .defaultValue(true));
 
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {

@@ -21,6 +21,7 @@ import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
+import org.carrot2.clustering.CommonAttributes;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.Tokenizer;
@@ -57,8 +58,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
       "clusterCount", AttrInteger.builder()
           .label("Cluster count")
           .min(2)
-          .defaultValue(25)
-          .build());
+          .defaultValue(25));
 
   /**
    * The maximum number of k-means iterations to perform.
@@ -67,8 +67,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
       "maxIterations", AttrInteger.builder()
           .label("Maximum iterations")
           .min(1)
-          .defaultValue(15)
-          .build());
+          .defaultValue(15));
 
   /**
    * Partition count. The number of partitions to create at each k-means clustering
@@ -79,8 +78,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
           .label("Partition count")
           .min(2)
           .max(10)
-          .defaultValue(2)
-          .build());
+          .defaultValue(2));
 
   /**
    * Label count. The minimum number of labels to return for each cluster.
@@ -90,16 +88,12 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
           .label("Label count")
           .min(1)
           .max(10)
-          .defaultValue(3)
-          .build());
+          .defaultValue(3));
 
   /**
    * Query terms used to retrieve documents. The query is used as a hint to avoid trivial clusters.
    */
-  public final AttrString queryHint = attributes.register(
-      "queryHint", AttrString.builder()
-          .label("Query hint")
-          .build());
+  public final AttrString queryHint = attributes.register("queryHint", CommonAttributes.queryHint());
 
   /**
    * Use dimensionality reduction. If <code>true</code>, k-means will be applied on the
@@ -112,8 +106,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
   public final AttrBoolean useDimensionalityReduction = attributes.register(
       "useDimensionalityReduction", AttrBoolean.builder()
           .label("Use dimensionality reduction")
-          .defaultValue(true)
-          .build());
+          .defaultValue(true));
 
   /**
    * Term-document matrix builder for the algorithm.

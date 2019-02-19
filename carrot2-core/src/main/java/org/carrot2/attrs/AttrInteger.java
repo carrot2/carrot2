@@ -1,44 +1,39 @@
 package org.carrot2.attrs;
 
-public class AttrInteger {
-  private Integer value;
+import java.util.function.Consumer;
 
-  private AttrInteger(Integer value) {
-    this.value = value;
+public class AttrInteger extends Attr<Integer> {
+  private AttrInteger(Integer value, Consumer<Integer> constraint, String label) {
+    super(value, label, constraint);
   }
 
-  public void set(Integer value) {
-    this.value = value;
-  }
-
-  public Integer get() {
-    return value;
-  }
-
-  public static class Builder {
-    private Integer defaultValue;
-
-    public Builder defaultValue(int value) {
-      defaultValue = value;
-      return this;
-    }
-
-    // TODO: add validation/ reporting?
+  public static class Builder extends BuilderScaffold<Integer> {
     public Builder min(int minInclusive) {
+      addConstraint((v) -> {
+        if (v != null && v < minInclusive) {
+          throw new IllegalArgumentException("Value must be >= " + minInclusive + ": " + v);
+        }
+      });
       return this;
     }
 
     public Builder max(int maxInclusive) {
+      addConstraint((v) -> {
+        if (v != null && v > maxInclusive) {
+          throw new IllegalArgumentException("Value must be <= " + maxInclusive + ": " + v);
+        }
+      });
       return this;
     }
 
-    // TODO: add validation/ reporting?
-    public Builder label(String cluster_count) {
+    @Override
+    public Builder label(String label) {
+      super.label(label);
       return this;
     }
 
-    public AttrInteger build() {
-      return new AttrInteger(defaultValue);
+    public AttrInteger defaultValue(Integer defaultValue) {
+      return new AttrInteger(defaultValue, getConstraint(), label);
     }
   }
 

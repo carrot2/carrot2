@@ -29,8 +29,7 @@ public class StopLabelFilter extends SingleLabelFilterBase {
    */
   public AttrBoolean enabled = attributes.register("enabled", AttrBoolean.builder()
       .label("Remove stop labels")
-      .defaultValue(true)
-      .build());
+      .defaultValue(true));
 
   /*
    *

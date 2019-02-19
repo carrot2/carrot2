@@ -1,35 +1,21 @@
 package org.carrot2.attrs;
 
-public class AttrString {
-  private String value;
+import java.util.function.Consumer;
 
-  private AttrString(String value) {
-    this.value = value;
+public class AttrString extends Attr<String> {
+  private AttrString(String value, Consumer<String> constraint, String label) {
+    super(value, label, constraint);
   }
 
-  public void set(String value) {
-    this.value = value;
-  }
-
-  public String get() {
-    return value;
-  }
-
-  public static class Builder {
-    private String defaultValue;
-
-    public Builder defaultValue(String value) {
-      defaultValue = value;
-      return this;
-    }
-
-    // TODO: add validation/ reporting?
+  public static class Builder extends BuilderScaffold<String> {
+    @Override
     public Builder label(String label) {
+      super.label(label);
       return this;
     }
 
-    public AttrString build() {
-      return new AttrString(defaultValue);
+    public AttrString defaultValue(String defaultValue) {
+      return new AttrString(defaultValue, getConstraint(), label);
     }
   }
 

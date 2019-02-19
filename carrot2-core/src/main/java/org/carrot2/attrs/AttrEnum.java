@@ -1,52 +1,39 @@
 package org.carrot2.attrs;
 
 import java.util.Locale;
+import java.util.function.Consumer;
 
-public class AttrEnum<T extends Enum<T>> {
-  private T value;
+public class AttrEnum<T extends Enum<T>> extends Attr<T> {
   private Class<T> clazz;
 
-  AttrEnum(Class<T> clazz, T value) {
+  AttrEnum(Class<T> clazz, T value, Consumer<T> constraint, String label) {
+    super(value, label, constraint);
+
     if (!clazz.isEnum()) {
       throw new RuntimeException(String.format(Locale.ROOT,
           "Expected an enum class: %s",  clazz.getSimpleName()));
     }
-    this.value = value;
     this.clazz = clazz;
   }
 
-  public void set(T value) {
-    this.value = value;
-  }
-
-  void set(String name) {
+  public void set(String name) {
     set(name == null ? null : Enum.valueOf(clazz, name));
   }
 
-  public T get() {
-    return value;
-  }
-
-  public static class Builder<T extends Enum<T>> {
+  public static class Builder<T extends Enum<T>> extends BuilderScaffold<T> {
     private Class<T> clazz;
-    private T defaultValue;
 
     public Builder(Class<T> clazz) {
       this.clazz = clazz;
     }
 
-    public Builder<T> defaultValue(T value) {
-      defaultValue = value;
-      return this;
-    }
-
-    // TODO: add label storage?
     public Builder<T> label(String label) {
+      super.label(label);
       return this;
     }
 
-    public AttrEnum<T> build() {
-      return new AttrEnum<>(clazz, defaultValue);
+    public AttrEnum<T> defaultValue(T defaultValue) {
+      return new AttrEnum<>(clazz, defaultValue, getConstraint(), label);
     }
   }
 

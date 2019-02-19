@@ -39,8 +39,7 @@ public class BasicPreprocessingPipeline extends AttrComposite {
           .min(1)
           .max(100)
           .label("Word document frequency threshold")
-          .defaultValue(1)
-          .build());
+          .defaultValue(1));
 
   /**
    * Tokenizer used by the algorithm, contains bindable attributes.

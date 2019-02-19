@@ -40,8 +40,7 @@ public class TermDocumentMatrixBuilder extends AttrComposite
             .label("Title word boost")
             .min(0)
             .max(10)
-            .defaultValue(2)
-            .build());
+            .defaultValue(2.));
 
     /**
      * Maximum matrix size. The maximum number of the term-document matrix elements. The
@@ -50,8 +49,7 @@ public class TermDocumentMatrixBuilder extends AttrComposite
     public final AttrInteger maximumMatrixSize = attributes.register(
         "maximumMatrixSize", AttrInteger.builder()
             .min(50 * 100)
-            .defaultValue(250 * 150)
-            .build());
+            .defaultValue(250 * 150));
 
     /**
      * Maximum word document frequency. The maximum document frequency allowed for words
@@ -77,8 +75,7 @@ public class TermDocumentMatrixBuilder extends AttrComposite
         "maxWordDf", AttrDouble.builder()
             .min(0)
             .max(1)
-            .defaultValue(0.9)
-            .build());
+            .defaultValue(0.9));
 
     /**
      * Term weighting. The method for calculating weight of words in the term-document

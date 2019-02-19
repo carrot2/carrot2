@@ -18,6 +18,7 @@ import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.IntStack;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
+import org.carrot2.clustering.CommonAttributes;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
 import org.carrot2.language.LanguageComponents;
@@ -54,13 +55,9 @@ import java.util.stream.Stream;
  */
 public final class STCClusteringAlgorithm extends AttrComposite implements ClusteringAlgorithm {
   /**
-   * Query that produced the documents. The query will help the algorithm to create
-   * better clusters. Therefore, providing the query is optional but desirable.
+   * Query terms used to retrieve documents. The query is used as a hint to avoid trivial clusters.
    */
-  public final AttrString queryHint = attributes.register(
-      "queryHint", AttrString.builder()
-          .label("Query hint")
-          .build());
+  public final AttrString queryHint = attributes.register("queryHint", CommonAttributes.queryHint());
 
   /**
    * Minimum word-document recurrences.
@@ -68,8 +65,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   public AttrInteger ignoreWordIfInFewerDocs = attributes.register("ignoreWordIfInFewerDocs",
       AttrInteger.builder()
           .min(2)
-          .defaultValue(2)
-          .build());
+          .defaultValue(2));
 
   /**
    * Maximum word-document ratio. A number between 0 and 1, if a word exists in more
@@ -79,8 +75,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       AttrDouble.builder()
           .min(0)
           .max(1)
-          .defaultValue(0.9)
-          .build());
+          .defaultValue(0.9));
 
   /**
    * Minimum base cluster score.
@@ -89,8 +84,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       AttrDouble.builder()
           .min(0)
           .max(10)
-          .defaultValue(2)
-          .build());
+          .defaultValue(2.));
 
   /**
    * Maximum base clusters count. Trims the base cluster array after N-th position for
@@ -99,8 +93,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   public AttrInteger maxBaseClusters = attributes.register("maxBaseClusters",
       AttrInteger.builder()
           .min(2)
-          .defaultValue(300)
-          .build());
+          .defaultValue(300));
 
   /**
    * Minimum documents per base cluster.
@@ -109,8 +102,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       AttrInteger.builder()
           .min(2)
           .max(20)
-          .defaultValue(2)
-          .build());
+          .defaultValue(2));
 
   /**
    * Maximum final clusters.
@@ -118,8 +110,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   public AttrInteger maxClusters = attributes.register("maxClusters",
       AttrInteger.builder()
           .min(1)
-          .defaultValue(15)
-          .build());
+          .defaultValue(15));
 
   /**
    * Base cluster merge threshold.
@@ -128,8 +119,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       AttrDouble.builder()
           .min(0)
           .max(1)
-          .defaultValue(0.6)
-          .build());
+          .defaultValue(0.6));
 
   /**
    * Maximum cluster phrase overlap.
@@ -138,8 +128,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       AttrDouble.builder()
           .min(0)
           .max(1)
-          .defaultValue(0.6)
-          .build());
+          .defaultValue(0.6));
 
   /**
    * Minimum general phrase coverage. Minimum phrase coverage to appear in cluster
@@ -149,8 +138,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       AttrDouble.builder()
           .min(0)
           .max(1)
-          .defaultValue(0.5)
-          .build());
+          .defaultValue(0.5));
 
   /**
    * Maximum words per label. Base clusters formed by phrases with more words than this
@@ -159,8 +147,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   public AttrInteger maxDescPhraseLength = attributes.register("maxDescPhraseLength",
       AttrInteger.builder()
           .min(1)
-          .defaultValue(4)
-          .build());
+          .defaultValue(4));
 
   /**
    * Maximum phrases per label. Maximum number of phrases from base clusters promoted
@@ -169,8 +156,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   public AttrInteger maxPhrases = attributes.register("maxPhrases",
       AttrInteger.builder()
           .min(1)
-          .defaultValue(3)
-          .build());
+          .defaultValue(3));
 
   /**
    * Single term boost. A factor in calculation of the base cluster score. If greater
@@ -180,8 +166,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   public AttrDouble singleTermBoost = attributes.register("singleTermBoost",
       AttrDouble.builder()
           .min(0)
-          .defaultValue(0.5)
-          .build());
+          .defaultValue(0.5));
 
   /**
    * Optimal label length. A factor in calculation of the base cluster score.
@@ -189,8 +174,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   public AttrInteger optimalPhraseLength = attributes.register("optimalPhraseLength",
       AttrInteger.builder()
           .min(1)
-          .defaultValue(3)
-          .build());
+          .defaultValue(3));
 
   /**
    * Phrase length tolerance. A factor in calculation of the base cluster score.
@@ -198,8 +182,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   public AttrDouble optimalPhraseLengthDev = attributes.register("optimalPhraseLengthDev",
       AttrDouble.builder()
           .min(0.5)
-          .defaultValue(2)
-          .build());
+          .defaultValue(2.));
 
   /**
    * Document count boost. A factor in calculation of the base cluster score, boosting
@@ -208,8 +191,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   public AttrDouble documentCountBoost = attributes.register("documentCountBoost",
       AttrDouble.builder()
           .min(0)
-          .defaultValue(1)
-          .build());
+          .defaultValue(1.));
 
   /**
    * Balance between cluster score and size during cluster sorting. Value equal to 0.0
@@ -221,8 +203,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
           .label("Size-score sorting ratio")
           .min(0)
           .max(1)
-          .defaultValue(1)
-          .build());
+          .defaultValue(1.));
 
   /**
    * Merge all stem-equivalent base clusters before running the merge phase.
@@ -232,8 +213,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   public AttrBoolean mergeStemEquivalentBaseClusters = attributes.register("mergeStemEquivalentBaseClusters",
       AttrBoolean.builder()
           .label("Merge all stem-equivalent phrases when discovering base clusters")
-          .defaultValue(true)
-          .build());
+          .defaultValue(true));
 
   /**
    * Preprocessing pipeline.

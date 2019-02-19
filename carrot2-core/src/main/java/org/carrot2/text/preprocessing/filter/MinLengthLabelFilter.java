@@ -26,13 +26,11 @@ public class MinLengthLabelFilter extends SingleLabelFilterBase {
    */
   public AttrBoolean enabled = attributes.register("enabled", AttrBoolean.builder()
       .label("Remove short labels")
-      .defaultValue(true)
-      .build());
+      .defaultValue(true));
 
   public AttrInteger minLength = attributes.register("minLength", AttrInteger.builder()
       .label("Minimum label length (inclusive)")
-      .defaultValue(3)
-      .build());
+      .defaultValue(3));
 
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {

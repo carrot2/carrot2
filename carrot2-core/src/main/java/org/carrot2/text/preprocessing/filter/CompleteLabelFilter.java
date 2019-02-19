@@ -35,8 +35,7 @@ public class CompleteLabelFilter extends AttrComposite implements ILabelFilter {
    */
   public AttrBoolean enabled = attributes.register("enabled", AttrBoolean.builder()
       .label("Remove truncated phrases")
-      .defaultValue(true)
-      .build());
+      .defaultValue(true));
 
   /**
    * Truncated label threshold. Determines the strength of the truncated label filter.
@@ -48,8 +47,7 @@ public class CompleteLabelFilter extends AttrComposite implements ILabelFilter {
       .label("Truncated label threshold")
       .min(0)
       .max(1)
-      .defaultValue(0.65)
-      .build());
+      .defaultValue(0.65));
 
   /**
    * Left complete label filter.

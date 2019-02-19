@@ -28,8 +28,7 @@ public abstract class IterativeMatrixFactorizationFactory extends AttrComposite 
     public final AttrEnum<IterationNumberGuesser.FactorizationQuality> factorizationQuality =
         attributes.register("factorizationFactory", AttrEnum.builder(IterationNumberGuesser.FactorizationQuality.class)
             .label("Factorization quality")
-            .defaultValue(IterationNumberGuesser.FactorizationQuality.HIGH)
-            .build());
+            .defaultValue(IterationNumberGuesser.FactorizationQuality.HIGH));
 
     /** The number of base vectors */
     protected int k;

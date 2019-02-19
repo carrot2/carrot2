@@ -26,8 +26,7 @@ public class NumericLabelFilter extends SingleLabelFilterBase {
    */
   public AttrBoolean enabled = attributes.register("enabled", AttrBoolean.builder()
       .label("Remove numeric labels")
-      .defaultValue(true)
-      .build());
+      .defaultValue(true));
 
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {

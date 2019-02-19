@@ -14,6 +14,8 @@ package org.carrot2.text.preprocessing;
 
 import com.carrotsearch.hppc.IntIntHashMap;
 import org.assertj.core.api.Assertions;
+import org.carrot2.attrs.AttrAccess;
+import org.carrot2.attrs.AttrInteger;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
@@ -129,7 +131,8 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
         { 0, 3, 0 }
     };
 
-    matrixBuilder.maximumMatrixSize.set(3 * 2);
+    // Skip preconditions.
+    AttrAccess.forceSet(matrixBuilder.maximumMatrixSize, 3 * 2);
     check(documents, expectedTdMatrixElements, expectedTdMatrixStemIndices);
   }
 

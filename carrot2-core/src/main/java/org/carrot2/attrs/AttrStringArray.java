@@ -1,30 +1,20 @@
 package org.carrot2.attrs;
 
-public class AttrStringArray {
-  private String [] value;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
-  private AttrStringArray(String [] value) {
-    this.value = value;
+public class AttrStringArray extends Attr<String[]> {
+  private AttrStringArray(String [] value, Consumer<String[]> constraint, String label) {
+    super(value, label, constraint);
   }
 
-  public void set(String... value) {
-    this.value = value;
-  }
-
-  public String [] get() {
-    return value;
-  }
-
-  public static class Builder {
-    private String [] defaultValue;
-
-    public Builder defaultValue(String... value) {
-      defaultValue = value;
-      return this;
+  public static class Builder extends BuilderScaffold<String[]> {
+    public AttrStringArray defaultValue(String value, String... values) {
+      return defaultValue(Stream.concat(Stream.of(value), Stream.of(values)).toArray(String[]::new));
     }
 
-    public AttrStringArray build() {
-      return new AttrStringArray(defaultValue == null ? null : defaultValue.clone());
+    public AttrStringArray defaultValue(String [] values) {
+      return new AttrStringArray(values, getConstraint(), label);
     }
   }
 

@@ -42,8 +42,7 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline {
           .min(1)
           .max(100)
           .label("Phrase document frequency threshold")
-          .defaultValue(1)
-          .build());
+          .defaultValue(1));
 
   /**
    * Label filter processor used by the algorithm, contains bindable attributes.

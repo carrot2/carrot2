@@ -17,8 +17,6 @@ import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant2;
-import org.carrot2.text.preprocessing.CompletePreprocessingPipeline;
-import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.TfTermWeighting;
 import org.carrot2.text.vsm.VectorSpaceModelContext;

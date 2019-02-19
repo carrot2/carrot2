@@ -15,6 +15,7 @@ package org.carrot2.clustering.lingo;
 import com.carrotsearch.hppc.BitSet;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
+import org.carrot2.clustering.CommonAttributes;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.text.preprocessing.CompletePreprocessingPipeline;
@@ -51,8 +52,7 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
             .label("Size-score sorting ratio")
             .min(0)
             .max(1)
-            .defaultValue(0)
-            .build());
+            .defaultValue(0.));
 
     /**
      * Desired cluster count base. Base factor used to calculate the number of clusters
@@ -65,8 +65,7 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
             .label("Cluster count base")
             .min(2)
             .max(100)
-            .defaultValue(30)
-            .build());
+            .defaultValue(30));
 
     /**
      * Preprocessing pipeline.
@@ -101,12 +100,9 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
             .build());
 
     /**
-     *
+     * Query terms used to retrieve documents. The query is used as a hint to avoid trivial clusters.
      */
-    public final AttrString queryHint = attributes.register(
-        "queryHint", AttrString.builder()
-            .label("Query hint")
-            .build());
+    public final AttrString queryHint = attributes.register("queryHint", CommonAttributes.queryHint());
 
     /**
      * Cluster label formatter, contains bindable attributes.

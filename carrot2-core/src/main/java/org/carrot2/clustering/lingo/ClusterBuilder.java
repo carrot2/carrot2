@@ -45,8 +45,7 @@ public class ClusterBuilder extends AttrComposite {
         .label("Phrase label boost")
         .min(0)
         .max(10)
-        .defaultValue(1.5)
-        .build());
+        .defaultValue(1.5));
 
     /**
      * Phrase length penalty start. The phrase length at which the overlong multi-word
@@ -57,8 +56,7 @@ public class ClusterBuilder extends AttrComposite {
         .label("Phrase length penalty start")
         .min(2)
         .max(8)
-        .defaultValue(8)
-        .build());
+        .defaultValue(8));
 
     /**
      * Phrase length penalty stop. The phrase length at which the overlong multi-word
@@ -69,8 +67,7 @@ public class ClusterBuilder extends AttrComposite {
         .label("Phrase length penalty stop")
         .min(2)
         .max(8)
-        .defaultValue(8)
-        .build());
+        .defaultValue(8));
 
     /**
      * Cluster merging threshold. The percentage overlap between two cluster's documents
@@ -83,8 +80,7 @@ public class ClusterBuilder extends AttrComposite {
         .label("Cluster merging threshold")
         .min(0)
         .max(1)
-        .defaultValue(0.7)
-        .build());
+        .defaultValue(0.7));
 
     /**
      * Optional feature scorer. We don't make it an attribute for now as the core Lingo

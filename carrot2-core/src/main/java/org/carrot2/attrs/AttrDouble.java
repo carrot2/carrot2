@@ -1,44 +1,39 @@
 package org.carrot2.attrs;
 
-public class AttrDouble {
-  private Double value;
+import java.util.function.Consumer;
 
-  private AttrDouble(Double value) {
-    this.value = value;
+public class AttrDouble extends Attr<Double> {
+  private AttrDouble(Double value, Consumer<Double> constraint, String label) {
+    super(value, label, constraint);
   }
 
-  public void set(Double value) {
-    this.value = value;
-  }
-
-  public Double get() {
-    return value;
-  }
-
-  public static class Builder {
-    private Double defaultValue;
-
-    public Builder defaultValue(double value) {
-      defaultValue = value;
-      return this;
-    }
-
-    // TODO: add validation/ reporting?
+  public static class Builder extends BuilderScaffold<Double> {
     public Builder min(double minInclusive) {
+      addConstraint((v) -> {
+        if (v != null && v < minInclusive) {
+          throw new IllegalArgumentException("Value must be >= " + minInclusive + ": " + v);
+        }
+      });
       return this;
     }
 
     public Builder max(double maxInclusive) {
+      addConstraint((v) -> {
+        if (v != null && v > maxInclusive) {
+          throw new IllegalArgumentException("Value must be <= " + maxInclusive + ": " + v);
+        }
+      });
       return this;
     }
 
-    // TODO: add validation/ reporting?
+    @Override
     public Builder label(String label) {
+      super.label(label);
       return this;
     }
 
-    public AttrDouble build() {
-      return new AttrDouble(defaultValue);
+    public AttrDouble defaultValue(Double defaultValue) {
+      return new AttrDouble(defaultValue, getConstraint(), label);
     }
   }
 

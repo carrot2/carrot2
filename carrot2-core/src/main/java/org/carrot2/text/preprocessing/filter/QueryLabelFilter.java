@@ -27,8 +27,7 @@ public class QueryLabelFilter extends SingleLabelFilterBase {
    */
   public AttrBoolean enabled = attributes.register("enabled", AttrBoolean.builder()
       .label("Remove query words")
-      .defaultValue(true)
-      .build());
+      .defaultValue(true));
 
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {
