@@ -18,8 +18,15 @@ allprojects {
     module {
       outputDir file('build/idea/classes/main')
       testOutputDir file('build/idea/classes/test')
+      downloadSources = true
     }
   }
+
+  task copyCodeStyle(type: Copy) {
+    from 'etc/intellij/codeStyles'
+    into '.idea'
+  }
+  tasks.idea.dependsOn copyCodeStyle
 
   gradle.projectsEvaluated {
     tasks.withType(JavaCompile) {
