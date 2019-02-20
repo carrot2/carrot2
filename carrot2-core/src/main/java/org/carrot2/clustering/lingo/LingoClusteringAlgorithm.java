@@ -72,32 +72,37 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
      */
     public final AttrObject<CompletePreprocessingPipeline> preprocessing =
         attributes.register("preprocessing", AttrObject.builder(CompletePreprocessingPipeline.class)
-            .defaultValue(new CompletePreprocessingPipeline())
-            .build());
+            .defaultValue(() -> new CompletePreprocessingPipeline()));
 
     /**
      * Term-document matrix builder for the algorithm.
      */
-    public final AttrObject<TermDocumentMatrixBuilder> matrixBuilder =
+    public TermDocumentMatrixBuilder matrixBuilder;
+    {
         attributes.register("matrixBuilder", AttrObject.builder(TermDocumentMatrixBuilder.class)
-            .defaultValue(new TermDocumentMatrixBuilder())
-            .build());
+            .getset(() -> matrixBuilder, (v) -> matrixBuilder = v)
+            .defaultValue(TermDocumentMatrixBuilder::new));
+    }
 
     /**
      * Term-document matrix reducer for the algorithm.
      */
-    public final AttrObject<TermDocumentMatrixReducer> matrixReducer =
+    public TermDocumentMatrixReducer matrixReducer;
+    {
         attributes.register("matrixReducer", AttrObject.builder(TermDocumentMatrixReducer.class)
-            .defaultValue(new TermDocumentMatrixReducer())
-            .build());
+            .getset(() -> matrixReducer, (v) -> matrixReducer = v)
+            .defaultValue(TermDocumentMatrixReducer::new));
+    }
 
     /**
      * Cluster label builder, contains bindable attributes.
      */
-    public final AttrObject<ClusterBuilder> clusterBuilder =
+    public ClusterBuilder clusterBuilder;
+    {
         attributes.register("clusterBuilder", AttrObject.builder(ClusterBuilder.class)
-            .defaultValue(new ClusterBuilder())
-            .build());
+            .getset(() -> clusterBuilder, (v) -> clusterBuilder = v)
+            .defaultValue(ClusterBuilder::new));
+    }
 
     /**
      * Query terms used to retrieve documents. The query is used as a hint to avoid trivial clusters.
@@ -132,16 +137,15 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
             LingoProcessingContext lingoContext = new LingoProcessingContext(
                 reducedVsmContext);
 
-            TermDocumentMatrixBuilder matrixBuilder = this.matrixBuilder.get();
+            TermDocumentMatrixBuilder matrixBuilder = this.matrixBuilder;
             matrixBuilder.buildTermDocumentMatrix(vsmContext);
             matrixBuilder.buildTermPhraseMatrix(vsmContext);
 
-            matrixReducer.get().reduce(reducedVsmContext,
+            matrixReducer.reduce(reducedVsmContext,
                 computeClusterCount(desiredClusterCountBase.get(), documents.size()));
 
             // Cluster label building
-            ClusterBuilder clusterBuilder = this.clusterBuilder.get();
-            clusterBuilder.buildLabels(lingoContext, matrixBuilder.termWeighting.get());
+            clusterBuilder.buildLabels(lingoContext, matrixBuilder.termWeighting);
 
             // Document assignment
             clusterBuilder.assignDocuments(lingoContext);

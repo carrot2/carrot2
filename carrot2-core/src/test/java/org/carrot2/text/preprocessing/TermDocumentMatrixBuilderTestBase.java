@@ -48,7 +48,7 @@ public class TermDocumentMatrixBuilderTestBase extends AbstractTest {
     preprocessingPipeline.labelFilters.minLengthLabelFilter.enabled.set(false);
 
     matrixBuilder = new TermDocumentMatrixBuilder();
-    matrixBuilder.termWeighting.set(new TfTermWeighting());
+    matrixBuilder.termWeighting = new TfTermWeighting();
     matrixBuilder.maxWordDf.set(1.0);
   }
 

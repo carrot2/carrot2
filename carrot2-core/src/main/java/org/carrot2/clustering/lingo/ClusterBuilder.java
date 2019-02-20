@@ -83,19 +83,22 @@ public class ClusterBuilder extends AttrComposite {
         .defaultValue(0.7));
 
     /**
+     * Cluster label assignment method.
+     */
+    public ILabelAssigner labelAssigner;
+
+    {
+        attributes.register("labelAssigner", AttrObject.builder(ILabelAssigner.class)
+            .label("Cluster label assignment method")
+            .getset(() -> labelAssigner, (v) -> labelAssigner = v)
+            .defaultValue(UniqueLabelAssigner::new));
+    }
+
+    /**
      * Optional feature scorer. We don't make it an attribute for now as the core Lingo
      * will not have any implementations for this interface.
      */
-    public IFeatureScorer featureScorer = null;
-
-    /**
-     * Cluster label assignment method.
-     */
-    public final AttrObject<ILabelAssigner> labelAssigner =
-        attributes.register("labelAssigner", AttrObject.builder(ILabelAssigner.class)
-            .label("Cluster label assignment method")
-            .defaultValue(new UniqueLabelAssigner())
-            .build());
+    IFeatureScorer featureScorer;
 
     /**
      * Coefficients for label weighting based on the cluster size.
@@ -232,7 +235,7 @@ public class ClusterBuilder extends AttrComposite {
         }
 
         // Assign labels to base vectors
-        labelAssigner.get().assignLabels(context, stemCos, filteredRowToStemIndex, phraseCos);
+        labelAssigner.assignLabels(context, stemCos, filteredRowToStemIndex, phraseCos);
     }
 
     private double getDocumentCountPenalty(int labelIndex, int documentCount,

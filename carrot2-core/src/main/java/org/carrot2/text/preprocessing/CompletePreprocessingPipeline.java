@@ -49,19 +49,20 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline {
    */
   public LabelFilterProcessor labelFilters = new LabelFilterProcessor();
   {
-    attributes.register("labelFilters",
-        () -> labelFilters,
-        (v) -> labelFilters = v,
-        () -> new LabelFilterProcessor());
+    attributes.register("labelFilters", AttrObject.builder(LabelFilterProcessor.class)
+        .getset(() -> labelFilters, (v) -> labelFilters = v)
+        .defaultValue(LabelFilterProcessor::new));
   }
 
   /**
    * Document assigner used by the algorithm, contains bindable attributes.
    */
-  public final AttrObject<DocumentAssigner> documentAssigner = attributes.register("documentAssigner",
-      AttrObject.builder(DocumentAssigner.class)
-        .defaultValue(new DocumentAssigner())
-        .build());
+  public DocumentAssigner documentAssigner;
+  {
+    attributes.register("documentAssigner", AttrObject.builder(DocumentAssigner.class)
+        .getset(() -> documentAssigner, (v) -> documentAssigner = v)
+        .defaultValue(DocumentAssigner::new));
+  }
 
   public PreprocessingContext preprocess(Stream<? extends Document> documents, String query, LanguageComponents langModel) {
     try (PreprocessingContext context = new PreprocessingContext(langModel)) {
@@ -71,7 +72,7 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline {
       stopListMarker.mark(context);
       new PhraseExtractor(phraseDfThreshold.get()).extractPhrases(context);
       labelFilters.process(context);
-      documentAssigner.get().assign(context);
+      documentAssigner.assign(context);
       return context;
     }
   }

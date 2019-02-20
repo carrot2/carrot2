@@ -81,7 +81,7 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
         "aa bb cc", "aa bb cc", "aa bb cc", "ff . gg . ff . gg")
         .map(v -> new TestDocument("", v));
 
-    preprocessingPipeline.documentAssigner.get().minClusterSize.set(1);
+    preprocessingPipeline.documentAssigner.minClusterSize.set(1);
 
     int[] expectedTdMatrixStemIndices = {
         0, 1, 2, 3, 4
@@ -121,7 +121,7 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
         "aa . aa", "bb . bb . bb", "cc . cc . cc . cc")
         .map(v -> new TestDocument("", v));
 
-    preprocessingPipeline.documentAssigner.get().minClusterSize.set(1);
+    preprocessingPipeline.documentAssigner.minClusterSize.set(1);
 
     int[] expectedTdMatrixStemIndices = {
         2, 1

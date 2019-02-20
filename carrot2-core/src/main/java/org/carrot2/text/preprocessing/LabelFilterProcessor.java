@@ -46,78 +46,71 @@ public class LabelFilterProcessor extends AttrComposite {
   /**
    * Query word label filter for this processor.
    */
-  public QueryLabelFilter queryLabelFilter = new QueryLabelFilter();
+  public QueryLabelFilter queryLabelFilter;
   {
-    attributes.register("queryLabelFilter",
-        () -> queryLabelFilter,
-        (v) -> queryLabelFilter = v,
-        () -> new QueryLabelFilter());
+    attributes.register("queryLabelFilter", AttrObject.builder(QueryLabelFilter.class)
+        .getset(() -> queryLabelFilter, (v) -> queryLabelFilter = v)
+        .defaultValue(QueryLabelFilter::new));
   }
 
   /**
    * Stop word label filter for this processor.
    */
-  public StopWordLabelFilter stopWordLabelFilter = new StopWordLabelFilter();
+  public StopWordLabelFilter stopWordLabelFilter;
   {
-    attributes.register("stopWordLabelFilter",
-        () -> stopWordLabelFilter,
-        (v) -> stopWordLabelFilter = v,
-        () -> new StopWordLabelFilter());
+    attributes.register("stopWordLabelFilter", AttrObject.builder(StopWordLabelFilter.class)
+        .getset(() -> stopWordLabelFilter, (v) -> stopWordLabelFilter = v)
+        .defaultValue(StopWordLabelFilter::new));
   }
 
   /**
    * Numeric label filter for this processor.
    */
-  public NumericLabelFilter numericLabelFilter = new NumericLabelFilter();
+  public NumericLabelFilter numericLabelFilter;
   {
-    attributes.register("numericLabelFilter",
-        () -> numericLabelFilter,
-        (v) -> numericLabelFilter = v,
-        () -> new NumericLabelFilter());
+    attributes.register("numericLabelFilter", AttrObject.builder(NumericLabelFilter.class)
+        .getset(() -> numericLabelFilter, (v) -> numericLabelFilter = v)
+        .defaultValue(NumericLabelFilter::new));
   }
 
   /**
    * Truncated phrase filter for this processor.
    */
-  public CompleteLabelFilter completeLabelFilter = new CompleteLabelFilter();
+  public CompleteLabelFilter completeLabelFilter;
   {
-    attributes.register("completeLabelFilter",
-        () -> completeLabelFilter,
-        (v) -> completeLabelFilter = v,
-        () -> new CompleteLabelFilter());
+    attributes.register("completeLabelFilter", AttrObject.builder(CompleteLabelFilter.class)
+        .getset(() -> completeLabelFilter, (v) -> completeLabelFilter = v)
+        .defaultValue(CompleteLabelFilter::new));
   }
 
   /**
    * Min length label filter.
    */
-  public MinLengthLabelFilter minLengthLabelFilter = new MinLengthLabelFilter();
+  public MinLengthLabelFilter minLengthLabelFilter;
   {
-    attributes.register("minLengthLabelFilter",
-        () -> minLengthLabelFilter,
-        (v) -> minLengthLabelFilter = v,
-        () -> new MinLengthLabelFilter());
+    attributes.register("minLengthLabelFilter", AttrObject.builder(MinLengthLabelFilter.class)
+        .getset(() -> minLengthLabelFilter, (v) -> minLengthLabelFilter = v)
+        .defaultValue(MinLengthLabelFilter::new));
   }
 
   /**
    * Genitive length label filter.
    */
-  public GenitiveLabelFilter genitiveLabelFilter = new GenitiveLabelFilter();
+  public GenitiveLabelFilter genitiveLabelFilter;
   {
-    attributes.register("genitiveLabelFilter",
-        () -> genitiveLabelFilter,
-        (v) -> genitiveLabelFilter = v,
-        () -> new GenitiveLabelFilter());
+    attributes.register("genitiveLabelFilter", AttrObject.builder(GenitiveLabelFilter.class)
+        .getset(() -> genitiveLabelFilter, (v) -> genitiveLabelFilter = v)
+        .defaultValue(GenitiveLabelFilter::new));
   }
 
   /**
    * Stop label filter.
    */
-  public StopLabelFilter stopLabelFilter = new StopLabelFilter();
+  public StopLabelFilter stopLabelFilter;
   {
-    attributes.register("stopLabelFilter",
-        () -> stopLabelFilter,
-        (v) -> stopLabelFilter = v,
-        () -> new StopLabelFilter());
+    attributes.register("stopLabelFilter", AttrObject.builder(StopLabelFilter.class)
+        .getset(() -> stopLabelFilter, (v) -> stopLabelFilter = v)
+        .defaultValue(StopLabelFilter::new));
   }
 
   /**

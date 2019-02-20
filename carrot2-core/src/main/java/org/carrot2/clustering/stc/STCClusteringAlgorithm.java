@@ -218,12 +218,11 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   /**
    * Preprocessing pipeline.
    */
-  public BasicPreprocessingPipeline preprocessing = new BasicPreprocessingPipeline();
+  public BasicPreprocessingPipeline preprocessing;
   {
-    attributes.register("preprocessing",
-        () -> preprocessing,
-        (v) -> preprocessing = v,
-        () -> new BasicPreprocessingPipeline());
+    attributes.register("preprocessing", AttrObject.builder(BasicPreprocessingPipeline.class)
+        .getset(() -> preprocessing, (v) -> preprocessing = v)
+        .defaultValue(BasicPreprocessingPipeline::new));
   }
 
   /**

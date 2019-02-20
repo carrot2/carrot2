@@ -16,7 +16,7 @@ public final class Attrs {
 
   private static class Wrapper implements AcceptingVisitor {
     AttrObject<AcceptingVisitor> value = AttrObject.builder(AcceptingVisitor.class)
-        .build();
+        .defaultValue(() -> null);
 
     @Override
     public void accept(AttrVisitor visitor) {
@@ -89,35 +89,27 @@ public final class Attrs {
     }
 
     @Override
-    public void visit(String key, AttrObject<?> attr) {
-      if (map.containsKey(key)) {
-        @SuppressWarnings("unchecked")
-        Map<String, Object> submap = (Map<String, Object>) map.get(key);
-        submap = new HashMap<>(submap);
-        String type = (String) submap.remove(KEY_TYPE);
-        attr.castSet(classToInstance.apply(type))
-            .accept(new FromMapVisitor(submap, classToInstance));
-      }
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
-    public <T extends AcceptingVisitor> void visit(String key, T value, Consumer<T> setter, Supplier<T> newInstance) {
+    public void visit(String key, AttrObject<?> attr) {
       if (map.containsKey(key)) {
         Map<String, Object> submap = (Map<String, Object>) map.get(key);
         if (submap == null) {
-          value = null;
+          attr.set(null);
         } else {
-          submap = new HashMap<>(submap);
+          submap = new LinkedHashMap<>(submap);
+          AcceptingVisitor value;
           if (submap.containsKey(KEY_TYPE)) {
             String type = (String) submap.remove(KEY_TYPE);
-            value = (T) classToInstance.apply(type);
+            value = attr.castAndSet(classToInstance.apply(type));
           } else {
-            value = newInstance.get();
+            Object instance = attr.newInstance();
+            if (instance == null) {
+              throw new RuntimeException("Default instance supplier not provided for: " + key);
+            }
+            value = attr.castAndSet(instance);
           }
           value.accept(new FromMapVisitor(submap, classToInstance));
         }
-        setter.accept(value);
       }
     }
 
@@ -174,23 +166,10 @@ public final class Attrs {
     @Override
     public void visit(String key, AttrObject<?> attrImpl) {
       ensureNoExistingKey(map, key);
-      AcceptingVisitor value = attrImpl.get();
-      if (value != null) {
-        Map<String, Object> submap = new LinkedHashMap<>();
-        submap.put(KEY_TYPE, objectToClass.apply(value));
-        value.accept(new ToMapVisitor(submap, objectToClass));
-        map.put(key, submap);
-      } else {
-        map.put(key, null);
-      }
-    }
-
-    @Override
-    public <T extends AcceptingVisitor> void visit(String key, T currentValue, Consumer<T> setter, Supplier<T> newInstance) {
-      ensureNoExistingKey(map, key);
+      AcceptingVisitor currentValue = attrImpl.get();
       if (currentValue != null) {
         Map<String, Object> submap = new LinkedHashMap<>();
-        if (newInstance.get().getClass() != currentValue.getClass()) {
+        if (!attrImpl.isDefaultClass(currentValue)) {
           submap.put(KEY_TYPE, objectToClass.apply(currentValue));
         }
         currentValue.accept(new ToMapVisitor(submap, objectToClass));

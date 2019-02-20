@@ -34,7 +34,7 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase {
   @Before
   public void setUpClusterLabelBuilder() {
     clusterBuilder = new ClusterBuilder();
-    clusterBuilder.labelAssigner.set(new SimpleLabelAssigner());
+    clusterBuilder.labelAssigner = new SimpleLabelAssigner();
     reducer = new TermDocumentMatrixReducer();
   }
 

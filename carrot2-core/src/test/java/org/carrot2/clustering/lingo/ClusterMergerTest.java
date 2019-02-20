@@ -35,9 +35,9 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase {
   @Before
   public void setUpClusterLabelBuilder() {
     clusterBuilder = new ClusterBuilder();
-    clusterBuilder.labelAssigner.set(new SimpleLabelAssigner());
+    clusterBuilder.labelAssigner = new SimpleLabelAssigner();
     reducer = new TermDocumentMatrixReducer();
-    reducer.factorizationFactory.set(new LocalNonnegativeMatrixFactorizationFactory());
+    reducer.factorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
     desiredClusterCountBase = 25;
   }
 
@@ -83,7 +83,7 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase {
 
   @Test
   public void testMultiMerge() {
-    preprocessingPipeline.documentAssigner.get().minClusterSize.set(2);
+    preprocessingPipeline.documentAssigner.minClusterSize.set(2);
     desiredClusterCountBase = 20;
     clusterBuilder.phraseLabelBoost.set(0.05);
     clusterBuilder.clusterMergingThreshold.set(0.2);

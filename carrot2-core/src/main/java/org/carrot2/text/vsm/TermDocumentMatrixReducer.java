@@ -32,18 +32,18 @@ public class TermDocumentMatrixReducer extends AttrComposite
      * Factorization method. The method to be used to factorize the term-document matrix
      * and create base vectors that will give rise to cluster labels.
      */
-    public final AttrObject<IMatrixFactorizationFactory> factorizationFactory =
+    public IMatrixFactorizationFactory factorizationFactory;
+    {
         attributes.register("factorizationFactory", AttrObject.builder(IMatrixFactorizationFactory.class)
-            .label("Factorization method")
-            .defaultValue(new NonnegativeMatrixFactorizationEDFactory())
-            .build());
+            .getset(() -> factorizationFactory, (v) -> factorizationFactory = v)
+            .defaultValue(NonnegativeMatrixFactorizationEDFactory::new));
+    }
 
     /**
      * Performs the reduction.
      */
     public void reduce(ReducedVectorSpaceModelContext context, int dimensions)
     {
-        IMatrixFactorizationFactory factorizationFactory = this.factorizationFactory.get();
         final VectorSpaceModelContext vsmContext = context.vsmContext;
         if (vsmContext.termDocumentMatrix.columns() == 0
             || vsmContext.termDocumentMatrix.rows() == 0)

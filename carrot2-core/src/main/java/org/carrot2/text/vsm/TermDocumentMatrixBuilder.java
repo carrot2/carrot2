@@ -81,10 +81,12 @@ public class TermDocumentMatrixBuilder extends AttrComposite
      * Term weighting. The method for calculating weight of words in the term-document
      * matrices.
      */
-    public final AttrObject<ITermWeighting> termWeighting = attributes.register(
-        "termWeighting", AttrObject.builder(ITermWeighting.class)
-            .defaultValue(new LogTfIdfTermWeighting())
-            .build());
+    public ITermWeighting termWeighting;
+    {
+        attributes.register("termWeighting", AttrObject.builder(ITermWeighting.class)
+            .getset(() -> termWeighting, (v) -> termWeighting = v)
+            .defaultValue(LogTfIdfTermWeighting::new));
+    }
 
     /**
      * Builds a term document matrix from data provided in the <code>context</code>,
@@ -123,7 +125,7 @@ public class TermDocumentMatrixBuilder extends AttrComposite
 
         // Sort stems by weight, so that stems get included in the matrix in the order
         // of frequency
-        final ITermWeighting termWeighting = this.termWeighting.get();
+        final ITermWeighting termWeighting = this.termWeighting;
         final double [] stemsWeight = new double [stemsToInclude.length];
         for (int i = 0; i < stemsToInclude.length; i++)
         {
@@ -191,7 +193,7 @@ public class TermDocumentMatrixBuilder extends AttrComposite
             }
 
             final DoubleMatrix2D phraseMatrix = TermDocumentMatrixBuilder
-                .buildAlignedMatrix(context, phraseFeatureIndices, termWeighting.get());
+                .buildAlignedMatrix(context, phraseFeatureIndices, termWeighting);
             MatrixUtils.normalizeColumnL2(phraseMatrix, null);
             context.termPhraseMatrix = phraseMatrix.viewDice();
         }

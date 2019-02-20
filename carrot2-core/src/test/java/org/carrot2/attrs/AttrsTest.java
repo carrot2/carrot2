@@ -11,7 +11,7 @@ public class AttrsTest extends AbstractTest {
   }
 
   public static class InterfaceImpl1 implements Interface {
-    private AttrGroup group = new AttrGroup();
+    protected AttrGroup group = new AttrGroup();
 
     public AttrInteger attrInt = group.register(
         "attrInt", AttrInteger.builder()
@@ -27,6 +27,12 @@ public class AttrsTest extends AbstractTest {
     public AttrString attrString = attributes.register(
         "attrString", AttrString.builder()
             .defaultValue("baz"));
+  }
+
+  public static class InterfaceImpl1Sub extends InterfaceImpl1 {
+    public AttrString attrString = group.register(
+        "attrString", AttrString.builder()
+            .defaultValue("sub"));
   }
 
   public enum EnumClass {
@@ -76,8 +82,7 @@ public class AttrsTest extends AbstractTest {
       public AttrObject<Interface> attrObject = attrs.register(
           "attrObject",
           AttrObject.builder(Interface.class)
-              .defaultValue(new InterfaceImpl1())
-              .build());
+              .defaultValue(() -> new InterfaceImpl1()));
 
       public AttrEnum<EnumClass> attrEnum = attrs.register(
           "attrEnum",
@@ -97,26 +102,27 @@ public class AttrsTest extends AbstractTest {
           attrs.register("attrStringArrayNoValue", AttrStringArray.builder()
               .defaultValue(null));
 
-      public InterfaceImpl1 attrConstantImpl = new InterfaceImpl1();
-      public InterfaceImpl1 attrConstantImplNoValue;
+      public AttrObject<InterfaceImpl1> attrConstantImpl = attrs.register(
+          "attrConstantImpl",
+          AttrObject.builder(InterfaceImpl1.class)
+              .defaultValue(() -> new InterfaceImpl1()));
 
-      public Interface attrInterface;
+      public AttrObject<InterfaceImpl1> attrConstantImplSubclass = attrs.register(
+          "attrConstantImplSubclass",
+          AttrObject.builder(InterfaceImpl1.class)
+              .defaultValue(() -> new InterfaceImpl1Sub()));
+
+      public AttrObject<Interface> attrConstantInterface = attrs.register(
+          "attrConstantInterface",
+          AttrObject.builder(Interface.class)
+              .defaultValue(() -> new InterfaceImpl2()));
+
+      public InterfaceImpl1 constantImpl = new InterfaceImpl1();
 
       {
-        attrs.register("attrInterface",
-            () -> attrInterface,
-            (val) -> attrInterface = val,
-            () -> new InterfaceImpl2());
-
-        attrs.register("attrConstantImpl",
-            () -> attrConstantImpl,
-            (val) -> attrConstantImpl = val,
-            () -> new InterfaceImpl1());
-
-        attrs.register("attrConstantImplNoValue",
-            () -> attrConstantImplNoValue,
-            (val) -> attrConstantImplNoValue = val,
-            () -> new InterfaceImpl1());
+        attrs.register("constantImpl", AttrObject.builder(InterfaceImpl1.class)
+            .getset(() -> constantImpl, (v) -> constantImpl = v)
+            .defaultValue(() -> new InterfaceImpl1()));
       }
 
       @Override
@@ -128,6 +134,8 @@ public class AttrsTest extends AbstractTest {
     AliasMapper mapper = new AliasMapper();
     mapper.alias("component", Component.class, () -> new Component());
     mapper.alias("impl1", InterfaceImpl1.class, () -> new InterfaceImpl1());
+    mapper.alias("impl2", InterfaceImpl2.class, () -> new InterfaceImpl2());
+    mapper.alias("impl1-sub", InterfaceImpl1Sub.class, () -> new InterfaceImpl1Sub());
 
     Component c1 = new Component();
     c1.attrInt.set(c1.attrInt.get() + 1);
@@ -136,13 +144,12 @@ public class AttrsTest extends AbstractTest {
         (impl) -> impl.attrInt.set(42));
     c1.attrEnum.set(EnumClass.VALUE2);
 
-    c1.attrConstantImpl.attrInt.set(42);
-    c1.attrInterface = new InterfaceImpl1();
+    c1.constantImpl.attrInt.set(42);
     System.out.println(Attrs.toPrettyString(c1));
 
     Component c2 = restore(Component.class, extract(c1, mapper), mapper);
     Assertions.assertThat(c2.attrInt.get()).isEqualTo(c1.attrInt.get());
-    Assertions.assertThat(c2.attrInterface).isInstanceOf(InterfaceImpl1.class);
+    Assertions.assertThat(c2.constantImpl.attrInt.get()).isEqualTo(42);
   }
 
   public static <E extends AcceptingVisitor> E restore(Class<? extends E> clazz,

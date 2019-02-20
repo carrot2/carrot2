@@ -19,6 +19,7 @@ import com.carrotsearch.hppc.cursors.IntCursor;
 import com.carrotsearch.hppc.cursors.IntIntCursor;
 import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
+import org.carrot2.attrs.*;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.CommonAttributes;
@@ -37,7 +38,6 @@ import org.carrot2.text.vsm.ReducedVectorSpaceModelContext;
 import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
-import org.carrot2.attrs.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -111,34 +111,31 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
   /**
    * Term-document matrix builder for the algorithm.
    */
-  public TermDocumentMatrixBuilder matrixBuilder = new TermDocumentMatrixBuilder();
+  public TermDocumentMatrixBuilder matrixBuilder;
   {
-    attributes.register("matrixBuilder",
-        () -> matrixBuilder,
-        (v) -> matrixBuilder = v,
-        () -> new TermDocumentMatrixBuilder());
+    attributes.register("matrixBuilder", AttrObject.builder(TermDocumentMatrixBuilder.class)
+        .getset(() -> matrixBuilder, (v) -> matrixBuilder = v)
+        .defaultValue(TermDocumentMatrixBuilder::new));
   }
 
   /**
    * Term-document matrix reducer for the algorithm.
    */
-  public TermDocumentMatrixReducer matrixReducer = new TermDocumentMatrixReducer();
+  public TermDocumentMatrixReducer matrixReducer;
   {
-    attributes.register("matrixReducer",
-        () -> matrixReducer,
-        (v) -> matrixReducer = v,
-        () -> new TermDocumentMatrixReducer());
+    attributes.register("matrixReducer", AttrObject.builder(TermDocumentMatrixReducer.class)
+        .getset(() -> matrixReducer, (v) -> matrixReducer = v)
+        .defaultValue(TermDocumentMatrixReducer::new));
   }
 
   /**
    * Preprocessing pipeline.
    */
-  public BasicPreprocessingPipeline preprocessing = new BasicPreprocessingPipeline();
+  public BasicPreprocessingPipeline preprocessing;
   {
-    attributes.register("preprocessing",
-        () -> preprocessing,
-        (v) -> preprocessing = v,
-        () -> new BasicPreprocessingPipeline());
+    attributes.register("preprocessing", AttrObject.builder(BasicPreprocessingPipeline.class)
+        .getset(() -> preprocessing, (v) -> preprocessing = v)
+        .defaultValue(BasicPreprocessingPipeline::new));
   }
 
   @Override

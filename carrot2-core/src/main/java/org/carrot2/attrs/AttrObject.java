@@ -1,55 +1,81 @@
 package org.carrot2.attrs;
 
+import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-public class AttrObject<T extends AcceptingVisitor> {
-  private T value;
+public class AttrObject<T extends AcceptingVisitor> extends Attr<T> {
   private Class<T> clazz;
+  private Supplier<T> getter;
+  private Consumer<T> setter;
+  private Supplier<? extends T> newInstance;
 
-  AttrObject(Class<T> clazz, T value) {
-    this.value = value;
+  AttrObject(Class<T> clazz, T defaultValue, String label, Consumer<T> constraint, Supplier<? extends T> newInstance, Supplier<T> getter, Consumer<T> setter) {
+    super(null, label, constraint);
     this.clazz = clazz;
+
+    this.setter = setter != null ? setter : (v) -> super.set(value);
+    this.getter = getter != null ? getter : () -> super.get();
+    this.newInstance = newInstance;
+
+    set(defaultValue);
   }
 
   public void set(T value) {
-    set(value, (v) -> {});
+    super.set(value);
+    setter.accept(value);
   }
 
   public <E extends T> E set(E value, Consumer<E> closure) {
-    this.value = value;
+    set(value);
     closure.accept(value);
     return value;
   }
 
-  T castSet(Object t) {
-    set(clazz.cast(t));
+  public T get() {
+    return getter.get();
+  }
+
+  public T castAndSet(Object object) {
+    set(clazz.cast(object));
     return get();
   }
 
-  public T get() {
-    return value;
+  public boolean isDefaultClass(Object value) {
+    Objects.requireNonNull(value);
+    T def = newInstance();
+    return def != null &&
+        Objects.equals(def.getClass(), value.getClass()) &&
+        Objects.equals(clazz, value.getClass());
   }
 
-  public static class Builder<T extends AcceptingVisitor> {
+  public T newInstance() {
+    return this.newInstance.get();
+  }
+
+  public static class Builder<T extends AcceptingVisitor> extends Attr.BuilderScaffold<T> {
     private Class<T> clazz;
-    private T defaultValue;
+    private Supplier<T> getter;
+    private Consumer<T> setter;
 
     public Builder(Class<T> clazz) {
       this.clazz = clazz;
     }
 
-    public Builder<T> defaultValue(T value) {
-      defaultValue = value;
+    public Builder<T> getset(Supplier<T> getter, Consumer<T> setter) {
+      this.setter = Objects.requireNonNull(setter);
+      this.getter = Objects.requireNonNull(getter);
       return this;
     }
 
-    // TODO: add label storage?
+    @Override
     public Builder<T> label(String label) {
+      super.label(label);
       return this;
     }
 
-    public AttrObject<T> build() {
-      return new AttrObject<>(clazz, defaultValue);
+    public AttrObject<T> defaultValue(Supplier<? extends T> newInstance) {
+      return new AttrObject<T>(clazz, newInstance.get(), label, getConstraint(), newInstance, getter, setter);
     }
   }
 
