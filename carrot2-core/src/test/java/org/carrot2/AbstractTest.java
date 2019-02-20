@@ -37,7 +37,7 @@ import java.util.Map;
 @ThreadLeakLingering(linger = 1000)
 @ThreadLeakAction({Action.WARN, Action.INTERRUPT})
 @SeedDecorators({MixWithSuiteName.class})
-public class AbstractTest extends RandomizedTest
+public abstract class AbstractTest extends RandomizedTest
 {
     /**
      * These property keys will be ignored in verification of altered properties.

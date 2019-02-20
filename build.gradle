@@ -22,12 +22,6 @@ allprojects {
     }
   }
 
-  task copyCodeStyle(type: Copy) {
-    from 'etc/intellij/codeStyles'
-    into '.idea'
-  }
-  tasks.idea.dependsOn copyCodeStyle
-
   gradle.projectsEvaluated {
     tasks.withType(JavaCompile) {
       options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
