@@ -13,15 +13,13 @@
 package org.carrot2.util;
 
 import org.assertj.core.api.Assertions;
-import org.carrot2.AbstractTest;
-import org.carrot2.util.MutableCharArray;
-import org.carrot2.util.MutableCharArrayUtils;
+import org.carrot2.TestBase;
 import org.junit.Test;
 
 /**
  * Test cases for {@link MutableCharArrayUtils}.
  */
-public class MutableCharArrayUtilsTest extends AbstractTest {
+public class MutableCharArrayUtilsTest extends TestBase {
   @Test
   public void toLowerCaseNoReallocation() {
     final MutableCharArray source = new MutableCharArray("ŁÓdŹ");

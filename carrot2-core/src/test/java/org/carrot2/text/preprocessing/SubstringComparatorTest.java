@@ -12,7 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Test cases for {@link SubstringComparator}.
  */
-public class SubstringComparatorTest extends AbstractTest {
+public class SubstringComparatorTest extends TestBase {
   /**
    * @see "http://issues.carrot2.org/browse/CARROT-778"
    */

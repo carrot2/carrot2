@@ -12,8 +12,7 @@
 
 package org.carrot2.util;
 
-import org.carrot2.AbstractTest;
-import org.carrot2.util.MutableCharArray;
+import org.carrot2.TestBase;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -21,7 +20,7 @@ import static org.junit.Assert.*;
 /**
  * Test cases for {@link MutableCharArray}.
  */
-public class MutableCharArrayTest extends AbstractTest {
+public class MutableCharArrayTest extends TestBase {
   @Test
   public void testCharArrayCharSequence() {
     final MutableCharArray seq = new MutableCharArray("Dawid Weiss");

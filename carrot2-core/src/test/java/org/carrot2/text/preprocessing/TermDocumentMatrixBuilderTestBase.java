@@ -12,7 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 /**
  * A base class for tests requiring that the main term-document document matrix is built.
  */
-public class TermDocumentMatrixBuilderTestBase extends AbstractTest {
+public class TermDocumentMatrixBuilderTestBase extends TestBase {
   /**
    * Matrix builder
    */

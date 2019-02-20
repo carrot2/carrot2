@@ -13,7 +13,7 @@
 package org.carrot2.math.matrix;
 
 import org.assertj.core.data.Offset;
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 import org.carrot2.math.mahout.matrix.impl.DenseDoubleMatrix2D;
 import org.junit.Test;
@@ -25,7 +25,7 @@ import com.carrotsearch.hppc.sorting.IndirectComparator;
 /**
  * Test cases for {@link MatrixUtils}.
  */
-public class MatrixUtilsTest extends AbstractTest
+public class MatrixUtilsTest extends TestBase
 {
     @Test
     public void testComputeOrthogonalityOrthogonal()

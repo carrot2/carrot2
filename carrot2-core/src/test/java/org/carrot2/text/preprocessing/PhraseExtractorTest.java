@@ -13,7 +13,7 @@
 package org.carrot2.text.preprocessing;
 
 import org.assertj.core.api.Assertions;
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant2;
 import org.junit.Test;
@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Test cases for {@link PhraseExtractor}.
  */
-public class PhraseExtractorTest extends AbstractTest {
+public class PhraseExtractorTest extends TestBase {
   PreprocessingContextBuilder contextBuilder =
       new PreprocessingContextBuilder(LanguageComponents.get(TestsLanguageComponentsFactoryVariant2.NAME));
 

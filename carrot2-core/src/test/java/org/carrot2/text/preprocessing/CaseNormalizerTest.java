@@ -13,7 +13,7 @@
 package org.carrot2.text.preprocessing;
 
 import org.assertj.core.api.Assertions;
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.Tokenizer;
@@ -24,7 +24,7 @@ import static org.carrot2.text.preprocessing.PreprocessingContextAssert.*;
 /**
  * Test cases for {@link CaseNormalizer}.
  */
-public class CaseNormalizerTest extends AbstractTest {
+public class CaseNormalizerTest extends TestBase {
   PreprocessingContextBuilder contextBuilder =
       new PreprocessingContextBuilder(LanguageComponents.get(EnglishLanguageComponentsFactory.NAME));
 

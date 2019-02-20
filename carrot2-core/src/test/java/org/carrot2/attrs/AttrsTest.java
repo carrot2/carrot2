@@ -1,12 +1,12 @@
 package org.carrot2.attrs;
 
 import org.assertj.core.api.Assertions;
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.junit.Test;
 
 import java.util.Map;
 
-public class AttrsTest extends AbstractTest {
+public class AttrsTest extends TestBase {
   public interface Interface extends AcceptingVisitor {
   }
 

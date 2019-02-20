@@ -13,8 +13,7 @@
 package org.carrot2.util;
 
 import org.assertj.core.api.Assertions;
-import org.carrot2.AbstractTest;
-import org.carrot2.util.CharArrayComparators;
+import org.carrot2.TestBase;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -24,7 +23,7 @@ import java.util.stream.Stream;
 /**
  * Test cases for char array comparators.
  */
-public class CharArrayComparatorsTest extends AbstractTest {
+public class CharArrayComparatorsTest extends TestBase {
   @Test
   public void testNormalizingComparatorPL() {
     char[][] testWords = Stream.of(

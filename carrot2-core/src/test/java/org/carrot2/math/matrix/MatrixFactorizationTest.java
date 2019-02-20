@@ -12,7 +12,7 @@
 
 package org.carrot2.math.matrix;
 
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 import org.carrot2.math.mahout.matrix.impl.DenseDoubleMatrix2D;
 import org.junit.Test;
@@ -20,7 +20,7 @@ import org.junit.Test;
 /**
  * Test cases for matrix factorizations.
  */
-public class MatrixFactorizationTest extends AbstractTest
+public class MatrixFactorizationTest extends TestBase
 {
     /** Factorization parameters */
     private static final int K = 2;

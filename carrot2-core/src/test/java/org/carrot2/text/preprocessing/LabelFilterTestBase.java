@@ -12,7 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Test cases for {@link CompleteLabelFilter}.
  */
-public class LabelFilterTestBase extends AbstractTest {
+public class LabelFilterTestBase extends TestBase {
   /**
    * Filter processor under tests
    */

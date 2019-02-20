@@ -12,7 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.carrot2.language.Tokenizer;
 import org.junit.Test;
 
@@ -24,7 +24,7 @@ import static org.carrot2.text.preprocessing.PreprocessingContextBuilder.FieldVa
 /**
  * Test cases for {@link Tokenizer}.
  */
-public class TokenizerTest extends AbstractTest {
+public class TokenizerTest extends TestBase {
   @Test
   public void testNoDocuments() {
     PreprocessingContext ctx = new PreprocessingContextBuilder()

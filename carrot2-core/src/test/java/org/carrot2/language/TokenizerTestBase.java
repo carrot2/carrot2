@@ -13,8 +13,7 @@
 package org.carrot2.language;
 
 import org.assertj.core.api.Assertions;
-import org.carrot2.AbstractTest;
-import org.carrot2.language.Tokenizer;
+import org.carrot2.TestBase;
 import org.carrot2.util.MutableCharArray;
 
 import java.io.IOException;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 /**
  * A base class for testing Carrot2 tokenizers.
  */
-abstract class TokenizerTestBase extends AbstractTest {
+abstract class TokenizerTestBase extends TestBase {
   /**
    * Creates the Analyzer under tests.
    */

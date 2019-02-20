@@ -15,7 +15,7 @@ package org.carrot2.clustering.stc;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
 import org.carrot2.text.suffixtree.SuffixTree;
 import org.junit.Test;
@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
  * Tests running GST-functionality on top of a {@link SuffixTree}. This is for demonstration
  * purposes mostly.
  */
-public class GeneralizedSuffixTreeTest extends AbstractTest {
+public class GeneralizedSuffixTreeTest extends TestBase {
   static class TestGST extends GeneralizedSuffixTree.Visitor {
     public final ArrayList<String> nodes = new ArrayList<>();
 

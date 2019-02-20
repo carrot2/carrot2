@@ -13,7 +13,7 @@
 package org.carrot2.clustering;
 
 import org.assertj.core.api.Assertions;
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
 import org.junit.Test;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class StreamingClusteringAlgorithmApiTest extends AbstractTest {
+public class ClusteringAlgorithmApiTest extends TestBase {
   @Test
   public void testStreamingInterface() {
     class Doc implements Document {
@@ -52,31 +52,28 @@ public class StreamingClusteringAlgorithmApiTest extends AbstractTest {
       public <T extends Document> List<Cluster<T>> cluster(Stream<? extends T> documents,
                                                            LanguageComponents languageComponents) {
         Cluster<T> root = new Cluster<>();
-        documents
-            .forEachOrdered(doc -> {
-              HashSet<String> fields = new HashSet<>();
-              doc.visitFields((field, value) -> {
-                Assertions.assertThat(field).isNotNull();
-                Assertions.assertThat(value).isNotNull();
-                fields.add(field);
-              });
-              Assertions.assertThat(fields).containsOnly("id", "field");
+        documents.forEachOrdered(doc -> {
+          HashSet<String> fields = new HashSet<>();
+          doc.visitFields((field, value) -> {
+            Assertions.assertThat(field).isNotNull();
+            Assertions.assertThat(value).isNotNull();
+            fields.add(field);
+          });
+          Assertions.assertThat(fields).containsOnly("id", "field");
 
-              root.addDocument(doc);
-            });
+          root.addDocument(doc);
+        });
 
         return Arrays.asList(root);
       }
     };
 
-    List<Doc> input = IntStream.range(0, 50)
-        .mapToObj(c -> new Doc(c, "doc:" + c))
-        .collect(Collectors.toList());
+    List<Doc> input = IntStream.range(0, 50).mapToObj(c -> new Doc(c, "doc:" + c)).collect(Collectors.toList());
 
-    List<Cluster<Doc>> cluster = ca.cluster(input.stream(), LanguageComponents.get(TestsLanguageComponentsFactoryVariant1.NAME));
+    List<Cluster<Doc>> cluster = ca.cluster(input.stream(),
+                                            LanguageComponents.get(TestsLanguageComponentsFactoryVariant1.NAME));
     Assertions.assertThat(cluster).hasSize(1);
-    Assertions.assertThat(cluster.get(0).getDocuments())
-        .containsExactlyElementsOf(input);
+    Assertions.assertThat(cluster.get(0).getDocuments()).containsExactlyElementsOf(input);
     Assertions.assertThat(input.stream()).allSatisfy((doc) -> {
       Assertions.assertThat(doc.field).isNull();
     });

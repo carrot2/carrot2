@@ -13,7 +13,7 @@
 package org.carrot2.text.preprocessing;
 
 import org.assertj.core.api.Assertions;
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.EnglishLanguageComponentsFactory;
@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 /**
  * Test cases for {@link LabelFormatter}.
  */
-public class LabelFormatterTest extends AbstractTest {
+public class LabelFormatterTest extends TestBase {
   /**
    * Other preprocessing components required for the test
    */

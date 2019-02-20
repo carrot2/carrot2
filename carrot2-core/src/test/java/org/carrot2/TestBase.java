@@ -27,9 +27,6 @@ import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @TimeoutSuite(millis = 180 * 1000) // No suite should run longer than 180 seconds.
 @ThreadLeakGroup(Group.MAIN)
 @ThreadLeakScope(Scope.TEST)
@@ -37,47 +34,31 @@ import java.util.Map;
 @ThreadLeakLingering(linger = 1000)
 @ThreadLeakAction({Action.WARN, Action.INTERRUPT})
 @SeedDecorators({MixWithSuiteName.class})
-public abstract class AbstractTest extends RandomizedTest
-{
-    /**
-     * These property keys will be ignored in verification of altered properties.
-     *
-     * @see SystemPropertiesInvariantRule
-     * @see #classRules
-     */
-    private static final String [] IGNORED_INVARIANT_PROPERTIES = {
-      "user.timezone"
-    };
+public abstract class TestBase extends RandomizedTest {
+  /**
+   * These property keys will be ignored in verification of altered properties.
+   *
+   * @see SystemPropertiesInvariantRule
+   * @see #classRules
+   */
+  private static final String[] IGNORED_INVARIANT_PROPERTIES = {"user.timezone"};
 
-    /**
-     * Class {@link TestRule}s.
-     */
-    @ClassRule
-    public static final TestRule classRules;
-    static {
-      RuleChain rules = RuleChain.outerRule(new SystemPropertiesInvariantRule(IGNORED_INVARIANT_PROPERTIES));
-      rules = rules.around(new NoClassHooksShadowingRule())
-                   .around(new NoInstanceHooksOverridesRule());
-      classRules = rules;
-    }
+  /**
+   * Class {@link TestRule}s.
+   */
+  @ClassRule
+  public static final TestRule classRules;
 
-    /**
-     * Test {@link TestRule}s.
-     */
-    @Rule
-    public final TestRule ruleChain = RuleChain
-      .outerRule(new SystemPropertiesInvariantRule(IGNORED_INVARIANT_PROPERTIES));
+  static {
+    RuleChain rules = RuleChain.outerRule(new SystemPropertiesInvariantRule(IGNORED_INVARIANT_PROPERTIES));
+    rules = rules.around(new NoClassHooksShadowingRule()).around(new NoInstanceHooksOverridesRule());
+    classRules = rules;
+  }
 
-    public static <K, V> Map<K, V> mapOf(K k, V v) {
-        HashMap<K, V> map = new HashMap<>();
-        map.put(k, v);
-        return map;
-    }
-
-    public static <K, V> Map<K, V> mapOf(K k1, V v1, K k2, V v2) {
-        HashMap<K, V> map = new HashMap<>();
-        map.put(k1, v1);
-        map.put(k2, v2);
-        return map;
-    }
+  /**
+   * Test {@link TestRule}s.
+   */
+  @Rule
+  public final TestRule ruleChain =
+      RuleChain.outerRule(new SystemPropertiesInvariantRule(IGNORED_INVARIANT_PROPERTIES));
 }

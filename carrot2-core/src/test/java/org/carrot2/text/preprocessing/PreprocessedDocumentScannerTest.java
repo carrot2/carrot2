@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.EnglishLanguageComponentsFactory;
@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.*;
 /**
  * Test cases for {@link PreprocessedDocumentScannerTest}.
  */
-public class PreprocessedDocumentScannerTest extends AbstractTest {
+public class PreprocessedDocumentScannerTest extends TestBase {
   String query;
 
   @Test

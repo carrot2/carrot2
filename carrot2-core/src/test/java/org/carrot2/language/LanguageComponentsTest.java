@@ -13,10 +13,10 @@
 package org.carrot2.language;
 
 import org.assertj.core.api.Assertions;
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.junit.Test;
 
-public class LanguageComponentsTest extends AbstractTest {
+public class LanguageComponentsTest extends TestBase {
   @Test
   public void testDefaultLanguageModels() {
     Assertions.assertThat(LanguageComponents.languages())

@@ -12,7 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 import org.junit.Before;
@@ -24,7 +24,7 @@ import static org.carrot2.text.preprocessing.PreprocessingContextAssert.assertTh
 /**
  *
  */
-public class EnglishStemmingPreprocessingTest extends AbstractTest {
+public class EnglishStemmingPreprocessingTest extends TestBase {
   PreprocessingContextBuilder contextBuilder;
 
   @Before

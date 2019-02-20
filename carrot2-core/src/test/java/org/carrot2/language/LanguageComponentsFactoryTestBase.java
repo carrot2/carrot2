@@ -12,7 +12,7 @@
 
 package org.carrot2.language;
 
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.carrot2.util.MutableCharArray;
 import org.junit.Test;
 
@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 /**
  * Superclass for testing language components.
  */
-public abstract class LanguageComponentsFactoryTestBase extends AbstractTest {
+public abstract class LanguageComponentsFactoryTestBase extends TestBase {
   /**
    * @return Returns language code for this test.
    */

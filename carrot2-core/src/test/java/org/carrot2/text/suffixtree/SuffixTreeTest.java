@@ -15,7 +15,7 @@ package org.carrot2.text.suffixtree;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.carrot2.AbstractTest;
+import org.carrot2.TestBase;
 import org.carrot2.text.suffixtree.SuffixTree.VisitorAdapter;
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 /**
  * Sanity and validation tests for the {@link SuffixTree} class.
  */
-public class SuffixTreeTest extends AbstractTest
+public class SuffixTreeTest extends TestBase
 {
     @Test
     public void checkMississipi()
