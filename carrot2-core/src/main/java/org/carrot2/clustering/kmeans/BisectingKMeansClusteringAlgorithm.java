@@ -22,7 +22,7 @@ import com.carrotsearch.hppc.sorting.IndirectSort;
 import org.carrot2.attrs.*;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
-import org.carrot2.clustering.CommonAttributes;
+import org.carrot2.clustering.SharedInfrastructure;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.Tokenizer;
@@ -93,7 +93,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
   /**
    * Query terms used to retrieve documents. The query is used as a hint to avoid trivial clusters.
    */
-  public final AttrString queryHint = attributes.register("queryHint", CommonAttributes.queryHint());
+  public final AttrString queryHint = attributes.register("queryHint", SharedInfrastructure.queryHintAttribute());
 
   /**
    * Use dimensionality reduction. If <code>true</code>, k-means will be applied on the
@@ -232,10 +232,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
       }
     }
 
-    // TODO: sort.
-    // Collections.sort(clusters, Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR);
-
-    return clusters;
+    return SharedInfrastructure.reorderByDescendingSizeAndLabel(clusters);
   }
 
   private static final Comparator<IntArrayList> BY_SIZE_DESCENDING = (o1, o2) -> o2.size() - o1.size();

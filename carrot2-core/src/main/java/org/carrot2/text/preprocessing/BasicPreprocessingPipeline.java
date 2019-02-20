@@ -12,10 +12,10 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.clustering.Document;
-import org.carrot2.language.LanguageComponents;
 import org.carrot2.attrs.AttrComposite;
 import org.carrot2.attrs.AttrInteger;
+import org.carrot2.clustering.Document;
+import org.carrot2.language.LanguageComponents;
 
 import java.util.stream.Stream;
 
@@ -42,11 +42,6 @@ public class BasicPreprocessingPipeline extends AttrComposite {
           .defaultValue(1));
 
   /**
-   * Tokenizer used by the algorithm, contains bindable attributes.
-   */
-  protected final InputTokenizer tokenizer = new InputTokenizer();
-
-  /**
    * Case normalizer used by the algorithm.
    */
   protected final CaseNormalizer caseNormalizer = new CaseNormalizer();
@@ -60,6 +55,11 @@ public class BasicPreprocessingPipeline extends AttrComposite {
    * Stop list marker used by the algorithm, contains bindable attributes.
    */
   protected final StopListMarker stopListMarker = new StopListMarker();
+
+  /**
+   * Tokenizer used by the algorithm.
+   */
+  protected final InputTokenizer tokenizer = new InputTokenizer();
 
   /**
    * Performs preprocessing on the provided list of documents. Results can be obtained

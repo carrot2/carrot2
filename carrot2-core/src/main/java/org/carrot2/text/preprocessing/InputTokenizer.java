@@ -23,7 +23,6 @@ import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.MutableCharArray;
 import org.carrot2.util.StringUtils;
-import org.carrot2.attrs.AttrComposite;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -42,8 +41,7 @@ import java.util.stream.Stream;
  * <li>{@link AllTokens#type}</li>
  * </ul>
  */
-// TODO: make this package-private once we have serialization aliases.
-public final class InputTokenizer {
+final class InputTokenizer {
   /**
    * Token images.
    */

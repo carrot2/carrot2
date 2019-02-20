@@ -61,11 +61,12 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
     List<Cluster<Document>> clusters = algorithm().cluster(
         SampleDocumentData.DOCUMENTS_DATA_MINING.stream(),
         LanguageComponents.get(EnglishLanguageComponentsFactory.NAME));
+
     assertThat(clusters.size())
         .isGreaterThan(0);
 
     for (Cluster<?> c : clusters) {
-      System.out.println(c.getLabels());
+      System.out.println(c);
     }
   }
 

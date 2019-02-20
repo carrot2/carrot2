@@ -15,9 +15,7 @@ package org.carrot2.language;
 import java.io.IOException;
 import java.io.Reader;
 
-import org.carrot2.text.preprocessing.LanguageModelStemmer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
-import org.carrot2.text.preprocessing.StopListMarker;
 import org.carrot2.util.MutableCharArray;
 
 /**
@@ -90,7 +88,6 @@ public interface Tokenizer {
    * tokenizer.
    *
    * @see AllWords#type
-   * @see StopListMarker
    */
   public static final short TF_COMMON_WORD = 0x1000;
 
@@ -99,7 +96,6 @@ public interface Tokenizer {
    * the tokenizer.
    *
    * @see AllWords#type
-   * @see LanguageModelStemmer
    */
   public static final short TF_QUERY_WORD = 0x2000;
 

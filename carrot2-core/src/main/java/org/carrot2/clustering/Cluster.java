@@ -14,6 +14,7 @@ package org.carrot2.clustering;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -33,7 +34,7 @@ public class Cluster<T> {
   /**
    * Subclusters of this cluster, if any.
    */
-  private List<Cluster> subclusters = new ArrayList<>();
+  private List<Cluster<T>> subclusters = new ArrayList<>();
 
   /**
    * This cluster's "score", interpretation left to algorithms.
@@ -66,7 +67,7 @@ public class Cluster<T> {
   /**
    * Add a single document to this cluster.
    */
-  public Cluster addDocument(T document) {
+  public Cluster<T> addDocument(T document) {
     this.documents.add(document);
     return this;
   }
@@ -74,14 +75,14 @@ public class Cluster<T> {
   /**
    * Returns all subclusters of this cluster.
    */
-  public List<Cluster> getSubclusters() {
+  public List<Cluster<T>> getSubclusters() {
     return subclusters;
   }
 
   /**
    * Adds subclusters to this cluster.
    */
-  public Cluster addSubcluster(Cluster cluster) {
+  public Cluster<T> addSubcluster(Cluster<T> cluster) {
     this.subclusters.add(cluster);
     return this;
   }
@@ -99,6 +100,15 @@ public class Cluster<T> {
   public Cluster setScore(Double score) {
     this.score = score;
     return this;
+  }
+
+  @Override
+  public String toString() {
+    return String.format(Locale.ROOT,
+                         "[\"%s\", docs: %,d, score: %.2f]",
+                         String.join(", ", getLabels()),
+                         getDocuments().size(),
+                         getScore() == null ? Double.NaN : score.doubleValue());
   }
 
   @Override

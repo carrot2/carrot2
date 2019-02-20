@@ -39,227 +39,195 @@ import java.util.Set;
  * <li>{@link AllStems#tfByDocument}</li>
  * <li>{@link AllWords#type} is populated with {@link Tokenizer#TF_QUERY_WORD}</li>
  * </ul>
- * 
+ * <p>
  * This class requires that {@link InputTokenizer} and {@link CaseNormalizer} be invoked first.
  */
-public final class LanguageModelStemmer
-{
-    /**
-     * Performs stemming and saves the results to the <code>context</code>.
-     */
-    public void stem(PreprocessingContext context, String queryHint)
-    {
-        final Stemmer stemmer = context.languageComponents.stemmer;
+final class LanguageModelStemmer {
+  /**
+   * Performs stemming and saves the results to the <code>context</code>.
+   */
+  public void stem(PreprocessingContext context, String queryHint) {
+    final Stemmer stemmer = context.languageComponents.stemmer;
 
-        final char [][] wordImages = context.allWords.image;
-        final char [][] stemImages = new char [wordImages.length] [];
+    final char[][] wordImages = context.allWords.image;
+    final char[][] stemImages = new char[wordImages.length][];
 
-        final MutableCharArray mutableCharArray = new MutableCharArray(CharArrayUtils.EMPTY_ARRAY);
-        char [] buffer = new char [128];
+    final MutableCharArray mutableCharArray = new MutableCharArray(CharArrayUtils.EMPTY_ARRAY);
+    char[] buffer = new char[128];
 
-        for (int i = 0; i < wordImages.length; i++)
-        {
-            final char [] word = wordImages[i];
-            if (buffer.length < word.length) buffer = new char [word.length];
+    for (int i = 0; i < wordImages.length; i++) {
+      final char[] word = wordImages[i];
+      if (buffer.length < word.length) buffer = new char[word.length];
 
-            final boolean different = CharArrayUtils.toLowerCase(word, buffer);
+      final boolean different = CharArrayUtils.toLowerCase(word, buffer);
 
-            mutableCharArray.reset(buffer, 0, word.length);
-            final CharSequence stemmed = stemmer.stem(mutableCharArray);
-            if (stemmed != null)
-            {
-                mutableCharArray.reset(stemmed);
-                stemImages[i] = context.intern(mutableCharArray);
-            }
-            else
-            {
-                // We need to put the original word here, otherwise, we wouldn't be able
-                // to compute frequencies for stems.
-                if (different)
-                    stemImages[i] = context.intern(mutableCharArray);
-                else
-                    stemImages[i] = word;
-            }
-        }
-
-        addStemStatistics(context, stemImages, prepareQueryWords(queryHint, stemmer));
+      mutableCharArray.reset(buffer, 0, word.length);
+      final CharSequence stemmed = stemmer.stem(mutableCharArray);
+      if (stemmed != null) {
+        mutableCharArray.reset(stemmed);
+        stemImages[i] = context.intern(mutableCharArray);
+      } else {
+        // We need to put the original word here, otherwise, we wouldn't be able
+        // to compute frequencies for stems.
+        if (different) stemImages[i] = context.intern(mutableCharArray);
+        else stemImages[i] = word;
+      }
     }
 
-    /**
-     * Adds frequency statistics to the stems.
-     */
-    private void addStemStatistics(PreprocessingContext context,
-        char [][] wordStemImages, Set<MutableCharArray> queryStems)
-    {
-        final int [] stemImagesOrder = IndirectSort.mergesort(wordStemImages, 0, wordStemImages.length,
-            CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR);
+    addStemStatistics(context, stemImages, prepareQueryWords(queryHint, stemmer));
+  }
 
-        // Local array references
-        final int [] wordTfArray = context.allWords.tf;
-        final int [][] wordTfByDocumentArray = context.allWords.tfByDocument;
-        final byte [] wordsFieldIndices = context.allWords.fieldIndices;
-        final short [] wordsType = context.allWords.type;
+  /**
+   * Adds frequency statistics to the stems.
+   */
+  private void addStemStatistics(PreprocessingContext context, char[][] wordStemImages,
+                                 Set<MutableCharArray> queryStems) {
+    final int[] stemImagesOrder = IndirectSort.mergesort(wordStemImages, 0, wordStemImages.length,
+                                                         CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR);
 
-        final int allWordsCount = wordTfArray.length;
+    // Local array references
+    final int[] wordTfArray = context.allWords.tf;
+    final int[][] wordTfByDocumentArray = context.allWords.tfByDocument;
+    final byte[] wordsFieldIndices = context.allWords.fieldIndices;
+    final short[] wordsType = context.allWords.type;
 
-        // Pointers from AllWords to AllStems
-        final int [] stemIndexesArray = new int [allWordsCount];
+    final int allWordsCount = wordTfArray.length;
 
-        if (stemImagesOrder.length == 0)
-        {
-            context.allStems.image = new char [0] [];
-            context.allStems.mostFrequentOriginalWordIndex = new int [0];
-            context.allStems.tf = new int [0];
-            context.allStems.tfByDocument = new int [0] [];
-            context.allStems.fieldIndices = new byte [0];
+    // Pointers from AllWords to AllStems
+    final int[] stemIndexesArray = new int[allWordsCount];
 
-            context.allWords.stemIndex = new int [context.allWords.image.length];
-            return;
+    if (stemImagesOrder.length == 0) {
+      context.allStems.image = new char[0][];
+      context.allStems.mostFrequentOriginalWordIndex = new int[0];
+      context.allStems.tf = new int[0];
+      context.allStems.tfByDocument = new int[0][];
+      context.allStems.fieldIndices = new byte[0];
+
+      context.allWords.stemIndex = new int[context.allWords.image.length];
+      return;
+    }
+
+    // Lists to accommodate the results
+    final ArrayList<char[]> stemImages = new ArrayList<char[]>(allWordsCount);
+    final IntArrayList stemTf = new IntArrayList(allWordsCount);
+    final IntArrayList stemMostFrequentWordIndexes = new IntArrayList(allWordsCount);
+    final ArrayList<int[]> stemTfByDocumentList = new ArrayList<int[]>(allWordsCount);
+    final ByteArrayList fieldIndexList = new ByteArrayList();
+
+    // Counters
+    int totalTf = wordTfArray[stemImagesOrder[0]];
+    int mostFrequentWordFrequency = wordTfArray[stemImagesOrder[0]];
+    int mostFrequentWordIndex = stemImagesOrder[0];
+    int stemIndex = 0;
+
+    // A list of document-term-frequency pairs, by document, for all words with identical stems.
+    final ArrayList<int[]> stemTfsByDocument = new ArrayList<>();
+
+    stemTfsByDocument.add(wordTfByDocumentArray[stemImagesOrder[0]]);
+    byte fieldIndices = 0;
+    fieldIndices |= wordsFieldIndices[0];
+
+    // For locating query words
+    final MutableCharArray buffer = new MutableCharArray(wordStemImages[stemImagesOrder[0]]);
+    boolean inQuery = queryStems.contains(buffer);
+
+    // Go through all words in the order of stem images
+    for (int i = 0; i < stemImagesOrder.length - 1; i++) {
+      final int orderIndex = stemImagesOrder[i];
+      final char[] stem = wordStemImages[orderIndex];
+      final int nextInOrderIndex = stemImagesOrder[i + 1];
+      final char[] nextStem = wordStemImages[nextInOrderIndex];
+
+      stemIndexesArray[orderIndex] = stemIndex;
+      if (inQuery) {
+        wordsType[orderIndex] |= Tokenizer.TF_QUERY_WORD;
+      }
+
+      // Now check if token image is changing
+      final boolean sameStem = CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR.compare(stem, nextStem) == 0;
+
+      if (sameStem) {
+        totalTf += wordTfArray[nextInOrderIndex];
+        stemTfsByDocument.add(wordTfByDocumentArray[nextInOrderIndex]);
+        fieldIndices |= wordsFieldIndices[nextInOrderIndex];
+        if (mostFrequentWordFrequency < wordTfArray[nextInOrderIndex]) {
+          mostFrequentWordFrequency = wordTfArray[nextInOrderIndex];
+          mostFrequentWordIndex = nextInOrderIndex;
         }
-
-        // Lists to accommodate the results
-        final ArrayList<char []> stemImages = new ArrayList<char []>(allWordsCount);
-        final IntArrayList stemTf = new IntArrayList(allWordsCount);
-        final IntArrayList stemMostFrequentWordIndexes = new IntArrayList(allWordsCount);
-        final ArrayList<int []> stemTfByDocumentList = new ArrayList<int []>(allWordsCount);
-        final ByteArrayList fieldIndexList = new ByteArrayList();
-
-        // Counters
-        int totalTf = wordTfArray[stemImagesOrder[0]];
-        int mostFrequentWordFrequency = wordTfArray[stemImagesOrder[0]];
-        int mostFrequentWordIndex = stemImagesOrder[0];
-        int stemIndex = 0;
-
-        // A list of document-term-frequency pairs, by document, for all words with identical stems.
-        final ArrayList<int[]> stemTfsByDocument = new ArrayList<>();
-        
-        stemTfsByDocument.add(wordTfByDocumentArray[stemImagesOrder[0]]);
-        byte fieldIndices = 0;
-        fieldIndices |= wordsFieldIndices[0];
-
-        // For locating query words
-        final MutableCharArray buffer = new MutableCharArray(
-            wordStemImages[stemImagesOrder[0]]);
-        boolean inQuery = queryStems.contains(buffer);
-
-        // Go through all words in the order of stem images
-        for (int i = 0; i < stemImagesOrder.length - 1; i++)
-        {
-            final int orderIndex = stemImagesOrder[i];
-            final char [] stem = wordStemImages[orderIndex];
-            final int nextInOrderIndex = stemImagesOrder[i + 1];
-            final char [] nextStem = wordStemImages[nextInOrderIndex];
-
-            stemIndexesArray[orderIndex] = stemIndex;
-            if (inQuery)
-            {
-                wordsType[orderIndex] |= Tokenizer.TF_QUERY_WORD;
-            }
-
-            // Now check if token image is changing
-            final boolean sameStem = CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR
-                .compare(stem, nextStem) == 0;
-
-            if (sameStem)
-            {
-                totalTf += wordTfArray[nextInOrderIndex];
-                stemTfsByDocument.add(wordTfByDocumentArray[nextInOrderIndex]);
-                fieldIndices |= wordsFieldIndices[nextInOrderIndex];
-                if (mostFrequentWordFrequency < wordTfArray[nextInOrderIndex])
-                {
-                    mostFrequentWordFrequency = wordTfArray[nextInOrderIndex];
-                    mostFrequentWordIndex = nextInOrderIndex;
-                }
-            }
-            else
-            {
-                stemImages.add(stem);
-                stemTf.add(totalTf);
-                stemMostFrequentWordIndexes.add(mostFrequentWordIndex);
-                storeTfByDocument(stemTfByDocumentList, stemTfsByDocument);
-                fieldIndexList.add(fieldIndices);
-
-                stemIndex++;
-                totalTf = wordTfArray[nextInOrderIndex];
-                mostFrequentWordFrequency = wordTfArray[nextInOrderIndex];
-                mostFrequentWordIndex = nextInOrderIndex;
-                fieldIndices = 0;
-                fieldIndices |= wordsFieldIndices[nextInOrderIndex];
-
-                stemTfsByDocument.clear();
-                stemTfsByDocument.add(wordTfByDocumentArray[nextInOrderIndex]);
-
-                buffer.reset(wordStemImages[nextInOrderIndex]);
-                inQuery = queryStems.contains(buffer);
-            }
-        }
-
-        // Store tf for the last stem in the array
-        stemImages.add(wordStemImages[stemImagesOrder[stemImagesOrder.length - 1]]);
+      } else {
+        stemImages.add(stem);
         stemTf.add(totalTf);
         stemMostFrequentWordIndexes.add(mostFrequentWordIndex);
-        stemIndexesArray[stemImagesOrder[stemImagesOrder.length - 1]] = stemIndex;
         storeTfByDocument(stemTfByDocumentList, stemTfsByDocument);
         fieldIndexList.add(fieldIndices);
-        if (inQuery)
-        {
-            wordsType[stemImagesOrder[stemImagesOrder.length - 1]] |= Tokenizer.TF_QUERY_WORD;
-        }
 
-        // Convert lists to arrays and store them in allStems
-        context.allStems.image = stemImages.toArray(new char [stemImages.size()] []);
-        context.allStems.mostFrequentOriginalWordIndex = stemMostFrequentWordIndexes
-            .toArray();
-        context.allStems.tf = stemTf.toArray();
-        context.allStems.tfByDocument = stemTfByDocumentList
-            .toArray(new int [stemTfByDocumentList.size()] []);
-        context.allStems.fieldIndices = fieldIndexList.toArray();
+        stemIndex++;
+        totalTf = wordTfArray[nextInOrderIndex];
+        mostFrequentWordFrequency = wordTfArray[nextInOrderIndex];
+        mostFrequentWordIndex = nextInOrderIndex;
+        fieldIndices = 0;
+        fieldIndices |= wordsFieldIndices[nextInOrderIndex];
 
-        // References in allWords
-        context.allWords.stemIndex = stemIndexesArray;
+        stemTfsByDocument.clear();
+        stemTfsByDocument.add(wordTfByDocumentArray[nextInOrderIndex]);
+
+        buffer.reset(wordStemImages[nextInOrderIndex]);
+        inQuery = queryStems.contains(buffer);
+      }
     }
 
-    /**
-     * 
-     */
-    private void storeTfByDocument(
-        ArrayList<int []> target, ArrayList<int []> source)
-    {
-        assert source.size() > 0 : "Empty source document list?";
-
-        if (source.size() == 1)
-        {
-            // Just copy the reference over if a single list is available.
-            target.add(source.get(0));
-        }
-        else
-        {
-            // Merge sparse representations if more than one.
-            target.add(SparseArray.mergeSparseArrays(source));
-        }
+    // Store tf for the last stem in the array
+    stemImages.add(wordStemImages[stemImagesOrder[stemImagesOrder.length - 1]]);
+    stemTf.add(totalTf);
+    stemMostFrequentWordIndexes.add(mostFrequentWordIndex);
+    stemIndexesArray[stemImagesOrder[stemImagesOrder.length - 1]] = stemIndex;
+    storeTfByDocument(stemTfByDocumentList, stemTfsByDocument);
+    fieldIndexList.add(fieldIndices);
+    if (inQuery) {
+      wordsType[stemImagesOrder[stemImagesOrder.length - 1]] |= Tokenizer.TF_QUERY_WORD;
     }
 
-    private Set<MutableCharArray> prepareQueryWords(String query, Stemmer stemmer)
-    {
-        final Set<MutableCharArray> queryWords = new HashSet<>();
+    // Convert lists to arrays and store them in allStems
+    context.allStems.image = stemImages.toArray(new char[stemImages.size()][]);
+    context.allStems.mostFrequentOriginalWordIndex = stemMostFrequentWordIndexes.toArray();
+    context.allStems.tf = stemTf.toArray();
+    context.allStems.tfByDocument = stemTfByDocumentList.toArray(new int[stemTfByDocumentList.size()][]);
+    context.allStems.fieldIndices = fieldIndexList.toArray();
 
-        if (query != null)
-        {
-            final String [] split = query.toLowerCase().split("\\s");
-            for (int i = 0; i < split.length; i++)
-            {
-                final CharSequence stem = stemmer.stem(split[i]);
-                if (stem != null)
-                {
-                    queryWords.add(new MutableCharArray(stem));
-                }
-                else
-                {
-                    queryWords.add(new MutableCharArray(split[i]));
-                }
-            }
-        }
+    // References in allWords
+    context.allWords.stemIndex = stemIndexesArray;
+  }
 
-        return queryWords;
+  /**
+   *
+   */
+  private void storeTfByDocument(ArrayList<int[]> target, ArrayList<int[]> source) {
+    assert source.size() > 0 : "Empty source document list?";
+
+    if (source.size() == 1) {
+      // Just copy the reference over if a single list is available.
+      target.add(source.get(0));
+    } else {
+      // Merge sparse representations if more than one.
+      target.add(SparseArray.mergeSparseArrays(source));
     }
+  }
+
+  private Set<MutableCharArray> prepareQueryWords(String query, Stemmer stemmer) {
+    final Set<MutableCharArray> queryWords = new HashSet<>();
+
+    if (query != null) {
+      final String[] split = query.toLowerCase().split("\\s");
+      for (int i = 0; i < split.length; i++) {
+        final CharSequence stem = stemmer.stem(split[i]);
+        if (stem != null) {
+          queryWords.add(new MutableCharArray(stem));
+        } else {
+          queryWords.add(new MutableCharArray(split[i]));
+        }
+      }
+    }
+
+    return queryWords;
+  }
 }

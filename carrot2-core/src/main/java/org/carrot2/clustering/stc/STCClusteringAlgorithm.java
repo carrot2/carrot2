@@ -18,7 +18,7 @@ import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.IntStack;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
-import org.carrot2.clustering.CommonAttributes;
+import org.carrot2.clustering.SharedInfrastructure;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
 import org.carrot2.language.LanguageComponents;
@@ -35,14 +35,7 @@ import org.carrot2.attrs.AttrInteger;
 import org.carrot2.attrs.AttrObject;
 import org.carrot2.attrs.AttrString;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -57,7 +50,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   /**
    * Query terms used to retrieve documents. The query is used as a hint to avoid trivial clusters.
    */
-  public final AttrString queryHint = attributes.register("queryHint", CommonAttributes.queryHint());
+  public final AttrString queryHint = attributes.register("queryHint", SharedInfrastructure.queryHintAttribute());
 
   /**
    * Minimum word-document recurrences.
@@ -322,7 +315,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
      */
     postProcessing(documents, mergedClusters, clusters);
 
-    return clusters;
+    return SharedInfrastructure.reorderByWeightedScoreAndSize(clusters, this.scoreWeight.get());
   }
 
   /**
@@ -840,9 +833,6 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       all.or(c.documents);
       docs.clear();
     }
-
-    // TODO: sort
-    // Collections.sort(this.clusters, Cluster.byReversedWeightedScoreAndSizeComparator(scoreWeight));
   }
 
   /**

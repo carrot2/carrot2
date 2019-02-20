@@ -28,31 +28,27 @@ import org.carrot2.util.CharArrayUtils;
  * <p>
  * This class requires that {@link InputTokenizer} and {@link CaseNormalizer} be invoked first.
  */
-public final class StopListMarker
-{
-    /**
-     * Marks stop words and saves the results to the <code>context</code>.
-     */
-    public void mark(PreprocessingContext context)
-    {
-        final char [][] wordImages = context.allWords.image;
-        final short [] types = context.allWords.type;
+final class StopListMarker {
+  /**
+   * Marks stop words and saves the results to the <code>context</code>.
+   */
+  public void mark(PreprocessingContext context) {
+    final char[][] wordImages = context.allWords.image;
+    final short[] types = context.allWords.type;
 
-        final MutableCharArray mutableCharArray = new MutableCharArray("");
-        char [] buffer = new char [128];
-        final LexicalData lexData = context.languageComponents.lexicalData;
+    final MutableCharArray mutableCharArray = new MutableCharArray("");
+    char[] buffer = new char[128];
+    final LexicalData lexData = context.languageComponents.lexicalData;
 
-        for (int i = 0; i < wordImages.length; i++)
-        {
-            final char [] word = wordImages[i];
-            if (buffer.length < word.length) buffer = new char [word.length];
+    for (int i = 0; i < wordImages.length; i++) {
+      final char[] word = wordImages[i];
+      if (buffer.length < word.length) buffer = new char[word.length];
 
-            CharArrayUtils.toLowerCase(word, buffer);
-            mutableCharArray.reset(buffer, 0, word.length);
-            if (lexData.isCommonWord(mutableCharArray))
-            {
-                types[i] |= Tokenizer.TF_COMMON_WORD;
-            }
-        }
+      CharArrayUtils.toLowerCase(word, buffer);
+      mutableCharArray.reset(buffer, 0, word.length);
+      if (lexData.isCommonWord(mutableCharArray)) {
+        types[i] |= Tokenizer.TF_COMMON_WORD;
+      }
     }
+  }
 }
