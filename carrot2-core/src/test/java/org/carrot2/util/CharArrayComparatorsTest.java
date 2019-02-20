@@ -70,13 +70,6 @@ public class CharArrayComparatorsTest extends TestBase {
     check(testWords, expectedOrderedWords);
   }
 
-  @Test
-  public void testNullsAreEqual() {
-    Assert.assertTrue(0 == CharArrayComparators.CASE_INSENSITIVE_CHAR_ARRAY_COMPARATOR.compare(null, null));
-    Assert.assertTrue(0 == CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR.compare(null, null));
-    Assert.assertTrue(0 == CharArrayComparators.NORMALIZING_CHAR_ARRAY_COMPARATOR.compare(null, null));
-  }
-
   private void check(char[][] testWords, char[][] expectedOrderedWords) {
     Arrays.sort(testWords, CharArrayComparators.NORMALIZING_CHAR_ARRAY_COMPARATOR);
     Assertions.assertThat(testWords).isEqualTo(expectedOrderedWords);

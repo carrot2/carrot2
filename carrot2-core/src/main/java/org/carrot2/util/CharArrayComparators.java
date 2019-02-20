@@ -23,12 +23,8 @@ public class CharArrayComparators {
    */
   public static final Comparator<char[]> CASE_INSENSITIVE_CHAR_ARRAY_COMPARATOR = (a1, a2) -> {
     if (a1 == null) {
-      if (a2 == null) return 0;
-
-      return 1;
-    }
-
-    if (a2 == null) {
+      return a2 == null ? 0 : 1;
+    } else if (a2 == null) {
       return -1;
     }
 
@@ -36,15 +32,15 @@ public class CharArrayComparators {
     final int l2 = a2.length;
     final int n = l1 < l2 ? l1 : l2;
 
-    // Quiet assumption that the numbers here won't cause an overflow.
-    for (int i = 0; i < n; i++) {
-      // TODO: this is wrong.
-      // Use JDK 1.5+ full codepoint method.
-      final int c = Character.toLowerCase((int) a1[i]);
-      final int d = Character.toLowerCase((int) a2[i]);
-      if (c != d) {
-        return c - d;
+    for (int i = 0, max = n; i < max;) {
+      int chr1 = Character.codePointAt(a1, i);
+      int chr2 = Character.codePointAt(a2, i);
+      int cp = Integer.compare(Character.toLowerCase(chr1), Character.toLowerCase(chr2));
+      if (cp != 0) {
+        return cp;
       }
+
+      i += Character.charCount(chr1);
     }
 
     return l1 - l2;
@@ -55,12 +51,8 @@ public class CharArrayComparators {
    */
   public static final Comparator<char[]> FAST_CHAR_ARRAY_COMPARATOR = (a1, a2) -> {
     if (a1 == null) {
-      if (a2 == null) return 0;
-
-      return 1;
-    }
-
-    if (a2 == null) {
+      return a2 == null ? 0 : 1;
+    } else if (a2 == null) {
       return -1;
     }
 
@@ -96,24 +88,21 @@ public class CharArrayComparators {
    */
   public static final Comparator<char[]> NORMALIZING_CHAR_ARRAY_COMPARATOR = (a1, a2) -> {
     if (a1 == null) {
-      if (a2 == null) return 0;
-
-      return 1;
-    }
-
-    if (a2 == null) {
+      return a2 == null ? 0 : 1;
+    } else if (a2 == null) {
       return -1;
-    }
-
-    if (a1 == a2) {
-      return 0;
     }
 
     final int l1 = a1.length;
     final int l2 = a2.length;
 
+    // Not crucial, but speeds things up
+    if (l1 != l2) {
+      return l1 - l2;
+    }
+
     /*
-     * For those who might wonder: the condition below is perfectly ok here. It is
+     * The condition below is perfectly ok here. It is
      * used to calculate word occurrence statistics, which is essentially a "count
      * unique strings by sorting" problem. Therefore, the semantic meaning of the
      * order produced by this comparator doesn't matter at all as long as it: a)
@@ -127,22 +116,16 @@ public class CharArrayComparators {
      * For CaseNormalizer it doesn't matter at all, and makes sorting way faster.
      */
 
-    // Quiet assumption that the numbers here won't cause an overflow.
-
-    // Not crucial, but speeds things up
-    if (l1 != l2) {
-      return l1 - l2;
-    }
-
     // Compare whole strings in case insensitive mode first
-    for (int i = 0; i < l1; i++) {
-      // TODO: this is wrong.
-      // Use JDK 1.5+ full codepoint method.
-      final int c = Character.toLowerCase((int) a1[i]);
-      final int d = Character.toLowerCase((int) a2[i]);
-      if (c != d) {
-        return c - d;
+    for (int i = 0, max = l1; i < max;) {
+      int chr1 = Character.codePointAt(a1, i);
+      int chr2 = Character.codePointAt(a2, i);
+      int cp = Integer.compare(Character.toLowerCase(chr1), Character.toLowerCase(chr2));
+      if (cp != 0) {
+        return cp;
       }
+
+      i += Character.charCount(chr1);
     }
 
     // Only if strings are case-insensitive equal, go case sensitive
