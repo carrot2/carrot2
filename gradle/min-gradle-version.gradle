@@ -1,0 +1,8 @@
+
+import org.gradle.util.GradleVersion
+
+String minimumGradleVersion = "5.1.1"
+if (GradleVersion.current() < GradleVersion.version(minimumGradleVersion)) {
+    throw new GradleException("Gradle ${minimumGradleVersion}+ is required (use local ./gradlew for wrapper).")
+}
+

@@ -1,0 +1,25 @@
+apply plugin: 'java-library'
+
+configurations {
+  jflex
+}
+
+dependencies {
+  api "org.slf4j:slf4j-api:1.7.13"
+  implementation "com.carrotsearch:hppc:0.8.1"
+  jflex "de.jflex:jflex:1.5.1"
+}
+
+task jflex(type: JavaExec) {
+  description = "Regenerate JFlex Java scanners."
+  group       = "Build"
+
+  classpath {
+    configurations.jflex
+  }
+  main = "jflex.Main"
+  args "-nobak", "--noinputstreamctor"
+  args "-d", file('src/main/java/org/carrot2/language')
+  args file('src/main/jflex/org/carrot2/language/ExtendedWhitespaceTokenizerImpl.jflex')
+}
+
