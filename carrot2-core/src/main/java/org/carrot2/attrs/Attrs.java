@@ -1,18 +1,11 @@
 package org.carrot2.attrs;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.*;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public final class Attrs {
-  private final static String KEY_TYPE = "@type";
-  private final static String KEY_WRAPPED = "@value";
+  final static String KEY_TYPE = "@type";
+  final static String KEY_WRAPPED = "@value";
 
   private static class Wrapper implements AcceptingVisitor {
     AttrObject<AcceptingVisitor> value = AttrObject.builder(AcceptingVisitor.class)
