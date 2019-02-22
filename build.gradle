@@ -9,7 +9,8 @@ ext {
     "randomizedtesting": "2.7.2",
     "junit": "4.12",
     "assertj": "3.11.1",
-    "slf4j": "1.7.13"
+    "slf4j": "1.7.13",
+    "morfologik": "2.1.5"
   ]
 
   legal = files('carrot2.LICENSE')

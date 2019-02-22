@@ -12,6 +12,7 @@
 
 package org.carrot2.language;
 
+import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
 import org.carrot2.util.MutableCharArray;
 import org.junit.Test;
@@ -40,14 +41,11 @@ public abstract class LanguageComponentsFactoryTestBase extends TestBase {
    */
   @Test
   public void testStemming() {
-    final String[][] testData = getStemmingTestData();
     final Stemmer stemmer = getComponents().stemmer;
 
-    for (String[] pair : testData) {
-      CharSequence stemmed = stemmer.stem(pair[0]);
-      assertEquals("Stemming difference: " + pair[0] + " should become " + pair[1]
-          + " but was transformed into " + stemmed, pair[1], stemmed == null ? null
-          : stemmed.toString());
+    for (String[] pair : getStemmingTestData()) {
+      Assertions.assertThat(stemmer.stem(pair[0]).toString())
+          .isEqualTo(pair[1]);
     }
   }
 

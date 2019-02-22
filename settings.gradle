@@ -1,5 +1,6 @@
 
 include 'carrot2-core'
+include 'carrot2-lang-polish'
 include 'carrot2-examples'
 
 rootProject.name = 'carrot2'
