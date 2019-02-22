@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.Map;
 
+@SuppressWarnings("unchecked")
 public class AttrObjectTest extends TestBase {
   interface Interface extends AcceptingVisitor {
   }

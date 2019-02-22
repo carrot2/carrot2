@@ -30,13 +30,11 @@ public class EnglishLanguageComponentsFactory implements LanguageComponentsFacto
     String stopwordsResource = "english.stopwords.utf8";
     String stoplabelsResource = "english.stoplabels.utf8";
 
-    ObjectHashSet<MutableCharArray> stopwords;
+    HashSet<String> stopwords = new HashSet<>();
     try (InputStream is = resourceLoader.open(stopwordsResource);
          BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
-      stopwords = new ObjectHashSet<>();
-      readLines(reader).stream()
-        .map(word -> new MutableCharArray(word.toLowerCase(Locale.ROOT)))
-        .forEach(v -> stopwords.add(v));
+      readLines(reader)
+        .forEach(word -> stopwords.add(word.toLowerCase(Locale.ROOT)));
     }
 
     List<Pattern> stoplabels;
@@ -72,7 +70,7 @@ public class EnglishLanguageComponentsFactory implements LanguageComponentsFacto
    * Loads words from a given resource (UTF-8, one word per line, #-starting lines are
    * considered comments).
    */
-  public static Set<String> readLines(BufferedReader reader) throws IOException {
+  public static HashSet<String> readLines(BufferedReader reader) throws IOException {
     final HashSet<String> words = new HashSet<>();
     String line;
     while ((line = reader.readLine()) != null) {

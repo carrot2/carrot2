@@ -114,6 +114,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
   public TermDocumentMatrixBuilder matrixBuilder;
   {
     attributes.register("matrixBuilder", AttrObject.builder(TermDocumentMatrixBuilder.class)
+        .label("Term-document matrix builder")
         .getset(() -> matrixBuilder, (v) -> matrixBuilder = v)
         .defaultValue(TermDocumentMatrixBuilder::new));
   }
@@ -124,6 +125,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
   public TermDocumentMatrixReducer matrixReducer;
   {
     attributes.register("matrixReducer", AttrObject.builder(TermDocumentMatrixReducer.class)
+        .label("Term-document matrix reducer")
         .getset(() -> matrixReducer, (v) -> matrixReducer = v)
         .defaultValue(TermDocumentMatrixReducer::new));
   }
@@ -134,6 +136,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
   public BasicPreprocessingPipeline preprocessing;
   {
     attributes.register("preprocessing", AttrObject.builder(BasicPreprocessingPipeline.class)
+        .label("Input preprocessing components")
         .getset(() -> preprocessing, (v) -> preprocessing = v)
         .defaultValue(BasicPreprocessingPipeline::new));
   }

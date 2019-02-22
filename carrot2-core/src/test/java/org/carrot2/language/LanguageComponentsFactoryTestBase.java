@@ -59,7 +59,7 @@ public abstract class LanguageComponentsFactoryTestBase extends TestBase {
     LexicalData lexicalData = getComponents().lexicalData;
     final String[] testData = getCommonWordsTestData();
     for (String word : testData) {
-      assertTrue(lexicalData.isCommonWord(new MutableCharArray(word)));
+      assertTrue(lexicalData.ignoreWord(new MutableCharArray(word)));
     }
   }
 

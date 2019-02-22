@@ -1,0 +1,5 @@
+apply plugin: 'java-library'
+
+dependencies {
+  testImplementation project(':carrot2-core')
+}

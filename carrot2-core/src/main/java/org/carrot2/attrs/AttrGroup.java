@@ -1,12 +1,12 @@
 package org.carrot2.attrs;
 
-import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Consumer;
 
 public final class AttrGroup {
-  private Map<String, Consumer<AttrVisitor>> attrs = new LinkedHashMap<>();
+  private Map<String, Consumer<AttrVisitor>> attrs = new TreeMap<>();
 
   public <T extends AcceptingVisitor> AttrObject<T> register(String key, AttrObject<T> attr) {
     checkNewKey(key);

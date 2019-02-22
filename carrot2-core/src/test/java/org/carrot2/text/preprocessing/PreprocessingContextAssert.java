@@ -45,7 +45,7 @@ public class PreprocessingContextAssert {
    */
   public final static String EOS = "<EOS>";
 
-  final PreprocessingContext context;
+  public final PreprocessingContext context;
 
   final class PreprocessingContextPhraseAssert {
     private int phraseIndex;

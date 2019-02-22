@@ -105,10 +105,10 @@ public class Cluster<T> {
   @Override
   public String toString() {
     return String.format(Locale.ROOT,
-                         "[\"%s\", docs: %,d, score: %.2f]",
+                         "[\"%s\", docs: %,d%s]",
                          String.join(", ", getLabels()),
                          getDocuments().size(),
-                         getScore() == null ? Double.NaN : score.doubleValue());
+                         getScore() == null ? "" : String.format(Locale.ROOT, ", score: %.2f", getScore().doubleValue()));
   }
 
   @Override

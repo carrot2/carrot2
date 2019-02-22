@@ -63,7 +63,7 @@ public class DocumentAssigner extends AttrComposite {
     /**
      * Assigns document to label candidates.
      */
-    public void assign(PreprocessingContext context)
+    void assign(PreprocessingContext context)
     {
         final int [] labelsFeatureIndex = context.allLabels.featureIndex;
         final int [][] stemsTfByDocument = context.allStems.tfByDocument;

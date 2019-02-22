@@ -120,8 +120,7 @@ public interface Tokenizer {
   /**
    * Sets the <strong>current</strong> token image to the provided buffer.
    *
-   * @param array buffer in which the <strong>current</strong> token image should be
-   *              stored
+   * @param array buffer in which the <strong>current</strong> token's image should be stored
    */
   void setTermBuffer(MutableCharArray array);
 }

@@ -46,7 +46,7 @@ final class StopListMarker {
 
       CharArrayUtils.toLowerCase(word, buffer);
       mutableCharArray.reset(buffer, 0, word.length);
-      if (lexData.isCommonWord(mutableCharArray)) {
+      if (lexData.ignoreWord(mutableCharArray)) {
         types[i] |= Tokenizer.TF_COMMON_WORD;
       }
     }

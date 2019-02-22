@@ -2,7 +2,7 @@ package org.carrot2.attrs;
 
 import java.util.function.Consumer;
 
-abstract class Attr<T> {
+public abstract class Attr<T> implements AttrMetadata {
   private final String label;
   private final Consumer<? super T> valueCheck;
 
@@ -14,7 +14,7 @@ abstract class Attr<T> {
     this.value = defaultValue;
   }
 
-  public final String getLabel() {
+  public final String getDescription() {
     return label;
   }
 

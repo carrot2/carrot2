@@ -3,7 +3,6 @@ package org.carrot2.clustering;
 import org.carrot2.attrs.AttrString;
 
 import java.util.*;
-import java.util.function.DoubleFunction;
 import java.util.stream.Collectors;
 
 public class SharedInfrastructure {
@@ -26,7 +25,6 @@ public class SharedInfrastructure {
       this.recursiveDocumentCount = recursiveDocumentCount;
     }
   }
-
 
   public static <T> List<Cluster<T>> reorderByWeightedScoreAndSize(List<Cluster<T>> clusters, double scoreWeight) {
     Comparator<ClusterData> comparator =
@@ -61,7 +59,7 @@ public class SharedInfrastructure {
         .collect(Collectors.toList());
   }
 
-  private static int recursiveDocumentCount(Cluster<?> cluster) {
+  public static int recursiveDocumentCount(Cluster<?> cluster) {
     Set<Object> visited = Collections.newSetFromMap(new IdentityHashMap<>());
     ArrayDeque<Cluster<?>> queue = new ArrayDeque<>();
     queue.add(cluster);

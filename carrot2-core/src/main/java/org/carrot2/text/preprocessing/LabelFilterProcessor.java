@@ -13,6 +13,7 @@
 package org.carrot2.text.preprocessing;
 
 import com.carrotsearch.hppc.IntArrayList;
+import org.carrot2.language.LexicalData;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllPhrases;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
@@ -49,6 +50,7 @@ public class LabelFilterProcessor extends AttrComposite {
   public QueryLabelFilter queryLabelFilter;
   {
     attributes.register("queryLabelFilter", AttrObject.builder(QueryLabelFilter.class)
+        .label("Filters out labels consisting of query hint terms")
         .getset(() -> queryLabelFilter, (v) -> queryLabelFilter = v)
         .defaultValue(QueryLabelFilter::new));
   }
@@ -59,8 +61,20 @@ public class LabelFilterProcessor extends AttrComposite {
   public StopWordLabelFilter stopWordLabelFilter;
   {
     attributes.register("stopWordLabelFilter", AttrObject.builder(StopWordLabelFilter.class)
+        .label("Filters out labels starting or ending with ignorable words")
         .getset(() -> stopWordLabelFilter, (v) -> stopWordLabelFilter = v)
         .defaultValue(StopWordLabelFilter::new));
+  }
+
+  /**
+   * Stop label filter.
+   */
+  public StopLabelFilter stopLabelFilter;
+  {
+    attributes.register("stopLabelFilter", AttrObject.builder(StopLabelFilter.class)
+        .label("Filters out labels that are declared ignorable by the " + LexicalData.class.getSimpleName() + " implementation")
+        .getset(() -> stopLabelFilter, (v) -> stopLabelFilter = v)
+        .defaultValue(StopLabelFilter::new));
   }
 
   /**
@@ -69,6 +83,7 @@ public class LabelFilterProcessor extends AttrComposite {
   public NumericLabelFilter numericLabelFilter;
   {
     attributes.register("numericLabelFilter", AttrObject.builder(NumericLabelFilter.class)
+        .label("Filters out labels that start with numerics")
         .getset(() -> numericLabelFilter, (v) -> numericLabelFilter = v)
         .defaultValue(NumericLabelFilter::new));
   }
@@ -79,6 +94,7 @@ public class LabelFilterProcessor extends AttrComposite {
   public CompleteLabelFilter completeLabelFilter;
   {
     attributes.register("completeLabelFilter", AttrObject.builder(CompleteLabelFilter.class)
+        .label("Filters out labels that appear to be sub-sequences of other good candidate phrases")
         .getset(() -> completeLabelFilter, (v) -> completeLabelFilter = v)
         .defaultValue(CompleteLabelFilter::new));
   }
@@ -89,6 +105,7 @@ public class LabelFilterProcessor extends AttrComposite {
   public MinLengthLabelFilter minLengthLabelFilter;
   {
     attributes.register("minLengthLabelFilter", AttrObject.builder(MinLengthLabelFilter.class)
+        .label("Filters out labels that are shorter than the provided threshold")
         .getset(() -> minLengthLabelFilter, (v) -> minLengthLabelFilter = v)
         .defaultValue(MinLengthLabelFilter::new));
   }
@@ -99,18 +116,9 @@ public class LabelFilterProcessor extends AttrComposite {
   public GenitiveLabelFilter genitiveLabelFilter;
   {
     attributes.register("genitiveLabelFilter", AttrObject.builder(GenitiveLabelFilter.class)
+        .label("Filters out labels ending with Saxon Genitive ('s)")
         .getset(() -> genitiveLabelFilter, (v) -> genitiveLabelFilter = v)
         .defaultValue(GenitiveLabelFilter::new));
-  }
-
-  /**
-   * Stop label filter.
-   */
-  public StopLabelFilter stopLabelFilter;
-  {
-    attributes.register("stopLabelFilter", AttrObject.builder(StopLabelFilter.class)
-        .getset(() -> stopLabelFilter, (v) -> stopLabelFilter = v)
-        .defaultValue(StopLabelFilter::new));
   }
 
   /**

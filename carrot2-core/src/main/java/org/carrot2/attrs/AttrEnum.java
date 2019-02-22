@@ -20,6 +20,10 @@ public class AttrEnum<T extends Enum<T>> extends Attr<T> {
     set(name == null ? null : Enum.valueOf(clazz, name));
   }
 
+  public Class<T> enumClass() {
+    return clazz;
+  }
+
   public static class Builder<T extends Enum<T>> extends BuilderScaffold<T> {
     private Class<T> clazz;
 

@@ -53,31 +53,35 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   public final AttrString queryHint = attributes.register("queryHint", SharedInfrastructure.queryHintAttribute());
 
   /**
-   * Minimum word-document recurrences.
-   */
-  public AttrInteger ignoreWordIfInFewerDocs = attributes.register("ignoreWordIfInFewerDocs",
-      AttrInteger.builder()
-          .min(2)
-          .defaultValue(2));
-
-  /**
    * Maximum word-document ratio. A number between 0 and 1, if a word exists in more
    * snippets than this ratio, it is ignored.
    */
   public AttrDouble ignoreWordIfInHigherDocsPercent = attributes.register("ignoreWordIfInHigherDocsPercent",
       AttrDouble.builder()
+          .label("Ignore words appearing in more than a given fraction of documents")
           .min(0)
           .max(1)
           .defaultValue(0.9));
 
   /**
-   * Minimum base cluster score.
+   * Minimum base cluster score (before coverage merging).
    */
   public AttrDouble minBaseClusterScore = attributes.register("minBaseClusterScore",
       AttrDouble.builder()
+          .label("Minimum base cluster score")
           .min(0)
           .max(10)
           .defaultValue(2.));
+
+  /**
+   * Minimum documents per base cluster.
+   */
+  public AttrInteger minBaseClusterSize = attributes.register("minBaseClusterSize",
+      AttrInteger.builder()
+          .label("Minimum number of documents in a base cluster")
+          .min(2)
+          .max(20)
+          .defaultValue(2));
 
   /**
    * Maximum base clusters count. Trims the base cluster array after N-th position for
@@ -85,23 +89,16 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
    */
   public AttrInteger maxBaseClusters = attributes.register("maxBaseClusters",
       AttrInteger.builder()
+          .label("Maximum number of base cluster")
           .min(2)
           .defaultValue(300));
-
-  /**
-   * Minimum documents per base cluster.
-   */
-  public AttrInteger minBaseClusterSize = attributes.register("minBaseClusterSize",
-      AttrInteger.builder()
-          .min(2)
-          .max(20)
-          .defaultValue(2));
 
   /**
    * Maximum final clusters.
    */
   public AttrInteger maxClusters = attributes.register("maxClusters",
       AttrInteger.builder()
+          .label("Maximum number of final clusters")
           .min(1)
           .defaultValue(15));
 
@@ -110,6 +107,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
    */
   public AttrDouble mergeThreshold = attributes.register("mergeThreshold",
       AttrDouble.builder()
+          .label("Base cluster merge threshold")
           .min(0)
           .max(1)
           .defaultValue(0.6));
@@ -119,6 +117,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
    */
   public AttrDouble maxPhraseOverlap = attributes.register("maxPhraseOverlap",
       AttrDouble.builder()
+          .label("Maximum cluster phrase overlap")
           .min(0)
           .max(1)
           .defaultValue(0.6));
@@ -129,6 +128,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
    */
   public AttrDouble mostGeneralPhraseCoverage = attributes.register("mostGeneralPhraseCoverage",
       AttrDouble.builder()
+          .label("Minimum general phrase coverage")
           .min(0)
           .max(1)
           .defaultValue(0.5));
@@ -137,8 +137,9 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
    * Maximum words per label. Base clusters formed by phrases with more words than this
    * ratio are trimmed.
    */
-  public AttrInteger maxDescPhraseLength = attributes.register("maxDescPhraseLength",
+  public AttrInteger maxWordsPerLabel = attributes.register("maxWordsPerLabel",
       AttrInteger.builder()
+          .label("Maximum words per label")
           .min(1)
           .defaultValue(4));
 
@@ -146,8 +147,9 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
    * Maximum phrases per label. Maximum number of phrases from base clusters promoted
    * to the cluster's label.
    */
-  public AttrInteger maxPhrases = attributes.register("maxPhrases",
+  public AttrInteger maxPhrasesPerLabel = attributes.register("maxPhrasesPerLabel",
       AttrInteger.builder()
+          .label("Maximum phrases per label")
           .min(1)
           .defaultValue(3));
 
@@ -158,6 +160,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
    */
   public AttrDouble singleTermBoost = attributes.register("singleTermBoost",
       AttrDouble.builder()
+          .label("Boost single-term clusters")
           .min(0)
           .defaultValue(0.5));
 
@@ -166,6 +169,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
    */
   public AttrInteger optimalPhraseLength = attributes.register("optimalPhraseLength",
       AttrInteger.builder()
+          .label("Optimal cluster label length")
           .min(1)
           .defaultValue(3));
 
@@ -174,6 +178,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
    */
   public AttrDouble optimalPhraseLengthDev = attributes.register("optimalPhraseLengthDev",
       AttrDouble.builder()
+          .label("Optimal cluster label length's tolerance")
           .min(0.5)
           .defaultValue(2.));
 
@@ -183,6 +188,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
    */
   public AttrDouble documentCountBoost = attributes.register("documentCountBoost",
       AttrDouble.builder()
+          .label("Base cluster document count boost")
           .min(0)
           .defaultValue(1.));
 
@@ -196,7 +202,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
           .label("Size-score sorting ratio")
           .min(0)
           .max(1)
-          .defaultValue(1.));
+          .defaultValue(0.));
 
   /**
    * Merge all stem-equivalent base clusters before running the merge phase.
@@ -214,6 +220,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   public BasicPreprocessingPipeline preprocessing;
   {
     attributes.register("preprocessing", AttrObject.builder(BasicPreprocessingPipeline.class)
+        .label("Input preprocessing components")
         .getset(() -> preprocessing, (v) -> preprocessing = v)
         .defaultValue(BasicPreprocessingPipeline::new));
   }
@@ -399,7 +406,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       // Build the candidate cluster's label for filtering. This may be costly so
       // we only do this for base clusters which are promoted to merging phase.
       assert cc.phrases.size() == 1;
-      if (!lexicalData.isStopLabel(buildLabel(cc.phrases.get(0)))) {
+      if (!lexicalData.ignoreLabel(buildLabel(cc.phrases.get(0)))) {
         candidates.set(j++, cc);
       }
     }
@@ -620,7 +627,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       ;
     });
 
-    int max = maxPhrases.get();
+    int max = maxPhrasesPerLabel.get();
     for (PhraseCandidate p : phrases) {
       if (max-- <= 0) break;
       result.phrases.add(p.cluster.phrases.get(0));
@@ -637,7 +644,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     final int max = phrases.size();
 
     // A list of all words for each candidate phrase.
-    final IntStack words = new IntStack(maxDescPhraseLength.get() * phrases.size());
+    final IntStack words = new IntStack(maxWordsPerLabel.get() * phrases.size());
 
     // Offset pairs in the words list -- a pair [start, length].
     final IntStack offsets = new IntStack(phrases.size() * 2);
@@ -708,7 +715,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     final int max = phrases.size();
 
     // A list of all unique words for each candidate phrase.
-    final IntStack words = new IntStack(maxDescPhraseLength.get() * phrases.size());
+    final IntStack words = new IntStack(maxWordsPerLabel.get() * phrases.size());
 
     // Offset pairs in the words list -- a pair [start, length].
     final IntStack offsets = new IntStack(phrases.size() * 2);
@@ -977,7 +984,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       termsCount += path.get(j + 1) - path.get(j) + 1;
     }
 
-    if (termsCount > maxDescPhraseLength.get()) {
+    if (termsCount > maxWordsPerLabel.get()) {
       return false;
     }
 
@@ -990,7 +997,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
    */
   final int effectivePhraseLength(IntStack path) {
     final int[] terms = sb.input.buffer;
-    final int lower = ignoreWordIfInFewerDocs.get();
+    final int lower = preprocessing.wordDfThreshold.get();
     final int upper = (int) (ignoreWordIfInHigherDocsPercent.get() * context.documentCount);
 
     int effectivePhraseLen = 0;

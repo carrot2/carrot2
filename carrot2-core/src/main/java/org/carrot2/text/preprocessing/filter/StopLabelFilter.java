@@ -31,15 +31,8 @@ public class StopLabelFilter extends SingleLabelFilterBase {
       .label("Remove stop labels")
       .defaultValue(true));
 
-  /*
-   *
-   */
-  private final LabelFormatter labelFormatter = new LabelFormatter();
-
-  /*
-   *
-   */
-  public LexicalData lexicalData;
+  private LabelFormatter labelFormatter = new LabelFormatter();
+  private LexicalData lexicalData;
 
   @Override
   public void filter(PreprocessingContext context, boolean[] acceptedStems, boolean[] acceptedPhrases) {
@@ -50,13 +43,13 @@ public class StopLabelFilter extends SingleLabelFilterBase {
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {
     final String formatedLabel = labelFormatter.format(context, phraseIndex + context.allWords.image.length);
-    return !lexicalData.isStopLabel(formatedLabel);
+    return !lexicalData.ignoreLabel(formatedLabel);
   }
 
   @Override
   public boolean acceptWord(PreprocessingContext context, int wordIndex) {
     final String formattedLabel = labelFormatter.format(context, wordIndex);
-    return !lexicalData.isStopLabel(formattedLabel);
+    return !lexicalData.ignoreLabel(formattedLabel);
   }
 
   public boolean isEnabled() {

@@ -45,11 +45,12 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline {
           .defaultValue(1));
 
   /**
-   * Label filter processor used by the algorithm, contains bindable attributes.
+   * Label filtering is a composite of individual filters.
    */
   public LabelFilterProcessor labelFilters = new LabelFilterProcessor();
   {
     attributes.register("labelFilters", AttrObject.builder(LabelFilterProcessor.class)
+        .label("Cluster label filters")
         .getset(() -> labelFilters, (v) -> labelFilters = v)
         .defaultValue(LabelFilterProcessor::new));
   }
@@ -60,6 +61,7 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline {
   public DocumentAssigner documentAssigner;
   {
     attributes.register("documentAssigner", AttrObject.builder(DocumentAssigner.class)
+        .label("Control over cluster-document assignment")
         .getset(() -> documentAssigner, (v) -> documentAssigner = v)
         .defaultValue(DocumentAssigner::new));
   }

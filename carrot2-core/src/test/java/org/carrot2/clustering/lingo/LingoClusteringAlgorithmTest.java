@@ -33,7 +33,7 @@ public class LingoClusteringAlgorithmTest extends ClusteringAlgorithmTestBase {
   @Test
   public void testClusteringWithDfThreshold() {
     LingoClusteringAlgorithm algorithm = algorithm();
-    algorithm.preprocessing.get().wordDfThreshold.set(100);
+    algorithm.preprocessing.wordDfThreshold.set(100);
 
     List<Cluster<Document>> clusters = algorithm.cluster(SampleDocumentData.DOCUMENTS_DATA_MINING.stream(),
         LanguageComponents.get(EnglishLanguageComponentsFactory.NAME));

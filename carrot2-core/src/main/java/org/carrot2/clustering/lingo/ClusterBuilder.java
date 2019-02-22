@@ -109,16 +109,15 @@ public class ClusterBuilder extends AttrComposite {
     /**
      * Discovers labels for clusters.
      */
-    void buildLabels(LingoProcessingContext context, ITermWeighting termWeighting)
-    {
+    void buildLabels(LingoProcessingContext context, ITermWeighting termWeighting) {
         final PreprocessingContext preprocessingContext = context.preprocessingContext;
         final VectorSpaceModelContext vsmContext = context.vsmContext;
         final DoubleMatrix2D reducedTdMatrix = context.reducedVsmContext.baseMatrix;
-        final int [] wordsStemIndex = preprocessingContext.allWords.stemIndex;
-        final int [] labelsFeatureIndex = preprocessingContext.allLabels.featureIndex;
-        final int [] mostFrequentOriginalWordIndex = preprocessingContext.allStems.mostFrequentOriginalWordIndex;
-        final int [][] phrasesWordIndices = preprocessingContext.allPhrases.wordIndices;
-        final BitSet [] labelsDocumentIndices = preprocessingContext.allLabels.documentIndices;
+        final int[] wordsStemIndex = preprocessingContext.allWords.stemIndex;
+        final int[] labelsFeatureIndex = preprocessingContext.allLabels.featureIndex;
+        final int[] mostFrequentOriginalWordIndex = preprocessingContext.allStems.mostFrequentOriginalWordIndex;
+        final int[][] phrasesWordIndices = preprocessingContext.allPhrases.wordIndices;
+        final BitSet[] labelsDocumentIndices = preprocessingContext.allLabels.documentIndices;
         final int wordCount = preprocessingContext.allWords.image.length;
         final int documentCount = preprocessingContext.documentCount;
 
@@ -128,11 +127,9 @@ public class ClusterBuilder extends AttrComposite {
         // we should use only those stems that appeared in AllLabels as one-word
         // candidates.
         final BitSet oneWordCandidateStemIndices = new BitSet();
-        for (int i = 0; i < labelsFeatureIndex.length; i++)
-        {
+        for (int i = 0; i < labelsFeatureIndex.length; i++) {
             final int featureIndex = labelsFeatureIndex[i];
-            if (featureIndex >= wordCount)
-            {
+            if (featureIndex >= wordCount) {
                 break;
             }
             oneWordCandidateStemIndices.set(wordsStemIndex[featureIndex]);
@@ -142,42 +139,32 @@ public class ClusterBuilder extends AttrComposite {
         final IntIntHashMap filteredRowToStemIndex = new IntIntHashMap();
         final IntArrayList filteredRows = new IntArrayList();
         int filteredRowIndex = 0;
-        for (IntIntCursor it : stemToRowIndex)
-        {
-            if (oneWordCandidateStemIndices.get(it.key))
-            {
+        for (IntIntCursor it : stemToRowIndex) {
+            if (oneWordCandidateStemIndices.get(it.key)) {
                 filteredRowToStemIndex.put(filteredRowIndex++, it.key);
                 filteredRows.add(it.value);
             }
         }
 
         // Request additional feature scores
-        final double [] featureScores = featureScorer != null ? featureScorer
-            .getFeatureScores(context) : null;
-        final int [] wordLabelIndex = new int [wordCount];
+        final double[] featureScores = featureScorer != null ? featureScorer.getFeatureScores(context) : null;
+        final int[] wordLabelIndex = new int[wordCount];
 
         // Word index to feature index mapping
         Arrays.fill(wordLabelIndex, -1);
-        for (int i = 0; i < labelsFeatureIndex.length; i++)
-        {
+        for (int i = 0; i < labelsFeatureIndex.length; i++) {
             final int featureIndex = labelsFeatureIndex[i];
-            if (featureIndex < wordCount)
-            {
+            if (featureIndex < wordCount) {
                 wordLabelIndex[featureIndex] = i;
             }
         }
 
         // Prepare base vector -- single stem cosine matrix.
-        final DoubleMatrix2D stemCos = reducedTdMatrix.viewSelection(
-            filteredRows.toArray(), null).copy();
-        for (int r = 0; r < stemCos.rows(); r++)
-        {
-            final int labelIndex = wordLabelIndex[mostFrequentOriginalWordIndex[filteredRowToStemIndex
-                .get(r)]];
-            double penalty = getDocumentCountPenalty(labelIndex, documentCount,
-                labelsDocumentIndices);
-            if (featureScores != null)
-            {
+        final DoubleMatrix2D stemCos = reducedTdMatrix.viewSelection(filteredRows.toArray(), null).copy();
+        for (int r = 0; r < stemCos.rows(); r++) {
+            final int labelIndex = wordLabelIndex[mostFrequentOriginalWordIndex[filteredRowToStemIndex.get(r)]];
+            double penalty = getDocumentCountPenalty(labelIndex, documentCount, labelsDocumentIndices);
+            if (featureScores != null) {
                 penalty *= featureScores[labelIndex];
             }
 
@@ -188,45 +175,34 @@ public class ClusterBuilder extends AttrComposite {
         final DoubleMatrix2D phraseMatrix = vsmContext.termPhraseMatrix;
         final int firstPhraseIndex = preprocessingContext.allLabels.firstPhraseIndex;
         DoubleMatrix2D phraseCos = null;
-        if (phraseMatrix != null)
-        {
+        if (phraseMatrix != null) {
             // Build raw cosine similarities
             phraseCos = phraseMatrix.zMult(reducedTdMatrix, null, 1, 0, false, false);
 
             // Apply phrase weighting
             int phraseLengthPenaltyStop = this.phraseLengthPenaltyStop.get();
             int phraseLengthPenaltyStart = this.phraseLengthPenaltyStart.get();
-            if (phraseLengthPenaltyStop < phraseLengthPenaltyStart)
-            {
+            if (phraseLengthPenaltyStop < phraseLengthPenaltyStart) {
                 phraseLengthPenaltyStop = phraseLengthPenaltyStart;
             }
-            final double penaltyStep = 1.0 / (phraseLengthPenaltyStop
-                - phraseLengthPenaltyStart + 1);
+            final double penaltyStep = 1.0 / (phraseLengthPenaltyStop - phraseLengthPenaltyStart + 1);
 
             // Multiply each row of the cos matrix (corresponding to the phrase) by the
             // penalty factor, if the phrase is longer than penalty start length
-            for (int row = 0; row < phraseCos.rows(); row++)
-            {
+            for (int row = 0; row < phraseCos.rows(); row++) {
                 final int phraseFeature = labelsFeatureIndex[row + firstPhraseIndex];
-                int [] phraseWordIndices = phrasesWordIndices[phraseFeature - wordCount];
+                int[] phraseWordIndices = phrasesWordIndices[phraseFeature - wordCount];
 
                 double penalty;
-                if (phraseWordIndices.length >= phraseLengthPenaltyStop)
-                {
+                if (phraseWordIndices.length >= phraseLengthPenaltyStop) {
                     penalty = 0;
-                }
-                else
-                {
-                    penalty = getDocumentCountPenalty(row + firstPhraseIndex,
-                        documentCount, labelsDocumentIndices);
+                } else {
+                    penalty = getDocumentCountPenalty(row + firstPhraseIndex, documentCount, labelsDocumentIndices);
 
-                    if (phraseWordIndices.length >= phraseLengthPenaltyStart)
-                    {
-                        penalty *= 1 - penaltyStep
-                            * (phraseWordIndices.length - phraseLengthPenaltyStart + 1);
+                    if (phraseWordIndices.length >= phraseLengthPenaltyStart) {
+                        penalty *= 1 - penaltyStep * (phraseWordIndices.length - phraseLengthPenaltyStart + 1);
                     }
-                    if (featureScores != null)
-                    {
+                    if (featureScores != null) {
                         penalty *= featureScores[row + firstPhraseIndex];
                     }
                 }
@@ -238,34 +214,28 @@ public class ClusterBuilder extends AttrComposite {
         labelAssigner.assignLabels(context, stemCos, filteredRowToStemIndex, phraseCos);
     }
 
-    private double getDocumentCountPenalty(int labelIndex, int documentCount,
-        BitSet [] labelsDocumentIndices)
-    {
-        return documentSizeCoefficients.getValue(
-            labelsDocumentIndices[labelIndex].cardinality() / (double) documentCount);
+    private double getDocumentCountPenalty(int labelIndex, int documentCount, BitSet[] labelsDocumentIndices) {
+        return documentSizeCoefficients.getValue(labelsDocumentIndices[labelIndex].cardinality() / (double) documentCount);
     }
 
     /**
      * Assigns documents to cluster labels.
      */
-    void assignDocuments(LingoProcessingContext context)
-    {
-        final int [] clusterLabelFeatureIndex = context.clusterLabelFeatureIndex;
-        final BitSet [] clusterDocuments = new BitSet [clusterLabelFeatureIndex.length];
+    void assignDocuments(LingoProcessingContext context) {
+        final int[] clusterLabelFeatureIndex = context.clusterLabelFeatureIndex;
+        final BitSet[] clusterDocuments = new BitSet[clusterLabelFeatureIndex.length];
 
-        final int [] labelsFeatureIndex = context.preprocessingContext.allLabels.featureIndex;
-        final BitSet [] documentIndices = context.preprocessingContext.allLabels.documentIndices;
+        final int[] labelsFeatureIndex = context.preprocessingContext.allLabels.featureIndex;
+        final BitSet[] documentIndices = context.preprocessingContext.allLabels.documentIndices;
         final IntIntHashMap featureValueToIndex = new IntIntHashMap();
 
-        for (int i = 0; i < labelsFeatureIndex.length; i++)
-        {
+        for (int i = 0; i < labelsFeatureIndex.length; i++) {
             featureValueToIndex.put(labelsFeatureIndex[i], i);
         }
 
-        for (int clusterIndex = 0; clusterIndex < clusterDocuments.length; clusterIndex++)
-        {
-            clusterDocuments[clusterIndex] = documentIndices[featureValueToIndex
-                .get(clusterLabelFeatureIndex[clusterIndex])];
+        for (int clusterIndex = 0; clusterIndex < clusterDocuments.length; clusterIndex++) {
+            clusterDocuments[clusterIndex] =
+                documentIndices[featureValueToIndex.get(clusterLabelFeatureIndex[clusterIndex])];
         }
 
         context.clusterDocuments = clusterDocuments;
@@ -275,75 +245,63 @@ public class ClusterBuilder extends AttrComposite {
      * Merges overlapping clusters. Stores merged label and documents in the relevant
      * arrays of the merged cluster, sets scores to -1 in those clusters that got merged.
      */
-    void merge(LingoProcessingContext context)
-    {
-        final BitSet [] clusterDocuments = context.clusterDocuments;
-        final int [] clusterLabelFeatureIndex = context.clusterLabelFeatureIndex;
-        final double [] clusterLabelScore = context.clusterLabelScore;
+    void merge(LingoProcessingContext context) {
+        final BitSet[] clusterDocuments = context.clusterDocuments;
+        final int[] clusterLabelFeatureIndex = context.clusterLabelFeatureIndex;
+        final double[] clusterLabelScore = context.clusterLabelScore;
 
         final double clusterMergingThreshold = this.clusterMergingThreshold.get();
-        final List<IntArrayList> mergedClusters = GraphUtils.findCoherentSubgraphs(
-            clusterDocuments.length, new GraphUtils.IArcPredicate()
-            {
-                private BitSet temp = new BitSet();
+        final List<IntArrayList> mergedClusters = GraphUtils.findCoherentSubgraphs(clusterDocuments.length,
+            new GraphUtils.IArcPredicate() {
+            private BitSet temp = new BitSet();
 
-                public boolean isArcPresent(int clusterA, int clusterB)
-                {
-                    temp.clear();
-                    int size;
-                    BitSet setA = clusterDocuments[clusterA];
-                    BitSet setB = clusterDocuments[clusterB];
+            public boolean isArcPresent(int clusterA, int clusterB) {
+                temp.clear();
+                int size;
+                BitSet setA = clusterDocuments[clusterA];
+                BitSet setB = clusterDocuments[clusterB];
 
-                    // Suitable for flat clustering
-                    // A small subgroup contained within a bigger group
-                    // will give small overlap ratio. Big ratios will
-                    // be produced only for balanced group sizes.
-                    if (setA.cardinality() < setB.cardinality())
-                    {
-                        // addAll == or
-                        // reiatinAll == and | intersect
-                        temp.or(setA);
-                        temp.intersect(setB);
-                        size = (int) setB.cardinality();
-                    }
-                    else
-                    {
-                        temp.or(setB);
-                        temp.intersect(setA);
-                        size = (int) setA.cardinality();
-                    }
-
-                    return temp.cardinality() / (double) size >= clusterMergingThreshold;
+                // Suitable for flat clustering
+                // A small subgroup contained within a bigger group
+                // will give small overlap ratio. Big ratios will
+                // be produced only for balanced group sizes.
+                if (setA.cardinality() < setB.cardinality()) {
+                    // addAll == or
+                    // reiatinAll == and | intersect
+                    temp.or(setA);
+                    temp.intersect(setB);
+                    size = (int) setB.cardinality();
+                } else {
+                    temp.or(setB);
+                    temp.intersect(setA);
+                    size = (int) setA.cardinality();
                 }
-            }, true);
 
-        
+                return temp.cardinality() / (double) size >= clusterMergingThreshold;
+            }
+        }, true);
+
+
         // For each merge group, choose the cluster with the highest score and
         // merge the rest to it
-        for (IntArrayList clustersToMerge : mergedClusters)
-        {
+        for (IntArrayList clustersToMerge : mergedClusters) {
             int mergeBaseClusterIndex = -1;
             double maxScore = -1;
-            
-            final int [] buf = clustersToMerge.buffer;
+
+            final int[] buf = clustersToMerge.buffer;
             final int max = clustersToMerge.size();
-            for (int i = 0; i < max; i++)
-            {
+            for (int i = 0; i < max; i++) {
                 final int clusterIndex = buf[i];
-                if (clusterLabelScore[clusterIndex] > maxScore)
-                {
+                if (clusterLabelScore[clusterIndex] > maxScore) {
                     mergeBaseClusterIndex = clusterIndex;
                     maxScore = clusterLabelScore[clusterIndex];
                 }
             }
 
-            for (int i = 0; i < max; i++)
-            {
+            for (int i = 0; i < max; i++) {
                 final int clusterIndex = buf[i];
-                if (clusterIndex != mergeBaseClusterIndex)
-                {
-                    clusterDocuments[mergeBaseClusterIndex].or(
-                        clusterDocuments[clusterIndex]);
+                if (clusterIndex != mergeBaseClusterIndex) {
+                    clusterDocuments[mergeBaseClusterIndex].or(clusterDocuments[clusterIndex]);
                     clusterLabelFeatureIndex[clusterIndex] = -1;
                     clusterDocuments[clusterIndex] = null;
                 }

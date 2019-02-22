@@ -6,11 +6,13 @@ public class TestsLanguageComponentsFactoryVariant2 implements LanguageComponent
   public static final String NAME = "_tests_language_variant2_";
 
   private static final class LexicalDataImpl implements LexicalData {
-    public boolean isCommonWord(MutableCharArray word) {
+    @Override
+    public boolean ignoreWord(CharSequence word) {
       return word.toString().contains("stop");
     }
 
-    public boolean isStopLabel(CharSequence formattedLabel) {
+    @Override
+    public boolean ignoreLabel(CharSequence formattedLabel) {
       return formattedLabel.toString().startsWith("stoplabel");
     }
 

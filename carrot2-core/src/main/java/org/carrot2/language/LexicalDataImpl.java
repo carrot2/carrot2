@@ -12,9 +12,7 @@
 
 package org.carrot2.language;
 
-import com.carrotsearch.hppc.ObjectHashSet;
-import org.carrot2.util.MutableCharArray;
-
+import java.util.HashSet;
 import java.util.regex.Pattern;
 
 /**
@@ -22,11 +20,11 @@ import java.util.regex.Pattern;
  * expression pattern (stoplabels).
  */
 public final class LexicalDataImpl implements LexicalData {
-  private final ObjectHashSet<MutableCharArray> stopwords;
+  private final HashSet<String> stopwords;
   private final Pattern stoplabelPattern;
   private final boolean usesSpaceDelimiters;
 
-  public LexicalDataImpl(ObjectHashSet<MutableCharArray> stopwords,
+  public LexicalDataImpl(HashSet<String> stopwords,
                          Pattern stoplabelPattern,
                          boolean usesSpaceDelimiters) {
     this.stopwords = stopwords;
@@ -38,15 +36,15 @@ public final class LexicalDataImpl implements LexicalData {
    *
    */
   @Override
-  public boolean isCommonWord(MutableCharArray word) {
-    return stopwords.contains(word);
+  public boolean ignoreWord(CharSequence word) {
+    return stopwords.contains(word.toString());
   }
 
   /*
    *
    */
   @Override
-  public boolean isStopLabel(CharSequence label) {
+  public boolean ignoreLabel(CharSequence label) {
     if (this.stoplabelPattern == null)
       return false;
 

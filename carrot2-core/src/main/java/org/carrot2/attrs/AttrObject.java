@@ -14,8 +14,8 @@ public class AttrObject<T extends AcceptingVisitor> extends Attr<T> {
     super(null, label, constraint);
     this.clazz = clazz;
 
-    this.setter = setter != null ? setter : (v) -> super.set(value);
-    this.getter = getter != null ? getter : () -> super.get();
+    this.setter = setter != null ? setter : super::set;
+    this.getter = getter != null ? getter : super::get;
     this.newInstance = newInstance;
 
     set(defaultValue);
@@ -39,6 +39,10 @@ public class AttrObject<T extends AcceptingVisitor> extends Attr<T> {
   public T castAndSet(Object object) {
     set(clazz.cast(object));
     return get();
+  }
+
+  public Class<T> getInterfaceClass() {
+    return clazz;
   }
 
   public boolean isDefaultClass(Object value) {

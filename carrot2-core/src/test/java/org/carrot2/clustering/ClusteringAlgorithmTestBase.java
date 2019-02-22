@@ -3,19 +3,15 @@ package org.carrot2.clustering;
 import com.carrotsearch.randomizedtesting.RandomizedTest;
 import com.carrotsearch.randomizedtesting.annotations.Nightly;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
+import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
+import org.carrot2.attrs.*;
 import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
-import org.carrot2.attrs.AcceptingVisitor;
-import org.carrot2.attrs.Attrs;
-import org.carrot2.attrs.JvmNameMapper;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -31,6 +27,65 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
 
   protected LanguageComponents testLanguageModel() {
     return LanguageComponents.get(TestsLanguageComponentsFactoryVariant1.NAME);
+  }
+
+  @Test
+  public void ensureAttributesHaveDescriptions() {
+    ArrayList<String> errors = new ArrayList<>();
+    algorithm().accept(new AttrVisitor() {
+      ArrayDeque<String> path = new ArrayDeque<>();
+
+      @Override
+      public void visit(String key, AttrBoolean attr) {
+        hasLabel(key, attr);
+      }
+
+      @Override
+      public void visit(String key, AttrInteger attr) {
+        hasLabel(key, attr);
+      }
+
+      @Override
+      public void visit(String key, AttrDouble attr) {
+        hasLabel(key, attr);
+      }
+
+      @Override
+      public void visit(String key, AttrEnum<? extends Enum<?>> attr) {
+        hasLabel(key, attr);
+      }
+
+      @Override
+      public void visit(String key, AttrString attr) {
+        hasLabel(key, attr);
+      }
+
+      @Override
+      public void visit(String key, AttrStringArray attr) {
+        hasLabel(key, attr);
+      }
+
+      @Override
+      public void visit(String key, AttrObject<?> attr) {
+        hasLabel(key, attr);
+        AcceptingVisitor o = attr.get();
+        if (o != null) {
+          path.addLast(key);
+          o.accept(this);
+          path.removeLast();
+        }
+      }
+
+      private void hasLabel(String key, Attr<?> attr) {
+        if (attr.getDescription() == null) {
+          path.addLast(key);
+          errors.add("Attribute has no description: " + String.join(".", path));
+          path.removeLast();
+        }
+      }
+    });
+
+    Assertions.assertThat(errors).isEmpty();
   }
 
   /**

@@ -58,10 +58,9 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
      * Desired cluster count base. Base factor used to calculate the number of clusters
      * based on the number of documents on input. The larger the value, the more clusters
      * will be created. The number of clusters created by the algorithm will be
-     * proportional to the cluster count base, but not in a linear way.
+     * proportionally adjusted to the cluster count base, but may be different.
      */
-    public AttrInteger desiredClusterCountBase = attributes.register("desiredClusterCountBase",
-        AttrInteger.builder()
+    public AttrInteger desiredClusterCount = attributes.register("desiredClusterCount", AttrInteger.builder()
             .label("Cluster count base")
             .min(2)
             .max(100)
@@ -70,9 +69,13 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
     /**
      * Preprocessing pipeline.
      */
-    public final AttrObject<CompletePreprocessingPipeline> preprocessing =
+    public CompletePreprocessingPipeline preprocessing;
+    {
         attributes.register("preprocessing", AttrObject.builder(CompletePreprocessingPipeline.class)
-            .defaultValue(() -> new CompletePreprocessingPipeline()));
+            .label("Input preprocessing components")
+            .getset(() -> preprocessing, (v) -> preprocessing = v)
+            .defaultValue(CompletePreprocessingPipeline::new));
+    }
 
     /**
      * Term-document matrix builder for the algorithm.
@@ -80,6 +83,7 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
     public TermDocumentMatrixBuilder matrixBuilder;
     {
         attributes.register("matrixBuilder", AttrObject.builder(TermDocumentMatrixBuilder.class)
+            .label("Term-document matrix builder")
             .getset(() -> matrixBuilder, (v) -> matrixBuilder = v)
             .defaultValue(TermDocumentMatrixBuilder::new));
     }
@@ -90,6 +94,7 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
     public TermDocumentMatrixReducer matrixReducer;
     {
         attributes.register("matrixReducer", AttrObject.builder(TermDocumentMatrixReducer.class)
+            .label("Term-document matrix reducer")
             .getset(() -> matrixReducer, (v) -> matrixReducer = v)
             .defaultValue(TermDocumentMatrixReducer::new));
     }
@@ -100,6 +105,7 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
     public ClusterBuilder clusterBuilder;
     {
         attributes.register("clusterBuilder", AttrObject.builder(ClusterBuilder.class)
+            .label("Cluster label supplier")
             .getset(() -> clusterBuilder, (v) -> clusterBuilder = v)
             .defaultValue(ClusterBuilder::new));
     }
@@ -123,7 +129,7 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
 
         // Preprocessing of documents
         final PreprocessingContext context =
-            preprocessing.get().preprocess(documents.stream(), queryHint.get(), languageComponents);
+            preprocessing.preprocess(documents.stream(), queryHint.get(), languageComponents);
 
         // Further processing only if there are words to process
         List<Cluster<T>> clusters = new ArrayList<>();
@@ -142,7 +148,7 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
             matrixBuilder.buildTermPhraseMatrix(vsmContext);
 
             matrixReducer.reduce(reducedVsmContext,
-                computeClusterCount(desiredClusterCountBase.get(), documents.size()));
+                computeClusterCount(desiredClusterCount.get(), documents.size()));
 
             // Cluster label building
             clusterBuilder.buildLabels(lingoContext, matrixBuilder.termWeighting);

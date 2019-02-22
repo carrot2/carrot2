@@ -19,21 +19,18 @@ import org.carrot2.util.MutableCharArray;
  */
 public interface LexicalData {
   /**
-   * @return Returns <code>true</code> if <code>word</code> is common (meaningless) in
-   * this language. Such words are referred to as "stop words" and are usually
-   * ignored in information retrieval tasks. Depending on the implementation,
-   * <code>word</code> may be lower-cased internally.
+   * @return Return true if the provided term is common (meaningless).
+   * Such words are referred to as "stop words" and are usually
+   * ignored in information retrieval tasks.
    */
-  default boolean isCommonWord(MutableCharArray word) {
+  default boolean ignoreWord(CharSequence word) {
     return false;
   }
 
   /**
-   * @return Returns <code>true</code> if the <code>formattedLabel</code> has been
-   * declared a stop label (meaningless) in this language. This is a very
-   * low-level tuning method.
+   * @return Return {@code true} if the label candidate should be ignored in processing.
    */
-  default boolean isStopLabel(CharSequence formattedLabel) {
+  default boolean ignoreLabel(CharSequence labelCandidate) {
     return false;
   }
 
