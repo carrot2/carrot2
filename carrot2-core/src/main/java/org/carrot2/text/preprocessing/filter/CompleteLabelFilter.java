@@ -19,24 +19,19 @@ import org.carrot2.attrs.AttrDouble;
 
 /**
  * A filter that removes "incomplete" labels.
+ *
+ * For example, in a collection of documents related to <i>Data Mining</i>, the phrase
+ * <i>Conference on Data</i> is incomplete in a sense that most likely it should be
+ * <i>Conference on Data Mining</i> or even <i>Conference on Data Mining in Large
+ * Databases</i>. When truncated phrase removal is enabled, the algorithm would try to
+ * remove the "incomplete" phrases like the former one and leave only the more
+ * informative variants.
+ *
  * <p>
  * See <a href="http://project.carrot2.org/publications/osinski-2003-lingo.pdf">this
  * document</a>, page 31 for a definition of a complete phrase.
  */
 public class CompleteLabelFilter extends AttrComposite implements ILabelFilter {
-  /**
-   * Remove truncated phrases. Tries to remove "incomplete" cluster labels. For example,
-   * in a collection of documents related to <i>Data Mining</i>, the phrase
-   * <i>Conference on Data</i> is incomplete in a sense that most likely it should be
-   * <i>Conference on Data Mining</i> or even <i>Conference on Data Mining in Large
-   * Databases</i>. When truncated phrase removal is enabled, the algorithm would try to
-   * remove the "incomplete" phrases like the former one and leave only the more
-   * informative variants.
-   */
-  public AttrBoolean enabled = attributes.register("enabled", AttrBoolean.builder()
-      .label("Remove truncated phrases")
-      .defaultValue(true));
-
   /**
    * Truncated label threshold. Determines the strength of the truncated label filter.
    * The lowest value means strongest truncated labels elimination, which may lead to
@@ -64,14 +59,8 @@ public class CompleteLabelFilter extends AttrComposite implements ILabelFilter {
    */
   public void filter(PreprocessingContext context, boolean[] acceptedStems,
                      boolean[] acceptedPhrases) {
-    if (enabled.get()) {
-      double labelOverrideThreshold = this.labelOverrideThreshold.get();
-      leftCompleteLabelFilter.filter(context, acceptedStems, acceptedPhrases, labelOverrideThreshold);
-      rightCompleteLabelFilter.filter(context, acceptedStems, acceptedPhrases, labelOverrideThreshold);
-    }
-  }
-
-  public boolean isEnabled() {
-    return enabled.get();
+    double labelOverrideThreshold = this.labelOverrideThreshold.get();
+    leftCompleteLabelFilter.filter(context, acceptedStems, acceptedPhrases, labelOverrideThreshold);
+    rightCompleteLabelFilter.filter(context, acceptedStems, acceptedPhrases, labelOverrideThreshold);
   }
 }

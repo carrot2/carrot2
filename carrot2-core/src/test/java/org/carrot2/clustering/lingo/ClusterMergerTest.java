@@ -68,7 +68,7 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase {
     desiredClusterCountBase = 20;
     clusterBuilder.phraseLabelBoost.set(0.08);
     clusterBuilder.clusterMergingThreshold.set(0.4);
-    preprocessingPipeline.labelFilters.minLengthLabelFilter.enabled.set(false);
+    preprocessingPipeline.labelFilters.minLengthLabelFilter = null;
 
     final int[][] expectedDocumentIndices = {
         {0, 1},
@@ -87,8 +87,8 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase {
     desiredClusterCountBase = 20;
     clusterBuilder.phraseLabelBoost.set(0.05);
     clusterBuilder.clusterMergingThreshold.set(0.2);
-    preprocessingPipeline.labelFilters.minLengthLabelFilter.enabled.set(false);
-    preprocessingPipeline.labelFilters.completeLabelFilter.enabled.set(false);
+    preprocessingPipeline.labelFilters.minLengthLabelFilter = null;
+    preprocessingPipeline.labelFilters.completeLabelFilter = null;
 
     final int[][] expectedDocumentIndices = {
         {3, 4},

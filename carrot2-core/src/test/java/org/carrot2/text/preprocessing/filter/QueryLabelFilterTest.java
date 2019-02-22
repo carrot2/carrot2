@@ -27,7 +27,7 @@ import org.junit.Test;
 public class QueryLabelFilterTest extends LabelFilterTestBase {
   @Override
   protected void initializeFilters(LabelFilterProcessor filterProcessor) {
-    filterProcessor.queryLabelFilter.enabled.set(true);
+    filterProcessor.queryLabelFilter = new QueryLabelFilter();
   }
 
   @Test

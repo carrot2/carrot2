@@ -20,15 +20,6 @@ import org.carrot2.attrs.AttrBoolean;
  * Accepts labels that do not consist only of query words.
  */
 public class QueryLabelFilter extends SingleLabelFilterBase {
-
-  /**
-   * Remove query words. Removes labels that consist only of words contained in the
-   * query.
-   */
-  public AttrBoolean enabled = attributes.register("enabled", AttrBoolean.builder()
-      .label("Remove query words")
-      .defaultValue(true));
-
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {
     final int[] wordIndices = context.allPhrases.wordIndices[phraseIndex];
@@ -50,9 +41,5 @@ public class QueryLabelFilter extends SingleLabelFilterBase {
 
   private final boolean isQueryWord(short flag) {
     return (flag & Tokenizer.TF_QUERY_WORD) != 0;
-  }
-
-  public boolean isEnabled() {
-    return enabled.get();
   }
 }

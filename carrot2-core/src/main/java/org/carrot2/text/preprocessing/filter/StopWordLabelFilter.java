@@ -13,7 +13,6 @@
 package org.carrot2.text.preprocessing.filter;
 
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.attrs.AttrBoolean;
 
 import static org.carrot2.language.TokenTypeUtils.isCommon;
 
@@ -22,14 +21,6 @@ import static org.carrot2.language.TokenTypeUtils.isCommon;
  * word.
  */
 public class StopWordLabelFilter extends SingleLabelFilterBase {
-  /**
-   * Remove leading and trailing stop words. Removes labels that consist of, start or
-   * end in stop words.
-   */
-  public AttrBoolean enabled = attributes.register("enabled", AttrBoolean.builder()
-      .label("Remove leading and trailing stop words")
-      .defaultValue(true));
-
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {
     final int[] wordIndices = context.allPhrases.wordIndices[phraseIndex];
@@ -42,9 +33,5 @@ public class StopWordLabelFilter extends SingleLabelFilterBase {
   @Override
   public boolean acceptWord(PreprocessingContext context, int wordIndex) {
     return !isCommon(context.allWords.type[wordIndex]);
-  }
-
-  public boolean isEnabled() {
-    return enabled.get();
   }
 }

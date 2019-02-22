@@ -46,11 +46,11 @@ public class LabelFilterTestBase extends TestBase {
   public void setUpPreprocessingComponents() {
     // Disable all filters by default. Tests will enable the filters they need.
     labelFilterProcessor = new LabelFilterProcessor();
-    labelFilterProcessor.minLengthLabelFilter.enabled.set(false);
-    labelFilterProcessor.queryLabelFilter.enabled.set(false);
-    labelFilterProcessor.numericLabelFilter.enabled.set(false);
-    labelFilterProcessor.stopWordLabelFilter.enabled.set(false);
-    labelFilterProcessor.completeLabelFilter.enabled.set(false);
+    labelFilterProcessor.minLengthLabelFilter = null;
+    labelFilterProcessor.queryLabelFilter = null;
+    labelFilterProcessor.numericLabelFilter = null;
+    labelFilterProcessor.stopWordLabelFilter = null;
+    labelFilterProcessor.completeLabelFilter = null;
 
     initializeFilters(labelFilterProcessor);
   }

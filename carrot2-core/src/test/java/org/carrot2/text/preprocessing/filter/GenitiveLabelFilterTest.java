@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 public class GenitiveLabelFilterTest extends LabelFilterTestBase {
   @Override
   protected void initializeFilters(LabelFilterProcessor filterProcessor) {
-    filterProcessor.genitiveLabelFilter.enabled.set(true);
+    filterProcessor.genitiveLabelFilter = new GenitiveLabelFilter();
   }
 
   @Test

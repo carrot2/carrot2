@@ -33,10 +33,4 @@ public interface ILabelFilter {
    */
   public void filter(PreprocessingContext context, boolean[] acceptedStems,
                      boolean[] acceptedPhrases);
-
-  /**
-   * @return <code>true</code> if the filter is to be applied, <code>false</code> if the
-   * filter should be omitted by the {@link LabelFilterProcessor}.
-   */
-  public boolean isEnabled();
 }

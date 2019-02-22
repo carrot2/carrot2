@@ -43,9 +43,9 @@ public class TermDocumentMatrixBuilderTestBase extends TestBase {
   protected String queryHint;
 
   @Before
-  public void setUpMatrixBuilder() throws Exception {
+  public void setUpMatrixBuilder() {
     preprocessingPipeline = new CompletePreprocessingPipeline();
-    preprocessingPipeline.labelFilters.minLengthLabelFilter.enabled.set(false);
+    preprocessingPipeline.labelFilters.minLengthLabelFilter = null;
 
     matrixBuilder = new TermDocumentMatrixBuilder();
     matrixBuilder.termWeighting = new TfTermWeighting();

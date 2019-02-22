@@ -16,6 +16,8 @@ import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
+import org.carrot2.text.preprocessing.filter.CompleteLabelFilter;
+import org.carrot2.text.preprocessing.filter.StopWordLabelFilter;
 import org.junit.Test;
 
 import java.util.stream.Stream;
@@ -33,8 +35,8 @@ public class DocumentAssignerTest extends LabelFilterTestBase {
 
   @Override
   protected void initializeFilters(LabelFilterProcessor filterProcessor) {
-    filterProcessor.stopWordLabelFilter.enabled.set(true);
-    filterProcessor.completeLabelFilter.enabled.set(true);
+    filterProcessor.stopWordLabelFilter = new StopWordLabelFilter();
+    filterProcessor.completeLabelFilter = new CompleteLabelFilter();
   }
 
   @Test

@@ -13,7 +13,6 @@
 package org.carrot2.text.preprocessing.filter;
 
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.attrs.AttrBoolean;
 
 import java.util.stream.Stream;
 
@@ -22,14 +21,6 @@ import java.util.stream.Stream;
  * the Country's").
  */
 public class GenitiveLabelFilter extends SingleLabelFilterBase {
-  /**
-   * Remove labels ending in genitive form. Removes labels that do end in words
-   * in the Saxon Genitive form (e.g. "Threatening the Country's").
-   */
-  public AttrBoolean enabled = attributes.register("enabled", AttrBoolean.builder()
-      .label("Remove labels ending in genitive form")
-      .defaultValue(true));
-
   private final static char[][] ENDINGS = Stream.of("'s", "`s", "s'", "s`")
       .map(String::toCharArray)
       .toArray(char[][]::new);
@@ -60,9 +51,5 @@ public class GenitiveLabelFilter extends SingleLabelFilterBase {
       }
     }
     return true;
-  }
-
-  public boolean isEnabled() {
-    return enabled.get();
   }
 }

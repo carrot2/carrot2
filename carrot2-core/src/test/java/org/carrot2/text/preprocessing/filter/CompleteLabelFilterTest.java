@@ -25,8 +25,8 @@ import org.junit.Test;
 public class CompleteLabelFilterTest extends LabelFilterTestBase {
   @Override
   protected void initializeFilters(LabelFilterProcessor filterProcessor) {
-    filterProcessor.stopWordLabelFilter.enabled.set(true);
-    filterProcessor.completeLabelFilter.enabled.set(true);
+    filterProcessor.stopWordLabelFilter = new StopWordLabelFilter();
+    filterProcessor.completeLabelFilter = new CompleteLabelFilter();
     filterProcessor.completeLabelFilter.labelOverrideThreshold.set(0.5);
   }
 

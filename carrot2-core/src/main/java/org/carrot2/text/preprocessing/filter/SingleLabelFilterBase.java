@@ -22,10 +22,6 @@ public abstract class SingleLabelFilterBase extends AttrComposite implements ILa
 
   public void filter(PreprocessingContext context, boolean[] acceptedStems,
                      boolean[] acceptedPhrases) {
-    if (!isEnabled()) {
-      return;
-    }
-
     final int[] mostFrequentOriginalWordIndex = context.allStems.mostFrequentOriginalWordIndex;
 
     for (int stemIndex = 0; stemIndex < acceptedStems.length; stemIndex++) {

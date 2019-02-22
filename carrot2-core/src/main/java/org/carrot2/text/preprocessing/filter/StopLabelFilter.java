@@ -15,22 +15,12 @@ package org.carrot2.text.preprocessing.filter;
 import org.carrot2.language.LexicalData;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.attrs.AttrBoolean;
 
 /**
  * Accepts labels that are not declared as stop labels in the stoplabels.&lt;lang&gt;
  * files.
  */
 public class StopLabelFilter extends SingleLabelFilterBase {
-  /**
-   * Remove stop labels. Removes labels that are declared as stop labels in the
-   * stoplabels.&lt;lang&gt; files. Please note that adding a long list of regular
-   * expressions to the stoplabels file may result in a noticeable performance penalty.
-   */
-  public AttrBoolean enabled = attributes.register("enabled", AttrBoolean.builder()
-      .label("Remove stop labels")
-      .defaultValue(true));
-
   private LabelFormatter labelFormatter = new LabelFormatter();
   private LexicalData lexicalData;
 
@@ -50,9 +40,5 @@ public class StopLabelFilter extends SingleLabelFilterBase {
   public boolean acceptWord(PreprocessingContext context, int wordIndex) {
     final String formattedLabel = labelFormatter.format(context, wordIndex);
     return !lexicalData.ignoreLabel(formattedLabel);
-  }
-
-  public boolean isEnabled() {
-    return enabled.get();
   }
 }

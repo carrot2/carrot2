@@ -20,13 +20,6 @@ import org.carrot2.attrs.AttrBoolean;
  * Accepts labels that start with a non-numeric token.
  */
 public class NumericLabelFilter extends SingleLabelFilterBase {
-  /**
-   * Remove numeric labels. Remove labels that consist only of or start with numbers.
-   */
-  public AttrBoolean enabled = attributes.register("enabled", AttrBoolean.builder()
-      .label("Remove numeric labels")
-      .defaultValue(true));
-
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {
     final int[] wordIndices = context.allPhrases.wordIndices[phraseIndex];
@@ -42,9 +35,5 @@ public class NumericLabelFilter extends SingleLabelFilterBase {
 
   private final boolean isNumeric(short type) {
     return (type & Tokenizer.TYPE_MASK) == Tokenizer.TT_NUMERIC;
-  }
-
-  public boolean isEnabled() {
-    return enabled.get();
   }
 }
