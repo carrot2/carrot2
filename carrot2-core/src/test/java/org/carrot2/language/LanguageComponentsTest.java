@@ -23,7 +23,21 @@ public class LanguageComponentsTest extends TestBase {
         .containsOnly(
             TestsLanguageComponentsFactoryVariant1.NAME,
             TestsLanguageComponentsFactoryVariant2.NAME,
-            EnglishLanguageComponentsFactory.NAME
+            EnglishLanguageComponentsFactory.NAME,
+            DanishLanguageComponentsFactory.NAME,
+            DutchLanguageComponentsFactory.NAME,
+            FinnishLanguageComponentsFactory.NAME,
+            FrenchLanguageComponentsFactory.NAME,
+            GermanLanguageComponentsFactory.NAME,
+            HungarianLanguageComponentsFactory.NAME,
+            ItalianLanguageComponentsFactory.NAME,
+            NorwegianLanguageComponentsFactory.NAME,
+            PortugueseLanguageComponentsFactory.NAME,
+            RomanianLanguageComponentsFactory.NAME,
+            RussianLanguageComponentsFactory.NAME,
+            SpanishLanguageComponentsFactory.NAME,
+            SwedishLanguageComponentsFactory.NAME,
+            TurkishLanguageComponentsFactory.NAME
         );
 
     for (String lang : LanguageComponents.languages()) {
