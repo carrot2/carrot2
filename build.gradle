@@ -1,10 +1,7 @@
 
 apply from: file('gradle/min-gradle-version.gradle') 
 
-
 ext {
-  version = "4.0"
-
   versions = [
     "randomizedtesting": "2.7.2",
     "junit": "4.12",
@@ -22,7 +19,7 @@ ext {
 
 allprojects {
   apply plugin: 'idea'
-  version = '${version}'
+  version = "4.0"
 
   repositories {
     mavenCentral()

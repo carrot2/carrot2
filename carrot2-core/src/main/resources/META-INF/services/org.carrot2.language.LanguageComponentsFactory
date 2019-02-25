@@ -13,4 +13,3 @@ org.carrot2.language.RussianLanguageComponentsFactory
 org.carrot2.language.SwedishLanguageComponentsFactory
 org.carrot2.language.SpanishLanguageComponentsFactory
 org.carrot2.language.TurkishLanguageComponentsFactory
-
