@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A factory for {@link IMatrixFactorization}s.
+ * A factory for {@link MatrixFactorization}s.
  */
-public abstract class IterativeMatrixFactorizationFactory extends AttrComposite implements IMatrixFactorizationFactory {
+public abstract class IterativeMatrixFactorizationFactory extends AttrComposite implements MatrixFactorizationFactory {
   /**
    * Factorization quality. The number of iterations of matrix factorization to perform.
    * The higher the required quality, the more time-consuming clustering.
@@ -66,12 +66,12 @@ public abstract class IterativeMatrixFactorizationFactory extends AttrComposite 
   /**
    * Matrix seeding strategy factory
    */
-  protected ISeedingStrategyFactory seedingFactory;
+  protected SeedingStrategyFactory seedingFactory;
 
   /**
    * Default matrix seeding strategy factory
    */
-  protected final static ISeedingStrategyFactory DEFAULT_SEEDING_FACTORY = new RandomSeedingStrategyFactory(0);
+  protected final static SeedingStrategyFactory DEFAULT_SEEDING_FACTORY = new RandomSeedingStrategyFactory(0);
 
   /**
    * Order base vectors according to their 'activity'
@@ -106,7 +106,7 @@ public abstract class IterativeMatrixFactorizationFactory extends AttrComposite 
   /**
    *
    */
-  protected ISeedingStrategy createSeedingStrategy() {
+  protected SeedingStrategy createSeedingStrategy() {
     return seedingFactory.createSeedingStrategy();
   }
 
@@ -139,16 +139,16 @@ public abstract class IterativeMatrixFactorizationFactory extends AttrComposite 
   }
 
   /**
-   * Returns the {@link ISeedingStrategyFactory} used by this factory.
+   * Returns the {@link SeedingStrategyFactory} used by this factory.
    */
-  public ISeedingStrategyFactory getSeedingFactory() {
+  public SeedingStrategyFactory getSeedingFactory() {
     return seedingFactory;
   }
 
   /**
-   * Sets the {@link ISeedingStrategyFactory} to be used by this factory.
+   * Sets the {@link SeedingStrategyFactory} to be used by this factory.
    */
-  public void setSeedingFactory(ISeedingStrategyFactory seedingFactory) {
+  public void setSeedingFactory(SeedingStrategyFactory seedingFactory) {
     this.seedingFactory = seedingFactory;
   }
 

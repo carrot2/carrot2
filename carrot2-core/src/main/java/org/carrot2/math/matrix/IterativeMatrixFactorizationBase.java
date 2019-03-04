@@ -18,10 +18,9 @@ import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 import com.carrotsearch.hppc.sorting.IndirectComparator;
 
 /**
- * Base functionality for {@link IIterativeMatrixFactorization}s.
+ * Base functionality for {@link IterativeMatrixFactorization}s.
  */
-abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase implements
-    IIterativeMatrixFactorization
+abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase implements IterativeMatrixFactorization
 {
     /** The desired number of base vectors */
     protected int k;
@@ -42,8 +41,8 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
     protected static double DEFAULT_STOP_THRESHOLD = -1.0;
 
     /** Seeding strategy */
-    protected ISeedingStrategy seedingStrategy;
-    protected static final ISeedingStrategy DEFAULT_SEEDING_STRATEGY = new RandomSeedingStrategy(
+    protected SeedingStrategy seedingStrategy;
+    protected static final SeedingStrategy DEFAULT_SEEDING_STRATEGY = new RandomSeedingStrategy(
         0);
 
     /** Order base vectors according to their 'activity'? */
@@ -144,17 +143,17 @@ abstract class IterativeMatrixFactorizationBase extends MatrixFactorizationBase 
     }
 
     /**
-     * Returns current {@link ISeedingStrategy}.
+     * Returns current {@link SeedingStrategy}.
      */
-    public ISeedingStrategy getSeedingStrategy()
+    public SeedingStrategy getSeedingStrategy()
     {
         return seedingStrategy;
     }
 
     /**
-     * Sets new {@link ISeedingStrategy}.
+     * Sets new {@link SeedingStrategy}.
      */
-    public void setSeedingStrategy(ISeedingStrategy seedingStrategy)
+    public void setSeedingStrategy(SeedingStrategy seedingStrategy)
     {
         this.seedingStrategy = seedingStrategy;
     }

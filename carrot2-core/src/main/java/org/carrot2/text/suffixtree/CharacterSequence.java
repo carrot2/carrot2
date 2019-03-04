@@ -13,9 +13,9 @@
 package org.carrot2.text.suffixtree;
 
 /**
- * A {@link ISequence} wrapper for any {@link CharSequence}.
+ * A {@link Sequence} wrapper for any {@link CharSequence}.
  */
-public final class CharacterSequence implements ISequence
+public final class CharacterSequence implements Sequence
 {
     public final CharSequence value;
 

@@ -13,13 +13,12 @@
 package org.carrot2.math.matrix;
 
 /**
- * A factory that produces objects implementing the {@link ISeedingStrategy}
+ * A factory that produces objects implementing the {@link SeedingStrategy}
  * interface.
  */
-public interface ISeedingStrategyFactory
-{
-    /**
-     * Creates a {@link ISeedingStrategy}.
-     */
-    public ISeedingStrategy createSeedingStrategy();
+public interface SeedingStrategyFactory {
+  /**
+   * Creates a {@link SeedingStrategy}.
+   */
+  SeedingStrategy createSeedingStrategy();
 }

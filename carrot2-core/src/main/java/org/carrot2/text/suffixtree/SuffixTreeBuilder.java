@@ -17,7 +17,7 @@ package org.carrot2.text.suffixtree;
  * Builds a suffix tree using method chains, thus avoiding direct dependency on
  * specialized constructors of {@link SuffixTree}.
  * 
- * @see #from(ISequence)
+ * @see #from(Sequence)
  * @see #build()
  */
 public final class SuffixTreeBuilder
@@ -25,7 +25,7 @@ public final class SuffixTreeBuilder
     /**
      * The input sequence for the tree.
      */
-    private final ISequence sequence;
+    private final Sequence sequence;
 
     /* */
     private SuffixTree.IStateCallback newStateCallback;
@@ -34,9 +34,9 @@ public final class SuffixTreeBuilder
     private SuffixTree.IProgressCallback progressCallback;
 
     /**
-     * @see #from(ISequence) 
+     * @see #from(Sequence)
      */
-    private SuffixTreeBuilder(ISequence sequence)
+    private SuffixTreeBuilder(Sequence sequence)
     {
         this.sequence = sequence;
     }
@@ -44,7 +44,7 @@ public final class SuffixTreeBuilder
     /**
      * Returns the builder for a suffix tree made from <code>sequence</code>.
      */
-    public static SuffixTreeBuilder from(ISequence sequence)
+    public static SuffixTreeBuilder from(Sequence sequence)
     {
         return new SuffixTreeBuilder(sequence);
     }

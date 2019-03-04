@@ -20,7 +20,7 @@ import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 /**
  * Random matrix factorization seeding.
  */
-public class RandomSeedingStrategy implements ISeedingStrategy
+public class RandomSeedingStrategy implements SeedingStrategy
 {
     /** Colt's random number generator */
     private DoubleFunction random;

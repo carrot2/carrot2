@@ -20,7 +20,7 @@ import org.carrot2.attrs.AcceptingVisitor;
 /**
  * Assigns labels to base vectors obtained from the factorization.
  */
-public interface ILabelAssigner extends AcceptingVisitor {
+public interface LabelAssigner extends AcceptingVisitor {
     /**
      * Assigns labels to base vectors found by the matrix factorization. The results must
      * be stored in the {@link LingoProcessingContext#clusterLabelFeatureIndex} and

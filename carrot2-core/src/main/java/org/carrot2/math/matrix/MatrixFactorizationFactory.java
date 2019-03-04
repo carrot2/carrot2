@@ -16,13 +16,13 @@ import org.carrot2.math.mahout.matrix.*;
 import org.carrot2.attrs.AcceptingVisitor;
 
 /**
- * A factory of {@link IMatrixFactorization}s.
+ * A factory of {@link MatrixFactorization}s.
  */
-public interface IMatrixFactorizationFactory extends AcceptingVisitor {
-    /**
-     * Factorizes matrix <code>A</code>.
-     * 
-     * @param A matrix to be factorized.
-     */
-    IMatrixFactorization factorize(DoubleMatrix2D A);
+public interface MatrixFactorizationFactory extends AcceptingVisitor {
+  /**
+   * Factorizes matrix <code>A</code>.
+   *
+   * @param A matrix to be factorized.
+   */
+  MatrixFactorization factorize(DoubleMatrix2D A);
 }

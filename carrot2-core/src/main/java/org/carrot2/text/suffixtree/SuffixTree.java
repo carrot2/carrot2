@@ -47,7 +47,7 @@ public final class SuffixTree
     /**
      * The input sequence of integers.
      */
-    final ISequence sequence;
+    final Sequence sequence;
 
     /**
      * Cached size of {@link #sequence}.
@@ -177,8 +177,8 @@ public final class SuffixTree
     /**
      * Build a suffix tree for a given input sequence of symbols.
      */
-    public SuffixTree(ISequence sequence, IStateCallback newStateCallback,
-        final IProgressCallback progressCallback)
+    public SuffixTree(Sequence sequence, IStateCallback newStateCallback,
+                      final IProgressCallback progressCallback)
     {
         this.sequence = sequence;
         this.newStateCallback = newStateCallback;
@@ -428,7 +428,7 @@ public final class SuffixTree
      *         leaf state corresponding to a given sequence of objects. This indicates the
      *         input sequence had a suffix identical to <code>sequence</code>.
      */
-    public boolean containsSuffix(ISequence seq)
+    public boolean containsSuffix(Sequence seq)
     {
         int state = root;
         int i = 0;

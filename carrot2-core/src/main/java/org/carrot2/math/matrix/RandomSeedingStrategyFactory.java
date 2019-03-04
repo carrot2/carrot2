@@ -15,7 +15,7 @@ package org.carrot2.math.matrix;
 /**
  * Creates random seeding strategies.
  */
-public class RandomSeedingStrategyFactory implements ISeedingStrategyFactory
+public class RandomSeedingStrategyFactory implements SeedingStrategyFactory
 {
     /** The random seed to be used */
     private int seed;
@@ -40,7 +40,7 @@ public class RandomSeedingStrategyFactory implements ISeedingStrategyFactory
         this.dateSeed = false;
     }
 
-    public ISeedingStrategy createSeedingStrategy()
+    public SeedingStrategy createSeedingStrategy()
     {
         RandomSeedingStrategy seeding;
 

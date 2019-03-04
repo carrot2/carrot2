@@ -19,7 +19,7 @@ import org.carrot2.math.mahout.matrix.*;
  */
 public class NonnegativeMatrixFactorizationEDFactory extends IterativeMatrixFactorizationFactory
 {
-    public IMatrixFactorization factorize(DoubleMatrix2D A)
+    public MatrixFactorization factorize(DoubleMatrix2D A)
     {
         NonnegativeMatrixFactorizationED factorization = new NonnegativeMatrixFactorizationED(A);
         factorization.setK(k);

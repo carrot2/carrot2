@@ -16,9 +16,9 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.attrs.AttrComposite;
 
 /**
- * A base for {@link ILabelFilter} implementations that handle each label independently.
+ * A base for {@link LabelFilter} implementations that handle each label independently.
  */
-public abstract class SingleLabelFilterBase extends AttrComposite implements ILabelFilter {
+public abstract class SingleLabelFilterBase extends AttrComposite implements LabelFilter {
 
   public void filter(PreprocessingContext context, boolean[] acceptedStems,
                      boolean[] acceptedPhrases) {

@@ -17,7 +17,7 @@ import org.carrot2.math.mahout.matrix.*;
 /**
  * Matrix seeding based on the k-means algorithms.
  */
-public class KMeansSeedingStrategy implements ISeedingStrategy
+public class KMeansSeedingStrategy implements SeedingStrategy
 {
     /** The maximum number of KMeans iterations */
     private int maxIterations;

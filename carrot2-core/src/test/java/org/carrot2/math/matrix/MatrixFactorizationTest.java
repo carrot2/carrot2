@@ -368,22 +368,22 @@ public class MatrixFactorizationTest extends TestBase
             new LocalNonnegativeMatrixFactorizationFactory());
     }
 
-    private IMatrixFactorization checkIterative(DoubleMatrix2D expectedU,
-                                                DoubleMatrix2D expectedV, IterativeMatrixFactorizationFactory factory)
+    private MatrixFactorization checkIterative(DoubleMatrix2D expectedU,
+                                               DoubleMatrix2D expectedV, IterativeMatrixFactorizationFactory factory)
     {
         factory.setK(K);
         factory.setMaxIterations(MAX_ITERATIONS);
         factory.setStopThreshold(STOP_THRESHOLD);
         factory.setSeedingFactory(ConstantSeedingStrategyFactory.INSTANCE);
 
-        IMatrixFactorization factorization = factory.factorize(A);
+        MatrixFactorization factorization = factory.factorize(A);
         check(expectedU, expectedV, factorization);
 
         return factorization;
     }
 
     private void check(DoubleMatrix2D expectedU, DoubleMatrix2D expectedV,
-        IMatrixFactorization factorization)
+        MatrixFactorization factorization)
     {
         final DoubleMatrix2D u = factorization.getU();
         MatrixAssertions.assertThat(u).as("U").isEquivalentTo(expectedU, DELTA);
@@ -391,7 +391,7 @@ public class MatrixFactorizationTest extends TestBase
     }
 
     /** Returns constant matrices of fixed size */
-    static class ConstantSeedingStrategyFactory implements ISeedingStrategyFactory
+    static class ConstantSeedingStrategyFactory implements SeedingStrategyFactory
     {
         static ConstantSeedingStrategyFactory INSTANCE = new ConstantSeedingStrategyFactory();
 
@@ -439,7 +439,7 @@ public class MatrixFactorizationTest extends TestBase
             }
         };
 
-        public ISeedingStrategy createSeedingStrategy()
+        public SeedingStrategy createSeedingStrategy()
         {
             return (A, U, V) -> {
                 U.assign(constantU);

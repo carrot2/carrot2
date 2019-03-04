@@ -16,7 +16,7 @@ import static org.carrot2.text.suffixtree.SuffixTree.NO_EDGE;
 
 import java.util.ArrayList;
 
-import org.carrot2.text.suffixtree.ISequence;
+import org.carrot2.text.suffixtree.Sequence;
 import org.carrot2.text.suffixtree.IntegerSequence;
 import org.carrot2.text.suffixtree.SuffixTree;
 import org.carrot2.text.suffixtree.SuffixTreeBuilder;
@@ -29,7 +29,7 @@ import com.carrotsearch.hppc.IntStack;
  */
 final class GeneralizedSuffixTree {
   /**
-   * Builds an {@link ISequence} suitable for detection of frequently occurring phrases
+   * Builds an {@link Sequence} suitable for detection of frequently occurring phrases
    * in many documents using a {@link SuffixTree}. Marks ends of phrases with unique
    * symbols and stores the information about document boundaries.
    */
@@ -104,7 +104,7 @@ final class GeneralizedSuffixTree {
       this.stateOriginDocument.clear();
 
       final LeafStateMarker marker = new LeafStateMarker();
-      final ISequence seq = new IntegerSequence(input.buffer, 0, input.elementsCount);
+      final Sequence seq = new IntegerSequence(input.buffer, 0, input.elementsCount);
       this.stree = SuffixTreeBuilder.from(seq)
           .withProgressCallback(marker)
           .withStateCallback(marker)

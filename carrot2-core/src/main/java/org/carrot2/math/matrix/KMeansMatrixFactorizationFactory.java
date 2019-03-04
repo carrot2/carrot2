@@ -19,7 +19,7 @@ import org.carrot2.math.mahout.matrix.*;
  */
 public class KMeansMatrixFactorizationFactory extends IterativeMatrixFactorizationFactory
 {
-    public IMatrixFactorization factorize(DoubleMatrix2D A)
+    public MatrixFactorization factorize(DoubleMatrix2D A)
     {
         KMeansMatrixFactorization factorization = new KMeansMatrixFactorization(A);
         factorization.setK(k);

@@ -29,7 +29,7 @@ import org.carrot2.attrs.AttrComposite;
  * {@link SimpleLabelAssigner}. This method is slightly slower than
  * {@link SimpleLabelAssigner}.
  */
-public class UniqueLabelAssigner extends AttrComposite implements ILabelAssigner {
+public class UniqueLabelAssigner extends AttrComposite implements LabelAssigner {
     public void assignLabels(LingoProcessingContext context, DoubleMatrix2D stemCos,
         IntIntHashMap filteredRowToStemIndex, DoubleMatrix2D phraseCos)
     {

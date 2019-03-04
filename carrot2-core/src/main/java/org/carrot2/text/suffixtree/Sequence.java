@@ -18,16 +18,15 @@ package org.carrot2.text.suffixtree;
  * as integers, where equal values at different indices indicate equal objects, whatever
  * the underlying objects might be.
  */
-public interface ISequence
-{
-    /**
-     * Returns the number of elements in the sequence.
-     */
-    public int size();
+public interface Sequence {
+  /**
+   * Returns the number of elements in the sequence.
+   */
+  int size();
 
-    /**
-     * Returns a unique integer code for object at index <code>i</code> (the first element
-     * has 0 index).
-     */
-    public int objectAt(int i);
+  /**
+   * Returns a unique integer code for object at index <code>i</code> (the first element
+   * has 0 index).
+   */
+  int objectAt(int i);
 }

@@ -21,7 +21,7 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
  *
  * @see LabelFilterProcessor
  */
-public interface ILabelFilter {
+public interface LabelFilter {
   /**
    * Called to perform label filtering.
    *
@@ -31,6 +31,5 @@ public interface ILabelFilter {
    * @param acceptedPhrases the filter should set to <code>false</code> those elements
    *                        that correspond to the phrases to be filtered out
    */
-  public void filter(PreprocessingContext context, boolean[] acceptedStems,
-                     boolean[] acceptedPhrases);
+  void filter(PreprocessingContext context, boolean[] acceptedStems, boolean[] acceptedPhrases);
 }

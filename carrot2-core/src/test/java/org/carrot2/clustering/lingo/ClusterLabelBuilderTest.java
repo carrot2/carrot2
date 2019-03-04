@@ -130,7 +130,7 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase {
     }
   }
 
-  private static class OneLabelFeatureScorer implements IFeatureScorer {
+  private static class OneLabelFeatureScorer implements FeatureScorer {
     private int labelIndex;
     private double score;
 

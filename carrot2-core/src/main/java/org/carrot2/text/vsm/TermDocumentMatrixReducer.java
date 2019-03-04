@@ -15,8 +15,8 @@ package org.carrot2.text.vsm;
 import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 import org.carrot2.math.mahout.matrix.impl.DenseDoubleMatrix2D;
 import org.carrot2.math.matrix.MatrixUtils;
-import org.carrot2.math.matrix.IMatrixFactorization;
-import org.carrot2.math.matrix.IMatrixFactorizationFactory;
+import org.carrot2.math.matrix.MatrixFactorization;
+import org.carrot2.math.matrix.MatrixFactorizationFactory;
 import org.carrot2.math.matrix.IterativeMatrixFactorizationFactory;
 import org.carrot2.math.matrix.NonnegativeMatrixFactorizationEDFactory;
 import org.carrot2.attrs.AttrComposite;
@@ -31,10 +31,10 @@ public class TermDocumentMatrixReducer extends AttrComposite {
    * Factorization method. The method to be used to factorize the term-document matrix
    * and create base vectors that will give rise to cluster labels.
    */
-  public IMatrixFactorizationFactory factorizationFactory;
+  public MatrixFactorizationFactory factorizationFactory;
   {
     attributes.register("factorizationFactory",
-        AttrObject.builder(IMatrixFactorizationFactory.class)
+        AttrObject.builder(MatrixFactorizationFactory.class)
             .label("Term-document matrix factorization method")
             .getset(() -> factorizationFactory, (v) -> factorizationFactory = v)
             .defaultValue(NonnegativeMatrixFactorizationEDFactory::new));
@@ -57,14 +57,14 @@ public class TermDocumentMatrixReducer extends AttrComposite {
     }
 
     MatrixUtils.normalizeColumnL2(vsmContext.termDocumentMatrix, null);
-    final IMatrixFactorization factorization = factorizationFactory.factorize(vsmContext.termDocumentMatrix);
+    final MatrixFactorization factorization = factorizationFactory.factorize(vsmContext.termDocumentMatrix);
     context.baseMatrix = factorization.getU();
     context.coefficientMatrix = factorization.getV();
     context.baseMatrix = trim(factorizationFactory, factorization.getU(), dimensions);
     context.coefficientMatrix = trim(factorizationFactory, factorization.getV(), dimensions);
   }
 
-  private final DoubleMatrix2D trim(IMatrixFactorizationFactory factorizationFactory, DoubleMatrix2D matrix,
+  private final DoubleMatrix2D trim(MatrixFactorizationFactory factorizationFactory, DoubleMatrix2D matrix,
                                     int dimensions) {
     if (!(factorizationFactory instanceof IterativeMatrixFactorizationFactory) && matrix.columns() > dimensions) {
       return matrix.viewPart(0, 0, matrix.rows(), dimensions);

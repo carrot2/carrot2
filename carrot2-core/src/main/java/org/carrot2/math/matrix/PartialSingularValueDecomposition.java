@@ -23,8 +23,7 @@ import org.carrot2.math.mahout.matrix.impl.DenseDoubleMatrix2D;
 /**
  * Performs matrix factorization using the Singular Value Decomposition algorithm.
  */
-public class PartialSingularValueDecomposition extends MatrixFactorizationBase implements
-    IMatrixFactorization
+public class PartialSingularValueDecomposition extends MatrixFactorizationBase implements MatrixFactorization
 {
     /** The desired number of base vectors */
     protected int k;

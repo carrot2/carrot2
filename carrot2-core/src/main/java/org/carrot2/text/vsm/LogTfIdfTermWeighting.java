@@ -17,7 +17,7 @@ import org.carrot2.attrs.AttrComposite;
 /**
  * Calculates term-document matrix element values based on Term Frequency.
  */
-public class LogTfIdfTermWeighting extends AttrComposite implements ITermWeighting {
+public class LogTfIdfTermWeighting extends AttrComposite implements TermWeighting {
   public double calculateTermWeight(int termFrequency, int documentFrequency,
                                     int documentCount) {
     if (documentFrequency > 0) {

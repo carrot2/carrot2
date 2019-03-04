@@ -29,7 +29,7 @@ import java.util.Arrays;
  * 
  * @see UniqueLabelAssigner
  */
-public class SimpleLabelAssigner extends AttrComposite implements ILabelAssigner {
+public class SimpleLabelAssigner extends AttrComposite implements LabelAssigner {
     public void assignLabels(LingoProcessingContext context, DoubleMatrix2D stemCos,
         IntIntHashMap filteredRowToStemIndex, DoubleMatrix2D phraseCos)
     {

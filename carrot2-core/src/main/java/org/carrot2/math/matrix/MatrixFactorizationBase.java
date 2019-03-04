@@ -15,9 +15,9 @@ package org.carrot2.math.matrix;
 import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 
 /**
- * Abstract implementation of the {@link IMatrixFactorization} interface.
+ * Abstract implementation of the {@link MatrixFactorization} interface.
  */
-abstract class MatrixFactorizationBase implements IMatrixFactorization
+abstract class MatrixFactorizationBase implements MatrixFactorization
 {
     /** Input matrix */
     protected DoubleMatrix2D A;

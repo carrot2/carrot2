@@ -139,7 +139,7 @@ public class LabelFilterProcessor extends AttrComposite {
         numericLabelFilter,
         stopLabelFilter,
         completeLabelFilter)
-    .forEachOrdered((ILabelFilter filter) -> {
+    .forEachOrdered((LabelFilter filter) -> {
       if (filter != null) {
         filter.filter(context, acceptedStems, acceptedPhrases);
       }

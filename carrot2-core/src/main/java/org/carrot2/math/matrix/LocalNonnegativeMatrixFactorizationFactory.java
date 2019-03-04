@@ -18,7 +18,7 @@ import org.carrot2.math.mahout.matrix.*;
  * {@link LocalNonnegativeMatrixFactorization} factory.
  */
 public class LocalNonnegativeMatrixFactorizationFactory extends IterativeMatrixFactorizationFactory {
-  public IMatrixFactorization factorize(DoubleMatrix2D A) {
+  public MatrixFactorization factorize(DoubleMatrix2D A) {
     LocalNonnegativeMatrixFactorization factorization = new LocalNonnegativeMatrixFactorization(A);
     factorization.setK(k);
     factorization.setMaxIterations(maxIterations);

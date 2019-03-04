@@ -82,10 +82,10 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
    * Term weighting. The method for calculating weight of words in the term-document
    * matrices.
    */
-  public ITermWeighting termWeighting;
+  public TermWeighting termWeighting;
 
   {
-    attributes.register("termWeighting", AttrObject.builder(ITermWeighting.class)
+    attributes.register("termWeighting", AttrObject.builder(TermWeighting.class)
         .label("Term weighting for term-document matrix")
         .getset(() -> termWeighting, (v) -> termWeighting = v)
         .defaultValue(LogTfIdfTermWeighting::new));
@@ -124,7 +124,7 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
 
     // Sort stems by weight, so that stems get included in the matrix in the order
     // of frequency
-    final ITermWeighting termWeighting = this.termWeighting;
+    final TermWeighting termWeighting = this.termWeighting;
     final double[] stemsWeight = new double[stemsToInclude.length];
     for (int i = 0; i < stemsToInclude.length; i++) {
       final int stemIndex = stemsToInclude[i];
@@ -250,7 +250,7 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
    * same term space as the original term-document matrix.
    */
   static DoubleMatrix2D buildAlignedMatrix(VectorSpaceModelContext vsmContext, int[] featureIndex,
-                                           ITermWeighting termWeighting) {
+                                           TermWeighting termWeighting) {
     final IntIntHashMap stemToRowIndex = vsmContext.stemToRowIndex;
     if (featureIndex.length == 0) {
       return new DenseDoubleMatrix2D(stemToRowIndex.size(), 0);

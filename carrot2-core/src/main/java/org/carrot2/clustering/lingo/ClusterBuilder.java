@@ -19,7 +19,7 @@ import com.carrotsearch.hppc.cursors.IntIntCursor;
 import org.carrot2.math.mahout.function.Functions;
 import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.text.vsm.ITermWeighting;
+import org.carrot2.text.vsm.TermWeighting;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
 import org.carrot2.util.GraphUtils;
 import org.carrot2.math.LinearApproximation;
@@ -85,10 +85,10 @@ public class ClusterBuilder extends AttrComposite {
     /**
      * Cluster label assignment method.
      */
-    public ILabelAssigner labelAssigner;
+    public LabelAssigner labelAssigner;
 
     {
-        attributes.register("labelAssigner", AttrObject.builder(ILabelAssigner.class)
+        attributes.register("labelAssigner", AttrObject.builder(LabelAssigner.class)
             .label("Cluster label assignment method")
             .getset(() -> labelAssigner, (v) -> labelAssigner = v)
             .defaultValue(UniqueLabelAssigner::new));
@@ -98,7 +98,7 @@ public class ClusterBuilder extends AttrComposite {
      * Optional feature scorer. We don't make it an attribute for now as the core Lingo
      * will not have any implementations for this interface.
      */
-    IFeatureScorer featureScorer;
+    FeatureScorer featureScorer;
 
     /**
      * Coefficients for label weighting based on the cluster size.
@@ -109,7 +109,7 @@ public class ClusterBuilder extends AttrComposite {
     /**
      * Discovers labels for clusters.
      */
-    void buildLabels(LingoProcessingContext context, ITermWeighting termWeighting) {
+    void buildLabels(LingoProcessingContext context, TermWeighting termWeighting) {
         final PreprocessingContext preprocessingContext = context.preprocessingContext;
         final VectorSpaceModelContext vsmContext = context.vsmContext;
         final DoubleMatrix2D reducedTdMatrix = context.reducedVsmContext.baseMatrix;

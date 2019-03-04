@@ -70,7 +70,7 @@ public class SuffixTreeTest extends TestBase
         }
         input[input.length - 1] = Integer.MAX_VALUE;
 
-        final SuffixTree stree = SuffixTreeBuilder.from(new ISequence() {
+        final SuffixTree stree = SuffixTreeBuilder.from(new Sequence() {
             public int objectAt(int i)
             {
                 return input[i];

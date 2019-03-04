@@ -19,7 +19,7 @@ import org.carrot2.attrs.AttrComposite;
  * Factory for {@link PartialSingularValueDecomposition}s.
  */
 public class PartialSingularValueDecompositionFactory extends AttrComposite
-    implements IMatrixFactorizationFactory
+    implements MatrixFactorizationFactory
 {
     /** The desired number of base vectors */
     protected int k;
@@ -36,7 +36,7 @@ public class PartialSingularValueDecompositionFactory extends AttrComposite
         this.k = DEFAULT_K;
     }
 
-    public IMatrixFactorization factorize(DoubleMatrix2D A)
+    public MatrixFactorization factorize(DoubleMatrix2D A)
     {
         PartialSingularValueDecomposition partialSingularValueDecomposition = new PartialSingularValueDecomposition(
             A);
