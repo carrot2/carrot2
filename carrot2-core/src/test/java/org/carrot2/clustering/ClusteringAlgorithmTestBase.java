@@ -9,6 +9,7 @@ import org.carrot2.attrs.*;
 import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.*;
@@ -140,7 +141,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
   @Nightly
   @Test
   @ThreadLeakLingering(linger = 5000)
-  public void testResultsStable() throws Exception {
+  public void testResultsStableFromSameOrder() throws Exception {
     final int numberOfThreads = randomIntBetween(1, 8);
     final int queriesPerThread = scaledRandomIntBetween(5, 25);
 
@@ -177,5 +178,62 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
     } finally {
       executorService.shutdown();
     }
+  }
+
+  /**
+   * Runs the algorithm concurrently, verifying stability of results.
+   */
+  @Nightly
+  @Test
+  @ThreadLeakLingering(linger = 5000)
+  @Ignore("https://issues.carrot2.org/browse/CARROT-1195") // TODO: CARROT-1195
+  public void testResultsStableFromRandomShuffle() throws Exception {
+    final int numberOfThreads = randomIntBetween(1, 8);
+    final int queriesPerThread = scaledRandomIntBetween(5, 25);
+
+    System.out.println("Threads: " + numberOfThreads + ", qpt: " + queriesPerThread);
+
+    List<Document> documents = RandomizedTest.randomFrom(Arrays.asList(
+        SampleDocumentData.DOCUMENTS_DATA_MINING,
+        SampleDocumentData.DOCUMENTS_DAWID));
+
+    ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+    List<Callable<List<Cluster<Document>>>> callables = new ArrayList<>();
+    for (int i = 0; i < numberOfThreads * queriesPerThread; i++) {
+      final int dataSetIndex = i;
+      callables.add(() -> {
+        long s = System.currentTimeMillis();
+        try {
+          ArrayList<Document> cloned = new ArrayList<>(documents);
+          Collections.shuffle(cloned);
+          return algorithm().cluster(cloned.stream(), testLanguageModel());
+        } finally {
+          System.out.println("Done. " + (System.currentTimeMillis() - s));
+        }
+      });
+    }
+
+    try {
+      List<Cluster<Document>> reference = null;
+      for (Future<List<Cluster<Document>>> f : executorService.invokeAll(callables)) {
+        List<Cluster<Document>> clusters = f.get();
+        // Order documents by their hash code so that equality works.
+        orderDocsByHash(clusters);
+        if (reference == null) {
+          reference = clusters;
+        } else {
+          assertThat(clusters).containsExactlyElementsOf(reference);
+        }
+      }
+    } finally {
+      executorService.shutdown();
+    }
+  }
+
+  private void orderDocsByHash(List<Cluster<Document>> clusters) {
+    clusters.forEach(c -> {
+      c.getDocuments().sort(Comparator.comparingInt(Object::hashCode));
+      orderDocsByHash(c.getSubclusters());
+    });
   }
 }

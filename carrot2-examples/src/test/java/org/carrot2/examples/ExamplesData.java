@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  * hard-coded so that no other external components are needed to run tests (i.e., circular
  * dependency between the XML input component and the core).
  */
-final class ExampleData {
+final class ExamplesData {
   final static String[][] DOCUMENTS_DATA_MINING = {{"http://en.wikipedia.org/wiki/Data_mining", "Data mining -" +
       " Wikipedia, the free " + "encyclopedia", "Article about knowledge-discovery in databases (KDD), the practice " +
       "of automatically " + "searching large stores of data for patterns."},
@@ -421,7 +421,7 @@ final class ExampleData {
               "Mining (SDM'08), (full paper), Atlanta, GA, April 2007. .." + "."}};
 
   public static Stream<Document> documentStream() {
-    return Arrays.stream(ExampleData.DOCUMENTS_DATA_MINING).map(fields -> (fieldVisitor) -> {
+    return Arrays.stream(ExamplesData.DOCUMENTS_DATA_MINING).map(fields -> (fieldVisitor) -> {
       fieldVisitor.accept("title", fields[1]);
       fieldVisitor.accept("content", fields[2]);
     });

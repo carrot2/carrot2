@@ -14,7 +14,6 @@ package org.carrot2.examples;
 
 import org.carrot2.attrs.*;
 import org.carrot2.clustering.Cluster;
-import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
@@ -36,7 +35,7 @@ import java.util.stream.Stream;
 public class E02_TweakingAttributes {
   @Test
   public void tweakLingo() {
-    Stream<Document> documentStream = ExampleData.documentStream();
+    Stream<Document> documentStream = ExamplesData.documentStream();
 
     LanguageComponents languageComponents =
         LanguageComponents.get(EnglishLanguageComponentsFactory.NAME);
@@ -59,12 +58,12 @@ public class E02_TweakingAttributes {
 
     List<Cluster<Document>> clusters = algorithm.cluster(documentStream, languageComponents);
     System.out.println("Clusters from Lingo:");
-    ExampleCommon.printClusters(clusters, "");
+    ExamplesCommon.printClusters(clusters, "");
   }
 
   @Test
   public void tweakStc() {
-    Stream<Document> documentStream = ExampleData.documentStream();
+    Stream<Document> documentStream = ExamplesData.documentStream();
 
     LanguageComponents languageComponents =
         LanguageComponents.get(EnglishLanguageComponentsFactory.NAME);
@@ -79,7 +78,7 @@ public class E02_TweakingAttributes {
 
     List<Cluster<Document>> clusters = algorithm.cluster(documentStream, languageComponents);
     System.out.println("Clusters from STC:");
-    ExampleCommon.printClusters(clusters, "");
+    ExamplesCommon.printClusters(clusters, "");
   }
 
   @Test

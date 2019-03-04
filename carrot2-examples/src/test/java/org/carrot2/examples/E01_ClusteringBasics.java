@@ -24,7 +24,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -36,7 +35,7 @@ public class E01_ClusteringBasics {
     // Create a stream of "documents" for clustering. Each such document provides
     // text content fields to a visitor.
     Stream<Document> documentStream =
-        Arrays.stream(ExampleData.DOCUMENTS_DATA_MINING).map(fields -> (fieldVisitor) -> {
+        Arrays.stream(ExamplesData.DOCUMENTS_DATA_MINING).map(fields -> (fieldVisitor) -> {
       fieldVisitor.accept("title", fields[1]);
       fieldVisitor.accept("content", fields[2]);
     });
@@ -57,7 +56,7 @@ public class E01_ClusteringBasics {
 
   @Test
   public void clusterWithQueryHint() {
-    Stream<Document> documentStream = ExampleData.documentStream();
+    Stream<Document> documentStream = ExamplesData.documentStream();
 
     LanguageComponents languageComponents =
         LanguageComponents.get(EnglishLanguageComponentsFactory.NAME);
@@ -67,7 +66,7 @@ public class E01_ClusteringBasics {
     LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
     algorithm.queryHint.set("data mining");
     List<Cluster<Document>> clusters = algorithm.cluster(documentStream, languageComponents);
-    ExampleCommon.printClusters(clusters, "");
+    ExamplesCommon.printClusters(clusters, "");
   }
 
   @Test
@@ -82,8 +81,8 @@ public class E01_ClusteringBasics {
         new BisectingKMeansClusteringAlgorithm())) {
       System.out.println();
       System.out.println("Clustering implementation: " + algorithm.getClass().getSimpleName());
-      List<Cluster<Document>> clusters = algorithm.cluster(ExampleData.documentStream(), languageComponents);
-      ExampleCommon.printClusters(clusters, "");
+      List<Cluster<Document>> clusters = algorithm.cluster(ExamplesData.documentStream(), languageComponents);
+      ExamplesCommon.printClusters(clusters, "");
     }
   }
 }

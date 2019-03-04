@@ -1,0 +1,114 @@
+
+/*
+ * Carrot2 project.
+ *
+ * Copyright (C) 2002-2019, Dawid Weiss, Stanisław Osiński.
+ * All rights reserved.
+ *
+ * Refer to the full license file "carrot2.LICENSE"
+ * in the root folder of the repository checkout or at:
+ * http://www.carrot2.org/carrot2.LICENSE
+ */
+
+package org.carrot2.examples;
+
+import org.carrot2.attrs.Attrs;
+import org.carrot2.attrs.JvmNameMapper;
+import org.carrot2.clustering.Cluster;
+import org.carrot2.clustering.ClusteringAlgorithm;
+import org.carrot2.clustering.Document;
+import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
+import org.carrot2.language.EnglishLanguageComponentsFactory;
+import org.carrot2.language.LanguageComponents;
+import org.carrot2.math.matrix.NonnegativeMatrixFactorizationKLFactory;
+import org.junit.Test;
+
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+/**
+ * This example shows clustering algorithms in multi-threading processing scenarios.
+ */
+public class E04_Multithreading {
+  @Test
+  public void ephemeral() throws Exception {
+    // Carrot2 components are *not* designed to be reused concurrently by multiple threads. A single
+    // algorithm or set of language components should only be used by one thread at a time.
+    //
+    // If multi-core concurrent clustering is needed, the application needs to guarantee the above property.
+    // The simplest way to achieve thread-safety is to create components on the fly and discard them after the
+    // clustering completes.
+
+    Function<Stream<Document>, List<Cluster<Document>>> processor = (documentStream) -> {
+      // Note that both language components and the algorithm are created per-thread and then discarded.
+      LanguageComponents languageComponents = LanguageComponents.get(EnglishLanguageComponentsFactory.NAME);
+      LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
+      algorithm.preprocessing.phraseDfThreshold.set(10);
+      return algorithm.cluster(documentStream, languageComponents);
+    };
+
+    runConcurrentClustering(processor);
+  }
+
+  @Test
+  public void cloningVisitor() throws Exception {
+    // Sometimes it may be more convenient to configure an algorithm instance and then create
+    // a clone of it for each processor thread. This can be done with the default attribute
+    // visitor implementation fairly easily.
+    //
+    // Note that language components must still be provided on a per-thread basis.
+
+    LingoClusteringAlgorithm preconfigured = new LingoClusteringAlgorithm();
+    preconfigured.preprocessing.phraseDfThreshold.set(10);
+    preconfigured.desiredClusterCount.set(10);
+    preconfigured.matrixReducer.factorizationFactory = new NonnegativeMatrixFactorizationKLFactory();
+    Map<String, Object> attrs = Attrs.toMap(preconfigured, JvmNameMapper.INSTANCE::toName);
+
+    Function<Stream<Document>, List<Cluster<Document>>> processor = (documentStream) -> {
+      // Clone from preconfigured.
+      LingoClusteringAlgorithm cloned = Attrs.fromMap(LingoClusteringAlgorithm.class, attrs,
+          JvmNameMapper.INSTANCE::fromName);
+
+      return cloned.cluster(documentStream, LanguageComponents.get(EnglishLanguageComponentsFactory.NAME));
+    };
+
+    runConcurrentClustering(processor);
+  }
+
+  private void runConcurrentClustering(Function<Stream<Document>, List<Cluster<Document>>> processor) throws InterruptedException, ExecutionException {
+    // Let's say we have 50 clustering requests to process with all available CPU cores (in the default fork-join pool).
+    Collection<Callable<List<Cluster<Document>>>> tasks = IntStream.range(0, 50)
+        .mapToObj(ord -> (Callable<List<Cluster<Document>>>) () -> {
+          // Shuffle input documents for each request.
+          ArrayList<String[]> fieldValues = new ArrayList<>(Arrays.asList(ExamplesData.DOCUMENTS_DATA_MINING));
+          Collections.shuffle(fieldValues, new Random(ord));
+
+          Stream<Document> documentStream =
+              fieldValues.stream().map(fields -> (fieldVisitor) -> {
+                fieldVisitor.accept("title", fields[1]);
+                fieldVisitor.accept("content", fields[2]);
+              });
+
+          long start = System.nanoTime();
+          List<Cluster<Document>> clusters = processor.apply(documentStream);
+          long end = System.nanoTime();
+          System.out.println(String.format(Locale.ROOT,
+              "Done clustering request: %d [%.2f sec.], %d cluster(s)",
+              ord,
+              (end - start) / (double) TimeUnit.SECONDS.toNanos(1),
+              clusters.size()));
+          return clusters;
+        })
+        .collect(Collectors.toList());
+
+    ExecutorService service = ForkJoinPool.commonPool();
+    for (Future<List<Cluster<Document>>> future : service.invokeAll(tasks)) {
+      // Consume the output.
+      future.get();
+    }
+  }
+}

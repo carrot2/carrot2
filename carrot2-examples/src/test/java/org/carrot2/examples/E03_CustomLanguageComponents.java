@@ -27,18 +27,25 @@ import java.util.stream.Stream;
  */
 public class E03_CustomLanguageComponents {
   @Test
+  public void listAllAvailableLanguages() {
+    // Preprocessing components for several languages are provided in the Carrot2 distribution (and in
+    // optional JAR libraries named carrot2-lang-*. These languages self-register with LanguageComponents
+    // factory and can be enumerated, as shown here:
+    System.out.println("Language preprocessing components for the following languages are available:\n  " +
+        LanguageComponents.factories().map(factory -> factory.name()).collect(Collectors.joining("\n  ")));
+  }
+
+  @Test
   public void customLanguageComponents() {
-    Stream<Document> documentStream = ExampleData.documentStream();
+    Stream<Document> documentStream = ExamplesData.documentStream();
 
-    // Language-specific components required for clustering algorithms are: a tokenizer, a stemmer and
-    // a lexical resource provider.
-    // These components are provided for many languages by default and are available via an enumeration
-    // in LanguageComponents, shown here:
-    System.out.println("Preprocessing components for the following languages are available:\n  " +
-      LanguageComponents.factories().map(factory -> factory.name()).collect(Collectors.joining("\n  ")));
-
-    // However, if this isn't sufficient or needs to be customized, a custom language component set can
-    // be assembled, as shown here.
+    // The language-specific components required for clustering algorithms are:
+    // a tokenizer, a stemmer and a lexical resource provider. The language components factory
+    // lists all languages for which these components are already preconfigured (see the
+    // example above).
+    //
+    // However, if this isn't sufficient or needs to be customized, a custom component set can
+    // be assembled, as shown below.
     Stemmer stemmer = (word) -> word.toString().toLowerCase(Locale.ROOT);
     Tokenizer tokenizer = new ExtendedWhitespaceTokenizer();
     LexicalData lexicalData = new LexicalData() {
@@ -57,12 +64,13 @@ public class E03_CustomLanguageComponents {
         return word.length() <= 3 || ignored.contains(word.toString());
       }
     };
+
     LanguageComponents languageComponents = new LanguageComponents(stemmer, tokenizer, lexicalData);
 
     LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
     algorithm.desiredClusterCount.set(10);
     List<Cluster<Document>> clusters = algorithm.cluster(documentStream, languageComponents);
     System.out.println("Clusters:");
-    ExampleCommon.printClusters(clusters, "");
+    ExamplesCommon.printClusters(clusters, "");
   }
 }
