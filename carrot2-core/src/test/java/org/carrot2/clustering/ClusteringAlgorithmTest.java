@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class ClusteringAlgorithmApiTest extends TestBase {
+public class ClusteringAlgorithmTest extends TestBase {
   @Test
   public void testStreamingInterface() {
     class Doc implements Document {

@@ -31,6 +31,15 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
   }
 
   @Test
+  public void ensureAllDefaultAttrsHaveRegisteredAliases() {
+    Map<String, Object> asMap = Attrs.toMap(algorithm());
+    AcceptingVisitor reconstructed = Attrs.fromMap(AcceptingVisitor.class, asMap);
+    Assertions.assertThat(reconstructed)
+        .isNotNull()
+        .isInstanceOf(algorithm().getClass());
+  }
+
+  @Test
   public void ensureAttributesHaveDescriptions() {
     ArrayList<String> errors = new ArrayList<>();
     algorithm().accept(new AttrVisitor() {
@@ -132,7 +141,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
     Map<String, Object> map = Attrs.toMap(algorithm, JvmNameMapper.INSTANCE::toName);
     Attrs.fromMap(AcceptingVisitor.class, map, JvmNameMapper.INSTANCE::fromName);
 
-    System.out.println(Attrs.toPrettyString(algorithm));
+    System.out.println(Attrs.toPrettyString(algorithm, AliasMapper.SPI_DEFAULTS));
   }
 
   /**

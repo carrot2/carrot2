@@ -5,6 +5,11 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class AliasMapper implements ClassNameMapper {
+  public static ClassNameMapper SPI_DEFAULTS;
+  static {
+    SPI_DEFAULTS = loadFromSpi();
+  }
+
   public static class Alias<T> {
     private final String name;
     private final Predicate<Object> isInstanceOf;
@@ -22,13 +27,16 @@ public class AliasMapper implements ClassNameMapper {
   public <T> AliasMapper alias(String alias, Class<? extends T> exactClass, Supplier<T> supplier) {
     Objects.requireNonNull(exactClass);
     Objects.requireNonNull(supplier);
+    alias(alias, new Alias<T>(alias, (ob) -> exactClass.equals(ob.getClass()), supplier));
+    return this;
+  }
+
+  <T> void alias(String key, Alias<T> alias) {
     if (aliases.containsKey(alias)) {
       throw new RuntimeException(String.format(Locale.ROOT,
           "An alias of key '%s' already exists.", alias));
     }
-
-    aliases.put(alias, new Alias<T>(alias, (ob) -> exactClass.equals(ob.getClass()), supplier));
-    return this;
+    aliases.put(key, alias);
   }
 
   @Override
@@ -58,5 +66,25 @@ public class AliasMapper implements ClassNameMapper {
     }
 
     return first.get();
+  }
+
+  private static AliasMapper loadFromSpi() {
+    AliasMapper composite = new AliasMapper();
+    HashMap<String, String> keyToFactoryName = new HashMap<>();
+    for (AliasMapperFactory factory : ServiceLoader.load(AliasMapperFactory.class)) {
+      String name = factory.name();
+      factory.mapper().aliases.forEach((key, alias) -> {
+        if (keyToFactoryName.containsKey(key)) {
+          throw new RuntimeException(String.format(Locale.ROOT,
+              "Class alias named '%s' already defined by more than one factory: %s, %s",
+              key,
+              name,
+              keyToFactoryName.get(key)));
+        }
+        keyToFactoryName.put(key, name);
+        composite.alias(key, alias);
+      });
+    }
+    return composite;
   }
 }

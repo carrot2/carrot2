@@ -13,9 +13,7 @@
 package org.carrot2.examples;
 
 import org.carrot2.attrs.Attrs;
-import org.carrot2.attrs.JvmNameMapper;
 import org.carrot2.clustering.Cluster;
-import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.language.EnglishLanguageComponentsFactory;
@@ -66,12 +64,11 @@ public class E04_Multithreading {
     preconfigured.preprocessing.phraseDfThreshold.set(10);
     preconfigured.desiredClusterCount.set(10);
     preconfigured.matrixReducer.factorizationFactory = new NonnegativeMatrixFactorizationKLFactory();
-    Map<String, Object> attrs = Attrs.toMap(preconfigured, JvmNameMapper.INSTANCE::toName);
+    Map<String, Object> attrs = Attrs.toMap(preconfigured);
 
     Function<Stream<Document>, List<Cluster<Document>>> processor = (documentStream) -> {
       // Clone from preconfigured.
-      LingoClusteringAlgorithm cloned = Attrs.fromMap(LingoClusteringAlgorithm.class, attrs,
-          JvmNameMapper.INSTANCE::fromName);
+      LingoClusteringAlgorithm cloned = Attrs.fromMap(LingoClusteringAlgorithm.class, attrs);
 
       return cloned.cluster(documentStream, LanguageComponents.get(EnglishLanguageComponentsFactory.NAME));
     };

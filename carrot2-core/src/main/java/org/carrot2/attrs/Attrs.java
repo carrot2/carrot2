@@ -17,6 +17,10 @@ public final class Attrs {
     }
   }
 
+  public static Map<String, Object> toMap(AcceptingVisitor composite) {
+    return toMap(composite, AliasMapper.SPI_DEFAULTS::toName);
+  }
+
   public static Map<String, Object> toMap(AcceptingVisitor composite, Function<Object, String> classToName) {
     LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
@@ -27,6 +31,11 @@ public final class Attrs {
     @SuppressWarnings("unchecked")
     Map<String, Object> sub = (Map<String, Object>) map.get(KEY_WRAPPED);
     return sub;
+  }
+
+  public static <E extends AcceptingVisitor> E fromMap(Class<? extends E> clazz,
+                                                       Map<String, Object> map) {
+    return fromMap(clazz, map, AliasMapper.SPI_DEFAULTS::fromName);
   }
 
   public static <E extends AcceptingVisitor> E fromMap(Class<? extends E> clazz,
@@ -200,8 +209,8 @@ public final class Attrs {
     }
   }
 
-  public static String toPrettyString(AcceptingVisitor ob) {
-    Map<String, Object> map = Attrs.toMap(ob, JvmNameMapper.INSTANCE::toName);
+  public static String toPrettyString(AcceptingVisitor ob, ClassNameMapper mapper) {
+    Map<String, Object> map = Attrs.toMap(ob, mapper::toName);
     StringBuilder builder = new StringBuilder();
     StringBuilder indent = new StringBuilder();
     appendMap(map, builder, indent);
