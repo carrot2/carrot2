@@ -104,7 +104,7 @@ public final class Attrs {
             String type = (String) submap.remove(KEY_TYPE);
             value = attr.castAndSet(classToInstance.apply(type));
           } else {
-            Object instance = attr.newInstance();
+            Object instance = attr.newDefaultValue();
             if (instance == null) {
               throw new RuntimeException("Default instance supplier not provided for: " + key);
             }

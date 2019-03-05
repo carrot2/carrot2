@@ -47,13 +47,13 @@ public class AttrObject<T extends AcceptingVisitor> extends Attr<T> {
 
   public boolean isDefaultClass(Object value) {
     Objects.requireNonNull(value);
-    T def = newInstance();
+    T def = newDefaultValue();
     return def != null &&
         Objects.equals(def.getClass(), value.getClass()) &&
         Objects.equals(clazz, value.getClass());
   }
 
-  public T newInstance() {
+  public T newDefaultValue() {
     return this.newInstance.get();
   }
 
