@@ -1,6 +1,6 @@
 package org.carrot2.attrs;
 
-public interface AliasMapperFactory {
+public interface AliasMappingFactory {
   AliasMapper mapper();
   String name();
 }

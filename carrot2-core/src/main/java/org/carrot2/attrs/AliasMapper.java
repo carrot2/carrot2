@@ -71,7 +71,7 @@ public class AliasMapper implements ClassNameMapper {
   private static AliasMapper loadFromSpi() {
     AliasMapper composite = new AliasMapper();
     HashMap<String, String> keyToFactoryName = new HashMap<>();
-    for (AliasMapperFactory factory : ServiceLoader.load(AliasMapperFactory.class)) {
+    for (AliasMappingFactory factory : ServiceLoader.load(AliasMappingFactory.class)) {
       String name = factory.name();
       factory.mapper().aliases.forEach((key, alias) -> {
         if (keyToFactoryName.containsKey(key)) {

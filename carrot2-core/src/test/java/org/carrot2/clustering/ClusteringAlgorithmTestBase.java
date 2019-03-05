@@ -9,6 +9,7 @@ import org.carrot2.attrs.*;
 import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -17,6 +18,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -32,11 +35,54 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
 
   @Test
   public void ensureAllDefaultAttrsHaveRegisteredAliases() {
+    // Part 1: default to-from serialization via map.
     Map<String, Object> asMap = Attrs.toMap(algorithm());
     AcceptingVisitor reconstructed = Attrs.fromMap(AcceptingVisitor.class, asMap);
     Assertions.assertThat(reconstructed)
         .isNotNull()
         .isInstanceOf(algorithm().getClass());
+
+    // Part 2: explicit visitor.
+    algorithm().accept(new AttrVisitor() {
+      ArrayDeque<String> path = new ArrayDeque<>();
+
+      @Override
+      public void visit(String key, AttrBoolean attr) {
+      }
+
+      @Override
+      public void visit(String key, AttrInteger attr) {
+      }
+
+      @Override
+      public void visit(String key, AttrDouble attr) {
+      }
+
+      @Override
+      public void visit(String key, AttrEnum<? extends Enum<?>> attr) {
+      }
+
+      @Override
+      public void visit(String key, AttrString attr) {
+      }
+
+      @Override
+      public void visit(String key, AttrStringArray attr) {
+      }
+
+      @Override
+      public void visit(String key, AttrObject<?> attr) {
+        AcceptingVisitor o = attr.get();
+        if (o != null) {
+          Assertions.assertThatCode(() -> AliasMapper.SPI_DEFAULTS.toName(o)).doesNotThrowAnyException();
+          Assertions.assertThat(AliasMapper.SPI_DEFAULTS.toName(o)).isNotEmpty();
+
+          path.addLast(key);
+          o.accept(this);
+          path.removeLast();
+        }
+      }
+    });
   }
 
   @Test
