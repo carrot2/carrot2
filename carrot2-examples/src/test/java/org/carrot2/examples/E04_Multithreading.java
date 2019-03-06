@@ -16,7 +16,6 @@ import org.carrot2.attrs.Attrs;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
-import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.math.matrix.NonnegativeMatrixFactorizationKLFactory;
 import org.junit.Test;
@@ -34,6 +33,10 @@ import java.util.stream.Stream;
 public class E04_Multithreading {
   @Test
   public void ephemeral() throws Exception {
+    // Loading language components can be heavy. Once loaded, the language components can be reused
+    // across concurrent threads so this is done prior to any clustering.
+    LanguageComponents english = LanguageComponents.load("English");
+
     // Carrot2 components are *not* designed to be reused concurrently by multiple threads. A single
     // algorithm or set of language components should only be used by one thread at a time.
     //
@@ -42,11 +45,10 @@ public class E04_Multithreading {
     // clustering completes.
 
     Function<Stream<Document>, List<Cluster<Document>>> processor = (documentStream) -> {
-      // Note that both language components and the algorithm are created per-thread and then discarded.
-      LanguageComponents languageComponents = LanguageComponents.get(EnglishLanguageComponentsFactory.NAME);
+      // Note that algorithm instances are created per-thread and then discarded.
       LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
       algorithm.preprocessing.phraseDfThreshold.set(10);
-      return algorithm.cluster(documentStream, languageComponents);
+      return algorithm.cluster(documentStream, english);
     };
 
     runConcurrentClustering(processor);
@@ -54,6 +56,8 @@ public class E04_Multithreading {
 
   @Test
   public void cloningVisitor() throws Exception {
+    LanguageComponents english = LanguageComponents.load("English");
+
     // Sometimes it may be more convenient to configure an algorithm instance and then create
     // a clone of it for each processor thread. This can be done with the default attribute
     // visitor implementation fairly easily.
@@ -70,7 +74,7 @@ public class E04_Multithreading {
       // Clone from preconfigured.
       LingoClusteringAlgorithm cloned = Attrs.fromMap(LingoClusteringAlgorithm.class, attrs);
 
-      return cloned.cluster(documentStream, LanguageComponents.get(EnglishLanguageComponentsFactory.NAME));
+      return cloned.cluster(documentStream, english);
     };
 
     runConcurrentClustering(processor);

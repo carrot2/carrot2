@@ -14,7 +14,6 @@ package org.carrot2.text.preprocessing;
 
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.FieldMapDocument;
-import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ class PreprocessingContextBuilder {
   }
 
   PreprocessingContextBuilder() {
-    this(LanguageComponents.get(EnglishLanguageComponentsFactory.NAME));
+    this(LanguageComponents.load("English"));
   }
 
   public PreprocessingContext buildContext(BasicPreprocessingPipeline pipeline) {

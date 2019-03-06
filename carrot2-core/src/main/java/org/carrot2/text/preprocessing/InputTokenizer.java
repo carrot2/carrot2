@@ -83,7 +83,7 @@ final class InputTokenizer {
     documentIndices = new IntArrayList();
     fieldIndices = new ByteArrayList();
 
-    final Tokenizer ts = context.languageComponents.tokenizer;
+    final Tokenizer ts = context.languageComponents.get(Tokenizer.class);
     final MutableCharArray wrapper = new MutableCharArray(CharArrayUtils.EMPTY_ARRAY);
 
     HashMap<String, Integer> fieldIndexes = new HashMap<>();

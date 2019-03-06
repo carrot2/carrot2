@@ -149,7 +149,7 @@ public class SuffixSorterTest extends TestBase {
 
   private void checkAsserts(Stream<? extends Document> documents, int[] expectedSuffixOrder, int[] expectedLcpArray) {
     PreprocessingContext context = new PreprocessingContext(
-        LanguageComponents.get(TestsLanguageComponentsFactoryVariant2.NAME));
+        LanguageComponents.load(TestsLanguageComponentsFactoryVariant2.NAME));
 
     tokenizer.tokenize(context, documents);
     caseNormalizer.normalize(context, 1);

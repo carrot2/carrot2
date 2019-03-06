@@ -66,6 +66,6 @@ public class QueryLabelFilterTest extends LabelFilterTestBase {
   }
 
   private PreprocessingContextAssert preprocess(String query, TestDocument... documents) {
-    return super.preprocess(query, LanguageComponents.get(TestsLanguageComponentsFactoryVariant2.NAME), documents);
+    return super.preprocess(query, LanguageComponents.load(TestsLanguageComponentsFactoryVariant2.NAME), documents);
   }
 }

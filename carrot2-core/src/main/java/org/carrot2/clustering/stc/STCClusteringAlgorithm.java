@@ -263,6 +263,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
 
   private GeneralizedSuffixTree.SequenceBuilder sb;
   private PreprocessingContext context;
+  private LexicalData lexicalData;
 
   /**
    * Performs STC clustering of documents.
@@ -276,6 +277,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
      * Step 1. Preprocessing: tokenization, stop word marking and stemming (if available).
      */
     context = preprocessing.preprocess(documents.stream(), queryHint.get(), languageComponents);
+    lexicalData = context.languageComponents.get(LexicalData.class);
 
     /*
      * Step 2: Create a generalized suffix tree from phrases in the input.
@@ -399,7 +401,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     Collections.sort(candidates, (c1, c2) -> -Float.compare(c1.score, c2.score));
 
     j = 0;
-    LexicalData lexicalData = context.languageComponents.lexicalData;
+    LexicalData lexicalData = context.languageComponents.get(LexicalData.class);
     int maxBaseClusters = this.maxBaseClusters.get();
     for (int max = candidates.size(), i = 0; i < max && j < maxBaseClusters; i++) {
       ClusterCandidate cc = candidates.get(i);
@@ -890,8 +892,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       }
     }
 
-    return LabelFormatter.format(images, stopwords,
-        context.languageComponents.lexicalData.usesSpaceDelimiters());
+    return LabelFormatter.format(images, stopwords, lexicalData.usesSpaceDelimiters());
   }
 
   @SuppressWarnings("unused")

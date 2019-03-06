@@ -63,7 +63,7 @@ public class LabelFilterTestBase extends TestBase {
   }
 
   protected PreprocessingContext check(Stream<? extends Document> documents, int[] expectedLabelsFeatureIndex, int expectedFirstPhraseIndex) {
-    LanguageComponents langComponents = LanguageComponents.get(TestsLanguageComponentsFactoryVariant2.NAME);
+    LanguageComponents langComponents = LanguageComponents.load(TestsLanguageComponentsFactoryVariant2.NAME);
     PreprocessingContext context = runPreprocessing(documents, langComponents);
 
     assertThat(context.allLabels.featureIndex).as("allLabels.featureIndex")
@@ -90,7 +90,7 @@ public class LabelFilterTestBase extends TestBase {
   }
 
   protected PreprocessingContextAssert preprocess(TestDocument... docs) {
-    return preprocess(null, LanguageComponents.get(TestsLanguageComponentsFactoryVariant2.NAME), docs);
+    return preprocess(null, LanguageComponents.load(TestsLanguageComponentsFactoryVariant2.NAME), docs);
   }
 
   protected PreprocessingContextAssert preprocess(String query, LanguageComponents langComponents, TestDocument... docs) {

@@ -23,28 +23,36 @@ public class LanguageComponentsTest extends TestBase {
         .containsOnly(
             TestsLanguageComponentsFactoryVariant1.NAME,
             TestsLanguageComponentsFactoryVariant2.NAME,
-            EnglishLanguageComponentsFactory.NAME,
-            DanishLanguageComponentsFactory.NAME,
-            DutchLanguageComponentsFactory.NAME,
-            FinnishLanguageComponentsFactory.NAME,
-            FrenchLanguageComponentsFactory.NAME,
-            GermanLanguageComponentsFactory.NAME,
-            HungarianLanguageComponentsFactory.NAME,
-            ItalianLanguageComponentsFactory.NAME,
-            NorwegianLanguageComponentsFactory.NAME,
-            PortugueseLanguageComponentsFactory.NAME,
-            RomanianLanguageComponentsFactory.NAME,
-            RussianLanguageComponentsFactory.NAME,
-            SpanishLanguageComponentsFactory.NAME,
-            SwedishLanguageComponentsFactory.NAME,
-            TurkishLanguageComponentsFactory.NAME
+            "English",
+            "Danish",
+            "Dutch",
+            "Finnish",
+            "French",
+            "German",
+            "Hungarian",
+            "Italian",
+            "Norwegian",
+            "Portuguese",
+            "Romanian",
+            "Russian",
+            "Spanish",
+            "Swedish",
+            "Turkish"
         );
 
     for (String lang : LanguageComponents.languages()) {
-      LanguageComponents actual = LanguageComponents.get(lang);
-      Assertions.assertThat(actual.tokenizer).as("Tokenizer for " + lang).isNotNull();
-      Assertions.assertThat(actual.stemmer).as("Stemmer for " + lang).isNotNull();
-      Assertions.assertThat(actual.lexicalData).as("Lexical data for " + lang).isNotNull();
+      LanguageComponents actual = LanguageComponents.load(lang);
+      Assertions.assertThat(actual.get(Tokenizer.class)).as("Tokenizer for " + lang).isNotNull();
+      Assertions.assertThat(actual.get(Stemmer.class)).as("Stemmer for " + lang).isNotNull();
+      Assertions.assertThat(actual.get(LexicalData.class)).as("Lexical data for " + lang).isNotNull();
     }
+  }
+
+  @Test
+  public void testCustomComponentInjection() {
+    LanguageComponents english = LanguageComponents.load("English");
+    Assertions.assertThat(english.components())
+        .contains(Runnable.class);
+    english.get(Runnable.class).run();
   }
 }

@@ -14,7 +14,6 @@ package org.carrot2.text.preprocessing;
 
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
-import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.text.preprocessing.filter.CompleteLabelFilter;
 import org.carrot2.text.preprocessing.filter.StopWordLabelFilter;
@@ -156,7 +155,7 @@ public class DocumentAssignerTest extends LabelFilterTestBase {
   }
 
   private void check(Stream<? extends Document> documents, int[][] expectedDocumentIndices, int expectedFirstPhraseIndex) {
-    LanguageComponents comp = LanguageComponents.get(EnglishLanguageComponentsFactory.NAME);
+    LanguageComponents comp = LanguageComponents.load("English");
     PreprocessingContext context = runPreprocessing(documents, comp);
     documentAssigner.assign(context);
 

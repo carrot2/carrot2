@@ -48,7 +48,7 @@ public class BisectingKMeansClusteringAlgorithmTest extends ClusteringAlgorithmT
     algorithm.partitionCount.set(3);
 
     final List<Cluster<TestDocument>> clusters = algorithm.cluster(documents.stream(),
-        LanguageComponents.get(TestsLanguageComponentsFactoryVariant1.NAME));
+        LanguageComponents.load(TestsLanguageComponentsFactoryVariant1.NAME));
 
     assertNotNull(clusters);
     assertEquals(3, clusters.size());

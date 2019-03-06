@@ -18,10 +18,10 @@ import org.carrot2.clustering.Document;
 import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.clustering.stc.STCClusteringAlgorithm;
-import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -31,7 +31,11 @@ import java.util.stream.Stream;
  */
 public class E01_ClusteringBasics {
   @Test
-  public void clusterDocumentStream() {
+  public void clusterDocumentStream() throws IOException {
+    // Our documents are in English so we load appropriate language resources. This call is heavy
+    // and an instance of LanguageComponents should be reused across different clustering calls.
+    LanguageComponents languageComponents = LanguageComponents.load("English");
+
     // Create a stream of "documents" for clustering. Each such document provides
     // text content fields to a visitor.
     Stream<Document> documentStream =
@@ -39,10 +43,6 @@ public class E01_ClusteringBasics {
       fieldVisitor.accept("title", fields[1]);
       fieldVisitor.accept("content", fields[2]);
     });
-
-    // Our documents are in English so provide appropriate language resources.
-    LanguageComponents languageComponents =
-        LanguageComponents.get(EnglishLanguageComponentsFactory.NAME);
 
     // Perform clustering.
     LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
@@ -55,11 +55,10 @@ public class E01_ClusteringBasics {
   }
 
   @Test
-  public void clusterWithQueryHint() {
-    Stream<Document> documentStream = ExamplesData.documentStream();
+  public void clusterWithQueryHint() throws IOException {
+    LanguageComponents languageComponents = LanguageComponents.load("English");
 
-    LanguageComponents languageComponents =
-        LanguageComponents.get(EnglishLanguageComponentsFactory.NAME);
+    Stream<Document> documentStream = ExamplesData.documentStream();
 
     // Perform clustering again, this time provide a "hint" about terms that should be penalized.
     // Typically these are search query terms that would form trivial clusters.
@@ -70,9 +69,8 @@ public class E01_ClusteringBasics {
   }
 
   @Test
-  public void clusterWithDifferentAlgorithms() {
-    LanguageComponents languageComponents =
-        LanguageComponents.get(EnglishLanguageComponentsFactory.NAME);
+  public void clusterWithDifferentAlgorithms() throws IOException {
+    LanguageComponents languageComponents = LanguageComponents.load("English");
 
     // Perform clustering with each of the available algorithms.
     for (ClusteringAlgorithm algorithm : Arrays.asList(

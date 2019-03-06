@@ -53,7 +53,7 @@ public class TermDocumentMatrixBuilderTestBase extends TestBase {
   }
 
   protected PreprocessingContext buildTermDocumentMatrix(Stream<? extends Document> documents) {
-    LanguageComponents languageComponents = LanguageComponents.get(TestsLanguageComponentsFactoryVariant2.NAME);
+    LanguageComponents languageComponents = LanguageComponents.load(TestsLanguageComponentsFactoryVariant2.NAME);
 
     PreprocessingContext context = preprocessingPipeline.preprocess(documents, queryHint, languageComponents);
 

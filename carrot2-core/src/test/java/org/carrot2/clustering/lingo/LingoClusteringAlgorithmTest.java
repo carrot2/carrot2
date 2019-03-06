@@ -16,7 +16,6 @@ import org.assertj.core.api.Assertions;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.*;
-import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 import org.junit.Test;
 
@@ -36,7 +35,7 @@ public class LingoClusteringAlgorithmTest extends ClusteringAlgorithmTestBase {
     algorithm.preprocessing.wordDfThreshold.set(100);
 
     List<Cluster<Document>> clusters = algorithm.cluster(SampleDocumentData.DOCUMENTS_DATA_MINING.stream(),
-        LanguageComponents.get(EnglishLanguageComponentsFactory.NAME));
+        LanguageComponents.load("English"));
 
     // Clustering with df threshold must not fail
     Assertions.assertThat(clusters).isEmpty();
@@ -54,7 +53,7 @@ public class LingoClusteringAlgorithmTest extends ClusteringAlgorithmTestBase {
     );
 
     List<Cluster<Document>> clusters = algorithm.cluster(documents,
-        LanguageComponents.get(EnglishLanguageComponentsFactory.NAME));
+        LanguageComponents.load("English"));
 
     Assertions.assertThat(clusters).isEmpty();
   }
@@ -75,7 +74,7 @@ public class LingoClusteringAlgorithmTest extends ClusteringAlgorithmTestBase {
     ).map(title -> new TestDocument(title));
 
     List<Cluster<Document>> clusters = algorithm.cluster(documents,
-        LanguageComponents.get(EnglishLanguageComponentsFactory.NAME));
+        LanguageComponents.load("English"));
 
     Assertions.assertThat(clusters).isNotEmpty();
     Assertions.assertThat(clusters.stream()

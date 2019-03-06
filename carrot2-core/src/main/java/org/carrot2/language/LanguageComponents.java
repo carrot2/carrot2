@@ -1,75 +1,126 @@
 package org.carrot2.language;
 
+import org.carrot2.util.ResourceLookup;
+
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 /**
- * A set of language-specific components. Instances not thread safe and cannot be shared
- * across different threads. Default implementations for named
- * languages available via {@link #get(String)}}.
- *
- * @see #get(String)
+ * A set of language-specific components.
  */
-public class LanguageComponents {
-  private static Map<String, LanguageComponentsFactory> factories;
+public final class LanguageComponents {
+  private final String language;
+  private final Map<Class<?>, Supplier<?>> suppliers;
 
-  public Stemmer stemmer;
-  public Tokenizer tokenizer;
-  public LexicalData lexicalData;
-
-  public LanguageComponents(Stemmer stemmer, Tokenizer tokenizer, LexicalData lexicalData) {
-    this.stemmer = stemmer;
-    this.tokenizer = tokenizer;
-    this.lexicalData = lexicalData;
+  public LanguageComponents(String language, LinkedHashMap<Class<?>, Supplier<?>> suppliers) {
+    this.language = language;
+    this.suppliers = suppliers;
   }
 
-  public synchronized static Set<String> languages() {
-    return factories().map(factory -> factory.name())
-        .collect(Collectors.toCollection(LinkedHashSet::new));
+  public String language() {
+    return language;
   }
 
-  public static Stream<LanguageComponentsFactory> factories() {
-    checkInitialized();
-    return factories.values().stream();
+  public <T> T get(Class<T> componentClass) {
+    Supplier<?> supplier = suppliers.get(componentClass);
+    if (supplier == null) {
+      throw new RuntimeException(String.format(Locale.ROOT,
+          "Language %s does not come with a supplier of component class %s.",
+          language,
+          componentClass.getName()));
+    }
+    return componentClass.cast(supplier.get());
   }
 
-  public static LanguageComponents get(String name) {
-    checkInitialized();
-    LanguageComponentsFactory factory = factories.get(name);
-    if (factory == null) {
+  public Set<Class<?>> components() {
+    return suppliers.keySet();
+  }
+
+  public static Set<String> languages() {
+    try {
+      return loadProvidersFromSpi().keySet();
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+  }
+
+  public static LanguageComponents load(String language) {
+    try {
+      return loadImpl(language, null);
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+  }
+
+  public static LanguageComponents load(String language, ResourceLookup resourceLookup) throws IOException {
+    return loadImpl(language, Objects.requireNonNull(resourceLookup));
+  }
+
+  private static LanguageComponents loadImpl(String language, ResourceLookup resourceLookup) throws IOException {
+    Map<String, List<LanguageComponentsProvider>> providers = loadProvidersFromSpi();
+
+    if (!providers.containsKey(language)) {
       throw new RuntimeException(String.format(Locale.ROOT,
           "Language components not available for language: %s [available: %s]",
-          name,
-          factories().map(f -> f.name()).collect(Collectors.joining(", "))));
+          language,
+          String.join(", ", providers.keySet())));
     }
-    return new LanguageComponents(
-        factory.createStemmer(),
-        factory.createTokenizer(),
-        factory.createLexicalResources()
-    );
+
+    LinkedHashMap<Class<?>, Supplier<?>> componentSuppliers = new LinkedHashMap<>();
+    for (LanguageComponentsProvider provider : providers.get(language)) {
+      Map<Class<?>, Supplier<?>> suppliers =
+          resourceLookup == null ? provider.load(language) : provider.load(language, resourceLookup);
+
+      suppliers.forEach((clazz, supplier) -> {
+            if (componentSuppliers.put(clazz, supplier) != null) {
+              throw new RuntimeException(String.format(Locale.ROOT,
+                  "Language %s has multiple providers of component %s?",
+                  language,
+                  clazz.getSimpleName()));
+            }
+          });
+    }
+
+    return new LanguageComponents(language, componentSuppliers);
   }
 
-  private synchronized static void checkInitialized() {
-    if (factories == null) {
-      factories = loadFromSpi();
-    }
-  }
+  private synchronized static Map<String, List<LanguageComponentsProvider>> loadProvidersFromSpi() throws IOException {
+    Map<String, List<LanguageComponentsProvider>> providers = new LinkedHashMap<>();
 
-  private static Map<String, LanguageComponentsFactory> loadFromSpi() {
-    Map<String, LanguageComponentsFactory> factories = new LinkedHashMap<>();
-    for (LanguageComponentsFactory factory : ServiceLoader.load(LanguageComponentsFactory.class)) {
-      String name = factory.name();
-      if (factories.containsKey(name)) {
-        throw new RuntimeException(String.format(Locale.ROOT,
-            "Duplicate implementation of interface %s for language %s: %s and %s.",
-            LanguageComponentsFactory.class.getName(),
-            name,
-            factory.getClass().getName(),
-            factories.get(name).getClass().getName()));
+    for (LanguageComponentsProvider provider : ServiceLoader.load(LanguageComponentsProvider.class)) {
+      for (String language : provider.languages()) {
+        providers.compute(language, (k, v) -> {
+          if (v == null) {
+            v = new ArrayList<>();
+          }
+          v.add(provider);
+          return v;
+        });
       }
-      factories.put(name, factory);
     }
-    return factories;
+
+    // TODO: This performs a sanity check but may be too heavy if called repeatedly?
+    for (Map.Entry<String, List<LanguageComponentsProvider>> e : providers.entrySet()) {
+      String language = e.getKey();
+      HashMap<Class<?>, LanguageComponentsProvider> components = new HashMap<>();
+      for (LanguageComponentsProvider provider : e.getValue()) {
+        for (Class<?> clazz : provider.load(language).keySet()) {
+          if (components.containsKey(clazz)) {
+            throw new RuntimeException(String.format(Locale.ROOT,
+                "Language '%s' has multiple providers implementing component class %s: %s and %s.",
+                language,
+                clazz.getName(),
+                provider.getClass().getName(),
+                components.get(clazz).getClass().getName()));
+          }
+          components.put(clazz, provider);
+        }
+      }
+    }
+    return providers;
   }
 }

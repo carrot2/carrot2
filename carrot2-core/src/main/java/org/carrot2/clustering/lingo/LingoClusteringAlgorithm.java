@@ -18,6 +18,7 @@ import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.SharedInfrastructure;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.LanguageComponents;
+import org.carrot2.language.LexicalData;
 import org.carrot2.text.preprocessing.CompletePreprocessingPipeline;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
@@ -116,11 +117,6 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
     public final AttrString queryHint = attributes.register("queryHint", SharedInfrastructure.queryHintAttribute());
 
     /**
-     * Cluster label formatter, contains bindable attributes.
-     */
-    public final LabelFormatter labelFormatter = new LabelFormatter();
-
-    /**
      * Performs Lingo clustering of documents.
      */
     @Override
@@ -160,6 +156,9 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
             clusterBuilder.merge(lingoContext);
 
             // Format final clusters
+            final LabelFormatter labelFormatter = new LabelFormatter(
+                lingoContext.preprocessingContext.languageComponents.get(LexicalData.class));
+
             final int [] clusterLabelIndex = lingoContext.clusterLabelFeatureIndex;
             final BitSet [] clusterDocuments = lingoContext.clusterDocuments;
             final double [] clusterLabelScore = lingoContext.clusterLabelScore;

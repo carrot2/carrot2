@@ -18,7 +18,9 @@ import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.language.*;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,27 +29,37 @@ import java.util.stream.Stream;
  */
 public class E03_CustomLanguageComponents {
   @Test
-  public void listAllAvailableLanguages() {
+  public void listAllAvailableLanguages() throws IOException {
     // Preprocessing components for several languages are provided in the Carrot2 distribution (and in
     // optional JAR libraries named carrot2-lang-*. These languages self-register with LanguageComponents
     // factory and can be enumerated, as shown here:
     System.out.println("Language preprocessing components for the following languages are available:\n  " +
-        LanguageComponents.factories().map(factory -> factory.name()).collect(Collectors.joining("\n  ")));
+        String.join(", ", LanguageComponents.languages()));
   }
 
   @Test
-  public void customLanguageComponents() {
-    Stream<Document> documentStream = ExamplesData.documentStream();
-
+  public void customLanguageComponents() throws IOException {
     // The language-specific components required for clustering algorithms are:
-    // a tokenizer, a stemmer and a lexical resource provider. The language components factory
-    // lists all languages for which these components are already preconfigured (see the
-    // example above).
-    //
-    // However, if this isn't sufficient or needs to be customized, a custom component set can
-    // be assembled, as shown below.
-    Stemmer stemmer = (word) -> word.toString().toLowerCase(Locale.ROOT);
-    Tokenizer tokenizer = new ExtendedWhitespaceTokenizer();
+    // a tokenizer, a stemmer and a lexical resource provider. These components
+    // can be supplied directly in case of a custom processing requirements. Here,
+    // we modify the stemmer and lexical data for the default English component set,
+    // leaving any other components as they were originally defined for English.
+
+    LanguageComponents english = LanguageComponents.load("English");
+
+    // Pass-through of all suppliers to English defaults.
+    LinkedHashMap<Class<?>, Supplier<?>> componentSuppliers = new LinkedHashMap<>();
+    for (Class<?> clazz : english.components()) {
+      componentSuppliers.put(clazz, () -> english.get(clazz));
+    }
+
+    // Now override the suppliers of Stemmer and LexicalData interfaces. These suppliers should be thread-safe, but the
+    // instances of corresponding components will not be reused across threads.
+
+    // Override the Stemmer supplier.
+    componentSuppliers.put(Stemmer.class, (Supplier<Stemmer>) () -> (word) -> word.toString().toLowerCase(Locale.ROOT));
+
+    // Override the default lexical data.
     LexicalData lexicalData = new LexicalData() {
       Set<String> ignored = new HashSet<>(Arrays.asList(
           "from", "what"
@@ -64,12 +76,14 @@ public class E03_CustomLanguageComponents {
         return word.length() <= 3 || ignored.contains(word.toString());
       }
     };
+    componentSuppliers.put(LexicalData.class, () -> lexicalData);
 
-    LanguageComponents languageComponents = new LanguageComponents(stemmer, tokenizer, lexicalData);
+    // The custom set of language components can be reused for multiple clustering requests.
+    LanguageComponents customLanguage = new LanguageComponents("English-custom", componentSuppliers);
 
     LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
     algorithm.desiredClusterCount.set(10);
-    List<Cluster<Document>> clusters = algorithm.cluster(documentStream, languageComponents);
+    List<Cluster<Document>> clusters = algorithm.cluster(ExamplesData.documentStream(), customLanguage);
     System.out.println("Clusters:");
     ExamplesCommon.printClusters(clusters, "");
   }

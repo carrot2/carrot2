@@ -12,6 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
+import org.carrot2.language.LexicalData;
 import org.carrot2.language.TokenTypeUtils;
 import org.carrot2.util.CharArrayUtils;
 
@@ -19,6 +20,13 @@ import org.carrot2.util.CharArrayUtils;
  * Formats cluster labels for final rendering.
  */
 public class LabelFormatter {
+
+  private final LexicalData lexicalData;
+
+  public LabelFormatter(LexicalData lexicalData) {
+    this.lexicalData = lexicalData;
+  }
+
   /**
    * Formats a cluster label for final rendering.
    */
@@ -32,7 +40,7 @@ public class LabelFormatter {
       final char[] image = wordsImage[featureIndex];
       appendFormatted(label, image, true, false);
     } else {
-      final boolean insertSpace = context.languageComponents.lexicalData.usesSpaceDelimiters();
+      final boolean insertSpace = lexicalData.usesSpaceDelimiters();
       final int[] wordIndices = phrasesWordIndices[featureIndex - wordCount];
       final short[] termTypes = context.allWords.type;
       for (int i = 0; i < wordIndices.length; i++) {

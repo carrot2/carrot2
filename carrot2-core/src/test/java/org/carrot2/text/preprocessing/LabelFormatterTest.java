@@ -16,8 +16,8 @@ import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
-import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
+import org.carrot2.language.LexicalData;
 import org.junit.Test;
 
 import java.util.stream.IntStream;
@@ -30,7 +30,6 @@ public class LabelFormatterTest extends TestBase {
   /**
    * Other preprocessing components required for the test
    */
-  private LabelFormatter labelFormatter = new LabelFormatter();
   private InputTokenizer tokenizer = new InputTokenizer();
   private CaseNormalizer caseNormalizer = new CaseNormalizer();
   private LanguageModelStemmer languageModelStemmer = new LanguageModelStemmer();
@@ -38,7 +37,7 @@ public class LabelFormatterTest extends TestBase {
   private StopListMarker stopListMarker = new StopListMarker();
   private LabelFilterProcessor labelFilterProcessor = new LabelFilterProcessor();
 
-  private LanguageComponents langComponents = LanguageComponents.get(EnglishLanguageComponentsFactory.NAME);
+  private LanguageComponents langComponents = LanguageComponents.load("English");
 
   @Test
   public void testSingleWordNotCapitalized() {
@@ -182,6 +181,7 @@ public class LabelFormatterTest extends TestBase {
     stopListMarker.mark(context);
     labelFilterProcessor.process(context);
 
+    LabelFormatter labelFormatter = new LabelFormatter(context.languageComponents.get(LexicalData.class));
     final int[] labelsFeatureIndex = context.allLabels.featureIndex;
     Assertions.assertThat(IntStream.of(labelsFeatureIndex)
         .mapToObj(feature -> labelFormatter.format(context, feature)))

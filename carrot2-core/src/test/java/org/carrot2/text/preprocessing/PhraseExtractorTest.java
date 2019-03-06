@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class PhraseExtractorTest extends TestBase {
   PreprocessingContextBuilder contextBuilder =
-      new PreprocessingContextBuilder(LanguageComponents.get(TestsLanguageComponentsFactoryVariant2.NAME));
+      new PreprocessingContextBuilder(LanguageComponents.load(TestsLanguageComponentsFactoryVariant2.NAME));
 
   @Test
   public void testEmpty() {

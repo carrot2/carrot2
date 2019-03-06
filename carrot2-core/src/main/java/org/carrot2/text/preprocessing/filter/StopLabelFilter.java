@@ -21,12 +21,13 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
  * files.
  */
 public class StopLabelFilter extends SingleLabelFilterBase {
-  private LabelFormatter labelFormatter = new LabelFormatter();
+  private LabelFormatter labelFormatter;
   private LexicalData lexicalData;
 
   @Override
   public void filter(PreprocessingContext context, boolean[] acceptedStems, boolean[] acceptedPhrases) {
-    lexicalData = context.languageComponents.lexicalData;
+    lexicalData = context.languageComponents.get(LexicalData.class);
+    labelFormatter = new LabelFormatter(lexicalData);
     super.filter(context, acceptedStems, acceptedPhrases);
   }
 

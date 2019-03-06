@@ -18,13 +18,13 @@ import org.carrot2.clustering.Document;
 import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.clustering.stc.STCClusteringAlgorithm;
-import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.math.mahout.Arrays;
 import org.carrot2.math.matrix.FactorizationQuality;
 import org.carrot2.math.matrix.LocalNonnegativeMatrixFactorizationFactory;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Stream;
@@ -34,11 +34,8 @@ import java.util.stream.Stream;
  */
 public class E02_TweakingAttributes {
   @Test
-  public void tweakLingo() {
-    Stream<Document> documentStream = ExamplesData.documentStream();
-
-    LanguageComponents languageComponents =
-        LanguageComponents.get(EnglishLanguageComponentsFactory.NAME);
+  public void tweakLingo() throws IOException {
+    LanguageComponents languageComponents = LanguageComponents.load("English");
 
     // Tweak Lingo's defaults. Note each attribute comes with JavaDoc documentation
     // and some are contrained to a specific range of values. Also, each algorithm
@@ -56,17 +53,14 @@ public class E02_TweakingAttributes {
     factorizationFactory.factorizationQuality.set(FactorizationQuality.HIGH);
     algorithm.matrixReducer.factorizationFactory = factorizationFactory;
 
-    List<Cluster<Document>> clusters = algorithm.cluster(documentStream, languageComponents);
+    List<Cluster<Document>> clusters = algorithm.cluster(ExamplesData.documentStream(), languageComponents);
     System.out.println("Clusters from Lingo:");
     ExamplesCommon.printClusters(clusters, "");
   }
 
   @Test
-  public void tweakStc() {
-    Stream<Document> documentStream = ExamplesData.documentStream();
-
-    LanguageComponents languageComponents =
-        LanguageComponents.get(EnglishLanguageComponentsFactory.NAME);
+  public void tweakStc() throws IOException {
+    LanguageComponents languageComponents = LanguageComponents.load("English");
 
     // Tweak Lingo's defaults. Note each attribute comes with JavaDoc documentation
     // and some are contrained to a specific range of values. Also, each algorithm
@@ -76,7 +70,7 @@ public class E02_TweakingAttributes {
     algorithm.ignoreWordIfInHigherDocsPercent.set(.8);
     algorithm.preprocessing.wordDfThreshold.set(5);
 
-    List<Cluster<Document>> clusters = algorithm.cluster(documentStream, languageComponents);
+    List<Cluster<Document>> clusters = algorithm.cluster(ExamplesData.documentStream(), languageComponents);
     System.out.println("Clusters from STC:");
     ExamplesCommon.printClusters(clusters, "");
   }

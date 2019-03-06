@@ -13,7 +13,6 @@
 package org.carrot2.text.preprocessing;
 
 import org.carrot2.TestBase;
-import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +28,7 @@ public class EnglishStemmingPreprocessingTest extends TestBase {
 
   @Before
   public void prepareContextBuilder() {
-    contextBuilder = new PreprocessingContextBuilder(LanguageComponents.get(EnglishLanguageComponentsFactory.NAME));
+    contextBuilder = new PreprocessingContextBuilder(LanguageComponents.load("English"));
   }
 
   @Test

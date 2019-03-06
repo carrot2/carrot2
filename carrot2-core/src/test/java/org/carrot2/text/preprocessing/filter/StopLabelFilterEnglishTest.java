@@ -14,7 +14,6 @@ package org.carrot2.text.preprocessing.filter;
 
 import org.assertj.core.api.Assertions;
 import org.carrot2.clustering.TestDocument;
-import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.text.preprocessing.LabelFilterProcessor;
 import org.carrot2.text.preprocessing.LabelFilterTestBase;
@@ -61,6 +60,6 @@ public class StopLabelFilterEnglishTest extends LabelFilterTestBase {
 
   @Override
   protected PreprocessingContextAssert preprocess(TestDocument... docs) {
-    return super.preprocess(null, LanguageComponents.get(EnglishLanguageComponentsFactory.NAME), docs);
+    return super.preprocess(null, LanguageComponents.load("English"), docs);
   }
 }

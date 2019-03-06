@@ -6,7 +6,6 @@ import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
 import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
 import org.carrot2.attrs.*;
-import org.carrot2.language.EnglishLanguageComponentsFactory;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
 import org.junit.Assert;
@@ -30,7 +29,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
   protected abstract T algorithm();
 
   protected LanguageComponents testLanguageModel() {
-    return LanguageComponents.get(TestsLanguageComponentsFactoryVariant1.NAME);
+    return LanguageComponents.load(TestsLanguageComponentsFactoryVariant1.NAME);
   }
 
   @Test
@@ -197,7 +196,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
   public void testClusteringSampleDataSet() {
     List<Cluster<Document>> clusters = algorithm().cluster(
         SampleDocumentData.DOCUMENTS_DATA_MINING.stream(),
-        LanguageComponents.get(EnglishLanguageComponentsFactory.NAME));
+        LanguageComponents.load("English"));
 
     assertThat(clusters.size())
         .isGreaterThan(0);

@@ -47,7 +47,7 @@ final class LanguageModelStemmer {
    * Performs stemming and saves the results to the <code>context</code>.
    */
   public void stem(PreprocessingContext context, String queryHint) {
-    final Stemmer stemmer = context.languageComponents.stemmer;
+    final Stemmer stemmer = context.languageComponents.get(Stemmer.class);
 
     final char[][] wordImages = context.allWords.image;
     final char[][] stemImages = new char[wordImages.length][];

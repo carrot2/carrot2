@@ -9,20 +9,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
-public class TestsLanguageComponentsFactoryVariant1 implements LanguageComponentsProvider {
-  public static final String NAME = "_tests_language_";
-
+public class TestsSpecializedEnglishComponent implements LanguageComponentsProvider {
   @Override
   public Set<String> languages() {
-    return Collections.singleton(NAME);
+    return Collections.singleton("English");
   }
 
   @Override
   public Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup) throws IOException {
     LinkedHashMap<Class<?>, Supplier<?>> components = new LinkedHashMap<>();
-    components.put(Stemmer.class, (Supplier<Stemmer>) () -> (word) -> null);
-    components.put(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
-    components.put(LexicalData.class, () -> new LexicalData() {});
+    components.put(Runnable.class, (Supplier<Runnable>) () -> () -> {});
     return components;
   }
 

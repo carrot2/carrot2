@@ -38,7 +38,7 @@ final class StopListMarker {
 
     final MutableCharArray mutableCharArray = new MutableCharArray("");
     char[] buffer = new char[128];
-    final LexicalData lexData = context.languageComponents.lexicalData;
+    final LexicalData lexData = context.languageComponents.get(LexicalData.class);
 
     for (int i = 0; i < wordImages.length; i++) {
       final char[] word = wordImages[i];
