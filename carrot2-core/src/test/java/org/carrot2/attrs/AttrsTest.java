@@ -28,9 +28,20 @@ public class AttrsTest extends TestBase {
 
   @Test
   public void testCustomDictionary() {
-    class Entry extends AttrComposite {
-      AttrString match = attributes.register("match", AttrString.builder().defaultValue(null));
-      AttrStringArray tokens = attributes.register("tokens", AttrStringArray.builder().defaultValue(null));
+    class Entry implements AcceptingVisitor {
+      String match;
+      String [] tokens;
+
+      @Override
+      public void accept(AttrVisitor visitor) {
+        AttrString a1 = AttrString.builder().defaultValue(match);
+        visitor.visit("match", a1);
+        this.match = a1.get();
+
+        AttrStringArray a2 = AttrStringArray.builder().defaultValue(tokens);
+        visitor.visit("tokens", a2);
+        tokens = a2.get();
+      }
     }
 
     class AdHocDict extends AttrComposite {
@@ -52,8 +63,8 @@ public class AttrsTest extends TestBase {
     }
 
     Entry entry = new Entry();
-    entry.match.set("e");
-    entry.tokens.set("foo", "bar");
+    entry.match = "e";
+    entry.tokens = new String [] {"foo", "bar"};
 
     Clazz ob = new Clazz();
     ob.adHocDict.entries = Arrays.asList(entry, entry);
