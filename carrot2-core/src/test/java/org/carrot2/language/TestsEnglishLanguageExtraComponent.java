@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
-public class TestsSpecializedEnglishComponent implements LanguageComponentsProvider {
+public class TestsEnglishLanguageExtraComponent implements LanguageComponentsProvider {
   @Override
   public Set<String> languages() {
     return Collections.singleton("English");
