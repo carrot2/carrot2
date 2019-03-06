@@ -82,6 +82,18 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
           path.removeLast();
         }
       }
+
+      @Override
+      public void visit(String key, AttrObjectArray<?> attr) {
+        List<? extends AcceptingVisitor> entries = attr.get();
+        if (entries != null) {
+          entries.forEach(v -> {
+            path.addLast(key);
+            v.accept(this);
+            path.removeLast();
+          });
+        }
+      }
     });
   }
 
@@ -129,6 +141,20 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
           path.addLast(key);
           o.accept(this);
           path.removeLast();
+        }
+      }
+
+      @Override
+      public void visit(String key, AttrObjectArray<?> attr) {
+        hasLabel(key, attr);
+
+        List<? extends AcceptingVisitor> entries = attr.get();
+        if (entries != null) {
+          entries.forEach(v -> {
+            path.addLast(key);
+            v.accept(this);
+            path.removeLast();
+          });
         }
       }
 

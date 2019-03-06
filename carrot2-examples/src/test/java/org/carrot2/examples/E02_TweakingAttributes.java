@@ -132,6 +132,18 @@ public class E02_TweakingAttributes {
         }
       }
 
+      @Override
+      public void visit(String key, AttrObjectArray<?> attr) {
+        List<? extends AcceptingVisitor> value = attr.get();
+        print(key, value == null ? "null" : "list[" + value.size() + "]",
+            "array of <" + attr.getInterfaceClass().getSimpleName() + ">", attr);
+        if (value != null) {
+          for (AcceptingVisitor v : value) {
+            v.accept(new Lister(lead + key + "[]."));
+          }
+        }
+      }
+
       private void print(String key, Object value, String type, Attr<?> attr) {
         System.out.println(String.format(Locale.ROOT,
             "%s%s = %s (%s, %s)",

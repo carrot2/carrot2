@@ -39,125 +39,98 @@ import java.util.ArrayList;
  * invoked first.
  */
 public class DocumentAssigner extends AttrComposite {
-    /**
-     * Only exact phrase assignments. Assign only documents that contain the label in its
-     * original form, including the order of words. Enabling this option will cause less
-     * documents to be put in clusters, which result in higher precision of assignment,
-     * but also a larger "Other Topics" group. Disabling this option will cause more
-     * documents to be put in clusters, which will make the "Other Topics" cluster
-     * smaller, but also lower the precision of cluster-document assignments.
-     */
-    public AttrBoolean exactPhraseAssignment = attributes.register("exactPhraseAssignment", AttrBoolean.builder()
-        .label("Exact phrase assignment")
-        .defaultValue(false));
-    
+  /**
+   * Only exact phrase assignments. Assign only documents that contain the label in its
+   * original form, including the order of words. Enabling this option will cause less
+   * documents to be put in clusters, which result in higher precision of assignment,
+   * but also a larger "Other Topics" group. Disabling this option will cause more
+   * documents to be put in clusters, which will make the "Other Topics" cluster
+   * smaller, but also lower the precision of cluster-document assignments.
+   */
+  public AttrBoolean exactPhraseAssignment = attributes.register("exactPhraseAssignment", AttrBoolean.builder()
+    .label("Exact phrase assignment")
+    .defaultValue(false));
+
     /**
      * Determines the minimum number of documents in each cluster.
      */
-    public AttrInteger minClusterSize = attributes.register("minClusterSize", AttrInteger.builder()
-        .label("Minimum cluster size")
-        .min(1)
-        .max(100)
-        .defaultValue(2));
+  public AttrInteger minClusterSize = attributes.register("minClusterSize", AttrInteger.builder()
+    .label("Minimum cluster size")
+    .min(1)
+    .max(100)
+    .defaultValue(2));
 
-    /**
-     * Assigns document to label candidates.
-     */
-    void assign(PreprocessingContext context)
-    {
-        final int [] labelsFeatureIndex = context.allLabels.featureIndex;
-        final int [][] stemsTfByDocument = context.allStems.tfByDocument;
-        final int [] wordsStemIndex = context.allWords.stemIndex;
-        final short [] wordsTypes = context.allWords.type;
-        final int [][] phrasesTfByDocument = context.allPhrases.tfByDocument;
-        final int [][] phrasesWordIndices = context.allPhrases.wordIndices;
-        final int wordCount = wordsStemIndex.length;
-        final int documentCount = context.documentCount;
+  /**
+   * Assigns document to label candidates.
+   */
+  void assign(PreprocessingContext context) {
+    final int[] labelsFeatureIndex = context.allLabels.featureIndex;
+    final int[][] stemsTfByDocument = context.allStems.tfByDocument;
+    final int[] wordsStemIndex = context.allWords.stemIndex;
+    final short[] wordsTypes = context.allWords.type;
+    final int[][] phrasesTfByDocument = context.allPhrases.tfByDocument;
+    final int[][] phrasesWordIndices = context.allPhrases.wordIndices;
+    final int wordCount = wordsStemIndex.length;
+    final int documentCount = context.documentCount;
 
-        final BitSet [] labelsDocumentIndices = new BitSet [labelsFeatureIndex.length];
+    final BitSet[] labelsDocumentIndices = new BitSet[labelsFeatureIndex.length];
 
-        for (int i = 0; i < labelsFeatureIndex.length; i++)
-        {
-            final BitSet documentIndices = new BitSet(documentCount);
+    for (int i = 0; i < labelsFeatureIndex.length; i++) {
+      final BitSet documentIndices = new BitSet(documentCount);
 
-            final int featureIndex = labelsFeatureIndex[i];
-            if (featureIndex < wordCount)
-            {
-                addTfByDocumentToBitSet(documentIndices,
-                    stemsTfByDocument[wordsStemIndex[featureIndex]]);
+      final int featureIndex = labelsFeatureIndex[i];
+      if (featureIndex < wordCount) {
+        addTfByDocumentToBitSet(documentIndices, stemsTfByDocument[wordsStemIndex[featureIndex]]);
+      } else {
+        final int phraseIndex = featureIndex - wordCount;
+        if (exactPhraseAssignment.get()) {
+          addTfByDocumentToBitSet(documentIndices, phrasesTfByDocument[phraseIndex]);
+        } else {
+          final int[] wordIndices = phrasesWordIndices[phraseIndex];
+          boolean firstAdded = false;
+
+          for (int j = 0; j < wordIndices.length; j++) {
+            final int wordIndex = wordIndices[j];
+            if (!TokenTypeUtils.isCommon(wordsTypes[wordIndex])) {
+              if (!firstAdded) {
+                addTfByDocumentToBitSet(documentIndices, stemsTfByDocument[wordsStemIndex[wordIndex]]);
+                firstAdded = true;
+              } else {
+                final BitSet temp = new BitSet(documentCount);
+                addTfByDocumentToBitSet(temp, stemsTfByDocument[wordsStemIndex[wordIndex]]);
+                documentIndices.and(temp);
+              }
             }
-            else
-            {
-                final int phraseIndex = featureIndex - wordCount;
-                if (exactPhraseAssignment.get())
-                {
-                    addTfByDocumentToBitSet(documentIndices,
-                        phrasesTfByDocument[phraseIndex]);
-                }
-                else
-                {
-                    final int [] wordIndices = phrasesWordIndices[phraseIndex];
-                    boolean firstAdded = false;
-
-                    for (int j = 0; j < wordIndices.length; j++)
-                    {
-                        final int wordIndex = wordIndices[j];
-                        if (!TokenTypeUtils.isCommon(wordsTypes[wordIndex]))
-                        {
-                            if (!firstAdded)
-                            {
-                                addTfByDocumentToBitSet(documentIndices,
-                                    stemsTfByDocument[wordsStemIndex[wordIndex]]);
-                                firstAdded = true;
-                            }
-                            else
-                            {
-                                final BitSet temp = new BitSet(documentCount);
-                                addTfByDocumentToBitSet(temp,
-                                    stemsTfByDocument[wordsStemIndex[wordIndex]]);
-                                // .retainAll == set intersection
-                                documentIndices.and(temp);
-                            }
-                        }
-                    }
-                }
-            }
-
-            labelsDocumentIndices[i] = documentIndices;
+          }
         }
+      }
 
-        // Filter out labels that do not meet the minimum cluster size
-        int minClusterSize = this.minClusterSize.get();
-        if (minClusterSize > 1)
-        {
-            final IntArrayList newFeatureIndex = new IntArrayList(
-                labelsFeatureIndex.length);
-            final ArrayList<BitSet> newDocumentIndices = new ArrayList<>(labelsFeatureIndex.length);
-
-            for (int i = 0; i < labelsFeatureIndex.length; i++)
-            {
-                if (labelsDocumentIndices[i].cardinality() >= minClusterSize)
-                {
-                    newFeatureIndex.add(labelsFeatureIndex[i]);
-                    newDocumentIndices.add(labelsDocumentIndices[i]);
-                }
-            }
-            context.allLabels.documentIndices = newDocumentIndices.toArray(new BitSet[0]);
-            context.allLabels.featureIndex = newFeatureIndex.toArray();
-            LabelFilterProcessor.updateFirstPhraseIndex(context);
-        }
-        else
-        {
-            context.allLabels.documentIndices = labelsDocumentIndices;
-        }
+      labelsDocumentIndices[i] = documentIndices;
     }
 
-    private static void addTfByDocumentToBitSet(final BitSet documentIndices,
-        final int [] tfByDocument)
-    {
-        for (int j = 0; j < tfByDocument.length / 2; j++)
-        {
-            documentIndices.set(tfByDocument[j * 2]);
+    // Filter out labels that do not meet the minimum cluster size
+    int minClusterSize = this.minClusterSize.get();
+    if (minClusterSize > 1) {
+      final IntArrayList newFeatureIndex = new IntArrayList(labelsFeatureIndex.length);
+      final ArrayList<BitSet> newDocumentIndices = new ArrayList<>(labelsFeatureIndex.length);
+
+      for (int i = 0; i < labelsFeatureIndex.length; i++) {
+        if (labelsDocumentIndices[i].cardinality() >= minClusterSize) {
+          newFeatureIndex.add(labelsFeatureIndex[i]);
+          newDocumentIndices.add(labelsDocumentIndices[i]);
         }
+      }
+      context.allLabels.documentIndices = newDocumentIndices.toArray(new BitSet[0]);
+      context.allLabels.featureIndex = newFeatureIndex.toArray();
+      LabelFilterProcessor.updateFirstPhraseIndex(context);
+    } else {
+      context.allLabels.documentIndices = labelsDocumentIndices;
     }
+  }
+
+  private static void addTfByDocumentToBitSet(final BitSet documentIndices, final int[] tfByDocument) {
+    for (int j = 0; j < tfByDocument.length / 2; j++) {
+      documentIndices.set(tfByDocument[j * 2]);
+    }
+  }
 }

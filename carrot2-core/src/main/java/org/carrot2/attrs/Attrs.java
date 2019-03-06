@@ -1,7 +1,9 @@
 package org.carrot2.attrs;
 
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public final class Attrs {
   final static String KEY_TYPE = "@type";
@@ -116,6 +118,40 @@ public final class Attrs {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public void visit(String key, AttrObjectArray<?> attr) {
+      if (map.containsKey(key)) {
+        Object[] array = (Object[]) map.get(key);
+        if (array == null) {
+          attr.set(null);
+        } else {
+          List<Object> entries = Arrays.stream(array).map(entry -> {
+            Map<String, Object> submap = (Map<String, Object>) entry;
+            if (submap == null) {
+              return null;
+            } else {
+              submap = new LinkedHashMap<>(submap);
+              AcceptingVisitor value;
+              if (submap.containsKey(KEY_TYPE)) {
+                String type = (String) submap.remove(KEY_TYPE);
+                value = attr.getInterfaceClass().cast(classToInstance.apply(type));
+              } else {
+                value = attr.newDefaultEntryValue();
+                if (value == null) {
+                  throw new RuntimeException("Default instance supplier not provided for: " + key);
+                }
+              }
+              value.accept(new FromMapVisitor(submap, classToInstance));
+              return value;
+            }
+          }).collect(Collectors.toList());
+
+          attr.castAndSet(entries);
+        }
+      }
+    }
+
+    @Override
     public void visit(String key, AttrEnum<? extends Enum<?>> attr) {
       if (map.containsKey(key)) {
         attr.set((String) map.get(key));
@@ -182,6 +218,26 @@ public final class Attrs {
     }
 
     @Override
+    public void visit(String key, AttrObjectArray<?> attrImpl) {
+      ensureNoExistingKey(map, key);
+
+      List<? extends AcceptingVisitor> values = attrImpl.get();
+      if (values != null) {
+        Object[] array = values.stream().map(currentValue -> {
+          Map<String, Object> submap = new LinkedHashMap<>();
+          if (!attrImpl.isDefaultClass(currentValue)) {
+            submap.put(KEY_TYPE, objectToClass.apply(currentValue));
+          }
+          currentValue.accept(new ToMapVisitor(submap, objectToClass));
+          return submap;
+        }).toArray();
+        map.put(key, array);
+      } else {
+        map.put(key, null);
+      }
+    }
+
+    @Override
     public void visit(String key, AttrEnum<? extends Enum<?>> attr) {
       ensureNoExistingKey(map, key);
       map.put(key, attr.get() != null ? attr.get().name() : null);
@@ -210,38 +266,92 @@ public final class Attrs {
   }
 
   public static String toPrettyString(AcceptingVisitor ob, ClassNameMapper mapper) {
-    Map<String, Object> map = Attrs.toMap(ob, mapper::toName);
     StringBuilder builder = new StringBuilder();
     StringBuilder indent = new StringBuilder();
-    appendMap(map, builder, indent);
-    return builder.toString();
-  }
 
-  private static void appendMap(Map<String, Object> map, StringBuilder builder, StringBuilder indent) {
-    map.forEach((k, v) -> {
-      builder.append(indent).append(k).append(": ");
-      if (v instanceof Map) {
-        builder.append("{\n");
-
-        int len = indent.length();
-        indent.append("  ");
-        @SuppressWarnings("unchecked")
-        Map<String, Object> vMap = (Map<String, Object>) v;
-        appendMap(vMap, builder, indent.append(" "));
-        indent.setLength(len);
-
-        builder.append(indent);
-        builder.append("}");
-      } else if (v != null && v.getClass().isArray()) {
-        if (v instanceof Object[]) {
-          builder.append(Arrays.toString((Object[]) v));
-        } else {
-          throw new RuntimeException("Unexpected array type: " + v);
-        }
-      } else {
-        builder.append(v);
+    ob.accept(new AttrVisitor() {
+      @Override
+      public void visit(String key, AttrBoolean attr) {
+        append(key, attr.get());
       }
-      builder.append("\n");
+
+      @Override
+      public void visit(String key, AttrInteger attr) {
+        append(key, attr.get());
+      }
+
+      @Override
+      public void visit(String key, AttrDouble attr) {
+        append(key, attr.get());
+      }
+
+      @Override
+      public void visit(String key, AttrEnum<? extends Enum<?>> attr) {
+        Enum<?> value = attr.get();
+        append(key, value == null ? value : "\"" + value + '"');
+      }
+
+      @Override
+      public void visit(String key, AttrString attr) {
+        append(key, attr.get());
+      }
+
+      @Override
+      public void visit(String key, AttrStringArray attr) {
+        String[] value = attr.get();
+        if (value == null) {
+          append(key, value);
+        } else {
+          builder.append(indent).append(key).append(": [\n");
+          for (String v : value) {
+            builder.append(indent).append("  \"").append(v).append("\"\n");
+          }
+          builder.append(indent).append("]\n");
+        }
+      }
+
+      @Override
+      public void visit(String key, AttrObject<?> attr) {
+        AcceptingVisitor value = attr.get();
+        if (value == null) {
+          append(key, value);
+        } else {
+          builder.append(indent).append(key).append(": {\n");
+          int len = indent.length();
+          indent.append("  ");
+          value.accept(this);
+          indent.setLength(len);
+          builder.append(indent).append("}\n");
+        }
+      }
+
+      @Override
+      public void visit(String key, AttrObjectArray<?> attr) {
+        List<? extends AcceptingVisitor> value = attr.get();
+        if (value == null) {
+          append(key, value);
+        } else {
+          int len1 = indent.length();
+          builder.append(indent).append(key).append(": [\n");
+          indent.append("  ");
+          for (AcceptingVisitor v : value) {
+            builder.append(indent).append("{\n");
+            int len2 = indent.length();
+            indent.append("  ");
+            v.accept(this);
+            indent.setLength(len2);
+            builder.append(indent).append("}\n");
+          }
+          indent.setLength(len1);
+          builder.append(indent).append("]\n");
+        }
+      }
+
+      private void append(String key, Object value) {
+        builder.append(indent).append(key).append(": ").append(value).append('\n');
+      }
     });
+
+    return builder.toString();
   }
 }

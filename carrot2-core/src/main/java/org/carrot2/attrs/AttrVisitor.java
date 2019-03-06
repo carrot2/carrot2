@@ -8,4 +8,5 @@ public interface AttrVisitor {
   void visit(String key, AttrString attr);
   void visit(String key, AttrStringArray attr);
   void visit(String key, AttrObject<?> attr);
+  void visit(String key, AttrObjectArray<?> attr);
 }

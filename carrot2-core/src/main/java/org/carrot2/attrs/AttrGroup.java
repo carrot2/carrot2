@@ -14,6 +14,12 @@ public final class AttrGroup {
     return attr;
   }
 
+  public <T extends AcceptingVisitor> AttrObjectArray<T> register(String key, AttrObjectArray<T> attr) {
+    checkNewKey(key);
+    attrs.put(key, (visitor) -> visitor.visit(key, attr));
+    return attr;
+  }
+
   public <T extends Enum<T>> AttrEnum<T> register(String key, AttrEnum<T> attr) {
     checkNewKey(key);
     attrs.put(key, (visitor) -> visitor.visit(key, attr));
