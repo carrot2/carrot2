@@ -6,3 +6,4 @@ build/
 
 # Intellij
 .idea/
+*.iml
