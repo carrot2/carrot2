@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT" follow="true" direct="false">
+      <PatternLayout charset="UTF-8"
+                     alwaysWriteExceptions="true" 
+                     pattern="%date{HH:mm:ss} %-5level %logger\: %msg%n" />
+    </Console>
+  </Appenders>
+
+  <Loggers>
+    <Logger level="DEBUG" name="l4g.diagnostics" />
+
+    <Root level="TRACE">
+      <AppenderRef ref="Console" />
+    </Root>
+  </Loggers>
+</Configuration>

@@ -1,14 +1,12 @@
 package org.carrot2.dcs.servlets;
 
 import com.carrotsearch.hppc.cursors.IntCursor;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.carrot2.attrs.Attrs;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.ClusteringAlgorithmProvider;
 import org.carrot2.clustering.Document;
-import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
+import org.carrot2.dcs.client.ClusterRequest;
+import org.carrot2.dcs.client.ClusterResponse;
 import org.carrot2.language.LanguageComponents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,34 +17,34 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ServiceLoader;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public class ClusterServlet extends RestEndpoint {
+  public static final String PARAM_TEMPLATE = "template";
+
   private static Logger log = LoggerFactory.getLogger(ClusterServlet.class);
 
-  private ObjectMapper om;
-  private Map<String, LanguageComponents> languages;
+  private DcsContext dcsContext;
+  private ClusterRequest templateDefault = new ClusterRequest();
 
   private static class DocumentRef implements Document {
     int ord;
-    ClusterServletRequest.Document source;
+    ClusterRequest.Document source;
 
-    public DocumentRef(ClusterServletRequest.Document doc, int ord) {
+    public DocumentRef(ClusterRequest.Document doc, int ord) {
       this.source = doc;
       this.ord = ord;
     }
 
     @Override
     public void visitFields(BiConsumer<String, String> fieldConsumer) {
-      this.source.getFields().forEach(fieldConsumer);
-      this.source.clear();
+      Map<String, String> fields = this.source.getFields();
+      fields.forEach(fieldConsumer);
+      fields.clear();
     }
   }
 
@@ -54,46 +52,75 @@ public class ClusterServlet extends RestEndpoint {
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
 
-    this.om = new ObjectMapper();
-    om.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
-
-    // TODO: Apply custom resource location customizations.
-    languages = new HashMap<>();
-    LanguageComponents.languages().stream().forEachOrdered(language -> {
-      languages.put(language, LanguageComponents.load(language));
-    });
+    dcsContext = DcsContext.load(config.getServletContext());
   }
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // TODO: support streaming mode in which request is not deserialized but parsed and processed
-    // on the fly?
+    // TODO: support streaming mode in which the request is not fully deserialized but parsed and processed on the fly?
 
     try {
-      ClusterServletRequest clusteringRequest = parseRequest(request);
+      ClusterRequest template = parseTemplate(request);
+      ClusterRequest clusteringRequest = parseRequest(request);
 
-      // TODO: Identify the algorithm to use, pick preconfigured instance.
-      Map<String, ClusteringAlgorithmProvider<?>> algorithms =
-          StreamSupport.stream(ServiceLoader.load(ClusteringAlgorithmProvider.class).spliterator(), false)
-              .collect(Collectors.toMap(e -> e.name(), e -> e));
-      ClusteringAlgorithm algorithm = algorithms.get("Dummy").get();
+      ClusteringAlgorithm algorithm = parseAlgorithm(template, clusteringRequest);
 
-      // TODO: Get language components for the designated language.
-      LanguageComponents language = languages.get("English");
-
-      // Clone algorithm instance for processing.
-      Map<String, Object> attrs = Attrs.toMap(algorithm);
-      // TODO: Apply any attribute customizations based on the request.
-      algorithm = Attrs.fromMap(ClusteringAlgorithm.class, attrs);
+      // Get language components for the designated language.
+      LanguageComponents language = getLanguage(template, clusteringRequest);
 
       // Write the response.
       List<Cluster<DocumentRef>> clusters = runClustering(clusteringRequest, algorithm, language);
-      // TODO: we could write the response directly, without wrapping it in an adapter.
-      ClusterServletResponse clusteringResponse = new ClusterServletResponse(adapt(clusters));
-      super.writeJsonResponse(response, shouldIndent(request), clusteringResponse);
+      super.writeJsonResponse(response, shouldIndent(request), new ClusterResponse(adapt(clusters)));
     } catch (TerminateRequestException e) {
       e.handle(response);
     }
+  }
+
+  private ClusteringAlgorithm parseAlgorithm(ClusterRequest template, ClusterRequest clusteringRequest) throws TerminateRequestException {
+    if (clusteringRequest.algorithm == null) {
+      clusteringRequest.algorithm = template.algorithm;
+    }
+    if (clusteringRequest.algorithm == null) {
+      throw new TerminateRequestException(HttpServletResponse.SC_BAD_REQUEST,
+          "Algorithm must not be empty.");
+    }
+    ClusteringAlgorithmProvider supplier = dcsContext.algorithmSuppliers.get(clusteringRequest.algorithm);
+    if (supplier == null) {
+      throw new TerminateRequestException(HttpServletResponse.SC_BAD_REQUEST,
+          "Algorithm not available: " + clusteringRequest.algorithm);
+    }
+
+    // TODO: Apply any attribute customizations based on the template.
+    // TODO: Apply any attribute customizations based on the request.
+
+    return supplier.get();
+  }
+
+  private ClusterRequest parseTemplate(HttpServletRequest request) {
+    ClusterRequest template = dcsContext.templates.get(request.getParameter(PARAM_TEMPLATE));
+    if (template == null) {
+      return templateDefault;
+    }
+    return template;
+  }
+
+  private LanguageComponents getLanguage(ClusterRequest template, ClusterRequest clusteringRequest) throws TerminateRequestException {
+    if (clusteringRequest.language == null) {
+      clusteringRequest.language = template.language;
+    }
+
+    String requestedLanguage = clusteringRequest.language;
+    if (requestedLanguage == null) {
+      throw new TerminateRequestException(HttpServletResponse.SC_BAD_REQUEST,
+          "Clustering language must not be empty.");
+    }
+
+    LanguageComponents language = dcsContext.languages.get(requestedLanguage);
+    if (language == null) {
+      throw new TerminateRequestException(HttpServletResponse.SC_BAD_REQUEST,
+          "Language not available: " + clusteringRequest.language);
+    }
+    return language;
   }
 
   private List<Cluster<Integer>> adapt(List<Cluster<DocumentRef>> clusters) {
@@ -107,7 +134,7 @@ public class ClusterServlet extends RestEndpoint {
     }).collect(Collectors.toList());
   }
 
-  private List<Cluster<DocumentRef>> runClustering(ClusterServletRequest clusteringRequest,
+  private List<Cluster<DocumentRef>> runClustering(ClusterRequest clusteringRequest,
                                                    ClusteringAlgorithm algorithm,
                                                    LanguageComponents language) {
     IntCursor c = new IntCursor();
@@ -118,9 +145,9 @@ public class ClusterServlet extends RestEndpoint {
     return algorithm.cluster(stream, language);
   }
 
-  private ClusterServletRequest parseRequest(HttpServletRequest request) throws IOException, TerminateRequestException {
+  private ClusterRequest parseRequest(HttpServletRequest request) throws TerminateRequestException {
     try {
-      return om.readerFor(ClusterServletRequest.class)
+      return dcsContext.om.readerFor(ClusterRequest.class)
           .readValue(new BufferedInputStream(request.getInputStream()));
     } catch (IOException e) {
       throw new TerminateRequestException(HttpServletResponse.SC_BAD_REQUEST, "Could not parse request body.", e);

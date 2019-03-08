@@ -2,12 +2,18 @@ package org.carrot2.dcs.servlets;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 class StringServletInputStream extends ServletInputStream {
   private final InputStream delegate;
+
+  StringServletInputStream(String utf8) {
+    this(new ByteArrayInputStream(utf8.getBytes(StandardCharsets.UTF_8)));
+  }
 
   StringServletInputStream(InputStream delegate) {
     this.delegate = Objects.requireNonNull(delegate);

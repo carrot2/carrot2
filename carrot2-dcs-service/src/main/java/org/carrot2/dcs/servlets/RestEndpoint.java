@@ -16,6 +16,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 class RestEndpoint extends HttpServlet {
+  public final static String PARAM_INDENT = "indent";
+
   private final static String CONTENT_TYPE_JSON_UTF8 = "application/json; charset=UTF-8";
   private final static Set<String> YES = new HashSet<>(Arrays.asList("yes", "true"));
 
@@ -49,6 +51,6 @@ class RestEndpoint extends HttpServlet {
   }
 
   protected boolean shouldIndent(HttpServletRequest request) {
-    return YES.contains(request.getParameter("indent"));
+    return YES.contains(request.getParameter(PARAM_INDENT));
   }
 }

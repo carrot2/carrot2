@@ -16,6 +16,11 @@ public class TerminateRequestException extends Exception {
     this.code = httpCode;
   }
 
+  TerminateRequestException(int httpCode, String message) {
+    super(message);
+    this.code = httpCode;
+  }
+
   public void handle(HttpServletResponse response) throws IOException {
     if (response.isCommitted()) {
       log.warn("Response already committed. Ignoring: {}", getMessage());

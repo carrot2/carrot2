@@ -1,15 +1,14 @@
-package org.carrot2.dcs.servlets;
+package org.carrot2.dcs.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import org.carrot2.clustering.Cluster;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClusterServletResponseTest {
+public class ClusterResponseTest {
   @Test
   public void testStructure() throws JsonProcessingException {
     List<Cluster<Integer>> clusters = new ArrayList<>();
@@ -28,7 +27,7 @@ public class ClusterServletResponseTest {
     c.addDocument(4);
     clusters.add(c);
 
-    ClusterServletResponse response = new ClusterServletResponse(clusters);
+    ClusterResponse response = new ClusterResponse(clusters);
     ObjectMapper om = new ObjectMapper();
     String s = om.writerWithDefaultPrettyPrinter().writeValueAsString(response);
     System.out.println(s);

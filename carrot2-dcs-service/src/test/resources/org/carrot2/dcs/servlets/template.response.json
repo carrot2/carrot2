@@ -1,0 +1,19 @@
+{
+  "clusters" : [
+    {
+      "labels" : [
+        "Leading docs"
+      ],
+      "documents" : [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "subclusters" : [ ],
+      "score" : null
+    }
+  ]
+}
+

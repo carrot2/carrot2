@@ -1,19 +1,27 @@
 package org.carrot2.dcs.servlets;
 
+import org.carrot2.dcs.client.ListResponse;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ListServlet extends RestEndpoint {
-  private ListServletResponse defaultResponse;
+  private DcsContext dcsContext;
+  private ListResponse defaultResponse;
 
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
 
-    defaultResponse = new ListServletResponse(ListAlgorithmsServlet.defaults(), ListLanguagesServlet.defaults());
+    dcsContext = DcsContext.load(config.getServletContext());
+    defaultResponse = new ListResponse(
+        new ArrayList<>(dcsContext.algorithmSuppliers.keySet()),
+        new ArrayList<>(dcsContext.languages.keySet()),
+        new ArrayList<>(dcsContext.templates.keySet()));
   }
 
   @Override

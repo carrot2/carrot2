@@ -1,6 +1,4 @@
 {
-  "language": "English",
-  "algorithm": "Dummy",
   "documents": [
     { "field": "value 1" },
     { "field": "value 2" },

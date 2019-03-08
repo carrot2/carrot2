@@ -1,4 +1,4 @@
-package org.carrot2.dcs.servlets;
+package org.carrot2.dcs.client;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -9,9 +9,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ClusterServletRequest {
+public class ClusterRequest {
   public static class Document {
-    private Map<String, String> fields = new LinkedHashMap<>();
+    public Map<String, String> fields = new LinkedHashMap<>();
 
     @JsonAnyGetter
     public Map<String, String> getFields() {
@@ -22,12 +22,14 @@ public class ClusterServletRequest {
     public void setField(String field, String value) {
       fields.put(field, value);
     }
-
-    void clear() {
-      fields = null;
-    }
   }
 
   @JsonProperty
-  List<Document> documents = new ArrayList<>();
+  public String language;
+
+  @JsonProperty
+  public String algorithm;
+
+  @JsonProperty
+  public List<Document> documents = new ArrayList<>();
 }

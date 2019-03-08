@@ -6,15 +6,4 @@
          version="3.1">
     <display-name>DCS</display-name>
     <description>Document Clustering Server REST Service</description>
-    
-    <servlet>
-        <servlet-name>ListLanguages</servlet-name>
-        <servlet-class>org.carrot2.dcs.servlets.ListLanguagesServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>ListLanguages</servlet-name>
-        <url-pattern>/list/languages</url-pattern>
-    </servlet-mapping>
 </web-app>

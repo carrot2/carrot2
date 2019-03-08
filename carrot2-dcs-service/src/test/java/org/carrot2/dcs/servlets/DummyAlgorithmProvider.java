@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class DummyAlgorithmProvider implements ClusteringAlgorithmProvider<DummyAlgorithmProvider.DummyAlgorithm> {
+public class DummyAlgorithmProvider implements ClusteringAlgorithmProvider {
   static class DummyAlgorithm implements ClusteringAlgorithm {
     @Override
     public <T extends Document> List<Cluster<T>> cluster(Stream<? extends T> documents, LanguageComponents languageComponents) {

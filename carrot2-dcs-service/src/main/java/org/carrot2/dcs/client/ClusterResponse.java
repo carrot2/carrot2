@@ -1,4 +1,4 @@
-package org.carrot2.dcs.servlets;
+package org.carrot2.dcs.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,12 +6,12 @@ import org.carrot2.clustering.Cluster;
 
 import java.util.List;
 
-public class ClusterServletResponse {
+public class ClusterResponse {
   @JsonProperty
-  List<Cluster<Integer>> clusters;
+  public List<Cluster<Integer>> clusters;
 
   @JsonCreator
-  public ClusterServletResponse(@JsonProperty("clusters") List<Cluster<Integer>> clusters) {
+  public ClusterResponse(@JsonProperty("clusters") List<Cluster<Integer>> clusters) {
     this.clusters = clusters;
   }
 }
