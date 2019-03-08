@@ -1,5 +1,6 @@
 package org.carrot2.dcs.servlets;
 
+import org.carrot2.attrs.AttrVisitor;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.ClusteringAlgorithmProvider;
@@ -25,6 +26,11 @@ public class DummyAlgorithmProvider implements ClusteringAlgorithmProvider<Dummy
         docs.stream().limit(5).forEachOrdered(c::addDocument);
         return Collections.singletonList(c);
       }
+    }
+
+    @Override
+    public void accept(AttrVisitor visitor) {
+      // No custom attributes.
     }
   }
 

@@ -14,6 +14,7 @@ package org.carrot2.clustering;
 
 import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
+import org.carrot2.attrs.AttrVisitor;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
 import org.junit.Test;
@@ -65,6 +66,11 @@ public class ClusteringAlgorithmTest extends TestBase {
         });
 
         return Arrays.asList(root);
+      }
+
+      @Override
+      public void accept(AttrVisitor visitor) {
+        // No attributes.
       }
     };
 
