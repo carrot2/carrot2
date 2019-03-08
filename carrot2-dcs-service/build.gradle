@@ -1,0 +1,17 @@
+
+apply plugin: 'java'
+apply plugin: 'war'
+
+dependencies {
+  implementation(project(':carrot2-core')) {
+    exclude group: 'org.slf4j'
+  }
+
+  implementation("com.fasterxml.jackson.core:jackson-databind:${versions.jackson}")
+
+  compileOnly "javax.servlet:javax.servlet-api:3.1.0"
+  compileOnly "org.slf4j:slf4j-api:${versions.slf4j}"
+
+  testCompile 'org.mockito:mockito-core:2.25.0'
+  testCompile 'javax.servlet:javax.servlet-api:3.1.0'
+}

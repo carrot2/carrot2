@@ -1,0 +1,3 @@
+org.carrot2.clustering.lingo.LingoProvider
+org.carrot2.clustering.stc.STCProvider
+org.carrot2.clustering.kmeans.BisectingKMeansProvider

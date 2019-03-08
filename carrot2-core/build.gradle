@@ -5,8 +5,9 @@ configurations {
 }
 
 dependencies {
-  api "org.slf4j:slf4j-api:1.7.13"
-  implementation "com.carrotsearch:hppc:0.8.1"
+  api "org.slf4j:slf4j-api:${versions.slf4j}"
+  api "com.carrotsearch:hppc:${versions.hppc}"
+
   jflex "de.jflex:jflex:1.5.1"
 }
 

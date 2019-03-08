@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="ERROR">
+    <Appenders>
+        <Console name="ConsoleDetailed" target="SYSTEM_OUT" follow="true" direct="false">
+            <PatternLayout charset="UTF-8"
+                           alwaysWriteExceptions="true"
+                           pattern="%date{HH:mm:ss} %-5level %logger\: %msg%n" />
+        </Console>
+
+        <Console name="Console" target="SYSTEM_OUT" follow="true" direct="false">
+            <PatternLayout charset="UTF-8"
+                           alwaysWriteExceptions="true"
+                           pattern="%date{HH:mm:ss}\: %msg%n" />
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="DEBUG">
+            <AppenderRef ref="ConsoleDetailed" />
+        </Root>
+
+        <Logger level="DEBUG" name="console" additivity="false">
+            <AppenderRef ref="Console" />
+        </Logger>
+
+        <Logger level="WARN" name="org.eclipse.jetty" />
+    </Loggers>
+</Configuration>

@@ -1,0 +1,51 @@
+import org.apache.tools.ant.filters.*
+
+apply plugin: 'java'
+
+dependencies {
+  implementation "com.beust:jcommander:1.72"
+
+  implementation "org.eclipse.jetty:jetty-server:${versions.jetty}"
+  implementation "org.eclipse.jetty:jetty-webapp:${versions.jetty}"
+
+  implementation "org.apache.logging.log4j:log4j-core:${versions.log4j2}"
+  implementation "org.apache.logging.log4j:log4j-slf4j-impl:${versions.log4j2}"
+}
+
+jar {
+  manifest {
+    attributes("Main-Class": "org.carrot2.dcs.Launcher")
+    attributes("Class-Path": configurations.runtimeClasspath.collect { it.getName() }.join(' '))
+  }
+}
+
+task collectDependencies(type: Sync) {
+  from configurations.runtimeClasspath
+  from jar
+
+  into "$buildDir/${project.name}/lib"
+}
+
+task collectScripts(type: Sync) {
+  from files('src/main/assembly') {
+    filteringCharset = 'UTF-8'
+    filter(ReplaceTokens, tokens: replaceTokens)
+  }
+  from legal
+
+  into "$buildDir/${project.name}"
+  preserve {
+    include 'lib/'
+  }
+}
+
+project.evaluationDependsOn(":carrot2-dcs-service")
+
+task collectWars(type: Sync) {
+  dependsOn ':carrot2-dcs-service:war'
+  from zipTree(project(":carrot2-dcs-service").war.archiveFile)
+
+  into "$buildDir/${project.name}/web"
+}
+
+assemble.dependsOn(collectScripts, collectDependencies, collectWars)
