@@ -1,6 +1,8 @@
 package org.carrot2.dcs.servlets;
 
 import com.carrotsearch.hppc.cursors.IntCursor;
+import org.carrot2.attrs.AliasMapper;
+import org.carrot2.attrs.Attrs;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.ClusteringAlgorithmProvider;
@@ -8,8 +10,6 @@ import org.carrot2.clustering.Document;
 import org.carrot2.dcs.client.ClusterRequest;
 import org.carrot2.dcs.client.ClusterResponse;
 import org.carrot2.language.LanguageComponents;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -25,8 +25,6 @@ import java.util.stream.Stream;
 
 public class ClusterServlet extends RestEndpoint {
   public static final String PARAM_TEMPLATE = "template";
-
-  private static Logger log = LoggerFactory.getLogger(ClusterServlet.class);
 
   private DcsContext dcsContext;
   private ClusterRequest templateDefault = new ClusterRequest();
@@ -77,23 +75,41 @@ public class ClusterServlet extends RestEndpoint {
   }
 
   private ClusteringAlgorithm parseAlgorithm(ClusterRequest template, ClusterRequest clusteringRequest) throws TerminateRequestException {
-    if (clusteringRequest.algorithm == null) {
-      clusteringRequest.algorithm = template.algorithm;
-    }
-    if (clusteringRequest.algorithm == null) {
+    String algorithmName = firstNotNull(clusteringRequest.algorithm, template.algorithm);
+    if (algorithmName == null) {
       throw new TerminateRequestException(HttpServletResponse.SC_BAD_REQUEST,
           "Algorithm must not be empty.");
     }
-    ClusteringAlgorithmProvider supplier = dcsContext.algorithmSuppliers.get(clusteringRequest.algorithm);
+    ClusteringAlgorithmProvider supplier = dcsContext.algorithmSuppliers.get(algorithmName);
     if (supplier == null) {
       throw new TerminateRequestException(HttpServletResponse.SC_BAD_REQUEST,
-          "Algorithm not available: " + clusteringRequest.algorithm);
+          "Algorithm not available: " + algorithmName);
     }
 
-    // TODO: Apply any attribute customizations based on the template.
-    // TODO: Apply any attribute customizations based on the request.
+    ClusteringAlgorithm algorithm = supplier.get();
 
-    return supplier.get();
+    // TODO: we could do this in template supplier?
+    if (template.parameters != null) {
+      algorithm.accept(
+          new Attrs.FromMapVisitor(template.parameters, AliasMapper.SPI_DEFAULTS::fromName));
+    }
+
+    if (clusteringRequest.parameters != null) {
+      algorithm.accept(
+          new Attrs.FromMapVisitor(clusteringRequest.parameters, AliasMapper.SPI_DEFAULTS::fromName));
+    }
+
+    return algorithm;
+  }
+
+  private static String firstNotNull(String first, String... other) {
+    if (first != null) return first;
+    for (String v : other) {
+      if (v != null) {
+        return v;
+      }
+    }
+    return null;
   }
 
   private ClusterRequest parseTemplate(HttpServletRequest request) {

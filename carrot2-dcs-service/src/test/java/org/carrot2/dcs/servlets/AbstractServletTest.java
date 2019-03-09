@@ -45,7 +45,7 @@ public abstract class AbstractServletTest {
     for (String template : templates) {
       String path = DcsContext.PATH_TEMPLATES + "/" + template;
       when(context.getResourceAsStream(path))
-          .thenReturn(resourceStream("template1.json"));
+          .thenReturn(resourceStream(template));
       set.add(path);
     }
 

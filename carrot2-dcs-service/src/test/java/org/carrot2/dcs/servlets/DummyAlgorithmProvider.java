@@ -1,36 +1,49 @@
 package org.carrot2.dcs.servlets;
 
-import org.carrot2.attrs.AttrVisitor;
+import org.carrot2.attrs.AttrComposite;
+import org.carrot2.attrs.AttrInteger;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.ClusteringAlgorithmProvider;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.LanguageComponents;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DummyAlgorithmProvider implements ClusteringAlgorithmProvider {
-  static class DummyAlgorithm implements ClusteringAlgorithm {
+  static class DummyAlgorithm extends AttrComposite implements ClusteringAlgorithm {
+    AttrInteger groupSize = attributes.register("groupSize",
+        AttrInteger.builder().min(1).defaultValue(5));
+
     @Override
     public <T extends Document> List<Cluster<T>> cluster(Stream<? extends T> documents, LanguageComponents languageComponents) {
       List<? extends T> docs = documents.collect(Collectors.toList());
 
-      if (docs.isEmpty()) {
-        return Collections.emptyList();
-      } else {
-        Cluster<T> c = new Cluster<T>();
-        c.addLabel("Leading docs");
-        docs.stream().limit(5).forEachOrdered(c::addDocument);
-        return Collections.singletonList(c);
-      }
-    }
+      List<Cluster<T>> clusters = new ArrayList<>();
 
-    @Override
-    public void accept(AttrVisitor visitor) {
-      // No custom attributes.
+      Supplier<Cluster<T>> newCluster = () -> {
+        Cluster<T> c = new Cluster<>();
+        c.addLabel("Group " + (clusters.size() + 1));
+        return c;
+      };
+
+      Cluster<T> c = newCluster.get();
+      for (T doc : docs) {
+        c.addDocument(doc);
+        if (c.getDocuments().size() >= groupSize.get()) {
+          clusters.add(c);
+          c = newCluster.get();
+        }
+      }
+      if (c.getDocuments().size() > 0) {
+        clusters.add(c);
+      }
+
+      return clusters;
     }
   }
 

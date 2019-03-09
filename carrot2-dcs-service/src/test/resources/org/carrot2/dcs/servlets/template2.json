@@ -1,0 +1,7 @@
+{
+  "language": "English",
+  "algorithm": "Dummy",
+  "parameters": {
+    "groupSize": 10
+  }
+}

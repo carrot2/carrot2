@@ -8,8 +8,6 @@ import org.junit.Test;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -24,10 +22,23 @@ public class ClusterServletTest extends AbstractServletTest {
 
   @Test
   public void testTemplateRequest() throws Exception {
-    setupMockTemplates("template1", "template2");
+    setupMockTemplates("template1.json", "template2.json");
 
     when(request.getParameter(ClusterServlet.PARAM_TEMPLATE)).thenReturn("template1");
-    verifyRequest("simple.request.json", "simple.response.json");
+    verifyRequest("template.request.json", "template.response.json");
+  }
+
+  @Test
+  public void testAttributeInRequest() throws Exception {
+    verifyRequest("attrInRequest.request.json", "attrInRequest.response.json");
+  }
+
+  @Test
+  public void testAttributeInTemplate() throws Exception {
+    setupMockTemplates("template1.json", "template2.json");
+
+    when(request.getParameter(ClusterServlet.PARAM_TEMPLATE)).thenReturn("template2");
+    verifyRequest("attrInTemplate.request.json", "attrInTemplate.response.json");
   }
 
   private void verifyRequest(String requestResource, String responseResource) throws Exception {
