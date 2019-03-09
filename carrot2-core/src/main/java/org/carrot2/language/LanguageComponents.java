@@ -103,7 +103,11 @@ public final class LanguageComponents {
       }
     }
 
-    // TODO: This performs a sanity check but may be too heavy if called repeatedly?
+    sanityCheck(providers);
+    return providers;
+  }
+
+  private static void sanityCheck(Map<String, List<LanguageComponentsProvider>> providers) throws IOException {
     for (Map.Entry<String, List<LanguageComponentsProvider>> e : providers.entrySet()) {
       String language = e.getKey();
       HashMap<Class<?>, LanguageComponentsProvider> components = new HashMap<>();
@@ -121,6 +125,5 @@ public final class LanguageComponents {
         }
       }
     }
-    return providers;
   }
 }

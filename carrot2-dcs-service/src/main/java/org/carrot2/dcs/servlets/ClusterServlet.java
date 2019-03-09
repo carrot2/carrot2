@@ -88,7 +88,6 @@ public class ClusterServlet extends RestEndpoint {
 
     ClusteringAlgorithm algorithm = supplier.get();
 
-    // TODO: we could do this in template supplier?
     if (template.parameters != null) {
       algorithm.accept(
           new Attrs.FromMapVisitor(template.parameters, AliasMapper.SPI_DEFAULTS::fromName));
