@@ -1,4 +1,3 @@
-
 - add carrot2-lang-polish to the DCS distribution
 - templates with a declared, but missing algorithm should be ignored
 - templates should be ordered by naming convention [00-id.json]
@@ -15,6 +14,8 @@
     /frontend
     / -> redirect /frontend
 
+- add some logging sanity in the launcher.
+
 - TODOs and performance optimizations.
 - documentation [another project/ dcs context?]
-
+- Add an IT that verifies what happens if we saturate the server with requests.
