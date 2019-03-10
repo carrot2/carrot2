@@ -73,7 +73,6 @@ public class E04_Multithreading {
     Function<Stream<Document>, List<Cluster<Document>>> processor = (documentStream) -> {
       // Clone from preconfigured.
       LingoClusteringAlgorithm cloned = Attrs.fromMap(LingoClusteringAlgorithm.class, attrs);
-
       return cloned.cluster(documentStream, english);
     };
 

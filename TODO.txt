@@ -16,6 +16,9 @@
 
 - add some logging sanity in the launcher.
 
+- add better error support (perhaps structured json response) and logging 
+- add better validation of extra/ unused/ invalid json entries in parameters; handle response.
+
 - TODOs and performance optimizations.
 - documentation [another project/ dcs context?]
 - Add an IT that verifies what happens if we saturate the server with requests.
