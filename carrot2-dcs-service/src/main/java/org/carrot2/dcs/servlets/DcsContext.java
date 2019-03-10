@@ -18,11 +18,11 @@ import java.util.stream.StreamSupport;
 
 class DcsContext {
   public static final String PARAM_RESOURCES = "resources";
-  public static final String PATH_TEMPLATES = "/templates";
+  public static final String PARAM_TEMPLATES = "templates";
 
   private static String KEY = "_dcs_";
   private static Logger log = LoggerFactory.getLogger(DcsContext.class);
-  
+
   final ObjectMapper om;
   final Map<String, ClusterRequest> templates;
   final Map<String, ClusteringAlgorithmProvider> algorithmSuppliers;
@@ -75,8 +75,14 @@ class DcsContext {
   }
 
   private Map<String, ClusterRequest> processTemplates(ObjectMapper om, ServletContext servletContext) throws ServletException {
+    String templatePath = servletContext.getInitParameter(PARAM_TEMPLATES);
+    if (templatePath == null || templatePath.isEmpty()) {
+      log.warn("Template path init parameter is empty.");
+      return Collections.emptyMap();
+    }
+
     Map<String, ClusterRequest> templates = new LinkedHashMap<>();
-    Set<String> resourcePaths = servletContext.getResourcePaths(PATH_TEMPLATES);
+    Set<String> resourcePaths = servletContext.getResourcePaths(templatePath);
     if (resourcePaths != null) {
       resourcePaths = new TreeSet<>(resourcePaths);
       for (String template : resourcePaths) {
@@ -95,7 +101,7 @@ class DcsContext {
             throw new ServletException("Could not process request template: " + template);
           }
         } else {
-          log.info("Ignoring non-template file: {}", template);
+          log.debug("Ignoring non-template file (must end in *.json): {}", template);
         }
       }
     }

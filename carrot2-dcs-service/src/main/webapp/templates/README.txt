@@ -1,0 +1,1 @@
+Place request templates in this folder.

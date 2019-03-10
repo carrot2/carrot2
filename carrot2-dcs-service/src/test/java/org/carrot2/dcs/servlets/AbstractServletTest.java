@@ -41,15 +41,19 @@ public abstract class AbstractServletTest {
   }
 
   protected void setupMockTemplates(String... templates) {
+    String templatesPath = "/templates";
+    when(context.getInitParameter(DcsContext.PARAM_TEMPLATES))
+        .thenReturn(templatesPath);
+
     Set<String> set = new LinkedHashSet<>();
     for (String template : templates) {
-      String path = DcsContext.PATH_TEMPLATES + "/" + template;
+      String path = templatesPath + "/" + template;
       when(context.getResourceAsStream(path))
           .thenReturn(resourceStream(template));
       set.add(path);
     }
 
-    when(context.getResourcePaths(DcsContext.PATH_TEMPLATES))
+    when(context.getResourcePaths(templatesPath))
         .thenReturn(set);
   }
 
