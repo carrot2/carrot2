@@ -1,5 +1,6 @@
-- add carrot2-lang-polish to the DCS distribution
+
 - templates with a declared, but missing algorithm should be ignored
+
 - templates should be ordered by naming convention [00-id.json]
 - add templates for all default algorithms (and English as the default language).
 - Copy language resources during build. Run with explicit language resources.
