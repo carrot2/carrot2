@@ -1,8 +1,6 @@
-- templates with a declared, but missing algorithm should be ignored
-
+- Add end-to-end integration test.
 - add templates for all default algorithms (and English as the default language).
 - Copy language resources during build. Run with explicit language resources.
-- Add end-to-end integration test.
 - Split "client" classes and request/ response model.
   - Add examples of using the client to call the service.
 

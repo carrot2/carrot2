@@ -34,10 +34,11 @@ class DcsContext {
     this.om = new ObjectMapper();
     om.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
 
-    this.templates = processTemplates(om, servletContext);
     this.algorithmSuppliers =
         StreamSupport.stream(ServiceLoader.load(ClusteringAlgorithmProvider.class).spliterator(), false)
             .collect(Collectors.toMap(e -> e.name(), e -> e));
+
+    this.templates = processTemplates(om, servletContext);
 
     // Load lexical resources.
     String resourcePath = servletContext.getInitParameter(PARAM_RESOURCES);
@@ -102,7 +103,12 @@ class DcsContext {
             log.warn("Templates must not contain the 'documents' property, clearing it in template: {}", ti.path);
             requestTemplate.documents = null;
           }
-          templates.put(ti.id, requestTemplate);
+
+          if (requestTemplate.algorithm != null && !algorithmSuppliers.containsKey(requestTemplate.algorithm)) {
+            log.debug("Template '{}' omitted because the algorithm is not available: {}", ti.path, requestTemplate.algorithm);
+          } else {
+            templates.put(ti.id, requestTemplate);
+          }
         } catch (IOException e) {
           throw new ServletException("Could not process request template: " + ti.path, e);
         }

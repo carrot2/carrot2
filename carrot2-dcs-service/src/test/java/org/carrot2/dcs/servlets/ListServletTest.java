@@ -36,4 +36,25 @@ public class ListServletTest extends AbstractServletTest {
     Assertions.assertThat(om.readValue(sw.toString(), ListResponse.class).templates)
         .containsExactly("template2", "template1", "template3");
   }
+
+  @Test
+  public void testTemplateFiltering() throws Exception {
+    setupMockTemplates(
+        "template1.json",
+        "template-unavailable.json",
+        "template-no-algorithm.json");
+
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    when(response.getWriter()).thenReturn(pw);
+
+    ListServlet servlet = new ListServlet();
+    servlet.init(config);
+    servlet.doGet(request, response);
+    pw.flush();
+
+    ObjectMapper om = new ObjectMapper();
+    Assertions.assertThat(om.readValue(sw.toString(), ListResponse.class).templates)
+        .containsOnly("template1", "template-no-algorithm");
+  }
 }
