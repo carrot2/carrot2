@@ -18,7 +18,7 @@ import java.util.Map;
 })
 public class ClusterRequest {
   public static class Document {
-    public Map<String, String> fields = new LinkedHashMap<>();
+    private Map<String, String> fields = new LinkedHashMap<>();
 
     @JsonAnyGetter
     public Map<String, String> getFields() {
