@@ -13,6 +13,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -81,30 +83,50 @@ class DcsContext {
       return Collections.emptyMap();
     }
 
+    Pattern NAME_PATTERN = Pattern.compile("(/)?(?<ordering>[0-9]+)?+(?<separator>\\s*\\-?\\s*)?+(?<id>[^/]+)(.json)$",
+        Pattern.CASE_INSENSITIVE);
+
     Map<String, ClusterRequest> templates = new LinkedHashMap<>();
     Set<String> resourcePaths = servletContext.getResourcePaths(templatePath);
     if (resourcePaths != null) {
-      resourcePaths = new TreeSet<>(resourcePaths);
-      for (String template : resourcePaths) {
-        if (template.toLowerCase(Locale.ROOT).endsWith(".json")) {
-          try {
-            ClusterRequest requestTemplate =
-                om.readValue(servletContext.getResourceAsStream(template), ClusterRequest.class);
-            if (requestTemplate.documents != null && !requestTemplate.documents.isEmpty()) {
-              log.warn("Templates should not contain any documents, but this template does: {}", template);
-              requestTemplate.documents = null;
-            }
-            String id = template.substring(0, template.lastIndexOf('.'));
-            id = id.substring(id.lastIndexOf('/') + 1);
-            templates.put(id, requestTemplate);
-          } catch (IOException e) {
-            throw new ServletException("Could not process request template: " + template);
+      for (TemplateInfo ti : resourcePaths.stream()
+          .filter(path -> path.toLowerCase(Locale.ROOT).endsWith(".json"))
+          .map(path -> new TemplateInfo(path))
+          .filter(v -> v != null)
+          .sorted(Comparator.comparing(t -> t.name))
+          .collect(Collectors.toList())) {
+        try {
+          ClusterRequest requestTemplate =
+              om.readValue(servletContext.getResourceAsStream(ti.path), ClusterRequest.class);
+          if (requestTemplate.documents != null && !requestTemplate.documents.isEmpty()) {
+            log.warn("Templates must not contain the 'documents' property, clearing it in template: {}", ti.path);
+            requestTemplate.documents = null;
           }
-        } else {
-          log.debug("Ignoring non-template file (must end in *.json): {}", template);
+          templates.put(ti.id, requestTemplate);
+        } catch (IOException e) {
+          throw new ServletException("Could not process request template: " + ti.path, e);
         }
       }
     }
     return templates;
+  }
+
+  private static class TemplateInfo {
+    private static Pattern NAME_PATTERN = Pattern.compile("(/)?(?<name>[^/]+)(.json)$", Pattern.CASE_INSENSITIVE);
+    private static Pattern ID_PATTERN = Pattern.compile("^(?:[0-9]+)?+(?:\\s*\\-?\\s*)?+", Pattern.CASE_INSENSITIVE);
+
+    private final String path;
+    private final String name;
+    private final String id;
+
+    public TemplateInfo(String path) {
+      this.path = path;
+      Matcher matcher = NAME_PATTERN.matcher(path);
+      if (!matcher.find()) {
+        throw new RuntimeException("Name part not found?: " + path);
+      }
+      this.name = matcher.group("name");
+      this.id = ID_PATTERN.matcher(name).replaceAll("");
+    }
   }
 }

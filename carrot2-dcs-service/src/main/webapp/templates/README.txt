@@ -1,1 +1,2 @@
-Place request templates in this folder.
+Place request templates in this folder. Templates are ordered alphabetically by file name. Any numerical
+prefix and .json suffix is then discarded - the remaining part of the file name forms template identifier.

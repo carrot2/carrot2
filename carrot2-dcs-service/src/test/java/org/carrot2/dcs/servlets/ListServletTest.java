@@ -14,7 +14,8 @@ import static org.mockito.Mockito.when;
 public class ListServletTest extends AbstractServletTest {
   @Test
   public void testGet() throws Exception {
-    setupMockTemplates("template1.json", "template2.json");
+    setupMockTemplates((name) -> resourceStream("template1.json"),
+        "01 template2.json", "02-template1.json", "03 - template3.json");
 
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
@@ -33,6 +34,6 @@ public class ListServletTest extends AbstractServletTest {
         .containsOnly("STC", "Lingo", "Bisecting K-Means", "Dummy");
 
     Assertions.assertThat(om.readValue(sw.toString(), ListResponse.class).templates)
-        .containsOnly("template1", "template2");
+        .containsExactly("template2", "template1", "template3");
   }
 }

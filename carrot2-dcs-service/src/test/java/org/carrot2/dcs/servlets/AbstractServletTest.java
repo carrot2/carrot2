@@ -14,6 +14,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.function.Function;
 
 import static org.mockito.Mockito.when;
 
@@ -40,7 +41,7 @@ public abstract class AbstractServletTest {
     when(request.getParameter(ClusterServlet.PARAM_INDENT)).thenReturn("true");
   }
 
-  protected void setupMockTemplates(String... templates) {
+  protected void setupMockTemplates(Function<String, InputStream> streamSupplier, String... templates) {
     String templatesPath = "/templates";
     when(context.getInitParameter(DcsContext.PARAM_TEMPLATES))
         .thenReturn(templatesPath);
@@ -49,12 +50,16 @@ public abstract class AbstractServletTest {
     for (String template : templates) {
       String path = templatesPath + "/" + template;
       when(context.getResourceAsStream(path))
-          .thenReturn(resourceStream(template));
+          .thenReturn(streamSupplier.apply(template));
       set.add(path);
     }
 
     when(context.getResourcePaths(templatesPath))
         .thenReturn(set);
+  }
+
+  protected void setupMockTemplates(String... templates) {
+    setupMockTemplates(this::resourceStream, templates);
   }
 
   protected byte[] resourceBytes(String resource) {
