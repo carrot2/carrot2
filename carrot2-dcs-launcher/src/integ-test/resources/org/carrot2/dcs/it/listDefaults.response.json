@@ -22,5 +22,9 @@
     "Swedish",
     "Turkish"
   ],
-  "templates" : [ ]
+  "templates" : [
+    "lingo",
+    "stc",
+    "bkmeans"
+  ]
 }
