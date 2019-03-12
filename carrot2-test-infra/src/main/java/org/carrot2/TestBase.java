@@ -26,6 +26,11 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 @TimeoutSuite(millis = 180 * 1000) // No suite should run longer than 180 seconds.
 @ThreadLeakGroup(Group.MAIN)
@@ -41,7 +46,10 @@ public abstract class TestBase extends RandomizedTest {
    * @see SystemPropertiesInvariantRule
    * @see #classRules
    */
-  private static final String[] IGNORED_INVARIANT_PROPERTIES = {"user.timezone"};
+  private static final String[] IGNORED_INVARIANT_PROPERTIES = {
+      "user.timezone",
+      "jetty.git.hash"
+  };
 
   /**
    * Class {@link TestRule}s.
@@ -61,4 +69,34 @@ public abstract class TestBase extends RandomizedTest {
   @Rule
   public final TestRule ruleChain =
       RuleChain.outerRule(new SystemPropertiesInvariantRule(IGNORED_INVARIANT_PROPERTIES));
+
+  /**
+   * Test logger.
+   */
+  protected final Logger log = LoggerFactory.getLogger(getClass());
+
+  protected byte[] resourceBytes(String resource) {
+    try (InputStream is = getClass().getResourceAsStream(resource)) {
+      if (is == null) {
+        throw new RuntimeException("Resource not found: " + resource);
+      }
+
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      byte [] buf = new byte [1024];
+      for (int len; (len = is.read(buf)) > 0;) {
+        baos.write(buf, 0, len);
+      }
+      return baos.toByteArray();
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+  }
+
+  protected String resourceString(String resource) {
+    return new String(resourceBytes(resource), StandardCharsets.UTF_8);
+  }
+
+  protected InputStream resourceStream(String resource) {
+    return new ByteArrayInputStream(resourceBytes(resource));
+  }
 }

@@ -8,7 +8,6 @@ import org.carrot2.TestBase;
 import org.carrot2.attrs.*;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -17,8 +16,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;

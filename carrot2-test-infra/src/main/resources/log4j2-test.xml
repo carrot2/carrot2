@@ -9,8 +9,7 @@
   </Appenders>
 
   <Loggers>
-    <Logger level="DEBUG" name="l4g.diagnostics" />
-
+    <Logger name="org.eclipse.jetty" level="WARN" />
     <Root level="TRACE">
       <AppenderRef ref="Console" />
     </Root>

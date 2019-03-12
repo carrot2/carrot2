@@ -1,0 +1,26 @@
+{
+  "algorithms" : [
+    "Bisecting K-Means",
+    "Lingo",
+    "STC"
+  ],
+  "languages" : [
+    "Danish",
+    "Dutch",
+    "English",
+    "Finnish",
+    "French",
+    "German",
+    "Hungarian",
+    "Italian",
+    "Norwegian",
+    "Polish",
+    "Portuguese",
+    "Romanian",
+    "Russian",
+    "Spanish",
+    "Swedish",
+    "Turkish"
+  ],
+  "templates" : [ ]
+}

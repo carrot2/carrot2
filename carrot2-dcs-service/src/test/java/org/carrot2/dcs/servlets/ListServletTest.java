@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.when;
 
@@ -28,10 +29,11 @@ public class ListServletTest extends AbstractServletTest {
 
     ObjectMapper om = new ObjectMapper();
     Assertions.assertThat(om.readValue(sw.toString(), ListResponse.class).languages)
-        .containsOnlyElementsOf(LanguageComponents.languages());
+        .containsExactlyElementsOf(
+            LanguageComponents.languages().stream().sorted().collect(Collectors.toList()));
 
     Assertions.assertThat(om.readValue(sw.toString(), ListResponse.class).algorithms)
-        .containsOnly("STC", "Lingo", "Bisecting K-Means", "Dummy");
+        .containsExactly("Bisecting K-Means", "Dummy", "Lingo", "STC");
 
     Assertions.assertThat(om.readValue(sw.toString(), ListResponse.class).templates)
         .containsExactly("template2", "template1", "template3");

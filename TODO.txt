@@ -1,4 +1,4 @@
-- Add end-to-end integration test.
+
 - add templates for all default algorithms (and English as the default language).
 - Copy language resources during build. Run with explicit language resources.
 - Split "client" classes and request/ response model.

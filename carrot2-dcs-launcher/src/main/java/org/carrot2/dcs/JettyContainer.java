@@ -12,28 +12,38 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import java.net.BindException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.carrot2.dcs.Loggers.CONSOLE;
 
-class JettyContainer {
+public class JettyContainer {
   private final int port;
   private final Path webappContext;
+  private Server server;
+  private ServerConnector connector;
 
-  JettyContainer(int port, Path context) {
+  public JettyContainer(int port, Path context) {
     this.port = port;
     this.webappContext = context;
   }
 
-  void start() throws Exception {
-    Server server = createServer();
-
+  public void start() throws Exception {
+    server = createServer();
     addContexts(server, webappContext);
-
     server.start();
+  }
+
+  public void join() throws InterruptedException {
     server.join();
+  }
+
+  public void stop() throws Exception {
+    server.stop();
+  }
+
+  public int getPort() {
+    return connector.getLocalPort();
   }
 
   private void addContexts(Server server, Path context) {
@@ -102,12 +112,10 @@ class JettyContainer {
 
     Server server = new Server(threadPool);
 
-    ServerConnector connector = new ServerConnector(server);
+    connector = new ServerConnector(server);
     connector.setPort(port);
     server.addConnector(connector);
-
     server.addLifeCycleListener(createLifecycleLogger(server, connector));
-
     return server;
   }
 }

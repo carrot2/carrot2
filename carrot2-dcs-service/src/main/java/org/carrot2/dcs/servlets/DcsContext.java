@@ -16,6 +16,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 class DcsContext {
@@ -27,16 +28,22 @@ class DcsContext {
 
   final ObjectMapper om;
   final Map<String, ClusterRequest> templates;
-  final Map<String, ClusteringAlgorithmProvider> algorithmSuppliers;
-  final Map<String, LanguageComponents> languages;
+  final LinkedHashMap<String, ClusteringAlgorithmProvider> algorithmSuppliers;
+  final LinkedHashMap<String, LanguageComponents> languages;
 
   private DcsContext(ServletContext servletContext) throws ServletException {
     this.om = new ObjectMapper();
     om.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
 
     this.algorithmSuppliers =
-        StreamSupport.stream(ServiceLoader.load(ClusteringAlgorithmProvider.class).spliterator(), false)
-            .collect(Collectors.toMap(e -> e.name(), e -> e));
+      StreamSupport.stream(ServiceLoader.load(ClusteringAlgorithmProvider.class).spliterator(), false)
+          .sorted(Comparator.comparing(v -> v.name()))
+          .collect(Collectors.toMap(
+              e -> e.name(),
+              e -> e,
+              (k1, k2) -> { throw new IllegalStateException("Duplicate algorithm key: " + k1.name()); },
+              LinkedHashMap::new
+          ));
 
     this.templates = processTemplates(om, servletContext);
 
@@ -56,11 +63,13 @@ class DcsContext {
       }
     } else {
       log.info("Loading language resources from default classpath locations.");
-      // Load default.
       this.languages = LanguageComponents.languages().stream()
+          .sorted()
           .collect(Collectors.toMap(
               e -> e,
-              e -> LanguageComponents.load(e)));
+              e -> LanguageComponents.load(e),
+              (k1, k2) -> { throw new IllegalStateException("Duplicate language key: " + k1.language()); },
+              LinkedHashMap::new));
     }
 
     log.info("DCS context initialized [algorithms: {}, templates: {}]",

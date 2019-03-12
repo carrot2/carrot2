@@ -30,6 +30,7 @@ public class Launcher {
 
     JettyContainer c = new JettyContainer(port, home.resolve("web"));
     c.start();
+    c.join();
   }
 
   private Path autodetectHome() {

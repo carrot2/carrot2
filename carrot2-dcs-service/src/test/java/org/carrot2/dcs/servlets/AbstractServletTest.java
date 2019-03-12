@@ -1,5 +1,6 @@
 package org.carrot2.dcs.servlets;
 
+import org.carrot2.TestBase;
 import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -10,15 +11,14 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.InputStream;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.Function;
 
 import static org.mockito.Mockito.when;
 
-public abstract class AbstractServletTest {
+public abstract class AbstractServletTest extends TestBase {
   protected final Logger log = LoggerFactory.getLogger(getClass());
 
   @Mock
@@ -60,30 +60,5 @@ public abstract class AbstractServletTest {
 
   protected void setupMockTemplates(String... templates) {
     setupMockTemplates(this::resourceStream, templates);
-  }
-
-  protected byte[] resourceBytes(String resource) {
-    try (InputStream is = getClass().getResourceAsStream(resource)) {
-      if (is == null) {
-        throw new RuntimeException("Resource not found: " + resource);
-      }
-
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      byte [] buf = new byte [1024];
-      for (int len; (len = is.read(buf)) > 0;) {
-        baos.write(buf, 0, len);
-      }
-      return baos.toByteArray();
-    } catch (IOException e) {
-      throw new UncheckedIOException(e);
-    }
-  }
-
-  protected String resourceString(String resource) {
-    return new String(resourceBytes(resource), StandardCharsets.UTF_8);
-  }
-
-  protected InputStream resourceStream(String resource) {
-    return new ByteArrayInputStream(resourceBytes(resource));
   }
 }
