@@ -9,28 +9,32 @@ import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+import java.io.IOException;
 import java.net.BindException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.carrot2.dcs.Loggers.CONSOLE;
 
 public class JettyContainer {
   private final int port;
-  private final Path webappContext;
+  private final Path webappContexts;
   private Server server;
   private ServerConnector connector;
 
-  public JettyContainer(int port, Path context) {
+  public JettyContainer(int port, Path contexts) {
     this.port = port;
-    this.webappContext = context;
+    this.webappContexts = contexts;
   }
 
   public void start() throws Exception {
     server = createServer();
-    addContexts(server, webappContext);
+    addContexts(server, webappContexts);
     server.start();
   }
 
@@ -46,20 +50,33 @@ public class JettyContainer {
     return connector.getLocalPort();
   }
 
-  private void addContexts(Server server, Path context) {
-    if (!Files.isRegularFile(context.resolve("WEB-INF").resolve("web.xml"))) {
-      throw new RuntimeException("Not a web application context folder: "
-        + context.toAbsolutePath());
+  private void addContexts(Server server, Path contexts) throws IOException {
+    List<Path> webapps;
+    try (Stream<Path> list = Files.list(contexts)) {
+      webapps = list
+          .filter(dir -> !Files.isDirectory(dir.resolve("WEB-INF").resolve("web.xml")))
+          .collect(Collectors.toList());
     }
 
-    ArrayList<ContextHandler> contexts = new ArrayList<>();
+    ArrayList<ContextHandler> handlers = new ArrayList<>();
+    for (Path context : webapps) {
+      if (!Files.isRegularFile(context.resolve("WEB-INF").resolve("web.xml"))) {
+        throw new RuntimeException("Not a web application context folder?: "
+          + context.toAbsolutePath());
+      }
 
-    WebAppContext ctx = new WebAppContext("dcs", "/");
-    ctx.setThrowUnavailableOnStartupException(true);
-    ctx.setWar(context.normalize().toAbsolutePath().toString());
-    contexts.add(ctx);
+      String ctxName = context.getFileName().toString();
+      String ctxPath = "root".equalsIgnoreCase(ctxName) ? "/" : "/" + ctxName;
 
-    server.setHandler(new ContextHandlerCollection(contexts.toArray(new ContextHandler[0])));
+      WebAppContext ctx = new WebAppContext();
+      ctx.setContextPath(ctxPath);
+      ctx.setThrowUnavailableOnStartupException(true);
+      ctx.setWar(context.normalize().toAbsolutePath().toString());
+      CONSOLE.info("Deploying context '{}' at: {}.", ctxName, ctxPath);
+      handlers.add(ctx);
+    }
+
+    server.setHandler(new ContextHandlerCollection(handlers.toArray(new ContextHandler[0])));
   }
 
   private LifeCycle.Listener createLifecycleLogger(Server server, ServerConnector connector) {

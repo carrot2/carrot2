@@ -3,6 +3,7 @@ import org.apache.tools.ant.filters.*
 apply plugin: 'java'
 
 project.evaluationDependsOn(":carrot2-dcs-service")
+project.evaluationDependsOn(":carrot2-dcs-root")
 
 sourceSets {
   integTest {
@@ -60,16 +61,23 @@ task collectScripts(type: Sync) {
   }
 }
 
-task collectWars(type: Sync) {
+task collectCtxService(type: Sync) {
   dependsOn ':carrot2-dcs-service:war'
   from zipTree(project(":carrot2-dcs-service").war.archiveFile)
 
-  into "$buildDir/${project.name}/web"
+  into "$buildDir/${project.name}/web/service"
+}
+
+task collectCtxRoot(type: Sync) {
+  dependsOn ':carrot2-dcs-root:war'
+  from zipTree(project(":carrot2-dcs-root").war.archiveFile)
+
+  into "$buildDir/${project.name}/web/root"
 }
 
 task integTest(type: Test) {
   group "verification"
-  dependsOn assemble
+  dependsOn assemble, ":carrot2-dcs-service:test"
   testClassesDirs = sourceSets.integTest.output.classesDirs
   classpath = sourceSets.integTest.runtimeClasspath
 
@@ -79,4 +87,8 @@ task integTest(type: Test) {
 integTest.mustRunAfter test
 check.dependsOn integTest
 
-assemble.dependsOn(collectScripts, collectDependencies, collectWars)
+assemble.dependsOn(
+        collectScripts,
+        collectDependencies,
+        collectCtxService,
+        collectCtxRoot)

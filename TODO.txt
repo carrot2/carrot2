@@ -1,14 +1,15 @@
 
-- Copy language resources during build. Run with explicit language resources.
-- Split "client" classes and request/ response model.
-  - Add examples of using the client to call the service.
-
-- Add frontend subproject from Staszek.
-
 - integrate frontend as a separate context in the DCS?
     /service/cluster
     /frontend
     / -> redirect /frontend
+
+- Copy language resources during build. Run with explicit language resources.
+
+- Split "client" classes and request/ response model.
+  - Add examples of using the client to call the service.
+
+- Add frontend subproject from Staszek.
 
 - add some logging sanity in the launcher.
 

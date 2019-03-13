@@ -1,6 +1,7 @@
 package org.carrot2.dcs.it;
 
 import org.carrot2.dcs.JettyContainer;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.util.resource.Resource;
 
 import java.io.IOException;
