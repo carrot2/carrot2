@@ -58,6 +58,7 @@ task collectScripts(type: Sync) {
   into "$buildDir/${project.name}"
   preserve {
     include 'lib/'
+    include 'web/'
   }
 }
 
