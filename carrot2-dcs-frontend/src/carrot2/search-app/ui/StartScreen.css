@@ -1,0 +1,22 @@
+
+.StartScreen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20vh;
+}
+
+.StartScreen .logo {
+  width: 10em;
+  transform: translateX(8%);
+}
+.StartScreen .text {
+  width: 8em;
+  margin-top: 1em;
+  margin-bottom: 2em;
+}
+
+.StartScreen > .slogan {
+  margin-top: 2em;
+}

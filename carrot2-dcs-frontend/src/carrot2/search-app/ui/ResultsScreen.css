@@ -1,0 +1,148 @@
+
+
+.ResultsScreen {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: auto 1fr 0.75fr;
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas:
+    "logo          search        search"
+    "clusters-tabs clusters-tabs docs-tabs"
+    "clusters      clusters      docs";
+
+  --selection-border-width: 2px;
+}
+
+.ResultsScreen .logo,
+.ResultsScreen .SearchForm,
+.ResultsScreen .clusters,
+.ResultsScreen .docs,
+.ResultsScreen .docs-tabs,
+.ResultsScreen .clusters-tabs {
+  padding: 0.5em;
+}
+
+.ResultsScreen .docs {
+  padding-left: 0;
+}
+.ResultsScreen .docs-tabs {
+  padding-left: 0.75em;
+}
+
+.ResultsScreen .SearchForm,
+.ResultsScreen .logo {
+  padding-top: 1em;
+}
+
+.ResultsScreen .logo,
+.ResultsScreen .clusters-tabs {
+  padding-left: 1em;
+}
+
+.ResultsScreen .SearchForm,
+.ResultsScreen .docs-tabs,
+.ResultsScreen .docs {
+  padding-right: 1em;
+  overflow-x: hidden;
+}
+
+.ResultsScreen .logo {
+  grid-area: logo;
+  width: 7em;
+}
+
+.ResultsScreen .SearchForm {
+  grid-area: search;
+}
+
+
+.ResultsScreen .clusters {
+  grid-area: clusters;
+  overflow-y: auto;
+  padding-left: 0.125em;
+}
+.ResultsScreen .docs {
+  grid-area: docs;
+  overflow-y: auto;
+}
+
+.ResultsScreen .clusters > div,
+.ResultsScreen .docs > div {
+  overflow-y: auto;
+  height: 100%;
+  padding-top: calc(0.25em - var(--selection-border-width));
+}
+.ResultsScreen .docs > div {
+  padding-top: 0.25em;
+}
+
+
+.ResultsScreen .clusters-tabs {
+  grid-area: clusters-tabs;
+  padding-bottom: 0;
+}
+
+.ResultsScreen .docs-tabs {
+  grid-area: docs-tabs;
+  padding-bottom: 0;
+}
+
+.ResultsScreen .views {
+}
+
+.ResultsScreen .views .bp3-tab-indicator-wrapper {
+  height: 28px;
+}
+.ResultsScreen .views .bp3-tab-indicator {
+  height: 1px;
+}
+
+.ResultsScreen .clusters,
+.ResultsScreen .docs {
+  background-color: #fff;
+  transition: background-color 0.15s ease;
+}
+
+.ResultsScreen .clusters-tabs,
+.ResultsScreen .docs-tabs {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+
+.bp3-dark .ResultsScreen .clusters,
+.bp3-dark .ResultsScreen .docs {
+  background-color: rgba(16, 22, 26, 0.3);
+}
+
+.bp3-dark .ResultsScreen .clusters-tabs,
+.bp3-dark .ResultsScreen .docs-tabs {
+  border-bottom: 1px solid rgba(16, 22, 26, 0.5);
+}
+
+::-webkit-scrollbar {
+  width: 0.85em;
+  height: 0.85em;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.07);
+  border-radius: 0.425em;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.bp3-dark ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+}
+.bp3-dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.07);
+}
+.bp3-dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.12);
+}

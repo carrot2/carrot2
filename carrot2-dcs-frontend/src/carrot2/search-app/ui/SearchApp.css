@@ -1,0 +1,21 @@
+.SearchApp {
+  text-align: center;
+  transition: background-color 0.15s ease;
+  background-color: #f5f8fa;
+}
+
+.SearchApp.bp3-dark {
+  background-color: #30404d;
+}
+
+.bp3-dark .logo,
+.bp3-dark .text {
+  filter: invert(1.0) grayscale(100%) contrast(1000%);
+}
+
+.SearchApp .top {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.5em;
+}

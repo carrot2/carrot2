@@ -1,0 +1,50 @@
+.DocumentList {
+  text-align: left;
+  padding-right: 0.5em;
+  padding-left: 0.25em;
+}
+
+.DocumentList > a {
+  color: inherit;
+  margin-bottom: 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  border-radius: 0.1875em;
+  text-decoration: none;
+  padding: 0.25em 0.25em 0.25em 0.5em;
+}
+.DocumentList > a:hover {
+  color: inherit;
+  background-color: rgba(59, 131, 192, 0.05);
+  box-shadow: 0 0 0 2px rgba(59, 131, 192, 0.3);
+}
+
+.DocumentList > a > strong > a,
+.DocumentList > a > strong > a:hover {
+  color: inherit;
+}
+
+.DocumentList > a > div {
+  opacity: 0.7;
+  margin: 0.25em 0;
+}
+
+.DocumentList > a > span {
+  display: block;
+  height: 1.5em;
+  background-size: auto 75%;
+  background-position: 0 0.0625em;
+  background-repeat: no-repeat;
+  padding-left: 1.5em;
+  white-space: nowrap;
+  font-weight: 300;
+  color: inherit;
+}
+.DocumentList > a > span:hover {
+  color: inherit;
+}
+
+.DocumentList > a > span > span {
+  opacity: 0.7;
+}

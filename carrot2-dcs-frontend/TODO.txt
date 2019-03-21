@@ -1,0 +1,6 @@
+* Add code splitting.
+* Per-source document renderers (code splitting?).
+* Error handling
+  * Per-source messages (IP banned exception for eTools, for example)
+* Extract constants (colors, paddings) into CSS variables?
+* Choose theme based on dark-mode media query.

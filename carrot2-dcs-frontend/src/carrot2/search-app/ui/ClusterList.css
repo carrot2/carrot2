@@ -1,0 +1,69 @@
+.ClusterList {
+  text-align: left;
+  column-width: 18em;
+  column-gap: 1em;
+  padding-left: 0.5em;
+  padding-right: 0.75em;
+}
+.ClusterList .Loading {
+  padding-left: 0.5em;
+}
+
+.ClusterList .TopCluster {
+  margin-bottom: 1em;
+  padding: 0.25em 0.25em 0.25em 1.75em;
+  position: relative;
+  border-radius: 0.25em;
+  cursor: pointer;
+  -webkit-column-break-inside: avoid; /* Chrome, Safari, Opera */
+  page-break-inside: avoid; /* Firefox */
+  break-inside: avoid; /* IE 10+ */
+  border: 2px solid transparent;
+}
+.ClusterList .TopCluster.with-subclusters {
+  margin-bottom: 2em;
+}
+
+.ClusterList .TopCluster > .icon {
+  position: absolute;
+  margin-left: -1.5em;
+  margin-top: 0.125em;
+}
+
+.ClusterList .TopCluster > .labels {
+  text-transform: uppercase;
+}
+
+.ClusterList .TopCluster.with-subclusters > .subclusters {
+  margin-top: 0.5em;
+}
+
+.ClusterList .TopCluster.selected {
+  background-color: rgba(59, 131, 192, 0.05);
+  border: var(--selection-border-width) solid rgba(59, 131, 192, 0.3);
+}
+
+.ClusterList .labels {
+  border-radius: 0.125em 0 0 0.125em;
+}
+.ClusterList .meta {
+  font-weight: 300;
+  white-space: nowrap;
+  opacity: 0.7;
+  border-radius: 0 0.125em 0.125em 0;
+}
+
+.ClusterList .SubCluster > .icon {
+  vertical-align: 15%;
+  white-space: nowrap;
+}
+
+.ClusterList .SubCluster:not(:last-child) {
+  margin-right: 0.5em;
+}
+
+.ClusterList .SubCluster.selected .labels,
+.ClusterList .SubCluster.selected .meta {
+  background-color: rgba(59, 131, 192, 0.3);
+  box-shadow: 0 0 0 2px rgba(59, 131, 192, 0.3);
+}

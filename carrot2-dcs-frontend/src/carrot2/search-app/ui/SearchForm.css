@@ -1,0 +1,9 @@
+.SearchForm {
+  width: 30em;
+  max-width: 70vw;
+}
+
+.SearchForm > .sources {
+  margin-bottom: 1em;
+  margin-left: 0.125em;
+}
