@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 class DcsContext {
@@ -48,12 +47,18 @@ class DcsContext {
     this.templates = processTemplates(om, servletContext);
 
     // Load lexical resources.
+    List<String> languageList = LanguageComponents.languages().stream()
+        .sorted().collect(Collectors.toList());
+
     String resourcePath = servletContext.getInitParameter(PARAM_RESOURCES);
     if (resourcePath != null && !resourcePath.trim().isEmpty()) {
+      if (!resourcePath.endsWith("/")) {
+        resourcePath += "/";
+      }
       ResourceLookup contextLookup = new ServletContextLookup(servletContext, resourcePath);
       log.info("Loading language resources from: " + resourcePath);
       this.languages = new LinkedHashMap<>();
-      for (String lang : LanguageComponents.languages()) {
+      for (String lang : languageList) {
         try {
           languages.put(lang, LanguageComponents.load(lang, contextLookup));
         } catch (IOException e) {
@@ -63,8 +68,7 @@ class DcsContext {
       }
     } else {
       log.info("Loading language resources from default classpath locations.");
-      this.languages = LanguageComponents.languages().stream()
-          .sorted()
+      this.languages = languageList.stream()
           .collect(Collectors.toMap(
               e -> e,
               e -> LanguageComponents.load(e),
@@ -72,9 +76,10 @@ class DcsContext {
               LinkedHashMap::new));
     }
 
-    log.info("DCS context initialized [algorithms: {}, templates: {}]",
+    log.info("DCS context initialized [algorithms: {}, templates: {}, languages: {}]",
         algorithmSuppliers.keySet(),
-        templates.keySet());
+        templates.keySet(),
+        languages.keySet());
   }
 
   public synchronized static DcsContext load(ServletContext servletContext) throws ServletException {

@@ -4,6 +4,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
@@ -72,6 +73,11 @@ public class JettyContainer {
       ctx.setContextPath(ctxPath);
       ctx.setThrowUnavailableOnStartupException(true);
       ctx.setWar(context.normalize().toAbsolutePath().toString());
+
+      // Don't allow directory listings and don't use mmap buffers for serving static content.
+      ctx.setInitParameter(DefaultServlet.CONTEXT_INIT + "dirAllowed", "false");
+      ctx.setInitParameter(DefaultServlet.CONTEXT_INIT + "useFileMappedBuffer", "false");
+
       CONSOLE.info("Deploying context '{}' at: {}.", ctxName, ctxPath);
       handlers.add(ctx);
     }

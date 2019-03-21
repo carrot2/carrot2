@@ -2,6 +2,7 @@ apply plugin: 'java-library'
 
 configurations {
   jflex
+  langResources
 }
 
 dependencies {
@@ -9,6 +10,8 @@ dependencies {
   api "com.carrotsearch:hppc:${versions.hppc}"
 
   jflex "de.jflex:jflex:1.5.1"
+
+  langResources fileTree(dir: 'src/main/resources', includes: ['**/*.stopwords.utf8', '**/*.stoplabels.utf8'])
 }
 
 task jflex(type: JavaExec) {

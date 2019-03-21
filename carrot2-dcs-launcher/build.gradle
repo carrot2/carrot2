@@ -67,6 +67,9 @@ task collectCtxService(type: Sync) {
   from zipTree(project(":carrot2-dcs-service").war.archiveFile)
 
   into "$buildDir/${project.name}/web/service"
+  preserve {
+    include 'resources/'
+  }
 }
 
 task collectCtxRoot(type: Sync) {

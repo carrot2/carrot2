@@ -18,13 +18,10 @@ public class DcsServiceTest extends AbstractDistributionTest {
       Assertions.assertThat(body)
           .isEqualToIgnoringWhitespace(resourceString("listDefaults.response.json"));
 
-      // TODO: locks files (mmap)
-      /*
       Assertions.assertThat(HttpRequest.builder().sendGet(service.getAddress())
           .assertStatus(HttpServletResponse.SC_OK)
           .bodyAsUtf8())
         .contains("_welcome_file_test_marker_");
-        */
     }
   }
 }

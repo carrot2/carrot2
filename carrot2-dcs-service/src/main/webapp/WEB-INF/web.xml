@@ -7,12 +7,10 @@
     <display-name>DCS</display-name>
     <description>Document Clustering Server REST Service</description>
 
-    <!--
     <context-param>
         <param-name>resources</param-name>
         <param-value>/resources</param-value>
     </context-param>
-    -->
     <context-param>
         <param-name>templates</param-name>
         <param-value>/templates</param-value>

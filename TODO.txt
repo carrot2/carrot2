@@ -1,6 +1,4 @@
 
-- Copy language resources during build. Run with explicit language resources.
-
 - Split "client" classes and request/ response model.
   - Add examples of using the client to call the service.
 

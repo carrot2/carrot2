@@ -2,6 +2,10 @@
 apply plugin: 'java'
 apply plugin: 'war'
 
+def aggregateProjects = [":carrot2-core", ":carrot2-lang-polish"]
+
+aggregateProjects.each { prj -> project.evaluationDependsOn(prj) }
+
 ext {
   versions += [
     "servletapi": "3.1.0",
@@ -10,11 +14,10 @@ ext {
 }
 
 dependencies {
-  implementation(project(':carrot2-core')) {
-    exclude group: 'org.slf4j'
-  }
-  implementation(project(':carrot2-lang-polish')) {
-    exclude group: 'org.slf4j'
+  aggregateProjects.each { prj ->
+    implementation(project(prj)) {
+      exclude group: 'org.slf4j'
+    }
   }
 
   implementation("com.fasterxml.jackson.core:jackson-databind:${versions.jackson}")
@@ -25,4 +28,12 @@ dependencies {
   testCompile "org.mockito:mockito-core:${versions.mockito}"
   testCompile "javax.servlet:javax.servlet-api:${versions.servletapi}"
   testCompile "org.apache.logging.log4j:log4j-slf4j-impl:${versions.log4j2}"
+}
+
+war {
+  aggregateProjects.each { name ->
+    from(project(name).configurations.langResources, {
+      into "resources"
+    })
+  }
 }
