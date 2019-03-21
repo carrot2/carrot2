@@ -1,6 +1,10 @@
 
 apply from: file('gradle/min-gradle-version.gradle') 
 
+allprojects {
+  version = "4.0"
+}
+
 ext {
   versions = [
     "randomizedtesting": "2.7.2",
@@ -19,15 +23,14 @@ ext {
   ]
 
   legal = files('carrot2.LICENSE')
+
   replaceTokens = [
-    "version": project.version
+    "version": rootProject.version
   ]
 }
 
-
 allprojects {
   apply plugin: 'idea'
-  version = "4.0"
 
   repositories {
     mavenCentral()

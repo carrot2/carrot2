@@ -1,33 +1,31 @@
-@echo off
+@ECHO OFF
 
-rem
-rem Suppress Terminate batch job on CTRL+C
-rem
-if ""%1"" == ""run"" goto delRun
-if "%TEMP%" == "" goto mainEntry
-if exist "%TEMP%\%~nx0.run" goto mainEntry
-echo Y>"%TEMP%\%~nx0.run"
-if not exist "%TEMP%\%~nx0.run" goto mainEntry
-echo Y>"%TEMP%\%~nx0.Y"
-call "%~f0" %* <"%TEMP%\%~nx0.Y"
-rem Use provided errorlevel
-set RETVAL=%ERRORLEVEL%
-del /Q "%TEMP%\%~nx0.Y" >NUL 2>&1
-exit /B %RETVAL%
-:delRun
-rem consume the dummy argument.
-shift
-:mainEntry
-del /Q "%TEMP%\%~nx0.run" >NUL 2>&1
+REM Redirect the user to use the *.sh script under CygWin environment
+REM (otherwise CTRL-C leaves subprocesses running).
+IF DEFINED SHELL (
+  IF DEFINED ORIGINAL_PATH (
+    ECHO Use the bash launcher script ^(dcs.sh^) on CygWin instead of dcs.cmd
+    EXIT /b 1
+  )
+)
 
-rem
-rem Default JVM options here
-rem
-if not "%DCS_OPTS%"=="" goto optsSet
-set DCS_OPTS=-Xmx768m
+SETLOCAL
+TITLE DCS @version@
+
+REM Determine installation home
+IF NOT "%DCS_HOME%"=="" GOTO homeSet
+SET DCS_HOME=%~dp0
+:homeSet
+
+REM Set other non-default options, if not set by the user.
+IF NOT "%DCS_OPTS%"=="" GOTO optsSet
+SET DCS_OPTS=
 :optsSet
 
-rem
-rem Launch the DCS
-rem
-java %DCS_OPTS% -Ddcs.war=web/carrot2-dcs-service-@version@.war -jar lib/carrot2-dcs-launcher-@version@.jar %*
+REM Launch DCS.
+java %DCS_OPTS% -jar "%DCS_HOME%\lib\carrot2-dcs-launcher-@version@.jar" %*
+SET DCS_EXITVAL=%errorlevel%
+
+REM Set cmd's window title and return with the exit code.
+TITLE %comspec%
+exit /b %DCS_EXITVAL%

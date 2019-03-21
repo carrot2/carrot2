@@ -1,9 +1,4 @@
 
-- integrate frontend as a separate context in the DCS?
-    /service/cluster
-    /frontend
-    / -> redirect /frontend
-
 - Copy language resources during build. Run with explicit language resources.
 
 - Split "client" classes and request/ response model.
@@ -11,7 +6,7 @@
 
 - Add frontend subproject from Staszek.
 
-- add some logging sanity in the launcher.
+- configure logging in the launcher (console, levels).
 
 - add better error support (perhaps structured json response) and logging 
 - add better validation of extra/ unused/ invalid json entries in parameters; handle response.
