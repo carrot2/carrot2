@@ -8,7 +8,7 @@ function ClusterInSummary(props) {
   const cluster = props.cluster;
   const subclusters = cluster.clusters || [];
   const hasSubclusters = subclusters.length > 0;
-  const labels = cluster.phrases.join(", ");
+  const labels = cluster.labels.join(", ");
 
   return (
     <span className="ClusterInSummary">

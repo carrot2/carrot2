@@ -13,7 +13,7 @@ function TopCluster(props) {
   const hasSubclusters = subclusters.length > 0;
 
   const meta = `(${cluster.size} docs` + (hasSubclusters ? `, ${cluster.clusters.length} subclusters)` : ")");
-  const labels = cluster.phrases.join(", ");
+  const labels = cluster.labels.join(", ");
 
   const selectionStore = props.selectionStore;
   const className = classNames("TopCluster", {

@@ -1,51 +1,46 @@
 import { config } from "../config";
 
-export function fetchClusters(algorithm, query, documents) {
-  const data = new FormData();
-  data.append("dcs.c2stream", documentsAsXML(query,documents));
-  data.append("dcs.output.format", "JSON");
-  data.append("dcs.clusters.only", "true");
+export function fetchClusters(query, documents) {
+  // Just pick the content fields we want to cluster. No IDs, URLs, or anything else.
+  const fields = ['title', 'snippet'];
+  const request = {
+      "documents": documents.map((doc) => {
+          return fields.reduce((obj, key) => {
+              return {
+                ...obj,
+                [key]: doc[key]
+              };
+          }, {});
+      })
+  };
 
   return fetch(config.dcsServiceUrl, {
     method: "POST",
-    body: data
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify(request)
   }).then(function (response) {
     return response.json();
   }).then(function (json) {
-    return json.clusters;
+      let clusters = enrichClusters(json.clusters, "");
+      // console.log(JSON.stringify(clusters, null, "  "));
+      return clusters;
   });
-}
 
-function documentsAsXML(query, documents) {
-  let xml = "";
-  xml += "<searchresult>";
-  xml += `<query>${escapeForXml(query)}</query>`;
-
-  for (const doc of documents) {
-    xml += "<document>";
-    xml += `<title>${escapeForXml(doc.title)}</title>`;
-    xml += `<snippet>${escapeForXml(doc.snippet)}</snippet>`;
-    xml += `<url>${escapeForXml(doc.url)}</url>`;
-    xml += "</document>";
-  }
-
-  xml += "</searchresult>";
-
-  return xml;
-
-  function escapeForXml(unsafe) {
-    if (!unsafe) {
-      return "";
+    // Assign unique IDs to clusters and compute additional information about
+    // their deep size, etc. This is done in-place.
+  function enrichClusters(clusters, prefix) {
+    var id = 0;
+    for (let cluster of clusters) {
+      const subclusters = cluster.subclusters || [];
+      const documents = cluster.documents || [];
+      enrichClusters(subclusters, prefix + id + ".");
+      cluster.uniqueDocuments = Array.from(new Set(subclusters.reduce((acc, val) => ([...acc, ...val]), documents)));
+      cluster.id = prefix + (id++);
+      cluster.size = cluster.uniqueDocuments.length;
     }
-    return unsafe.replace(/[<>&'"]/g, function (c) {
-      switch (c) {
-        case '<': return '&lt;';
-        case '>': return '&gt;';
-        case '&': return '&amp;';
-        case '\'': return '&apos;';
-        case '"': return '&quot;';
-        default: throw new Error("Unexpected");
-      }
-    });
+
+    return clusters;
   }
 }

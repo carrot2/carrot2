@@ -18,7 +18,7 @@ export const clusterStore = store({
     } else {
       // TODO: cancel currently running request
       clusterStore.loading = true;
-      clusterStore.clusters = await fetchClusters("lingo3g", query, documents);
+      clusterStore.clusters = await fetchClusters(query, documents);
       clusterStore.loading = false;
     }
   }
@@ -35,10 +35,22 @@ export const searchResultStore = store({
   load: async function (source, query) {
     // TODO: cancel currently running request
     searchResultStore.loading = true;
-    searchResultStore.searchResult = await etools(query, {});
+    searchResultStore.searchResult = assignDocumentIds(await etools(query, {}));
     searchResultStore.loading = false;
   }
 });
+
+function assignDocumentIds(result) {
+  var id = 0;
+  let value = {
+      ...result,
+      "documents": (result.documents || []).map((doc) => ({
+          ...doc,
+          "id": id++
+      }))
+  };
+  return value;
+}
 
 // Invoke clustering once search results are available.
 observe(function () {

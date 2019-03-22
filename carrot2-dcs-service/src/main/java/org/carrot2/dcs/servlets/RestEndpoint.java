@@ -34,6 +34,8 @@ class RestEndpoint extends HttpServlet {
   protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     // Permit cross-site requests by default.
     response.setHeader("Access-Control-Allow-Origin", "*");
+    response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    response.setHeader("Access-Control-Allow-Methods", "GET, POST");
     super.service(request, response);
   }
 
