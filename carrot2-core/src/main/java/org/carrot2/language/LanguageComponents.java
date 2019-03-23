@@ -2,11 +2,9 @@ package org.carrot2.language;
 
 import org.carrot2.util.ResourceLookup;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.*;
-import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 /**

@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 public class E01_ClusteringBasics {
   @Test
   public void clusterDocumentStream() throws IOException {
-    // Our documents are in English so we load appropriate language resources. This call is heavy
+    // Our documents are in English so we load appropriate language resources. This call can be heavy
     // and an instance of LanguageComponents should be reused across different clustering calls.
     LanguageComponents languageComponents = LanguageComponents.load("English");
 
