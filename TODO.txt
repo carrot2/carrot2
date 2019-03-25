@@ -1,14 +1,14 @@
 
-- add better error support (perhaps structured json response) and logging
-- add better validation of extra/ unused/ invalid json entries in parameters; handle response.
-
-- DCS: the frontend should have real source(s) (ETools) and switch between available clustering 
+- DCS: the frontend should have real source(s) (ETools) and switch between available clustering
   service templates (?)
 
 - Add checkstyle, header license checks?
 
 - TODOs and performance optimizations.
-- documentation [another project/ dcs context?]
+- documentation [another project/ copy into a dcs context?]
+
+- DCS: add better error support (perhaps structured json response) and logging
+- DCS: add better validation of extra/ unused/ invalid json entries in parameters; handle response.
 
 - Add an IT that verifies what happens if we saturate the server with requests.
 - Add proper "distribution" subproject to assemble the DCS and Java examples (?).
