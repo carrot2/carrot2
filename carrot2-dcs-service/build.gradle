@@ -13,13 +13,13 @@ ext {
 }
 
 dependencies {
+  implementation project(":carrot2-dcs-client")
   aggregateProjects.each { prj ->
     implementation(project(prj)) {
       exclude group: 'org.slf4j'
     }
   }
-
-  implementation("com.fasterxml.jackson.core:jackson-databind:${versions.jackson}")
+  implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
 
   compileOnly "org.slf4j:slf4j-api:${versions.slf4j}"
 

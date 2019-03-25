@@ -2,9 +2,15 @@ package org.carrot2.dcs.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.List;
 
+@JsonPropertyOrder({
+    "algorithm",
+    "languages",
+    "templates"
+})
 public class ListResponse {
   @JsonProperty
   public List<String> algorithms;

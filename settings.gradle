@@ -2,12 +2,14 @@
 include 'carrot2-test-infra'
 
 include 'carrot2-core'
+include 'carrot2-core-examples'
+
 include 'carrot2-lang-polish'
-include 'carrot2-examples'
 
 include 'carrot2-dcs-launcher'
 include 'carrot2-dcs-service'
 include 'carrot2-dcs-root'
 include 'carrot2-dcs-frontend'
+include 'carrot2-dcs-client'
 
 rootProject.name = 'carrot2'
