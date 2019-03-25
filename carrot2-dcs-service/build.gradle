@@ -2,7 +2,10 @@
 apply plugin: 'java'
 apply plugin: 'war'
 
-def aggregateProjects = [":carrot2-core", ":carrot2-lang-polish"]
+def aggregateProjects = [
+  ":carrot2-core",
+  ":carrot2-lang-polish"
+]
 
 aggregateProjects.each { prj -> project.evaluationDependsOn(prj) }
 
@@ -13,7 +16,10 @@ ext {
 }
 
 dependencies {
-  implementation project(":carrot2-dcs-client")
+  implementation(project(':carrot2-dcs-client')) {
+    exclude group: 'org.slf4j'
+  }
+
   aggregateProjects.each { prj ->
     implementation(project(prj)) {
       exclude group: 'org.slf4j'

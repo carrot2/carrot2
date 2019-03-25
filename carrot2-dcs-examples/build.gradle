@@ -1,0 +1,9 @@
+apply plugin: 'java-library'
+
+dependencies {
+  implementation project(':carrot2-core')
+  implementation project(':carrot2-core-examples')
+  implementation project(':carrot2-dcs-client')
+  implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
+  implementation "org.apache.httpcomponents:httpclient:${versions.httpclient}"
+}

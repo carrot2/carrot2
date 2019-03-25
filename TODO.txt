@@ -1,8 +1,5 @@
 
-- Split "client" classes and request/ response model.
-  - Add examples of using the client to call the service.
-
-- add better error support (perhaps structured json response) and logging 
+- add better error support (perhaps structured json response) and logging
 - add better validation of extra/ unused/ invalid json entries in parameters; handle response.
 
 - DCS: the frontend should have real source(s) (ETools) and switch between available clustering 

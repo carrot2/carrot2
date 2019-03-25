@@ -85,6 +85,6 @@ public class E03_CustomLanguageComponents {
     algorithm.desiredClusterCount.set(10);
     List<Cluster<Document>> clusters = algorithm.cluster(ExamplesData.documentStream(), customLanguage);
     System.out.println("Clusters:");
-    ExamplesCommon.printClusters(clusters, "");
+    ExamplesCommon.printClusters(clusters);
   }
 }

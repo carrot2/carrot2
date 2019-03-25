@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  * hard-coded so that no other external components are needed to run tests (i.e., circular
  * dependency between the XML input component and the core).
  */
-final class ExamplesData {
+public final class ExamplesData {
   final static String[][] DOCUMENTS_DATA_MINING = {{"http://en.wikipedia.org/wiki/Data_mining", "Data mining -" +
       " Wikipedia, the free " + "encyclopedia", "Article about knowledge-discovery in databases (KDD), the practice " +
       "of automatically " + "searching large stores of data for patterns."},

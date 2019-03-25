@@ -65,7 +65,7 @@ public class E01_ClusteringBasics {
     LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
     algorithm.queryHint.set("data mining");
     List<Cluster<Document>> clusters = algorithm.cluster(documentStream, languageComponents);
-    ExamplesCommon.printClusters(clusters, "");
+    ExamplesCommon.printClusters(clusters);
   }
 
   @Test
@@ -80,7 +80,7 @@ public class E01_ClusteringBasics {
       System.out.println();
       System.out.println("Clustering implementation: " + algorithm.getClass().getSimpleName());
       List<Cluster<Document>> clusters = algorithm.cluster(ExamplesData.documentStream(), languageComponents);
-      ExamplesCommon.printClusters(clusters, "");
+      ExamplesCommon.printClusters(clusters);
     }
   }
 }

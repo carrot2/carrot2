@@ -55,7 +55,7 @@ public class E02_TweakingAttributes {
 
     List<Cluster<Document>> clusters = algorithm.cluster(ExamplesData.documentStream(), languageComponents);
     System.out.println("Clusters from Lingo:");
-    ExamplesCommon.printClusters(clusters, "");
+    ExamplesCommon.printClusters(clusters);
   }
 
   @Test
@@ -72,7 +72,7 @@ public class E02_TweakingAttributes {
 
     List<Cluster<Document>> clusters = algorithm.cluster(ExamplesData.documentStream(), languageComponents);
     System.out.println("Clusters from STC:");
-    ExamplesCommon.printClusters(clusters, "");
+    ExamplesCommon.printClusters(clusters);
   }
 
   @Test

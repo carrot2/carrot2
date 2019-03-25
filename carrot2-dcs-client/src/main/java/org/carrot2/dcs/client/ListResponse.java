@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.List;
 
 @JsonPropertyOrder({
-    "algorithm",
+    "algorithms",
     "languages",
     "templates"
 })
