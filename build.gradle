@@ -2,7 +2,8 @@
 apply from: file('gradle/min-gradle-version.gradle') 
 
 allprojects {
-  version = "4.0"
+  group 'org.carrot2'
+  version = '4.0'
 }
 
 ext {
