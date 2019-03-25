@@ -1,6 +1,4 @@
 
-- DCS: add shutdown token service.
-
 - DCS: configure logging in the launcher (console, levels).
 
 - Split "client" classes and request/ response model.

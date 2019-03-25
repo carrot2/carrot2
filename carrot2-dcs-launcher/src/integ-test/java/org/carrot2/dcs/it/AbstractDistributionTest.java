@@ -48,12 +48,16 @@ public abstract class AbstractDistributionTest extends TestBase {
   @Rule
   public final RuleChain testChain = RuleChain.outerRule(restoreDistRule);
 
-  protected final DcsService startDcs() {
+  protected final DcsService startDcs(String shutdownToken) {
     try {
-      return new EmbeddedDcs(getDistributionDir());
+      return new EmbeddedDcs(getDistributionDir(), shutdownToken);
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
+  }
+
+  protected final DcsService startDcs() {
+    return startDcs(null);
   }
 
   protected final Path getDistributionDir() {

@@ -12,11 +12,11 @@ public class EmbeddedDcs implements DcsService {
   private final JettyContainer container;
   private final URI serviceUri;
 
-  public EmbeddedDcs(Path distributionDir) throws IOException {
+  public EmbeddedDcs(Path distributionDir, String shutdownToken) throws IOException {
     // Disable JAR caches, otherwise we get locked files on Windows.
     Resource.setDefaultUseCaches(false);
 
-    container = new JettyContainer(0, distributionDir.resolve("web"));
+    container = new JettyContainer(0, distributionDir.resolve("web"), shutdownToken);
     try {
       container.start();
       serviceUri = URI.create("http://localhost:" + container.getPort());
@@ -28,6 +28,11 @@ public class EmbeddedDcs implements DcsService {
   @Override
   public URI getAddress() {
     return serviceUri;
+  }
+
+  @Override
+  public boolean isRunning() {
+    return container.isRunning();
   }
 
   @Override

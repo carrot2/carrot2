@@ -28,8 +28,8 @@ export function fetchClusters(query, documents) {
       return clusters;
   });
 
-    // Assign unique IDs to clusters and compute additional information about
-    // their deep size, etc. This is done in-place.
+  // Assign unique IDs to clusters and compute additional information about
+  // their deep size, etc. This is done in-place.
   function enrichClusters(clusters, prefix) {
     var id = 0;
     for (let cluster of clusters) {

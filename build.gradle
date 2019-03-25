@@ -19,7 +19,8 @@ ext {
     "log4j2": "2.11.2",
     "jackson": "2.9.8",
 
-    "httpclient": "4.5.7"
+    "httpclient": "4.5.7",
+    "servletapi": "3.1.0"
   ]
 
   legal = files('carrot2.LICENSE')
@@ -58,6 +59,15 @@ allprojects {
 
       tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+      }
+    }
+  }
+
+  afterEvaluate {
+    if (project.plugins.hasPlugin(WarPlugin)) {
+      dependencies {
+        compileOnly "javax.servlet:javax.servlet-api:${versions.servletapi}"
+        testCompile "javax.servlet:javax.servlet-api:${versions.servletapi}"
       }
     }
   }

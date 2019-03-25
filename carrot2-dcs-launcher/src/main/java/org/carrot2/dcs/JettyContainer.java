@@ -4,6 +4,8 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.server.handler.ShutdownHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.component.LifeCycle;
@@ -23,14 +25,19 @@ import java.util.stream.Stream;
 import static org.carrot2.dcs.Loggers.CONSOLE;
 
 public class JettyContainer {
+  public static final String CTX_PARAM_SHUTDOWN_TOKEN = "dcs.shutdownToken";
+
   private final int port;
   private final Path webappContexts;
+  private final String shutdownToken;
+
   private Server server;
   private ServerConnector connector;
 
-  public JettyContainer(int port, Path contexts) {
+  public JettyContainer(int port, Path contexts, String shutdownToken) {
     this.port = port;
     this.webappContexts = contexts;
+    this.shutdownToken = shutdownToken;
   }
 
   public void start() throws Exception {
@@ -41,6 +48,10 @@ public class JettyContainer {
 
   public void join() throws InterruptedException {
     server.join();
+  }
+
+  public boolean isRunning() {
+    return server.isRunning();
   }
 
   public void stop() throws Exception {
@@ -59,7 +70,7 @@ public class JettyContainer {
           .collect(Collectors.toList());
     }
 
-    ArrayList<ContextHandler> handlers = new ArrayList<>();
+    ArrayList<ContextHandler> ctxHandlers = new ArrayList<>();
     for (Path context : webapps) {
       if (!Files.isRegularFile(context.resolve("WEB-INF").resolve("web.xml"))) {
         throw new RuntimeException("Not a web application context folder?: "
@@ -79,10 +90,15 @@ public class JettyContainer {
       ctx.setInitParameter(DefaultServlet.CONTEXT_INIT + "useFileMappedBuffer", "false");
 
       CONSOLE.info("Deploying context '{}' at: {}.", ctxName, ctxPath);
-      handlers.add(ctx);
+      ctxHandlers.add(ctx);
     }
 
-    server.setHandler(new ContextHandlerCollection(handlers.toArray(new ContextHandler[0])));
+    HandlerList handlers = new HandlerList();
+    if (shutdownToken != null && !shutdownToken.trim().isEmpty()) {
+      handlers.addHandler(new ShutdownHandler(shutdownToken, false, false));
+    }
+    handlers.addHandler(new ContextHandlerCollection(ctxHandlers.toArray(new ContextHandler[0])));
+    server.setHandler(handlers);
   }
 
   private LifeCycle.Listener createLifecycleLogger(Server server, ServerConnector connector) {
@@ -134,7 +150,6 @@ public class JettyContainer {
     threadPool.setMaxThreads(50);
 
     Server server = new Server(threadPool);
-
     connector = new ServerConnector(server);
     connector.setPort(port);
     server.addConnector(connector);

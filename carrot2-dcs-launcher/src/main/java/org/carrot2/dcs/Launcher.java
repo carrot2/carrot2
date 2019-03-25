@@ -15,11 +15,18 @@ import java.nio.file.Paths;
 public class Launcher {
   private static final String LAUNCHER_SCRIPT_NAME = "dcs";
 
-  @Parameter(names = {"-p", "--port"}, description = "Port number to bind to.")
+  public static final String OPT_SHUTDOWN_TOKEN = "--shutdown-token";
+  public static final String OPT_PORT = "--port";
+  public static final String OPT_HOME = "--home";
+
+  @Parameter(names = {"-p", OPT_PORT}, description = "Port number to bind to.")
   public int port = 8080;
 
-  @Parameter(names = {"--home"}, description = "DCS's home folder (for resource and application lookup).")
+  @Parameter(names = {OPT_HOME}, description = "DCS's home folder (for resource and application lookup).")
   public Path home;
+
+  @Parameter(names = {OPT_SHUTDOWN_TOKEN}, description = "Shutdown service's validation token.")
+  public String shutdownToken;
 
   @SuppressWarnings("unused")
   @Parameter(names = "--help", help = true)
@@ -28,7 +35,7 @@ public class Launcher {
   public void start() throws Exception {
     autodetectHome();
 
-    JettyContainer c = new JettyContainer(port, home.resolve("web"));
+    JettyContainer c = new JettyContainer(port, home.resolve("web"), shutdownToken);
     c.start();
     c.join();
   }
