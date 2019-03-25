@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration xmlns:xi="http://www.w3.org/2001/XInclude" 
+               status="WARN" 
+               packages="org.carrot2.dcs">
+
+  <Appenders>
+    <xi:include href="appender-console-warn.xml" />
+    <xi:include href="appender-file.xml" />
+  </Appenders>
+
+  <Loggers>
+    <!-- start: common filters -->
+    <Logger name="org.eclipse" level="WARN" />
+    <Logger name="org.eclipse.jetty.http.HttpParser" level="ERROR" />
+    <Logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" additivity="false" level="ERROR" />
+    <Logger name="org.apache"  level="WARN" />
+    <!-- end: common filters -->
+
+    <Logger level="TRACE" name="console" additivity="false">
+      <AppenderRef ref="appender-file" />
+      <AppenderRef ref="appender-console-warn" />
+    </Logger>
+
+    <Root level="DEBUG">
+      <AppenderRef ref="appender-file" />
+      <AppenderRef ref="appender-console-warn" />
+    </Root>
+  </Loggers>
+</Configuration>

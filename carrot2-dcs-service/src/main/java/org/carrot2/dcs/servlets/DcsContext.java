@@ -23,7 +23,7 @@ class DcsContext {
   public static final String PARAM_TEMPLATES = "templates";
 
   private static String KEY = "_dcs_";
-  private static Logger log = LoggerFactory.getLogger(DcsContext.class);
+  private static Logger console = LoggerFactory.getLogger("console");
 
   final ObjectMapper om;
   final Map<String, ClusterRequest> templates;
@@ -56,7 +56,7 @@ class DcsContext {
         resourcePath += "/";
       }
       ResourceLookup contextLookup = new ServletContextLookup(servletContext, resourcePath);
-      log.info("Loading language resources from: " + resourcePath);
+      console.debug("Loading language resources from context path: " + servletContext.getContextPath() + resourcePath);
       this.languages = new LinkedHashMap<>();
       for (String lang : languageList) {
         try {
@@ -67,7 +67,7 @@ class DcsContext {
         }
       }
     } else {
-      log.info("Loading language resources from default classpath locations.");
+      console.debug("Loading language resources from default classpath locations.");
       this.languages = languageList.stream()
           .collect(Collectors.toMap(
               e -> e,
@@ -76,7 +76,7 @@ class DcsContext {
               LinkedHashMap::new));
     }
 
-    log.info("DCS context initialized [algorithms: {}, templates: {}, languages: {}]",
+    console.info("DCS context initialized [algorithms: {}, templates: {}, languages: {}]",
         algorithmSuppliers.keySet(),
         templates.keySet(),
         languages.keySet());
@@ -94,7 +94,7 @@ class DcsContext {
   private Map<String, ClusterRequest> processTemplates(ObjectMapper om, ServletContext servletContext) throws ServletException {
     String templatePath = servletContext.getInitParameter(PARAM_TEMPLATES);
     if (templatePath == null || templatePath.isEmpty()) {
-      log.warn("Template path init parameter is empty.");
+      console.warn("Template path init parameter is empty.");
       return Collections.emptyMap();
     }
 
@@ -114,12 +114,12 @@ class DcsContext {
           ClusterRequest requestTemplate =
               om.readValue(servletContext.getResourceAsStream(ti.path), ClusterRequest.class);
           if (requestTemplate.documents != null && !requestTemplate.documents.isEmpty()) {
-            log.warn("Templates must not contain the 'documents' property, clearing it in template: {}", ti.path);
+            console.warn("Templates must not contain the 'documents' property, clearing it in template: {}", ti.path);
             requestTemplate.documents = null;
           }
 
           if (requestTemplate.algorithm != null && !algorithmSuppliers.containsKey(requestTemplate.algorithm)) {
-            log.debug("Template '{}' omitted because the algorithm is not available: {}", ti.path, requestTemplate.algorithm);
+            console.debug("Template '{}' omitted because the algorithm is not available: {}", ti.path, requestTemplate.algorithm);
           } else {
             templates.put(ti.id, requestTemplate);
           }

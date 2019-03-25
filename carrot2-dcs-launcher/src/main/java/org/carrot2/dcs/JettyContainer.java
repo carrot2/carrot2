@@ -89,7 +89,7 @@ public class JettyContainer {
       ctx.setInitParameter(DefaultServlet.CONTEXT_INIT + "dirAllowed", "false");
       ctx.setInitParameter(DefaultServlet.CONTEXT_INIT + "useFileMappedBuffer", "false");
 
-      CONSOLE.info("Deploying context '{}' at: {}.", ctxName, ctxPath);
+      CONSOLE.debug("Deploying context '{}' at: {}.", ctxName, ctxPath);
       ctxHandlers.add(ctx);
     }
 

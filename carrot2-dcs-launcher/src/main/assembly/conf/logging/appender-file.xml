@@ -1,0 +1,7 @@
+<File name="appender-file" 
+      fileName="${dcs:home}/logs/${dcs:tstamp}.log"
+      append="true">
+  <PatternLayout charset="UTF-8"
+                 alwaysWriteExceptions="true" 
+                 pattern="%d %-5p %c\: %replace{%m}{\r?\n}{$0  | }   [%t]%n" />
+</File>

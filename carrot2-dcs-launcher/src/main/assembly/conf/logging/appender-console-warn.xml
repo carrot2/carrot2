@@ -1,0 +1,6 @@
+<Console name="appender-console-warn" target="SYSTEM_OUT" follow="true" direct="false">
+  <ThresholdFilter level="WARN" />
+  <PatternLayout charset="UTF-8"
+                 alwaysWriteExceptions="true"
+                 pattern="%date{HH:mm:ss}\: %msg%n" />
+</Console>
