@@ -21,4 +21,14 @@ public class ClassRelativeResourceLoader implements ResourceLookup {
     }
     return is;
   }
+
+  @Override
+  public boolean exists(String resource) {
+    return clazz.getResource(resource) != null;
+  }
+
+  @Override
+  public String pathOf(String resource) {
+    return clazz.getResource(resource).toExternalForm();
+  }
 }

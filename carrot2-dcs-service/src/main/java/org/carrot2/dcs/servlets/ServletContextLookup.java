@@ -5,6 +5,7 @@ import org.carrot2.util.ResourceLookup;
 import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.Objects;
 
 class ServletContextLookup implements ResourceLookup {
@@ -24,5 +25,23 @@ class ServletContextLookup implements ResourceLookup {
       throw new IOException("Resource not found in context: " + resourcePath);
     }
     return is;
+  }
+
+  @Override
+  public boolean exists(String resource) {
+    try {
+      return ctx.getResource(resource) != null;
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public String pathOf(String resource) {
+    try {
+      return ctx.getResource(resource).toExternalForm();
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
+    }
   }
 }
