@@ -23,6 +23,7 @@ import org.carrot2.util.IntMapUtils;
 
 import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.procedures.IntIntProcedure;
+import org.carrot2.util.ObjectUtils;
 
 /**
  * Fest-style assertions on the content of {@link PreprocessingContext}.
@@ -477,7 +478,7 @@ public class PreprocessingContextAssert {
               image != null ? image.toCharArray() : null,
               context.allTokens.image[tokenIndex]) == 0)
           .as("token image equality: " + image + " vs. " +
-              new String(firstNonNull(context.allTokens.image[tokenIndex], "<null>" .toCharArray())))
+              new String(ObjectUtils.firstNonNull(context.allTokens.image[tokenIndex], "<null>" .toCharArray())))
           .isTrue();
       return this;
     }
@@ -495,16 +496,6 @@ public class PreprocessingContextAssert {
           .isEqualTo((byte) expectedFieldIndex);
       return this;
     }
-  }
-
-  private static <T> T firstNonNull(T o1, T o2) {
-    if (o1 != null) {
-      return o1;
-    }
-    if (o2 == null) {
-      throw new RuntimeException("Both arguments null.");
-    }
-    return o2;
   }
 
   public TokenAssert tokenAt(int tokenIndex) {
