@@ -14,7 +14,7 @@ public final class LanguageComponents {
   private final String language;
   private final Map<Class<?>, Supplier<?>> suppliers;
 
-  public LanguageComponents(String language, LinkedHashMap<Class<?>, Supplier<?>> suppliers) {
+  public LanguageComponents(String language, Map<Class<?>, Supplier<?>> suppliers) {
     this.language = language;
     this.suppliers = suppliers;
   }
@@ -32,6 +32,12 @@ public final class LanguageComponents {
           componentClass.getName()));
     }
     return componentClass.cast(supplier.get());
+  }
+
+  public <T> LanguageComponents override(Class<T> clazz, Supplier<? extends T> supplier) {
+    Map<Class<?>, Supplier<?>> clonedSuppliers = new LinkedHashMap<>(suppliers);
+    clonedSuppliers.put(clazz, supplier);
+    return new LanguageComponents(language, clonedSuppliers);
   }
 
   public Set<Class<?>> components() {
