@@ -75,10 +75,11 @@ public abstract class TestBase extends RandomizedTest {
    */
   protected final Logger log = LoggerFactory.getLogger(getClass());
 
-  protected byte[] resourceBytes(String resource) {
-    try (InputStream is = getClass().getResourceAsStream(resource)) {
+  protected static byte[] resourceBytes(Class<?> clazz, String resource) {
+    try (InputStream is = clazz.getResourceAsStream(resource)) {
       if (is == null) {
-        throw new RuntimeException("Resource not found: " + resource);
+        throw new RuntimeException("Resource not found relative to class "
+            + clazz.getName() + ": " + resource);
       }
 
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -92,8 +93,20 @@ public abstract class TestBase extends RandomizedTest {
     }
   }
 
+  protected byte[] resourceBytes(String resource) {
+    return resourceBytes(getClass(), resource);
+  }
+
+  protected static String resourceString(Class<?> clazz, String resource) {
+    return new String(resourceBytes(clazz, resource), StandardCharsets.UTF_8);
+  }
+
   protected String resourceString(String resource) {
     return new String(resourceBytes(resource), StandardCharsets.UTF_8);
+  }
+
+  protected static  InputStream resourceStream(Class<?> clazz, String resource) {
+    return new ByteArrayInputStream(resourceBytes(clazz, resource));
   }
 
   protected InputStream resourceStream(String resource) {
