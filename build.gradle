@@ -24,7 +24,7 @@ ext {
 }
 
 configure(rootProject) { project ->
-  loadProperties('dependencies.versions', ext.versions)
+  loadProperties(file('dependencies.versions'), ext.versions)
 }
 
 allprojects {

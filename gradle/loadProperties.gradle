@@ -1,8 +1,7 @@
 
 /** Load properties from an external file to ext. */
 
-def loadProperties(source, target) {
-    def propFile = new File(source)
+def loadProperties(propFile, target) {
     if (propFile.canRead()) {
       def config = new Properties()
       propFile.withInputStream { is ->
