@@ -7,3 +7,5 @@ as a HTTP/REST service.
 To run the DCS, execute the 'dcs' script, it starts the server at the
 default address of: http://localhost:8080
 
+
+Build: @version@, @gitRev@, @buildDate@

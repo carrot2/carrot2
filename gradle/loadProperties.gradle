@@ -1,0 +1,19 @@
+
+/** Load properties from an external file to ext. */
+
+def loadProperties(source, target) {
+    def propFile = new File(source)
+    if (propFile.canRead()) {
+      def config = new Properties()
+      propFile.withInputStream { is ->
+        config.load(is)
+      }
+      for (Map.Entry property in config) {
+          target[property.key] = property.value;
+      }
+    } else {
+      throw new GradleException("Property file cannot be read: " + propFile);
+    }
+}
+
+ext.loadProperties = { source, target -> loadProperties(source, target) }
