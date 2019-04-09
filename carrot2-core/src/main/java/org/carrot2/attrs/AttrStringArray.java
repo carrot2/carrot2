@@ -20,6 +20,12 @@ public class AttrStringArray extends Attr<String[]> {
     public AttrStringArray defaultValue(String [] values) {
       return new AttrStringArray(values, getConstraint(), label);
     }
+
+    @Override
+    public Builder label(String label) {
+      super.label(label);
+      return this;
+    }
   }
 
   public static Builder builder() {
