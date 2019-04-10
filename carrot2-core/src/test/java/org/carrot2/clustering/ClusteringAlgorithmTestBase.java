@@ -31,66 +31,15 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
 
   @Test
   public void ensureAllDefaultAttrsHaveRegisteredAliases() {
-    // Part 1: default to-from serialization via map.
-    Map<String, Object> asMap = Attrs.toMap(algorithm());
-    AcceptingVisitor reconstructed = Attrs.fromMap(AcceptingVisitor.class, asMap);
+    // Run serialization with Alias mapper defaults.
+    Map<String, Object> asMap = Attrs.toMap(algorithm(), AliasMapper.SPI_DEFAULTS::toName);
+
+    AcceptingVisitor reconstructed = Attrs.fromMap(AcceptingVisitor.class, asMap,
+        AliasMapper.SPI_DEFAULTS::fromName);
+
     Assertions.assertThat(reconstructed)
         .isNotNull()
         .isInstanceOf(algorithm().getClass());
-
-    // Part 2: explicit visitor.
-    algorithm().accept(new AttrVisitor() {
-      ArrayDeque<String> path = new ArrayDeque<>();
-
-      @Override
-      public void visit(String key, AttrBoolean attr) {
-      }
-
-      @Override
-      public void visit(String key, AttrInteger attr) {
-      }
-
-      @Override
-      public void visit(String key, AttrDouble attr) {
-      }
-
-      @Override
-      public void visit(String key, AttrEnum<? extends Enum<?>> attr) {
-      }
-
-      @Override
-      public void visit(String key, AttrString attr) {
-      }
-
-      @Override
-      public void visit(String key, AttrStringArray attr) {
-      }
-
-      @Override
-      public void visit(String key, AttrObject<?> attr) {
-        AcceptingVisitor o = attr.get();
-        if (o != null) {
-          Assertions.assertThatCode(() -> AliasMapper.SPI_DEFAULTS.toName(o)).doesNotThrowAnyException();
-          Assertions.assertThat(AliasMapper.SPI_DEFAULTS.toName(o)).isNotEmpty();
-
-          path.addLast(key);
-          o.accept(this);
-          path.removeLast();
-        }
-      }
-
-      @Override
-      public void visit(String key, AttrObjectArray<?> attr) {
-        List<? extends AcceptingVisitor> entries = attr.get();
-        if (entries != null) {
-          entries.forEach(v -> {
-            path.addLast(key);
-            v.accept(this);
-            path.removeLast();
-          });
-        }
-      }
-    });
   }
 
   @Test
