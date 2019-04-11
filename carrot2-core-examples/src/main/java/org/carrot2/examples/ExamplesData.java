@@ -18,9 +18,7 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 /**
- * A sample set of search results (URL, title, snippet) returned for the query <i>data mining</i>. This set is
- * hard-coded so that no other external components are needed to run tests (i.e., circular
- * dependency between the XML input component and the core).
+ * A sample set of search results (URL, title, snippet) returned for the query <i>data mining</i>..
  */
 public final class ExamplesData {
   final static String[][] DOCUMENTS_DATA_MINING = {{"http://en.wikipedia.org/wiki/Data_mining", "Data mining -" +
