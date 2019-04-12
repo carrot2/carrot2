@@ -14,6 +14,7 @@ package org.carrot2.language;
 
 import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
+import org.carrot2.clustering.CachedLangComponents;
 import org.junit.Test;
 
 public class LanguageComponentsTest extends TestBase {
@@ -41,7 +42,7 @@ public class LanguageComponentsTest extends TestBase {
         );
 
     for (String lang : LanguageComponents.languages()) {
-      LanguageComponents actual = LanguageComponents.load(lang);
+      LanguageComponents actual = CachedLangComponents.loadCached(lang);
       Assertions.assertThat(actual.get(Tokenizer.class)).as("Tokenizer for " + lang).isNotNull();
       Assertions.assertThat(actual.get(Stemmer.class)).as("Stemmer for " + lang).isNotNull();
       Assertions.assertThat(actual.get(LexicalData.class)).as("Lexical data for " + lang).isNotNull();
@@ -50,7 +51,7 @@ public class LanguageComponentsTest extends TestBase {
 
   @Test
   public void testCustomComponentInjection() {
-    LanguageComponents english = LanguageComponents.load("English");
+    LanguageComponents english = CachedLangComponents.loadCached("English");
     Assertions.assertThat(english.components())
         .contains(Runnable.class);
     english.get(Runnable.class).run();

@@ -13,6 +13,7 @@
 package org.carrot2.text.preprocessing.filter;
 
 import org.assertj.core.api.Assertions;
+import org.carrot2.clustering.CachedLangComponents;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant2;
@@ -66,6 +67,6 @@ public class QueryLabelFilterTest extends LabelFilterTestBase {
   }
 
   private PreprocessingContextAssert preprocess(String query, TestDocument... documents) {
-    return super.preprocess(query, LanguageComponents.load(TestsLanguageComponentsFactoryVariant2.NAME), documents);
+    return super.preprocess(query, CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant2.NAME), documents);
   }
 }

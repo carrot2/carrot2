@@ -13,6 +13,7 @@
 package org.carrot2.text.preprocessing;
 
 import org.carrot2.TestBase;
+import org.carrot2.clustering.CachedLangComponents;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
@@ -53,7 +54,7 @@ public class TermDocumentMatrixBuilderTestBase extends TestBase {
   }
 
   protected PreprocessingContext buildTermDocumentMatrix(Stream<? extends Document> documents) {
-    LanguageComponents languageComponents = LanguageComponents.load(TestsLanguageComponentsFactoryVariant2.NAME);
+    LanguageComponents languageComponents = CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant2.NAME);
 
     PreprocessingContext context = preprocessingPipeline.preprocess(documents, queryHint, languageComponents);
 

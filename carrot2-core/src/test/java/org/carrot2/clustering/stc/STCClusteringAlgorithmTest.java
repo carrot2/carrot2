@@ -43,7 +43,7 @@ public class STCClusteringAlgorithmTest extends ClusteringAlgorithmTestBase {
     algorithm.preprocessing.wordDfThreshold.set(20);
 
     List<Cluster<Document>> clusters = algorithm.cluster(SampleDocumentData.DOCUMENTS_DATA_MINING.stream(),
-        LanguageComponents.load("English"));
+        CachedLangComponents.loadCached("English"));
     Assertions.assertThat(clusters.size()).isEqualTo(0);
   }
 
@@ -53,7 +53,7 @@ public class STCClusteringAlgorithmTest extends ClusteringAlgorithmTestBase {
     algorithm.maxClusters.set(9);
 
     List<Cluster<Document>> clusters = algorithm.cluster(SampleDocumentData.DOCUMENTS_DATA_MINING.stream(),
-        LanguageComponents.load("English"));
+        CachedLangComponents.loadCached("English"));
 
     Assertions.assertThat(clusters.size())
         .isEqualTo(9);
@@ -92,7 +92,7 @@ public class STCClusteringAlgorithmTest extends ClusteringAlgorithmTestBase {
 
     Stream<TestDocument> documentStream = titles.stream().map(title -> new TestDocument(title));
     List<Cluster<Document>> clusters = algorithm.cluster(documentStream,
-        LanguageComponents.load("English"));
+        CachedLangComponents.loadCached("English"));
 
     Assertions.assertThat(clusters.stream().flatMap(cluster -> cluster.getLabels().stream()))
         .contains("Good Programs")
@@ -124,7 +124,7 @@ public class STCClusteringAlgorithmTest extends ClusteringAlgorithmTestBase {
     algorithm.maxClusters.set(30);
 
     List<Cluster<Document>> clusters = algorithm.cluster(docStream,
-        LanguageComponents.load("English"));
+        CachedLangComponents.loadCached("English"));
 
     List<String> collect = clusters.stream().flatMap(c -> c.getLabels().stream())
         .collect(Collectors.toList());

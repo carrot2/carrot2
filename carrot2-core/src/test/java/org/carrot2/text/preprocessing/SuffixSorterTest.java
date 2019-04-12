@@ -14,6 +14,7 @@ package org.carrot2.text.preprocessing;
 
 import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
+import org.carrot2.clustering.CachedLangComponents;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
@@ -149,7 +150,7 @@ public class SuffixSorterTest extends TestBase {
 
   private void checkAsserts(Stream<? extends Document> documents, int[] expectedSuffixOrder, int[] expectedLcpArray) {
     PreprocessingContext context = new PreprocessingContext(
-        LanguageComponents.load(TestsLanguageComponentsFactoryVariant2.NAME));
+        CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant2.NAME));
 
     tokenizer.tokenize(context, documents);
     caseNormalizer.normalize(context, 1);

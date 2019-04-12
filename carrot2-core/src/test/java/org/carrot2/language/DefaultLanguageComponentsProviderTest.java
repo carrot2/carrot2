@@ -14,6 +14,7 @@ package org.carrot2.language;
 
 import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
+import org.carrot2.clustering.CachedLangComponents;
 import org.carrot2.util.MutableCharArray;
 import org.junit.Test;
 
@@ -138,7 +139,7 @@ public class DefaultLanguageComponentsProviderTest extends TestBase {
   }
 
   private void check(String language, String [][] stemmingData, String [] commonWords) throws IOException {
-    LanguageComponents components = LanguageComponents.load(language);
+    LanguageComponents components = CachedLangComponents.loadCached(language);
 
     Tokenizer tokenizer = components.get(Tokenizer.class);
     tokenizer.reset(new StringReader(""));

@@ -14,6 +14,7 @@ package org.carrot2.text.preprocessing;
 
 import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
+import org.carrot2.clustering.CachedLangComponents;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
@@ -37,7 +38,7 @@ public class LabelFormatterTest extends TestBase {
   private StopListMarker stopListMarker = new StopListMarker();
   private LabelFilterProcessor labelFilterProcessor = new LabelFilterProcessor();
 
-  private LanguageComponents langComponents = LanguageComponents.load("English");
+  private LanguageComponents langComponents = CachedLangComponents.loadCached("English");
 
   @Test
   public void testSingleWordNotCapitalized() {

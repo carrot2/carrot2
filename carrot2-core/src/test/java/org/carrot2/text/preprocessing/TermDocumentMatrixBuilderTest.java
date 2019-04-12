@@ -15,6 +15,7 @@ package org.carrot2.text.preprocessing;
 import com.carrotsearch.hppc.IntIntHashMap;
 import org.assertj.core.api.Assertions;
 import org.carrot2.attrs.AttrAccess;
+import org.carrot2.clustering.CachedLangComponents;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
@@ -162,7 +163,7 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
         new TestDocument("", "aa . cc . cc"));
 
     PreprocessingContext context = preprocessingPipeline.preprocess(documents, null,
-        LanguageComponents.load(TestsLanguageComponentsFactoryVariant2.NAME));
+        CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant2.NAME));
 
     // The preprocessing pipeline will produce increasing indices in tfByDocument,
     // so to reproduce the bug, we need to perturb them, e.g. reverse.

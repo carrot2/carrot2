@@ -77,7 +77,7 @@ public class ClusteringAlgorithmTest extends TestBase {
     List<Doc> input = IntStream.range(0, 50).mapToObj(c -> new Doc(c, "doc:" + c)).collect(Collectors.toList());
 
     List<Cluster<Doc>> cluster = ca.cluster(input.stream(),
-                                            LanguageComponents.load(TestsLanguageComponentsFactoryVariant1.NAME));
+        CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant1.NAME));
     Assertions.assertThat(cluster).hasSize(1);
     Assertions.assertThat(cluster.get(0).getDocuments()).containsExactlyElementsOf(input);
     Assertions.assertThat(input.stream()).allSatisfy((doc) -> {

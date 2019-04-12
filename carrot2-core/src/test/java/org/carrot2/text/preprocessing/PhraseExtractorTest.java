@@ -14,6 +14,7 @@ package org.carrot2.text.preprocessing;
 
 import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
+import org.carrot2.clustering.CachedLangComponents;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant2;
 import org.junit.Test;
@@ -28,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class PhraseExtractorTest extends TestBase {
   PreprocessingContextBuilder contextBuilder =
-      new PreprocessingContextBuilder(LanguageComponents.load(TestsLanguageComponentsFactoryVariant2.NAME));
+      new PreprocessingContextBuilder(CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant2.NAME));
 
   @Test
   public void testEmpty() {

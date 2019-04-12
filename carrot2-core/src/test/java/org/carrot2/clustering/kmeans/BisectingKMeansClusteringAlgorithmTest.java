@@ -13,11 +13,7 @@
 package org.carrot2.clustering.kmeans;
 
 import org.assertj.core.api.Assertions;
-import org.carrot2.clustering.Cluster;
-import org.carrot2.clustering.ClusteringAlgorithm;
-import org.carrot2.clustering.ClusteringAlgorithmTestBase;
-import org.carrot2.clustering.TestDocument;
-import org.carrot2.language.LanguageComponents;
+import org.carrot2.clustering.*;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
 import org.junit.Test;
 
@@ -48,7 +44,7 @@ public class BisectingKMeansClusteringAlgorithmTest extends ClusteringAlgorithmT
     algorithm.partitionCount.set(3);
 
     final List<Cluster<TestDocument>> clusters = algorithm.cluster(documents.stream(),
-        LanguageComponents.load(TestsLanguageComponentsFactoryVariant1.NAME));
+        CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant1.NAME));
 
     assertNotNull(clusters);
     assertEquals(3, clusters.size());

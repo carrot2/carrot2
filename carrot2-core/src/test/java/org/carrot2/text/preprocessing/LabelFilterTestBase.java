@@ -13,6 +13,7 @@
 package org.carrot2.text.preprocessing;
 
 import org.carrot2.TestBase;
+import org.carrot2.clustering.CachedLangComponents;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
@@ -63,7 +64,7 @@ public class LabelFilterTestBase extends TestBase {
   }
 
   protected PreprocessingContext check(Stream<? extends Document> documents, int[] expectedLabelsFeatureIndex, int expectedFirstPhraseIndex) {
-    LanguageComponents langComponents = LanguageComponents.load(TestsLanguageComponentsFactoryVariant2.NAME);
+    LanguageComponents langComponents = CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant2.NAME);
     PreprocessingContext context = runPreprocessing(documents, langComponents);
 
     assertThat(context.allLabels.featureIndex).as("allLabels.featureIndex")
@@ -90,7 +91,7 @@ public class LabelFilterTestBase extends TestBase {
   }
 
   protected PreprocessingContextAssert preprocess(TestDocument... docs) {
-    return preprocess(null, LanguageComponents.load(TestsLanguageComponentsFactoryVariant2.NAME), docs);
+    return preprocess(null, CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant2.NAME), docs);
   }
 
   protected PreprocessingContextAssert preprocess(String query, LanguageComponents langComponents, TestDocument... docs) {

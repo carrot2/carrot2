@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.carrot2.TestBase;
+import org.carrot2.clustering.CachedLangComponents;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
@@ -98,7 +99,7 @@ public class PreprocessedDocumentScannerTest extends TestBase {
     final CaseNormalizer caseNormalizer = new CaseNormalizer();
     final LanguageModelStemmer languageModelStemmer = new LanguageModelStemmer();
 
-    LanguageComponents langComponents = LanguageComponents.load("English");
+    LanguageComponents langComponents = CachedLangComponents.loadCached("English");
     PreprocessingContext context = new PreprocessingContext(langComponents);
     tokenizer.tokenize(context, documents);
     caseNormalizer.normalize(context, 1);

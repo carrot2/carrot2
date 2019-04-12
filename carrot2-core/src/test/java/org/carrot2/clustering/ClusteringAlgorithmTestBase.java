@@ -26,7 +26,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
   protected abstract T algorithm();
 
   protected LanguageComponents testLanguageModel() {
-    return LanguageComponents.load(TestsLanguageComponentsFactoryVariant1.NAME);
+    return CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant1.NAME);
   }
 
   @Test
@@ -142,7 +142,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
   public void testClusteringSampleDataSet() {
     List<Cluster<Document>> clusters = algorithm().cluster(
         SampleDocumentData.DOCUMENTS_DATA_MINING.stream(),
-        LanguageComponents.load("English"));
+        CachedLangComponents.loadCached("English"));
 
     assertThat(clusters.size())
         .isGreaterThan(0);
