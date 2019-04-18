@@ -19,7 +19,7 @@ class ServletContextLookup implements ResourceLookup {
 
   @Override
   public InputStream open(String resource) throws IOException {
-    String resourcePath = this.path + resource;
+    String resourcePath = resourcePath(resource);
     InputStream is = ctx.getResourceAsStream(resourcePath);
     if (is == null) {
       throw new IOException("Resource not found in context: " + resourcePath);
@@ -30,7 +30,7 @@ class ServletContextLookup implements ResourceLookup {
   @Override
   public boolean exists(String resource) {
     try {
-      return ctx.getResource(resource) != null;
+      return ctx.getResource(resourcePath(resource)) != null;
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
@@ -39,9 +39,13 @@ class ServletContextLookup implements ResourceLookup {
   @Override
   public String pathOf(String resource) {
     try {
-      return ctx.getResource(resource).toExternalForm();
+      return ctx.getResource(resourcePath(resource)).toExternalForm();
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  private String resourcePath(String resource) {
+    return this.path + resource;
   }
 }
