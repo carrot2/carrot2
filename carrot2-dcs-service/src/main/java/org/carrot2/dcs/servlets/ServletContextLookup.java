@@ -27,8 +27,8 @@ class ServletContextLookup implements ResourceLookup {
     InputStream is = ctx.getResourceAsStream(resourcePath);
 
     console.trace("Opening servlet context resource: {}, {}",
-        resourcePath,
-        is == null ? " (found)" : " (not found)");
+        is != null ? pathOf(resource) : resourcePath,
+        is != null ? " (found)" : " (not found)");
 
     if (is == null) {
       throw new IOException("Resource not found in context: " + resourcePath);
