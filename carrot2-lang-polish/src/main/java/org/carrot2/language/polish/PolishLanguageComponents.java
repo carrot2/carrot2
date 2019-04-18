@@ -9,6 +9,8 @@ import org.carrot2.util.ResourceLookup;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  *

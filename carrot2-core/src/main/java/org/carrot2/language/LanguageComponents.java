@@ -45,11 +45,7 @@ public final class LanguageComponents {
   }
 
   public static Set<String> languages() {
-    try {
-      return loadProvidersFromSpi().keySet();
-    } catch (IOException e) {
-      throw new UncheckedIOException(e);
-    }
+    return loadProvidersFromSpi().keySet();
   }
 
   public static LanguageComponents load(String language) {
@@ -92,23 +88,35 @@ public final class LanguageComponents {
     return new LanguageComponents(language, componentSuppliers);
   }
 
-  private synchronized static Map<String, List<LanguageComponentsProvider>> loadProvidersFromSpi() throws IOException {
-    Map<String, List<LanguageComponentsProvider>> providers = new LinkedHashMap<>();
+  private static Map<ClassLoader, Map<String, List<LanguageComponentsProvider>>> SPI_PROVIDERS
+      = Collections.synchronizedMap(new WeakHashMap<>());
 
-    for (LanguageComponentsProvider provider : ServiceLoader.load(LanguageComponentsProvider.class)) {
-      for (String language : provider.languages()) {
-        providers.compute(language, (k, v) -> {
-          if (v == null) {
-            v = new ArrayList<>();
-          }
-          v.add(provider);
-          return v;
-        });
+  private synchronized static Map<String, List<LanguageComponentsProvider>> loadProvidersFromSpi() {
+    ClassLoader cl = Thread.currentThread().getContextClassLoader();
+
+    return SPI_PROVIDERS.computeIfAbsent(cl, (key) -> {
+      Map<String, List<LanguageComponentsProvider>> providers = new LinkedHashMap<>();
+
+      for (LanguageComponentsProvider provider : ServiceLoader.load(LanguageComponentsProvider.class)) {
+        for (String language : provider.languages()) {
+          providers.compute(language, (k, v) -> {
+            if (v == null) {
+              v = new ArrayList<>();
+            }
+            v.add(provider);
+            return v;
+          });
+        }
       }
-    }
 
-    sanityCheck(providers);
-    return providers;
+      try {
+        sanityCheck(providers);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+
+      return providers;
+    });
   }
 
   private static void sanityCheck(Map<String, List<LanguageComponentsProvider>> providers) throws IOException {

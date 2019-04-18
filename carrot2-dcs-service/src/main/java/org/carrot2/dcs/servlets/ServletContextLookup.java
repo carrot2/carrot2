@@ -1,6 +1,8 @@
 package org.carrot2.dcs.servlets;
 
 import org.carrot2.util.ResourceLookup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
 import java.io.IOException;
@@ -9,6 +11,8 @@ import java.net.MalformedURLException;
 import java.util.Objects;
 
 class ServletContextLookup implements ResourceLookup {
+  private static Logger console = LoggerFactory.getLogger("console");
+
   private final ServletContext ctx;
   private final String path;
 
@@ -21,6 +25,11 @@ class ServletContextLookup implements ResourceLookup {
   public InputStream open(String resource) throws IOException {
     String resourcePath = resourcePath(resource);
     InputStream is = ctx.getResourceAsStream(resourcePath);
+
+    console.trace("Opening servlet context resource: {}, {}",
+        resourcePath,
+        is == null ? " (found)" : " (not found)");
+
     if (is == null) {
       throw new IOException("Resource not found in context: " + resourcePath);
     }
