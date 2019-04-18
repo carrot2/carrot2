@@ -111,10 +111,16 @@ public class ClusterServlet extends RestEndpoint {
     return null;
   }
 
-  private ClusterRequest parseTemplate(HttpServletRequest request) {
-    ClusterRequest template = dcsContext.templates.get(request.getParameter(PARAM_TEMPLATE));
-    if (template == null) {
+  private ClusterRequest parseTemplate(HttpServletRequest request) throws TerminateRequestException {
+    String templateName = request.getParameter(PARAM_TEMPLATE);
+    if (templateName == null) {
       return templateDefault;
+    }
+
+    ClusterRequest template = dcsContext.templates.get(templateName);
+    if (template == null) {
+      throw new TerminateRequestException(HttpServletResponse.SC_BAD_REQUEST,
+          "Template not available: " + templateName);
     }
     return template;
   }

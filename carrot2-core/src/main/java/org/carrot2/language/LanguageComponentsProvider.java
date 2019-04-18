@@ -1,6 +1,5 @@
 package org.carrot2.language;
 
-import org.carrot2.util.ClassRelativeResourceLoader;
 import org.carrot2.util.ResourceLookup;
 
 import java.io.IOException;

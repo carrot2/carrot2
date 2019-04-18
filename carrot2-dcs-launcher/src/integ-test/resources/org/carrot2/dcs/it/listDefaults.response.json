@@ -23,6 +23,7 @@
     "Turkish"
   ],
   "templates" : [
+    "frontend-default",
     "lingo",
     "stc",
     "bkmeans"
