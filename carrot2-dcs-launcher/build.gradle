@@ -1,5 +1,8 @@
 import org.apache.tools.ant.filters.*
 
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
+
 apply plugin: 'java'
 
 project.evaluationDependsOn(":carrot2-dcs-service")
@@ -57,6 +60,14 @@ task collectScripts(type: Sync) {
     filter(ReplaceTokens, tokens: replaceTokens)
   }
   from legal
+
+  inputs.properties([
+    'version': replaceTokens.version,
+    'gitRev': gitRev,
+
+    // force refiltering every hour if nothing else changes.
+    'tstamp': LocalDateTime.now().truncatedTo(ChronoUnit.HOURS)
+  ])
 
   into "$buildDir/${project.name}"
   preserve {
