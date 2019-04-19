@@ -4,6 +4,10 @@ plugins {
   id 'com.moowork.node' version '1.3.1'
 }
 
+configurations {
+  it.default.extendsFrom archives
+}
+
 node {
   // node/yarn versions
   version = '10.15.1'
@@ -34,4 +38,8 @@ task yarnBuild(type: YarnTask) {
   args = ['run', 'build']
 }
 
-assemble.dependsOn yarnBuild
+artifacts {
+  archives file("build"), {
+    builtBy yarnBuild
+  }
+}

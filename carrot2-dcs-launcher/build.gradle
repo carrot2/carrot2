@@ -5,10 +5,6 @@ import java.time.temporal.ChronoUnit
 
 apply plugin: 'java'
 
-project.evaluationDependsOn(":carrot2-dcs-service")
-project.evaluationDependsOn(":carrot2-dcs-root")
-project.evaluationDependsOn(":carrot2-dcs-frontend")
-
 sourceSets {
   integTest {
     java {
@@ -21,11 +17,19 @@ sourceSets {
 }
 
 configurations {
+  ctxService
+  ctxRoot
+  ctxFrontend
+
   integTestImplementation.extendsFrom testImplementation
   integTestRuntimeOnly.extendsFrom testRuntimeOnly
 }
 
 dependencies {
+  ctxService  project(path: ":carrot2-dcs-service", configuration: "war")
+  ctxRoot     project(path: ":carrot2-dcs-root", configuration: "war")
+  ctxFrontend project(path: ":carrot2-dcs-frontend")
+
   implementation "com.beust:jcommander:1.72"
 
   implementation "org.eclipse.jetty:jetty-server:${versions.jetty}"
@@ -77,8 +81,8 @@ task collectScripts(type: Sync) {
 }
 
 task collectCtxService(type: Sync) {
-  dependsOn ':carrot2-dcs-service:war'
-  from zipTree(project(":carrot2-dcs-service").war.archiveFile)
+  dependsOn configurations.ctxService
+  from zipTree(configurations.ctxService.asPath)
   into "$buildDir/${project.name}/web/service"
   preserve {
     include 'resources/'
@@ -86,14 +90,14 @@ task collectCtxService(type: Sync) {
 }
 
 task collectCtxRoot(type: Sync) {
-  dependsOn ':carrot2-dcs-root:war'
-  from(zipTree(project(":carrot2-dcs-root").war.archiveFile))
+  dependsOn configurations.ctxRoot
+  from zipTree(configurations.ctxRoot.asPath)
   into "$buildDir/${project.name}/web/root"
 }
 
 task collectCtxFrontend(type: Sync) {
-  dependsOn ':carrot2-dcs-frontend:assemble'
-  from(project(":carrot2-dcs-frontend").buildDir)
+  dependsOn configurations.ctxFrontend
+  from configurations.ctxFrontend
   into "$buildDir/${project.name}/web/frontend"
 }
 

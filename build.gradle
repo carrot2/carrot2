@@ -69,9 +69,16 @@ allprojects {
 
   afterEvaluate {
     if (project.plugins.hasPlugin(WarPlugin)) {
+      configurations {
+        war {}
+      }
+
+      artifacts {
+        war tasks.war
+      }
+
       dependencies {
-        compileOnly "javax.servlet:javax.servlet-api:${versions.servletapi}"
-        testCompile "javax.servlet:javax.servlet-api:${versions.servletapi}"
+        providedCompile "javax.servlet:javax.servlet-api:${versions.servletapi}@jar"
       }
     }
   }
