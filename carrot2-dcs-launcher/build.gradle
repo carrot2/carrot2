@@ -23,6 +23,9 @@ configurations {
 
   integTestImplementation.extendsFrom testImplementation
   integTestRuntimeOnly.extendsFrom testRuntimeOnly
+
+  distZip
+  distDir
 }
 
 dependencies {
@@ -101,6 +104,18 @@ task collectCtxFrontend(type: Sync) {
   into "$buildDir/${project.name}/web/frontend"
 }
 
+task distDir {
+  dependsOn collectScripts, collectDependencies, collectCtxService, collectCtxRoot, collectCtxFrontend
+  outputs.file("$buildDir/${project.name}")
+}
+
+task distZip(type: Zip) {
+  archiveFileName = "${project.name}.zip"
+  destinationDirectory = file("$buildDir/dist")
+
+  from distDir
+}
+
 task integTest(type: Test) {
   group "verification"
   dependsOn assemble, ":carrot2-dcs-service:test"
@@ -113,9 +128,10 @@ task integTest(type: Test) {
 integTest.mustRunAfter test
 check.dependsOn integTest
 
-assemble.dependsOn(
-        collectScripts,
-        collectDependencies,
-        collectCtxService,
-        collectCtxRoot,
-        collectCtxFrontend)
+artifacts {
+  distZip tasks.distZip
+  distDir file("$buildDir/${project.name}"), {
+    builtBy distDir
+  }
+}
+
