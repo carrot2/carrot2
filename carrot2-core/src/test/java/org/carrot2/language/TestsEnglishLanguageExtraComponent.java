@@ -26,4 +26,9 @@ public class TestsEnglishLanguageExtraComponent implements LanguageComponentsPro
   public Map<Class<?>, Supplier<?>> load(String language) throws IOException {
     return load(language, null);
   }
+
+  @Override
+  public String name() {
+    return getClass().getName();
+  }
 }

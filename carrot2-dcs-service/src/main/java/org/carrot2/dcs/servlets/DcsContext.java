@@ -67,7 +67,9 @@ class DcsContext {
         try {
           return provider.load(language, contextLookup);
         } catch (IOException e) {
-          console.debug("Falling back to default resources for provider {}", provider.getClass().getName());
+          console.debug("Will use default resources for '{}' language components of provider {}",
+              language,
+              provider.name());
           return provider.load(language);
         }
       };

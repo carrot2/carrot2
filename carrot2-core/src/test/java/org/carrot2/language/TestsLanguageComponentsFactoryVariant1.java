@@ -30,4 +30,9 @@ public class TestsLanguageComponentsFactoryVariant1 implements LanguageComponent
   public Map<Class<?>, Supplier<?>> load(String language) throws IOException {
     return load(language, null);
   }
+
+  @Override
+  public String name() {
+    return getClass().getName();
+  }
 }

@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 public interface LanguageComponentsProvider {
+  String name();
   Set<String> languages();
   Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup) throws IOException;
   Map<Class<?>, Supplier<?>> load(String language) throws IOException;

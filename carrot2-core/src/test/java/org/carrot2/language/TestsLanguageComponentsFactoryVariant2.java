@@ -58,4 +58,9 @@ public class TestsLanguageComponentsFactoryVariant2 implements LanguageComponent
       }
     };
   }
+
+  @Override
+  public String name() {
+    return getClass().getName();
+  }
 }

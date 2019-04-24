@@ -54,4 +54,9 @@ public class DefaultLanguageComponentsProvider implements LanguageComponentsProv
   public Map<Class<?>, Supplier<?>> load(String language) throws IOException {
     return load(language, new ClassRelativeResourceLoader(this.getClass()));
   }
+
+  @Override
+  public String name() {
+    return "Carrot2 Default";
+  }
 }
