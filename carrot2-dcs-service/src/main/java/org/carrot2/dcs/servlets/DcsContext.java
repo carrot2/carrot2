@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.carrot2.clustering.ClusteringAlgorithmProvider;
 import org.carrot2.dcs.client.ClusterRequest;
+import org.carrot2.language.ComponentLoader;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.util.ResourceLookup;
 import org.slf4j.Logger;
@@ -50,30 +51,38 @@ class DcsContext {
     List<String> languageList = LanguageComponents.languages().stream()
         .sorted().collect(Collectors.toList());
 
+    ComponentLoader suppliersLoader;
+
     String resourcePath = servletContext.getInitParameter(PARAM_RESOURCES);
     if (resourcePath != null && !resourcePath.trim().isEmpty()) {
       if (!resourcePath.endsWith("/")) {
         resourcePath += "/";
       }
+
+      console.debug("Will try to load language resources from context path: {}",
+          servletContext.getContextPath() + resourcePath);
+
       ResourceLookup contextLookup = new ServletContextLookup(servletContext, resourcePath);
-      console.debug("Loading language resources from context path: " + servletContext.getContextPath() + resourcePath);
-      this.languages = new LinkedHashMap<>();
-      for (String lang : languageList) {
+      suppliersLoader = (language, provider) -> {
         try {
-          languages.put(lang, LanguageComponents.load(lang, contextLookup));
+          return provider.load(language, contextLookup);
         } catch (IOException e) {
-          throw new ServletException(
-              String.format(Locale.ROOT, "Could not load the required resource for language '%s'.", lang), e);
+          console.debug("Falling back to default resources for provider {}", provider.getClass().getName());
+          return provider.load(language);
         }
-      }
+      };
     } else {
-      console.debug("Loading language resources from default classpath locations.");
-      this.languages = languageList.stream()
-          .collect(Collectors.toMap(
-              e -> e,
-              e -> LanguageComponents.load(e),
-              (k1, k2) -> { throw new IllegalStateException("Duplicate language key: " + k1.language()); },
-              LinkedHashMap::new));
+      suppliersLoader = (language, provider) -> provider.load(language);
+    }
+
+    this.languages = new LinkedHashMap<>();
+    for (String lang : languageList) {
+      try {
+        languages.put(lang, LanguageComponents.load(lang, suppliersLoader));
+      } catch (IOException e) {
+        throw new ServletException(
+            String.format(Locale.ROOT, "Could not load the required resource for language '%s'.", lang), e);
+      }
     }
 
     console.info("DCS context initialized [algorithms: {}, templates: {}, languages: {}]",

@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A set of language-specific components.
@@ -50,17 +52,18 @@ public final class LanguageComponents {
 
   public static LanguageComponents load(String language) {
     try {
-      return loadImpl(language, null);
+      return load(language, (lang, provider) -> provider.load(lang));
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
   }
 
   public static LanguageComponents load(String language, ResourceLookup resourceLookup) throws IOException {
-    return loadImpl(language, Objects.requireNonNull(resourceLookup));
+    return load(language, (lang, provider) -> provider.load(lang, Objects.requireNonNull(resourceLookup)));
   }
 
-  private static LanguageComponents loadImpl(String language, ResourceLookup resourceLookup) throws IOException {
+  public static LanguageComponents load(String language,
+                                        ComponentLoader loader) throws IOException {
     Map<String, List<LanguageComponentsProvider>> providers = loadProvidersFromSpi();
 
     if (!providers.containsKey(language)) {
@@ -72,17 +75,16 @@ public final class LanguageComponents {
 
     LinkedHashMap<Class<?>, Supplier<?>> componentSuppliers = new LinkedHashMap<>();
     for (LanguageComponentsProvider provider : providers.get(language)) {
-      Map<Class<?>, Supplier<?>> suppliers =
-          resourceLookup == null ? provider.load(language) : provider.load(language, resourceLookup);
-
-      suppliers.forEach((clazz, supplier) -> {
-            if (componentSuppliers.put(clazz, supplier) != null) {
-              throw new RuntimeException(String.format(Locale.ROOT,
-                  "Language %s has multiple providers of component %s?",
-                  language,
-                  clazz.getSimpleName()));
-            }
-          });
+      loader.load(language, provider).forEach((clazz, supplier) -> {
+        Supplier<?> existing;
+        if ((existing = componentSuppliers.put(clazz, supplier)) != null) {
+            throw new RuntimeException(String.format(Locale.ROOT,
+                "Language '%s' has multiple providers of component '%s': %s",
+                language,
+                clazz.getSimpleName(),
+                Stream.of(existing, supplier).map(s -> s.getClass().getName()).collect(Collectors.joining(", "))));
+          }
+        });
     }
 
     return new LanguageComponents(language, componentSuppliers);
