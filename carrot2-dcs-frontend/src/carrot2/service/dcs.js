@@ -36,7 +36,9 @@ export function fetchClusters(query, documents) {
       const subclusters = cluster.subclusters || [];
       const documents = cluster.documents || [];
       enrichClusters(subclusters, prefix + id + ".");
-      cluster.uniqueDocuments = Array.from(new Set(subclusters.reduce((acc, val) => ([...acc, ...val]), documents)));
+      cluster.uniqueDocuments = Array.from(new Set(subclusters.reduce((acc, val) => {
+        return ([...acc, ...val.documents]);
+      }, documents)));
       cluster.id = prefix + (id++);
       cluster.size = cluster.uniqueDocuments.length;
     }
