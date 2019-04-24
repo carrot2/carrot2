@@ -19,7 +19,8 @@ ext {
   replaceTokens = [
     'version': rootProject.version,
     'gitRev': gitRev,
-    'buildDate': buildDate
+    'buildDate': buildDate,
+    'buildDateTrimmed': buildDateTrimmed
   ]
 }
 
@@ -61,7 +62,7 @@ allprojects {
       tasks.withType(Jar) {
         manifest {
           attributes("Implementation-Title": project.name,
-                     "Implementation-Version": "${version} (${gitRev}, ${buildDate})")
+                     "Implementation-Version": "${version} (${gitRev}, ${buildDateTrimmed})")
         }
       }
     }
