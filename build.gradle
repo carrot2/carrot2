@@ -5,7 +5,6 @@ apply from: file('gradle/gitinfo.gradle')
 apply from: file('gradle/buildinfo.gradle')
 
 allprojects {
-  group 'org.carrot2'
   version = '4.0'
 }
 
@@ -26,6 +25,10 @@ ext {
 
 configure(rootProject) { project ->
   loadProperties(file('dependencies.versions'), ext.versions)
+}
+
+subprojects { project ->
+  group "org." + project.group
 }
 
 allprojects {

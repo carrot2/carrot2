@@ -29,9 +29,9 @@ configurations {
 }
 
 dependencies {
-  ctxService  project(path: ":carrot2-dcs-service", configuration: "war")
-  ctxRoot     project(path: ":carrot2-dcs-root", configuration: "war")
-  ctxFrontend project(path: ":carrot2-dcs-frontend")
+  ctxService  project(path: ":dcs:contexts:service", configuration: "war")
+  ctxRoot     project(path: ":dcs:contexts:root", configuration: "war")
+  ctxFrontend project(path: ":dcs:contexts:frontend")
 
   implementation "com.beust:jcommander:1.72"
 
@@ -41,10 +41,14 @@ dependencies {
   implementation "org.apache.logging.log4j:log4j-core:${versions.log4j2}"
   implementation "org.apache.logging.log4j:log4j-slf4j-impl:${versions.log4j2}"
 
-  integTestImplementation project(":carrot2-dcs-examples")
+  integTestImplementation project(":dcs:examples")
 
   // Fairly neat agent for I/O leak detection.
   // testCompile "org.kohsuke:file-leak-detector:1.13"
+}
+
+ext {
+  replaceTokens.jarname = 'dcs-launcher'
 }
 
 jar {
@@ -52,6 +56,8 @@ jar {
     attributes("Main-Class": "org.carrot2.dcs.Launcher")
     attributes("Class-Path": configurations.runtimeClasspath.collect { it.getName() }.join(' '))
   }
+
+  baseName = replaceTokens.jarname
 }
 
 task collectDependencies(type: Sync) {
@@ -110,15 +116,17 @@ task distDir {
 }
 
 task distZip(type: Zip) {
-  archiveFileName = "${project.name}.zip"
+  archiveFileName = "carrot2-dcs-${project.version}.zip"
   destinationDirectory = file("$buildDir/dist")
+  duplicatesStrategy = 'fail'
 
   from distDir
+  into "carrot2-dcs-${project.version}/"
 }
 
 task integTest(type: Test) {
   group "verification"
-  dependsOn assemble, ":carrot2-dcs-service:test"
+  dependsOn assemble, ":dcs:contexts:service:test"
   testClassesDirs = sourceSets.integTest.output.classesDirs
   classpath = sourceSets.integTest.runtimeClasspath
 

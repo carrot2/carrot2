@@ -47,5 +47,5 @@ for arg in "$@" ; do
 done
 
 # Launch DCS.
-eval java $DCS_OPTS -jar \"$DCS_HOME/lib/carrot2-dcs-launcher-@version@.jar\" "$all_args"
+eval java $DCS_OPTS -jar \"$DCS_HOME/lib/@jarname@-@version@.jar\" "$all_args"
 exit $?

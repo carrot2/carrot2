@@ -26,7 +26,7 @@ public abstract class AbstractDistributionTest extends TestBase {
 
     protected void before() throws Throwable {
       Path distDir =
-          Paths.get(System.getProperty("dist.dir", "./build/carrot2-dcs-launcher"))
+          Paths.get(System.getProperty("dist.dir", "./build/distribution"))
           .normalize()
           .toAbsolutePath();
 

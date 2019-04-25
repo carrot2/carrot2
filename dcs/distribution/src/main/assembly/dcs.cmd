@@ -23,7 +23,7 @@ SET DCS_OPTS=
 :optsSet
 
 REM Launch DCS.
-java %DCS_OPTS% -jar "%DCS_HOME%\lib\carrot2-dcs-launcher-@version@.jar" %*
+java %DCS_OPTS% -jar "%DCS_HOME%\lib\@jarname@-@version@.jar" %*
 SET DCS_EXITVAL=%errorlevel%
 
 REM Set cmd's window title and return with the exit code.

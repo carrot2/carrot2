@@ -1,5 +1,7 @@
 apply plugin: 'java-library'
 
+archivesBaseName = 'carrot2-dcs-client'
+
 dependencies {
   implementation project(":carrot2-core")
   implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"

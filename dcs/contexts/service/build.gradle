@@ -11,14 +11,8 @@ def aggregateProjects = [
   ":carrot2-lang-polish"
 ]
 
-ext {
-  versions += [
-    "mockito": "2.25.0"
-  ]
-}
-
 dependencies {
-  implementation(project(':carrot2-dcs-client')) {
+  implementation(project(':dcs:client')) {
     exclude group: 'org.slf4j'
   }
   implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
