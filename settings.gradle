@@ -5,10 +5,9 @@ include 'carrot2-core'
 include 'carrot2-core-examples'
 include 'carrot2-lang-polish'
 
+include 'dcs:distribution'
 include 'dcs:client'
 include 'dcs:examples'
-include 'dcs:distribution'
-include 'dcs:distribution-zip'
 
 include 'dcs:contexts:service'
 include 'dcs:contexts:frontend'
