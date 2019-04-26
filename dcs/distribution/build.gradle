@@ -89,6 +89,7 @@ task collectScripts(type: Sync) {
   preserve {
     include 'lib/'
     include 'web/'
+    include 'examples/'
   }
 }
 
@@ -157,6 +158,7 @@ task integTest {
 
 integTest.mustRunAfter test
 check.dependsOn integTest
+assemble.dependsOn distDir
 
 artifacts {
   distZip tasks.distZip
