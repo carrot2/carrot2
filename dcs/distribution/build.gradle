@@ -20,6 +20,7 @@ configurations {
   ctxService
   ctxRoot
   ctxFrontend
+  examples
 
   integTestImplementation.extendsFrom testImplementation
   integTestRuntimeOnly.extendsFrom testRuntimeOnly
@@ -32,6 +33,8 @@ dependencies {
   ctxService  project(path: ":dcs:contexts:service", configuration: "war")
   ctxRoot     project(path: ":dcs:contexts:root", configuration: "war")
   ctxFrontend project(path: ":dcs:contexts:frontend")
+
+  examples    project(path: ":dcs:examples", configuration: "distribution")
 
   implementation "com.beust:jcommander:1.72"
 
@@ -105,13 +108,18 @@ task collectCtxRoot(type: Sync) {
 }
 
 task collectCtxFrontend(type: Sync) {
-  dependsOn configurations.ctxFrontend
   from configurations.ctxFrontend
   into "$buildDir/${project.name}/web/frontend"
 }
 
+task collectExamples(type: Sync) {
+  from configurations.examples
+  into "$buildDir/${project.name}/examples"
+}
+
 task distDir {
-  dependsOn collectScripts, collectDependencies, collectCtxService, collectCtxRoot, collectCtxFrontend
+  dependsOn collectScripts, collectDependencies, collectCtxService, collectCtxRoot, collectCtxFrontend, collectExamples
+
   outputs.file("$buildDir/${project.name}")
 }
 
@@ -124,13 +132,27 @@ task distZip(type: Zip) {
   into "carrot2-dcs-${project.version}/"
 }
 
-task integTest(type: Test) {
+task itJUnit(type: Test) {
   group "verification"
   dependsOn assemble, ":dcs:contexts:service:test"
   testClassesDirs = sourceSets.integTest.output.classesDirs
   classpath = sourceSets.integTest.runtimeClasspath
 
   outputs.upToDateWhen { false }
+}
+
+task itExamples(type: GradleBuild) {
+  group "verification"
+  dependsOn assemble
+
+  dir "$buildDir/${project.name}/examples"
+  setTasks(['clean', 'check', 'assemble'])
+}
+
+task integTest {
+  group "verification"
+
+  dependsOn itJUnit, itExamples
 }
 
 integTest.mustRunAfter test

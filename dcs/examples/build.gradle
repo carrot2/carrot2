@@ -1,12 +1,46 @@
+
 apply plugin: 'java-library'
 
 archivesBaseName = 'carrot2-dcs-examples'
 
-dependencies {
-  implementation project(':carrot2-core')
-  implementation project(':carrot2-core-examples')
-  implementation project(':dcs:client')
+if (file('lib').exists()) {
+  dependencies {
+    implementation fileTree(dir: 'lib', include: "**/*.jar")
+  }
+} else {
+  dependencies {
+    implementation project(':carrot2-core')
+    implementation project(':carrot2-core-examples')
+    implementation project(':dcs:client')
 
-  implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
-  implementation "org.apache.httpcomponents:httpclient:${versions.httpclient}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
+    implementation "org.apache.httpcomponents:httpclient:${versions.httpclient}"
+  }
+}
+
+configurations {
+  distribution
+}
+
+task buildDistribution(type: Sync) {
+  from(project.projectDir) {
+    include 'build.gradle'
+    include 'src/**'
+  }
+
+  from(file("src/main/assembly")) {
+    include '**/*'
+  }
+
+  from(configurations.runtimeClasspath) {
+    into 'lib'
+  }
+
+  into "$buildDir/distribution"
+}
+
+artifacts {
+  distribution file("$buildDir/distribution"), {
+    builtBy tasks.buildDistribution
+  }
 }
