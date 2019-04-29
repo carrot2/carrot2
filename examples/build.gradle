@@ -1,6 +1,41 @@
+
 apply plugin: 'java-library'
 
-dependencies {
-  implementation project(':core')
-  testImplementation project(':lang:polish')
+if (file('lib').exists()) {
+  dependencies {
+    implementation fileTree(dir: 'lib', include: "**/*.jar")
+  }
+} else {
+  dependencies {
+    implementation project(':core')
+    testImplementation project(':lang:polish')
+  }
+}
+
+configurations {
+  distribution
+}
+
+task buildDistribution(type: Sync) {
+  from(project.projectDir) {
+    include 'build.gradle'
+    include 'src/**'
+    exclude 'src/main/assembly/**'
+  }
+
+  from(file("src/main/assembly")) {
+    include '**/*'
+  }
+
+  from(configurations.runtimeClasspath + configurations.testRuntimeClasspath) {
+    into 'lib'
+  }
+
+  into "$buildDir/distribution"
+}
+
+artifacts {
+  distribution file("$buildDir/distribution"), {
+    builtBy tasks.buildDistribution
+  }
 }

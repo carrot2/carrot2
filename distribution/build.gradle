@@ -1,0 +1,34 @@
+
+plugins {
+  id 'base'
+}
+
+configurations {
+  dcs
+  examples
+  legal
+}
+
+dependencies {
+  dcs project(path: ":dcs:distribution", configuration: "distDir" )
+
+  examples project(path: ":examples", configuration: "distribution" )
+}
+
+task collectDependencies(type: Sync) {
+  from legal
+
+  from(configurations.dcs) {
+    into "dcs/"
+  }
+
+  from(configurations.examples) {
+    into "examples/"
+  }
+
+  into "$buildDir/${project.name}"
+}
+
+assemble.dependsOn(
+  collectDependencies
+)

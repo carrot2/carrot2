@@ -14,4 +14,6 @@ include 'dcs:contexts:service'
 include 'dcs:contexts:frontend'
 include 'dcs:contexts:root'
 
+include 'distribution'
+
 rootProject.name = 'carrot2'
