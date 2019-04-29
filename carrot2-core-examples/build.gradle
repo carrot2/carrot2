@@ -1,6 +1,0 @@
-apply plugin: 'java-library'
-
-dependencies {
-  implementation project(':carrot2-core')
-  testImplementation project(':carrot2-lang-polish')
-}

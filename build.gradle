@@ -29,6 +29,12 @@ configure(rootProject) { project ->
 
 subprojects { project ->
   group "org." + project.group
+
+  afterEvaluate {
+    if (project.plugins.hasPlugin(JavaPlugin)) {
+      project.archivesBaseName = "carrot2" + project.path.replace(':', '-')
+    }
+  }
 }
 
 allprojects {
@@ -55,7 +61,7 @@ allprojects {
       compileTestJava.options.encoding = "UTF-8"
 
       dependencies {
-        testImplementation project(':carrot2-test-infra')
+        testImplementation project(':test-infra')
       }
 
       tasks.withType(JavaCompile) {

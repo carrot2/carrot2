@@ -1,9 +1,10 @@
 
-include 'carrot2-test-infra'
+include 'core'
+include 'examples'
 
-include 'carrot2-core'
-include 'carrot2-core-examples'
-include 'carrot2-lang-polish'
+include 'test-infra'
+
+include 'lang:polish'
 
 include 'dcs:distribution'
 include 'dcs:client'

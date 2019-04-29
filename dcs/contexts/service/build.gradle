@@ -7,8 +7,8 @@ configurations {
 }
 
 def aggregateProjects = [
-  ":carrot2-core",
-  ":carrot2-lang-polish"
+  ":core",
+  ":lang:polish"
 ]
 
 dependencies {

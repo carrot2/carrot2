@@ -9,8 +9,8 @@ if (file('lib').exists()) {
   }
 } else {
   dependencies {
-    implementation project(':carrot2-core')
-    implementation project(':carrot2-core-examples')
+    implementation project(':core')
+    implementation project(':examples')
     implementation project(':dcs:client')
 
     implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"

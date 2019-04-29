@@ -52,6 +52,8 @@ dependencies {
 
 ext {
   replaceTokens.jarname = 'dcs-launcher'
+  outputDir = "$buildDir/dist"
+  outputZip = "$buildDir/dist-zip"
 }
 
 jar {
@@ -67,7 +69,7 @@ task collectDependencies(type: Sync) {
   from configurations.runtimeClasspath
   from jar
 
-  into "$buildDir/${project.name}/lib"
+  into "$outputDir/lib"
 }
 
 task collectScripts(type: Sync) {
@@ -85,7 +87,7 @@ task collectScripts(type: Sync) {
     'tstamp': LocalDateTime.now().truncatedTo(ChronoUnit.HOURS)
   ])
 
-  into "$buildDir/${project.name}"
+  into "$outputDir"
   preserve {
     include 'lib/'
     include 'web/'
@@ -96,7 +98,7 @@ task collectScripts(type: Sync) {
 task collectCtxService(type: Sync) {
   dependsOn configurations.ctxService
   from zipTree(configurations.ctxService.asPath)
-  into "$buildDir/${project.name}/web/service"
+  into "$outputDir/web/service"
   preserve {
     include 'resources/'
   }
@@ -105,32 +107,32 @@ task collectCtxService(type: Sync) {
 task collectCtxRoot(type: Sync) {
   dependsOn configurations.ctxRoot
   from zipTree(configurations.ctxRoot.asPath)
-  into "$buildDir/${project.name}/web/root"
+  into "$outputDir/web/root"
 }
 
 task collectCtxFrontend(type: Sync) {
   from configurations.ctxFrontend
-  into "$buildDir/${project.name}/web/frontend"
+  into "$outputDir/web/frontend"
 }
 
 task collectExamples(type: Sync) {
   from configurations.examples
-  into "$buildDir/${project.name}/examples"
+  into "$outputDir/examples"
 }
 
 task distDir {
   dependsOn collectScripts, collectDependencies, collectCtxService, collectCtxRoot, collectCtxFrontend, collectExamples
 
-  outputs.file("$buildDir/${project.name}")
+  outputs.file("$outputDir")
 }
 
 task distZip(type: Zip) {
   archiveFileName = "carrot2-dcs-${project.version}.zip"
-  destinationDirectory = file("$buildDir/dist")
+  destinationDirectory = file("$outputZip")
   duplicatesStrategy = 'fail'
 
   from distDir
-  into "carrot2-dcs-${project.version}/"
+  into "${archivesBaseName}/"
 }
 
 task itJUnit(type: Test) {
@@ -146,7 +148,7 @@ task itExamples(type: GradleBuild) {
   group "verification"
   dependsOn assemble
 
-  dir "$buildDir/${project.name}/examples"
+  dir "$outputDir/examples"
   setTasks(['clean', 'check', 'assemble'])
 }
 
@@ -162,7 +164,7 @@ assemble.dependsOn distDir
 
 artifacts {
   distZip tasks.distZip
-  distDir file("$buildDir/${project.name}"), {
+  distDir file("$outputDir"), {
     builtBy distDir
   }
 }
