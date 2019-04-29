@@ -141,6 +141,8 @@ task itJUnit(type: Test) {
   testClassesDirs = sourceSets.integTest.output.classesDirs
   classpath = sourceSets.integTest.runtimeClasspath
 
+  systemProperty "dist.dir", "$outputDir"
+
   outputs.upToDateWhen { false }
 }
 
