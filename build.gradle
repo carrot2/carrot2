@@ -11,6 +11,8 @@ allprojects {
 ext {
   versions = [:]
 
+  mavenBuildRepo = "${rootProject.buildDir}/maven"
+
   legal = files('carrot2.LICENSE')
 
   gitRev = gitStatus.id
@@ -34,6 +36,60 @@ subprojects { project ->
     if (project.plugins.hasPlugin(JavaPlugin)) {
       project.archivesBaseName = "carrot2" + project.path.replace(':', '-')
     }
+  }
+}
+
+configure(subprojects.findAll { it.name == "core" }) {
+  apply plugin: 'maven-publish'
+  apply plugin: 'signing'
+
+  afterEvaluate {
+    task sourcesJar(type: Jar) {
+      archiveClassifier = 'sources'
+      from sourceSets.main.allJava
+    }
+  }
+
+  publishing {
+    repositories {
+      maven {
+        name = 'build'
+        url = mavenBuildRepo
+      }
+    }
+
+    publications {
+      maven(MavenPublication) {
+        afterEvaluate {
+            from components.java
+            artifactId = project.archivesBaseName
+
+            artifact sourcesJar
+        }
+
+        // artifact javadocJar
+        pom {
+          name = "Carrot2 (${project.name})"
+          description = "Carrot2 Text Clustering Library"
+          url = 'https://project.carrot2.org'
+          licenses {
+            license {
+              name = 'BSD License'
+              url = 'https://www.carrot2.org/carrot2.LICENSE'
+            }
+          }
+          scm {
+            connection = 'scm:git:git@github.com:carrot2/carrot2.git'
+            developerConnection = 'scm:git:git@github.com:carrot2/carrot2.git'
+            url = 'https://github.com/carrot2/carrot2'
+          }
+        }
+      }
+    }
+  }
+
+  signing {
+    sign publishing.publications.maven
   }
 }
 
@@ -92,4 +148,8 @@ allprojects {
       }
     }
   }
+}
+
+task clean(type: Delete) {
+  delete rootProject.buildDir
 }
