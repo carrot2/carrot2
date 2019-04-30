@@ -30,8 +30,8 @@ configurations {
 }
 
 dependencies {
-  ctxService  project(path: ":dcs:contexts:service", configuration: "war")
-  ctxRoot     project(path: ":dcs:contexts:root", configuration: "war")
+  ctxService project(path: ":dcs:contexts:service", configuration: 'war')
+  ctxRoot project(path: ":dcs:contexts:root", configuration: 'war')
   ctxFrontend project(path: ":dcs:contexts:frontend")
 
   examples    project(path: ":dcs:examples", configuration: "distribution")

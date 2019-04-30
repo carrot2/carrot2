@@ -42,8 +42,7 @@ public class Cluster<T> {
   private Double score;
 
   /**
-   *
-   * @return
+   * @return Returns a list of labels describing this cluster.
    */
   public List<String> getLabels() {
     return labels;

@@ -22,8 +22,6 @@ public final class MutableCharArrayUtils
      * <code>result</code> array. If the result array is too small to accommodate the
      * result, its buffer will be reallocated.
      * 
-     * @param source
-     * @param result
      * @return Returns <code>true</code> if at least one character was changed between
      *         <code>source</code> and <code>result</code>. <code>false</code> indicates
      *         an identical copy.

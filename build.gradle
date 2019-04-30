@@ -17,6 +17,8 @@ ext {
 
   gitRev = gitStatus.id
 
+  isIdea = System.getProperty("idea.active") != null || gradle.startParameter.taskNames.contains('idea') || gradle.startParameter.taskNames.contains('cleanIdea')
+
   replaceTokens = [
     'version': rootProject.version,
     'gitRev': gitRev,
@@ -173,6 +175,18 @@ allprojects {
           attributes("Implementation-Title": project.name,
                      "Implementation-Version": "${version} (${gitRev}, ${buildDateTrimmed})")
         }
+      }
+
+      javadoc {
+        title = "Carrot<sup>2</sup> ${project.version} API Documentation"
+
+        if (JavaVersion.current().isJava9Compatible()) {
+          options.addBooleanOption('html5', true)
+          options.addStringOption('Xdoclint:all,-missing', '-noindex')
+          options.encoding = 'UTF-8'
+        }
+
+        exclude 'org/carrot2/math/mahout/**'
       }
     }
   }
