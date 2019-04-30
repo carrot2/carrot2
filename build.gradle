@@ -24,7 +24,7 @@ ext {
     'buildDateTrimmed': buildDateTrimmed
   ]
 }
-
+  
 configure(rootProject) { project ->
   loadProperties(file('dependencies.versions'), ext.versions)
 }
@@ -75,8 +75,12 @@ configure(subprojects.findAll { it.name == "core" }) {
         name = 'sonatype'
         url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
         credentials {
-            username nexusUsername
-            password nexusPassword
+            if (project.hasProperty('nexusUsername')) {
+              username project.nexusUsername
+            }
+            if (project.hasProperty('nexusPassword_')) {
+              password project.nexusPassword_
+            } 
         }
       }
     }
