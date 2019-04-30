@@ -78,8 +78,8 @@ configure(subprojects.findAll { it.name == "core" }) {
             if (project.hasProperty('nexusUsername')) {
               username project.nexusUsername
             }
-            if (project.hasProperty('nexusPassword_')) {
-              password project.nexusPassword_
+            if (project.hasProperty('nexusPassword')) {
+              password project.nexusPassword
             } 
         }
       }
