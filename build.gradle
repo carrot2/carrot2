@@ -112,14 +112,14 @@ configure(subprojects.findAll { it.name == "core" }) {
           }
           developers {
             developer {
-              id 'stanislaw.osinski'
-              name 'Stanisław Osiński'
-              email 'stanislaw.osinski@carrotsearch.com'
+              id = 'stanislaw.osinski'
+              name = 'Stanisław Osiński'
+              email = 'stanislaw.osinski@carrotsearch.com'
             }
             developer {
-              id 'dawid.weiss'
-              name 'Dawid Weiss'
-              email 'dawid.weiss@carrotsearch.com'
+              id = 'dawid.weiss'
+              name = 'Dawid Weiss'
+              email = 'dawid.weiss@carrotsearch.com'
             }
           }
           scm {
