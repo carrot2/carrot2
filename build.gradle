@@ -44,9 +44,24 @@ configure(subprojects.findAll { it.name == "core" }) {
   apply plugin: 'signing'
 
   afterEvaluate {
-    task sourcesJar(type: Jar) {
+    task sourcesJar(type: Jar, dependsOn: classes) {
       archiveClassifier = 'sources'
       from sourceSets.main.allJava
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+      archiveClassifier = 'javadoc'
+      from javadoc.destinationDir
+    }
+
+    task mavenLocal(dependsOn: publishAllPublicationsToBuildRepository) {
+      group "Publishing"
+      description "Publish Maven artifacts locally to " + file(mavenBuildRepo)
+    }
+
+    task mavenSonatype(dependsOn: publishAllPublicationsToSonatypeRepository) {
+      group "Publishing"
+      description "Publish Maven artifacts to Sonatype OSS Nexus"
     }
   }
 
@@ -56,26 +71,49 @@ configure(subprojects.findAll { it.name == "core" }) {
         name = 'build'
         url = mavenBuildRepo
       }
+      maven {
+        name = 'sonatype'
+        url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+        credentials {
+            username nexusUsername
+            password nexusPassword
+        }
+      }
     }
 
     publications {
       maven(MavenPublication) {
         afterEvaluate {
-            from components.java
-            artifactId = project.archivesBaseName
+          from components.java
+          artifactId = project.archivesBaseName
 
-            artifact sourcesJar
+          artifact sourcesJar
+          artifact javadocJar
         }
 
-        // artifact javadocJar
         pom {
           name = "Carrot2 (${project.name})"
           description = "Carrot2 Text Clustering Library"
           url = 'https://project.carrot2.org'
+          inceptionYear = "2001"
           licenses {
             license {
               name = 'BSD License'
               url = 'https://www.carrot2.org/carrot2.LICENSE'
+            }
+          }
+          organization {
+            name = "Carrot Search s.c."
+            url = "https://www.carrotsearch.com"
+          }
+          developers {
+            developer { 
+              id = 'stachoo'
+              name = 'Stanisław Osiński'
+            }
+            developer { 
+              id = 'dweiss'
+              name = 'Dawid Weiss'
             }
           }
           scm {
