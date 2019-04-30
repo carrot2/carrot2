@@ -111,13 +111,15 @@ configure(subprojects.findAll { it.name == "core" }) {
             url = "https://www.carrotsearch.com"
           }
           developers {
-            developer { 
-              id = 'stachoo'
-              name = 'Stanisław Osiński'
+            developer {
+              id 'stanislaw.osinski'
+              name 'Stanisław Osiński'
+              email 'stanislaw.osinski@carrotsearch.com'
             }
-            developer { 
-              id = 'dweiss'
-              name = 'Dawid Weiss'
+            developer {
+              id 'dawid.weiss'
+              name 'Dawid Weiss'
+              email 'dawid.weiss@carrotsearch.com'
             }
           }
           scm {
