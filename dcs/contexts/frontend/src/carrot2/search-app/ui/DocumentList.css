@@ -5,7 +5,7 @@
 }
 
 .DocumentList > a {
-  color: inherit;
+  color: var(--text-color);
   margin-bottom: 1em;
   overflow: hidden;
   text-overflow: ellipsis;

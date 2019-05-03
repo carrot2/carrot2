@@ -16,6 +16,7 @@
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.0",
     "store2": "^2.7.1",
+    "typeface-lato": "^0.0.54",
     "webpack-bundle-analyzer": "^3.3.2"
   },
   "scripts": {

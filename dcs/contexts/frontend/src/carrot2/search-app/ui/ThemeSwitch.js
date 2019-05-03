@@ -1,34 +1,48 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
 
-import { AnchorButton, Hotkey, Hotkeys, HotkeysTarget } from "@blueprintjs/core";
+import { AnchorButton } from "@blueprintjs/core";
+import { view } from 'react-easy-state';
+import { persistentStore } from "../../util/persistent-store.js";
 
-class ThemeSwitchImpl extends Component {
-  render() {
-    const isDarkTheme = this.props.theme === "dark";
-    return (
-      <AnchorButton text={(isDarkTheme ? "Light" : "Dark") + " theme"}
-                    icon={(isDarkTheme ? "flash" : "moon")}
-                    onClick={this.props.onThemeFlip}
-                    minimal={true} small={true} />
-    );
+export const uiConfig = persistentStore("uiConfig",
+  {
+    theme: "dark"
+  },
+  {
+    flipTheme: () => uiConfig.theme = uiConfig.isDarkTheme() ? "light" : "dark",
+    isDarkTheme: () => uiConfig.theme === "dark"
+  });
+
+
+function ThemeSwitchImpl () {
+  function updateTheme() {
+    const classList = document.body.classList;
+    if (uiConfig.isDarkTheme()) {
+      classList.remove("light");
+      classList.add("bp3-dark", "dark");
+    } else {
+      classList.remove("bp3-dark", "dark");
+      classList.add("light");
+    }
   }
 
-  renderHotkeys() {
-    return <Hotkeys>
-      <Hotkey
-        global={true}
-        combo="alt + t"
-        label="Switch color theme"
-        onKeyDown={() => this.props.onThemeFlip()}
-      />
-    </Hotkeys>;
+  function flipTheme() {
+    uiConfig.flipTheme();
+    updateTheme();
   }
+
+  // Set theme on initial render.
+  useEffect(function () {
+    updateTheme();
+  }, []);
+
+  const isDarkTheme = uiConfig.isDarkTheme();
+  return (
+    <AnchorButton text={(isDarkTheme ? "Light" : "Dark") + " theme"}
+                  icon={(isDarkTheme ? "flash" : "moon")}
+                  onClick={flipTheme}
+                  minimal={true} small={true} />
+  );
 }
 
-ThemeSwitchImpl.propTypes = {
-  theme: PropTypes.string.isRequired,
-  onThemeFlip: PropTypes.func.isRequired
-};
-
-export const ThemeSwitch = HotkeysTarget(ThemeSwitchImpl);
+export const ThemeSwitch = view(ThemeSwitchImpl);
