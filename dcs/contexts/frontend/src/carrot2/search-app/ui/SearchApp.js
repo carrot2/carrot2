@@ -11,7 +11,7 @@ import { ThemeSwitch } from "./ThemeSwitch";
 function SearchApp() {
   return (
     <React.Fragment>
-      <div style={{position: "absolute", top: 0, right: 0}}><ThemeSwitch /></div>
+      <div className="ThemeSwitch"><ThemeSwitch /></div>
       <div className="SearchApp">
         <Router>
           <Switch>

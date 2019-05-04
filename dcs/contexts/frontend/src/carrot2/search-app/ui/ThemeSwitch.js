@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
-import { AnchorButton } from "@blueprintjs/core";
 import { view } from 'react-easy-state';
+import { LightDarkSwitch } from "../../../carrotsearch/ui/LightDarkSwitch.js";
 import { persistentStore } from "../../util/persistent-store.js";
 
 export const uiConfig = persistentStore("uiConfig",
@@ -38,10 +38,7 @@ function ThemeSwitchImpl () {
 
   const isDarkTheme = uiConfig.isDarkTheme();
   return (
-    <AnchorButton text={(isDarkTheme ? "Light" : "Dark") + " theme"}
-                  icon={(isDarkTheme ? "flash" : "moon")}
-                  onClick={flipTheme}
-                  minimal={true} small={true} />
+    <LightDarkSwitch dark={isDarkTheme} onChange={flipTheme} />
   );
 }
 

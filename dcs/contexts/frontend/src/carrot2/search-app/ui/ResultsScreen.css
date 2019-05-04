@@ -87,14 +87,9 @@
   padding-bottom: 0;
 }
 
-.ResultsScreen .views {
-}
-
-.ResultsScreen .views .bp3-tab-indicator-wrapper {
-  height: 28px;
-}
 .ResultsScreen .views .bp3-tab-indicator {
   height: 1px;
+  bottom: -1px;
 }
 
 .ResultsScreen .clusters,

@@ -1,0 +1,63 @@
+/**
+ * Inspired by: https://codepen.io/mallendeo/pen/eLIiG.
+ */
+
+.tgl {
+  position: absolute;
+}
+.tgl, .tgl:focus {
+  box-shadow: none !important;
+}
+.tgl, .tgl:after, .tgl:before, .tgl *, .tgl *:after, .tgl *:before, .tgl + .tgl-btn {
+  box-sizing: border-box;
+}
+.tgl::selection, .tgl:after::selection, .tgl:before::selection, .tgl *::selection, .tgl *:after::selection, .tgl *:before::selection, .tgl + .tgl-btn::selection {
+  background: none;
+}
+.tgl + .tgl-btn {
+  display: inline-block;
+  width: 3.0em;
+  height: 1.4em;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+.tgl + .tgl-btn:after, .tgl + .tgl-btn:before {
+  position: relative;
+  display: inline-block;
+  content: "";
+  width: 47%;
+  height: 100%;
+}
+.tgl + .tgl-btn:after {
+  left: 0;
+}
+.tgl + .tgl-btn:before {
+  display: none;
+}
+.tgl:checked + .tgl-btn:after {
+  left: 55%;
+}
+
+.tgl-ios + .tgl-btn {
+  background: #2e9fe6 url(../../flaticon/contrast.svg) no-repeat 82% center;
+  background-size: 37%;
+  border-radius: 2em;
+  transition: all 0.4s ease;
+}
+.tgl-ios + .tgl-btn:after {
+  border-radius: 2em;
+  background: #fbfbfb;
+  transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), padding 0.3s ease;
+}
+.tgl-ios:checked + .tgl-btn {
+  background: #111a2f url(../../flaticon/crescent-moon.svg) no-repeat 15% center;
+  background-size: 32%;
+}
+.tgl-ios + .tgl-btn:after, .tgl-ios+ .tgl-btn:before {
+  box-shadow: inset 0 0 0.0625rem 0.0625rem rgba(0, 0, 0, 0.3)
+}
+.tgl-ios:focus + .tgl-btn:after, .tgl-ios:focus + .tgl-btn:before,
+.tgl-ios:active + .tgl-btn:after, .tgl-ios:active + .tgl-btn:before {
+  box-shadow: 0 0 0.125rem 0.125rem #fcc600, inset 0 0 0.0625rem 0.0625rem rgba(0, 0, 0, 0.3);
+}
