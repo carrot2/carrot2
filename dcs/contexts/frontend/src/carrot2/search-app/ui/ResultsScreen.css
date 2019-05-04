@@ -32,6 +32,15 @@
 .ResultsScreen .SearchForm,
 .ResultsScreen .logo {
   padding-top: 1em;
+  padding-bottom: 1rem;
+}
+
+.ResultsScreen .logo {
+  padding-right: 0;
+}
+
+.ResultsScreen .SearchForm {
+  padding-left: 1rem;
 }
 
 .ResultsScreen .logo,
@@ -48,7 +57,7 @@
 
 .ResultsScreen .logo {
   grid-area: logo;
-  width: 7em;
+  width: 5.5rem;
 }
 
 .ResultsScreen .SearchForm {
