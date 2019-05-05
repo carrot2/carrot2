@@ -1,19 +1,14 @@
 import { Tab, Tabs } from "@blueprintjs/core";
 import React from "react";
-import { persistentStore } from "../../util/persistent-store";
 
-export const sourceTabStore = persistentStore("source",
-  {
-    active: "web"
-  },
-  {
-    getActive: () => sourceTabStore.active,
-    setActive: (active) => sourceTabStore.active = active
-  });
+import { sources } from "../../config.js";
 
 export function SourceTabs(props) {
   return <Tabs id="sources" selectedTabId={props.active} onChange={props.onChange} className="sources">
-    <Tab id="web" title="Web" />
-    <Tab id="pubmed" title="PubMed" />
+    {
+      Object.keys(sources).map(s => (
+        <Tab key={s} id={s} title={sources[s].label} />
+      ))
+    }
   </Tabs>;
 }
