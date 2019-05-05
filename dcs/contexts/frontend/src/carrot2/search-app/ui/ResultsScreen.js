@@ -6,16 +6,17 @@ import React, { Component } from 'react';
 import { view } from 'react-easy-state';
 import { clusterStore, searchResultStore } from "../store/services";
 
+import { views } from "../../config.js";
+
 import logo from './assets/carrot-search-logo.svg';
 
-import { ClusterList } from "./ClusterList";
 import { ClusterSelectionSummary } from "./ClusterSelectionSummary";
 import { DocumentList } from "./DocumentList";
 import { routes } from "../routes";
+import { PanelSwitcher } from "./PanelSwitcher.js";
 import { SearchForm } from "./SearchForm";
 import { clusterSelectionStore, documentVisibilityStore } from "../store/selection";
 
-const ClusterListView = view(ClusterList);
 const DocumentListView = view(DocumentList);
 const ClusterSelectionSummaryView = view(ClusterSelectionSummary);
 
@@ -37,17 +38,28 @@ export class ResultsScreen extends Component {
   onQueryChange(newQuery) {
     this.pushNewUrl({
       query: newQuery,
-      source: this.getSource()
+      source: this.getSource(),
+      view: this.getView()
     });
   }
 
   getSource(props) { return (props || this.props).match.params.source; }
   getQuery(props) { return (props || this.props).match.params.query; }
+  getView(props) { return (props || this.props).match.params.view; }
 
   onSourceChange(newSource) {
     this.pushNewUrl({
       query: this.getQuery(),
-      source: newSource
+      source: newSource,
+      view: this.getView()
+    });
+  }
+
+  onViewChange(newView) {
+    this.pushNewUrl({
+      query: this.getQuery(),
+      source: this.getSource(),
+      view: newView
     });
   }
 
@@ -56,11 +68,21 @@ export class ResultsScreen extends Component {
   }
 
   render() {
+    const panelProps = { store: clusterStore, selectionStore: clusterSelectionStore };
+    const panels = Object.keys(views)
+      .map(v => {
+        return {
+          id: v,
+          createElement: () => {
+            return views[v].createContentElement(panelProps);
+          }
+        };
+      });
+
     return (
       <main className="ResultsScreen">
         <img src={logo} className="logo" alt="Carrot Search logo" />
-        {
-          /**
+        {/**
            * The key prop is used to re-create the component on query changes,
            * so that the internal state holding value is thrown away and
            * replaced with the provided initialQuery prop.
@@ -70,10 +92,12 @@ export class ResultsScreen extends Component {
                     onSourceChange={this.onSourceChange.bind(this)}
                     onSubmit={this.onQueryChange.bind(this)} />
         <div className="clusters-tabs">
-          <Tabs id="views" selectedTabId="folders" className="views">
-            <Tab id="folders" title="Folders" />
-            <Tab id="treemap" title="Treemap" />
-            <Tab id="piechart" title="Pie-chart" />
+          <Tabs id="views" selectedTabId={this.getView()} onChange={this.onViewChange.bind(this)} className="views">
+            {
+              Object.keys(views).map(v => (
+                <Tab key={v} id={v} title={views[v].label} />
+              ))
+            }
           </Tabs>
         </div>
         <div className="docs-tabs">
@@ -82,7 +106,7 @@ export class ResultsScreen extends Component {
                                        searchResultStore={searchResultStore} />
         </div>
         <div className="clusters">
-          <div><ClusterListView store={clusterStore} selectionStore={clusterSelectionStore} /></div>
+          <PanelSwitcher panels={panels} visible={this.getView()} />
         </div>
         <div className="docs">
           <div><DocumentListView store={searchResultStore} visibilityStore={documentVisibilityStore} /></div>
