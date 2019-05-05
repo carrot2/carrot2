@@ -14,7 +14,7 @@ export class StartScreen extends Component {
     this.props.history.push(routes.search.buildUrl({
       query: query,
       source: this.props.match.params.source,
-      view: Object.keys(views)[0] // start with the first view by defaultk
+      view: Object.keys(views)[0] // start with the first view by default
     }));
   }
 
