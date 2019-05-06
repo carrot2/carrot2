@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import React from 'react';
 import { view } from 'react-easy-state';
 import './ClusterList.css';
-import { Loading } from "./Loading";
+import { Loading } from "../Loading";
 
 function TopCluster(props) {
   const cluster = props.cluster;

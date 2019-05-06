@@ -21,14 +21,16 @@ PanelSwitcher.propTypes = {
 function Switch(props) {
   const [ initialized, setInitialized ] = useState(false);
   useEffect(() => {
-    setInitialized(true);
-  }, []);
+    if (props.visible) {
+      setInitialized(true);
+    }
+  }, [ props.visible ]);
 
   if (!initialized) {
     return null;
   }
 
-  return <div style={{display: props.visible ? "block" : "none"}}>
+  return <div style={{display: props.visible ? "block" : "none", position: "relative"}}>
     { props.createElement() }
   </div>;
 }

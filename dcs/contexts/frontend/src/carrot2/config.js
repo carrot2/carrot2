@@ -1,6 +1,7 @@
 import React from "react";
 import { view } from "react-easy-state";
-import { ClusterList } from "./search-app/ui/ClusterList.js";
+import { ClusterList } from "./search-app/ui/views/ClusterList.js";
+import { Treemap } from "./search-app/ui/views/Treemap.js";
 
 export const config = {
   dcsServiceUrl: process.env.REACT_APP_DCS_SERVICE_URL || "http://localhost:8080/service/cluster?template=frontend-default"
@@ -16,6 +17,7 @@ export const sources = {
 };
 
 const ClusterListView = view(ClusterList);
+const TreemapView = view(Treemap);
 
 export const views = {
   "folders": {
@@ -28,7 +30,7 @@ export const views = {
   "treemap": {
     label: "Treemap",
     createContentElement: (props) => {
-      return <div>Treemap place holder.</div>;
+      return <TreemapView {...props} />;
     }
   },
 

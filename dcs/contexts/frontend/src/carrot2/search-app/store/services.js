@@ -1,5 +1,5 @@
-import { store } from 'react-easy-state';
 import { observe } from '@nx-js/observer-util';
+import { store } from 'react-easy-state';
 import { fetchClusters } from "../../service/dcs";
 
 import { etools } from "../../service/sources/etools";
@@ -41,15 +41,13 @@ export const searchResultStore = store({
 });
 
 function assignDocumentIds(result) {
-  var id = 0;
-  let value = {
-      ...result,
-      "documents": (result.documents || []).map((doc) => ({
-          ...doc,
-          "id": id++
-      }))
+  return {
+    ...result,
+    "documents": (result.documents || []).map((doc, index) => ({
+      ...doc,
+      "id": index
+    }))
   };
-  return value;
 }
 
 // Invoke clustering once search results are available.

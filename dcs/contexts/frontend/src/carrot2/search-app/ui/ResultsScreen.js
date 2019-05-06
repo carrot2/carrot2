@@ -68,7 +68,11 @@ export class ResultsScreen extends Component {
   }
 
   render() {
-    const panelProps = { store: clusterStore, selectionStore: clusterSelectionStore };
+    const panelProps = {
+      store: clusterStore,
+      selectionStore: clusterSelectionStore,
+      searchResultStore: searchResultStore
+    };
     const panels = Object.keys(views)
       .map(v => {
         return {
