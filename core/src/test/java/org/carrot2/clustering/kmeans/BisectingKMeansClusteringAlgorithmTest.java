@@ -13,8 +13,10 @@
 package org.carrot2.clustering.kmeans;
 
 import org.assertj.core.api.Assertions;
+import org.carrot2.AwaitsFix;
 import org.carrot2.clustering.*;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -51,5 +53,11 @@ public class BisectingKMeansClusteringAlgorithmTest extends ClusteringAlgorithmT
     Assertions.assertThat(clusters.get(0).getLabels()).containsExactly("WordA");
     Assertions.assertThat(clusters.get(1).getLabels()).containsExactly("WordB");
     Assertions.assertThat(clusters.get(2).getLabels()).containsExactly("WordC");
+  }
+
+  @AwaitsFix("https://issues.carrot2.org/browse/CARROT-1195") // TODO: CARROT-1195 (clustering not deterministic)
+  @Override
+  public void testResultsStableFromRandomShuffle() throws Exception {
+    super.testResultsStableFromRandomShuffle();
   }
 }

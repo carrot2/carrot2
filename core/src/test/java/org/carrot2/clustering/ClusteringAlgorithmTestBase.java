@@ -8,7 +8,6 @@ import org.carrot2.TestBase;
 import org.carrot2.attrs.*;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.*;
@@ -212,7 +211,6 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
   @Nightly
   @Test
   @ThreadLeakLingering(linger = 5000)
-  @Ignore("https://issues.carrot2.org/browse/CARROT-1195") // TODO: CARROT-1195
   public void testResultsStableFromRandomShuffle() throws Exception {
     final int numberOfThreads = randomIntBetween(1, 8);
     final int queriesPerThread = scaledRandomIntBetween(5, 25);

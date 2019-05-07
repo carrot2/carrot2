@@ -13,10 +13,10 @@
 package org.carrot2.clustering.lingo;
 
 import org.assertj.core.api.Assertions;
+import org.carrot2.AwaitsFix;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.*;
-import org.carrot2.language.LanguageComponents;
 import org.junit.Test;
 
 import java.util.List;
@@ -81,5 +81,12 @@ public class LingoClusteringAlgorithmTest extends ClusteringAlgorithmTestBase {
         .flatMap(c -> c.getLabels().stream())
         .map(label -> label.toLowerCase(Locale.ROOT)))
         .containsOnly("program");
+  }
+
+
+  @AwaitsFix("https://issues.carrot2.org/browse/CARROT-1195") // TODO: CARROT-1195 (clustering not deterministic)
+  @Override
+  public void testResultsStableFromRandomShuffle() throws Exception {
+    super.testResultsStableFromRandomShuffle();
   }
 }
