@@ -1,6 +1,4 @@
 
-- review TODOs and performance optimizations.
-- port DCS examples to be unit tests
 - filtering of algorithm-supported language components
 
 - documentation subproject (scaffolding)
