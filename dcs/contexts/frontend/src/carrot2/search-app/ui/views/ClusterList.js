@@ -15,14 +15,14 @@ function TopCluster(props) {
   const meta = `(${cluster.size} docs` + (hasSubclusters ? `, ${cluster.clusters.length} subclusters)` : ")");
   const labels = cluster.labels.join(", ");
 
-  const selectionStore = props.selectionStore;
+  const clusterSelectionStore = props.clusterSelectionStore;
   const className = classNames("TopCluster", {
     "with-subclusters": hasSubclusters,
-    "selected": selectionStore.isSelected(cluster)
+    "selected": clusterSelectionStore.isSelected(cluster)
   });
 
   return (
-    <div className={className} onClick={() => selectionStore.toggleSelection(cluster)}>
+    <div className={className} onClick={() => clusterSelectionStore.toggleSelection(cluster)}>
       <Icon className="icon" icon="lightbulb" intent="warning" />
       <span className="labels">{labels}</span>{" "}
       <span className="meta">{meta}</span>
@@ -30,7 +30,7 @@ function TopCluster(props) {
       <div className="subclusters">
         {
           subclusters.map((subcluster) =>
-            <SubClusterView key={subcluster.id} cluster={subcluster} selectionStore={selectionStore} />)
+            <SubClusterView key={subcluster.id} cluster={subcluster} clusterSelectionStore={clusterSelectionStore} />)
         }
       </div>
     </div>
@@ -44,12 +44,12 @@ function SubCluster(props) {
   const labels = cluster.phrases.join(", ");
   const meta = `(${cluster.size})`;
   const metaTitle = `(${cluster.size} docs)`;
-  const selectionStore = props.selectionStore;
+  const clusterSelectionStore = props.clusterSelectionStore;
 
-  const className = classNames("SubCluster", { "selected": selectionStore.isSelected(cluster) });
+  const className = classNames("SubCluster", { "selected": clusterSelectionStore.isSelected(cluster) });
 
   return (
-    <span className={className} onClick={(e) => { e.stopPropagation(); selectionStore.toggleSelection(cluster)} }>
+    <span className={className} onClick={(e) => { e.stopPropagation(); clusterSelectionStore.toggleSelection(cluster)} }>
       <span className="icon"><Icon icon="folder-close" intent="warning" iconSize="0.9em" />{"\u00a0"}</span>
       <span className="labels">{labels}</span>{"\u00a0"}
       <span className="meta" title={metaTitle}>{meta}</span>{" "}
@@ -62,10 +62,10 @@ const SubClusterView = view(SubCluster);
 export function ClusterList(props) {
   return (
     <div className="ClusterList ">
-      <Loading loading={props.store.loading}>
+      <Loading loading={props.clusterStore.loading}>
         {
-          props.store.clusters.map(cluster =>
-            <TopClusterView cluster={cluster} key={cluster.id} selectionStore={props.selectionStore} />)
+          props.clusterStore.clusters.map(cluster =>
+            <TopClusterView cluster={cluster} key={cluster.id} clusterSelectionStore={props.clusterSelectionStore} />)
         }
       </Loading>
     </div>
@@ -73,6 +73,6 @@ export function ClusterList(props) {
 }
 
 ClusterList.propTypes = {
-  store: PropTypes.object.isRequired,
-  selectionStore: PropTypes.object.isRequired
+  clusterStore: PropTypes.object.isRequired,
+  clusterSelectionStore: PropTypes.object.isRequired
 };

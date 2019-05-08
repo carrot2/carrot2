@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 
 import { view } from 'react-easy-state';
 import { clusterStore, searchResultStore } from "../store/services";
+import { themeStore } from "./ThemeSwitch.js";
 
 import { views } from "../../config.js";
 
@@ -69,9 +70,10 @@ export class ResultsScreen extends Component {
 
   render() {
     const panelProps = {
-      store: clusterStore,
-      selectionStore: clusterSelectionStore,
-      searchResultStore: searchResultStore
+      clusterStore,
+      clusterSelectionStore,
+      searchResultStore,
+      themeStore
     };
     const panels = Object.keys(views)
       .map(v => {

@@ -7,6 +7,7 @@ import { etools } from "../../service/sources/etools";
 export const clusterStore = store({
   loading: false,
   clusters: [],
+  seq: 0,
   error: false,
   load: async function (searchResult) {
     const documents = searchResult.documents;
@@ -20,6 +21,7 @@ export const clusterStore = store({
       clusterStore.loading = true;
       clusterStore.clusters = await fetchClusters(query, documents);
       clusterStore.loading = false;
+      clusterStore.seq++;
     }
   }
 });

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 FoamTree.propTypes = {
   options: PropTypes.object,
+  dataObject: PropTypes.object.isRequired
 };
 
 export function FoamTree(props) {
@@ -21,6 +22,7 @@ export function FoamTree(props) {
   useEffect(() => {
     if (foamtree.current) {
       foamtree.current.set(props.options);
+      foamtree.current.redraw();
     } else {
       foamtree.current = new CarrotSearchFoamTree({
         element: element.current,
@@ -29,6 +31,12 @@ export function FoamTree(props) {
       });
     }
   }, [ props.options ]); // run once
+
+  useEffect(() => {
+    if (foamtree.current) {
+      foamtree.current.set("dataObject", props.dataObject);
+    }
+  }, [ props.dataObject ]);
 
   return (
     <div ref={element} style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }}/>

@@ -4,20 +4,20 @@ import { view } from 'react-easy-state';
 import { LightDarkSwitch } from "../../../carrotsearch/ui/LightDarkSwitch.js";
 import { persistentStore } from "../../util/persistent-store.js";
 
-export const uiConfig = persistentStore("uiConfig",
+export const themeStore = persistentStore("uiConfig",
   {
     theme: "dark"
   },
   {
-    flipTheme: () => uiConfig.theme = uiConfig.isDarkTheme() ? "light" : "dark",
-    isDarkTheme: () => uiConfig.theme === "dark"
+    flipTheme: () => themeStore.theme = themeStore.isDarkTheme() ? "light" : "dark",
+    isDarkTheme: () => themeStore.theme === "dark"
   });
 
 
 function ThemeSwitchImpl () {
   function updateTheme() {
     const classList = document.body.classList;
-    if (uiConfig.isDarkTheme()) {
+    if (themeStore.isDarkTheme()) {
       classList.remove("light");
       classList.add("bp3-dark", "dark");
     } else {
@@ -27,7 +27,7 @@ function ThemeSwitchImpl () {
   }
 
   function flipTheme() {
-    uiConfig.flipTheme();
+    themeStore.flipTheme();
     updateTheme();
   }
 
@@ -36,7 +36,7 @@ function ThemeSwitchImpl () {
     updateTheme();
   }, []);
 
-  const isDarkTheme = uiConfig.isDarkTheme();
+  const isDarkTheme = themeStore.isDarkTheme();
   return (
     <LightDarkSwitch dark={isDarkTheme} onChange={flipTheme} />
   );
