@@ -15,6 +15,11 @@ const darkThemeOptions = {
     if (!props.hasChildren && !props.selected && !props.exposed) {
       vars.groupColor.a = 0.7;
     }
+
+    if (props.group.rank) {
+      vars.l = props.group.rank * 100
+    }
+
     vars.labelColor = "white";
   }
 };
@@ -41,15 +46,16 @@ export const Treemap = props => {
       const clusters = props.clusterStore.clusters;
       const searchResult = props.searchResultStore.searchResult;
       setDataObject({
-        groups: clusters.map(c => {
+        groups: clusters.map(function clusters(c) {
           return {
             label: `${c.labels.join(", ")} (${c.size})`,
             weight: c.size,
             groups: c.documents.map(d => {
               return {
-                label: searchResult.documents[d].title
+                label: searchResult.documents[d].title,
+                rank: d.rank
               }
-            })
+            }).concat((c.subclusters || []).map(clusters))
           }
         })
       })

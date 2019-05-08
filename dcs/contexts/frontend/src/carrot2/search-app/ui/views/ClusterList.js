@@ -9,10 +9,10 @@ import { Loading } from "../Loading";
 
 function TopCluster(props) {
   const cluster = props.cluster;
-  const subclusters = cluster.clusters || [];
+  const subclusters = cluster.subclusters || [];
   const hasSubclusters = subclusters.length > 0;
 
-  const meta = `(${cluster.size} docs` + (hasSubclusters ? `, ${cluster.clusters.length} subclusters)` : ")");
+  const meta = `(${cluster.size} docs` + (hasSubclusters ? `, ${cluster.subclusters.length} subclusters)` : ")");
   const labels = cluster.labels.join(", ");
 
   const clusterSelectionStore = props.clusterSelectionStore;
@@ -41,7 +41,7 @@ const TopClusterView = view(TopCluster);
 
 function SubCluster(props) {
   const cluster = props.cluster;
-  const labels = cluster.phrases.join(", ");
+  const labels = cluster.labels.join(", ");
   const meta = `(${cluster.size})`;
   const metaTitle = `(${cluster.size} docs)`;
   const clusterSelectionStore = props.clusterSelectionStore;
