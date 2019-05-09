@@ -44,16 +44,15 @@ export const Treemap = props => {
   const [ dataObject, setDataObject ] = useState({});
   useEffect(() => {
     const fn = () => {
-      // TODO: remove dependency on results store, it causes duplicate rendering
       const clusters = props.clusterStore.clusters;
-      const searchResult = props.searchResultStore.searchResult;
+      const documents = props.clusterStore.documents;
       setDataObject({
         groups: clusters.map(function clusters(c) {
           return {
             label: `${c.labels.join(", ")} (${c.size})`,
             weight: c.size,
             groups: c.documents.map(d => {
-              let document = searchResult.documents[d];
+              let document = documents[d];
               return {
                 label: document.title,
                 rank: document.rank
@@ -61,7 +60,7 @@ export const Treemap = props => {
             }).concat((c.clusters || []).map(clusters))
           }
         })
-      })
+      });
     };
 
     // Run fn every time the values it observes change
@@ -69,7 +68,7 @@ export const Treemap = props => {
 
     // When component unmounts, remove observer.
     return () => { unobserve(fn); };
-  }, [ props.clusterStore, props.searchResultStore.searchResult ]);
+  }, [ props.clusterStore ]);
 
   const themeOptions = props.themeStore.theme === "dark" ? darkThemeOptions : lightThemeOptions;
 
