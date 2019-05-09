@@ -257,7 +257,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
   private void orderDocsByHash(List<Cluster<Document>> clusters) {
     clusters.forEach(c -> {
       c.getDocuments().sort(Comparator.comparingInt(Object::hashCode));
-      orderDocsByHash(c.getSubclusters());
+      orderDocsByHash(c.getClusters());
     });
   }
 }

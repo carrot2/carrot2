@@ -32,9 +32,9 @@ public class Cluster<T> {
   private List<T> documents = new ArrayList<>();
 
   /**
-   * Subclusters of this cluster, if any.
+   * Sub-clusters of this cluster, if any.
    */
-  private List<Cluster<T>> subclusters = new ArrayList<>();
+  private List<Cluster<T>> clusters = new ArrayList<>();
 
   /**
    * This cluster's "score", interpretation left to algorithms.
@@ -72,17 +72,17 @@ public class Cluster<T> {
   }
 
   /**
-   * Returns all subclusters of this cluster.
+   * Returns all child clusters belonging to this cluster.
    */
-  public List<Cluster<T>> getSubclusters() {
-    return subclusters;
+  public List<Cluster<T>> getClusters() {
+    return clusters;
   }
 
   /**
-   * Adds subclusters to this cluster.
+   * Adds a child cluster to this cluster.
    */
-  public Cluster<T> addSubcluster(Cluster<T> cluster) {
-    this.subclusters.add(cluster);
+  public Cluster<T> addCluster(Cluster<T> cluster) {
+    this.clusters.add(cluster);
     return this;
   }
 
@@ -118,14 +118,14 @@ public class Cluster<T> {
   }
 
   private boolean equals(Cluster<?> that) {
-    return Objects.equals(this.labels, that.labels) &&
-        Objects.equals(this.documents, that.documents) &&
-        Objects.equals(this.subclusters, that.subclusters) &&
-        Objects.equals(this.score, that.score);
+    return Objects.equals(this.getLabels(), that.getLabels()) &&
+        Objects.equals(this.getDocuments(), that.getDocuments()) &&
+        Objects.equals(this.getClusters(), that.getClusters()) &&
+        Objects.equals(this.getScore(), that.getScore());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(labels, documents, subclusters, score);
+    return Objects.hash(getLabels(), getDocuments(), getClusters(), getScore());
   }
 }

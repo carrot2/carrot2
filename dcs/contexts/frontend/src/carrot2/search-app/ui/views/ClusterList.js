@@ -9,10 +9,10 @@ import { Loading } from "../Loading";
 
 function TopCluster(props) {
   const cluster = props.cluster;
-  const subclusters = cluster.subclusters || [];
+  const subclusters = cluster.clusters || [];
   const hasSubclusters = subclusters.length > 0;
 
-  const meta = `(${cluster.size} docs` + (hasSubclusters ? `, ${cluster.subclusters.length} subclusters)` : ")");
+  const meta = `(${cluster.size} docs` + (hasSubclusters ? `, ${subclusters.length} subclusters)` : ")");
   const labels = cluster.labels.join(", ");
 
   const clusterSelectionStore = props.clusterSelectionStore;

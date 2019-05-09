@@ -67,7 +67,7 @@ public class SharedInfrastructure {
     while (!queue.isEmpty()) {
       Cluster<?> c = queue.removeLast();
       visited.addAll(c.getDocuments());
-      queue.addAll(cluster.getSubclusters());
+      queue.addAll(cluster.getClusters());
     }
 
     return visited.size();

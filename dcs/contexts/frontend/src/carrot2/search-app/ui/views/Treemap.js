@@ -55,7 +55,7 @@ export const Treemap = props => {
                 label: searchResult.documents[d].title,
                 rank: d.rank
               }
-            }).concat((c.subclusters || []).map(clusters))
+            }).concat((c.clusters || []).map(clusters))
           }
         })
       })

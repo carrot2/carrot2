@@ -12,7 +12,7 @@ public class ExamplesCommon {
   private static <T> void printClusters(List<Cluster<T>> clusters, String indent) {
     for (Cluster<T> c : clusters) {
       System.out.println(indent + c);
-      printClusters(c.getSubclusters(), indent + "  ");
+      printClusters(c.getClusters(), indent + "  ");
     }
   }
 }

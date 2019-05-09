@@ -33,7 +33,7 @@ export function fetchClusters(query, documents) {
   function enrichClusters(clusters, prefix) {
     var id = 0;
     for (let cluster of clusters) {
-      const subclusters = cluster.subclusters || [];
+      const subclusters = cluster.clusters || [];
       const documents = cluster.documents || [];
       enrichClusters(subclusters, prefix + id + ".");
       cluster.uniqueDocuments = Array.from(new Set(subclusters.reduce((acc, val) => {

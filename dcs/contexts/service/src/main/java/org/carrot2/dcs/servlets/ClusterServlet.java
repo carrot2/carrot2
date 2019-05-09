@@ -150,7 +150,7 @@ public class ClusterServlet extends RestEndpoint {
       clone.setScore(c.getScore());
       c.getLabels().forEach(clone::addLabel);
       c.getDocuments().forEach(doc -> clone.addDocument(doc.ord));
-      adapt(c.getSubclusters()).forEach(clone::addSubcluster);
+      adapt(c.getClusters()).forEach(clone::addCluster);
       return clone;
     }).collect(Collectors.toList());
   }
