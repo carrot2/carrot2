@@ -146,18 +146,9 @@ task itJUnit(type: Test) {
   outputs.upToDateWhen { false }
 }
 
-task itExamples(type: GradleBuild) {
-  group "verification"
-  dependsOn assemble
-
-  dir "$outputDir/examples"
-  setTasks(['clean', 'check', 'assemble'])
-}
-
 task integTest {
   group "verification"
-
-  dependsOn itJUnit, itExamples
+  dependsOn itJUnit
 }
 
 integTest.mustRunAfter test
