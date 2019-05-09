@@ -15,11 +15,9 @@ const darkThemeOptions = {
     if (!props.hasChildren && !props.selected && !props.exposed) {
       vars.groupColor.a = 0.7;
     }
-
     if (props.group.rank) {
-      vars.l = props.group.rank * 100
+      vars.groupColor.l = 10 + 40 * props.group.rank
     }
-
     vars.labelColor = "white";
   }
 };
@@ -35,6 +33,9 @@ const lightThemeOptions = {
     if (!props.hasChildren && !props.selected && !props.exposed) {
       vars.groupColor.a = 0.7;
     }
+    if (props.group.rank) {
+      vars.groupColor.l = 35 + 40 * props.group.rank
+    }
     vars.labelColor = "black";
   }
 };
@@ -43,6 +44,7 @@ export const Treemap = props => {
   const [ dataObject, setDataObject ] = useState({});
   useEffect(() => {
     const fn = () => {
+      // TODO: remove dependency on results store, it causes duplicate rendering
       const clusters = props.clusterStore.clusters;
       const searchResult = props.searchResultStore.searchResult;
       setDataObject({
@@ -51,9 +53,10 @@ export const Treemap = props => {
             label: `${c.labels.join(", ")} (${c.size})`,
             weight: c.size,
             groups: c.documents.map(d => {
+              let document = searchResult.documents[d];
               return {
-                label: searchResult.documents[d].title,
-                rank: d.rank
+                label: document.title,
+                rank: document.rank
               }
             }).concat((c.clusters || []).map(clusters))
           }
