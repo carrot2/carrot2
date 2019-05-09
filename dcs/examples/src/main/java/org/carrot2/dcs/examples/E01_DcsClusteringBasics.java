@@ -53,8 +53,7 @@ public class E01_DcsClusteringBasics implements Runnable, Closeable {
       expect(httpResponse, HttpStatus.SC_OK);
 
       ListResponse response = om.readValue(httpResponse.getEntity().getContent(), ListResponse.class);
-      System.out.println("Available algorithms: " + response.algorithms);
-      System.out.println("Available languages: " + response.languages);
+      System.out.println("Available algorithms: " + response.algorithms.keySet());
       System.out.println("Available templates: " + response.templates);
     }
   }

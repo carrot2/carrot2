@@ -5,28 +5,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.List;
+import java.util.Map;
 
 @JsonPropertyOrder({
     "algorithms",
-    "languages",
     "templates"
 })
 public class ListResponse {
+  /**
+   * A map of algorithm names and their supported languages.
+   */
   @JsonProperty
-  public List<String> algorithms;
-
-  @JsonProperty
-  public List<String> languages;
+  public Map<String, List<String>> algorithms;
 
   @JsonProperty
   public List<String> templates;
 
   @JsonCreator
-  public ListResponse(@JsonProperty("algorithms") List<String> algorithms,
-                      @JsonProperty("languages") List<String> languages,
+  public ListResponse(@JsonProperty("algorithms") Map<String, List<String>> algorithms,
                       @JsonProperty("templates") List<String> templates) {
     this.algorithms = algorithms;
-    this.languages = languages;
     this.templates = templates;
   }
 }

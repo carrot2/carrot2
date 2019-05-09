@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.when;
@@ -28,15 +29,23 @@ public class ListServletTest extends AbstractServletTest {
     pw.flush();
 
     ObjectMapper om = new ObjectMapper();
-    Assertions.assertThat(om.readValue(sw.toString(), ListResponse.class).languages)
-        .containsExactlyElementsOf(
-            LanguageComponents.languages().stream().sorted().collect(Collectors.toList()));
+    String content = sw.toString();
+    ListResponse response = om.readValue(content, ListResponse.class);
 
-    Assertions.assertThat(om.readValue(sw.toString(), ListResponse.class).algorithms)
+    Assertions.assertThat(response.algorithms.keySet())
         .containsExactly("Bisecting K-Means", "Dummy", "Lingo", "STC");
 
-    Assertions.assertThat(om.readValue(sw.toString(), ListResponse.class).templates)
+    List<String> allLangs = LanguageComponents.languages().stream().sorted().collect(Collectors.toList());
+    response.algorithms.forEach((algorithm, langs) -> {
+      Assertions.assertThat(langs)
+          .as("Algorithm: " + algorithm)
+          .containsExactlyElementsOf(allLangs);
+    });
+
+    Assertions.assertThat(response.templates)
         .containsExactly("template2", "template1", "template3");
+
+    Assertions.assertThat(content).isEqualToIgnoringNewLines(resourceString("list.response.json"));
   }
 
   @Test

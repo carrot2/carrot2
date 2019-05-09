@@ -162,6 +162,10 @@ allprojects {
       compileJava.options.encoding = "UTF-8"
       compileTestJava.options.encoding = "UTF-8"
 
+      test {
+        maxParallelForks = Math.max(Runtime.runtime.availableProcessors() / 2.0, 4.0)
+      }
+
       dependencies {
         testImplementation project(':test-infra')
       }

@@ -7,5 +7,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public interface ClusteringAlgorithm extends AcceptingVisitor {
+  boolean supports(LanguageComponents languageComponents);
   <T extends Document> List<Cluster<T>> cluster(Stream<? extends T> documents, LanguageComponents languageComponents);
 }

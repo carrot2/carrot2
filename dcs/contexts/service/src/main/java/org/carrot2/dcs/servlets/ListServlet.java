@@ -19,8 +19,7 @@ public class ListServlet extends RestEndpoint {
 
     dcsContext = DcsContext.load(config.getServletContext());
     defaultResponse = new ListResponse(
-        new ArrayList<>(dcsContext.algorithmSuppliers.keySet()),
-        new ArrayList<>(dcsContext.languages.keySet()),
+        dcsContext.algorithmLanguages,
         new ArrayList<>(dcsContext.templates.keySet()));
   }
 

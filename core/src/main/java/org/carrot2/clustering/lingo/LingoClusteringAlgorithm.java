@@ -19,6 +19,8 @@ import org.carrot2.clustering.SharedInfrastructure;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.LexicalData;
+import org.carrot2.language.Stemmer;
+import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.CompletePreprocessingPipeline;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
@@ -32,8 +34,7 @@ import org.carrot2.attrs.AttrInteger;
 import org.carrot2.attrs.AttrObject;
 import org.carrot2.attrs.AttrString;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,6 +44,12 @@ import java.util.stream.Stream;
  * Systems, May/June, 3 (vol. 20), 2005, pp. 48—54."</i>.
  */
 public class LingoClusteringAlgorithm extends AttrComposite implements ClusteringAlgorithm {
+    private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS = new HashSet<>(Arrays.asList(
+        Stemmer.class,
+        Tokenizer.class,
+        LexicalData.class
+    ));
+
     /**
      * Balance between cluster score and size during cluster sorting. Value equal to 0.0
      * will cause Lingo to sort clusters based only on cluster size. Value equal to 1.0
@@ -115,6 +122,11 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
      * Query terms used to retrieve documents. The query is used as a hint to avoid trivial clusters.
      */
     public final AttrString queryHint = attributes.register("queryHint", SharedInfrastructure.queryHintAttribute());
+
+    @Override
+    public boolean supports(LanguageComponents languageComponents) {
+        return languageComponents.components().containsAll(REQUIRED_LANGUAGE_COMPONENTS);
+    }
 
     /**
      * Performs Lingo clustering of documents.

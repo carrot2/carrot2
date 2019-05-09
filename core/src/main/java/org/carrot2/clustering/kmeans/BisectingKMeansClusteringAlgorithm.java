@@ -25,6 +25,8 @@ import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.SharedInfrastructure;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.LanguageComponents;
+import org.carrot2.language.LexicalData;
+import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.math.mahout.function.Functions;
 import org.carrot2.math.mahout.matrix.DoubleMatrix1D;
@@ -50,6 +52,12 @@ import java.util.stream.Stream;
  * may not always fully correspond to all documents in the cluster.
  */
 public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements ClusteringAlgorithm {
+  private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS = new HashSet<>(Arrays.asList(
+      Stemmer.class,
+      Tokenizer.class,
+      LexicalData.class
+  ));
+
   /**
    * The number of clusters to create. The algorithm will create at most the specified
    * number of clusters.
@@ -139,6 +147,11 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
         .label("Input preprocessing components")
         .getset(() -> preprocessing, (v) -> preprocessing = v)
         .defaultValue(BasicPreprocessingPipeline::new));
+  }
+
+  @Override
+  public boolean supports(LanguageComponents languageComponents) {
+    return languageComponents.components().containsAll(REQUIRED_LANGUAGE_COMPONENTS);
   }
 
   @Override

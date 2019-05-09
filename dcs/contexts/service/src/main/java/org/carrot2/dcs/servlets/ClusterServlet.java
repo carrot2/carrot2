@@ -136,7 +136,7 @@ public class ClusterServlet extends RestEndpoint {
           "Clustering language must not be empty.");
     }
 
-    LanguageComponents language = dcsContext.languages.get(requestedLanguage);
+    LanguageComponents language = dcsContext.getLanguage(requestedLanguage);
     if (language == null) {
       throw new TerminateRequestException(HttpServletResponse.SC_BAD_REQUEST,
           "Language not available: " + clusteringRequest.language);

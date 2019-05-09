@@ -20,6 +20,7 @@ import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -50,6 +51,11 @@ public class ClusteringAlgorithmTest extends TestBase {
 
     ClusteringAlgorithm ca = new ClusteringAlgorithm() {
       @Override
+      public boolean supports(LanguageComponents languageComponents) {
+        return true;
+      }
+
+      @Override
       public <T extends Document> List<Cluster<T>> cluster(Stream<? extends T> documents,
                                                            LanguageComponents languageComponents) {
         Cluster<T> root = new Cluster<>();
@@ -65,7 +71,7 @@ public class ClusteringAlgorithmTest extends TestBase {
           root.addDocument(doc);
         });
 
-        return Arrays.asList(root);
+        return Collections.singletonList(root);
       }
 
       @Override

@@ -2,6 +2,7 @@ package org.carrot2.dcs.servlets;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.ClusteringAlgorithmProvider;
 import org.carrot2.dcs.client.ClusterRequest;
 import org.carrot2.language.ComponentLoader;
@@ -26,10 +27,12 @@ class DcsContext {
   private static String KEY = "_dcs_";
   private static Logger console = LoggerFactory.getLogger("console");
 
+  private final LinkedHashMap<String, LanguageComponents> languages;
+
   final ObjectMapper om;
   final Map<String, ClusterRequest> templates;
   final LinkedHashMap<String, ClusteringAlgorithmProvider> algorithmSuppliers;
-  final LinkedHashMap<String, LanguageComponents> languages;
+  final LinkedHashMap<String, List<String>> algorithmLanguages;
 
   private DcsContext(ServletContext servletContext) throws ServletException {
     this.om = new ObjectMapper();
@@ -46,8 +49,15 @@ class DcsContext {
           ));
 
     this.templates = processTemplates(om, servletContext);
+    this.languages = computeLanguageComponents(servletContext);
+    this.algorithmLanguages = computeAlgorithmLanguagePairs(algorithmSuppliers, languages.values());
 
-    // Load lexical resources.
+    console.info("DCS context initialized [algorithms: {}, templates: {}]",
+        algorithmSuppliers.keySet(),
+        templates.keySet());
+  }
+
+  private static LinkedHashMap<String, LanguageComponents> computeLanguageComponents(ServletContext servletContext) throws ServletException {
     List<String> languageList = LanguageComponents.languages().stream()
         .sorted().collect(Collectors.toList());
 
@@ -67,7 +77,7 @@ class DcsContext {
         try {
           return provider.load(language, contextLookup);
         } catch (IOException e) {
-          console.debug("Will use default resources for '{}' language components of provider {}",
+          console.debug("Will use default resources for '{}' language components of provider '{}'",
               language,
               provider.name());
           return provider.load(language);
@@ -77,7 +87,7 @@ class DcsContext {
       suppliersLoader = (language, provider) -> provider.load(language);
     }
 
-    this.languages = new LinkedHashMap<>();
+    LinkedHashMap<String, LanguageComponents> languages = new LinkedHashMap<>();
     for (String lang : languageList) {
       try {
         languages.put(lang, LanguageComponents.load(lang, suppliersLoader));
@@ -86,11 +96,25 @@ class DcsContext {
             String.format(Locale.ROOT, "Could not load the required resource for language '%s'.", lang), e);
       }
     }
+    return languages;
+  }
 
-    console.info("DCS context initialized [algorithms: {}, templates: {}, languages: {}]",
-        algorithmSuppliers.keySet(),
-        templates.keySet(),
-        languages.keySet());
+  private static LinkedHashMap<String, List<String>> computeAlgorithmLanguagePairs(
+      LinkedHashMap<String, ClusteringAlgorithmProvider> algorithmSuppliers,
+      Collection<LanguageComponents> languageComponents) {
+    LinkedHashMap<String, List<String>> algorithmLanguages = new LinkedHashMap<>();
+    for (Map.Entry<String, ClusteringAlgorithmProvider> e : algorithmSuppliers.entrySet()) {
+      ClusteringAlgorithm algorithm = e.getValue().get();
+      List<String> supportedLanguages = languageComponents.stream()
+          .filter(lc -> algorithm.supports(lc))
+          .map(lc -> lc.language())
+          .collect(Collectors.toList());
+      algorithmLanguages.put(e.getKey(), supportedLanguages);
+      console.debug("Languages supported by algorithm '{}': {}", e.getKey(),
+          String.join(", ", supportedLanguages));
+    }
+
+    return algorithmLanguages;
   }
 
   public synchronized static DcsContext load(ServletContext servletContext) throws ServletException {
@@ -140,6 +164,10 @@ class DcsContext {
       }
     }
     return templates;
+  }
+
+  public LanguageComponents getLanguage(String requestedLanguage) {
+    return languages.get(requestedLanguage);
   }
 
   private static class TemplateInfo {

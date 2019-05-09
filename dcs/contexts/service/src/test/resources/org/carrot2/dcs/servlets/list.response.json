@@ -18,6 +18,24 @@
       "Swedish",
       "Turkish"
     ],
+    "Dummy" : [
+      "Danish",
+      "Dutch",
+      "English",
+      "Finnish",
+      "French",
+      "German",
+      "Hungarian",
+      "Italian",
+      "Norwegian",
+      "Polish",
+      "Portuguese",
+      "Romanian",
+      "Russian",
+      "Spanish",
+      "Swedish",
+      "Turkish"
+    ],
     "Lingo" : [
       "Danish",
       "Dutch",
@@ -56,9 +74,8 @@
     ]
   },
   "templates" : [
-    "frontend-default",
-    "lingo",
-    "stc",
-    "bkmeans"
+    "template2",
+    "template1",
+    "template3"
   ]
 }

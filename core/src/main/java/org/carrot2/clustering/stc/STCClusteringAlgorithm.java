@@ -21,10 +21,7 @@ import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.SharedInfrastructure;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
-import org.carrot2.language.LanguageComponents;
-import org.carrot2.language.LexicalData;
-import org.carrot2.language.Tokenizer;
-import org.carrot2.language.TokenTypeUtils;
+import org.carrot2.language.*;
 import org.carrot2.text.preprocessing.BasicPreprocessingPipeline;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
@@ -47,6 +44,12 @@ import java.util.stream.Stream;
  * thought some improvements could be made.
  */
 public final class STCClusteringAlgorithm extends AttrComposite implements ClusteringAlgorithm {
+  private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS = new HashSet<>(Arrays.asList(
+      Stemmer.class,
+      Tokenizer.class,
+      LexicalData.class
+  ));
+
   /**
    * Query terms used to retrieve documents. The query is used as a hint to avoid trivial clusters.
    */
@@ -259,11 +262,16 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
    * Returns a collection of {@link PhraseCandidate}s that have
    * {@link PhraseCandidate#selected} set to <code>false</code>.
    */
-  private final static Predicate<PhraseCandidate> notSelected = (p) -> !p.selected;
+  private final static Predicate<PhraseCandidate> NOT_SELECTED = (p) -> !p.selected;
 
   private GeneralizedSuffixTree.SequenceBuilder sb;
   private PreprocessingContext context;
   private LexicalData lexicalData;
+
+  @Override
+  public boolean supports(LanguageComponents languageComponents) {
+    return languageComponents.components().containsAll(REQUIRED_LANGUAGE_COMPONENTS);
+  }
 
   /**
    * Performs STC clustering of documents.
@@ -614,10 +622,10 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     }
 
     markSubSuperPhrases(phrases);
-    phrases.removeIf(notSelected);
+    phrases.removeIf(NOT_SELECTED);
 
     markOverlappingPhrases(context, phrases);
-    phrases.removeIf(notSelected);
+    phrases.removeIf(NOT_SELECTED);
 
     Collections.sort(phrases, new Comparator<PhraseCandidate>() {
       public int compare(PhraseCandidate p1, PhraseCandidate p2) {

@@ -20,6 +20,11 @@ public class DummyAlgorithmProvider implements ClusteringAlgorithmProvider {
         AttrInteger.builder().min(1).defaultValue(5));
 
     @Override
+    public boolean supports(LanguageComponents languageComponents) {
+      return true;
+    }
+
+    @Override
     public <T extends Document> List<Cluster<T>> cluster(Stream<? extends T> documents, LanguageComponents languageComponents) {
       List<? extends T> docs = documents.collect(Collectors.toList());
 
