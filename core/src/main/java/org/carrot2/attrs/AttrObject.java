@@ -36,11 +36,6 @@ public class AttrObject<T extends AcceptingVisitor> extends Attr<T> {
     return getter.get();
   }
 
-  public T castAndSet(Object object) {
-    set(clazz.cast(object));
-    return get();
-  }
-
   public Class<T> getInterfaceClass() {
     return clazz;
   }

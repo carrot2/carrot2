@@ -83,53 +83,47 @@ public final class Attrs {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void visit(String key, AttrObject<?> attr) {
+    public <T extends AcceptingVisitor> void visit(String key, AttrObject<T> attr) {
       if (map.containsKey(key)) {
+        @SuppressWarnings("unchecked")
         Map<String, Object> submap = (Map<String, Object>) map.get(key);
         if (submap == null) {
           attr.set(null);
         } else {
           submap = new LinkedHashMap<>(submap);
-          AcceptingVisitor value;
+          T value;
           if (submap.containsKey(KEY_TYPE)) {
-            String type = (String) submap.remove(KEY_TYPE);
-            safeCast(classToInstance.apply(type), key, attr.getInterfaceClass());
-            value = attr.castAndSet(classToInstance.apply(type));
+            String valueType = safeCast(submap.remove(KEY_TYPE), KEY_TYPE, String.class);
+            value = safeCast(classToInstance.apply(valueType), key, attr.getInterfaceClass());
           } else {
-            value = attr.castAndSet(attr.newDefaultValue());
-            if (value == null) {
-              throw new RuntimeException("Default instance supplier not provided for: " + key);
-            }
+            value = notNull(key, attr.newDefaultValue());
           }
           value.accept(new FromMapVisitor(submap, classToInstance));
+          attr.set(value);
         }
       }
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void visit(String key, AttrObjectArray<?> attr) {
+    public <T extends AcceptingVisitor> void visit(String key, AttrObjectArray<T> attr) {
       if (map.containsKey(key)) {
         Object[] array = (Object[]) map.get(key);
         if (array == null) {
           attr.set(null);
         } else {
           List<Object> entries = Arrays.stream(array).map(entry -> {
+            @SuppressWarnings("unchecked")
             Map<String, Object> submap = (Map<String, Object>) entry;
             if (submap == null) {
               return null;
             } else {
               submap = new LinkedHashMap<>(submap);
-              AcceptingVisitor value;
+              T value;
               if (submap.containsKey(KEY_TYPE)) {
-                String type = (String) submap.remove(KEY_TYPE);
-                value = safeCast(classToInstance.apply(type), key, attr.getInterfaceClass());
+                String valueType = safeCast(submap.remove(KEY_TYPE), KEY_TYPE, String.class);
+                value = safeCast(classToInstance.apply(valueType), key, attr.getInterfaceClass());
               } else {
-                value = attr.newDefaultEntryValue();
-                if (value == null) {
-                  throw new RuntimeException("Default instance supplier not provided for: " + key);
-                }
+                value = notNull(key, attr.newDefaultEntryValue());
               }
               value.accept(new FromMapVisitor(submap, classToInstance));
               return value;
@@ -142,7 +136,7 @@ public final class Attrs {
     }
 
     @Override
-    public void visit(String key, AttrEnum<? extends Enum<?>> attr) {
+    public <T extends Enum<T>> void visit(String key, AttrEnum<T> attr) {
       if (map.containsKey(key)) {
         attr.set(safeCast(map.get(key), key, String.class));
       }
@@ -160,6 +154,15 @@ public final class Attrs {
       if (map.containsKey(key)) {
         attr.set(safeCast(map.get(key), key, String.class));
       }
+    }
+
+    private <T> T notNull(String key, T value) {
+      if (value == null) {
+        throw new RuntimeException(
+            String.format(Locale.ROOT,
+                "Default instance supplier returned null for key: '%s'", key));
+      }
+      return value;
     }
 
     private <T> T safeCast(Object value, String key, Class<T> clazz) {
@@ -205,12 +208,12 @@ public final class Attrs {
     }
 
     @Override
-    public void visit(String key, AttrObject<?> attrImpl) {
+    public <T extends AcceptingVisitor> void visit(String key, AttrObject<T> attr) {
       ensureNoExistingKey(map, key);
-      AcceptingVisitor currentValue = attrImpl.get();
+      AcceptingVisitor currentValue = attr.get();
       if (currentValue != null) {
         Map<String, Object> submap = new LinkedHashMap<>();
-        if (!attrImpl.isDefaultClass(currentValue)) {
+        if (!attr.isDefaultClass(currentValue)) {
           submap.put(KEY_TYPE, objectToClass.apply(currentValue));
         }
         currentValue.accept(new ToMapVisitor(submap, objectToClass));
@@ -221,14 +224,14 @@ public final class Attrs {
     }
 
     @Override
-    public void visit(String key, AttrObjectArray<?> attrImpl) {
+    public <T extends AcceptingVisitor> void visit(String key, AttrObjectArray<T> attr) {
       ensureNoExistingKey(map, key);
 
-      List<? extends AcceptingVisitor> values = attrImpl.get();
+      List<T> values = attr.get();
       if (values != null) {
         Object[] array = values.stream().map(currentValue -> {
           Map<String, Object> submap = new LinkedHashMap<>();
-          if (!attrImpl.isDefaultClass(currentValue)) {
+          if (!attr.isDefaultClass(currentValue)) {
             submap.put(KEY_TYPE, objectToClass.apply(currentValue));
           }
           currentValue.accept(new ToMapVisitor(submap, objectToClass));
@@ -241,7 +244,7 @@ public final class Attrs {
     }
 
     @Override
-    public void visit(String key, AttrEnum<? extends Enum<?>> attr) {
+    public <T extends Enum<T>> void visit(String key, AttrEnum<T> attr) {
       ensureNoExistingKey(map, key);
       map.put(key, attr.get() != null ? attr.get().name() : null);
     }
@@ -289,8 +292,8 @@ public final class Attrs {
       }
 
       @Override
-      public void visit(String key, AttrEnum<? extends Enum<?>> attr) {
-        Enum<?> value = attr.get();
+      public <T extends Enum<T>> void visit(String key, AttrEnum<T> attr) {
+        T value = attr.get();
         append(key, value == null ? value : "\"" + value + '"');
       }
 
@@ -314,7 +317,7 @@ public final class Attrs {
       }
 
       @Override
-      public void visit(String key, AttrObject<?> attr) {
+      public <T extends AcceptingVisitor> void visit(String key, AttrObject<T> attr) {
         AcceptingVisitor value = attr.get();
         if (value == null) {
           append(key, value);
@@ -329,8 +332,8 @@ public final class Attrs {
       }
 
       @Override
-      public void visit(String key, AttrObjectArray<?> attr) {
-        List<? extends AcceptingVisitor> value = attr.get();
+      public <T extends AcceptingVisitor> void visit(String key, AttrObjectArray<T> attr) {
+        List<T> value = attr.get();
         if (value == null) {
           append(key, value);
         } else {

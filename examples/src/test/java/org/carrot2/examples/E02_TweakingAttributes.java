@@ -102,7 +102,7 @@ public class E02_TweakingAttributes {
       }
 
       @Override
-      public void visit(String key, AttrEnum<? extends Enum<?>> attr) {
+      public <T extends Enum<T>> void visit(String key, AttrEnum<T> attr) {
         print(key, attr.get(), "enum of: " + attr.enumClass().getSimpleName(), attr);
       }
 
@@ -117,7 +117,7 @@ public class E02_TweakingAttributes {
       }
 
       @Override
-      public void visit(String key, AttrObject<?> attr) {
+      public <T extends AcceptingVisitor> void visit(String key, AttrObject<T> attr) {
         AcceptingVisitor value = attr.get();
         print(key, value == null ? "null" : value.getClass().getSimpleName(),
             "<" + attr.getInterfaceClass().getSimpleName() + ">", attr);
@@ -127,8 +127,8 @@ public class E02_TweakingAttributes {
       }
 
       @Override
-      public void visit(String key, AttrObjectArray<?> attr) {
-        List<? extends AcceptingVisitor> value = attr.get();
+      public <T extends AcceptingVisitor> void visit(String key, AttrObjectArray<T> attr) {
+        List<T> value = attr.get();
         print(key, value == null ? "null" : "list[" + value.size() + "]",
             "array of <" + attr.getInterfaceClass().getSimpleName() + ">", attr);
         if (value != null) {

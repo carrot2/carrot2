@@ -63,7 +63,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
       }
 
       @Override
-      public void visit(String key, AttrEnum<? extends Enum<?>> attr) {
+      public <T extends Enum<T>> void visit(String key, AttrEnum<T> attr) {
         hasLabel(key, attr);
       }
 
@@ -78,7 +78,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
       }
 
       @Override
-      public void visit(String key, AttrObject<?> attr) {
+      public <T extends AcceptingVisitor> void visit(String key, AttrObject<T> attr) {
         hasLabel(key, attr);
         AcceptingVisitor o = attr.get();
         if (o != null) {
@@ -89,10 +89,10 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
       }
 
       @Override
-      public void visit(String key, AttrObjectArray<?> attr) {
+      public <E extends AcceptingVisitor> void visit(String key, AttrObjectArray<E> attr) {
         hasLabel(key, attr);
 
-        List<? extends AcceptingVisitor> entries = attr.get();
+        List<E> entries = attr.get();
         if (entries != null) {
           entries.forEach(v -> {
             path.addLast(key);
