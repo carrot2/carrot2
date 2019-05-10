@@ -74,7 +74,13 @@ public class AttrObject<T extends AcceptingVisitor> extends Attr<T> {
     }
 
     public AttrObject<T> defaultValue(Supplier<? extends T> newInstance) {
-      return new AttrObject<T>(clazz, newInstance.get(), label, getConstraint(), newInstance, getter, setter);
+      Objects.requireNonNull(newInstance, "New instance supplier must not be null.");
+      return defaultValue(newInstance.get(), newInstance);
+    }
+
+    public AttrObject<T> defaultValue(T defaultValue, Supplier<? extends T> newInstance) {
+      Objects.requireNonNull(newInstance, "New instance supplier must not be null.");
+      return new AttrObject<T>(clazz, defaultValue, label, getConstraint(), newInstance, getter, setter);
     }
   }
 

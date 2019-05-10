@@ -1,7 +1,5 @@
 
-- DCS: handle custom algorithm parameters from the request properly (+ tests)
-- DCS: add better error support (perhaps structured json response)
-- DCS: add better validation of extra/ unused/ invalid json entries in parameters; handle response.
+- DCS: add validation of extra (unused) json entries in parameters
 
 - documentation subproject (scaffolding)
 - DCS: add a switch between available clustering service templates (?)

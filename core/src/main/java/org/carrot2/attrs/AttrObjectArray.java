@@ -42,10 +42,6 @@ public class AttrObjectArray<T extends AcceptingVisitor> extends Attr<List<T>> {
     return clazz;
   }
 
-  public void castAndSet(List<?> values) {
-    set(values.stream().map(v -> clazz.cast(v)).collect(Collectors.toList()));
-  }
-
   public boolean isDefaultClass(Object value) {
     Objects.requireNonNull(value);
     T def = newDefaultEntryValue();

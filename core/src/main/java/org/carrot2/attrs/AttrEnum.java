@@ -16,10 +16,6 @@ public class AttrEnum<T extends Enum<T>> extends Attr<T> {
     this.clazz = clazz;
   }
 
-  public void set(String name) {
-    set(name == null ? null : Enum.valueOf(clazz, name));
-  }
-
   public Class<T> enumClass() {
     return clazz;
   }

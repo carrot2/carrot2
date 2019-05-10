@@ -21,8 +21,8 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm & AcceptingVisitor> extends TestBase {
-  protected abstract T algorithm();
+public abstract class ClusteringAlgorithmTestBase<E extends ClusteringAlgorithm & AcceptingVisitor> extends TestBase {
+  protected abstract E algorithm();
 
   protected LanguageComponents testLanguageModel() {
     return CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant1.NAME);
@@ -89,10 +89,10 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
       }
 
       @Override
-      public <E extends AcceptingVisitor> void visit(String key, AttrObjectArray<E> attr) {
+      public <T extends AcceptingVisitor> void visit(String key, AttrObjectArray<T> attr) {
         hasLabel(key, attr);
 
-        List<E> entries = attr.get();
+        List<T> entries = attr.get();
         if (entries != null) {
           entries.forEach(v -> {
             path.addLast(key);
@@ -185,7 +185,8 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
         try {
           return algorithm().cluster(documents.stream(), testLanguageModel());
         } finally {
-          System.out.println("Done. " + (System.currentTimeMillis() - s));
+          System.out.println(String.format(Locale.ROOT,
+              "Done %s, %.2f sec. ", dataSetIndex, (System.currentTimeMillis() - s) / 1000d));
         }
       });
     }
@@ -232,7 +233,8 @@ public abstract class ClusteringAlgorithmTestBase<T extends ClusteringAlgorithm 
           Collections.shuffle(cloned);
           return algorithm().cluster(cloned.stream(), testLanguageModel());
         } finally {
-          System.out.println("Done. " + (System.currentTimeMillis() - s));
+          System.out.println(String.format(Locale.ROOT,
+              "Done %s, %.2f sec. ", dataSetIndex, (System.currentTimeMillis() - s) / 1000d));
         }
       });
     }

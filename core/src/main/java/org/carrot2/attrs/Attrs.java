@@ -63,7 +63,24 @@ public final class Attrs {
     @Override
     public void visit(String key, AttrInteger attr) {
       if (map.containsKey(key)) {
-        attr.set(safeCast(map.get(key), key, Integer.class));
+        Number value = safeCast(map.get(key), key, Number.class);
+        if (value != null) {
+          if (Double.compare(value.doubleValue(), value.longValue()) != 0) {
+            throw new IllegalArgumentException(String.format(Locale.ROOT,
+                "Value at key '%s' should be an integer but encountered floating point value: '%s'",
+                key, value.toString()));
+          }
+
+          long v =  value.longValue();
+          if ((int) v != v) {
+            throw new IllegalArgumentException(String.format(Locale.ROOT,
+                "Value at key '%s' should be an integer but is out of integer range: '%s'",
+                key, value.toString()));
+          }
+          attr.set((int) v);
+        } else {
+          attr.set(null);
+        }
       }
     }
 
@@ -86,7 +103,7 @@ public final class Attrs {
     public <T extends AcceptingVisitor> void visit(String key, AttrObject<T> attr) {
       if (map.containsKey(key)) {
         @SuppressWarnings("unchecked")
-        Map<String, Object> submap = (Map<String, Object>) map.get(key);
+        Map<String, Object> submap = safeCast(this.map.get(key), key, Map.class);
         if (submap == null) {
           attr.set(null);
         } else {
@@ -107,30 +124,41 @@ public final class Attrs {
     @Override
     public <T extends AcceptingVisitor> void visit(String key, AttrObjectArray<T> attr) {
       if (map.containsKey(key)) {
-        Object[] array = (Object[]) map.get(key);
-        if (array == null) {
+        Object value = map.get(key);
+        if (value == null) {
           attr.set(null);
         } else {
-          List<Object> entries = Arrays.stream(array).map(entry -> {
+          List<?> array;
+          if (value instanceof List) {
+            array = (List<?>) value;
+          } else if (value instanceof Object[]) {
+            array = Arrays.asList((Object[]) value);
+          } else {
+            throw new IllegalArgumentException(String.format(Locale.ROOT,
+                "Value at key '%s' should be a list or an array of objects of type '%s' but is an instance of '%s': '%s'",
+                key, attr.getInterfaceClass().getSimpleName(), value.getClass().getSimpleName(), value));
+          }
+
+          List<T> entries = array.stream().map(entry -> {
             @SuppressWarnings("unchecked")
-            Map<String, Object> submap = (Map<String, Object>) entry;
+            Map<String, Object> submap = safeCast(entry, key, Map.class);
             if (submap == null) {
               return null;
             } else {
               submap = new LinkedHashMap<>(submap);
-              T value;
+              T entryValue;
               if (submap.containsKey(KEY_TYPE)) {
-                String valueType = safeCast(submap.remove(KEY_TYPE), KEY_TYPE, String.class);
-                value = safeCast(classToInstance.apply(valueType), key, attr.getInterfaceClass());
+                String entryValueType = safeCast(submap.remove(KEY_TYPE), KEY_TYPE, String.class);
+                entryValue = safeCast(classToInstance.apply(entryValueType), key, attr.getInterfaceClass());
               } else {
-                value = notNull(key, attr.newDefaultEntryValue());
+                entryValue = notNull(key, attr.newDefaultEntryValue());
               }
-              value.accept(new FromMapVisitor(submap, classToInstance));
-              return value;
+              entryValue.accept(new FromMapVisitor(submap, classToInstance));
+              return entryValue;
             }
           }).collect(Collectors.toList());
 
-          attr.castAndSet(entries);
+          attr.set(entries);
         }
       }
     }
@@ -138,7 +166,20 @@ public final class Attrs {
     @Override
     public <T extends Enum<T>> void visit(String key, AttrEnum<T> attr) {
       if (map.containsKey(key)) {
-        attr.set(safeCast(map.get(key), key, String.class));
+        Object value = map.get(key);
+        if (value == null) {
+          attr.set((T) null);
+        } else if (value instanceof String) {
+          try {
+            attr.set(Enum.valueOf(attr.enumClass(), (String) value));
+          } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(String.format(Locale.ROOT,
+                "Value at key '%s' should be an enum constant of class '%s', but no such constant exists: '%s'",
+                key, attr.enumClass().getSimpleName(), value.toString()));
+          }
+        } else {
+          attr.set(safeCast(map.get(key), key, attr.enumClass()));
+        }
       }
     }
 
