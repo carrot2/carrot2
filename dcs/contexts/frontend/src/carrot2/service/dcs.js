@@ -37,8 +37,8 @@ export function fetchClusters(query, documents) {
       enrichClusters(subclusters, prefix + id + ".");
 
       cluster.uniqueDocuments = Array.from(subclusters.reduce(function fold(set, sc) {
-        (sc.subclusteres || []).reduce(set, fold);
-        for (const doc of sc.documents()) { set.add(doc); }
+        (sc.clusters || []).reduce(fold, set);
+        for (const doc of sc.documents) { set.add(doc); }
         return set;
       }, new Set(documents)));
       cluster.id = prefix + (id++);
