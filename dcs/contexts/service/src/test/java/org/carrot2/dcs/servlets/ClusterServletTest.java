@@ -1,13 +1,19 @@
 package org.carrot2.dcs.servlets;
 
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.carrot2.dcs.client.ClusterResponse;
+import org.carrot2.dcs.client.ErrorResponse;
 import org.carrot2.math.mahout.Arrays;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -29,16 +35,71 @@ public class ClusterServletTest extends AbstractServletTest {
   }
 
   @Test
-  public void testAttributeInRequest() throws Exception {
+  public void testAttrInRequest() throws Exception {
     verifyRequest("attrInRequest.request.json", "attrInRequest.response.json");
   }
 
   @Test
-  public void testAttributeInTemplate() throws Exception {
+  public void testAttrInTemplate() throws Exception {
     setupMockTemplates("template1.json", "template2.json");
 
     when(request.getParameter(ClusterServlet.PARAM_TEMPLATE)).thenReturn("template2");
     verifyRequest("attrInTemplate.request.json", "attrInTemplate.response.json");
+  }
+
+  @Test
+  public void testInvalidValueAttr() throws Exception {
+    verifyInvalidRequest(
+        HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+        "invalidValueAttr.request.json",
+        "invalidValueAttr.response.json");
+  }
+
+  @Test @Ignore // XXX: uncomment test
+  public void testMissingAttr() throws Exception {
+    verifyInvalidRequest(
+        HttpServletResponse.SC_BAD_REQUEST,
+        "missingAttr.request.json",
+        "missingAttr.response.json");
+  }
+
+  private void verifyInvalidRequest(int expectedStatus, String requestResource, String responseResource) throws Exception {
+    String requestData = resourceString(requestResource);
+    log.debug("Request: " + requestData);
+
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    when(response.getWriter()).thenReturn(pw);
+    when(request.getInputStream()).thenReturn(new StringServletInputStream(requestData));
+
+    AtomicInteger returnedStatus = new AtomicInteger();
+    doAnswer((a) -> {
+      returnedStatus.set(a.getArgument(0));
+      return null;
+    }).when(response).sendError(anyInt(), anyString());
+
+    ClusterServlet servlet = new ClusterServlet();
+    servlet.init(config);
+    servlet.doPost(request, response);
+    pw.flush();
+
+    // Verify status.
+    Assertions.assertThat(returnedStatus.get()).isEqualTo(expectedStatus);
+
+    // Verify against expected response.
+    String content = sw.toString();
+    log.debug("Actual response: " + content);
+
+    // Clear the stack trace since it's apt to change.
+    ObjectMapper om = new ObjectMapper();
+
+    ErrorResponse errorResponse = om.readValue(content, ErrorResponse.class);
+    errorResponse.stacktrace = "<removed>";
+
+    DefaultPrettyPrinter pp = new DefaultPrettyPrinter();
+    pp.indentArraysWith(new DefaultIndenter("  ", DefaultIndenter.SYS_LF));
+    content = om.writer().with(pp).writeValueAsString(errorResponse);
+    Assertions.assertThat(content).isEqualToIgnoringNewLines(resourceString(responseResource));
   }
 
   private void verifyRequest(String requestResource, String responseResource) throws Exception {

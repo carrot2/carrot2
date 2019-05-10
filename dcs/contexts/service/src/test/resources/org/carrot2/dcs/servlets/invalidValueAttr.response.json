@@ -1,0 +1,5 @@
+{
+  "class" : "java.lang.IllegalArgumentException",
+  "message" : "Value at key 'groupSize' should be an instance of 'Integer', but encountered class 'String': '10'",
+  "stacktrace" : "<removed>"
+}

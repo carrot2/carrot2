@@ -1,0 +1,9 @@
+{
+  "language": "English",
+  "algorithm": "Dummy",
+  "parameters": {
+    "missingAttribute": "value"
+  },
+  "documents": [
+  ]
+}

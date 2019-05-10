@@ -9,7 +9,10 @@ import org.carrot2.clustering.ClusteringAlgorithmProvider;
 import org.carrot2.clustering.Document;
 import org.carrot2.dcs.client.ClusterRequest;
 import org.carrot2.dcs.client.ClusterResponse;
+import org.carrot2.dcs.client.ErrorResponse;
 import org.carrot2.language.LanguageComponents;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -24,6 +27,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ClusterServlet extends RestEndpoint {
+  private static Logger console = LoggerFactory.getLogger("console");
+
   public static final String PARAM_TEMPLATE = "template";
 
   private DcsContext dcsContext;
@@ -66,11 +71,31 @@ public class ClusterServlet extends RestEndpoint {
       // Get language components for the designated language.
       LanguageComponents language = getLanguage(template, clusteringRequest);
 
-      // Write the response.
+      // Run the clustering.
       List<Cluster<DocumentRef>> clusters = runClustering(clusteringRequest, algorithm, language);
-      super.writeJsonResponse(response, shouldIndent(request), new ClusterResponse(adapt(clusters)));
+
+      writeJsonResponse(response, shouldIndent(request), new ClusterResponse(adapt(clusters)));
     } catch (TerminateRequestException e) {
-      e.handle(response);
+      handleException(response, e);
+    } catch (Exception e) {
+      handleException(response, e);
+    }
+  }
+
+  private void handleException(HttpServletResponse response, Throwable exception) throws IOException {
+    if (response.isCommitted()) {
+      console.debug("Response already committed. Ignoring: {}", exception);
+    } else {
+      String message = "Uncaught internal server error.";
+      int code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+
+      if (exception instanceof TerminateRequestException) {
+        code = ((TerminateRequestException) exception).code;
+        message = ((TerminateRequestException) exception).getMessage();
+      }
+
+      response.sendError(code, message);
+      writeJsonResponse(response, true, new ErrorResponse(exception));
     }
   }
 

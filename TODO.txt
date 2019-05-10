@@ -1,11 +1,10 @@
 
-- filtering of algorithm-supported language components
+- DCS: handle custom algorithm parameters from the request properly (+ tests)
+- DCS: add better error support (perhaps structured json response)
+- DCS: add better validation of extra/ unused/ invalid json entries in parameters; handle response.
 
 - documentation subproject (scaffolding)
-- DCS: add better error support (perhaps structured json response)
 - DCS: add a switch between available clustering service templates (?)
-
-- DCS: add better validation of extra/ unused/ invalid json entries in parameters; handle response.
 
 - Add support for additional languages from the Lucene project.
 - Add checkstyle, header license checks?

@@ -63,31 +63,22 @@ public final class Attrs {
     @Override
     public void visit(String key, AttrInteger attr) {
       if (map.containsKey(key)) {
-        Object value = map.get(key);
-        if (value != null) {
-          attr.set((Integer) map.get(key));
-        } else {
-          attr.set(null);
-        }
+        attr.set(safeCast(map.get(key), key, Integer.class));
       }
     }
 
     @Override
     public void visit(String key, AttrDouble attr) {
       if (map.containsKey(key)) {
-        Number number = (Number) map.get(key);
-        if (number != null) {
-          attr.set(number.doubleValue());
-        } else {
-          attr.set(null);
-        }
+        Number value = safeCast(map.get(key), key, Number.class);
+        attr.set(value == null ? null : value.doubleValue());
       }
     }
 
     @Override
     public void visit(String key, AttrBoolean attr) {
       if (map.containsKey(key)) {
-        attr.set((Boolean) map.get(key));
+        attr.set(safeCast(map.get(key), key, Boolean.class));
       }
     }
 
@@ -103,13 +94,13 @@ public final class Attrs {
           AcceptingVisitor value;
           if (submap.containsKey(KEY_TYPE)) {
             String type = (String) submap.remove(KEY_TYPE);
+            safeCast(classToInstance.apply(type), key, attr.getInterfaceClass());
             value = attr.castAndSet(classToInstance.apply(type));
           } else {
-            Object instance = attr.newDefaultValue();
-            if (instance == null) {
+            value = attr.castAndSet(attr.newDefaultValue());
+            if (value == null) {
               throw new RuntimeException("Default instance supplier not provided for: " + key);
             }
-            value = attr.castAndSet(instance);
           }
           value.accept(new FromMapVisitor(submap, classToInstance));
         }
@@ -133,7 +124,7 @@ public final class Attrs {
               AcceptingVisitor value;
               if (submap.containsKey(KEY_TYPE)) {
                 String type = (String) submap.remove(KEY_TYPE);
-                value = attr.getInterfaceClass().cast(classToInstance.apply(type));
+                value = safeCast(classToInstance.apply(type), key, attr.getInterfaceClass());
               } else {
                 value = attr.newDefaultEntryValue();
                 if (value == null) {
@@ -153,21 +144,34 @@ public final class Attrs {
     @Override
     public void visit(String key, AttrEnum<? extends Enum<?>> attr) {
       if (map.containsKey(key)) {
-        attr.set((String) map.get(key));
+        attr.set(safeCast(map.get(key), key, String.class));
       }
     }
 
     @Override
     public void visit(String key, AttrStringArray attr) {
       if (map.containsKey(key)) {
-        attr.set((String[]) map.get(key));
+        attr.set(safeCast(map.get(key), key, String[].class));
       }
     }
 
     @Override
     public void visit(String key, AttrString attr) {
       if (map.containsKey(key)) {
-        attr.set((String) map.get(key));
+        attr.set(safeCast(map.get(key), key, String.class));
+      }
+    }
+
+    private <T> T safeCast(Object value, String key, Class<T> clazz) {
+      if (value == null) {
+        return null;
+      } else {
+        if (!clazz.isInstance(value)) {
+          throw new IllegalArgumentException(String.format(Locale.ROOT,
+              "Value at key '%s' should be an instance of '%s', but encountered class '%s': '%s'",
+              key, clazz.getSimpleName(), value.getClass().getSimpleName(), value.toString()));
+        }
+        return clazz.cast(value);
       }
     }
   }
