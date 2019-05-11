@@ -58,7 +58,6 @@ observe(function () {
   // from the new cluster would do here. Instead, we avoid useless re-rendering
   // when we remove and add documents to the set as appropriate.
   // See the comment in the clear() method of clusterSelectionStore for justification.
-  visibleDocumentIds.clear();
 
   const newVisibleDocuments = new Set();
   addDocumentsFromClusters(clusterSelectionStore.selected, newVisibleDocuments);
