@@ -1,5 +1,6 @@
 {
-  "class" : "java.lang.IllegalArgumentException",
+  "type" : "BAD_REQUEST",
   "message" : "Value at key 'groupSize' should be an instance of 'Number', but encountered class 'String': '10'",
+  "exception" : "java.lang.IllegalArgumentException",
   "stacktrace" : "<removed>"
 }

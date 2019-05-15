@@ -50,17 +50,17 @@ public class ClusterServletTest extends AbstractServletTest {
   @Test
   public void testInvalidValueAttr() throws Exception {
     verifyInvalidRequest(
-        HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+        HttpServletResponse.SC_BAD_REQUEST,
         "invalidValueAttr.request.json",
         "invalidValueAttr.response.json");
   }
 
-  @Test @Ignore // XXX: uncomment test
-  public void testMissingAttr() throws Exception {
+  @Test
+  public void testExtraUnusedAttr() throws Exception {
     verifyInvalidRequest(
         HttpServletResponse.SC_BAD_REQUEST,
-        "missingAttr.request.json",
-        "missingAttr.response.json");
+        "extraUnusedAttr.request.json",
+        "extraUnusedAttr.response.json");
   }
 
   private void verifyInvalidRequest(int expectedStatus, String requestResource, String responseResource) throws Exception {

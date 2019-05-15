@@ -1,15 +1,17 @@
 package org.carrot2.dcs.servlets;
 
-public class TerminateRequestException extends Exception {
-  public final int code;
+import org.carrot2.dcs.client.ErrorResponseType;
 
-  TerminateRequestException(int httpCode, String message, Throwable cause) {
+public class TerminateRequestException extends Exception {
+  public final ErrorResponseType type;
+
+  TerminateRequestException(ErrorResponseType type, String message, Throwable cause) {
     super(message, cause);
-    this.code = httpCode;
+    this.type = type;
   }
 
-  TerminateRequestException(int httpCode, String message) {
+  TerminateRequestException(ErrorResponseType type, String message) {
     super(message);
-    this.code = httpCode;
+    this.type = type;
   }
 }

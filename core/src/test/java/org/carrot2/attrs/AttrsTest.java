@@ -2,11 +2,9 @@ package org.carrot2.attrs;
 
 import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class AttrsTest extends TestBase {
@@ -77,7 +75,7 @@ public class AttrsTest extends TestBase {
   }
 
   @Test
-  public void testFromMap() {
+  public void testFromMapAttrWithInvalidValue() {
     class Clazz extends AttrComposite {
       AttrBoolean attrBoolean = attributes.register("attrBoolean", AttrBoolean.builder().defaultValue(null));
       AttrInteger attrInteger = attributes.register("attrInteger", AttrInteger.builder().defaultValue(null));
@@ -90,6 +88,20 @@ public class AttrsTest extends TestBase {
 
     AliasMapper mapper = new AliasMapper();
     mapper.alias("clazz", Clazz.class, () -> new Clazz());
+
+
+    Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
+        .isThrownBy(() -> {
+          Map<String, Object> map = Collections.singletonMap("extraKey", "");
+          Attrs.populate(new Clazz(), map, mapper::fromName);
+        });
+
+    Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
+        .isThrownBy(() -> {
+          Map<String, Object> map = Collections.singletonMap("attrObject",
+              Collections.singletonMap("extraKey", "invalid-value"));
+          Attrs.populate(new Clazz(), map, mapper::fromName);
+        });
 
     for (Object value : Arrays.asList(true, false, null)) {
       checkValueLegal(mapper, new Clazz(), "attrBoolean", value);
@@ -161,8 +173,7 @@ public class AttrsTest extends TestBase {
 
     Throwable x;
     try {
-      Map<String, Object> map = Collections.singletonMap(key, value);
-      instance.accept(new Attrs.FromMapVisitor(map, mapper::fromName));
+      Attrs.populate(instance, Collections.singletonMap(key, value), mapper::fromName);
       throw new RuntimeException("Expected an invalid value for: " + value);
     } catch (Throwable t) {
       x = t;
@@ -171,12 +182,12 @@ public class AttrsTest extends TestBase {
     System.out.println(x.toString());
 
     Assertions.assertThat(x)
-    .as("illegal value check: '" + value + "'")
-    .isExactlyInstanceOf(IllegalArgumentException.class)
-    .hasMessageContaining("Value at key ");
+      .as("illegal value check: '" + value + "'")
+      .isExactlyInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("Value at key ");
 
     Assertions.assertThat(reader.apply(instance))
-        .isSameAs(previously);
+      .isSameAs(previously);
   }
 
   private <T extends AcceptingVisitor, E> void checkValueLegal(AliasMapper mapper,
@@ -184,8 +195,7 @@ public class AttrsTest extends TestBase {
                                                             String key,
                                                             E value) {
     Assertions.assertThatCode(() -> {
-      Map<String, Object> map = Collections.singletonMap(key, value);
-      instance.accept(new Attrs.FromMapVisitor(map, mapper::fromName));
+      Attrs.populate(instance, Collections.singletonMap(key, value), mapper::fromName);
     }).doesNotThrowAnyException();
   }
 }

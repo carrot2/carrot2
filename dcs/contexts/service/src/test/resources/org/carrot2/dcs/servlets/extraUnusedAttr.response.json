@@ -1,0 +1,6 @@
+{
+  "type" : "BAD_REQUEST",
+  "message" : "Unrecognized extra attributes with keys: unknownAttr",
+  "exception" : "java.lang.IllegalArgumentException",
+  "stacktrace" : "<removed>"
+}

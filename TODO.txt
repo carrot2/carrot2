@@ -1,6 +1,3 @@
-
-- DCS: add validation of extra (unused) json entries in parameters
-
 - documentation subproject (scaffolding)
 - DCS: add a switch between available clustering service templates (?)
 

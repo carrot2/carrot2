@@ -10,6 +10,7 @@ import org.carrot2.clustering.Document;
 import org.carrot2.dcs.client.ClusterRequest;
 import org.carrot2.dcs.client.ClusterResponse;
 import org.carrot2.dcs.client.ErrorResponse;
+import org.carrot2.dcs.client.ErrorResponseType;
 import org.carrot2.language.LanguageComponents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -86,41 +88,42 @@ public class ClusterServlet extends RestEndpoint {
     if (response.isCommitted()) {
       console.debug("Response already committed. Ignoring: {}", exception);
     } else {
-      String message = "Uncaught internal server error.";
-      int code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+      ErrorResponseType type = ErrorResponseType.UNHANDLED_ERROR;
 
       if (exception instanceof TerminateRequestException) {
-        code = ((TerminateRequestException) exception).code;
-        message = ((TerminateRequestException) exception).getMessage();
+        type = ((TerminateRequestException) exception).type;
+        exception = exception.getCause();
       }
 
-      response.sendError(code, message);
-      writeJsonResponse(response, true, new ErrorResponse(exception));
+      response.sendError(type.httpStatusCode, type.name());
+      writeJsonResponse(response, true, new ErrorResponse(type, exception));
     }
   }
 
   private ClusteringAlgorithm parseAlgorithm(ClusterRequest template, ClusterRequest clusteringRequest) throws TerminateRequestException {
     String algorithmName = firstNotNull(clusteringRequest.algorithm, template.algorithm);
     if (algorithmName == null) {
-      throw new TerminateRequestException(HttpServletResponse.SC_BAD_REQUEST,
+      throw new TerminateRequestException(ErrorResponseType.BAD_REQUEST,
           "Algorithm must not be empty.");
     }
     ClusteringAlgorithmProvider supplier = dcsContext.algorithmSuppliers.get(algorithmName);
     if (supplier == null) {
-      throw new TerminateRequestException(HttpServletResponse.SC_BAD_REQUEST,
+      throw new TerminateRequestException(ErrorResponseType.BAD_REQUEST,
           "Algorithm not available: " + algorithmName);
     }
 
+    Function<String, Object> classFromName = AliasMapper.SPI_DEFAULTS::fromName;
     ClusteringAlgorithm algorithm = supplier.get();
 
-    if (template.parameters != null) {
-      algorithm.accept(
-          new Attrs.FromMapVisitor(template.parameters, AliasMapper.SPI_DEFAULTS::fromName));
-    }
-
-    if (clusteringRequest.parameters != null) {
-      algorithm.accept(
-          new Attrs.FromMapVisitor(clusteringRequest.parameters, AliasMapper.SPI_DEFAULTS::fromName));
+    try {
+      if (template.parameters != null) {
+        Attrs.populate(algorithm, template.parameters, classFromName);
+      }
+      if (clusteringRequest.parameters != null) {
+        Attrs.populate(algorithm, clusteringRequest.parameters, classFromName);
+      }
+    } catch (IllegalArgumentException e) {
+      throw new TerminateRequestException(ErrorResponseType.BAD_REQUEST, e.getMessage(), e);
     }
 
     return algorithm;
@@ -144,7 +147,7 @@ public class ClusterServlet extends RestEndpoint {
 
     ClusterRequest template = dcsContext.templates.get(templateName);
     if (template == null) {
-      throw new TerminateRequestException(HttpServletResponse.SC_BAD_REQUEST,
+      throw new TerminateRequestException(ErrorResponseType.BAD_REQUEST,
           "Template not available: " + templateName);
     }
     return template;
@@ -157,13 +160,13 @@ public class ClusterServlet extends RestEndpoint {
 
     String requestedLanguage = clusteringRequest.language;
     if (requestedLanguage == null) {
-      throw new TerminateRequestException(HttpServletResponse.SC_BAD_REQUEST,
+      throw new TerminateRequestException(ErrorResponseType.BAD_REQUEST,
           "Clustering language must not be empty.");
     }
 
     LanguageComponents language = dcsContext.getLanguage(requestedLanguage);
     if (language == null) {
-      throw new TerminateRequestException(HttpServletResponse.SC_BAD_REQUEST,
+      throw new TerminateRequestException(ErrorResponseType.BAD_REQUEST,
           "Language not available: " + clusteringRequest.language);
     }
     return language;
@@ -196,7 +199,7 @@ public class ClusterServlet extends RestEndpoint {
       return dcsContext.om.readerFor(ClusterRequest.class)
           .readValue(new BufferedInputStream(request.getInputStream()));
     } catch (IOException e) {
-      throw new TerminateRequestException(HttpServletResponse.SC_BAD_REQUEST, "Could not parse request body.", e);
+      throw new TerminateRequestException(ErrorResponseType.BAD_REQUEST, "Could not parse request body.", e);
     }
   }
 }
