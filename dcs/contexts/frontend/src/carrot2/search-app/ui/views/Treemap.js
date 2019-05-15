@@ -72,6 +72,27 @@ export const Treemap = props => {
     return () => { unobserve(fn); };
   }, [ props.clusterStore ]);
 
+  const [ selection, setSelection ] = useState([]);
+  useEffect(() => {
+    const updateSelection = () => {
+      const groups = dataObject.groups;
+      if (groups) {
+        const toSelect = [];
+        groups.forEach(function collect(group) {
+          if ((group.cluster && props.clusterSelectionStore.isSelected(group.cluster)) ||
+              (group.document && props.documentSelectionStore.isSelected(group.document))) {
+            toSelect.push(group);
+          }
+        });
+        setSelection(toSelect);
+      }
+    };
+
+    observe(updateSelection);
+
+    return () => { unobserve(updateSelection); };
+  }, [ props.clusterSelectionStore, props.documentSelectionStore, dataObject ]);
+
   const themeOptions = props.themeStore.theme === "dark" ? darkThemeOptions : lightThemeOptions;
 
   return (
@@ -90,7 +111,7 @@ export const Treemap = props => {
         props.documentSelectionStore.replaceSelection(e.groups.filter(g => !!g.document).map(g => g.document));
       },
       ...themeOptions
-    }} dataObject={dataObject} />
+    }} dataObject={dataObject} selection={selection} />
   );
 };
 

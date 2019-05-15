@@ -41,7 +41,7 @@ export function FoamTree(props) {
 
   useEffect(() => {
     if (foamtree.current) {
-      foamtree.current.select(props.selection);
+      foamtree.current.select({ groups: props.selection, keepPrevious: false });
     }
   }, [ props.selection ]);
 
