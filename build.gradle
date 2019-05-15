@@ -1,8 +1,4 @@
 
-plugins {
-  id 'com.github.sherter.google-java-format' version '0.8' apply false
-}
-
 apply from: file('gradle/min-gradle-version.gradle')
 apply from: file('gradle/loadProperties.gradle')
 apply from: file('gradle/gitinfo.gradle')
@@ -48,7 +44,6 @@ subprojects { project ->
 configure(subprojects.findAll { it.name == "core" }) {
   apply plugin: 'maven-publish'
   apply plugin: 'signing'
-  apply plugin: 'com.github.sherter.google-java-format'
 
   afterEvaluate {
     task sourcesJar(type: Jar, dependsOn: classes) {
