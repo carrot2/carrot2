@@ -49,11 +49,13 @@ export const Treemap = props => {
       setDataObject({
         groups: clusters.map(function clusters(c) {
           return {
+            cluster: c,
             label: `${c.labels.join(", ")} (${c.size})`,
             weight: c.size,
             groups: c.documents.map(d => {
               let document = documents[d];
               return {
+                document: document,
                 label: document.title,
                 rank: document.rank
               }
@@ -83,6 +85,10 @@ export const Treemap = props => {
       wireframeLabelDrawing: "always",
       groupFillType: "plain",
       groupStrokeWidth: 1,
+      onGroupSelectionChanged: function (e) {
+        props.clusterSelectionStore.replaceSelection(e.groups.filter(g => !!g.cluster).map(g => g.cluster));
+        props.documentSelectionStore.replaceSelection(e.groups.filter(g => !!g.document).map(g => g.document));
+      },
       ...themeOptions
     }} dataObject={dataObject} />
   );

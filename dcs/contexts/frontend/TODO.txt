@@ -1,5 +1,14 @@
-* Add code splitting.
-* Per-source document renderers (code splitting?).
+Features:
+* For each document, list the clusters the document belongs to.
+  Clicking on the cluster reference should select the cluster.
+* Option to highlight clusters to which the hovered-on document belongs.
 * Error handling
   * Per-source messages (IP banned exception for eTools, for example)
+
+
+Performance:
+* Changing source or cluster view re-renders the whole application.
+  Check if this can be reasonably contained to the actual components involved.
+* Add code splitting.
+* Per-source document renderers (code splitting?).
 * Choose theme based on dark-mode media query.

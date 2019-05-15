@@ -16,7 +16,8 @@ import { DocumentList } from "./DocumentList";
 import { routes } from "../routes";
 import { PanelSwitcher } from "./PanelSwitcher.js";
 import { SearchForm } from "./SearchForm";
-import { clusterSelectionStore, documentVisibilityStore } from "../store/selection";
+import { clusterSelectionStore, documentSelectionStore,
+         documentVisibilityStore } from "../store/selection";
 
 const DocumentListView = view(DocumentList);
 const ClusterSelectionSummaryView = view(ClusterSelectionSummary);
@@ -72,6 +73,7 @@ export class ResultsScreen extends Component {
     const panelProps = {
       clusterStore,
       clusterSelectionStore,
+      documentSelectionStore,
       searchResultStore,
       themeStore
     };

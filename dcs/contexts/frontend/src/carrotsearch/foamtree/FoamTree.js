@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 
 FoamTree.propTypes = {
   options: PropTypes.object,
-  dataObject: PropTypes.object.isRequired
+  dataObject: PropTypes.object.isRequired,
+  selection: PropTypes.array
 };
 
 export function FoamTree(props) {
@@ -37,6 +38,13 @@ export function FoamTree(props) {
       foamtree.current.set("dataObject", props.dataObject);
     }
   }, [ props.dataObject ]);
+
+  useEffect(() => {
+    if (foamtree.current) {
+      foamtree.current.select(props.selection);
+    }
+  }, [ props.selection ]);
+
 
   return (
     <div ref={element} style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }}/>

@@ -3,74 +3,97 @@ import { observe } from '@nx-js/observer-util';
 
 import { clusterStore } from "./services";
 
-export const clusterSelectionStore = store({
-  selected: new Set(),
-  toggleSelection: function (cluster, keepSelection) {
-    const selected = clusterSelectionStore.selected;
+const itemSelectionStore = () => {
+  const itemSelectionStore = store({
+    selected: new Set(),
+    toggleSelection: function (item, keepSelection) {
+      const selected = itemSelectionStore.selected;
 
-    if (!keepSelection) {
-      if (selected.size === 1 && selected.has(cluster)) {
-        // See the comment in the clear() method for why
-        // we don't use selected.clear() here.
-        selected.delete(cluster);
-        return;
+      if (!keepSelection) {
+        if (selected.size === 1 && selected.has(item)) {
+          // See the comment in the clear() method for why
+          // we don't use selected.clear() here.
+          selected.delete(item);
+          return;
+        }
+
+        itemSelectionStore.clear();
       }
 
-      clusterSelectionStore.clear();
-    }
+      if (itemSelectionStore.isSelected(item)) {
+        selected.delete(item);
+      } else {
+        selected.add(item);
+      }
+    },
+    replaceSelection: function (items) {
+      const itemSet = new Set(items);
+      const selected = itemSelectionStore.selected;
 
-    if (clusterSelectionStore.isSelected(cluster)) {
-      selected.delete(cluster);
-    } else {
-      selected.add(cluster);
+      for (const c of Array.from(selected.values())) {
+        if (!itemSet.has(c)) {
+          selected.delete(c);
+        }
+      }
+      items.forEach(i => {
+        selected.add(i);
+      })
+    },
+    isSelected: function (item) {
+      return itemSelectionStore.selected.has(item);
+    },
+    clear: function () {
+      // Normally, selected.clear() would be cleaner here, but
+      // react-easy-state is smart enough to track operations
+      // on individual set members and redraw only the affected
+      // components. Therefore, if we remove individual clusters,
+      // only the corresponding elements would re-render.
+      // If we cleared the whole set, all cluster components
+      // would have to re-render.
+      const selected = itemSelectionStore.selected;
+      for (const c of Array.from(selected.values())) {
+        selected.delete(c);
+      }
     }
-  },
-  isSelected: function (cluster) {
-    return clusterSelectionStore.selected.has(cluster);
-  },
-  clear: function () {
-    // Normally, selected.clear() would be cleaner here, but
-    // react-easy-state is smart enough to track operations
-    // on individual set members and redraw only the affected
-    // components. Therefore, if we remove individual clusters,
-    // only the corresponding elements would re-render.
-    // If we cleared the whole set, all cluster components
-    // would have to re-render.
-    const selected = clusterSelectionStore.selected;
-    for (const c of Array.from(selected.values())) {
-      selected.delete(c);
-    }
-  }
-});
+  });
+  return itemSelectionStore;
+};
+
+export const clusterSelectionStore = itemSelectionStore();
+export const documentSelectionStore = itemSelectionStore();
 
 export const documentVisibilityStore = store({
   visibleDocumentIds: new Set(),
   isVisible: function (document) {
     return documentVisibilityStore.visibleDocumentIds.size === 0 ?
       true : documentVisibilityStore.visibleDocumentIds.has(document.id);
+  },
+  replaceVisible: function (newVisibleDocumentIdsSet) {
+    const visibleDocumentIds = documentVisibilityStore.visibleDocumentIds;
+
+    // A sequence of visibleDocumentIds.clear() and adding documents
+    // from the new cluster would do here. Instead, we avoid useless re-rendering
+    // when we remove and add documents to the set as appropriate.
+    // See the comment in the clear() method of clusterSelectionStore for justification.
+    for (const oldDocId of visibleDocumentIds) {
+      if (!newVisibleDocumentIdsSet.has(oldDocId)) {
+        visibleDocumentIds.delete(oldDocId);
+      }
+    }
+
+    for (const newDocId of newVisibleDocumentIdsSet) {
+      visibleDocumentIds.add(newDocId);
+    }
   }
 });
 
 observe(function () {
-  const visibleDocumentIds = documentVisibilityStore.visibleDocumentIds;
-
-  // A sequence of visibleDocumentIds.clear() and adding documents
-  // from the new cluster would do here. Instead, we avoid useless re-rendering
-  // when we remove and add documents to the set as appropriate.
-  // See the comment in the clear() method of clusterSelectionStore for justification.
-
   const newVisibleDocuments = new Set();
   addDocumentsFromClusters(clusterSelectionStore.selected, newVisibleDocuments);
-
-  for (const oldDocId of visibleDocumentIds) {
-    if (!newVisibleDocuments.has(oldDocId)) {
-      visibleDocumentIds.delete(oldDocId);
-    }
+  for (let doc of documentSelectionStore.selected) {
+    newVisibleDocuments.add(doc.id);
   }
-
-  for (const newDocId of newVisibleDocuments) {
-    visibleDocumentIds.add(newDocId);
-  }
+  documentVisibilityStore.replaceVisible(newVisibleDocuments);
 
   function addDocumentsFromClusters(clusters, set) {
     if (clusters) {

@@ -3,6 +3,7 @@ import { Icon } from "@blueprintjs/core";
 import PropTypes from "prop-types";
 
 import React from 'react';
+import { pluralize } from "../../util/pluralize.js";
 
 function ClusterInSummary(props) {
   const cluster = props.cluster;
@@ -27,28 +28,33 @@ export function ClusterSelectionSummary (props) {
     return null;
   }
 
-  const selectedCluster = props.clusterSelectionStore.selected;
+  const clusterSelection = props.clusterSelectionStore.selected;
   const selectedDocs = props.documentVisibilityStore.visibleDocumentIds;
-  if (selectedCluster.size === 0) {
+  if (selectedDocs.size === 0) {
     return (
       <div className="ClusterSelectionSummary">
         All retrieved results ({searchResultStore.searchResult.documents.length})
       </div>
     );
-  } else if (selectedCluster.size === 1) {
-    const it = selectedCluster.values();
+  } else if (clusterSelection.size === 1) {
+    const it = clusterSelection.values();
     const cluster = it.next().value;
     return (
       <div className="ClusterSelectionSummary">
         {cluster.size} results in <ClusterInSummary cluster={cluster} />
       </div>
     )
+  } else if (clusterSelection.size > 1) {
+    return (
+      <div className="ClusterSelectionSummary">
+        {pluralize(selectedDocs.size, "result")} in {clusterSelection.size} clusters
+      </div>
+    );
   }
 
-  // Multi-selection is not yet supported, so a generic fallback message here.
   return (
     <div className="ClusterSelectionSummary">
-      ${selectedDocs.size} in selected clusters
+      {pluralize(selectedDocs.size, "result")}
     </div>
   );
 }
