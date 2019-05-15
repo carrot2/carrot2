@@ -135,8 +135,7 @@ task distZip(type: Zip) {
   into "${archivesBaseName}/"
 }
 
-task itJUnit(type: Test) {
-  group "verification"
+task runIntegTest(type: Test) {
   dependsOn assemble, ":dcs:contexts:service:test"
   testClassesDirs = sourceSets.integTest.output.classesDirs
   classpath = sourceSets.integTest.runtimeClasspath
@@ -146,9 +145,9 @@ task itJUnit(type: Test) {
   outputs.upToDateWhen { false }
 }
 
-task integTest {
+task integTest(dependsOn: runIntegTest) {
   group "verification"
-  dependsOn itJUnit
+  description "Run integration tests"
 }
 
 integTest.mustRunAfter test
