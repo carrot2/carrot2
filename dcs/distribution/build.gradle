@@ -121,7 +121,10 @@ task collectExamples(type: Sync) {
 }
 
 task distDir {
-  dependsOn collectScripts, collectDependencies, collectCtxService, collectCtxRoot, collectCtxFrontend, collectExamples
+  dependsOn collectScripts, collectDependencies, collectCtxService, collectCtxRoot, collectExamples
+  if (!hasProperty("fastBuild")) {
+    dependsOn collectCtxFrontend
+  }
 
   outputs.file("$outputDir")
 }
