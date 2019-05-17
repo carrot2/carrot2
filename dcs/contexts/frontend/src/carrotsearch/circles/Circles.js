@@ -1,9 +1,9 @@
 import React from 'react';
 import { Visualization } from "../Visualization.js";
-import { CarrotSearchFoamTree } from "./foamtree-impl.js";
+import { CarrotSearchCircles } from "./circles-impl.js";
 import PropTypes from 'prop-types';
 
-FoamTree.propTypes = {
+Circles.propTypes = {
   options: PropTypes.object,
   dataObject: PropTypes.object.isRequired,
   selection: PropTypes.array
@@ -11,26 +11,24 @@ FoamTree.propTypes = {
 
 const impl = {
   embed: (options) => {
-    return new CarrotSearchFoamTree(options);
+    return new CarrotSearchCircles(options);
   },
   set: (instance, ...rest) => {
     instance.set.apply(instance, rest);
-    if (!rest.dataObject) {
-      instance.redraw();
-    }
   },
   select: (instance, selection) => {
     if (!selection) {
       return;
     }
-    instance.select({ groups: selection, keepPrevious: false });
+    if (!selection.keepPrevious) {
+      instance.set("selection", { all: true, selected: false });
+    }
+    instance.set("selection", { groups: selection.groups.map(g => g.id), selected: true });
   },
-  dispose: (instance) => {
-    instance.dispose();
-  }
+  dispose: () => { }, // no-op, Circles does not support disposing
 };
 
-export function FoamTree(props) {
+export function Circles(props) {
   return (
     <Visualization impl={impl} {...props} />
   );

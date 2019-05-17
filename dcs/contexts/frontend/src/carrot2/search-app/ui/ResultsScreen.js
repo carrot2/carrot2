@@ -77,6 +77,7 @@ export class ResultsScreen extends Component {
       searchResultStore,
       themeStore
     };
+
     const panels = Object.keys(views)
       .map(v => {
         return {

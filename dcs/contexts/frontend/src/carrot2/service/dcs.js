@@ -21,7 +21,12 @@ export function fetchClusters(query, documents) {
     },
     body: JSON.stringify(request)
   }).then(function (response) {
-    return response.json();
+    return new Promise(function (resolve) {
+      window.setTimeout(function () {
+        resolve(response.json());
+      }, 1000)
+    });
+    // return response.json();
   }).then(function (json) {
     return enrichClusters(json.clusters, "");
   });

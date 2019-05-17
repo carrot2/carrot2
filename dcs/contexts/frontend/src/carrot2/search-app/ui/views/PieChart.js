@@ -1,56 +1,44 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { FoamTree } from "../../../../carrotsearch/foamtree/FoamTree.js";
+import { Circles } from "../../../../carrotsearch/circles/Circles.js";
 import { useDataObject, useSelection } from "./visualization-hooks.js";
 
 const darkThemeOptions = {
-  groupStrokePlainLightnessShift: 15,
-  groupHoverStrokeLightnessShift: 20,
-  groupSelectionOutlineColor: "rgba(255, 255, 255, 0.6)",
-  attributionTheme: "dark",
+  groupOutlineColor: "rgba(255, 255, 255, 0.1)",
+  groupSelectionOutlineColor: "rgba(255, 255, 255, 0.8)",
+  expanderColor: "rgba(255, 255, 255, 0.15)",
+  expanderOutlineColor: "rgba(255, 255, 255, 0.2)",
   groupColorDecorator: function(opts, props, vars) {
     vars.groupColor.s = 60;
-    vars.groupColor.l = 25;
-    if (!props.hasChildren && !props.selected && !props.exposed) {
-      vars.groupColor.a = 0.7;
-    }
+    vars.groupColor.l = 20;
     if (props.group.rank) {
       vars.groupColor.l = 10 + 40 * props.group.rank
     }
-    vars.labelColor = "white";
+    vars.labelColor = "rgba(255, 255, 255, 0.8)";
   }
 };
 
 const lightThemeOptions = {
-  groupStrokePlainLightnessShift: -15,
-  groupHoverStrokeLightnessShift: -20,
-  attributionTheme: "light",
-  groupSelectionOutlineColor: "rgba(0, 0, 0, 0.6)",
+  groupOutlineColor: "rgba(0, 0, 0, 0.1)",
+  groupSelectionOutlineColor: "rgba(0, 0, 0, 0.8)",
+  expanderColor: "rgba(0, 0, 0, 0.15)",
+  expanderOutlineColor: "rgba(0, 0, 0, 0.2)",
   groupColorDecorator: function(opts, props, vars) {
-    vars.groupColor.s = 50;
-    vars.groupColor.l = 55;
-    if (!props.hasChildren && !props.selected && !props.exposed) {
-      vars.groupColor.a = 0.7;
-    }
+    vars.groupColor.s = 60;
+    vars.groupColor.l = 70;
     if (props.group.rank) {
       vars.groupColor.l = 35 + 40 * props.group.rank
     }
-    vars.labelColor = "black";
   }
 };
 
 function buildOptions(theme, clusterSelectionStore, documentSelectionStore) {
   return {
-    rolloutDuration: 0,
-    pullbackDuration: 0,
-    groupLabelFontFamily: "Cabin Condensed, sans-serif",
-    wireframeDrawMaxDuration: 1000,
-    finalCompleteDrawMaxDuration: 20000,
-    finalIncrementalDrawMaxDuration: 20000,
-    wireframeLabelDrawing: "always",
-    groupFillType: "plain",
-    groupStrokeWidth: 1,
+    groupFontFamily: "Cabin Condensed, sans-serif",
+    rainbowStartColor: "hsla(0, 100%, 50%, 1.0)",
+    rainbowEndColor: "hsla(300, 100%, 50%, 1.0)",
+    angleStart: 180,
     onGroupSelectionChanged: function (e) {
       clusterSelectionStore.replaceSelection(e.groups.filter(g => !!g.cluster).map(g => g.cluster));
       documentSelectionStore.replaceSelection(e.groups.filter(g => !!g.document).map(g => g.document));
@@ -63,7 +51,8 @@ function buildOptions(theme, clusterSelectionStore, documentSelectionStore) {
   }
 }
 
-export const Treemap = props => {
+
+export const PieChart = props => {
   // Without this dummy read, clusters don't get proxy wrappers, weird...
   props.clusterStore.clusters.forEach(function touch(c) {
     c.clusters && c.clusters.forEach(touch);
@@ -80,10 +69,10 @@ export const Treemap = props => {
   }, [ props.themeStore.theme, props.clusterSelectionStore, props.documentSelectionStore ]);
 
   return (
-    <FoamTree options={options} dataObject={dataObject} selection={selection} />
+    <Circles options={options} dataObject={dataObject} selection={selection} />
   );
 };
 
-Treemap.propTypes = {
+PieChart.propTypes = {
   clusterStore: PropTypes.object.isRequired
 };

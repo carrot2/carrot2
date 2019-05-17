@@ -1,4 +1,5 @@
 @import "~typeface-lato";
+@import "~typeface-cabin-condensed";
 
 :root {
   --leading: 1rem;

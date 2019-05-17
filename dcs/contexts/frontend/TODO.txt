@@ -1,12 +1,16 @@
 Features:
+* Resize visualizations on window resize
+* Tune light theme
+* PubMed document source
+* Error handling
+  * Per-source messages (IP banned exception for eTools, for example)
 * For each document, list the clusters the document belongs to.
   Clicking on the cluster reference should select the cluster.
 * Option to highlight clusters to which the hovered-on document belongs.
-* Error handling
-  * Per-source messages (IP banned exception for eTools, for example)
 
 
 Performance:
+* Update visualizations only when they are visible?
 * Changing source or cluster view re-renders the whole application.
   Check if this can be reasonably contained to the actual components involved.
 * Add code splitting.

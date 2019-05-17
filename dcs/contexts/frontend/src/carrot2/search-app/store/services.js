@@ -8,7 +8,6 @@ export const clusterStore = store({
   loading: false,
   clusters: [],
   documents: [],
-  seq: 0,
   error: false,
   load: async function (searchResult) {
     const documents = searchResult.documents;
@@ -21,10 +20,10 @@ export const clusterStore = store({
     } else {
       // TODO: cancel currently running request
       clusterStore.loading = true;
+      clusterStore.clusters = [];
       clusterStore.documents = documents;
       clusterStore.clusters = await fetchClusters(query, documents);
       clusterStore.loading = false;
-      clusterStore.seq++;
     }
   }
 });

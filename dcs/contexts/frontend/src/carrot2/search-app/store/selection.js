@@ -37,7 +37,7 @@ const itemSelectionStore = () => {
       }
       items.forEach(i => {
         selected.add(i);
-      })
+      });
     },
     isSelected: function (item) {
       return itemSelectionStore.selected.has(item);
@@ -51,7 +51,7 @@ const itemSelectionStore = () => {
       // If we cleared the whole set, all cluster components
       // would have to re-render.
       const selected = itemSelectionStore.selected;
-      for (const c of Array.from(selected.values())) {
+      for (const c of selected.values()) {
         selected.delete(c);
       }
     }

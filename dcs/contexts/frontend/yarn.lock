@@ -9993,6 +9993,11 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
+typeface-cabin-condensed@^0.0.72:
+  version "0.0.72"
+  resolved "https://registry.yarnpkg.com/typeface-cabin-condensed/-/typeface-cabin-condensed-0.0.72.tgz#8a66483e1e5d4702e41c1159e7ad95c890bc1736"
+  integrity sha512-IFldvlUazG86xhGfWL1/Rz/wyXk6pfBp7x5axfD7RbkSGmdIgfYman7VxQ9wyGz717T5KtpiwaM2Jx+B8E7TeQ==
+
 typeface-lato@^0.0.54:
   version "0.0.54"
   resolved "https://registry.yarnpkg.com/typeface-lato/-/typeface-lato-0.0.54.tgz#6ea56309a8b0cfdb7e8246e05de4b58b8272b47c"
