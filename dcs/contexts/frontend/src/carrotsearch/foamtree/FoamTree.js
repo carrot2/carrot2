@@ -10,9 +10,7 @@ FoamTree.propTypes = {
 };
 
 const impl = {
-  embed: (options) => {
-    return new CarrotSearchFoamTree(options);
-  },
+  embed: (options) => new CarrotSearchFoamTree(options),
   set: (instance, ...rest) => {
     instance.set.apply(instance, rest);
     if (!rest.dataObject && rest[0] !== "dataObject") {
@@ -25,9 +23,8 @@ const impl = {
     }
     instance.select({ groups: selection, keepPrevious: false });
   },
-  dispose: (instance) => {
-    instance.dispose();
-  }
+  resize: (instance) => instance.resize(),
+  dispose: (instance) => instance.dispose()
 };
 
 export function FoamTree(props) {

@@ -10,9 +10,7 @@ Circles.propTypes = {
 };
 
 const impl = {
-  embed: (options) => {
-    return new CarrotSearchCircles(options);
-  },
+  embed: (options) => new CarrotSearchCircles(options),
   set: (instance, ...rest) => {
     instance.set.apply(instance, rest);
   },
@@ -25,6 +23,7 @@ const impl = {
     }
     instance.set("selection", { groups: selection.groups.map(g => g.id), selected: true });
   },
+  resize: (instance) => instance.resize(),
   dispose: () => { }, // no-op, Circles does not support disposing
 };
 

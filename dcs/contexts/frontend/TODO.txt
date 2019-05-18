@@ -1,5 +1,4 @@
 Features:
-* Resize visualizations on window resize
 * PubMed document source
 * Error handling
   * Per-source messages (IP banned exception for eTools, for example)

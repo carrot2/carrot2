@@ -47,6 +47,18 @@ export function Visualization(props) {
     }
   }, [ props.selection, props.impl ]);
 
+  useEffect(() => {
+    let timeout;
+    const onResize = () => {
+      window.clearTimeout(timeout);
+      timeout = window.setTimeout(() => {
+        props.impl.resize(instance.current);
+      }, 300);
+    };
+
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [ props.impl ]);
 
   return (
     <div ref={element} style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }}/>
