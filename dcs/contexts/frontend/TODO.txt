@@ -1,6 +1,5 @@
 Features:
 * Resize visualizations on window resize
-* Tune light theme
 * PubMed document source
 * Error handling
   * Per-source messages (IP banned exception for eTools, for example)

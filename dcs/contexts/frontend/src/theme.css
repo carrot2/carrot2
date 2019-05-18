@@ -6,7 +6,7 @@
 }
 
 body.light, body {
-  --background-color: #ffffff;
+  --background-color: #f4f4f4;
   --background-color-intense: #ccc;
   --background-color-dimmed: hsla(0, 0%, 0%, 0.07);
   --text-color: black;
@@ -14,6 +14,7 @@ body.light, body {
   --text-color-light: rgba(0, 0, 0, 0.5);
   --link-color: hsl(203, 82%, 35%);
   --logo-color: #1d2a4c;
+  --cluster-icon-color: #ffa64d;
   --hr: hsla(0, 0%, 0%, 0.15);
 }
 
@@ -28,6 +29,7 @@ body.dark {
   --text-color-inverted: black;
   --link-color: hsl(203, 85%, 61%);
   --logo-color: var(--text-color);
+  --cluster-icon-color: #ffb366;
   --hr: hsla(0, 0%, 100%, 0.15);
 }
 

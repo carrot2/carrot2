@@ -23,7 +23,7 @@ function TopCluster(props) {
 
   return (
     <div className={className} onClick={() => clusterSelectionStore.toggleSelection(cluster)}>
-      <Icon className="icon" icon="lightbulb" intent="warning" />
+      <Icon className="icon" icon="lightbulb" />
       <span className="labels">{labels}</span>{" "}
       <span className="meta">{meta}</span>
 
@@ -50,7 +50,7 @@ function SubCluster(props) {
 
   return (
     <span className={className} onClick={(e) => { e.stopPropagation(); clusterSelectionStore.toggleSelection(cluster)} }>
-      <span className="icon"><Icon icon="folder-close" intent="warning" iconSize="0.9em" />{"\u00a0"}</span>
+      <span className="icon"><Icon icon="folder-close" iconSize="0.9em" />{"\u00a0"}</span>
       <span className="labels">{labels}</span>{"\u00a0"}
       <span className="meta" title={metaTitle}>{meta}</span>{" "}
     </span>

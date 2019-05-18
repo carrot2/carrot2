@@ -56,14 +56,23 @@
 .ClusterList .SubCluster > .icon {
   vertical-align: 15%;
   white-space: nowrap;
+  margin-right: 0.125em;
 }
 
 .ClusterList .SubCluster:not(:last-child) {
   margin-right: 0.5em;
 }
 
-.ClusterList .SubCluster.selected .labels,
 .ClusterList .SubCluster.selected .meta {
   background-color: rgba(59, 131, 192, 0.3);
+  box-shadow: 1.125px 0 0 2px rgba(59, 131, 192, 0.3);
+}
+
+.ClusterList .SubCluster.selected .labels {
+  background-color: rgba(59, 131, 192, 0.3);
   box-shadow: 0 0 0 2px rgba(59, 131, 192, 0.3);
+}
+
+.ClusterList .icon {
+  color: var(--cluster-icon-color);
 }
