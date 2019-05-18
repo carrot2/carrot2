@@ -12,8 +12,8 @@ const darkThemeOptions = {
   groupColorDecorator: function(opts, props, vars) {
     vars.groupColor.s = 60;
     vars.groupColor.l = 25;
-    if (!props.hasChildren && !props.selected && !props.exposed) {
-      vars.groupColor.a = 0.7;
+    if (!props.hasChildren && !props.selected && !props.hovered) {
+      vars.groupColor.a = 0.95;
     }
     if (props.group.rank) {
       vars.groupColor.l = 10 + 40 * props.group.rank
@@ -30,8 +30,8 @@ const lightThemeOptions = {
   groupColorDecorator: function(opts, props, vars) {
     vars.groupColor.s = 50;
     vars.groupColor.l = 55;
-    if (!props.hasChildren && !props.selected && !props.exposed) {
-      vars.groupColor.a = 0.7;
+    if (!props.hasChildren && !props.selected && !props.hovered) {
+      vars.groupColor.a = 0.95;
     }
     if (props.group.rank) {
       vars.groupColor.l = 35 + 40 * props.group.rank

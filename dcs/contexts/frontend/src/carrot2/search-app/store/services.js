@@ -20,7 +20,7 @@ export const clusterStore = store({
     } else {
       // TODO: cancel currently running request
       clusterStore.loading = true;
-      clusterStore.clusters = [];
+      clusterStore.clusters = [ ];
       clusterStore.documents = documents;
       clusterStore.clusters = await fetchClusters(query, documents);
       clusterStore.loading = false;

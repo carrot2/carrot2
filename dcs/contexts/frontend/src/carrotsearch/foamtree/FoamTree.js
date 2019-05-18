@@ -15,7 +15,7 @@ const impl = {
   },
   set: (instance, ...rest) => {
     instance.set.apply(instance, rest);
-    if (!rest.dataObject) {
+    if (!rest.dataObject && rest[0] !== "dataObject") {
       instance.redraw();
     }
   },

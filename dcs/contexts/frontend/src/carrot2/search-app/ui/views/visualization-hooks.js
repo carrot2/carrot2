@@ -5,10 +5,14 @@ import { observeBatched } from "../../../util/batch-observe.js";
 export const useDataObject = clusterStore => {
   const [ dataObject, setDataObject ] = useState({});
 
-  useEffect(() => {
-    const clusters = clusterStore.clusters;
-    const documents = clusterStore.documents;
+  // Get references to arrays before setting up the side effect.
+  // If we referenced clusterStore inside the effect function,
+  // the effect might run with an array that is different from
+  // the one passed in the inputs parameters.
+  const clusters = clusterStore.clusters;
+  const documents = clusterStore.documents;
 
+  useEffect(() => {
     let groupId = 0;
     setDataObject({
       groups: clusters.map(function clusters(c) {
@@ -29,7 +33,7 @@ export const useDataObject = clusterStore => {
         }
       })
     });
-  }, [ clusterStore.clusters, clusterStore.documents ]);
+  }, [ clusters, documents ]);
 
   return [ dataObject, setDataObject ];
 };
