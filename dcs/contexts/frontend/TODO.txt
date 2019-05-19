@@ -5,6 +5,7 @@ Features:
 * For each document, list the clusters the document belongs to.
   Clicking on the cluster reference should select the cluster.
 * Option to highlight clusters to which the hovered-on document belongs.
+* Message for IE users
 
 
 Performance:

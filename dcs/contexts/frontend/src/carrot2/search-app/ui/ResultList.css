@@ -20,31 +20,40 @@
   box-shadow: 0 0 0 2px rgba(59, 131, 192, 0.3);
 }
 
-.DocumentList > a > strong > a,
-.DocumentList > a > strong > a:hover {
-  color: inherit;
+.DocumentList > a > strong > span {
+  font-size: 80%;
+  font-weight: normal;
+  background-color: rgba(59, 131, 192, 0.05);
+  box-shadow: 0 0 0 1px rgba(59, 131, 192, 0.3);
+  padding: 0 0.125rem;
+  margin-right: 0.25rem;
+  vertical-align: 10%;
+  border-radius: 0.125rem;
+  color: var(--text-color-lighter);
 }
 
 .DocumentList > a > div {
-  opacity: 0.7;
+  color: var(--text-color-light);
   margin: 0.25em 0;
 }
 
-.DocumentList > a > span {
+.DocumentList > a > span.url {
   display: block;
   height: 1.5em;
-  background-size: auto 75%;
-  background-position: 0 0.0625em;
-  background-repeat: no-repeat;
-  padding-left: 1.5em;
   white-space: nowrap;
   font-weight: 300;
   color: inherit;
 }
-.DocumentList > a > span:hover {
+.DocumentList > a > span.url.with-site-icon {
+  background-size: auto 75%;
+  background-position: 0 0.0625em;
+  background-repeat: no-repeat;
+  padding-left: 1.5em;
+}
+.DocumentList > a > span.url:hover {
   color: inherit;
 }
 
-.DocumentList > a > span > span {
+.DocumentList > a > span.url > span {
   opacity: 0.7;
 }

@@ -49,7 +49,6 @@
 }
 
 .ResultsScreen .SearchForm,
-.ResultsScreen .docs-tabs,
 .ResultsScreen .docs {
   padding-right: 1em;
   overflow-x: hidden;
@@ -99,6 +98,11 @@
 .ResultsScreen .views .bp3-tab-indicator {
   height: 1px;
   bottom: -1px;
+}
+
+.ResultsScreen .bp3-control-group .bp3-icon {
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .ResultsScreen .clusters,

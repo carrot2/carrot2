@@ -11,7 +11,8 @@ body.light, body {
   --background-color-dimmed: hsla(0, 0%, 0%, 0.07);
   --text-color: black;
   --text-color-inverted: white;
-  --text-color-light: rgba(0, 0, 0, 0.5);
+  --text-color-light: rgba(0, 0, 0, 0.8);
+  --text-color-lighter: rgba(0, 0, 0, 0.5);
   --link-color: hsl(203, 82%, 35%);
   --logo-color: #1d2a4c;
   --cluster-icon-color: #ffa64d;
@@ -25,7 +26,8 @@ body.dark {
   --background-color-intense: hsl(207, 28%, 11%);
   --background-color-dimmed: hsl(207, 23%, 22%);
   --text-color: rgba(255, 255, 255, 1.0);
-  --text-color-light: rgba(255, 255, 255, 0.5);
+  --text-color-light: rgba(255, 255, 255, 0.85);
+  --text-color-lighter: rgba(255, 255, 255, 0.5);
   --text-color-inverted: black;
   --link-color: hsl(203, 85%, 61%);
   --logo-color: var(--text-color);
@@ -41,7 +43,11 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: Raleway, sans-serif;
+  font-family: Lato, sans-serif;
+}
+
+h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, h6:first-child {
+  margin-top: 0;
 }
 
 a {

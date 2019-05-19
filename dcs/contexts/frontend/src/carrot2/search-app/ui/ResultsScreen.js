@@ -1,26 +1,30 @@
 import './ResultsScreen.css';
 
-import { Tab, Tabs } from "@blueprintjs/core";
+import { ControlGroup, Button, Tab, Tabs, Classes, Popover, Position } from "@blueprintjs/core";
+import { IconNames } from "@blueprintjs/icons";
 import React, { Component } from 'react';
 
 import { view } from 'react-easy-state';
 import { clusterStore, searchResultStore } from "../store/services";
+import { clusterSelectionStore, documentSelectionStore, documentVisibilityStore } from "../store/selection";
+import { resultListConfigStore } from "../store/ui-config.js";
 import { themeStore } from "./ThemeSwitch.js";
 
+import { routes } from "../routes";
 import { views } from "../../config.js";
 
 import logo from './assets/carrot-search-logo.svg';
 
 import { ClusterSelectionSummary } from "./ClusterSelectionSummary";
-import { DocumentList } from "./DocumentList";
-import { routes } from "../routes";
+import { ResultList } from "./ResultList";
 import { PanelSwitcher } from "./PanelSwitcher.js";
 import { SearchForm } from "./SearchForm";
-import { clusterSelectionStore, documentSelectionStore,
-         documentVisibilityStore } from "../store/selection";
 
-const DocumentListView = view(DocumentList);
+import { ResultListConfig } from "./ResultListConfig.js";
+
+const ResultListView = view(ResultList);
 const ClusterSelectionSummaryView = view(ClusterSelectionSummary);
+const ResultListConfigView = view(ResultListConfig);
 
 export class ResultsScreen extends Component {
   runSearch() {
@@ -110,15 +114,26 @@ export class ResultsScreen extends Component {
           </Tabs>
         </div>
         <div className="docs-tabs">
-          <ClusterSelectionSummaryView clusterSelectionStore={clusterSelectionStore}
-                                       documentVisibilityStore={documentVisibilityStore}
-                                       searchResultStore={searchResultStore} />
+          <ControlGroup fill={true} vertical={false}>
+            <ClusterSelectionSummaryView clusterSelectionStore={clusterSelectionStore}
+              documentVisibilityStore={documentVisibilityStore}
+              searchResultStore={searchResultStore} />
+            <Popover style={{position: "absolute"}} className={Classes.FIXED}
+                     position={Position.BOTTOM_RIGHT}
+                     popoverClassName="bp3-popover-content-sizing">
+              <Button icon={IconNames.COG} minimal={true} />
+              <ResultListConfigView store={resultListConfigStore} />
+            </Popover>
+          </ControlGroup>
         </div>
         <div className="clusters">
           <PanelSwitcher panels={panels} visible={this.getView()} />
         </div>
         <div className="docs">
-          <div><DocumentListView store={searchResultStore} visibilityStore={documentVisibilityStore} /></div>
+          <div>
+            <ResultListView store={searchResultStore} visibilityStore={documentVisibilityStore}
+                            configStore={resultListConfigStore} />
+          </div>
         </div>
       </main>
     );
