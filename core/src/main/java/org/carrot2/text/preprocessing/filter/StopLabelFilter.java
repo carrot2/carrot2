@@ -14,7 +14,7 @@ import org.carrot2.language.LexicalData;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
-/** Accepts labels that are not declared as stop labels in the stoplabels.&lt;lang&gt; files. */
+/** Accepts labels that are not declared as stop labels in the {@code stoplabels.<lang>} files. */
 public class StopLabelFilter extends SingleLabelFilterBase {
   private LabelFormatter labelFormatter;
   private LexicalData lexicalData;

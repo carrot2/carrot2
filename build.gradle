@@ -114,6 +114,7 @@ subprojects {
 
     afterEvaluate {
       check.dependsOn(spotlessCheck)
+      precommit.dependsOn(spotlessCheck)
 
       tasks.withType(AbstractArchiveTask) {
         duplicatesStrategy = 'fail'
@@ -232,4 +233,9 @@ configure(subprojects.findAll { it.path in publishedProjects }) {
   signing {
     sign publishing.publications.maven
   }
+}
+
+task precommit {
+  description "Runs code quality and other precommit checks"
+  group "Verification"
 }
