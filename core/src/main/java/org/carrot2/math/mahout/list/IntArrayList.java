@@ -1,34 +1,27 @@
-/* Imported from Mahout. */package org.carrot2.math.mahout.list;
+/* Imported from Mahout. */ package org.carrot2.math.mahout.list;
 
 import org.carrot2.math.mahout.Arithmetic;
 import org.carrot2.math.mahout.Arrays;
 import org.carrot2.math.mahout.Sorting;
 import org.carrot2.math.mahout.function.IntProcedure;
 
-
-
 public class IntArrayList extends AbstractIntList implements Cloneable {
 
-  
   private int[] elements;
 
-  
   public IntArrayList() {
     this(10);
   }
 
-  
   public IntArrayList(int[] elements) {
     elements(elements);
   }
 
-  
   public IntArrayList(int initialCapacity) {
     this(new int[initialCapacity]);
     setSizeRaw(0);
   }
 
-  
   public void add(int element) {
     // overridden for performance only.
     if (size == elements.length) {
@@ -37,7 +30,6 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     elements[size++] = element;
   }
 
-  
   public void beforeInsert(int index, int element) {
     // overridden for performance only.
     if (size == index) {
@@ -53,13 +45,11 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     size++;
   }
 
-  
   @Override
   public int binarySearchFromTo(int key, int from, int to) {
     return Sorting.binarySearchFromTo(elements, key, from, to);
   }
-  
-  
+
   @Override
   public Object clone() {
     // overridden for performance only.
@@ -68,23 +58,21 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     return clone;
   }
 
-  
   public IntArrayList copy() {
     return (IntArrayList) clone();
   }
 
-    
   protected void countSortFromTo(int from, int to, int min, int max) {
     if (size == 0) {
       return;
     }
     checkRangeFromTo(from, to, size);
 
-    int width = (int)(max - min + 1);
+    int width = (int) (max - min + 1);
 
     int[] counts = new int[width];
     int[] theElements = elements;
-    for (int i = from; i <= to;) {
+    for (int i = from; i <= to; ) {
       counts[(theElements[i++] - min)]++;
     }
 
@@ -103,26 +91,22 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
       }
     }
   }
-  
-  
+
   public int[] elements() {
     return elements;
   }
 
-  
   public AbstractIntList elements(int[] elements) {
     this.elements = elements;
     this.size = elements.length;
     return this;
   }
 
-  
   public void ensureCapacity(int minCapacity) {
     elements = Arrays.ensureCapacity(elements, minCapacity);
   }
 
-  
-  public boolean equals(Object otherObj) { //delta
+  public boolean equals(Object otherObj) { // delta
     if (otherObj == null) {
       return false;
     }
@@ -140,7 +124,7 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
 
     int[] theElements = elements();
     int[] otherElements = other.elements();
-    for (int i = size(); --i >= 0;) {
+    for (int i = size(); --i >= 0; ) {
       if (theElements[i] != otherElements[i]) {
         return false;
       }
@@ -148,13 +132,12 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     return true;
   }
 
-  
   public boolean forEach(IntProcedure procedure) {
     // overridden for performance only.
     int[] theElements = elements;
     int theSize = size;
 
-    for (int i = 0; i < theSize;) {
+    for (int i = 0; i < theSize; ) {
       if (!procedure.apply(theElements[i++])) {
         return false;
       }
@@ -162,7 +145,6 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     return true;
   }
 
-  
   public int get(int index) {
     // overridden for performance only.
     if (index >= size || index < 0) {
@@ -171,13 +153,11 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     return elements[index];
   }
 
-  
   @Override
   public int getQuick(int index) {
     return elements[index];
   }
 
-  
   @Override
   public int indexOfFromTo(int element, int from, int to) {
     // overridden for performance only.
@@ -190,12 +170,11 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     for (int i = from; i <= to; i++) {
       if (element == theElements[i]) {
         return i;
-      } //found
+      } // found
     }
-    return -1; //not found
+    return -1; // not found
   }
 
-  
   @Override
   public int lastIndexOfFromTo(int element, int from, int to) {
     // overridden for performance only.
@@ -208,12 +187,11 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     for (int i = to; i >= from; i--) {
       if (element == theElements[i]) {
         return i;
-      } //found
+      } // found
     }
-    return -1; //not found
+    return -1; // not found
   }
 
-  
   @Override
   public AbstractIntList partFromTo(int from, int to) {
     if (size == 0) {
@@ -227,7 +205,6 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     return new IntArrayList(part);
   }
 
-  
   @Override
   public boolean removeAll(AbstractIntList other) {
     // overridden for performance only.
@@ -247,7 +224,7 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     */
     if (other.isEmpty()) {
       return false;
-    } //nothing to do
+    } // nothing to do
     int limit = other.size() - 1;
     int j = 0;
     int[] theElements = elements;
@@ -279,7 +256,6 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     return modified;
   }
 
-  
   @Override
   public void replaceFromToWithFrom(int from, int to, AbstractIntList other, int otherFrom) {
     // overridden for performance only.
@@ -296,7 +272,6 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     }
   }
 
-  
   @Override
   public boolean retainAll(AbstractIntList other) {
     // overridden for performance only.
@@ -345,7 +320,6 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     return modified;
   }
 
-  
   @Override
   public void reverse() {
     // overridden for performance only.
@@ -353,14 +327,13 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     int j = size - 1;
 
     int[] theElements = elements;
-    for (int i = 0; i < limit;) { //swap
+    for (int i = 0; i < limit; ) { // swap
       int tmp = theElements[i];
       theElements[i++] = theElements[j];
       theElements[j--] = tmp;
     }
   }
 
-  
   @Override
   public void set(int index, int element) {
     // overridden for performance only.
@@ -370,21 +343,17 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     elements[index] = element;
   }
 
-  
   @Override
   public void setQuick(int index, int element) {
     elements[index] = element;
   }
 
-  
-
-  
   @Override
   public void sortFromTo(int from, int to) {
     /*
-    * Computes min and max and decides on this basis.
-    * In practice the additional overhead is very small compared to the potential gains.
-    */
+     * Computes min and max and decides on this basis.
+     * In practice the additional overhead is very small compared to the potential gains.
+     */
 
     if (size == 0) {
       return;
@@ -396,7 +365,7 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     int max = elements[from];
 
     int[] theElements = elements;
-    for (int i = from + 1; i <= to;) {
+    for (int i = from + 1; i <= to; ) {
       int elem = theElements[i++];
       if (elem > max) {
         max = elem;
@@ -405,22 +374,23 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
       }
     }
 
-        // try to figure out which option is fastest.
+    // try to figure out which option is fastest.
     double N = (double) to - (double) from + 1.0;
-    double quickSortEstimate = N * Math.log(N) / 0.6931471805599453; // O(N*log(N,base=2)) ; ln(2)=0.6931471805599453
+    double quickSortEstimate =
+        N * Math.log(N) / 0.6931471805599453; // O(N*log(N,base=2)) ; ln(2)=0.6931471805599453
 
     double width = (double) max - (double) min + 1.0;
     double countSortEstimate = Math.max(width, N); // O(Max(width,N))
 
-    int widthThreshold = 10000; // never consider options resulting in outrageous memory allocations.
+    int widthThreshold =
+        10000; // never consider options resulting in outrageous memory allocations.
     if (width < widthThreshold && countSortEstimate < quickSortEstimate) {
       countSortFromTo(from, to, min, max);
     } else {
       quickSortFromTo(from, to);
     }
-      }
+  }
 
-  
   @Override
   public void trimToSize() {
     elements = Arrays.trimToCapacity(elements, size());

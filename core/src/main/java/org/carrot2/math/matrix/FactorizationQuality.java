@@ -1,21 +1,13 @@
 package org.carrot2.math.matrix;
 
-/**
- * Factorization quality.
- */
+/** Factorization quality. */
 public enum FactorizationQuality {
-  /**
-   * Low, quick processing
-   */
+  /** Low, quick processing */
   LOW,
 
-  /**
-   * Medium, longer processing
-   */
+  /** Medium, longer processing */
   MEDIUM,
 
-  /**
-   * High, long processing
-   */
+  /** High, long processing */
   HIGH;
 }

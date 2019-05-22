@@ -1,12 +1,10 @@
-/* Imported from Mahout. */package org.carrot2.math.mahout.map;
+/* Imported from Mahout. */ package org.carrot2.math.mahout.map;
 
 import java.util.Arrays;
-
 import org.carrot2.math.mahout.function.IntDoubleProcedure;
 import org.carrot2.math.mahout.function.IntProcedure;
 import org.carrot2.math.mahout.list.DoubleArrayList;
 import org.carrot2.math.mahout.list.IntArrayList;
-
 
 public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
   protected static final byte FREE = 0;
@@ -14,35 +12,26 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
   protected static final byte REMOVED = 2;
   protected static final int NO_KEY_VALUE = 0;
 
-  
   protected int[] table;
 
-  
   protected double[] values;
 
-  
   protected byte[] state;
 
-  
   protected int freeEntries;
 
-
-  
   public OpenIntDoubleHashMap() {
     this(defaultCapacity);
   }
 
-  
   public OpenIntDoubleHashMap(int initialCapacity) {
     this(initialCapacity, defaultMinLoadFactor, defaultMaxLoadFactor);
   }
 
-  
   public OpenIntDoubleHashMap(int initialCapacity, double minLoadFactor, double maxLoadFactor) {
     setUp(initialCapacity, minLoadFactor, maxLoadFactor);
   }
 
-  
   @Override
   public void clear() {
     Arrays.fill(this.state, FREE);
@@ -51,7 +40,6 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     trimToSize();
   }
 
-  
   @Override
   public Object clone() {
     OpenIntDoubleHashMap copy = (OpenIntDoubleHashMap) super.clone();
@@ -61,19 +49,16 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return copy;
   }
 
-  
   @Override
   public boolean containsKey(int key) {
     return indexOfKey(key) >= 0;
   }
 
-  
   @Override
   public boolean containsValue(double value) {
     return indexOfValue(value) >= 0;
   }
 
-  
   @Override
   public void ensureCapacity(int minCapacity) {
     if (table.length < minCapacity) {
@@ -82,10 +67,9 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
   }
 
-  
   @Override
   public boolean forEachKey(IntProcedure procedure) {
-    for (int i = table.length; i-- > 0;) {
+    for (int i = table.length; i-- > 0; ) {
       if (state[i] == FULL) {
         if (!procedure.apply(table[i])) {
           return false;
@@ -95,10 +79,9 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return true;
   }
 
-  
   @Override
   public boolean forEachPair(IntDoubleProcedure procedure) {
-    for (int i = table.length; i-- > 0;) {
+    for (int i = table.length; i-- > 0; ) {
       if (state[i] == FULL) {
         if (!procedure.apply(table[i], values[i])) {
           return false;
@@ -108,24 +91,23 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return true;
   }
 
-  
   @Override
   public double get(int key) {
     final int i = indexOfKey(key);
     if (i < 0) {
       return 0;
-    } //not contained
+    } // not contained
     return values[i];
   }
 
-  
   protected int indexOfInsertion(int key) {
     final int length = table.length;
 
     final int hash = HashFunctions.hash(key) & 0x7FFFFFFF;
     int i = hash % length;
-    int decrement = hash % (length - 2); // double hashing, see http://www.eece.unm.edu/faculty/heileman/hash/node4.html
-    //int decrement = (hash / length) % length;
+    int decrement = hash % (length - 2); // double hashing, see
+    // http://www.eece.unm.edu/faculty/heileman/hash/node4.html
+    // int decrement = (hash / length) % length;
     if (decrement == 0) {
       decrement = 1;
     }
@@ -134,7 +116,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     // do NOT skip over removed slots (yes, open addressing is like that...)
     while (state[i] == FULL && table[i] != key) {
       i -= decrement;
-      //hashCollisions++;
+      // hashCollisions++;
       if (i < 0) {
         i += length;
       }
@@ -147,7 +129,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
       final int j = i;
       while (state[i] != FREE && (state[i] == REMOVED || table[i] != key)) {
         i -= decrement;
-        //hashCollisions++;
+        // hashCollisions++;
         if (i < 0) {
           i += length;
         }
@@ -156,7 +138,6 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
         i = j;
       }
     }
-
 
     if (state[i] == FULL) {
       // key already contained at slot i.
@@ -168,14 +149,14 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return i;
   }
 
-  
   protected int indexOfKey(int key) {
     final int length = table.length;
 
     final int hash = HashFunctions.hash(key) & 0x7FFFFFFF;
     int i = hash % length;
-    int decrement = hash % (length - 2); // double hashing, see http://www.eece.unm.edu/faculty/heileman/hash/node4.html
-    //int decrement = (hash / length) % length;
+    int decrement = hash % (length - 2); // double hashing, see
+    // http://www.eece.unm.edu/faculty/heileman/hash/node4.html
+    // int decrement = (hash / length) % length;
     if (decrement == 0) {
       decrement = 1;
     }
@@ -184,7 +165,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     // do skip over removed slots (yes, open addressing is like that...)
     while (state[i] != FREE && (state[i] == REMOVED || table[i] != key)) {
       i -= decrement;
-      //hashCollisions++;
+      // hashCollisions++;
       if (i < 0) {
         i += length;
       }
@@ -193,15 +174,14 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     if (state[i] == FREE) {
       return -1;
     } // not found
-    return i; //found, return index where key is contained
+    return i; // found, return index where key is contained
   }
 
-  
   protected int indexOfValue(double value) {
     double[] val = values;
     byte[] stat = state;
 
-    for (int i = stat.length; --i >= 0;) {
+    for (int i = stat.length; --i >= 0; ) {
       if (stat[i] == FULL && val[i] == value) {
         return i;
       }
@@ -210,29 +190,26 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return -1; // not found
   }
 
-  
   @Override
   public void keys(IntArrayList list) {
     list.setSize(distinct);
-    int [] elements = list.elements();
+    int[] elements = list.elements();
 
     int j = 0;
-    for (int i = table.length; i-- > 0;) {
+    for (int i = table.length; i-- > 0; ) {
       if (state[i] == FULL) {
         elements[j++] = table[i];
       }
     }
   }
 
-  
   @Override
-  public void pairsMatching(IntDoubleProcedure condition, 
-                            IntArrayList keyList, 
-                            DoubleArrayList valueList) {
+  public void pairsMatching(
+      IntDoubleProcedure condition, IntArrayList keyList, DoubleArrayList valueList) {
     keyList.clear();
     valueList.clear();
 
-    for (int i = table.length; i-- > 0;) {
+    for (int i = table.length; i-- > 0; ) {
       if (state[i] == FULL && condition.apply(table[i], values[i])) {
         keyList.add(table[i]);
         valueList.add(values[i]);
@@ -240,18 +217,18 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
   }
 
-  
   @Override
   public boolean put(int key, double value) {
     int i = indexOfInsertion(key);
-    if (i < 0) { //already contained
+    if (i < 0) { // already contained
       i = -i - 1;
       this.values[i] = value;
       return false;
     }
 
     if (this.distinct > this.highWaterMark) {
-      int newCapacity = chooseGrowCapacity(this.distinct + 1, this.minLoadFactor, this.maxLoadFactor);
+      int newCapacity =
+          chooseGrowCapacity(this.distinct + 1, this.minLoadFactor, this.maxLoadFactor);
       rehash(newCapacity);
       return put(key, value);
     }
@@ -264,8 +241,9 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     this.state[i] = FULL;
     this.distinct++;
 
-    if (this.freeEntries < 1) { //delta
-      int newCapacity = chooseGrowCapacity(this.distinct + 1, this.minLoadFactor, this.maxLoadFactor);
+    if (this.freeEntries < 1) { // delta
+      int newCapacity =
+          chooseGrowCapacity(this.distinct + 1, this.minLoadFactor, this.maxLoadFactor);
       rehash(newCapacity);
     }
 
@@ -275,20 +253,19 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
   @Override
   public double adjustOrPutValue(int key, double newValue, double incrValue) {
     int i = indexOfInsertion(key);
-    if (i < 0) { //already contained
+    if (i < 0) { // already contained
       i = -i - 1;
       this.values[i] += incrValue;
       return this.values[i];
     } else {
-        put(key, newValue);
-        return newValue;
+      put(key, newValue);
+      return newValue;
     }
- }
-  
-  
+  }
+
   protected void rehash(int newCapacity) {
     int oldCapacity = table.length;
-    //if (oldCapacity == newCapacity) return;
+    // if (oldCapacity == newCapacity) return;
 
     int[] oldTable = table;
     double[] oldValues = values;
@@ -303,7 +280,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
 
     this.freeEntries = newCapacity - this.distinct; // delta
 
-    for (int i = oldCapacity; i-- > 0;) {
+    for (int i = oldCapacity; i-- > 0; ) {
       if (oldState[i] == FULL) {
         int element = oldTable[i];
         int index = indexOfInsertion(element);
@@ -314,7 +291,6 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
   }
 
-  
   @Override
   public boolean removeKey(int key) {
     int i = indexOfKey(key);
@@ -323,7 +299,7 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     } // key not contained
 
     this.state[i] = REMOVED;
-    //this.values[i]=0; // delta
+    // this.values[i]=0; // delta
     this.distinct--;
 
     if (this.distinct < this.lowWaterMark) {
@@ -334,7 +310,6 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     return true;
   }
 
-  
   @Override
   protected void setUp(int initialCapacity, double minLoadFactor, double maxLoadFactor) {
     int capacity = initialCapacity;
@@ -360,14 +335,15 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     this.freeEntries = capacity; // delta
 
     // lowWaterMark will be established upon first expansion.
-    // establishing it now (upon instance construction) would immediately make the table shrink upon first put(...).
-    // After all the idea of an "initialCapacity" implies violating lowWaterMarks when an object is young.
+    // establishing it now (upon instance construction) would immediately make the table shrink upon
+    // first put(...).
+    // After all the idea of an "initialCapacity" implies violating lowWaterMarks when an object is
+    // young.
     // See ensureCapacity(...)
     this.lowWaterMark = 0;
     this.highWaterMark = chooseHighWaterMark(capacity, this.maxLoadFactor);
   }
 
-  
   @Override
   public void trimToSize() {
     // * 1.2 because open addressing's performance exponentially degrades beyond that point
@@ -378,24 +354,21 @@ public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
     }
   }
 
-  
   @Override
   public void values(DoubleArrayList list) {
     list.setSize(distinct);
     double[] elements = list.elements();
 
     int j = 0;
-    for (int i = state.length; i-- > 0;) {
+    for (int i = state.length; i-- > 0; ) {
       if (state[i] == FULL) {
         elements[j++] = values[i];
       }
     }
   }
-  
-  
-  protected void getInternalFactors(int[] capacity, 
-      double[] minLoadFactor, 
-      double[] maxLoadFactor) {
+
+  protected void getInternalFactors(
+      int[] capacity, double[] minLoadFactor, double[] maxLoadFactor) {
     capacity[0] = table.length;
     minLoadFactor[0] = this.minLoadFactor;
     maxLoadFactor[0] = this.maxLoadFactor;

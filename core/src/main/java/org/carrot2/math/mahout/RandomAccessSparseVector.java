@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,13 +11,10 @@
 
 package org.carrot2.math.mahout;
 
-import java.util.Iterator;
-
 import com.carrotsearch.hppc.AbstractIterator;
+import java.util.Iterator;
 import org.carrot2.math.mahout.list.IntArrayList;
 import org.carrot2.math.mahout.map.OpenIntDoubleHashMap;
-
-
 
 public class RandomAccessSparseVector extends AbstractVector {
 
@@ -26,13 +22,13 @@ public class RandomAccessSparseVector extends AbstractVector {
 
   private OpenIntDoubleHashMap values;
 
-  
   public RandomAccessSparseVector() {
     super(0);
   }
 
   public RandomAccessSparseVector(int cardinality) {
-    this(cardinality, Math.min(cardinality, INITIAL_CAPACITY)); // arbitrary estimate of 'sparseness'
+    this(
+        cardinality, Math.min(cardinality, INITIAL_CAPACITY)); // arbitrary estimate of 'sparseness'
   }
 
   public RandomAccessSparseVector(int cardinality, int initialCapacity) {
@@ -56,7 +52,7 @@ public class RandomAccessSparseVector extends AbstractVector {
 
   public RandomAccessSparseVector(RandomAccessSparseVector other, boolean shallowCopy) {
     super(other.size());
-    values = shallowCopy ? other.values : (OpenIntDoubleHashMap)other.values.clone();
+    values = shallowCopy ? other.values : (OpenIntDoubleHashMap) other.values.clone();
   }
 
   @Override
@@ -99,13 +95,11 @@ public class RandomAccessSparseVector extends AbstractVector {
     return this;
   }
 
-  
   @Override
   public boolean isDense() {
     return false;
   }
 
-  
   @Override
   public boolean isSequentialAccess() {
     return false;
@@ -136,12 +130,11 @@ public class RandomAccessSparseVector extends AbstractVector {
     return new RandomAccessSparseVector(size(), values.size());
   }
 
-  
   @Override
   public Iterator<Element> iterateNonZero() {
     return new NonDefaultIterator();
   }
-  
+
   @Override
   public Iterator<Element> iterator() {
     return new AllIterator();
@@ -166,7 +159,6 @@ public class RandomAccessSparseVector extends AbstractVector {
       offset++;
       return element;
     }
-
   }
 
   private final class AllIterator extends AbstractIterator<Element> {
@@ -186,7 +178,6 @@ public class RandomAccessSparseVector extends AbstractVector {
         return done();
       }
     }
-
   }
 
   private final class RandomAccessElement implements Element {
@@ -213,5 +204,4 @@ public class RandomAccessSparseVector extends AbstractVector {
       }
     }
   }
-  
 }

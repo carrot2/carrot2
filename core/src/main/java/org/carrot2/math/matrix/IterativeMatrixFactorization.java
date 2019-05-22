@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,13 +11,11 @@
 
 package org.carrot2.math.matrix;
 
-/**
- * Performs an iterative matrix factorization.
- */
+/** Performs an iterative matrix factorization. */
 public interface IterativeMatrixFactorization extends MatrixFactorization {
   /**
-   * Returns approximation error achieved after the last iteration of the
-   * algorithm or -1 if the approximation error is not available.
+   * Returns approximation error achieved after the last iteration of the algorithm or -1 if the
+   * approximation error is not available.
    *
    * @return approximation error or -1
    */

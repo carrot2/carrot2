@@ -1,4 +1,8 @@
 
+plugins {
+  id 'com.github.sherter.google-java-format' version '0.8' apply false
+}
+
 apply from: file('gradle/min-gradle-version.gradle')
 apply from: file('gradle/loadProperties.gradle')
 apply from: file('gradle/gitinfo.gradle')
@@ -141,6 +145,7 @@ configure(subprojects.findAll { it.name == "core" }) {
 
 allprojects {
   apply plugin: 'idea'
+  apply plugin: 'com.github.sherter.google-java-format'
 
   repositories {
     mavenCentral()
@@ -181,6 +186,11 @@ allprojects {
         }
       }
 
+      googleJavaFormat {
+        toolVersion = '1.7'
+      }
+      check.dependsOn(googleJavaFormat)
+
       javadoc {
         title = "Carrot<sup>2</sup> ${project.version} API Documentation"
 
@@ -192,6 +202,12 @@ allprojects {
 
         exclude 'org/carrot2/math/mahout/**'
       }
+    }
+  }
+
+  afterEvaluate {
+    project.tasks.withType(AbstractArchiveTask) { task ->
+      duplicatesStrategy = 'fail'
     }
   }
 

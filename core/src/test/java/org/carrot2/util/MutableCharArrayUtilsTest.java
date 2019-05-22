@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,9 +15,7 @@ import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
 import org.junit.Test;
 
-/**
- * Test cases for {@link MutableCharArrayUtils}.
- */
+/** Test cases for {@link MutableCharArrayUtils}. */
 public class MutableCharArrayUtilsTest extends TestBase {
   @Test
   public void toLowerCaseNoReallocation() {
@@ -26,7 +23,7 @@ public class MutableCharArrayUtilsTest extends TestBase {
     final MutableCharArray result = new MutableCharArray("    z");
 
     Assertions.assertThat(MutableCharArrayUtils.toLowerCase(source, result)).isTrue();
-    Assertions.assertThat(result.getBuffer()).isEqualTo("łódźz" .toCharArray());
+    Assertions.assertThat(result.getBuffer()).isEqualTo("łódźz".toCharArray());
   }
 
   @Test
@@ -35,6 +32,6 @@ public class MutableCharArrayUtilsTest extends TestBase {
     final MutableCharArray result = new MutableCharArray("abc");
 
     Assertions.assertThat(MutableCharArrayUtils.toLowerCase(source, result)).isTrue();
-    Assertions.assertThat(result.getBuffer()).isEqualTo("łódź" .toCharArray());
+    Assertions.assertThat(result.getBuffer()).isEqualTo("łódź".toCharArray());
   }
 }

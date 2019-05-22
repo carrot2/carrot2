@@ -1,4 +1,4 @@
-/* Imported from Mahout. */package org.carrot2.math.mahout.matrix.impl;
+/* Imported from Mahout. */ package org.carrot2.math.mahout.matrix.impl;
 
 import org.carrot2.math.mahout.function.DoubleDoubleFunction;
 import org.carrot2.math.mahout.function.DoubleFunction;
@@ -18,24 +18,21 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
    */
   final AbstractIntDoubleMap elements;
 
-  
   public SparseDoubleMatrix2D(double[][] values) {
     this(values.length, values.length == 0 ? 0 : values[0].length);
     assign(values);
   }
 
-  
   public SparseDoubleMatrix2D(int rows, int columns) {
     this(rows, columns, rows * (columns / 1000), 0.2, 0.5);
   }
 
-  
-  public SparseDoubleMatrix2D(int rows, int columns, int initialCapacity, double minLoadFactor, double maxLoadFactor) {
+  public SparseDoubleMatrix2D(
+      int rows, int columns, int initialCapacity, double minLoadFactor, double maxLoadFactor) {
     setUp(rows, columns);
     this.elements = new OpenIntDoubleHashMap(initialCapacity, minLoadFactor, maxLoadFactor);
   }
 
-  
   @Override
   public DoubleMatrix2D assign(double value) {
     // overriden for performance only
@@ -47,7 +44,6 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     return this;
   }
 
-  
   @Override
   public void assign(DoubleFunction function) {
     if (this.isNoView && function instanceof Mult) { // x[i] = mult*x[i]
@@ -57,7 +53,6 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     }
   }
 
-  
   @Override
   public DoubleMatrix2D assign(DoubleMatrix2D source) {
     // overriden for performance only
@@ -78,8 +73,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
   }
 
   @Override
-  public DoubleMatrix2D assign(final DoubleMatrix2D y,
-                               DoubleDoubleFunction function) {
+  public DoubleMatrix2D assign(final DoubleMatrix2D y, DoubleDoubleFunction function) {
     if (!this.isNoView) {
       return super.assign(y, function);
     }
@@ -98,8 +92,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
               setQuick(i, j, getQuick(i, j) + alpha * value);
               return value;
             }
-          }
-      );
+          });
       return this;
     }
 
@@ -116,8 +109,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
               }
               return true;
             }
-          }
-      );
+          });
     }
 
     if (function == Functions.DIV) { // x[i] = x[i] / y[i]
@@ -133,20 +125,17 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
               }
               return true;
             }
-          }
-      );
+          });
     }
 
     return super.assign(y, function);
   }
 
-  
   @Override
   public int cardinality() {
     return this.isNoView ? this.elements.size() : super.cardinality();
   }
 
-  
   @Override
   public void ensureCapacity(int minCapacity) {
     this.elements.ensureCapacity(minCapacity);
@@ -167,24 +156,21 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
               }
               return true;
             }
-          }
-      );
+          });
     } else {
       super.forEachNonZero(function);
     }
   }
 
-  
   @Override
   public double getQuick(int row, int column) {
-    //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
+    // if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
     // throw new IndexOutOfBoundsException("row:"+row+", column:"+column);
-    //return this.elements.get(index(row,column));
-    //manually inlined:
+    // return this.elements.get(index(row,column));
+    // manually inlined:
     return this.elements.get(rowZero + row * rowStride + columnZero + column * columnStride);
   }
 
-  
   @Override
   protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
     if (other instanceof SelectedSparseDoubleMatrix2D) {
@@ -198,7 +184,6 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     return false;
   }
 
-  
   @Override
   protected int index(int row, int column) {
     // return super.index(row,column);
@@ -206,34 +191,30 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     return rowZero + row * rowStride + columnZero + column * columnStride;
   }
 
-  
   @Override
   public DoubleMatrix2D like(int rows, int columns) {
     return new SparseDoubleMatrix2D(rows, columns);
   }
 
-  
   @Override
   public DoubleMatrix1D like1D(int size) {
     return new SparseDoubleMatrix1D(size);
   }
 
-  
   @Override
   protected DoubleMatrix1D like1D(int size, int offset, int stride) {
     return new SparseDoubleMatrix1D(size, this.elements, offset, stride);
   }
 
-  
   @Override
   public void setQuick(int row, int column, double value) {
-    //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
+    // if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
     // throw new IndexOutOfBoundsException("row:"+row+", column:"+column);
-    //int index =  index(row,column);
-    //manually inlined:
+    // int index =  index(row,column);
+    // manually inlined:
     int index = rowZero + row * rowStride + columnZero + column * columnStride;
 
-    //if (value == 0 || Math.abs(value) < TOLERANCE)
+    // if (value == 0 || Math.abs(value) < TOLERANCE)
     if (value == 0) {
       this.elements.removeKey(index);
     } else {
@@ -241,14 +222,14 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
     }
   }
 
-  
   @Override
   protected DoubleMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {
     return new SelectedSparseDoubleMatrix2D(this.elements, rowOffsets, columnOffsets, 0);
   }
 
   @Override
-  public DoubleMatrix1D zMult(DoubleMatrix1D y, DoubleMatrix1D z, double alpha, double beta, final boolean transposeA) {
+  public DoubleMatrix1D zMult(
+      DoubleMatrix1D y, DoubleMatrix1D z, double alpha, double beta, final boolean transposeA) {
     int m = rows;
     int n = columns;
     if (transposeA) {
@@ -301,8 +282,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
             zElements[zi + zStride * i] += value * yElements[yi + yStride * j];
             return true;
           }
-        }
-    );
+        });
 
     if (alpha != 1.0) {
       z.assign(Functions.mult(alpha));
@@ -311,8 +291,13 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
   }
 
   @Override
-  public DoubleMatrix2D zMult(DoubleMatrix2D B, DoubleMatrix2D C, final double alpha, double beta,
-                              final boolean transposeA, boolean transposeB) {
+  public DoubleMatrix2D zMult(
+      DoubleMatrix2D B,
+      DoubleMatrix2D C,
+      final double alpha,
+      double beta,
+      final boolean transposeA,
+      boolean transposeB) {
     if (!this.isNoView) {
       return super.zMult(B, C, alpha, beta, transposeA, transposeB);
     }
@@ -347,11 +332,11 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
 
     // cache views
     final DoubleMatrix1D[] Brows = new DoubleMatrix1D[n];
-    for (int i = n; --i >= 0;) {
+    for (int i = n; --i >= 0; ) {
       Brows[i] = B.viewRow(i);
     }
     final DoubleMatrix1D[] Crows = new DoubleMatrix1D[m];
-    for (int i = m; --i >= 0;) {
+    for (int i = m; --i >= 0; ) {
       Crows[i] = C.viewRow(i);
     }
 
@@ -371,8 +356,7 @@ public final class SparseDoubleMatrix2D extends DoubleMatrix2D {
             }
             return true;
           }
-        }
-    );
+        });
 
     return C;
   }

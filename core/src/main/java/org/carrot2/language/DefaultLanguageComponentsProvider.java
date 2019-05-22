@@ -1,15 +1,15 @@
 package org.carrot2.language;
 
+import java.io.IOException;
+import java.util.*;
+import java.util.function.Supplier;
 import org.carrot2.language.snowball.*;
 import org.carrot2.util.ClassRelativeResourceLoader;
 import org.carrot2.util.ResourceLookup;
 
-import java.io.IOException;
-import java.util.*;
-import java.util.function.Supplier;
-
 public class DefaultLanguageComponentsProvider implements LanguageComponentsProvider {
   private static final Map<String, Supplier<Stemmer>> STEMMER_SUPPLIERS;
+
   static {
     Map<String, Supplier<Stemmer>> m = new LinkedHashMap<>();
     m.put("English", () -> new SnowballStemmerAdapter(new EnglishStemmer()));
@@ -36,15 +36,16 @@ public class DefaultLanguageComponentsProvider implements LanguageComponentsProv
   }
 
   @Override
-  public Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup) throws IOException {
+  public Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup)
+      throws IOException {
     LinkedHashMap<Class<?>, Supplier<?>> components = new LinkedHashMap<>();
     components.put(Stemmer.class, STEMMER_SUPPLIERS.get(language));
     components.put(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
 
     String langPrefix = language.toLowerCase(Locale.ROOT);
-    LexicalData lexicalData = new LexicalDataImpl(resourceLookup,
-        langPrefix + ".stopwords.utf8",
-        langPrefix + ".stoplabels.utf8", true);
+    LexicalData lexicalData =
+        new LexicalDataImpl(
+            resourceLookup, langPrefix + ".stopwords.utf8", langPrefix + ".stoplabels.utf8", true);
     components.put(LexicalData.class, () -> lexicalData);
 
     return components;

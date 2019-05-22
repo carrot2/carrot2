@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,9 +12,7 @@
 package org.carrot2.math.mahout;
 
 import com.carrotsearch.hppc.AbstractIterator;
-
 import java.util.Iterator;
-
 
 public class VectorView extends AbstractVector {
 
@@ -24,7 +21,6 @@ public class VectorView extends AbstractVector {
   // the offset into the Vector
   private int offset;
 
-  
   public VectorView() {
     super(0);
   }
@@ -84,7 +80,6 @@ public class VectorView extends AbstractVector {
     return new VectorView(vector, offset + this.offset, length);
   }
 
-  
   private boolean isInView(int index) {
     return index >= offset && index < offset + size();
   }

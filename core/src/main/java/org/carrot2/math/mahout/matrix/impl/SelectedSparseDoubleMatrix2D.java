@@ -1,9 +1,8 @@
-/* Imported from Mahout. */package org.carrot2.math.mahout.matrix.impl;
+/* Imported from Mahout. */ package org.carrot2.math.mahout.matrix.impl;
 
 import org.carrot2.math.mahout.map.AbstractIntDoubleMap;
 import org.carrot2.math.mahout.matrix.DoubleMatrix1D;
 import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
-
 
 final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
   /*
@@ -11,17 +10,22 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
    */
   final AbstractIntDoubleMap elements;
 
-  
   int[] rowOffsets;
   int[] columnOffsets;
 
-  
   int offset;
 
-  
-  SelectedSparseDoubleMatrix2D(int rows, int columns, AbstractIntDoubleMap elements, int rowZero,
-                                         int columnZero, int rowStride, int columnStride, int[] rowOffsets,
-                                         int[] columnOffsets, int offset) {
+  SelectedSparseDoubleMatrix2D(
+      int rows,
+      int columns,
+      AbstractIntDoubleMap elements,
+      int rowZero,
+      int columnZero,
+      int rowStride,
+      int columnStride,
+      int[] rowOffsets,
+      int[] columnOffsets,
+      int offset) {
     // be sure parameters are valid, we do not check...
     setUp(rows, columns, rowZero, columnZero, rowStride, columnStride);
 
@@ -33,36 +37,43 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     this.isNoView = false;
   }
 
-  
-  SelectedSparseDoubleMatrix2D(AbstractIntDoubleMap elements, int[] rowOffsets, int[] columnOffsets,
-                                         int offset) {
-    this(rowOffsets.length, columnOffsets.length, elements, 0, 0, 1, 1, rowOffsets, columnOffsets, offset);
+  SelectedSparseDoubleMatrix2D(
+      AbstractIntDoubleMap elements, int[] rowOffsets, int[] columnOffsets, int offset) {
+    this(
+        rowOffsets.length,
+        columnOffsets.length,
+        elements,
+        0,
+        0,
+        1,
+        1,
+        rowOffsets,
+        columnOffsets,
+        offset);
   }
 
-  
   @Override
   protected int columnOffset(int absRank) {
     return columnOffsets[absRank];
   }
 
-  
   @Override
   protected int rowOffset(int absRank) {
     return rowOffsets[absRank];
   }
 
-  
   @Override
   public double getQuick(int row, int column) {
-    //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
+    // if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
     // throw new IndexOutOfBoundsException("row:"+row+", column:"+column);
-    //return elements.get(index(row,column));
-    //manually inlined:
-    return elements
-        .get(offset + rowOffsets[rowZero + row * rowStride] + columnOffsets[columnZero + column * columnStride]);
+    // return elements.get(index(row,column));
+    // manually inlined:
+    return elements.get(
+        offset
+            + rowOffsets[rowZero + row * rowStride]
+            + columnOffsets[columnZero + column * columnStride]);
   }
 
-  
   @Override
   protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
     if (other instanceof SelectedSparseDoubleMatrix2D) {
@@ -76,41 +87,41 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     return false;
   }
 
-  
   @Override
   protected int index(int row, int column) {
-    //return this.offset + super.index(row,column);
-    //manually inlined:
-    return this.offset + rowOffsets[rowZero + row * rowStride] + columnOffsets[columnZero + column * columnStride];
+    // return this.offset + super.index(row,column);
+    // manually inlined:
+    return this.offset
+        + rowOffsets[rowZero + row * rowStride]
+        + columnOffsets[columnZero + column * columnStride];
   }
 
-  
   @Override
   public DoubleMatrix2D like(int rows, int columns) {
     return new SparseDoubleMatrix2D(rows, columns);
   }
 
-  
   @Override
   public DoubleMatrix1D like1D(int size) {
     return new SparseDoubleMatrix1D(size);
   }
 
-  
   @Override
   protected DoubleMatrix1D like1D(int size, int zero, int stride) {
     throw new UnsupportedOperationException();
     // this method is never called since viewRow() and viewColumn are overridden properly.
   }
 
-  
   @Override
   public void setQuick(int row, int column, double value) {
-    //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
+    // if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
     // throw new IndexOutOfBoundsException("row:"+row+", column:"+column);
-    //int index =  index(row,column);
-    //manually inlined:
-    int index = offset + rowOffsets[rowZero + row * rowStride] + columnOffsets[columnZero + column * columnStride];
+    // int index =  index(row,column);
+    // manually inlined:
+    int index =
+        offset
+            + rowOffsets[rowZero + row * rowStride]
+            + columnOffsets[columnZero + column * columnStride];
 
     if (value == 0) {
       this.elements.removeKey(index);
@@ -119,7 +130,6 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     }
   }
 
-  
   @Override
   protected void setUp(int rows, int columns) {
     super.setUp(rows, columns);
@@ -128,7 +138,6 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     this.offset = 0;
   }
 
-  
   @Override
   protected AbstractMatrix2D vDice() {
     super.vDice();
@@ -143,7 +152,6 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     return this;
   }
 
-  
   @Override
   public DoubleMatrix1D viewColumn(int column) {
     checkColumn(column);
@@ -152,10 +160,10 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     int viewStride = this.rowStride;
     int[] viewOffsets = this.rowOffsets;
     int viewOffset = this.offset + columnOffset(columnRank(column));
-    return new SelectedSparseDoubleMatrix1D(viewSize, this.elements, viewZero, viewStride, viewOffsets, viewOffset);
+    return new SelectedSparseDoubleMatrix1D(
+        viewSize, this.elements, viewZero, viewStride, viewOffsets, viewOffset);
   }
 
-  
   @Override
   public DoubleMatrix1D viewRow(int row) {
     checkRow(row);
@@ -164,10 +172,10 @@ final class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     int viewStride = this.columnStride;
     int[] viewOffsets = this.columnOffsets;
     int viewOffset = this.offset + rowOffset(rowRank(row));
-    return new SelectedSparseDoubleMatrix1D(viewSize, this.elements, viewZero, viewStride, viewOffsets, viewOffset);
+    return new SelectedSparseDoubleMatrix1D(
+        viewSize, this.elements, viewZero, viewStride, viewOffsets, viewOffset);
   }
 
-  
   @Override
   protected DoubleMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {
     return new SelectedSparseDoubleMatrix2D(this.elements, rowOffsets, columnOffsets, this.offset);

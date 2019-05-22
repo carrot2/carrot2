@@ -1,4 +1,4 @@
-/* Imported from Mahout. */package org.carrot2.math.mahout.matrix.impl;
+/* Imported from Mahout. */ package org.carrot2.math.mahout.matrix.impl;
 
 import org.carrot2.math.mahout.function.DoubleDoubleFunction;
 import org.carrot2.math.mahout.function.DoubleFunction;
@@ -10,29 +10,24 @@ import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 
 public class DenseDoubleMatrix1D extends DoubleMatrix1D {
 
-  
   protected final double[] elements;
 
-  
   public DenseDoubleMatrix1D(double[] values) {
     this(values.length);
     assign(values);
   }
 
-  
   public DenseDoubleMatrix1D(int size) {
     setUp(size);
     this.elements = new double[size];
   }
 
-  
   protected DenseDoubleMatrix1D(int size, double[] elements, int zero, int stride) {
     setUp(size, zero, stride);
     this.elements = elements;
     this.isNoView = false;
   }
 
-  
   @Override
   public void assign(double[] values) {
     if (isNoView) {
@@ -46,19 +41,17 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     }
   }
 
-  
   @Override
   public void assign(double value) {
     int index = index(0);
     int s = this.stride;
     double[] elems = this.elements;
-    for (int i = size; --i >= 0;) {
+    for (int i = size; --i >= 0; ) {
       elems[index] = value;
       index += s;
     }
   }
 
-  
   @Override
   public void assign(DoubleFunction function) {
     int s = stride;
@@ -74,19 +67,18 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
       if (multiplicator == 1) {
         return;
       }
-      for (int k = size; --k >= 0;) {
+      for (int k = size; --k >= 0; ) {
         elems[i] *= multiplicator;
         i += s;
       }
     } else { // the general case x[i] = f(x[i])
-      for (int k = size; --k >= 0;) {
+      for (int k = size; --k >= 0; ) {
         elems[i] = function.apply(elems[i]);
         i += s;
       }
     }
   }
 
-  
   @Override
   public DoubleMatrix1D assign(DoubleMatrix1D source) {
     // overriden for performance only
@@ -120,7 +112,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
 
     int index = index(0);
     int otherIndex = other.index(0);
-    for (int k = size; --k >= 0;) {
+    for (int k = size; --k >= 0; ) {
       elems[index] = otherElems[otherIndex];
       index += s;
       otherIndex += ys;
@@ -128,7 +120,6 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     return this;
   }
 
-  
   @Override
   public DoubleMatrix1D assign(DoubleMatrix1D y, DoubleDoubleFunction function) {
     // overriden for performance only
@@ -149,14 +140,14 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     int otherIndex = other.index(0);
 
     // specialized for speed
-    if (function == Functions.MULT) {  // x[i] = x[i] * y[i]
-      for (int k = size; --k >= 0;) {
+    if (function == Functions.MULT) { // x[i] = x[i] * y[i]
+      for (int k = size; --k >= 0; ) {
         elems[index] *= otherElems[otherIndex];
         index += s;
         otherIndex += ys;
       }
     } else if (function == Functions.DIV) { // x[i] = x[i] / y[i]
-      for (int k = size; --k >= 0;) {
+      for (int k = size; --k >= 0; ) {
         elems[index] /= otherElems[otherIndex];
         index += s;
         otherIndex += ys;
@@ -166,26 +157,26 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
       if (multiplicator == 0) { // x[i] = x[i] + 0*y[i]
         return this;
       } else if (multiplicator == 1) { // x[i] = x[i] + y[i]
-        for (int k = size; --k >= 0;) {
+        for (int k = size; --k >= 0; ) {
           elems[index] += otherElems[otherIndex];
           index += s;
           otherIndex += ys;
         }
       } else if (multiplicator == -1) { // x[i] = x[i] - y[i]
-        for (int k = size; --k >= 0;) {
+        for (int k = size; --k >= 0; ) {
           elems[index] -= otherElems[otherIndex];
           index += s;
           otherIndex += ys;
         }
       } else { // the general case x[i] = x[i] + mult*y[i]
-        for (int k = size; --k >= 0;) {
+        for (int k = size; --k >= 0; ) {
           elems[index] += multiplicator * otherElems[otherIndex];
           index += s;
           otherIndex += ys;
         }
       }
     } else { // the general case x[i] = f(x[i],y[i])
-      for (int k = size; --k >= 0;) {
+      for (int k = size; --k >= 0; ) {
         elems[index] = function.apply(elems[index], otherElems[otherIndex]);
         index += s;
         otherIndex += ys;
@@ -194,7 +185,6 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     return this;
   }
 
-  
   @Override
   protected int cardinality(int maxCardinality) {
     int cardinality = 0;
@@ -211,16 +201,14 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     return cardinality;
   }
 
-  
   @Override
   public double getQuick(int index) {
-    //if (debug) if (index<0 || index>=size) checkIndex(index);
-    //return elements[index(index)];
+    // if (debug) if (index<0 || index>=size) checkIndex(index);
+    // return elements[index(index)];
     // manually inlined:
     return elements[zero + index * stride];
   }
 
-  
   @Override
   protected boolean haveSharedCellsRaw(DoubleMatrix1D other) {
     if (other instanceof SelectedDenseDoubleMatrix1D) {
@@ -234,36 +222,31 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     return false;
   }
 
-  
   @Override
   protected int index(int rank) {
     // overriden for manual inlining only
-    //return _offset(_rank(rank));
+    // return _offset(_rank(rank));
     return zero + rank * stride;
   }
 
-  
   @Override
   public DoubleMatrix1D like(int size) {
     return new DenseDoubleMatrix1D(size);
   }
 
-  
   @Override
   public DoubleMatrix2D like2D(int rows, int columns) {
     return new DenseDoubleMatrix2D(rows, columns);
   }
 
-  
   @Override
   public void setQuick(int index, double value) {
-    //if (debug) if (index<0 || index>=size) checkIndex(index);
-    //elements[index(index)] = value;
+    // if (debug) if (index<0 || index>=size) checkIndex(index);
+    // elements[index(index)] = value;
     // manually inlined:
     elements[zero + index * stride] = value;
   }
 
-  
   @Override
   public void swap(DoubleMatrix1D other) {
     // overriden for performance only
@@ -286,7 +269,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
 
     int index = index(0);
     int otherIndex = y.index(0);
-    for (int k = size; --k >= 0;) {
+    for (int k = size; --k >= 0; ) {
       double tmp = elems[index];
       elems[index] = otherElems[otherIndex];
       otherElems[otherIndex] = tmp;
@@ -295,7 +278,6 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     }
   }
 
-  
   @Override
   public void toArray(double[] values) {
     if (values.length < size) {
@@ -308,13 +290,11 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     }
   }
 
-  
   @Override
   protected DoubleMatrix1D viewSelectionLike(int[] offsets) {
     return new SelectedDenseDoubleMatrix1D(this.elements, offsets);
   }
 
-  
   @Override
   public double zDotProduct(DoubleMatrix1D y, int from, int length) {
     if (!(y instanceof DenseDoubleMatrix1D)) {
@@ -358,19 +338,19 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     i -= s;
     j -= ys;
     double sum = 0;
-    for (int k = min / 4; --k >= 0;) {
-      sum += elems[i += s] * yElems[j += ys]
-          + elems[i += s] * yElems[j += ys]
-          + elems[i += s] * yElems[j += ys]
-          + elems[i += s] * yElems[j += ys];
+    for (int k = min / 4; --k >= 0; ) {
+      sum +=
+          elems[i += s] * yElems[j += ys]
+              + elems[i += s] * yElems[j += ys]
+              + elems[i += s] * yElems[j += ys]
+              + elems[i += s] * yElems[j += ys];
     }
-    for (int k = min % 4; --k >= 0;) {
+    for (int k = min % 4; --k >= 0; ) {
       sum += elems[i += s] * yElems[j += ys];
     }
     return sum;
   }
 
-  
   @Override
   public double zSum() {
     int s = stride;
@@ -380,7 +360,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
       throw new IllegalStateException();
     }
     double sum = 0;
-    for (int k = size; --k >= 0;) {
+    for (int k = size; --k >= 0; ) {
       sum += elems[i];
       i += s;
     }

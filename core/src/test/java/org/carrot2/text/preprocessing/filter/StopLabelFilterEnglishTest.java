@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -20,9 +19,7 @@ import org.carrot2.text.preprocessing.LabelFilterTestBase;
 import org.carrot2.text.preprocessing.PreprocessingContextAssert;
 import org.junit.Test;
 
-/**
- * Test cases for {@link StopWordLabelFilter}.
- */
+/** Test cases for {@link StopWordLabelFilter}. */
 public class StopLabelFilterEnglishTest extends LabelFilterTestBase {
   @Override
   protected void initializeFilters(LabelFilterProcessor filterProcessor) {
@@ -33,29 +30,27 @@ public class StopLabelFilterEnglishTest extends LabelFilterTestBase {
   @Test
   public void testEmpty() {
     PreprocessingContextAssert a = preprocess();
-    Assertions.assertThat(a.labelImages())
-        .isEmpty();
+    Assertions.assertThat(a.labelImages()).isEmpty();
   }
 
   @Test
   public void testNonStopLabels() {
     PreprocessingContextAssert a = preprocess(new TestDocument("coal . mining", "coal . mining"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("coal", "mining");
+    Assertions.assertThat(a.labelImages()).containsOnly("coal", "mining");
   }
 
   @Test
   public void testSingleWordStopLabels() {
-    PreprocessingContextAssert a = preprocess(new TestDocument("new . new . new", "coal news . coal news"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("coal", "news", "coal news");
+    PreprocessingContextAssert a =
+        preprocess(new TestDocument("new . new . new", "coal news . coal news"));
+    Assertions.assertThat(a.labelImages()).containsOnly("coal", "news", "coal news");
   }
 
   @Test
   public void testPhraseStopLabels() {
-    PreprocessingContextAssert a = preprocess(new TestDocument("information on coal", "information on coal"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("coal");
+    PreprocessingContextAssert a =
+        preprocess(new TestDocument("information on coal", "information on coal"));
+    Assertions.assertThat(a.labelImages()).containsOnly("coal");
   }
 
   @Override

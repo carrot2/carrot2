@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,6 +11,7 @@
 
 package org.carrot2.clustering.lingo;
 
+import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
@@ -21,15 +21,9 @@ import org.carrot2.text.vsm.TfTermWeighting;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.stream.Stream;
-
-/**
- * Test cases for cluster merging in {@link ClusterBuilder}.
- */
+/** Test cases for cluster merging in {@link ClusterBuilder}. */
 public class ClusterMergerTest extends LingoProcessingComponentTestBase {
-  /**
-   * Label builder under tests
-   */
+  /** Label builder under tests */
   private ClusterBuilder clusterBuilder;
 
   @Before
@@ -49,17 +43,18 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase {
   @Test
   public void testNoMerge() {
     final int[][] expectedDocumentIndices = {
-        {0, 2},
-        {0, 1},
-        {1, 2}
+      {0, 2},
+      {0, 1},
+      {1, 2}
     };
 
     desiredClusterCountBase = 30;
-    check(Stream.of(
-        new TestDocument("", "aa . bb"),
-        new TestDocument("", "bb . cc"),
-        new TestDocument("", "cc . aa")
-    ), expectedDocumentIndices);
+    check(
+        Stream.of(
+            new TestDocument("", "aa . bb"),
+            new TestDocument("", "bb . cc"),
+            new TestDocument("", "cc . aa")),
+        expectedDocumentIndices);
   }
 
   @Test
@@ -70,15 +65,11 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase {
     clusterBuilder.clusterMergingThreshold.set(0.4);
     preprocessingPipeline.labelFilters.minLengthLabelFilter = null;
 
-    final int[][] expectedDocumentIndices = {
-        {0, 1},
-        null
-    };
+    final int[][] expectedDocumentIndices = {{0, 1}, null};
 
-    check(Stream.of(
-        new TestDocument("aa", "aa"),
-        new TestDocument("aa bb", "aa bb")
-    ), expectedDocumentIndices);
+    check(
+        Stream.of(new TestDocument("aa", "aa"), new TestDocument("aa bb", "aa bb")),
+        expectedDocumentIndices);
   }
 
   @Test
@@ -91,19 +82,17 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase {
     preprocessingPipeline.labelFilters.completeLabelFilter = null;
 
     final int[][] expectedDocumentIndices = {
-        {3, 4},
-        {0, 1, 2},
-        null,
-        null,
+      {3, 4}, {0, 1, 2}, null, null,
     };
 
-    check(Stream.of(
-        new TestDocument("aa", "aa"),
-        new TestDocument("aa bb", "aa bb"),
-        new TestDocument("aa bb cc", "aa bb cc"),
-        new TestDocument("dd dd", "dd dd"),
-        new TestDocument("dd dd", "dd dd")
-    ), expectedDocumentIndices);
+    check(
+        Stream.of(
+            new TestDocument("aa", "aa"),
+            new TestDocument("aa bb", "aa bb"),
+            new TestDocument("aa bb cc", "aa bb cc"),
+            new TestDocument("dd dd", "dd dd"),
+            new TestDocument("dd dd", "dd dd")),
+        expectedDocumentIndices);
   }
 
   private void check(Stream<? extends Document> documents, int[][] expectedDocumentIndices) {
@@ -118,8 +107,8 @@ public class ClusterMergerTest extends LingoProcessingComponentTestBase {
       final String description = "clusterDocuments[" + i + "]";
       if (expectedDocumentIndices[i] != null) {
         Assertions.assertThat(lingoContext.clusterDocuments[i]).as(description).isNotNull();
-        Assertions.assertThat(
-            lingoContext.clusterDocuments[i].asIntLookupContainer().toArray()).as(description)
+        Assertions.assertThat(lingoContext.clusterDocuments[i].asIntLookupContainer().toArray())
+            .as(description)
             .containsOnly(expectedDocumentIndices[i]);
       } else {
         Assertions.assertThat(lingoContext.clusterDocuments[i]).as(description).isNull();

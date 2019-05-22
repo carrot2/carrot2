@@ -8,9 +8,12 @@ public class AttrIntegerTest extends TestBase {
   @Test
   public void testToFromMap() {
     class Clazz extends AttrComposite {
-      public AttrInteger defValue = attributes.register("defValue", AttrInteger.builder().defaultValue(42));
-      public AttrInteger nullValue = attributes.register("nullValue", AttrInteger.builder().defaultValue(null));
-      public AttrInteger otherValue = attributes.register("otherValue", AttrInteger.builder().defaultValue(null));
+      public AttrInteger defValue =
+          attributes.register("defValue", AttrInteger.builder().defaultValue(42));
+      public AttrInteger nullValue =
+          attributes.register("nullValue", AttrInteger.builder().defaultValue(null));
+      public AttrInteger otherValue =
+          attributes.register("otherValue", AttrInteger.builder().defaultValue(null));
     }
 
     AliasMapper mapper = new AliasMapper();
@@ -32,10 +35,7 @@ public class AttrIntegerTest extends TestBase {
 
   @Test
   public void testConstraintValidation() {
-    AttrInteger attr = AttrInteger.builder()
-        .min(10)
-        .max(20)
-        .defaultValue(null);
+    AttrInteger attr = AttrInteger.builder().min(10).max(20).defaultValue(null);
 
     attr.set(10);
     attr.set(20);
@@ -45,4 +45,3 @@ public class AttrIntegerTest extends TestBase {
         .isThrownBy(() -> attr.set(21));
   }
 }
-

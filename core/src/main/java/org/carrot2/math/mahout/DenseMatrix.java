@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,12 +13,10 @@ package org.carrot2.math.mahout;
 
 import java.util.Arrays;
 
-
 public class DenseMatrix extends AbstractMatrix {
 
   private double[][] values;
 
-  
   public DenseMatrix(double[][] values) {
     super(values.length, values[0].length);
     // clone the rows
@@ -29,8 +26,7 @@ public class DenseMatrix extends AbstractMatrix {
       this.values[i] = values[i].clone();
     }
   }
-  
-  
+
   public DenseMatrix(int rows, int columns) {
     super(rows, columns);
     this.values = new double[rows][columns];
@@ -45,22 +41,22 @@ public class DenseMatrix extends AbstractMatrix {
     }
     return clone;
   }
-  
+
   @Override
   public double getQuick(int row, int column) {
     return values[row][column];
   }
-  
+
   @Override
   public Matrix like() {
     return like(rowSize(), columnSize());
   }
-  
+
   @Override
   public Matrix like(int rows, int columns) {
     return new DenseMatrix(rows, columns);
   }
-  
+
   @Override
   public void setQuick(int row, int column, double value) {
     values[row][column] = value;
@@ -90,7 +86,8 @@ public class DenseMatrix extends AbstractMatrix {
     if (columnOffset + columnsRequested > columnSize()) {
       throw new IndexException(columnOffset + columnsRequested, columnSize());
     }
-    return new MatrixView(this, new int[]{rowOffset, columnOffset}, new int[]{rowsRequested, columnsRequested});
+    return new MatrixView(
+        this, new int[] {rowOffset, columnOffset}, new int[] {rowsRequested, columnsRequested});
   }
 
   @Override
@@ -100,10 +97,11 @@ public class DenseMatrix extends AbstractMatrix {
     }
     return this;
   }
-  
+
   public Matrix assign(DenseMatrix matrix) {
     // make sure the data field has the correct length
-    if (matrix.values[0].length != this.values[0].length || matrix.values.length != this.values.length) {
+    if (matrix.values[0].length != this.values[0].length
+        || matrix.values.length != this.values.length) {
       this.values = new double[matrix.values.length][matrix.values[0].length];
     }
     // now copy the values
@@ -112,7 +110,7 @@ public class DenseMatrix extends AbstractMatrix {
     }
     return this;
   }
-  
+
   @Override
   public Matrix assignColumn(int column, Vector other) {
     if (rowSize() != other.size()) {
@@ -126,7 +124,7 @@ public class DenseMatrix extends AbstractMatrix {
     }
     return this;
   }
-  
+
   @Override
   public Matrix assignRow(int row, Vector other) {
     if (columnSize() != other.size()) {
@@ -140,7 +138,7 @@ public class DenseMatrix extends AbstractMatrix {
     }
     return this;
   }
-  
+
   @Override
   public Vector viewRow(int row) {
     if (row < 0 || row >= rowSize()) {
@@ -148,5 +146,4 @@ public class DenseMatrix extends AbstractMatrix {
     }
     return new DenseVector(values[row], true);
   }
-  
 }

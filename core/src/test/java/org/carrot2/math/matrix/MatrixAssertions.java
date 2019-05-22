@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,20 +13,14 @@ package org.carrot2.math.matrix;
 
 import org.carrot2.math.mahout.matrix.*;
 
-/**
- * FEST-style assertions for Colt matrices.
- */
+/** FEST-style assertions for Colt matrices. */
 public class MatrixAssertions {
-  /**
-   * Creates a {@link DoubleMatrix1DAssertion}.
-   */
+  /** Creates a {@link DoubleMatrix1DAssertion}. */
   public static DoubleMatrix1DAssertion assertThat(DoubleMatrix1D actualMatrix) {
     return new DoubleMatrix1DAssertion(actualMatrix);
   }
 
-  /**
-   * Creates a {@link DoubleMatrix2DAssertion}.
-   */
+  /** Creates a {@link DoubleMatrix2DAssertion}. */
   public static DoubleMatrix2DAssertion assertThat(DoubleMatrix2D actualMatrix) {
     return new DoubleMatrix2DAssertion(actualMatrix);
   }

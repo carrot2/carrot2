@@ -10,8 +10,8 @@ public class AttrEnum<T extends Enum<T>> extends Attr<T> {
     super(value, label, constraint);
 
     if (!clazz.isEnum()) {
-      throw new RuntimeException(String.format(Locale.ROOT,
-          "Expected an enum class: %s",  clazz.getSimpleName()));
+      throw new RuntimeException(
+          String.format(Locale.ROOT, "Expected an enum class: %s", clazz.getSimpleName()));
     }
     this.clazz = clazz;
   }

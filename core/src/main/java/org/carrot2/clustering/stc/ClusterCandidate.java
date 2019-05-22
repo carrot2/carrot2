@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,33 +11,24 @@
 
 package org.carrot2.clustering.stc;
 
+import com.carrotsearch.hppc.BitSet;
 import java.util.ArrayList;
 
-import com.carrotsearch.hppc.BitSet;
-
-/**
- * A cluster candidate in the process of building STC clusters.
- */
+/** A cluster candidate in the process of building STC clusters. */
 final class ClusterCandidate {
-  /**
-   * This cluster's score.
-   */
+  /** This cluster's score. */
   float score;
 
-  /**
-   * Indexes of documents this cluster covers.
-   */
+  /** Indexes of documents this cluster covers. */
   BitSet documents;
 
   /**
-   * Pairs of integers denoting a range of indices in {@link GeneralizedSuffixTree.SequenceBuilder#input}
-   * forming this cluster's label.
+   * Pairs of integers denoting a range of indices in {@link
+   * GeneralizedSuffixTree.SequenceBuilder#input} forming this cluster's label.
    */
   final ArrayList<int[]> phrases;
 
-  /**
-   * Cached cardinality of {@link #documents}.
-   */
+  /** Cached cardinality of {@link #documents}. */
   int cardinality;
 
   /* For cluster merging. */

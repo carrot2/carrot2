@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -19,9 +18,7 @@ import org.carrot2.text.preprocessing.LabelFilterTestBase;
 import org.carrot2.text.preprocessing.PreprocessingContextAssert;
 import org.junit.Test;
 
-/**
- * Test cases for {@link MinLengthLabelFilter}.
- */
+/** Test cases for {@link MinLengthLabelFilter}. */
 public class MinLengthLabelFilterTest extends LabelFilterTestBase {
   @Override
   protected void initializeFilters(LabelFilterProcessor filterProcessor) {
@@ -31,28 +28,24 @@ public class MinLengthLabelFilterTest extends LabelFilterTestBase {
   @Test
   public void testEmpty() {
     PreprocessingContextAssert a = preprocess();
-    Assertions.assertThat(a.labelImages())
-        .isEmpty();
+    Assertions.assertThat(a.labelImages()).isEmpty();
   }
 
   @Test
   public void testTooShortWords() {
     PreprocessingContextAssert a = preprocess(new TestDocument("aa . aa", "b . b"));
-    Assertions.assertThat(a.labelImages())
-        .isEmpty();
+    Assertions.assertThat(a.labelImages()).isEmpty();
   }
 
   @Test
   public void testLongerWords() {
     PreprocessingContextAssert a = preprocess(new TestDocument("abc . abc", "abcd . abcd"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("abc", "abcd");
+    Assertions.assertThat(a.labelImages()).containsOnly("abc", "abcd");
   }
 
   @Test
   public void testShortPhrases() {
     PreprocessingContextAssert a = preprocess(new TestDocument("a a . a a", "b b . b b"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("a a", "b b");
+    Assertions.assertThat(a.labelImages()).containsOnly("a a", "b b");
   }
 }

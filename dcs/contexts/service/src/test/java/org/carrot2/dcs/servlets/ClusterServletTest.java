@@ -1,24 +1,22 @@
 package org.carrot2.dcs.servlets;
 
-import com.fasterxml.jackson.core.util.DefaultIndenter;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.Assertions;
-import org.carrot2.dcs.client.ClusterResponse;
-import org.carrot2.dcs.client.ErrorResponse;
-import org.carrot2.math.mahout.Arrays;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
+
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.concurrent.atomic.AtomicInteger;
+import javax.servlet.http.HttpServletResponse;
+import org.assertj.core.api.Assertions;
+import org.carrot2.dcs.client.ClusterResponse;
+import org.carrot2.dcs.client.ErrorResponse;
+import org.carrot2.math.mahout.Arrays;
+import org.junit.Test;
 
 public class ClusterServletTest extends AbstractServletTest {
   @Test
@@ -63,7 +61,8 @@ public class ClusterServletTest extends AbstractServletTest {
         "extraUnusedAttr.response.json");
   }
 
-  private void verifyInvalidRequest(int expectedStatus, String requestResource, String responseResource) throws Exception {
+  private void verifyInvalidRequest(
+      int expectedStatus, String requestResource, String responseResource) throws Exception {
     String requestData = resourceString(requestResource);
     log.debug("Request: " + requestData);
 
@@ -73,10 +72,13 @@ public class ClusterServletTest extends AbstractServletTest {
     when(request.getInputStream()).thenReturn(new StringServletInputStream(requestData));
 
     AtomicInteger returnedStatus = new AtomicInteger();
-    doAnswer((a) -> {
-      returnedStatus.set(a.getArgument(0));
-      return null;
-    }).when(response).sendError(anyInt(), anyString());
+    doAnswer(
+            (a) -> {
+              returnedStatus.set(a.getArgument(0));
+              return null;
+            })
+        .when(response)
+        .sendError(anyInt(), anyString());
 
     ClusterServlet servlet = new ClusterServlet();
     servlet.init(config);
@@ -111,9 +113,13 @@ public class ClusterServletTest extends AbstractServletTest {
     when(response.getWriter()).thenReturn(pw);
     when(request.getInputStream()).thenReturn(new StringServletInputStream(requestData));
 
-    doAnswer((a) -> {
-      throw new RuntimeException("Unexpected sendError(): " + Arrays.toString(a.getArguments()));
-    }).when(response).sendError(anyInt(), anyString());
+    doAnswer(
+            (a) -> {
+              throw new RuntimeException(
+                  "Unexpected sendError(): " + Arrays.toString(a.getArguments()));
+            })
+        .when(response)
+        .sendError(anyInt(), anyString());
 
     ClusterServlet servlet = new ClusterServlet();
     servlet.init(config);
@@ -130,4 +136,3 @@ public class ClusterServletTest extends AbstractServletTest {
     om.readValue(content, ClusterResponse.class);
   }
 }
-

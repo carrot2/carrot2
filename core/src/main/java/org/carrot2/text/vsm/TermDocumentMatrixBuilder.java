@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,84 +15,78 @@ import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
+import org.carrot2.attrs.AttrComposite;
+import org.carrot2.attrs.AttrDouble;
+import org.carrot2.attrs.AttrInteger;
+import org.carrot2.attrs.AttrObject;
 import org.carrot2.language.TokenTypeUtils;
 import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 import org.carrot2.math.mahout.matrix.impl.DenseDoubleMatrix2D;
 import org.carrot2.math.mahout.matrix.impl.SparseDoubleMatrix2D;
 import org.carrot2.math.matrix.MatrixUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.attrs.AttrComposite;
-import org.carrot2.attrs.AttrDouble;
-import org.carrot2.attrs.AttrInteger;
-import org.carrot2.attrs.AttrObject;
 
-/**
- * Builds a term document matrix based on the provided {@link PreprocessingContext}.
- */
+/** Builds a term document matrix based on the provided {@link PreprocessingContext}. */
 public class TermDocumentMatrixBuilder extends AttrComposite {
-  /**
-   * Title word boost. Gives more weight to words that appeared in title fields.
-   */
-  public final AttrDouble titleWordsBoost = attributes.register("titleWordsBoost",
-      AttrDouble.builder()
-          .label("Title word boost")
-          .min(0)
-          .max(10)
-          .defaultValue(2.));
+  /** Title word boost. Gives more weight to words that appeared in title fields. */
+  public final AttrDouble titleWordsBoost =
+      attributes.register(
+          "titleWordsBoost",
+          AttrDouble.builder().label("Title word boost").min(0).max(10).defaultValue(2.));
 
   /**
-   * The maximum number of the term-document matrix elements. The
-   * larger the size, the more accurate, time- and memory-consuming clustering.
+   * The maximum number of the term-document matrix elements. The larger the size, the more
+   * accurate, time- and memory-consuming clustering.
    */
-  public final AttrInteger maximumMatrixSize = attributes.register("maximumMatrixSize",
-      AttrInteger.builder()
-          .label("Maximum term-document matrix size")
-          .min(50 * 100)
-          .defaultValue(250 * 150));
+  public final AttrInteger maximumMatrixSize =
+      attributes.register(
+          "maximumMatrixSize",
+          AttrInteger.builder()
+              .label("Maximum term-document matrix size")
+              .min(50 * 100)
+              .defaultValue(250 * 150));
 
   /**
-   * Maximum word document frequency. The maximum document frequency allowed for words
-   * as a fraction of all documents. Words with document frequency larger than
-   * <code>maxWordDf</code> will be ignored. For example, when <code>maxWordDf</code> is
-   * <code>0.4</code>, words appearing in more than 40% of documents will be be ignored.
-   * A value of <code>1.0</code> means that all words will be taken into
-   * account, no matter in how many documents they appear.
-   * <p>
-   * This attribute may be useful when certain words appear in most of the input
-   * documents (e.g. company name from header or footer) and such words dominate the
-   * cluster labels. In such case, setting <code>maxWordDf</code> to a value lower than
-   * <code>1.0</code>, e.g. <code>0.9</code> may improve the clusters.
-   * </p>
-   * <p>
-   * Another useful application of this attribute is when there is a need to generate
-   * only very specific clusters, i.e. clusters containing small numbers of documents.
-   * This can be achieved by setting <code>maxWordDf</code> to extremely low values,
-   * e.g. <code>0.1</code> or <code>0.05</code>.
-   * </p>
+   * Maximum word document frequency. The maximum document frequency allowed for words as a fraction
+   * of all documents. Words with document frequency larger than <code>maxWordDf</code> will be
+   * ignored. For example, when <code>maxWordDf</code> is <code>0.4</code>, words appearing in more
+   * than 40% of documents will be be ignored. A value of <code>1.0</code> means that all words will
+   * be taken into account, no matter in how many documents they appear.
+   *
+   * <p>This attribute may be useful when certain words appear in most of the input documents (e.g.
+   * company name from header or footer) and such words dominate the cluster labels. In such case,
+   * setting <code>maxWordDf</code> to a value lower than <code>1.0</code>, e.g. <code>0.9</code>
+   * may improve the clusters.
+   *
+   * <p>Another useful application of this attribute is when there is a need to generate only very
+   * specific clusters, i.e. clusters containing small numbers of documents. This can be achieved by
+   * setting <code>maxWordDf</code> to extremely low values, e.g. <code>0.1</code> or <code>0.05
+   * </code>.
    */
-  public final AttrDouble maxWordDf = attributes.register("maxWordDf",
-      AttrDouble.builder()
-          .label("Maximum word document frequency")
-          .min(0)
-          .max(1)
-          .defaultValue(0.9));
+  public final AttrDouble maxWordDf =
+      attributes.register(
+          "maxWordDf",
+          AttrDouble.builder()
+              .label("Maximum word document frequency")
+              .min(0)
+              .max(1)
+              .defaultValue(0.9));
 
-  /**
-   * Term weighting. The method for calculating weight of words in the term-document
-   * matrices.
-   */
+  /** Term weighting. The method for calculating weight of words in the term-document matrices. */
   public TermWeighting termWeighting;
 
   {
-    attributes.register("termWeighting", AttrObject.builder(TermWeighting.class)
-        .label("Term weighting for term-document matrix")
-        .getset(() -> termWeighting, (v) -> termWeighting = v)
-        .defaultValue(LogTfIdfTermWeighting::new));
+    attributes.register(
+        "termWeighting",
+        AttrObject.builder(TermWeighting.class)
+            .label("Term weighting for term-document matrix")
+            .getset(() -> termWeighting, (v) -> termWeighting = v)
+            .defaultValue(LogTfIdfTermWeighting::new));
   }
 
   /**
-   * Builds a term document matrix from data provided in the <code>context</code>,
-   * stores the result in there.
+   * Builds a term document matrix from data provided in the <code>context</code>, stores the result
+   * in there.
    */
   public void buildTermDocumentMatrix(VectorSpaceModelContext vsmContext) {
     final PreprocessingContext preprocessingContext = vsmContext.preprocessingContext;
@@ -128,15 +121,19 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
     final double[] stemsWeight = new double[stemsToInclude.length];
     for (int i = 0; i < stemsToInclude.length; i++) {
       final int stemIndex = stemsToInclude[i];
-      stemsWeight[i] = termWeighting.calculateTermWeight(stemsTf[stemIndex], stemsTfByDocument[stemIndex].length / 2,
-          documentCount) * getWeightBoost(titleFieldIndex, stemsFieldIndices[stemIndex]);
+      stemsWeight[i] =
+          termWeighting.calculateTermWeight(
+                  stemsTf[stemIndex], stemsTfByDocument[stemIndex].length / 2, documentCount)
+              * getWeightBoost(titleFieldIndex, stemsFieldIndices[stemIndex]);
     }
-    final int[] stemWeightOrder = IndirectSort.mergesort(0, stemsWeight.length,
-        new IndirectComparator.DescendingDoubleComparator(stemsWeight));
+    final int[] stemWeightOrder =
+        IndirectSort.mergesort(
+            0, stemsWeight.length, new IndirectComparator.DescendingDoubleComparator(stemsWeight));
 
     // Calculate the number of terms we can include to fulfill the max matrix size
     final int maxRows = maximumMatrixSize.get() / documentCount;
-    final DoubleMatrix2D tdMatrix = new DenseDoubleMatrix2D(Math.min(maxRows, stemsToInclude.length), documentCount);
+    final DoubleMatrix2D tdMatrix =
+        new DenseDoubleMatrix2D(Math.min(maxRows, stemsToInclude.length), documentCount);
 
     for (int i = 0; i < stemWeightOrder.length && i < maxRows; i++) {
       final int stemIndex = stemsToInclude[stemWeightOrder[i]];
@@ -145,7 +142,8 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
       final byte fieldIndices = stemsFieldIndices[stemIndex];
 
       for (int j = 0; j < df; j++) {
-        double weight = termWeighting.calculateTermWeight(tfByDocument[j * 2 + 1], df, documentCount);
+        double weight =
+            termWeighting.calculateTermWeight(tfByDocument[j * 2 + 1], df, documentCount);
 
         weight *= getWeightBoost(titleFieldIndex, fieldIndices);
         tdMatrix.set(i, tfByDocument[j * 2], weight);
@@ -164,9 +162,9 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
   }
 
   /**
-   * Builds a term-phrase matrix in the same space as the main term-document matrix. If
-   * the processing context contains no phrases,
-   * {@link VectorSpaceModelContext#termPhraseMatrix} will remain <code>null</code>.
+   * Builds a term-phrase matrix in the same space as the main term-document matrix. If the
+   * processing context contains no phrases, {@link VectorSpaceModelContext#termPhraseMatrix} will
+   * remain <code>null</code>.
    */
   public void buildTermPhraseMatrix(VectorSpaceModelContext context) {
     final PreprocessingContext preprocessingContext = context.preprocessingContext;
@@ -181,16 +179,15 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
         phraseFeatureIndices[featureIndex] = labelsFeatureIndex[featureIndex + firstPhraseIndex];
       }
 
-      final DoubleMatrix2D phraseMatrix = TermDocumentMatrixBuilder.buildAlignedMatrix(context, phraseFeatureIndices,
-          termWeighting);
+      final DoubleMatrix2D phraseMatrix =
+          TermDocumentMatrixBuilder.buildAlignedMatrix(
+              context, phraseFeatureIndices, termWeighting);
       MatrixUtils.normalizeColumnL2(phraseMatrix, null);
       context.termPhraseMatrix = phraseMatrix.viewDice();
     }
   }
 
-  /**
-   * Calculates the boost we should apply to a stem, based on the field indices array.
-   */
+  /** Calculates the boost we should apply to a stem, based on the field indices array. */
   private double getWeightBoost(int titleFieldIndex, final byte fieldIndices) {
     if ((fieldIndices & (1 << titleFieldIndex)) != 0) {
       return titleWordsBoost.get();
@@ -200,8 +197,8 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
   }
 
   /**
-   * Computes stem indices of words that are one-word label candidates or are non-stop
-   * words from phrase label candidates.
+   * Computes stem indices of words that are one-word label candidates or are non-stop words from
+   * phrase label candidates.
    */
   private int[] computeRequiredStemIndices(PreprocessingContext context) {
     final int[] labelsFeatureIndex = context.allLabels.featureIndex;
@@ -218,13 +215,25 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
     for (int i = 0; i < labelsFeatureIndex.length; i++) {
       final int featureIndex = labelsFeatureIndex[i];
       if (featureIndex < wordCount) {
-        addStemIndex(wordsStemIndex, documentCount, stemsTfByDocument, requiredStemIndices, featureIndex, maxWordDf);
+        addStemIndex(
+            wordsStemIndex,
+            documentCount,
+            stemsTfByDocument,
+            requiredStemIndices,
+            featureIndex,
+            maxWordDf);
       } else {
         final int[] wordIndices = phrasesWordIndices[featureIndex - wordCount];
         for (int j = 0; j < wordIndices.length; j++) {
           final int wordIndex = wordIndices[j];
           if (!TokenTypeUtils.isCommon(wordsTypes[wordIndex])) {
-            addStemIndex(wordsStemIndex, documentCount, stemsTfByDocument, requiredStemIndices, wordIndex, maxWordDf);
+            addStemIndex(
+                wordsStemIndex,
+                documentCount,
+                stemsTfByDocument,
+                requiredStemIndices,
+                wordIndex,
+                maxWordDf);
           }
         }
       }
@@ -233,11 +242,14 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
     return requiredStemIndices.asIntLookupContainer().toArray();
   }
 
-  /**
-   * Adds stem index to the set with a check on the stem's document frequency.
-   */
-  private void addStemIndex(final int[] wordsStemIndex, int documentCount, int[][] stemsTfByDocument,
-                            final BitSet requiredStemIndices, final int featureIndex, double maxWordDf) {
+  /** Adds stem index to the set with a check on the stem's document frequency. */
+  private void addStemIndex(
+      final int[] wordsStemIndex,
+      int documentCount,
+      int[][] stemsTfByDocument,
+      final BitSet requiredStemIndices,
+      final int featureIndex,
+      double maxWordDf) {
     final int stemIndex = wordsStemIndex[featureIndex];
     final int df = stemsTfByDocument[stemIndex].length / 2;
     if (((double) df / documentCount) <= maxWordDf) {
@@ -246,17 +258,18 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
   }
 
   /**
-   * Builds a sparse term-document-like matrix for the provided matrixWordIndices in the
-   * same term space as the original term-document matrix.
+   * Builds a sparse term-document-like matrix for the provided matrixWordIndices in the same term
+   * space as the original term-document matrix.
    */
-  static DoubleMatrix2D buildAlignedMatrix(VectorSpaceModelContext vsmContext, int[] featureIndex,
-                                           TermWeighting termWeighting) {
+  static DoubleMatrix2D buildAlignedMatrix(
+      VectorSpaceModelContext vsmContext, int[] featureIndex, TermWeighting termWeighting) {
     final IntIntHashMap stemToRowIndex = vsmContext.stemToRowIndex;
     if (featureIndex.length == 0) {
       return new DenseDoubleMatrix2D(stemToRowIndex.size(), 0);
     }
 
-    final DoubleMatrix2D phraseMatrix = new SparseDoubleMatrix2D(stemToRowIndex.size(), featureIndex.length);
+    final DoubleMatrix2D phraseMatrix =
+        new SparseDoubleMatrix2D(stemToRowIndex.size(), featureIndex.length);
 
     final PreprocessingContext preprocessingContext = vsmContext.preprocessingContext;
     final int[] wordsStemIndex = preprocessingContext.allWords.stemIndex;
@@ -281,8 +294,9 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
         if (stemToRowIndex.indexExists(index)) {
           final int rowIndex = stemToRowIndex.indexGet(index);
 
-          double weight = termWeighting.calculateTermWeight(stemsTf[stemIndex],
-              stemsTfByDocument[stemIndex].length / 2, documentCount);
+          double weight =
+              termWeighting.calculateTermWeight(
+                  stemsTf[stemIndex], stemsTfByDocument[stemIndex].length / 2, documentCount);
 
           phraseMatrix.setQuick(rowIndex, i, weight);
         }

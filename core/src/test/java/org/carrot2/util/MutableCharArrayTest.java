@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,14 +11,12 @@
 
 package org.carrot2.util;
 
+import static org.junit.Assert.*;
+
 import org.carrot2.TestBase;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-/**
- * Test cases for {@link MutableCharArray}.
- */
+/** Test cases for {@link MutableCharArray}. */
 public class MutableCharArrayTest extends TestBase {
   @Test
   public void testCharArrayCharSequence() {
@@ -29,13 +26,13 @@ public class MutableCharArrayTest extends TestBase {
 
   @Test
   public void testCharArrayCharArrayIntInt() {
-    final MutableCharArray seq = new MutableCharArray("Dawid Weiss" .toCharArray(), 1, 3);
+    final MutableCharArray seq = new MutableCharArray("Dawid Weiss".toCharArray(), 1, 3);
     assertEquals("awi", seq.toString());
   }
 
   @Test
   public void testCharAt() {
-    final MutableCharArray seq = new MutableCharArray("Dawid Weiss" .toCharArray(), 1, 3);
+    final MutableCharArray seq = new MutableCharArray("Dawid Weiss".toCharArray(), 1, 3);
     assertEquals('a', seq.charAt(0));
     assertEquals('w', seq.charAt(1));
     assertEquals('i', seq.charAt(2));
@@ -43,7 +40,7 @@ public class MutableCharArrayTest extends TestBase {
 
   @Test(expected = IndexOutOfBoundsException.class)
   public void testCharAtOutOfBounds() {
-    final MutableCharArray seq = new MutableCharArray("Dawid Weiss" .toCharArray(), 1, 3);
+    final MutableCharArray seq = new MutableCharArray("Dawid Weiss".toCharArray(), 1, 3);
     assertEquals('-', seq.charAt(3));
   }
 
@@ -52,7 +49,7 @@ public class MutableCharArrayTest extends TestBase {
     MutableCharArray seq = new MutableCharArray("1234");
     assertEquals(4, seq.length());
 
-    seq = new MutableCharArray("1234" .toCharArray(), 1, 2);
+    seq = new MutableCharArray("1234".toCharArray(), 1, 2);
     assertEquals(2, seq.length());
   }
 
@@ -79,7 +76,7 @@ public class MutableCharArrayTest extends TestBase {
     seq.reset("Abcdef");
     assertEquals(seq.toString(), "Abcdef");
 
-    seq.reset("Dawid Weiss" .toCharArray(), 1, 3);
+    seq.reset("Dawid Weiss".toCharArray(), 1, 3);
     assertEquals(seq, new MutableCharArray("awi"));
 
     seq.reset("abc");

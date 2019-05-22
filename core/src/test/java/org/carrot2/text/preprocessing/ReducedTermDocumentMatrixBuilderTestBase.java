@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,19 +11,18 @@
 
 package org.carrot2.text.preprocessing;
 
+import java.util.stream.Stream;
 import org.carrot2.clustering.Document;
-import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.text.preprocessing.TermDocumentMatrixBuilderTestBase;
 import org.carrot2.text.vsm.ReducedVectorSpaceModelContext;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.junit.Before;
 
-import java.util.stream.Stream;
-
 /**
- * A base class for tests requiring that a dimensionality-reduced term-document document matrix is built.
+ * A base class for tests requiring that a dimensionality-reduced term-document document matrix is
+ * built.
  */
-public abstract class ReducedTermDocumentMatrixBuilderTestBase extends TermDocumentMatrixBuilderTestBase {
+public abstract class ReducedTermDocumentMatrixBuilderTestBase
+    extends TermDocumentMatrixBuilderTestBase {
   protected ReducedVectorSpaceModelContext reducedVsmContext;
   protected TermDocumentMatrixReducer reducer;
 
@@ -40,5 +38,5 @@ public abstract class ReducedTermDocumentMatrixBuilderTestBase extends TermDocum
     reducer.reduce(reducedVsmContext, getDimensions(ctx));
   }
 
-  abstract protected int getDimensions(PreprocessingContext ctx);
+  protected abstract int getDimensions(PreprocessingContext ctx);
 }

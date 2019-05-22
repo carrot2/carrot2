@@ -1,17 +1,20 @@
 package org.carrot2.dcs.client;
 
-import com.fasterxml.jackson.annotation.*;
-
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 @JsonPropertyOrder({
-    "language",
-    "algorithm",
-    "parameters",
-    "documents",
+  "language",
+  "algorithm",
+  "parameters",
+  "documents",
 })
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClusterRequest {
@@ -29,15 +32,11 @@ public class ClusterRequest {
     }
   }
 
-  @JsonProperty
-  public String language;
+  @JsonProperty public String language;
 
-  @JsonProperty
-  public String algorithm;
+  @JsonProperty public String algorithm;
 
-  @JsonProperty
-  public Map<String, Object> parameters;
+  @JsonProperty public Map<String, Object> parameters;
 
-  @JsonProperty
-  public List<Document> documents = new ArrayList<>();
+  @JsonProperty public List<Document> documents = new ArrayList<>();
 }

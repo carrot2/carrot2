@@ -1,12 +1,9 @@
-/* Imported from Mahout. */package org.carrot2.math.mahout;
-
+/* Imported from Mahout. */ package org.carrot2.math.mahout;
 
 public final class Arrays {
 
-  private Arrays() {
-  }
+  private Arrays() {}
 
-  
   public static byte[] ensureCapacity(byte[] array, int minCapacity) {
     int oldCapacity = array.length;
     byte[] newArray;
@@ -24,7 +21,6 @@ public final class Arrays {
     return newArray;
   }
 
-  
   public static char[] ensureCapacity(char[] array, int minCapacity) {
     int oldCapacity = array.length;
     char[] newArray;
@@ -42,7 +38,6 @@ public final class Arrays {
     return newArray;
   }
 
-  
   public static double[] ensureCapacity(double[] array, int minCapacity) {
     int oldCapacity = array.length;
     double[] newArray;
@@ -53,7 +48,7 @@ public final class Arrays {
       }
 
       newArray = new double[newCapacity];
-      //for (int i = oldCapacity; --i >= 0; ) newArray[i] = array[i];
+      // for (int i = oldCapacity; --i >= 0; ) newArray[i] = array[i];
       System.arraycopy(array, 0, newArray, 0, oldCapacity);
     } else {
       newArray = array;
@@ -61,7 +56,6 @@ public final class Arrays {
     return newArray;
   }
 
-  
   public static float[] ensureCapacity(float[] array, int minCapacity) {
     int oldCapacity = array.length;
     float[] newArray;
@@ -79,7 +73,6 @@ public final class Arrays {
     return newArray;
   }
 
-  
   public static int[] ensureCapacity(int[] array, int minCapacity) {
     int oldCapacity = array.length;
     int[] newArray;
@@ -97,7 +90,6 @@ public final class Arrays {
     return newArray;
   }
 
-  
   public static long[] ensureCapacity(long[] array, int minCapacity) {
     int oldCapacity = array.length;
     long[] newArray;
@@ -115,7 +107,6 @@ public final class Arrays {
     return newArray;
   }
 
-  
   public static Object[] ensureCapacity(Object[] array, int minCapacity) {
     int oldCapacity = array.length;
     Object[] newArray;
@@ -133,7 +124,6 @@ public final class Arrays {
     return newArray;
   }
 
-  
   public static short[] ensureCapacity(short[] array, int minCapacity) {
     int oldCapacity = array.length;
     short[] newArray;
@@ -151,7 +141,6 @@ public final class Arrays {
     return newArray;
   }
 
-  
   public static boolean[] ensureCapacity(boolean[] array, int minCapacity) {
     int oldCapacity = array.length;
     boolean[] newArray;
@@ -169,7 +158,6 @@ public final class Arrays {
     return newArray;
   }
 
-  
   public static String toString(byte[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -184,7 +172,6 @@ public final class Arrays {
     return buf.toString();
   }
 
-  
   public static String toString(char[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -199,7 +186,6 @@ public final class Arrays {
     return buf.toString();
   }
 
-  
   public static String toString(double[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -214,7 +200,6 @@ public final class Arrays {
     return buf.toString();
   }
 
-  
   public static String toString(float[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -229,7 +214,6 @@ public final class Arrays {
     return buf.toString();
   }
 
-  
   public static String toString(int[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -244,7 +228,6 @@ public final class Arrays {
     return buf.toString();
   }
 
-  
   public static String toString(long[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -259,7 +242,6 @@ public final class Arrays {
     return buf.toString();
   }
 
-  
   public static String toString(Object[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -274,7 +256,6 @@ public final class Arrays {
     return buf.toString();
   }
 
-  
   public static String toString(short[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -289,7 +270,6 @@ public final class Arrays {
     return buf.toString();
   }
 
-  
   public static String toString(boolean[] array) {
     StringBuilder buf = new StringBuilder();
     buf.append('[');
@@ -304,7 +284,6 @@ public final class Arrays {
     return buf.toString();
   }
 
-  
   public static byte[] trimToCapacity(byte[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       byte[] oldArray = array;
@@ -314,7 +293,6 @@ public final class Arrays {
     return array;
   }
 
-  
   public static char[] trimToCapacity(char[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       char[] oldArray = array;
@@ -324,7 +302,6 @@ public final class Arrays {
     return array;
   }
 
-  
   public static double[] trimToCapacity(double[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       double[] oldArray = array;
@@ -334,7 +311,6 @@ public final class Arrays {
     return array;
   }
 
-  
   public static float[] trimToCapacity(float[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       float[] oldArray = array;
@@ -344,7 +320,6 @@ public final class Arrays {
     return array;
   }
 
-  
   public static int[] trimToCapacity(int[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       int[] oldArray = array;
@@ -354,7 +329,6 @@ public final class Arrays {
     return array;
   }
 
-  
   public static long[] trimToCapacity(long[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       long[] oldArray = array;
@@ -364,7 +338,6 @@ public final class Arrays {
     return array;
   }
 
-  
   public static Object[] trimToCapacity(Object[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       Object[] oldArray = array;
@@ -374,7 +347,6 @@ public final class Arrays {
     return array;
   }
 
-  
   public static short[] trimToCapacity(short[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       short[] oldArray = array;
@@ -384,7 +356,6 @@ public final class Arrays {
     return array;
   }
 
-  
   public static boolean[] trimToCapacity(boolean[] array, int maxCapacity) {
     if (array.length > maxCapacity) {
       boolean[] oldArray = array;
@@ -394,52 +365,45 @@ public final class Arrays {
     return array;
   }
 
-  
   public static byte[] copyOf(byte[] src, int length) {
-      byte[] result = new byte [length];
-      System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
-      return result;
-  }
-  
-  
-  public static char[] copyOf(char[] src, int length) {
-      char[] result = new char [length];
-      System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
-      return result;
-  }
-  
-  
-  public static short[] copyOf(short[] src, int length) {
-      short[] result = new short [length];
-      System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
-      return result;
-  }
-  
-  
-  public static int[] copyOf(int[] src, int length) {
-      int[] result = new int [length];
-      System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
-      return result;
-  }
-  
-  
-  public static float[] copyOf(float[] src, int length) {
-      float[] result = new float [length];
-      System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
-      return result;
+    byte[] result = new byte[length];
+    System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
+    return result;
   }
 
-  
-  public static double[] copyOf(double[] src, int length) {
-      double[] result = new double [length];
-      System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
-      return result;
+  public static char[] copyOf(char[] src, int length) {
+    char[] result = new char[length];
+    System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
+    return result;
   }
-  
-  
+
+  public static short[] copyOf(short[] src, int length) {
+    short[] result = new short[length];
+    System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
+    return result;
+  }
+
+  public static int[] copyOf(int[] src, int length) {
+    int[] result = new int[length];
+    System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
+    return result;
+  }
+
+  public static float[] copyOf(float[] src, int length) {
+    float[] result = new float[length];
+    System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
+    return result;
+  }
+
+  public static double[] copyOf(double[] src, int length) {
+    double[] result = new double[length];
+    System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
+    return result;
+  }
+
   public static long[] copyOf(long[] src, int length) {
-      long[] result = new long [length];
-      System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
-      return result;
+    long[] result = new long[length];
+    System.arraycopy(src, 0, result, 0, Math.min(length, src.length));
+    return result;
   }
 }

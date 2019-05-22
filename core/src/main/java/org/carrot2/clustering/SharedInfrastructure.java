@@ -1,15 +1,18 @@
 package org.carrot2.clustering;
 
-import org.carrot2.attrs.AttrString;
-
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import org.carrot2.attrs.AttrString;
 
 public class SharedInfrastructure {
   public static AttrString queryHintAttribute() {
-    return AttrString.builder()
-        .label("Query hint")
-        .defaultValue(null);
+    return AttrString.builder().label("Query hint").defaultValue(null);
   }
 
   private static class ClusterData<T> {
@@ -26,34 +29,39 @@ public class SharedInfrastructure {
     }
   }
 
-  public static <T> List<Cluster<T>> reorderByWeightedScoreAndSize(List<Cluster<T>> clusters, double scoreWeight) {
+  public static <T> List<Cluster<T>> reorderByWeightedScoreAndSize(
+      List<Cluster<T>> clusters, double scoreWeight) {
     Comparator<ClusterData> comparator =
-        Comparator.<ClusterData> comparingDouble(data -> data.score).reversed().thenComparing(
-            Comparator.nullsFirst(
-                Comparator.comparing(data -> data.label)));
+        Comparator.<ClusterData>comparingDouble(data -> data.score)
+            .reversed()
+            .thenComparing(Comparator.nullsFirst(Comparator.comparing(data -> data.label)));
 
     return clusters.stream()
-        .map(cluster -> {
-          int docCount = recursiveDocumentCount(cluster);
-          double score = Math.pow(docCount, 1d - scoreWeight) * Math.pow(cluster.getScore(), scoreWeight);
-          return new ClusterData<T>(cluster, score, docCount);
-        })
+        .map(
+            cluster -> {
+              int docCount = recursiveDocumentCount(cluster);
+              double score =
+                  Math.pow(docCount, 1d - scoreWeight) * Math.pow(cluster.getScore(), scoreWeight);
+              return new ClusterData<T>(cluster, score, docCount);
+            })
         .sorted(comparator)
         .map(data -> data.cluster)
         .collect(Collectors.toList());
   }
 
-  public static <T extends Document> List<Cluster<T>> reorderByDescendingSizeAndLabel(ArrayList<Cluster<T>> clusters) {
+  public static <T extends Document> List<Cluster<T>> reorderByDescendingSizeAndLabel(
+      ArrayList<Cluster<T>> clusters) {
     Comparator<ClusterData> comparator =
-        Comparator.<ClusterData> comparingInt(data -> data.recursiveDocumentCount).reversed().thenComparing(
-            Comparator.nullsFirst(
-                Comparator.comparing(data -> data.label)));
+        Comparator.<ClusterData>comparingInt(data -> data.recursiveDocumentCount)
+            .reversed()
+            .thenComparing(Comparator.nullsFirst(Comparator.comparing(data -> data.label)));
 
     return clusters.stream()
-        .map(cluster -> {
-          int docCount = recursiveDocumentCount(cluster);
-          return new ClusterData<T>(cluster, 0, docCount);
-        })
+        .map(
+            cluster -> {
+              int docCount = recursiveDocumentCount(cluster);
+              return new ClusterData<T>(cluster, 0, docCount);
+            })
         .sorted(comparator)
         .map(data -> data.cluster)
         .collect(Collectors.toList());

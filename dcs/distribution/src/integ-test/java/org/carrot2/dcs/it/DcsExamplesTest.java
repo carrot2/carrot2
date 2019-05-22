@@ -1,10 +1,9 @@
 package org.carrot2.dcs.it;
 
-import org.carrot2.dcs.examples.E01_DcsClusteringBasics;
-import org.junit.Test;
-
 import java.io.IOException;
 import java.net.URI;
+import org.carrot2.dcs.examples.E01_DcsClusteringBasics;
+import org.junit.Test;
 
 public class DcsExamplesTest extends AbstractDistributionTest {
   @Test

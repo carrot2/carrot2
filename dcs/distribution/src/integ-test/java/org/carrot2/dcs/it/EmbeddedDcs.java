@@ -1,11 +1,10 @@
 package org.carrot2.dcs.it;
 
-import org.carrot2.dcs.JettyContainer;
-import org.eclipse.jetty.util.resource.Resource;
-
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Path;
+import org.carrot2.dcs.JettyContainer;
+import org.eclipse.jetty.util.resource.Resource;
 
 public class EmbeddedDcs implements DcsService {
   private final JettyContainer container;

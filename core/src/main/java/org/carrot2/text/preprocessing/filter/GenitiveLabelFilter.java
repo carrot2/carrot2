@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,18 +11,16 @@
 
 package org.carrot2.text.preprocessing.filter;
 
+import java.util.stream.Stream;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
-import java.util.stream.Stream;
-
 /**
- * Accepts labels that do not end in words in the Saxon Genitive form (e.g. "Threatening
- * the Country's").
+ * Accepts labels that do not end in words in the Saxon Genitive form (e.g. "Threatening the
+ * Country's").
  */
 public class GenitiveLabelFilter extends SingleLabelFilterBase {
-  private final static char[][] ENDINGS = Stream.of("'s", "`s", "s'", "s`")
-      .map(String::toCharArray)
-      .toArray(char[][]::new);
+  private static final char[][] ENDINGS =
+      Stream.of("'s", "`s", "s'", "s`").map(String::toCharArray).toArray(char[][]::new);
 
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {

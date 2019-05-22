@@ -1,9 +1,6 @@
 package org.carrot2;
 
 import com.carrotsearch.randomizedtesting.LifecycleScope;
-import org.assertj.core.api.Assertions;
-import org.junit.Test;
-
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
@@ -14,6 +11,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.assertj.core.api.Assertions;
+import org.junit.Test;
 
 public class SyncTest extends TestBase {
   @Test
@@ -53,31 +52,35 @@ public class SyncTest extends TestBase {
 
   private List<String> listAll(Path src) throws IOException {
     try (Stream<Path> walk = Files.walk(src)) {
-      return walk
-          .filter(p -> !p.equals(src))
-          .map(p -> {
-            try {
-              if (Files.isDirectory(p)) {
-                return p.normalize().relativize(src).toString() + " [dir]";
-              } else {
-                String perms = "";
-                PosixFileAttributeView posix = Files.getFileAttributeView(p, PosixFileAttributeView.class);
-                if (posix != null) {
-                  perms = posix.readAttributes().permissions().stream().map(Enum::name)
-                      .collect(Collectors.joining(", "));
-                }
+      return walk.filter(p -> !p.equals(src))
+          .map(
+              p -> {
+                try {
+                  if (Files.isDirectory(p)) {
+                    return p.normalize().relativize(src).toString() + " [dir]";
+                  } else {
+                    String perms = "";
+                    PosixFileAttributeView posix =
+                        Files.getFileAttributeView(p, PosixFileAttributeView.class);
+                    if (posix != null) {
+                      perms =
+                          posix.readAttributes().permissions().stream()
+                              .map(Enum::name)
+                              .collect(Collectors.joining(", "));
+                    }
 
-                return String.format(Locale.ROOT,
-                    "%s [file, %,d bytes, last modified: %s, perms: %s]",
-                    p.normalize().relativize(src).toString(),
-                    Files.size(p),
-                    Files.getLastModifiedTime(p),
-                    perms);
-              }
-            } catch (IOException e) {
-              throw new UncheckedIOException(e);
-            }
-          })
+                    return String.format(
+                        Locale.ROOT,
+                        "%s [file, %,d bytes, last modified: %s, perms: %s]",
+                        p.normalize().relativize(src).toString(),
+                        Files.size(p),
+                        Files.getLastModifiedTime(p),
+                        perms);
+                  }
+                } catch (IOException e) {
+                  throw new UncheckedIOException(e);
+                }
+              })
           .collect(Collectors.toList());
     }
   }

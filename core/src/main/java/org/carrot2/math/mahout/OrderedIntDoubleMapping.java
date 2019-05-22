@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -48,7 +47,7 @@ final class OrderedIntDoubleMapping implements Cloneable {
   int getNumMappings() {
     return numMappings;
   }
-  
+
   private void growTo(int newCapacity) {
     if (newCapacity > indices.length) {
       int[] newIndices = new int[newCapacity];
@@ -156,5 +155,4 @@ final class OrderedIntDoubleMapping implements Cloneable {
   public OrderedIntDoubleMapping clone() {
     return new OrderedIntDoubleMapping(indices.clone(), values.clone(), numMappings);
   }
-
 }

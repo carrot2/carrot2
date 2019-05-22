@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,7 +11,6 @@
 
 package org.carrot2.math.mahout;
 
-
 public class MatrixView extends AbstractMatrix {
 
   private Matrix matrix;
@@ -20,7 +18,6 @@ public class MatrixView extends AbstractMatrix {
   // the offset into the Matrix
   private int[] offset;
 
-  
   public MatrixView(Matrix matrix, int[] offset, int[] size) {
     super(size[ROW], size[COL]);
     int rowOffset = offset[ROW];
@@ -76,8 +73,7 @@ public class MatrixView extends AbstractMatrix {
 
   @Override
   public int[] getNumNondefaultElements() {
-    return new int[]{rowSize(), columnSize()};
-
+    return new int[] {rowSize(), columnSize()};
   }
 
   @Override
@@ -106,8 +102,7 @@ public class MatrixView extends AbstractMatrix {
       throw new CardinalityException(rowSize(), other.size());
     }
     for (int row = 0; row < rowSize(); row++) {
-      matrix.setQuick(row + offset[ROW], column + offset[COL], other
-          .getQuick(row));
+      matrix.setQuick(row + offset[ROW], column + offset[COL], other.getQuick(row));
     }
     return this;
   }
@@ -118,8 +113,7 @@ public class MatrixView extends AbstractMatrix {
       throw new CardinalityException(columnSize(), other.size());
     }
     for (int col = 0; col < columnSize(); col++) {
-      matrix
-          .setQuick(row + offset[ROW], col + offset[COL], other.getQuick(col));
+      matrix.setQuick(row + offset[ROW], col + offset[COL], other.getQuick(col));
     }
     return this;
   }
@@ -139,5 +133,4 @@ public class MatrixView extends AbstractMatrix {
     }
     return new VectorView(matrix.viewRow(row + offset[ROW]), offset[COL], columnSize());
   }
-
 }

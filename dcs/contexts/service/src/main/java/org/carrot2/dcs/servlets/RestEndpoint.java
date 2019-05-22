@@ -4,22 +4,21 @@ import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 class RestEndpoint extends HttpServlet {
-  public final static String PARAM_INDENT = "indent";
+  public static final String PARAM_INDENT = "indent";
 
-  private final static String CONTENT_TYPE_JSON_UTF8 = "application/json; charset=UTF-8";
-  private final static Set<String> YES = new HashSet<>(Arrays.asList("yes", "true", ""));
+  private static final String CONTENT_TYPE_JSON_UTF8 = "application/json; charset=UTF-8";
+  private static final Set<String> YES = new HashSet<>(Arrays.asList("yes", "true", ""));
 
   private ObjectMapper om;
 
@@ -31,15 +30,18 @@ class RestEndpoint extends HttpServlet {
   }
 
   @Override
-  protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  protected void service(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
     // Permit cross-site requests by default.
     response.setHeader("Access-Control-Allow-Origin", "*");
-    response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    response.setHeader(
+        "Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     response.setHeader("Access-Control-Allow-Methods", "GET, POST");
     super.service(request, response);
   }
 
-  protected void writeJsonResponse(HttpServletResponse response, boolean indent, Object jsonResponse) throws IOException {
+  protected void writeJsonResponse(
+      HttpServletResponse response, boolean indent, Object jsonResponse) throws IOException {
     response.setContentType(CONTENT_TYPE_JSON_UTF8);
 
     ObjectWriter writer = om.writer();

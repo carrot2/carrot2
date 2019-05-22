@@ -1,4 +1,4 @@
-/* Imported from Mahout. */package org.carrot2.math.mahout.matrix.impl;
+/* Imported from Mahout. */ package org.carrot2.math.mahout.matrix.impl;
 
 import org.carrot2.math.mahout.function.DoubleDoubleFunction;
 import org.carrot2.math.mahout.function.DoubleFunction;
@@ -10,43 +10,42 @@ import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 
 public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
 
-  
   final double[] elements;
 
-  
   public DenseDoubleMatrix2D(double[][] values) {
     this(values.length, values.length == 0 ? 0 : values[0].length);
     assign(values);
   }
 
-  
   public DenseDoubleMatrix2D(int rows, int columns) {
     setUp(rows, columns);
     this.elements = new double[rows * columns];
   }
 
-  
   public static DoubleMatrix2D identity(int rowsAndColumns) {
     DoubleMatrix2D matrix = new DenseDoubleMatrix2D(rowsAndColumns, rowsAndColumns);
-    for (int i = rowsAndColumns; --i >= 0;) {
+    for (int i = rowsAndColumns; --i >= 0; ) {
       matrix.setQuick(i, i, 1);
     }
     return matrix;
   }
 
-  
   @Override
   public void assign(double[][] values) {
     if (this.isNoView) {
       if (values.length != rows) {
-        throw new IllegalArgumentException("Must have same number of rows: rows=" + values.length + "rows()=" + rows());
+        throw new IllegalArgumentException(
+            "Must have same number of rows: rows=" + values.length + "rows()=" + rows());
       }
       int i = columns * (rows - 1);
-      for (int row = rows; --row >= 0;) {
+      for (int row = rows; --row >= 0; ) {
         double[] currentRow = values[row];
         if (currentRow.length != columns) {
           throw new IllegalArgumentException(
-              "Must have same number of columns in every row: columns=" + currentRow.length + "columns()=" + columns());
+              "Must have same number of columns in every row: columns="
+                  + currentRow.length
+                  + "columns()="
+                  + columns());
         }
         System.arraycopy(currentRow, 0, this.elements, i, columns);
         i -= columns;
@@ -56,15 +55,14 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     }
   }
 
-  
   @Override
   public DoubleMatrix2D assign(double value) {
     double[] elems = this.elements;
     int index = index(0, 0);
     int cs = this.columnStride;
     int rs = this.rowStride;
-    for (int row = rows; --row >= 0;) {
-      for (int i = index, column = columns; --column >= 0;) {
+    for (int row = rows; --row >= 0; ) {
+      for (int i = index, column = columns; --column >= 0; ) {
         elems[i] = value;
         i += cs;
       }
@@ -73,7 +71,6 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return this;
   }
 
-  
   @Override
   public void assign(DoubleFunction function) {
     double[] elems = this.elements;
@@ -94,16 +91,16 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
         assign(0);
         return;
       }
-      for (int row = rows; --row >= 0;) { // the general case
-        for (int i = index, column = columns; --column >= 0;) {
+      for (int row = rows; --row >= 0; ) { // the general case
+        for (int i = index, column = columns; --column >= 0; ) {
           elems[i] *= multiplicator;
           i += cs;
         }
         index += rs;
       }
     } else { // the general case x[i] = f(x[i])
-      for (int row = rows; --row >= 0;) {
-        for (int i = index, column = columns; --column >= 0;) {
+      for (int row = rows; --row >= 0; ) {
+        for (int i = index, column = columns; --column >= 0; ) {
           elems[i] = function.apply(elems[i]);
           i += cs;
         }
@@ -112,7 +109,6 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     }
   }
 
-  
   @Override
   public DoubleMatrix2D assign(DoubleMatrix2D source) {
     // overriden for performance only
@@ -150,8 +146,8 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
 
     int otherIndex = other.index(0, 0);
     int index = index(0, 0);
-    for (int row = rows; --row >= 0;) {
-      for (int i = index, j = otherIndex, column = columns; --column >= 0;) {
+    for (int row = rows; --row >= 0; ) {
+      for (int i = index, j = otherIndex, column = columns; --column >= 0; ) {
         elems[i] = otherElems[j];
         i += cs;
         j += ocs;
@@ -162,7 +158,6 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return this;
   }
 
-  
   @Override
   public DoubleMatrix2D assign(DoubleMatrix2D y, DoubleDoubleFunction function) {
     // overriden for performance only
@@ -187,8 +182,8 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
 
     // specialized for speed
     if (function == Functions.MULT) { // x[i] = x[i] * y[i]
-      for (int row = rows; --row >= 0;) {
-        for (int i = index, j = otherIndex, column = columns; --column >= 0;) {
+      for (int row = rows; --row >= 0; ) {
+        for (int i = index, j = otherIndex, column = columns; --column >= 0; ) {
           elems[i] *= otherElems[j];
           i += cs;
           j += ocs;
@@ -197,8 +192,8 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
         otherIndex += ors;
       }
     } else if (function == Functions.DIV) { // x[i] = x[i] / y[i]
-      for (int row = rows; --row >= 0;) {
-        for (int i = index, j = otherIndex, column = columns; --column >= 0;) {
+      for (int row = rows; --row >= 0; ) {
+        for (int i = index, j = otherIndex, column = columns; --column >= 0; ) {
           elems[i] /= otherElems[j];
           i += cs;
           j += ocs;
@@ -211,8 +206,8 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
       if (multiplicator == 0) { // x[i] = x[i] + 0*y[i]
         return this;
       } else if (multiplicator == 1) { // x[i] = x[i] + y[i]
-        for (int row = rows; --row >= 0;) {
-          for (int i = index, j = otherIndex, column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+          for (int i = index, j = otherIndex, column = columns; --column >= 0; ) {
             elems[i] += otherElems[j];
             i += cs;
             j += ocs;
@@ -221,8 +216,8 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
           otherIndex += ors;
         }
       } else if (multiplicator == -1) { // x[i] = x[i] - y[i]
-        for (int row = rows; --row >= 0;) {
-          for (int i = index, j = otherIndex, column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+          for (int i = index, j = otherIndex, column = columns; --column >= 0; ) {
             elems[i] -= otherElems[j];
             i += cs;
             j += ocs;
@@ -231,8 +226,8 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
           otherIndex += ors;
         }
       } else { // the general case
-        for (int row = rows; --row >= 0;) { // x[i] = x[i] + mult*y[i]
-          for (int i = index, j = otherIndex, column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) { // x[i] = x[i] + mult*y[i]
+          for (int i = index, j = otherIndex, column = columns; --column >= 0; ) {
             elems[i] += multiplicator * otherElems[j];
             i += cs;
             j += ocs;
@@ -242,8 +237,8 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
         }
       }
     } else { // the general case x[i] = f(x[i],y[i])
-      for (int row = rows; --row >= 0;) {
-        for (int i = index, j = otherIndex, column = columns; --column >= 0;) {
+      for (int row = rows; --row >= 0; ) {
+        for (int i = index, j = otherIndex, column = columns; --column >= 0; ) {
           elems[i] = function.apply(elems[i], otherElems[j]);
           i += cs;
           j += ocs;
@@ -255,17 +250,15 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return this;
   }
 
-  
   @Override
   public double getQuick(int row, int column) {
-    //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
+    // if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
     // throw new IndexOutOfBoundsException("row:"+row+", column:"+column);
-    //return elements[index(row,column)];
-    //manually inlined:
+    // return elements[index(row,column)];
+    // manually inlined:
     return elements[rowZero + row * rowStride + columnZero + column * columnStride];
   }
 
-  
   @Override
   protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
     if (other instanceof SelectedDenseDoubleMatrix2D) {
@@ -279,7 +272,6 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return false;
   }
 
-  
   @Override
   protected int index(int row, int column) {
     // return super.index(row,column);
@@ -287,42 +279,38 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return rowZero + row * rowStride + columnZero + column * columnStride;
   }
 
-  
   @Override
   public DoubleMatrix2D like(int rows, int columns) {
     return new DenseDoubleMatrix2D(rows, columns);
   }
 
-  
   @Override
   public DoubleMatrix1D like1D(int size) {
     return new DenseDoubleMatrix1D(size);
   }
 
-  
   @Override
   protected DoubleMatrix1D like1D(int size, int zero, int stride) {
     return new DenseDoubleMatrix1D(size, this.elements, zero, stride);
   }
 
-  
   @Override
   public void setQuick(int row, int column, double value) {
-    //if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
+    // if (debug) if (column<0 || column>=columns || row<0 || row>=rows)
     // throw new IndexOutOfBoundsException("row:"+row+", column:"+column);
-    //elements[index(row,column)] = value;
-    //manually inlined:
+    // elements[index(row,column)] = value;
+    // manually inlined:
     elements[rowZero + row * rowStride + columnZero + column * columnStride] = value;
   }
 
-  
   @Override
   protected DoubleMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {
     return new SelectedDenseDoubleMatrix2D(this.elements, rowOffsets, columnOffsets, 0);
   }
 
   @Override
-  public DoubleMatrix1D zMult(DoubleMatrix1D y, DoubleMatrix1D z, double alpha, double beta, boolean transposeA) {
+  public DoubleMatrix1D zMult(
+      DoubleMatrix1D y, DoubleMatrix1D z, double alpha, double beta, boolean transposeA) {
     if (transposeA) {
       return viewDice().zMult(y, z, alpha, beta, false);
     }
@@ -354,19 +342,20 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     int indexZ = zz.index(0);
 
     int cols = columns;
-    for (int row = rows; --row >= 0;) {
+    for (int row = rows; --row >= 0; ) {
       double sum = 0;
       // loop unrolled
       int i = indexA - As;
       int j = indexY - ys;
-      for (int k = cols % 4; --k >= 0;) {
+      for (int k = cols % 4; --k >= 0; ) {
         sum += AElems[i += As] * yElems[j += ys];
       }
-      for (int k = cols / 4; --k >= 0;) {
-        sum += AElems[i += As] * yElems[j += ys]
-            + AElems[i += As] * yElems[j += ys] 
-            + AElems[i += As] * yElems[j += ys]
-            + AElems[i += As] * yElems[j += ys];
+      for (int k = cols / 4; --k >= 0; ) {
+        sum +=
+            AElems[i += As] * yElems[j += ys]
+                + AElems[i += As] * yElems[j += ys]
+                + AElems[i += As] * yElems[j += ys]
+                + AElems[i += As] * yElems[j += ys];
       }
 
       zElems[indexZ] = alpha * sum + beta * zElems[indexZ];
@@ -378,8 +367,13 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
   }
 
   @Override
-  public DoubleMatrix2D zMult(DoubleMatrix2D B, DoubleMatrix2D C, double alpha, double beta, boolean transposeA,
-                              boolean transposeB) {
+  public DoubleMatrix2D zMult(
+      DoubleMatrix2D B,
+      DoubleMatrix2D C,
+      double alpha,
+      double beta,
+      boolean transposeA,
+      boolean transposeB) {
     // overriden for performance only
     if (transposeA) {
       return viewDice().zMult(B, C, alpha, beta, false, transposeB);
@@ -408,12 +402,10 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
       return super.zMult(B, C, alpha, beta, transposeA, transposeB);
     }
     if (B.rows != n) {
-      throw new IllegalArgumentException(
-          "Matrix2D inner dimensions must agree");
+      throw new IllegalArgumentException("Matrix2D inner dimensions must agree");
     }
     if (C.rows != m || C.columns != p) {
-      throw new IllegalArgumentException(
-          "Incompatible result matrix");
+      throw new IllegalArgumentException("Incompatible result matrix");
     }
     if (this == C || B == C) {
       throw new IllegalArgumentException("Matrices must not be identical");
@@ -451,8 +443,8 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     xxx     xxxxxxx
     */
     int blockSize = 30000; // * 8 == Level 2 cache in bytes
-    //if (n+p == 0) return C;
-    //int m_optimal = (BLOCK_SIZE - n*p) / (n+p);
+    // if (n+p == 0) return C;
+    // int m_optimal = (BLOCK_SIZE - n*p) / (n+p);
     int mOptimal = (blockSize - n) / (n + 1);
     if (mOptimal <= 0) {
       mOptimal = 1;
@@ -471,10 +463,10 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
         mOptimal += m - rr;
       }
 
-      for (int j = p; --j >= 0;) {
+      for (int j = p; --j >= 0; ) {
         int iA = indexA;
         int iC = jC;
-        for (int i = mOptimal; --i >= 0;) {
+        for (int i = mOptimal; --i >= 0; ) {
           int kA = iA;
           int kB = jB;
 
@@ -493,14 +485,15 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
           kB -= rB;
 
           double s = 0;
-          for (int k = n % 4; --k >= 0;) {
+          for (int k = n % 4; --k >= 0; ) {
             s += AElems[kA += cA] * BElems[kB += rB];
           }
-          for (int k = n / 4; --k >= 0;) {
-            s += AElems[kA += cA] * BElems[kB += rB]
-                + AElems[kA += cA] * BElems[kB += rB] 
-                + AElems[kA += cA] * BElems[kB += rB]
-                + AElems[kA += cA] * BElems[kB += rB];
+          for (int k = n / 4; --k >= 0; ) {
+            s +=
+                AElems[kA += cA] * BElems[kB += rB]
+                    + AElems[kA += cA] * BElems[kB += rB]
+                    + AElems[kA += cA] * BElems[kB += rB]
+                    + AElems[kA += cA] * BElems[kB += rB];
           }
 
           CElems[iC] = alpha * s + beta * CElems[iC];
@@ -514,7 +507,6 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     return C;
   }
 
-  
   @Override
   public double zSum() {
     double[] elems = this.elements;
@@ -525,8 +517,8 @@ public final class DenseDoubleMatrix2D extends DoubleMatrix2D {
     int cs = this.columnStride;
     int rs = this.rowStride;
     double sum = 0;
-    for (int row = rows; --row >= 0;) {
-      for (int i = index, column = columns; --column >= 0;) {
+    for (int row = rows; --row >= 0; ) {
+      for (int i = index, column = columns; --column >= 0; ) {
         sum += elems[i];
         i += cs;
       }

@@ -2,11 +2,10 @@ package org.carrot2.dcs.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.carrot2.clustering.Cluster;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.carrot2.clustering.Cluster;
+import org.junit.Test;
 
 public class ClusterResponseTest {
   @Test

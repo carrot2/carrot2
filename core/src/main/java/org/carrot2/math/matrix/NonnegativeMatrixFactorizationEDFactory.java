@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,22 +13,18 @@ package org.carrot2.math.matrix;
 
 import org.carrot2.math.mahout.matrix.*;
 
-/**
- * A factory for {@link NonnegativeMatrixFactorizationED}s.
- */
-public class NonnegativeMatrixFactorizationEDFactory extends IterativeMatrixFactorizationFactory
-{
-    public MatrixFactorization factorize(DoubleMatrix2D A)
-    {
-        NonnegativeMatrixFactorizationED factorization = new NonnegativeMatrixFactorizationED(A);
-        factorization.setK(k);
-        factorization.setMaxIterations(maxIterations);
-        factorization.setStopThreshold(stopThreshold);
-        factorization.setSeedingStrategy(createSeedingStrategy());
-        factorization.setOrdered(ordered);
+/** A factory for {@link NonnegativeMatrixFactorizationED}s. */
+public class NonnegativeMatrixFactorizationEDFactory extends IterativeMatrixFactorizationFactory {
+  public MatrixFactorization factorize(DoubleMatrix2D A) {
+    NonnegativeMatrixFactorizationED factorization = new NonnegativeMatrixFactorizationED(A);
+    factorization.setK(k);
+    factorization.setMaxIterations(maxIterations);
+    factorization.setStopThreshold(stopThreshold);
+    factorization.setSeedingStrategy(createSeedingStrategy());
+    factorization.setOrdered(ordered);
 
-        factorization.compute();
+    factorization.compute();
 
-        return factorization;
-    }
+    return factorization;
+  }
 }

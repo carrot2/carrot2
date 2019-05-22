@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,6 +11,7 @@
 
 package org.carrot2.clustering.lingo;
 
+import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
@@ -20,15 +20,9 @@ import org.carrot2.text.vsm.TfTermWeighting;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.stream.Stream;
-
-/**
- * Test cases for cluster document assignment in {@link ClusterBuilder}.
- */
+/** Test cases for cluster document assignment in {@link ClusterBuilder}. */
 public class ClusterDocumentAssignerTest extends LingoProcessingComponentTestBase {
-  /**
-   * Label builder under tests
-   */
+  /** Label builder under tests */
   private ClusterBuilder clusterBuilder;
 
   @Before
@@ -40,7 +34,7 @@ public class ClusterDocumentAssignerTest extends LingoProcessingComponentTestBas
 
   @Test
   public void testEmpty() {
-    check(Stream.empty(), new int[][]{});
+    check(Stream.empty(), new int[][] {});
   }
 
   @Test
@@ -48,30 +42,28 @@ public class ClusterDocumentAssignerTest extends LingoProcessingComponentTestBas
     desiredClusterCountBase = 30;
 
     final int[][] expectedDocumentIndices = {
-        {0, 2},
-        {0, 1},
-        {1, 2}
+      {0, 2},
+      {0, 1},
+      {1, 2}
     };
 
-    check(Stream.of(
-        new TestDocument("", "aa . bb"),
-        new TestDocument("", "cc . bb"),
-        new TestDocument("", "cc . aa")
-    ), expectedDocumentIndices);
+    check(
+        Stream.of(
+            new TestDocument("", "aa . bb"),
+            new TestDocument("", "cc . bb"),
+            new TestDocument("", "cc . aa")),
+        expectedDocumentIndices);
   }
 
   @Test
   public void testSinglePhraseNoSingleWords() {
     desiredClusterCountBase = 10;
 
-    final int[][] expectedDocumentIndices = {
-        {0, 1}
-    };
+    final int[][] expectedDocumentIndices = {{0, 1}};
 
-    check(Stream.of(
-        new TestDocument("aa bb", "aa bb"),
-        new TestDocument("aa bb", "aa bb")
-    ), expectedDocumentIndices);
+    check(
+        Stream.of(new TestDocument("aa bb", "aa bb"), new TestDocument("aa bb", "aa bb")),
+        expectedDocumentIndices);
   }
 
   @Test
@@ -80,15 +72,16 @@ public class ClusterDocumentAssignerTest extends LingoProcessingComponentTestBas
     clusterBuilder.phraseLabelBoost.set(0.3);
 
     final int[][] expectedDocumentIndices = {
-        {0, 2},
-        {1, 2}
+      {0, 2},
+      {1, 2}
     };
 
-    check(Stream.of(
-        new TestDocument("aa bb", "aa bb"),
-        new TestDocument("cc", "cc"),
-        new TestDocument("aa bb", "aa bb . cc")
-    ), expectedDocumentIndices);
+    check(
+        Stream.of(
+            new TestDocument("aa bb", "aa bb"),
+            new TestDocument("cc", "cc"),
+            new TestDocument("aa bb", "aa bb . cc")),
+        expectedDocumentIndices);
   }
 
   private void check(Stream<? extends Document> documents, int[][] expectedDocumentIndices) {

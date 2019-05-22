@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,27 +14,30 @@ package org.carrot2.clustering.lingo;
 import com.carrotsearch.hppc.DoubleArrayList;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.IntIntHashMap;
+import org.carrot2.attrs.AttrComposite;
 import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.util.Pair;
-import org.carrot2.attrs.AttrComposite;
 
 /**
- * Assigns unique labels to each base vector using a greedy algorithm. For each base
- * vector chooses the label that maximizes the base vector--label term vector cosine
- * similarity and has not been previously selected. Once a label is selected, it will not
- * be used to label any other vector. This algorithm does not create duplicate cluster
- * labels, which usually means that this assignment method will create more clusters than
- * {@link SimpleLabelAssigner}. This method is slightly slower than
- * {@link SimpleLabelAssigner}.
+ * Assigns unique labels to each base vector using a greedy algorithm. For each base vector chooses
+ * the label that maximizes the base vector--label term vector cosine similarity and has not been
+ * previously selected. Once a label is selected, it will not be used to label any other vector.
+ * This algorithm does not create duplicate cluster labels, which usually means that this assignment
+ * method will create more clusters than {@link SimpleLabelAssigner}. This method is slightly slower
+ * than {@link SimpleLabelAssigner}.
  */
 public class UniqueLabelAssigner extends AttrComposite implements LabelAssigner {
-  public void assignLabels(LingoProcessingContext context, DoubleMatrix2D stemCos,
-                           IntIntHashMap filteredRowToStemIndex, DoubleMatrix2D phraseCos) {
+  public void assignLabels(
+      LingoProcessingContext context,
+      DoubleMatrix2D stemCos,
+      IntIntHashMap filteredRowToStemIndex,
+      DoubleMatrix2D phraseCos) {
     final PreprocessingContext preprocessingContext = context.preprocessingContext;
     final int firstPhraseIndex = preprocessingContext.allLabels.firstPhraseIndex;
     final int[] labelsFeatureIndex = preprocessingContext.allLabels.featureIndex;
-    final int[] mostFrequentOriginalWordIndex = preprocessingContext.allStems.mostFrequentOriginalWordIndex;
+    final int[] mostFrequentOriginalWordIndex =
+        preprocessingContext.allStems.mostFrequentOriginalWordIndex;
     final int desiredClusterCount = stemCos.columns();
 
     final IntArrayList clusterLabelFeatureIndex = new IntArrayList(desiredClusterCount);
@@ -49,7 +51,8 @@ public class UniqueLabelAssigner extends AttrComposite implements LabelAssigner 
       }
 
       double stemScore = stemMax != null ? stemCos.getQuick(stemMax.objectA, stemMax.objectB) : -1;
-      double phraseScore = phraseMax != null ? phraseCos.getQuick(phraseMax.objectA, phraseMax.objectB) : -1;
+      double phraseScore =
+          phraseMax != null ? phraseCos.getQuick(phraseMax.objectA, phraseMax.objectB) : -1;
 
       if (phraseScore > stemScore) {
         phraseCos.viewRow(phraseMax.objectA).assign(0);
@@ -65,7 +68,8 @@ public class UniqueLabelAssigner extends AttrComposite implements LabelAssigner 
           phraseCos.viewColumn(stemMax.objectB).assign(0);
         }
 
-        clusterLabelFeatureIndex.add(mostFrequentOriginalWordIndex[filteredRowToStemIndex.get(stemMax.objectA)]);
+        clusterLabelFeatureIndex.add(
+            mostFrequentOriginalWordIndex[filteredRowToStemIndex.get(stemMax.objectA)]);
         clusterLabelScore.add(stemScore);
       }
     }

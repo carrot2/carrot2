@@ -5,5 +5,6 @@ import java.net.URI;
 
 public interface DcsService extends Closeable {
   URI getAddress();
+
   boolean isRunning();
 }

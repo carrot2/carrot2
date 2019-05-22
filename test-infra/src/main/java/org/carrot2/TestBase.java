@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -22,15 +21,14 @@ import com.carrotsearch.randomizedtesting.annotations.ThreadLeakZombies.Conseque
 import com.carrotsearch.randomizedtesting.rules.NoClassHooksShadowingRule;
 import com.carrotsearch.randomizedtesting.rules.NoInstanceHooksOverridesRule;
 import com.carrotsearch.randomizedtesting.rules.SystemPropertiesInvariantRule;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 
 @TimeoutSuite(millis = 180 * 1000) // No suite should run longer than 180 seconds.
 @ThreadLeakGroup(Group.MAIN)
@@ -46,45 +44,37 @@ public abstract class TestBase extends RandomizedTest {
    * @see SystemPropertiesInvariantRule
    * @see #classRules
    */
-  private static final String[] IGNORED_INVARIANT_PROPERTIES = {
-      "user.timezone",
-      "jetty.git.hash"
-  };
+  private static final String[] IGNORED_INVARIANT_PROPERTIES = {"user.timezone", "jetty.git.hash"};
 
-  /**
-   * Class {@link TestRule}s.
-   */
-  @ClassRule
-  public static final TestRule classRules;
+  /** Class {@link TestRule}s. */
+  @ClassRule public static final TestRule classRules;
 
   static {
-    RuleChain rules = RuleChain.outerRule(new SystemPropertiesInvariantRule(IGNORED_INVARIANT_PROPERTIES));
-    rules = rules.around(new NoClassHooksShadowingRule()).around(new NoInstanceHooksOverridesRule());
+    RuleChain rules =
+        RuleChain.outerRule(new SystemPropertiesInvariantRule(IGNORED_INVARIANT_PROPERTIES));
+    rules =
+        rules.around(new NoClassHooksShadowingRule()).around(new NoInstanceHooksOverridesRule());
     classRules = rules;
   }
 
-  /**
-   * Test {@link TestRule}s.
-   */
+  /** Test {@link TestRule}s. */
   @Rule
   public final TestRule ruleChain =
       RuleChain.outerRule(new SystemPropertiesInvariantRule(IGNORED_INVARIANT_PROPERTIES));
 
-  /**
-   * Test logger.
-   */
+  /** Test logger. */
   protected final Logger log = LoggerFactory.getLogger(getClass());
 
   protected static byte[] resourceBytes(Class<?> clazz, String resource) {
     try (InputStream is = clazz.getResourceAsStream(resource)) {
       if (is == null) {
-        throw new RuntimeException("Resource not found relative to class "
-            + clazz.getName() + ": " + resource);
+        throw new RuntimeException(
+            "Resource not found relative to class " + clazz.getName() + ": " + resource);
       }
 
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      byte [] buf = new byte [1024];
-      for (int len; (len = is.read(buf)) > 0;) {
+      byte[] buf = new byte[1024];
+      for (int len; (len = is.read(buf)) > 0; ) {
         baos.write(buf, 0, len);
       }
       return baos.toByteArray();
@@ -105,7 +95,7 @@ public abstract class TestBase extends RandomizedTest {
     return new String(resourceBytes(resource), StandardCharsets.UTF_8);
   }
 
-  protected static  InputStream resourceStream(Class<?> clazz, String resource) {
+  protected static InputStream resourceStream(Class<?> clazz, String resource) {
     return new ByteArrayInputStream(resourceBytes(clazz, resource));
   }
 

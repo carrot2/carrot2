@@ -28,10 +28,12 @@ class Sync {
         Files.createDirectories(dst);
         sync(src.path, dst);
       } else {
-        if (!Files.exists(dst) ||
-            Files.size(dst) != Files.size(src.path) ||
-            Files.getLastModifiedTime(dst).compareTo(Files.getLastModifiedTime(src.path)) != 0) {
-          Files.copy(src.path, dst,
+        if (!Files.exists(dst)
+            || Files.size(dst) != Files.size(src.path)
+            || Files.getLastModifiedTime(dst).compareTo(Files.getLastModifiedTime(src.path)) != 0) {
+          Files.copy(
+              src.path,
+              dst,
               StandardCopyOption.COPY_ATTRIBUTES,
               StandardCopyOption.REPLACE_EXISTING);
         }
@@ -39,9 +41,7 @@ class Sync {
     }
 
     Set<String> atSource = sourceEntries.stream().map(e -> e.name).collect(Collectors.toSet());
-    targetEntries.stream()
-        .filter(v -> !atSource.contains(v.name))
-        .forEach(e -> remove(e.path));
+    targetEntries.stream().filter(v -> !atSource.contains(v.name)).forEach(e -> remove(e.path));
   }
 
   private List<Entry> files(Path source) throws IOException {
@@ -54,19 +54,23 @@ class Sync {
 
   private static void remove(Path p) {
     try {
-      Files.walkFileTree(p, new SimpleFileVisitor<Path>() {
-        @Override
-        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-          Files.delete(dir);
-          return FileVisitResult.CONTINUE;
-        }
+      Files.walkFileTree(
+          p,
+          new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc)
+                throws IOException {
+              Files.delete(dir);
+              return FileVisitResult.CONTINUE;
+            }
 
-        @Override
-        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-          Files.delete(file);
-          return FileVisitResult.CONTINUE;
-        }
-      });
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                throws IOException {
+              Files.delete(file);
+              return FileVisitResult.CONTINUE;
+            }
+          });
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }

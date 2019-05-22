@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -24,10 +23,7 @@ public interface VectorIterable extends Iterable<MatrixSlice> {
 
   int numCols();
 
-  
   Vector times(Vector v);
 
-  
   Vector timesSquared(Vector v);
-
 }

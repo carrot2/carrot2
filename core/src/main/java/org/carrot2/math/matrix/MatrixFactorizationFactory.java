@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,12 +11,10 @@
 
 package org.carrot2.math.matrix;
 
-import org.carrot2.math.mahout.matrix.*;
 import org.carrot2.attrs.AcceptingVisitor;
+import org.carrot2.math.mahout.matrix.*;
 
-/**
- * A factory of {@link MatrixFactorization}s.
- */
+/** A factory of {@link MatrixFactorization}s. */
 public interface MatrixFactorizationFactory extends AcceptingVisitor {
   /**
    * Factorizes matrix <code>A</code>.

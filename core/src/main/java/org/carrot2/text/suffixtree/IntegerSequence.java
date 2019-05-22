@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,34 +11,27 @@
 
 package org.carrot2.text.suffixtree;
 
-/**
- * An {@link Sequence} wrapper for an array of integers.
- */
-public final class IntegerSequence implements Sequence
-{
-    private final int [] seq;
-    private final int start;
-    private final int length;
+/** An {@link Sequence} wrapper for an array of integers. */
+public final class IntegerSequence implements Sequence {
+  private final int[] seq;
+  private final int start;
+  private final int length;
 
-    public IntegerSequence(int [] seq)
-    {
-        this(seq, 0, seq.length);
-    }
+  public IntegerSequence(int[] seq) {
+    this(seq, 0, seq.length);
+  }
 
-    public IntegerSequence(int [] seq, int start, int length)
-    {
-        this.seq = seq;
-        this.start = start;
-        this.length = length;
-    }
+  public IntegerSequence(int[] seq, int start, int length) {
+    this.seq = seq;
+    this.start = start;
+    this.length = length;
+  }
 
-    public int size()
-    {
-        return length;
-    }
+  public int size() {
+    return length;
+  }
 
-    public int objectAt(int i)
-    {
-        return seq[start + i];
-    }
+  public int objectAt(int i) {
+    return seq[start + i];
+  }
 }

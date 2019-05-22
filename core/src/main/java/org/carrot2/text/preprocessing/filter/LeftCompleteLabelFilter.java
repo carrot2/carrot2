@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,10 +14,7 @@ package org.carrot2.text.preprocessing.filter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
-/**
- * Filters out phrases that are not left complete.
- */
+/** Filters out phrases that are not left complete. */
 class LeftCompleteLabelFilter extends CompleteLabelFilterBase {
   int[] createLcp(List<LabelIndexWithCodes> phraseCodes) {
     int[] lcpArray = new int[phraseCodes.size()];
@@ -41,29 +37,30 @@ class LeftCompleteLabelFilter extends CompleteLabelFilterBase {
     return lcpArray;
   }
 
-  List<LabelIndexWithCodes> sortPhraseCodes(
-      List<LabelIndexWithCodes> phrasesWithCodes) {
-    return phrasesWithCodes.stream().sorted((o1, o2) -> {
-      int[] codesA = o1.getCodes();
-      int[] codesB = o2.getCodes();
+  List<LabelIndexWithCodes> sortPhraseCodes(List<LabelIndexWithCodes> phrasesWithCodes) {
+    return phrasesWithCodes.stream()
+        .sorted(
+            (o1, o2) -> {
+              int[] codesA = o1.getCodes();
+              int[] codesB = o2.getCodes();
 
-      int minLength = Math.min(codesA.length, codesB.length);
-      for (int i = 1; i <= minLength; i++) {
-        if (codesA[codesA.length - i] < codesB[codesB.length - i]) {
-          return -1;
-        } else if (codesA[codesA.length - i] > codesB[codesB.length - i]) {
-          return 1;
-        }
-      }
+              int minLength = Math.min(codesA.length, codesB.length);
+              for (int i = 1; i <= minLength; i++) {
+                if (codesA[codesA.length - i] < codesB[codesB.length - i]) {
+                  return -1;
+                } else if (codesA[codesA.length - i] > codesB[codesB.length - i]) {
+                  return 1;
+                }
+              }
 
-      if (codesA.length < codesB.length) {
-        return -1;
-      } else if (codesA.length > codesB.length) {
-        return 1;
-      }
+              if (codesA.length < codesB.length) {
+                return -1;
+              } else if (codesA.length > codesB.length) {
+                return 1;
+              }
 
-      return 0;
-    })
+              return 0;
+            })
         .collect(Collectors.toList());
   }
 }

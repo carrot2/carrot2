@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,24 +11,20 @@
 
 package org.carrot2.math.mahout;
 
+import com.carrotsearch.hppc.AbstractIterator;
 import java.util.Arrays;
 import java.util.Iterator;
-
-import com.carrotsearch.hppc.AbstractIterator;
 import org.carrot2.math.mahout.function.DoubleDoubleFunction;
 import org.carrot2.math.mahout.function.PlusMult;
-
 
 public class DenseVector extends AbstractVector {
 
   private double[] values;
 
-  
   public DenseVector() {
     super(0);
   }
 
-  
   public DenseVector(double[] values) {
     this(values, false);
   }
@@ -43,13 +38,11 @@ public class DenseVector extends AbstractVector {
     this(values.values, shallowCopy);
   }
 
-  
   public DenseVector(int cardinality) {
     super(cardinality);
     this.values = new double[cardinality];
   }
 
-  
   public DenseVector(Vector vector) {
     super(vector.size());
     values = new double[vector.size()];
@@ -65,13 +58,11 @@ public class DenseVector extends AbstractVector {
     return new DenseVector(values.clone());
   }
 
-  
   @Override
   public boolean isDense() {
     return true;
   }
 
-  
   @Override
   public boolean isSequentialAccess() {
     return true;
@@ -103,14 +94,14 @@ public class DenseVector extends AbstractVector {
     lengthSquared = -1.0;
     values[index] = value;
   }
-  
+
   @Override
   public Vector assign(double value) {
     this.lengthSquared = -1;
     Arrays.fill(values, value);
     return this;
   }
-  
+
   @Override
   public Vector assign(Vector other, DoubleDoubleFunction function) {
     if (size() != other.size()) {
@@ -158,7 +149,6 @@ public class DenseVector extends AbstractVector {
     return new VectorView(this, offset, length);
   }
 
-  
   @Override
   public Iterator<Element> iterateNonZero() {
     return new NonDefaultIterator();
@@ -187,7 +177,6 @@ public class DenseVector extends AbstractVector {
     double result = 0.0;
     for (double value : values) {
       result += value * value;
-
     }
     lengthSquared = result;
     return result;
@@ -197,7 +186,7 @@ public class DenseVector extends AbstractVector {
     if (size() != v.size()) {
       throw new CardinalityException(size(), v.size());
     }
-    
+
     Iterator<Element> iter = v.iterateNonZero();
     while (iter.hasNext()) {
       Element element = iter.next();
@@ -223,7 +212,6 @@ public class DenseVector extends AbstractVector {
         return done();
       }
     }
-
   }
 
   private final class AllIterator extends AbstractIterator<Element> {
@@ -243,7 +231,6 @@ public class DenseVector extends AbstractVector {
         return done();
       }
     }
-
   }
 
   private final class DenseElement implements Element {
@@ -266,5 +253,4 @@ public class DenseVector extends AbstractVector {
       values[index] = value;
     }
   }
-
 }

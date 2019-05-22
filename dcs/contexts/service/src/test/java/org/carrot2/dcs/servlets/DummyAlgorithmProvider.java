@@ -1,5 +1,10 @@
 package org.carrot2.dcs.servlets;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.carrot2.attrs.AttrComposite;
 import org.carrot2.attrs.AttrInteger;
 import org.carrot2.clustering.Cluster;
@@ -8,16 +13,10 @@ import org.carrot2.clustering.ClusteringAlgorithmProvider;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.LanguageComponents;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 public class DummyAlgorithmProvider implements ClusteringAlgorithmProvider {
   static class DummyAlgorithm extends AttrComposite implements ClusteringAlgorithm {
-    AttrInteger groupSize = attributes.register("groupSize",
-        AttrInteger.builder().min(1).defaultValue(5));
+    AttrInteger groupSize =
+        attributes.register("groupSize", AttrInteger.builder().min(1).defaultValue(5));
 
     @Override
     public boolean supports(LanguageComponents languageComponents) {
@@ -25,16 +24,18 @@ public class DummyAlgorithmProvider implements ClusteringAlgorithmProvider {
     }
 
     @Override
-    public <T extends Document> List<Cluster<T>> cluster(Stream<? extends T> documents, LanguageComponents languageComponents) {
+    public <T extends Document> List<Cluster<T>> cluster(
+        Stream<? extends T> documents, LanguageComponents languageComponents) {
       List<? extends T> docs = documents.collect(Collectors.toList());
 
       List<Cluster<T>> clusters = new ArrayList<>();
 
-      Supplier<Cluster<T>> newCluster = () -> {
-        Cluster<T> c = new Cluster<>();
-        c.addLabel("Group " + (clusters.size() + 1));
-        return c;
-      };
+      Supplier<Cluster<T>> newCluster =
+          () -> {
+            Cluster<T> c = new Cluster<>();
+            c.addLabel("Group " + (clusters.size() + 1));
+            return c;
+          };
 
       Cluster<T> c = newCluster.get();
       for (T doc : docs) {

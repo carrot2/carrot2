@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,133 +11,102 @@
 
 package org.carrot2.language;
 
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.io.StringReader;
 import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
 import org.carrot2.clustering.CachedLangComponents;
 import org.carrot2.util.MutableCharArray;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.io.StringReader;
-
-import static org.junit.Assert.assertTrue;
-
 public class DefaultLanguageComponentsProviderTest extends TestBase {
   @Test
   public void testEnglish() throws IOException {
-    check("English", new String [][] {
-        {"pulps", "pulp"},
-        {"driving", "drive"},
-        {"king's", "king"},
-        {"mining", "mine"}
-    }, new String [] {
-        "and", "or", "to", "from"
-    });
+    check(
+        "English",
+        new String[][] {
+          {"pulps", "pulp"},
+          {"driving", "drive"},
+          {"king's", "king"},
+          {"mining", "mine"}
+        },
+        new String[] {"and", "or", "to", "from"});
   }
 
   @Test
   public void testDanish() throws IOException {
-    check("Danish", new String [][] {
-    }, new String [] {
-        "enhver"
-    });
+    check("Danish", new String[][] {}, new String[] {"enhver"});
   }
 
   @Test
   public void testDutch() throws IOException {
-    check("Dutch", new String [][] {
-    }, new String [] {
-        "daaruit"
-    });
+    check("Dutch", new String[][] {}, new String[] {"daaruit"});
   }
 
   @Test
   public void testFinnish() throws IOException {
-    check("Finnish", new String [][] {
-    }, new String [] {
-    });
+    check("Finnish", new String[][] {}, new String[] {});
   }
 
   @Test
   public void testFrench() throws IOException {
-    check("French", new String [][] {
-    }, new String [] {
-    });
+    check("French", new String[][] {}, new String[] {});
   }
 
   @Test
   public void testGerman() throws IOException {
-    check("German", new String [][] {
-    }, new String [] {
-    });
+    check("German", new String[][] {}, new String[] {});
   }
 
   @Test
   public void testHungarian() throws IOException {
-    check("Hungarian", new String [][] {
-    }, new String [] {
-    });
+    check("Hungarian", new String[][] {}, new String[] {});
   }
 
   @Test
   public void testItalian() throws IOException {
-    check("Italian", new String [][] {
-    }, new String [] {
-    });
+    check("Italian", new String[][] {}, new String[] {});
   }
 
   @Test
   public void testNorwegian() throws IOException {
-    check("Norwegian", new String [][] {
-    }, new String [] {
-    });
+    check("Norwegian", new String[][] {}, new String[] {});
   }
 
   @Test
   public void testPortuguese() throws IOException {
-    check("Portuguese", new String [][] {
-    }, new String [] {
-    });
+    check("Portuguese", new String[][] {}, new String[] {});
   }
 
   @Test
   public void testRomanian() throws IOException {
-    check("Romanian", new String [][] {
-    }, new String [] {
-    });
+    check("Romanian", new String[][] {}, new String[] {});
   }
 
   @Test
   public void testRussian() throws IOException {
-    check("Russian", new String [][] {
-    }, new String [] {
-        "вернуться"
-    });
+    check("Russian", new String[][] {}, new String[] {"вернуться"});
   }
 
   @Test
   public void testSpanish() throws IOException {
-    check("Spanish", new String [][] {
-    }, new String [] {
-    });
+    check("Spanish", new String[][] {}, new String[] {});
   }
 
   @Test
   public void testSwedish() throws IOException {
-    check("Swedish", new String [][] {
-    }, new String [] {
-    });
+    check("Swedish", new String[][] {}, new String[] {});
   }
 
   @Test
   public void testTurkish() throws IOException {
-    check("Turkish", new String [][] {
-    }, new String [] {
-        "birþeyi"
-    });
+    check("Turkish", new String[][] {}, new String[] {"birþeyi"});
   }
 
-  private void check(String language, String [][] stemmingData, String [] commonWords) throws IOException {
+  private void check(String language, String[][] stemmingData, String[] commonWords)
+      throws IOException {
     LanguageComponents components = CachedLangComponents.loadCached(language);
 
     Tokenizer tokenizer = components.get(Tokenizer.class);

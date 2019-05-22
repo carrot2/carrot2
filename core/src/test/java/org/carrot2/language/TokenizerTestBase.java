@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,26 +11,19 @@
 
 package org.carrot2.language;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
 import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
 import org.carrot2.util.MutableCharArray;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-
-/**
- * A base class for testing Carrot2 tokenizers.
- */
+/** A base class for testing Carrot2 tokenizers. */
 abstract class TokenizerTestBase extends TestBase {
-  /**
-   * Creates the Analyzer under tests.
-   */
+  /** Creates the Analyzer under tests. */
   protected abstract Tokenizer createTokenStream() throws IOException;
 
-  /**
-   * Internal class for comparing sequences of tokens.
-   */
+  /** Internal class for comparing sequences of tokens. */
   protected static class TokenImage {
     final int type;
     final String image;
@@ -61,9 +53,7 @@ abstract class TokenizerTestBase extends TestBase {
     }
   }
 
-  /**
-   * Compare expected and produced token sequences.
-   */
+  /** Compare expected and produced token sequences. */
   protected void assertEqualTokens(String testString, TokenImage[] expectedTokens) {
     try {
       final Tokenizer tokenStream = createTokenStream();
@@ -77,9 +67,7 @@ abstract class TokenizerTestBase extends TestBase {
         tokens.add(new TokenImage(buffer.toString(), token));
       }
 
-      Assertions
-          .assertThat(tokens)
-          .containsExactly(expectedTokens);
+      Assertions.assertThat(tokens).containsExactly(expectedTokens);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

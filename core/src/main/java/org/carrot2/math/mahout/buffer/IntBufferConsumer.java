@@ -1,4 +1,4 @@
-/* Imported from Mahout. */package org.carrot2.math.mahout.buffer;
+/* Imported from Mahout. */ package org.carrot2.math.mahout.buffer;
 
 import org.carrot2.math.mahout.list.IntArrayList;
 

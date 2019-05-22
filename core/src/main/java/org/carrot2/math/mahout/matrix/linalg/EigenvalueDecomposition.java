@@ -1,4 +1,7 @@
-/* Imported from Mahout. */package org.carrot2.math.mahout.matrix.linalg;
+/* Imported from Mahout. */ package org.carrot2.math.mahout.matrix.linalg;
+
+import static org.carrot2.math.mahout.Algebra.hypot;
+import static org.carrot2.math.mahout.matrix.linalg.Property.checkSquare;
 
 import org.carrot2.math.mahout.Matrix;
 import org.carrot2.math.mahout.MatrixSlice;
@@ -8,25 +11,17 @@ import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 import org.carrot2.math.mahout.matrix.impl.DenseDoubleMatrix1D;
 import org.carrot2.math.mahout.matrix.impl.DenseDoubleMatrix2D;
 
-import static org.carrot2.math.mahout.Algebra.hypot;
-import static org.carrot2.math.mahout.matrix.linalg.Property.checkSquare;
-
 public final class EigenvalueDecomposition {
 
-  
   private final int n;
 
-  
   private final double[] d;
   private final double[] e;
 
-  
   private final double[][] V;
 
-  
   private double[][] H;
 
-  
   private double[] ort;
 
   // Complex scalar division.
@@ -35,7 +30,7 @@ public final class EigenvalueDecomposition {
   private double cdivi;
 
   public EigenvalueDecomposition(double[][] v) {
-    if(v.length != v[0].length) {
+    if (v.length != v[0].length) {
       throw new IllegalArgumentException("Matrix must be square");
     }
     n = v.length;
@@ -77,9 +72,9 @@ public final class EigenvalueDecomposition {
 
     int n = A.numCols();
     double[][] V = new double[n][n];
-    for(MatrixSlice slice : A) {
+    for (MatrixSlice slice : A) {
       int row = slice.index();
-      for(Vector.Element element : slice.vector()) {
+      for (Vector.Element element : slice.vector()) {
         V[row][element.index()] = element.get();
       }
     }
@@ -87,9 +82,9 @@ public final class EigenvalueDecomposition {
   }
 
   private static boolean isSymmetric(double[][] matrix) {
-    for(int i=0; i<matrix.length; i++) {
-      for(int j=0; j<i; j++) {
-        if(matrix[i][j] != matrix[j][i]) {
+    for (int i = 0; i < matrix.length; i++) {
+      for (int j = 0; j < i; j++) {
+        if (matrix[i][j] != matrix[j][i]) {
           return false;
         }
       }
@@ -102,14 +97,14 @@ public final class EigenvalueDecomposition {
 
     int n = A.columns();
     double[][] V = new double[n][n];
-    for(int row = 0; row < A.rows(); row++) {
-      for(int col = 0; col < A.rows(); col++) {
+    for (int row = 0; row < A.rows(); row++) {
+      for (int col = 0; col < A.rows(); col++) {
         V[row][col] = A.getQuick(row, col);
       }
     }
     return V;
   }
-  
+
   public EigenvalueDecomposition(DoubleMatrix2D A) {
     this(toArray(A));
   }
@@ -130,7 +125,6 @@ public final class EigenvalueDecomposition {
     }
   }
 
-  
   public DoubleMatrix2D getD() {
     double[][] D = new double[n][n];
     for (int i = 0; i < n; i++) {
@@ -147,22 +141,18 @@ public final class EigenvalueDecomposition {
     return new DenseDoubleMatrix2D(D);
   }
 
-  
   public DoubleMatrix1D getImagEigenvalues() {
     return new DenseDoubleMatrix1D(e);
   }
 
-  
   public DoubleMatrix1D getRealEigenvalues() {
     return new DenseDoubleMatrix1D(d);
   }
 
-  
   public DoubleMatrix2D getV() {
     return new DenseDoubleMatrix2D(V);
   }
 
-  
   private void hqr2() {
     //  This is derived from the Algol procedure hqr2,
     //  by Martin and Wilkinson, Handbook for Auto. Comp.,
@@ -342,7 +332,7 @@ public final class EigenvalueDecomposition {
           }
         }
 
-        iter += 1;   // (Could check iteration count here.)
+        iter += 1; // (Could check iteration count here.)
 
         // Look for two consecutive small sub-diagonal elements
 
@@ -362,7 +352,9 @@ public final class EigenvalueDecomposition {
             break;
           }
           if (Math.abs(H[m][m - 1]) * (Math.abs(q) + Math.abs(r))
-              < eps * Math.abs(p) * (Math.abs(H[m - 1][m - 1]) + Math.abs(z) + Math.abs(H[m + 1][m + 1]))) {
+              < eps
+                  * Math.abs(p)
+                  * (Math.abs(H[m - 1][m - 1]) + Math.abs(z) + Math.abs(H[m + 1][m + 1]))) {
             break;
           }
           m--;
@@ -445,10 +437,10 @@ public final class EigenvalueDecomposition {
               V[i][k] -= p;
               V[i][k + 1] -= p * q;
             }
-          }  // (s != 0)
-        }  // k loop
-      }  // check convergence
-    }  // while (n >= low)
+          } // (s != 0)
+        } // k loop
+      } // check convergence
+    } // while (n >= low)
 
     // Backsubstitute to find vectors of upper triangular form
 
@@ -555,7 +547,10 @@ public final class EigenvalueDecomposition {
               double vr = (d[i] - p) * (d[i] - p) + e[i] * e[i] - q * q;
               double vi = (d[i] - p) * 2.0 * q;
               if (vr == 0.0 && vi == 0.0) {
-                vr = eps * norm * (Math.abs(w) + Math.abs(q) + Math.abs(x) + Math.abs(y) + Math.abs(z));
+                vr =
+                    eps
+                        * norm
+                        * (Math.abs(w) + Math.abs(q) + Math.abs(x) + Math.abs(y) + Math.abs(z));
               }
               cdiv(x * r - z * ra + q * sa, x * s - z * sa - q * ra, vr, vi);
               H[i][n - 1] = cdivr;
@@ -605,7 +600,6 @@ public final class EigenvalueDecomposition {
     }
   }
 
-  
   private void orthes() {
     //  This is derived from the Algol procedures orthes and ortran,
     //  by Martin and Wilkinson, Handbook for Auto. Comp.,
@@ -696,7 +690,6 @@ public final class EigenvalueDecomposition {
     }
   }
 
-  
   @Override
   public String toString() {
     StringBuilder buf = new StringBuilder();
@@ -737,7 +730,6 @@ public final class EigenvalueDecomposition {
     return buf.toString();
   }
 
-  
   private void tql2() {
 
     //  This is derived from the Algol procedures tql2, by
@@ -850,16 +842,13 @@ public final class EigenvalueDecomposition {
     }
   }
 
-  
   private void tred2() {
     //  This is derived from the Algol procedures tred2 by
     //  Bowdler, Martin, Reinsch, and Wilkinson, Handbook for
     //  Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
     //  Fortran subroutine in EISPACK.
 
-
     System.arraycopy(V[n - 1], 0, d, 0, n);
-
 
     // Householder reduction to tridiagonal form.
 

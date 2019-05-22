@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,12 +11,10 @@
 
 package org.carrot2.math.mahout;
 
-
 @SuppressWarnings("serial")
 public class CardinalityException extends IllegalArgumentException {
 
   public CardinalityException(int expected, int cardinality) {
     super("Required cardinality " + expected + " but got " + cardinality);
   }
-
 }

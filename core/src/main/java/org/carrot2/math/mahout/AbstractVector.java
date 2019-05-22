@@ -17,15 +17,13 @@
 
 package org.carrot2.math.mahout;
 
+import java.util.Iterator;
 import org.carrot2.math.mahout.function.DoubleDoubleFunction;
 import org.carrot2.math.mahout.function.DoubleFunction;
 import org.carrot2.math.mahout.function.Functions;
 
-import java.util.Iterator;
-
-
 public abstract class AbstractVector implements Vector {
-  
+
   private static final double LOG2 = Math.log(2.0);
 
   private int size;
@@ -48,7 +46,8 @@ public abstract class AbstractVector implements Vector {
   }
 
   @Override
-  public double aggregate(Vector other, DoubleDoubleFunction aggregator, DoubleDoubleFunction combiner) {
+  public double aggregate(
+      Vector other, DoubleDoubleFunction aggregator, DoubleDoubleFunction combiner) {
     if (size < 1) {
       throw new IllegalArgumentException("Cannot aggregate empty vector");
     }
@@ -106,8 +105,10 @@ public abstract class AbstractVector implements Vector {
     }
 
     // Crude rule of thumb: when a sequential-access vector, with O(log n) lookups, has about
-    // 2^n elements, its lookups take longer than a dense / random access vector (with O(1) lookups) by
-    // about a factor of (0.71n - 12.3). This holds pretty well from n=19 up to at least n=23 according to my tests;
+    // 2^n elements, its lookups take longer than a dense / random access vector (with O(1) lookups)
+    // by
+    // about a factor of (0.71n - 12.3). This holds pretty well from n=19 up to at least n=23
+    // according to my tests;
     // below that lookups are so fast that this difference is near zero.
 
     int thisNumNonDefault = getNumNondefaultElements();
@@ -115,7 +116,8 @@ public abstract class AbstractVector implements Vector {
     // Default: dot from smaller vector to larger vector
     boolean reverseDot = thatNumNonDefault < thisNumNonDefault;
 
-    // But, see if we should override that -- is exactly one of them sequential access and so slower to lookup in?
+    // But, see if we should override that -- is exactly one of them sequential access and so slower
+    // to lookup in?
     if (isSequentialAccess() != x.isSequentialAccess()) {
       double log2ThisSize = Math.log(thisNumNonDefault) / LOG2;
       double log2ThatSize = Math.log(thatNumNonDefault) / LOG2;
@@ -145,7 +147,7 @@ public abstract class AbstractVector implements Vector {
     }
     return result;
   }
-  
+
   public double dotSelf() {
     double result = 0.0;
     Iterator<Element> iter = iterateNonZero();
@@ -194,18 +196,18 @@ public abstract class AbstractVector implements Vector {
   public Vector normalize(double power) {
     return divide(norm(power));
   }
-  
+
   @Override
   public Vector logNormalize() {
     return logNormalize(2.0, Math.sqrt(dotSelf()));
   }
-  
+
   @Override
   public Vector logNormalize(double power) {
     return logNormalize(power, norm(power));
   }
-  
-  public Vector logNormalize(double power, double normLength) {   
+
+  public Vector logNormalize(double power, double normLength) {
     // we can special case certain powers
     if (Double.isInfinite(power) || power <= 1.0) {
       throw new IllegalArgumentException("Power must be > 1 and < infinity");
@@ -276,7 +278,9 @@ public abstract class AbstractVector implements Vector {
       throw new CardinalityException(size, v.size());
     }
     // if this and v has a cached lengthSquared, dot product is quickest way to compute this.
-    if (lengthSquared >= 0 && v instanceof AbstractVector && ((AbstractVector)v).lengthSquared >= 0) {
+    if (lengthSquared >= 0
+        && v instanceof AbstractVector
+        && ((AbstractVector) v).lengthSquared >= 0) {
       return lengthSquared + v.getLengthSquared() - 2 * this.dot(v);
     }
     Vector randomlyAccessed;
@@ -296,7 +300,7 @@ public abstract class AbstractVector implements Vector {
       double value = e.get();
       d += value * (value - 2.0 * randomlyAccessed.getQuick(e.index()));
     }
-    //assert d > -1.0e-9; // round-off errors should never be too far off!
+    // assert d > -1.0e-9; // round-off errors should never be too far off!
     return Math.abs(d);
   }
 
@@ -315,7 +319,7 @@ public abstract class AbstractVector implements Vector {
     }
     return result;
   }
-  
+
   @Override
   public int maxValueIndex() {
     int result = -1;
@@ -408,7 +412,8 @@ public abstract class AbstractVector implements Vector {
     }
 
     // prefer to have this be the denser than x
-    if (!isDense() && (x.isDense() || x.getNumNondefaultElements() > this.getNumNondefaultElements())) {
+    if (!isDense()
+        && (x.isDense() || x.getNumNondefaultElements() > this.getNumNondefaultElements())) {
       return x.plus(this);
     }
 
@@ -440,7 +445,7 @@ public abstract class AbstractVector implements Vector {
     if (x == 1.0) {
       return result;
     }
-    
+
     Iterator<Element> iter = result.iterateNonZero();
     while (iter.hasNext()) {
       Element element = iter.next();
@@ -563,7 +568,7 @@ public abstract class AbstractVector implements Vector {
 
   @Override
   public final int size() {
-    return size;  
+    return size;
   }
 
   @Override
@@ -582,7 +587,6 @@ public abstract class AbstractVector implements Vector {
     return result;
   }
 
-  
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -627,7 +631,6 @@ public abstract class AbstractVector implements Vector {
     }
     return result.toString();
   }
-
 
   protected final class LocalElement implements Element {
     int index;

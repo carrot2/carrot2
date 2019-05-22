@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,216 +15,199 @@ import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.BitSetIterator;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.IntStack;
-import org.carrot2.clustering.Cluster;
-import org.carrot2.clustering.ClusteringAlgorithm;
-import org.carrot2.clustering.SharedInfrastructure;
-import org.carrot2.clustering.Document;
-import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
-import org.carrot2.language.*;
-import org.carrot2.text.preprocessing.BasicPreprocessingPipeline;
-import org.carrot2.text.preprocessing.LabelFormatter;
-import org.carrot2.text.preprocessing.PreprocessingContext;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.carrot2.attrs.AttrBoolean;
 import org.carrot2.attrs.AttrComposite;
 import org.carrot2.attrs.AttrDouble;
 import org.carrot2.attrs.AttrInteger;
 import org.carrot2.attrs.AttrObject;
 import org.carrot2.attrs.AttrString;
-
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import org.carrot2.clustering.Cluster;
+import org.carrot2.clustering.ClusteringAlgorithm;
+import org.carrot2.clustering.Document;
+import org.carrot2.clustering.SharedInfrastructure;
+import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
+import org.carrot2.language.*;
+import org.carrot2.text.preprocessing.BasicPreprocessingPipeline;
+import org.carrot2.text.preprocessing.LabelFormatter;
+import org.carrot2.text.preprocessing.PreprocessingContext;
 
 /**
- * Suffix Tree Clustering (STC) algorithm. Pretty much as described in: <i>Oren Zamir,
- * Oren Etzioni, Grouper: A Dynamic Clustering Interface to Web Search Results, 1999.</i>
- * Some liberties were taken wherever STC's description was not clear enough or where we
- * thought some improvements could be made.
+ * Suffix Tree Clustering (STC) algorithm. Pretty much as described in: <i>Oren Zamir, Oren Etzioni,
+ * Grouper: A Dynamic Clustering Interface to Web Search Results, 1999.</i> Some liberties were
+ * taken wherever STC's description was not clear enough or where we thought some improvements could
+ * be made.
  */
 public final class STCClusteringAlgorithm extends AttrComposite implements ClusteringAlgorithm {
-  private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS = new HashSet<>(Arrays.asList(
-      Stemmer.class,
-      Tokenizer.class,
-      LexicalData.class
-  ));
+  private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS =
+      new HashSet<>(Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class));
 
   /**
    * Query terms used to retrieve documents. The query is used as a hint to avoid trivial clusters.
    */
-  public final AttrString queryHint = attributes.register("queryHint", SharedInfrastructure.queryHintAttribute());
+  public final AttrString queryHint =
+      attributes.register("queryHint", SharedInfrastructure.queryHintAttribute());
 
   /**
-   * Maximum word-document ratio. A number between 0 and 1, if a word exists in more
-   * snippets than this ratio, it is ignored.
+   * Maximum word-document ratio. A number between 0 and 1, if a word exists in more snippets than
+   * this ratio, it is ignored.
    */
-  public AttrDouble ignoreWordIfInHigherDocsPercent = attributes.register("ignoreWordIfInHigherDocsPercent",
-      AttrDouble.builder()
-          .label("Ignore words appearing in more than a given fraction of documents")
-          .min(0)
-          .max(1)
-          .defaultValue(0.9));
+  public AttrDouble ignoreWordIfInHigherDocsPercent =
+      attributes.register(
+          "ignoreWordIfInHigherDocsPercent",
+          AttrDouble.builder()
+              .label("Ignore words appearing in more than a given fraction of documents")
+              .min(0)
+              .max(1)
+              .defaultValue(0.9));
+
+  /** Minimum base cluster score (before coverage merging). */
+  public AttrDouble minBaseClusterScore =
+      attributes.register(
+          "minBaseClusterScore",
+          AttrDouble.builder().label("Minimum base cluster score").min(0).max(10).defaultValue(2.));
+
+  /** Minimum documents per base cluster. */
+  public AttrInteger minBaseClusterSize =
+      attributes.register(
+          "minBaseClusterSize",
+          AttrInteger.builder()
+              .label("Minimum number of documents in a base cluster")
+              .min(2)
+              .max(20)
+              .defaultValue(2));
 
   /**
-   * Minimum base cluster score (before coverage merging).
+   * Maximum base clusters count. Trims the base cluster array after N-th position for the merging
+   * phase.
    */
-  public AttrDouble minBaseClusterScore = attributes.register("minBaseClusterScore",
-      AttrDouble.builder()
-          .label("Minimum base cluster score")
-          .min(0)
-          .max(10)
-          .defaultValue(2.));
+  public AttrInteger maxBaseClusters =
+      attributes.register(
+          "maxBaseClusters",
+          AttrInteger.builder().label("Maximum number of base cluster").min(2).defaultValue(300));
+
+  /** Maximum final clusters. */
+  public AttrInteger maxClusters =
+      attributes.register(
+          "maxClusters",
+          AttrInteger.builder().label("Maximum number of final clusters").min(1).defaultValue(15));
+
+  /** Base cluster merge threshold. */
+  public AttrDouble mergeThreshold =
+      attributes.register(
+          "mergeThreshold",
+          AttrDouble.builder()
+              .label("Base cluster merge threshold")
+              .min(0)
+              .max(1)
+              .defaultValue(0.6));
+
+  /** Maximum cluster phrase overlap. */
+  public AttrDouble maxPhraseOverlap =
+      attributes.register(
+          "maxPhraseOverlap",
+          AttrDouble.builder()
+              .label("Maximum cluster phrase overlap")
+              .min(0)
+              .max(1)
+              .defaultValue(0.6));
+
+  /** Minimum general phrase coverage. Minimum phrase coverage to appear in cluster description. */
+  public AttrDouble mostGeneralPhraseCoverage =
+      attributes.register(
+          "mostGeneralPhraseCoverage",
+          AttrDouble.builder()
+              .label("Minimum general phrase coverage")
+              .min(0)
+              .max(1)
+              .defaultValue(0.5));
 
   /**
-   * Minimum documents per base cluster.
+   * Maximum words per label. Base clusters formed by phrases with more words than this ratio are
+   * trimmed.
    */
-  public AttrInteger minBaseClusterSize = attributes.register("minBaseClusterSize",
-      AttrInteger.builder()
-          .label("Minimum number of documents in a base cluster")
-          .min(2)
-          .max(20)
-          .defaultValue(2));
+  public AttrInteger maxWordsPerLabel =
+      attributes.register(
+          "maxWordsPerLabel",
+          AttrInteger.builder().label("Maximum words per label").min(1).defaultValue(4));
 
   /**
-   * Maximum base clusters count. Trims the base cluster array after N-th position for
-   * the merging phase.
+   * Maximum phrases per label. Maximum number of phrases from base clusters promoted to the
+   * cluster's label.
    */
-  public AttrInteger maxBaseClusters = attributes.register("maxBaseClusters",
-      AttrInteger.builder()
-          .label("Maximum number of base cluster")
-          .min(2)
-          .defaultValue(300));
+  public AttrInteger maxPhrasesPerLabel =
+      attributes.register(
+          "maxPhrasesPerLabel",
+          AttrInteger.builder().label("Maximum phrases per label").min(1).defaultValue(3));
 
   /**
-   * Maximum final clusters.
+   * Single term boost. A factor in calculation of the base cluster score. If greater then zero,
+   * single-term base clusters are assigned this value regardless of the penalty function.
    */
-  public AttrInteger maxClusters = attributes.register("maxClusters",
-      AttrInteger.builder()
-          .label("Maximum number of final clusters")
-          .min(1)
-          .defaultValue(15));
+  public AttrDouble singleTermBoost =
+      attributes.register(
+          "singleTermBoost",
+          AttrDouble.builder().label("Boost single-term clusters").min(0).defaultValue(0.5));
+
+  /** Optimal label length. A factor in calculation of the base cluster score. */
+  public AttrInteger optimalPhraseLength =
+      attributes.register(
+          "optimalPhraseLength",
+          AttrInteger.builder().label("Optimal cluster label length").min(1).defaultValue(3));
+
+  /** Phrase length tolerance. A factor in calculation of the base cluster score. */
+  public AttrDouble optimalPhraseLengthDev =
+      attributes.register(
+          "optimalPhraseLengthDev",
+          AttrDouble.builder()
+              .label("Optimal cluster label length's tolerance")
+              .min(0.5)
+              .defaultValue(2.));
 
   /**
-   * Base cluster merge threshold.
+   * Document count boost. A factor in calculation of the base cluster score, boosting the score
+   * depending on the number of documents found in the base cluster.
    */
-  public AttrDouble mergeThreshold = attributes.register("mergeThreshold",
-      AttrDouble.builder()
-          .label("Base cluster merge threshold")
-          .min(0)
-          .max(1)
-          .defaultValue(0.6));
+  public AttrDouble documentCountBoost =
+      attributes.register(
+          "documentCountBoost",
+          AttrDouble.builder().label("Base cluster document count boost").min(0).defaultValue(1.));
 
   /**
-   * Maximum cluster phrase overlap.
+   * Balance between cluster score and size during cluster sorting. Value equal to 0.0 will sort
+   * clusters based only on cluster size. Value equal to 1.0 will sort clusters based only on
+   * cluster score.
    */
-  public AttrDouble maxPhraseOverlap = attributes.register("maxPhraseOverlap",
-      AttrDouble.builder()
-          .label("Maximum cluster phrase overlap")
-          .min(0)
-          .max(1)
-          .defaultValue(0.6));
-
-  /**
-   * Minimum general phrase coverage. Minimum phrase coverage to appear in cluster
-   * description.
-   */
-  public AttrDouble mostGeneralPhraseCoverage = attributes.register("mostGeneralPhraseCoverage",
-      AttrDouble.builder()
-          .label("Minimum general phrase coverage")
-          .min(0)
-          .max(1)
-          .defaultValue(0.5));
-
-  /**
-   * Maximum words per label. Base clusters formed by phrases with more words than this
-   * ratio are trimmed.
-   */
-  public AttrInteger maxWordsPerLabel = attributes.register("maxWordsPerLabel",
-      AttrInteger.builder()
-          .label("Maximum words per label")
-          .min(1)
-          .defaultValue(4));
-
-  /**
-   * Maximum phrases per label. Maximum number of phrases from base clusters promoted
-   * to the cluster's label.
-   */
-  public AttrInteger maxPhrasesPerLabel = attributes.register("maxPhrasesPerLabel",
-      AttrInteger.builder()
-          .label("Maximum phrases per label")
-          .min(1)
-          .defaultValue(3));
-
-  /**
-   * Single term boost. A factor in calculation of the base cluster score. If greater
-   * then zero, single-term base clusters are assigned this value regardless of the
-   * penalty function.
-   */
-  public AttrDouble singleTermBoost = attributes.register("singleTermBoost",
-      AttrDouble.builder()
-          .label("Boost single-term clusters")
-          .min(0)
-          .defaultValue(0.5));
-
-  /**
-   * Optimal label length. A factor in calculation of the base cluster score.
-   */
-  public AttrInteger optimalPhraseLength = attributes.register("optimalPhraseLength",
-      AttrInteger.builder()
-          .label("Optimal cluster label length")
-          .min(1)
-          .defaultValue(3));
-
-  /**
-   * Phrase length tolerance. A factor in calculation of the base cluster score.
-   */
-  public AttrDouble optimalPhraseLengthDev = attributes.register("optimalPhraseLengthDev",
-      AttrDouble.builder()
-          .label("Optimal cluster label length's tolerance")
-          .min(0.5)
-          .defaultValue(2.));
-
-  /**
-   * Document count boost. A factor in calculation of the base cluster score, boosting
-   * the score depending on the number of documents found in the base cluster.
-   */
-  public AttrDouble documentCountBoost = attributes.register("documentCountBoost",
-      AttrDouble.builder()
-          .label("Base cluster document count boost")
-          .min(0)
-          .defaultValue(1.));
-
-  /**
-   * Balance between cluster score and size during cluster sorting. Value equal to 0.0
-   * will sort clusters based only on cluster size. Value equal to 1.0
-   * will sort clusters based only on cluster score.
-   */
-  public AttrDouble scoreWeight = attributes.register("scoreWeight",
-      AttrDouble.builder()
-          .label("Size-score sorting ratio")
-          .min(0)
-          .max(1)
-          .defaultValue(0.));
+  public AttrDouble scoreWeight =
+      attributes.register(
+          "scoreWeight",
+          AttrDouble.builder().label("Size-score sorting ratio").min(0).max(1).defaultValue(0.));
 
   /**
    * Merge all stem-equivalent base clusters before running the merge phase.
    *
    * @see "http://issues.carrot2.org/browse/CARROT-1008"
    */
-  public AttrBoolean mergeStemEquivalentBaseClusters = attributes.register("mergeStemEquivalentBaseClusters",
-      AttrBoolean.builder()
-          .label("Merge all stem-equivalent phrases when discovering base clusters")
-          .defaultValue(true));
+  public AttrBoolean mergeStemEquivalentBaseClusters =
+      attributes.register(
+          "mergeStemEquivalentBaseClusters",
+          AttrBoolean.builder()
+              .label("Merge all stem-equivalent phrases when discovering base clusters")
+              .defaultValue(true));
 
-  /**
-   * Preprocessing pipeline.
-   */
+  /** Preprocessing pipeline. */
   public BasicPreprocessingPipeline preprocessing;
+
   {
-    attributes.register("preprocessing", AttrObject.builder(BasicPreprocessingPipeline.class)
-        .label("Input preprocessing components")
-        .getset(() -> preprocessing, (v) -> preprocessing = v)
-        .defaultValue(BasicPreprocessingPipeline::new));
+    attributes.register(
+        "preprocessing",
+        AttrObject.builder(BasicPreprocessingPipeline.class)
+            .label("Input preprocessing components")
+            .getset(() -> preprocessing, (v) -> preprocessing = v)
+            .defaultValue(BasicPreprocessingPipeline::new));
   }
 
   /**
@@ -237,19 +219,13 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     final ClusterCandidate cluster;
     final float coverage;
 
-    /**
-     * If <code>false</code> the phrase should not be selected (various criteria).
-     */
+    /** If <code>false</code> the phrase should not be selected (various criteria). */
     boolean selected = true;
 
-    /**
-     * @see STCClusteringAlgorithm#markSubSuperPhrases(ArrayList)
-     */
+    /** @see STCClusteringAlgorithm#markSubSuperPhrases(ArrayList) */
     boolean mostGeneral = true;
 
-    /**
-     * @see STCClusteringAlgorithm#markSubSuperPhrases(ArrayList)
-     */
+    /** @see STCClusteringAlgorithm#markSubSuperPhrases(ArrayList) */
     boolean mostSpecific = true;
 
     PhraseCandidate(ClusterCandidate c, float coverage) {
@@ -259,10 +235,10 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   }
 
   /**
-   * Returns a collection of {@link PhraseCandidate}s that have
-   * {@link PhraseCandidate#selected} set to <code>false</code>.
+   * Returns a collection of {@link PhraseCandidate}s that have {@link PhraseCandidate#selected} set
+   * to <code>false</code>.
    */
-  private final static Predicate<PhraseCandidate> NOT_SELECTED = (p) -> !p.selected;
+  private static final Predicate<PhraseCandidate> NOT_SELECTED = (p) -> !p.selected;
 
   private GeneralizedSuffixTree.SequenceBuilder sb;
   private PreprocessingContext context;
@@ -273,11 +249,10 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     return languageComponents.components().containsAll(REQUIRED_LANGUAGE_COMPONENTS);
   }
 
-  /**
-   * Performs STC clustering of documents.
-   */
+  /** Performs STC clustering of documents. */
   @Override
-  public <T extends Document> List<Cluster<T>> cluster(Stream<? extends T> docStream, LanguageComponents languageComponents) {
+  public <T extends Document> List<Cluster<T>> cluster(
+      Stream<? extends T> docStream, LanguageComponents languageComponents) {
     List<T> documents = docStream.collect(Collectors.toList());
     List<Cluster<T>> clusters = new ArrayList<>();
 
@@ -336,10 +311,9 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   }
 
   /**
-   * Create <i>base clusters</i>. Base clusters are frequently occurring words and
-   * phrases. We extract them by walking the generalized suffix tree constructed for
-   * each phrase, and extracting paths from those internal tree states, that occurred in
-   * more than one document.
+   * Create <i>base clusters</i>. Base clusters are frequently occurring words and phrases. We
+   * extract them by walking the generalized suffix tree constructed for each phrase, and extracting
+   * paths from those internal tree states, that occurred in more than one document.
    */
   private List<ClusterCandidate> createBaseClusters(SequenceBuilder sb) {
     /*
@@ -351,8 +325,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     // Walk the internal nodes of the suffix tree.
     final int minBaseClusterSize = this.minBaseClusterSize.get();
     new GeneralizedSuffixTree.Visitor(sb, minBaseClusterSize) {
-      protected void visit(int state, int cardinality,
-                           BitSet documents, IntStack path) {
+      protected void visit(int state, int cardinality, BitSet documents, IntStack path) {
         // Check minimum base cluster cardinality.
         assert cardinality >= minBaseClusterSize;
 
@@ -376,8 +349,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
          */
         final float score = baseClusterScore(effectivePhraseLen, cardinality);
         candidates.add(
-            new ClusterCandidate(path.toArray(),
-                (BitSet) documents.clone(), cardinality, score));
+            new ClusterCandidate(path.toArray(), (BitSet) documents.clone(), cardinality, score));
       }
     }.visit();
 
@@ -430,7 +402,8 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   }
 
   /* */
-  private void mergeStemEquivalentBaseClusters(SequenceBuilder sb, final List<ClusterCandidate> candidates) {
+  private void mergeStemEquivalentBaseClusters(
+      SequenceBuilder sb, final List<ClusterCandidate> candidates) {
     // Look for candidates to merge.
     Map<IntArrayList, ClusterCandidate> merged = new HashMap<>();
     int j = 0;
@@ -478,9 +451,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
         cc.cardinality = (int) cc.documents.cardinality();
         scratch.buffer = cc.phrases.get(0);
         scratch.elementsCount = scratch.buffer.length;
-        cc.score = baseClusterScore(
-            effectivePhraseLength(scratch),
-            cc.cardinality);
+        cc.score = baseClusterScore(effectivePhraseLength(scratch), cc.cardinality);
 
         // Clear any other phrase variants.
         cc.phrases.subList(1, cc.phrases.size()).clear();
@@ -489,10 +460,9 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   }
 
   /**
-   * Create final clusters by merging base clusters and pruning their labels. Cluster
-   * merging is a greedy process of compacting clusters with document sets that overlap
-   * by a certain ratio. In other words, phrases that "cover" nearly identical document
-   * sets will be conflated.
+   * Create final clusters by merging base clusters and pruning their labels. Cluster merging is a
+   * greedy process of compacting clusters with document sets that overlap by a certain ratio. In
+   * other words, phrases that "cover" nearly identical document sets will be conflated.
    */
   private ArrayList<ClusterCandidate> createMergedClusters(List<ClusterCandidate> baseClusters) {
     /*
@@ -533,8 +503,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     final int[] merged = new int[baseClusters.size()];
     Arrays.fill(merged, NO_INDEX);
 
-    final ArrayList<ClusterCandidate> mergedClusters =
-        new ArrayList<>(baseClusters.size());
+    final ArrayList<ClusterCandidate> mergedClusters = new ArrayList<>(baseClusters.size());
     final IntStack stack = new IntStack(baseClusters.size());
     final IntStack mergeList = new IntStack(baseClusters.size());
     int mergedIndex = 0;
@@ -575,13 +544,15 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     /*
      * Sort merged clusters.
      */
-    Collections.sort(mergedClusters, (c1, c2) -> {
-        if (c1.score < c2.score) return 1;
-        if (c1.score > c2.score) return -1;
-        if (c1.cardinality < c2.cardinality) return 1;
-        if (c1.cardinality > c2.cardinality) return -1;
-        return 0;
-      });
+    Collections.sort(
+        mergedClusters,
+        (c1, c2) -> {
+          if (c1.score < c2.score) return 1;
+          if (c1.score > c2.score) return -1;
+          if (c1.cardinality < c2.cardinality) return 1;
+          if (c1.cardinality > c2.cardinality) return -1;
+          return 0;
+        });
 
     int maxClusters = this.maxClusters.get();
     if (mergedClusters.size() > maxClusters) {
@@ -591,12 +562,9 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     return mergedClusters;
   }
 
-  /**
-   * Merge a list of base clusters into one.
-   */
-  private ClusterCandidate merge(PreprocessingContext context,
-                                 IntStack mergeList,
-                                 List<ClusterCandidate> baseClusters) {
+  /** Merge a list of base clusters into one. */
+  private ClusterCandidate merge(
+      PreprocessingContext context, IntStack mergeList, List<ClusterCandidate> baseClusters) {
     assert mergeList.size() > 0;
     final ClusterCandidate result = new ClusterCandidate();
 
@@ -613,8 +581,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     /*
      * Combine cluster labels and try to find the best description for the cluster.
      */
-    final ArrayList<PhraseCandidate> phrases =
-        new ArrayList<PhraseCandidate>(mergeList.size());
+    final ArrayList<PhraseCandidate> phrases = new ArrayList<PhraseCandidate>(mergeList.size());
     for (int i = 0; i < mergeList.size(); i++) {
       final ClusterCandidate cc = baseClusters.get(mergeList.get(i));
       final float coverage = cc.cardinality / (float) result.cardinality;
@@ -627,15 +594,15 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     markOverlappingPhrases(context, phrases);
     phrases.removeIf(NOT_SELECTED);
 
-    Collections.sort(phrases, new Comparator<PhraseCandidate>() {
-      public int compare(PhraseCandidate p1, PhraseCandidate p2) {
-        if (p1.coverage < p2.coverage) return 1;
-        if (p1.coverage > p2.coverage) return -1;
-        return 0;
-      }
-
-      ;
-    });
+    Collections.sort(
+        phrases,
+        new Comparator<PhraseCandidate>() {
+          public int compare(PhraseCandidate p1, PhraseCandidate p2) {
+            if (p1.coverage < p2.coverage) return 1;
+            if (p1.coverage > p2.coverage) return -1;
+            return 0;
+          };
+        });
 
     int max = maxPhrasesPerLabel.get();
     for (PhraseCandidate p : phrases) {
@@ -647,8 +614,8 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   }
 
   /**
-   * Leave only most general (no other phrase is a substring of this one) and
-   * most specific (no other phrase is a superstring of this one) phrases.
+   * Leave only most general (no other phrase is a substring of this one) and most specific (no
+   * other phrase is a superstring of this one) phrases.
    */
   private void markSubSuperPhrases(ArrayList<PhraseCandidate> phrases) {
     final int max = phrases.size();
@@ -670,9 +637,14 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       for (int j = 0; j < max; j++) {
         if (i == j) continue;
 
-        int index = indexOf(
-            words.buffer, offsets.get(2 * i), offsets.get(2 * i + 1),
-            words.buffer, offsets.get(2 * j), offsets.get(2 * j + 1));
+        int index =
+            indexOf(
+                words.buffer,
+                offsets.get(2 * i),
+                offsets.get(2 * i + 1),
+                words.buffer,
+                offsets.get(2 * j),
+                offsets.get(2 * j + 1));
         if (index >= 0) {
           // j is a subphrase of i, hence i cannot be mostGeneral and j
           // cannot be most specific.
@@ -695,9 +667,14 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
         final PhraseCandidate b = phrases.get(j);
         if (i == j || !b.mostSpecific) continue;
 
-        int index = indexOf(
-            words.buffer, offsets.get(2 * j), offsets.get(2 * j + 1),
-            words.buffer, offsets.get(2 * i), offsets.get(2 * i + 1));
+        int index =
+            indexOf(
+                words.buffer,
+                offsets.get(2 * j),
+                offsets.get(2 * j + 1),
+                words.buffer,
+                offsets.get(2 * i),
+                offsets.get(2 * i + 1));
         if (index >= 0) {
           if (a.coverage - b.coverage < mostGeneralPhraseCoverage) {
             a.selected = false;
@@ -718,10 +695,11 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   }
 
   /**
-   * Mark those phrases that overlap with other phrases by more than
-   * {@link #maxPhraseOverlap} and have lower coverage.
+   * Mark those phrases that overlap with other phrases by more than {@link #maxPhraseOverlap} and
+   * have lower coverage.
    */
-  private void markOverlappingPhrases(PreprocessingContext context, ArrayList<PhraseCandidate> phrases) {
+  private void markOverlappingPhrases(
+      PreprocessingContext context, ArrayList<PhraseCandidate> phrases) {
     final int max = phrases.size();
 
     // A list of all unique words for each candidate phrase.
@@ -743,9 +721,14 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
         final int a_words = offsets.get(2 * i + 1);
         final int b_words = offsets.get(2 * j + 1);
 
-        final float intersection = computeIntersection(
-            words.buffer, offsets.get(2 * i), a_words,
-            words.buffer, offsets.get(2 * j), b_words);
+        final float intersection =
+            computeIntersection(
+                words.buffer,
+                offsets.get(2 * i),
+                a_words,
+                words.buffer,
+                offsets.get(2 * j),
+                b_words);
 
         if ((intersection / b_words) > maxPhraseOverlap && b.coverage < a.coverage) {
           b.selected = false;
@@ -758,9 +741,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     }
   }
 
-  /**
-   * Compute the number of common elements in two (sorted) lists.
-   */
+  /** Compute the number of common elements in two (sorted) lists. */
   static int computeIntersection(int[] a, int aPos, int aLength, int[] b, int bPos, int bLength) {
     final int maxa = aPos + aLength;
     final int maxb = bPos + bLength;
@@ -779,10 +760,9 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     return common;
   }
 
-  /**
-   * Collect all unique non-stop word from a phrase.
-   */
-  private void appendUniqueWords(PreprocessingContext context, IntStack words, IntStack offsets, PhraseCandidate p) {
+  /** Collect all unique non-stop word from a phrase. */
+  private void appendUniqueWords(
+      PreprocessingContext context, IntStack words, IntStack offsets, PhraseCandidate p) {
     assert p.cluster.phrases.size() == 1;
 
     final int start = words.size();
@@ -812,9 +792,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     offsets.push(start, words.size() - start);
   }
 
-  /**
-   * Collect all words from a phrase.
-   */
+  /** Collect all words from a phrase. */
   private void appendWords(IntStack words, IntStack offsets, PhraseCandidate p) {
     final int start = words.size();
 
@@ -833,10 +811,11 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   }
 
   /**
-   * Create the junk (unassigned documents) cluster and create the final
-   * set of clusters in Carrot2 format.
+   * Create the junk (unassigned documents) cluster and create the final set of clusters in Carrot2
+   * format.
    */
-  private <T extends Document> void postProcessing(List<T> documents, List<ClusterCandidate> candidates, List<Cluster<T>> clusters) {
+  private <T extends Document> void postProcessing(
+      List<T> documents, List<ClusterCandidate> candidates, List<Cluster<T>> clusters) {
     // Adapt to Carrot2 classes, counting used documents on the way.
     final BitSet all = new BitSet(documents.size());
     final ArrayList<T> docs = new ArrayList<>(documents.size());
@@ -852,19 +831,16 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     }
   }
 
-  /**
-   * Collect phrases from a cluster.
-   */
+  /** Collect phrases from a cluster. */
   private void collectPhrases(ClusterCandidate c, Cluster<?> cluster) {
     for (int[] phraseIndexes : c.phrases) {
       cluster.addLabel(buildLabel(phraseIndexes));
     }
   }
 
-  /**
-   * Collect documents from a bitset.
-   */
-  private <T extends Document> List<T> collectDocuments(List<T> documents, List<T> l, BitSet bitset) {
+  /** Collect documents from a bitset. */
+  private <T extends Document> List<T> collectDocuments(
+      List<T> documents, List<T> l, BitSet bitset) {
     if (l == null) {
       l = new ArrayList<>((int) bitset.cardinality());
     }
@@ -876,9 +852,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     return l;
   }
 
-  /**
-   * Build the cluster's label from suffix tree edge indices.
-   */
+  /** Build the cluster's label from suffix tree edge indices. */
   private String buildLabel(int[] phraseIndices) {
     // Count the number of terms first.
     int termsCount = 0;
@@ -905,7 +879,9 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
 
   @SuppressWarnings("unused")
   private String toString(PhraseCandidate c) {
-    return String.format(Locale.ENGLISH, "%3.2f %s %s %s %s",
+    return String.format(
+        Locale.ENGLISH,
+        "%3.2f %s %s %s %s",
         c.coverage,
         buildLabel(c.cluster.phrases.get(0)),
         c.selected ? "S" : "",
@@ -914,8 +890,8 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   }
 
   /**
-   * Build a cluster's label from suffix tree edge indices, including some debugging and
-   * diagnostic information.
+   * Build a cluster's label from suffix tree edge indices, including some debugging and diagnostic
+   * information.
    */
   @SuppressWarnings("unused")
   private String buildDebugLabel(int[] phraseIndices) {
@@ -941,23 +917,20 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   }
 
   /**
-   * Consider certain special cases of internal suffix tree nodes. The suffix tree may
-   * contain internal nodes with paths starting or ending with a stop word (common
-   * word). We have the following interesting scenarios:
+   * Consider certain special cases of internal suffix tree nodes. The suffix tree may contain
+   * internal nodes with paths starting or ending with a stop word (common word). We have the
+   * following interesting scenarios:
    *
    * <dl>
-   * <dt>IF LEADING STOPWORD: IGNORE THE NODE.</dt>
-   * <dd>
-   * There MUST be a phrase with this stopword chopped off in the suffix tree
-   * (a suffix of this phrase) and its frequency will be just as high.</dd>
-   *
-   * <dt>IF TRAILING STOPWORDS:</dt>
-   * <dd>
-   * Check if the edge leading to the current node is composed entirely of stopwords. If so,
-   * there must be a parent node that contains non-stopwords and we can ignore the current node.
-   * Otherwise we can chop off the trailing stopwords from the current node's phrase (this phrase
-   * cannot be duplicated anywhere in the tree because if it were, there would have to be a branch
-   * somewhere in the suffix tree on the edge).</dd>
+   *   <dt>IF LEADING STOPWORD: IGNORE THE NODE.
+   *   <dd>There MUST be a phrase with this stopword chopped off in the suffix tree (a suffix of
+   *       this phrase) and its frequency will be just as high.
+   *   <dt>IF TRAILING STOPWORDS:
+   *   <dd>Check if the edge leading to the current node is composed entirely of stopwords. If so,
+   *       there must be a parent node that contains non-stopwords and we can ignore the current
+   *       node. Otherwise we can chop off the trailing stopwords from the current node's phrase
+   *       (this phrase cannot be duplicated anywhere in the tree because if it were, there would
+   *       have to be a branch somewhere in the suffix tree on the edge).
    * </dl>
    */
   final boolean checkAcceptablePhrase(IntStack path) {
@@ -1000,10 +973,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     return true;
   }
 
-  /**
-   * Calculate "effective phrase length", that is the number of non-ignored words
-   * in the phrase.
-   */
+  /** Calculate "effective phrase length", that is the number of non-ignored words in the phrase. */
   final int effectivePhraseLength(IntStack path) {
     final int[] terms = sb.input.buffer;
     final int lower = preprocessing.wordDfThreshold.get();
@@ -1035,11 +1005,11 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
 
   /**
    * Calculates base cluster score.
-   * <p>
-   * The boost is calculated as a Gaussian function of density around the "optimum"
-   * expected phrase length (average) and "tolerance" towards shorter and longer phrases
-   * (standard deviation). You can draw this score multiplier's characteristic with
-   * gnuplot:
+   *
+   * <p>The boost is calculated as a Gaussian function of density around the "optimum" expected
+   * phrase length (average) and "tolerance" towards shorter and longer phrases (standard
+   * deviation). You can draw this score multiplier's characteristic with gnuplot:
+   *
    * <pre>
    * reset
    *
@@ -1072,14 +1042,13 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
    *
    * pause -1
    * </pre>
-   * One word-phrases can be given a fixed boost, if
-   * {@link #singleTermBoost} is greater than zero.
    *
-   * @param phraseLength  Effective phrase length (number of non-stopwords).
+   * One word-phrases can be given a fixed boost, if {@link #singleTermBoost} is greater than zero.
+   *
+   * @param phraseLength Effective phrase length (number of non-stopwords).
    * @param documentCount Number of documents this phrase occurred in.
-   * @return Returns the base cluster score calculated as a function of the number of
-   * documents the phrase occurred in and a function of the effective length of
-   * the phrase.
+   * @return Returns the base cluster score calculated as a function of the number of documents the
+   *     phrase occurred in and a function of the effective length of the phrase.
    */
   final float baseClusterScore(final int phraseLength, final int documentCount) {
     double singleTermBoost = this.singleTermBoost.get();
@@ -1088,18 +1057,22 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       boost = singleTermBoost;
     } else {
       final int tmp = phraseLength - optimalPhraseLength.get();
-      boost = Math.exp((-tmp * tmp)
-          / (2 * optimalPhraseLengthDev.get() * optimalPhraseLengthDev.get()));
+      boost =
+          Math.exp(
+              (-tmp * tmp) / (2 * optimalPhraseLengthDev.get() * optimalPhraseLengthDev.get()));
     }
 
     return (float) (boost * (documentCount * documentCountBoost.get()));
   }
 
-  /**
-   * Subsequence search in int arrays.
-   */
-  private static int indexOf(int[] source, int sourceOffset, int sourceCount,
-                             int[] target, int targetOffset, int targetCount) {
+  /** Subsequence search in int arrays. */
+  private static int indexOf(
+      int[] source,
+      int sourceOffset,
+      int sourceCount,
+      int[] target,
+      int targetOffset,
+      int targetCount) {
     if (targetCount == 0) {
       return 0;
     }

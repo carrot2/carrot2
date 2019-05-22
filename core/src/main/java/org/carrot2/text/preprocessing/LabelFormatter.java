@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,9 +15,7 @@ import org.carrot2.language.LexicalData;
 import org.carrot2.language.TokenTypeUtils;
 import org.carrot2.util.CharArrayUtils;
 
-/**
- * Formats cluster labels for final rendering.
- */
+/** Formats cluster labels for final rendering. */
 public class LabelFormatter {
 
   private final LexicalData lexicalData;
@@ -27,9 +24,7 @@ public class LabelFormatter {
     this.lexicalData = lexicalData;
   }
 
-  /**
-   * Formats a cluster label for final rendering.
-   */
+  /** Formats a cluster label for final rendering. */
   public String format(PreprocessingContext context, int featureIndex) {
     final char[][] wordsImage = context.allWords.image;
     final int[][] phrasesWordIndices = context.allPhrases.wordIndices;
@@ -47,8 +42,8 @@ public class LabelFormatter {
         if (insertSpace && i > 0) label.append(' ');
 
         final int wordIndex = wordIndices[i];
-        appendFormatted(label, wordsImage[wordIndex], i == 0,
-            TokenTypeUtils.isCommon(termTypes[wordIndex]));
+        appendFormatted(
+            label, wordsImage[wordIndex], i == 0, TokenTypeUtils.isCommon(termTypes[wordIndex]));
       }
     }
 
@@ -56,16 +51,14 @@ public class LabelFormatter {
   }
 
   /**
-   * A method for formatting cluster labels that is not coupled to
-   * {@link PreprocessingContext#allLabels} and can be used in algorithms that do not
-   * use the full preprocessing pipeline.
+   * A method for formatting cluster labels that is not coupled to {@link
+   * PreprocessingContext#allLabels} and can be used in algorithms that do not use the full
+   * preprocessing pipeline.
    *
-   * @param image         images of the words making the label.
-   * @param stopWord      determines whether the corresponding word of the label is a stop
-   *                      word
-   * @param joinWithSpace if <code>true</code>, label tokens will be joined with a space
-   *                      character, if <code>false</code>, no extra characters will be inserted
-   *                      between label tokens.
+   * @param image images of the words making the label.
+   * @param stopWord determines whether the corresponding word of the label is a stop word
+   * @param joinWithSpace if <code>true</code>, label tokens will be joined with a space character,
+   *     if <code>false</code>, no extra characters will be inserted between label tokens.
    */
   public static String format(char[][] image, boolean[] stopWord, boolean joinWithSpace) {
     final StringBuilder label = new StringBuilder();
@@ -90,11 +83,11 @@ public class LabelFormatter {
   }
 
   /**
-   * Appends a segment of the label to the buffer, capitalized or lower-cased depending
-   * on the position and content.
+   * Appends a segment of the label to the buffer, capitalized or lower-cased depending on the
+   * position and content.
    */
-  private static void appendFormatted(final StringBuilder label, final char[] image,
-                                      boolean isFirst, boolean isCommon) {
+  private static void appendFormatted(
+      final StringBuilder label, final char[] image, boolean isFirst, boolean isCommon) {
     if (CharArrayUtils.hasCapitalizedLetters(image)) {
       label.append(image);
     } else if (isFirst) {

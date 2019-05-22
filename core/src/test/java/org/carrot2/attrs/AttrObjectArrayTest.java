@@ -1,13 +1,12 @@
 package org.carrot2.attrs;
 
-import org.assertj.core.api.Assertions;
-import org.carrot2.TestBase;
-import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
+import org.carrot2.TestBase;
+import org.junit.Test;
 
 public class AttrObjectArrayTest extends TestBase {
   @Test
@@ -15,8 +14,7 @@ public class AttrObjectArrayTest extends TestBase {
     class Entry extends AttrComposite {
       AttrString attr = attributes.register("attr", AttrString.builder().defaultValue(null));
 
-      Entry() {
-      }
+      Entry() {}
 
       Entry(String value) {
         attr.set(value);
@@ -25,19 +23,20 @@ public class AttrObjectArrayTest extends TestBase {
 
     class Clazz extends AttrComposite {
       public AttrObjectArray<Entry> defValue =
-          attributes.register("defValue", AttrObjectArray.builder(Entry.class, () -> new Entry())
-              .defaultValue(Arrays.asList(
-                  new Entry("foo"),
-                  new Entry("bar")
-              )));
+          attributes.register(
+              "defValue",
+              AttrObjectArray.builder(Entry.class, () -> new Entry())
+                  .defaultValue(Arrays.asList(new Entry("foo"), new Entry("bar"))));
 
       public AttrObjectArray<Entry> nullValue =
-          attributes.register("nullValue", AttrObjectArray.builder(Entry.class, () -> new Entry())
-            .defaultValue(null));
+          attributes.register(
+              "nullValue",
+              AttrObjectArray.builder(Entry.class, () -> new Entry()).defaultValue(null));
 
       public AttrObjectArray<Entry> otherValue =
-          attributes.register("otherValue", AttrObjectArray.builder(Entry.class, () -> new Entry())
-              .defaultValue(null));
+          attributes.register(
+              "otherValue",
+              AttrObjectArray.builder(Entry.class, () -> new Entry()).defaultValue(null));
     }
 
     AliasMapper mapper = new AliasMapper();
@@ -55,9 +54,9 @@ public class AttrObjectArrayTest extends TestBase {
     baz.put("attr", "baz");
 
     Assertions.assertThat(Attrs.toMap(ob, mapper::toName))
-        .containsEntry("defValue", new Object [] {foo, bar})
+        .containsEntry("defValue", new Object[] {foo, bar})
         .containsEntry("nullValue", null)
-        .containsEntry("otherValue", new Object [] {baz});
+        .containsEntry("otherValue", new Object[] {baz});
 
     Clazz clazz = Attrs.fromMap(Clazz.class, Attrs.toMap(ob, mapper::toName), mapper::fromName);
     Assertions.assertThat(clazz.defValue.get().stream())
@@ -70,4 +69,3 @@ public class AttrObjectArrayTest extends TestBase {
         .containsExactly("baz");
   }
 }
-

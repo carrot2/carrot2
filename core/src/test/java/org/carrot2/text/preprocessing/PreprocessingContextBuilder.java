@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,16 +11,13 @@
 
 package org.carrot2.text.preprocessing;
 
+import java.util.ArrayList;
 import org.carrot2.clustering.CachedLangComponents;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.FieldMapDocument;
 import org.carrot2.language.LanguageComponents;
 
-import java.util.ArrayList;
-
-/**
- * Preprocessing context builder for tests.
- */
+/** Preprocessing context builder for tests. */
 class PreprocessingContextBuilder {
   private final LanguageComponents languageComponents;
   private ArrayList<Document> documents = new ArrayList<>();
@@ -42,7 +38,7 @@ class PreprocessingContextBuilder {
     return PreprocessingContextAssert.assertThat(buildContext(pipeline));
   }
 
-  public final static class FieldValue {
+  public static final class FieldValue {
     String field;
     String value;
 
@@ -77,4 +73,3 @@ class PreprocessingContextBuilder {
     return this;
   }
 }
-

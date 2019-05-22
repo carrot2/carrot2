@@ -1,13 +1,12 @@
 package org.carrot2.language;
 
-import org.carrot2.util.ResourceLookup;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
+import org.carrot2.util.ResourceLookup;
 
 public class TestsEnglishLanguageExtraComponent implements LanguageComponentsProvider {
   @Override
@@ -16,7 +15,8 @@ public class TestsEnglishLanguageExtraComponent implements LanguageComponentsPro
   }
 
   @Override
-  public Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup) throws IOException {
+  public Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup)
+      throws IOException {
     LinkedHashMap<Class<?>, Supplier<?>> components = new LinkedHashMap<>();
     components.put(Runnable.class, (Supplier<Runnable>) () -> () -> {});
     return components;

@@ -132,7 +132,6 @@ task distDir {
 task distZip(type: Zip) {
   archiveFileName = "carrot2-dcs-${project.version}.zip"
   destinationDirectory = file("$outputZip")
-  duplicatesStrategy = 'fail'
 
   from distDir
   into "${archivesBaseName}/"

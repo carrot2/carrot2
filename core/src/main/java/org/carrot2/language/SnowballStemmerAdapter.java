@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,13 +12,10 @@
 package org.carrot2.language;
 
 import java.util.Arrays;
-
 import org.carrot2.language.snowball.SnowballProgram;
 import org.carrot2.util.MutableCharArray;
 
-/**
- * An adapter converting Snowball programs into {@link Stemmer} interface.
- */
+/** An adapter converting Snowball programs into {@link Stemmer} interface. */
 final class SnowballStemmerAdapter implements Stemmer {
   private final SnowballProgram s;
 
@@ -30,17 +26,13 @@ final class SnowballStemmerAdapter implements Stemmer {
   public CharSequence stem(CharSequence word) {
     final int len = word.length();
     char[] buffer = s.getCurrentBuffer();
-    if (buffer.length < len)
-      buffer = new char[len];
+    if (buffer.length < len) buffer = new char[len];
 
-    for (int i = word.length(); --i >= 0; )
-      buffer[i] = word.charAt(i);
+    for (int i = word.length(); --i >= 0; ) buffer[i] = word.charAt(i);
     s.setCurrent(buffer, len);
 
     if (s.stem()) {
-      return new MutableCharArray(Arrays.copyOf(
-          s.getCurrentBuffer(),
-          s.getCurrentBufferLength()));
+      return new MutableCharArray(Arrays.copyOf(s.getCurrentBuffer(), s.getCurrentBufferLength()));
     } else {
       return null;
     }

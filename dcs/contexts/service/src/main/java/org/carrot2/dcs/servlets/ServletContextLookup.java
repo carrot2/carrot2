@@ -1,14 +1,13 @@
 package org.carrot2.dcs.servlets;
 
-import org.carrot2.util.ResourceLookup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.Objects;
+import javax.servlet.ServletContext;
+import org.carrot2.util.ResourceLookup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class ServletContextLookup implements ResourceLookup {
   private static Logger console = LoggerFactory.getLogger("console");
@@ -26,7 +25,8 @@ class ServletContextLookup implements ResourceLookup {
     String resourcePath = resourcePath(resource);
     InputStream is = ctx.getResourceAsStream(resourcePath);
 
-    console.trace("Opening servlet context resource: {}, {}",
+    console.trace(
+        "Opening servlet context resource: {}, {}",
         is != null ? pathOf(resource) : resourcePath,
         is != null ? " (found)" : " (not found)");
 

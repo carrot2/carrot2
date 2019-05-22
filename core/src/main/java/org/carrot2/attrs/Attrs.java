@@ -5,12 +5,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class Attrs {
-  final static String KEY_TYPE = "@type";
-  final static String KEY_WRAPPED = "@value";
+  static final String KEY_TYPE = "@type";
+  static final String KEY_WRAPPED = "@value";
 
   private static class Wrapper implements AcceptingVisitor {
-    AttrObject<AcceptingVisitor> value = AttrObject.builder(AcceptingVisitor.class)
-        .defaultValue(() -> null);
+    AttrObject<AcceptingVisitor> value =
+        AttrObject.builder(AcceptingVisitor.class).defaultValue(() -> null);
 
     @Override
     public void accept(AttrVisitor visitor) {
@@ -22,7 +22,8 @@ public final class Attrs {
     return toMap(composite, AliasMapper.SPI_DEFAULTS::toName);
   }
 
-  public static Map<String, Object> toMap(AcceptingVisitor composite, Function<Object, String> classToName) {
+  public static Map<String, Object> toMap(
+      AcceptingVisitor composite, Function<Object, String> classToName) {
     LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
     Wrapper wrapped = new Wrapper();
@@ -34,21 +35,20 @@ public final class Attrs {
     return sub;
   }
 
-  public static <E extends AcceptingVisitor> E fromMap(Class<? extends E> clazz,
-                                                       Map<String, Object> map) {
+  public static <E extends AcceptingVisitor> E fromMap(
+      Class<? extends E> clazz, Map<String, Object> map) {
     return fromMap(clazz, map, AliasMapper.SPI_DEFAULTS::fromName);
   }
 
-  public static <E extends AcceptingVisitor> E fromMap(Class<? extends E> clazz,
-                                                       Map<String, Object> map,
-                                                       Function<String, Object> nameToClass) {
-    Wrapper wrapper = populate(new Wrapper(), Collections.singletonMap(KEY_WRAPPED, map), nameToClass);
+  public static <E extends AcceptingVisitor> E fromMap(
+      Class<? extends E> clazz, Map<String, Object> map, Function<String, Object> nameToClass) {
+    Wrapper wrapper =
+        populate(new Wrapper(), Collections.singletonMap(KEY_WRAPPED, map), nameToClass);
     return safeCast(wrapper.value.get(), KEY_WRAPPED, clazz);
   }
 
-  public static <E extends AcceptingVisitor> E populate(E instance,
-                                                       Map<String, Object> map,
-                                                       Function<String, Object> nameToClass) {
+  public static <E extends AcceptingVisitor> E populate(
+      E instance, Map<String, Object> map, Function<String, Object> nameToClass) {
     FromMapVisitor visitor = new FromMapVisitor(map, nameToClass);
     instance.accept(visitor);
     visitor.ensureKeysConsumed();
@@ -60,8 +60,7 @@ public final class Attrs {
     private final Map<String, Object> map;
     private final Function<String, Object> classToInstance;
 
-    private FromMapVisitor(Map<String, Object> map,
-                          Function<String, Object> classToInstance) {
+    private FromMapVisitor(Map<String, Object> map, Function<String, Object> classToInstance) {
       this.map = new LinkedHashMap<>(Objects.requireNonNull(map));
       this.classToInstance = classToInstance;
     }
@@ -72,16 +71,22 @@ public final class Attrs {
         Number value = safeCast(map.remove(key), key, Number.class);
         if (value != null) {
           if (Double.compare(value.doubleValue(), value.longValue()) != 0) {
-            throw new IllegalArgumentException(String.format(Locale.ROOT,
-                "Value at key '%s' should be an integer but encountered floating point value: '%s'",
-                key, toDebugString(value)));
+            throw new IllegalArgumentException(
+                String.format(
+                    Locale.ROOT,
+                    "Value at key '%s' should be an integer but encountered floating point value: '%s'",
+                    key,
+                    toDebugString(value)));
           }
 
-          long v =  value.longValue();
+          long v = value.longValue();
           if ((int) v != v) {
-            throw new IllegalArgumentException(String.format(Locale.ROOT,
-                "Value at key '%s' should be an integer but is out of integer range: '%s'",
-                key, toDebugString(value)));
+            throw new IllegalArgumentException(
+                String.format(
+                    Locale.ROOT,
+                    "Value at key '%s' should be an integer but is out of integer range: '%s'",
+                    key,
+                    toDebugString(value)));
           }
           attr.set((int) v);
         } else {
@@ -144,34 +149,47 @@ public final class Attrs {
           } else if (value instanceof Object[]) {
             array = Arrays.asList((Object[]) value);
           } else {
-            throw new IllegalArgumentException(String.format(Locale.ROOT,
-                "Value at key '%s' should be a list or an array of objects of type '%s' but is an instance of '%s': '%s'",
-                key, attr.getInterfaceClass().getSimpleName(), value.getClass().getSimpleName(),
-                toDebugString(value)));
+            throw new IllegalArgumentException(
+                String.format(
+                    Locale.ROOT,
+                    "Value at key '%s' should be a list or an array of objects of type '%s' but is an instance of '%s': '%s'",
+                    key,
+                    attr.getInterfaceClass().getSimpleName(),
+                    value.getClass().getSimpleName(),
+                    toDebugString(value)));
           }
 
-          List<T> entries = array.stream().map(entry -> {
-            @SuppressWarnings("unchecked")
-            Map<String, Object> submap = safeCast(entry, key, Map.class);
-            if (submap == null) {
-              return null;
-            } else {
-              submap = new LinkedHashMap<>(submap);
-              T entryValue;
-              if (submap.containsKey(KEY_TYPE)) {
-                String entryValueType = safeCast(submap.remove(KEY_TYPE), KEY_TYPE, String.class);
-                entryValue = safeCast(classToInstance.apply(entryValueType), key, attr.getInterfaceClass());
-              } else {
-                entryValue = notNull(key, attr.newDefaultEntryValue());
-              }
+          List<T> entries =
+              array.stream()
+                  .map(
+                      entry -> {
+                        @SuppressWarnings("unchecked")
+                        Map<String, Object> submap = safeCast(entry, key, Map.class);
+                        if (submap == null) {
+                          return null;
+                        } else {
+                          submap = new LinkedHashMap<>(submap);
+                          T entryValue;
+                          if (submap.containsKey(KEY_TYPE)) {
+                            String entryValueType =
+                                safeCast(submap.remove(KEY_TYPE), KEY_TYPE, String.class);
+                            entryValue =
+                                safeCast(
+                                    classToInstance.apply(entryValueType),
+                                    key,
+                                    attr.getInterfaceClass());
+                          } else {
+                            entryValue = notNull(key, attr.newDefaultEntryValue());
+                          }
 
-              FromMapVisitor visitor = new FromMapVisitor(submap, classToInstance);
-              entryValue.accept(visitor);
-              visitor.ensureKeysConsumed();
+                          FromMapVisitor visitor = new FromMapVisitor(submap, classToInstance);
+                          entryValue.accept(visitor);
+                          visitor.ensureKeysConsumed();
 
-              return entryValue;
-            }
-          }).collect(Collectors.toList());
+                          return entryValue;
+                        }
+                      })
+                  .collect(Collectors.toList());
 
           attr.set(entries);
         }
@@ -188,12 +206,14 @@ public final class Attrs {
           try {
             attr.set(Enum.valueOf(attr.enumClass(), (String) value));
           } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(String.format(Locale.ROOT,
-                "Value at key '%s' should be an enum constant of class '%s', but no such constant exists: '%s' (available constants: %s)",
-                key,
-                attr.enumClass().getSimpleName(),
-                toDebugString(value),
-                EnumSet.allOf(attr.enumClass())));
+            throw new IllegalArgumentException(
+                String.format(
+                    Locale.ROOT,
+                    "Value at key '%s' should be an enum constant of class '%s', but no such constant exists: '%s' (available constants: %s)",
+                    key,
+                    attr.enumClass().getSimpleName(),
+                    toDebugString(value),
+                    EnumSet.allOf(attr.enumClass())));
           }
         } else {
           attr.set(safeCast(value, key, attr.enumClass()));
@@ -218,17 +238,19 @@ public final class Attrs {
     private <T> T notNull(String key, T value) {
       if (value == null) {
         throw new RuntimeException(
-            String.format(Locale.ROOT,
-                "Default instance supplier returned null for key: '%s'", key));
+            String.format(
+                Locale.ROOT, "Default instance supplier returned null for key: '%s'", key));
       }
       return value;
     }
 
     public void ensureKeysConsumed() {
       if (!map.isEmpty()) {
-        throw new IllegalArgumentException(String.format(Locale.ROOT,
-            "Unrecognized extra attributes with keys: %s",
-              String.join(", ", map.keySet())));
+        throw new IllegalArgumentException(
+            String.format(
+                Locale.ROOT,
+                "Unrecognized extra attributes with keys: %s",
+                String.join(", ", map.keySet())));
       }
     }
   }
@@ -238,9 +260,14 @@ public final class Attrs {
       return null;
     } else {
       if (!clazz.isInstance(value)) {
-        throw new IllegalArgumentException(String.format(Locale.ROOT,
-            "Value at key '%s' should be an instance of '%s', but encountered class '%s': '%s'",
-            key, clazz.getSimpleName(), value.getClass().getSimpleName(), toDebugString(value)));
+        throw new IllegalArgumentException(
+            String.format(
+                Locale.ROOT,
+                "Value at key '%s' should be an instance of '%s', but encountered class '%s': '%s'",
+                key,
+                clazz.getSimpleName(),
+                value.getClass().getSimpleName(),
+                toDebugString(value)));
       }
       return clazz.cast(value);
     }
@@ -260,8 +287,7 @@ public final class Attrs {
     private final Map<String, Object> map;
     private final Function<Object, String> objectToClass;
 
-    public ToMapVisitor(Map<String, Object> map,
-                        Function<Object, String> objectToClass) {
+    public ToMapVisitor(Map<String, Object> map, Function<Object, String> objectToClass) {
       this.map = map;
       this.objectToClass = objectToClass;
     }
@@ -306,14 +332,18 @@ public final class Attrs {
 
       List<T> values = attr.get();
       if (values != null) {
-        Object[] array = values.stream().map(currentValue -> {
-          Map<String, Object> submap = new LinkedHashMap<>();
-          if (!attr.isDefaultClass(currentValue)) {
-            submap.put(KEY_TYPE, objectToClass.apply(currentValue));
-          }
-          currentValue.accept(new ToMapVisitor(submap, objectToClass));
-          return submap;
-        }).toArray();
+        Object[] array =
+            values.stream()
+                .map(
+                    currentValue -> {
+                      Map<String, Object> submap = new LinkedHashMap<>();
+                      if (!attr.isDefaultClass(currentValue)) {
+                        submap.put(KEY_TYPE, objectToClass.apply(currentValue));
+                      }
+                      currentValue.accept(new ToMapVisitor(submap, objectToClass));
+                      return submap;
+                    })
+                .toArray();
         map.put(key, array);
       } else {
         map.put(key, null);
@@ -340,10 +370,12 @@ public final class Attrs {
 
     private void ensureNoExistingKey(Map<?, ?> map, String key) {
       if (map.containsKey(key)) {
-        throw new RuntimeException(String.format(Locale.ROOT,
-            "Could not serialize key '%s' because it already exists in the map with value: %s",
-            key,
-            map.get(key)));
+        throw new RuntimeException(
+            String.format(
+                Locale.ROOT,
+                "Could not serialize key '%s' because it already exists in the map with value: %s",
+                key,
+                map.get(key)));
       }
     }
   }
@@ -352,88 +384,89 @@ public final class Attrs {
     StringBuilder builder = new StringBuilder();
     StringBuilder indent = new StringBuilder();
 
-    ob.accept(new AttrVisitor() {
-      @Override
-      public void visit(String key, AttrBoolean attr) {
-        append(key, attr.get());
-      }
-
-      @Override
-      public void visit(String key, AttrInteger attr) {
-        append(key, attr.get());
-      }
-
-      @Override
-      public void visit(String key, AttrDouble attr) {
-        append(key, attr.get());
-      }
-
-      @Override
-      public <T extends Enum<T>> void visit(String key, AttrEnum<T> attr) {
-        T value = attr.get();
-        append(key, value == null ? value : "\"" + value + '"');
-      }
-
-      @Override
-      public void visit(String key, AttrString attr) {
-        append(key, attr.get());
-      }
-
-      @Override
-      public void visit(String key, AttrStringArray attr) {
-        String[] value = attr.get();
-        if (value == null) {
-          append(key, value);
-        } else {
-          builder.append(indent).append(key).append(": [\n");
-          for (String v : value) {
-            builder.append(indent).append("  \"").append(v).append("\"\n");
+    ob.accept(
+        new AttrVisitor() {
+          @Override
+          public void visit(String key, AttrBoolean attr) {
+            append(key, attr.get());
           }
-          builder.append(indent).append("]\n");
-        }
-      }
 
-      @Override
-      public <T extends AcceptingVisitor> void visit(String key, AttrObject<T> attr) {
-        AcceptingVisitor value = attr.get();
-        if (value == null) {
-          append(key, value);
-        } else {
-          builder.append(indent).append(key).append(": {\n");
-          int len = indent.length();
-          indent.append("  ");
-          value.accept(this);
-          indent.setLength(len);
-          builder.append(indent).append("}\n");
-        }
-      }
-
-      @Override
-      public <T extends AcceptingVisitor> void visit(String key, AttrObjectArray<T> attr) {
-        List<T> value = attr.get();
-        if (value == null) {
-          append(key, value);
-        } else {
-          int len1 = indent.length();
-          builder.append(indent).append(key).append(": [\n");
-          indent.append("  ");
-          for (AcceptingVisitor v : value) {
-            builder.append(indent).append("{\n");
-            int len2 = indent.length();
-            indent.append("  ");
-            v.accept(this);
-            indent.setLength(len2);
-            builder.append(indent).append("}\n");
+          @Override
+          public void visit(String key, AttrInteger attr) {
+            append(key, attr.get());
           }
-          indent.setLength(len1);
-          builder.append(indent).append("]\n");
-        }
-      }
 
-      private void append(String key, Object value) {
-        builder.append(indent).append(key).append(": ").append(value).append('\n');
-      }
-    });
+          @Override
+          public void visit(String key, AttrDouble attr) {
+            append(key, attr.get());
+          }
+
+          @Override
+          public <T extends Enum<T>> void visit(String key, AttrEnum<T> attr) {
+            T value = attr.get();
+            append(key, value == null ? value : "\"" + value + '"');
+          }
+
+          @Override
+          public void visit(String key, AttrString attr) {
+            append(key, attr.get());
+          }
+
+          @Override
+          public void visit(String key, AttrStringArray attr) {
+            String[] value = attr.get();
+            if (value == null) {
+              append(key, value);
+            } else {
+              builder.append(indent).append(key).append(": [\n");
+              for (String v : value) {
+                builder.append(indent).append("  \"").append(v).append("\"\n");
+              }
+              builder.append(indent).append("]\n");
+            }
+          }
+
+          @Override
+          public <T extends AcceptingVisitor> void visit(String key, AttrObject<T> attr) {
+            AcceptingVisitor value = attr.get();
+            if (value == null) {
+              append(key, value);
+            } else {
+              builder.append(indent).append(key).append(": {\n");
+              int len = indent.length();
+              indent.append("  ");
+              value.accept(this);
+              indent.setLength(len);
+              builder.append(indent).append("}\n");
+            }
+          }
+
+          @Override
+          public <T extends AcceptingVisitor> void visit(String key, AttrObjectArray<T> attr) {
+            List<T> value = attr.get();
+            if (value == null) {
+              append(key, value);
+            } else {
+              int len1 = indent.length();
+              builder.append(indent).append(key).append(": [\n");
+              indent.append("  ");
+              for (AcceptingVisitor v : value) {
+                builder.append(indent).append("{\n");
+                int len2 = indent.length();
+                indent.append("  ");
+                v.accept(this);
+                indent.setLength(len2);
+                builder.append(indent).append("}\n");
+              }
+              indent.setLength(len1);
+              builder.append(indent).append("]\n");
+            }
+          }
+
+          private void append(String key, Object value) {
+            builder.append(indent).append(key).append(": ").append(value).append('\n');
+          }
+        });
 
     return builder.toString();
   }

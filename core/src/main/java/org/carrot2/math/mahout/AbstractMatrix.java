@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,17 +11,15 @@
 
 package org.carrot2.math.mahout;
 
+import com.carrotsearch.hppc.AbstractIterator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import com.carrotsearch.hppc.AbstractIterator;
 import org.carrot2.math.mahout.function.DoubleDoubleFunction;
 import org.carrot2.math.mahout.function.DoubleFunction;
 import org.carrot2.math.mahout.function.Functions;
 import org.carrot2.math.mahout.function.PlusMult;
 import org.carrot2.math.mahout.function.VectorFunction;
-
 
 public abstract class AbstractMatrix implements Matrix {
 
@@ -55,6 +52,7 @@ public abstract class AbstractMatrix implements Matrix {
   public Iterator<MatrixSlice> iterateAll() {
     return new AbstractIterator<MatrixSlice>() {
       private int slice;
+
       @Override
       protected MatrixSlice fetch() {
         if (slice >= numSlices()) {
@@ -66,7 +64,6 @@ public abstract class AbstractMatrix implements Matrix {
     };
   }
 
-  
   @Override
   public int numSlices() {
     return numRows();
@@ -218,8 +215,7 @@ public abstract class AbstractMatrix implements Matrix {
     }
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
-        setQuick(row, col, function.apply(getQuick(row, col), other.getQuick(
-            row, col)));
+        setQuick(row, col, function.apply(getQuick(row, col), other.getQuick(row, col)));
       }
     }
     return this;
@@ -255,7 +251,6 @@ public abstract class AbstractMatrix implements Matrix {
     return this;
   }
 
-  
   @Override
   public Vector aggregateRows(VectorFunction f) {
     Vector r = new DenseVector(numRows());
@@ -266,37 +261,33 @@ public abstract class AbstractMatrix implements Matrix {
     return r;
   }
 
-  
   @Override
   public Vector viewRow(int row) {
     return new MatrixVectorView(this, row, 0, 0, 1);
   }
 
-
-  
   @Override
   public Vector viewColumn(int column) {
     return new MatrixVectorView(this, 0, column, 1, 0);
   }
 
-  
   @Override
   public Vector viewDiagonal() {
     return new MatrixVectorView(this, 0, 0, 1, 1);
   }
 
-  
   @Override
   public double aggregate(final DoubleDoubleFunction combiner, final DoubleFunction mapper) {
-    return aggregateRows(new VectorFunction() {
-      @Override
-      public double apply(Vector v) {
-        return v.aggregate(combiner, mapper);
-      }
-    }).aggregate(combiner, Functions.IDENTITY);
+    return aggregateRows(
+            new VectorFunction() {
+              @Override
+              public double apply(Vector v) {
+                return v.aggregate(combiner, mapper);
+              }
+            })
+        .aggregate(combiner, Functions.IDENTITY);
   }
 
-  
   @Override
   public Vector aggregateColumns(VectorFunction f) {
     Vector r = new DenseVector(numCols());
@@ -334,12 +325,10 @@ public abstract class AbstractMatrix implements Matrix {
         }
         ret += getQuick(0, i) * sign * minor.determinant();
         sign *= -1;
-
       }
 
       return ret;
     }
-
   }
 
   @Override
@@ -387,15 +376,14 @@ public abstract class AbstractMatrix implements Matrix {
     if (rows != other.rowSize()) {
       throw new CardinalityException(rows, other.rowSize());
     }
-    int columns = columnSize();    
+    int columns = columnSize();
     if (columns != other.columnSize()) {
       throw new CardinalityException(columns, other.columnSize());
     }
     Matrix result = like();
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
-        result.setQuick(row, col, getQuick(row, col)
-            - other.getQuick(row, col));
+        result.setQuick(row, col, getQuick(row, col) - other.getQuick(row, col));
       }
     }
     return result;
@@ -420,15 +408,14 @@ public abstract class AbstractMatrix implements Matrix {
     if (rows != other.rowSize()) {
       throw new CardinalityException(rows, other.rowSize());
     }
-    int columns = columnSize();    
+    int columns = columnSize();
     if (columns != other.columnSize()) {
       throw new CardinalityException(columns, other.columnSize());
     }
     Matrix result = like();
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
-        result.setQuick(row, col, getQuick(row, col)
-            + other.getQuick(row, col));
+        result.setQuick(row, col, getQuick(row, col) + other.getQuick(row, col));
       }
     }
     return result;
@@ -451,7 +438,7 @@ public abstract class AbstractMatrix implements Matrix {
     if (columns < data.length) {
       throw new CardinalityException(columns, data.length);
     }
-    int rows = rowSize();    
+    int rows = rowSize();
     if (row < 0 || row >= rows) {
       throw new IndexException(row, rowSize());
     }
@@ -522,7 +509,6 @@ public abstract class AbstractMatrix implements Matrix {
       if (d != 0.0) {
         w.assign(xi, new PlusMult(d));
       }
-
     }
     return w;
   }
@@ -542,7 +528,8 @@ public abstract class AbstractMatrix implements Matrix {
 
   @Override
   public Matrix viewPart(int rowOffset, int rowsRequested, int columnOffset, int columnsRequested) {
-    return viewPart(new int[]{rowOffset, columnOffset}, new int[]{rowsRequested, columnsRequested});
+    return viewPart(
+        new int[] {rowOffset, columnOffset}, new int[] {rowsRequested, columnsRequested});
   }
 
   @Override
@@ -558,7 +545,7 @@ public abstract class AbstractMatrix implements Matrix {
 
   @Override
   public int[] getNumNondefaultElements() {
-    return new int[]{rowSize(), columnSize()};
+    return new int[] {rowSize(), columnSize()};
   }
 
   protected class TransposeViewVector extends AbstractVector {
@@ -601,6 +588,7 @@ public abstract class AbstractMatrix implements Matrix {
     public Iterator<Element> iterator() {
       return new AbstractIterator<Element>() {
         private int i;
+
         @Override
         protected Element fetch() {
           if (i >= size()) {
@@ -611,7 +599,6 @@ public abstract class AbstractMatrix implements Matrix {
       };
     }
 
-    
     @Override
     public Iterator<Element> iterateNonZero() {
       return iterator();
@@ -670,11 +657,9 @@ public abstract class AbstractMatrix implements Matrix {
       return new DenseVector(cardinality);
     }
 
-    
     @Override
     public int getNumNondefaultElements() {
       return size();
     }
   }
-
 }

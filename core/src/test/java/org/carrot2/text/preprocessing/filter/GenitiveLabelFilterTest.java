@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -19,11 +18,7 @@ import org.carrot2.text.preprocessing.LabelFilterTestBase;
 import org.carrot2.text.preprocessing.PreprocessingContextAssert;
 import org.junit.Test;
 
-import java.util.stream.Stream;
-
-/**
- * Test cases for {@link GenitiveLabelFilter}.
- */
+/** Test cases for {@link GenitiveLabelFilter}. */
 public class GenitiveLabelFilterTest extends LabelFilterTestBase {
   @Override
   protected void initializeFilters(LabelFilterProcessor filterProcessor) {
@@ -33,35 +28,32 @@ public class GenitiveLabelFilterTest extends LabelFilterTestBase {
   @Test
   public void testEmpty() {
     PreprocessingContextAssert a = preprocess();
-    Assertions.assertThat(a.labelImages())
-        .isEmpty();
+    Assertions.assertThat(a.labelImages()).isEmpty();
   }
 
   @Test
   public void testNoGenitiveWords() {
     PreprocessingContextAssert a = preprocess(new TestDocument("abc . abc", "abcd . abcd"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("abc", "abcd");
+    Assertions.assertThat(a.labelImages()).containsOnly("abc", "abcd");
   }
 
   @Test
   public void testGenitiveWords() {
     PreprocessingContextAssert a = preprocess(new TestDocument("abcs' . abcs'", "abcd`s . abcd`s"));
-    Assertions.assertThat(a.labelImages())
-        .isEmpty();
+    Assertions.assertThat(a.labelImages()).isEmpty();
   }
 
   @Test
   public void testNoGenitiveEndingPhrases() {
-    PreprocessingContextAssert a = preprocess(new TestDocument("country's minister'll . country's minister'll"));
-    Assertions.assertThat(a.labelImages())
-        .noneMatch(label -> label.endsWith("'s"));
+    PreprocessingContextAssert a =
+        preprocess(new TestDocument("country's minister'll . country's minister'll"));
+    Assertions.assertThat(a.labelImages()).noneMatch(label -> label.endsWith("'s"));
   }
 
   @Test
   public void testGenitiveEndingPhrases() {
-    PreprocessingContextAssert a = preprocess(new TestDocument("country minister`s . country's minister`s"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("country");
+    PreprocessingContextAssert a =
+        preprocess(new TestDocument("country minister`s . country's minister`s"));
+    Assertions.assertThat(a.labelImages()).containsOnly("country");
   }
 }

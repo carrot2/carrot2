@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -19,9 +18,7 @@ import org.carrot2.text.preprocessing.LabelFilterTestBase;
 import org.carrot2.text.preprocessing.PreprocessingContextAssert;
 import org.junit.Test;
 
-/**
- * Test cases for {@link StopWordLabelFilter}.
- */
+/** Test cases for {@link StopWordLabelFilter}. */
 public class CompleteLabelFilterTest extends LabelFilterTestBase {
   @Override
   protected void initializeFilters(LabelFilterProcessor filterProcessor) {
@@ -33,50 +30,53 @@ public class CompleteLabelFilterTest extends LabelFilterTestBase {
   @Test
   public void testEmpty() {
     PreprocessingContextAssert a = preprocess();
-    Assertions.assertThat(a.labelImages())
-        .isEmpty();
+    Assertions.assertThat(a.labelImages()).isEmpty();
   }
 
   @Test
   public void testOnePhrase() {
-    PreprocessingContextAssert a = preprocess(new TestDocument("aa bb cc . aa bb cc", "aa bb cc . aa bb cc"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("aa bb cc");
+    PreprocessingContextAssert a =
+        preprocess(new TestDocument("aa bb cc . aa bb cc", "aa bb cc . aa bb cc"));
+    Assertions.assertThat(a.labelImages()).containsOnly("aa bb cc");
   }
 
   @Test
   public void testSubphrases() {
-    PreprocessingContextAssert a = preprocess(new TestDocument("aa bb cc . aa bb cc", "bb cc . bb cc"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("aa bb cc");
+    PreprocessingContextAssert a =
+        preprocess(new TestDocument("aa bb cc . aa bb cc", "bb cc . bb cc"));
+    Assertions.assertThat(a.labelImages()).containsOnly("aa bb cc");
   }
 
   @Test
   public void testNestedPhrases() {
-    PreprocessingContextAssert a = preprocess(new TestDocument("aa bb cc dd . aa bb cc dd", "aa bb dd . aa bb dd"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("aa bb cc dd", "aa bb dd");
+    PreprocessingContextAssert a =
+        preprocess(new TestDocument("aa bb cc dd . aa bb cc dd", "aa bb dd . aa bb dd"));
+    Assertions.assertThat(a.labelImages()).containsOnly("aa bb cc dd", "aa bb dd");
   }
 
   @Test
   public void testFuzzyOverrideApplied() {
     labelFilterProcessor.completeLabelFilter.labelOverrideThreshold.set(0.3);
-    PreprocessingContextAssert a = preprocess(new TestDocument("aa bb cc . aa bb cc . aa bb cc . aa bb cc . aa bb cc dd . aa bb cc dd"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("aa bb cc dd");
+    PreprocessingContextAssert a =
+        preprocess(
+            new TestDocument(
+                "aa bb cc . aa bb cc . aa bb cc . aa bb cc . aa bb cc dd . aa bb cc dd"));
+    Assertions.assertThat(a.labelImages()).containsOnly("aa bb cc dd");
   }
 
   @Test
   public void testFuzzyOverrideNotApplied() {
-    PreprocessingContextAssert a = preprocess(new TestDocument("aa bb cc . aa bb cc . aa bb cc . aa bb cc . aa bb cc dd . aa bb cc dd"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("aa bb cc dd", "aa bb cc");
+    PreprocessingContextAssert a =
+        preprocess(
+            new TestDocument(
+                "aa bb cc . aa bb cc . aa bb cc . aa bb cc . aa bb cc dd . aa bb cc dd"));
+    Assertions.assertThat(a.labelImages()).containsOnly("aa bb cc dd", "aa bb cc");
   }
 
   @Test
   public void testOverridingByFilteredOutPhrase() {
-    PreprocessingContextAssert a = preprocess(new TestDocument("stop aa bb stop . stop aa bb stop"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("aa bb");
+    PreprocessingContextAssert a =
+        preprocess(new TestDocument("stop aa bb stop . stop aa bb stop"));
+    Assertions.assertThat(a.labelImages()).containsOnly("aa bb");
   }
 }

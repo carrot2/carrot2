@@ -5,7 +5,6 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
@@ -20,8 +19,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 public class HttpRequest {
-  HttpRequest() {
-  }
+  HttpRequest() {}
 
   public static HttpRequestBuilder builder() {
     return new HttpRequestBuilder();
@@ -32,9 +30,8 @@ public class HttpRequest {
     List<KeyValue> headers = new ArrayList<>();
     byte[] body;
 
-    HttpRequestBuilder() {
-    }
-    
+    HttpRequestBuilder() {}
+
     public HttpResponse sendGet(URI path) throws IOException {
       return sendRequest(path, RequestBuilder.get());
     }
@@ -63,16 +60,16 @@ public class HttpRequest {
     public HttpRequestBuilder header(String key, String value) {
       headers.add(new KeyValue(key, value));
       return this;
-    }    
+    }
 
     private void checkPath(URI path) {
-      if (path.getScheme() == null || 
-          !path.getScheme().matches("https?")) {
+      if (path.getScheme() == null || !path.getScheme().matches("https?")) {
         throw new RuntimeException("Paths must be absolute: " + path);
       }
     }
 
-    private HttpResponse sendRequest(URI path, RequestBuilder rb) throws IOException, ClientProtocolException {
+    private HttpResponse sendRequest(URI path, RequestBuilder rb)
+        throws IOException, ClientProtocolException {
       checkPath(path);
 
       for (KeyValue qp : queryParams) {
@@ -93,15 +90,17 @@ public class HttpRequest {
       rb.setUri(path);
       HttpUriRequest request = rb.build();
 
-      HttpClientBuilder clientBuilder = HttpClientBuilder.create()
-        .disableAutomaticRetries()
-        .disableContentCompression()
-        .disableRedirectHandling()
-        .setDefaultRequestConfig(RequestConfig.custom()
-            .setMaxRedirects(0)
-            .setConnectionRequestTimeout(3000)
-            .setConnectTimeout(3000)
-            .build());
+      HttpClientBuilder clientBuilder =
+          HttpClientBuilder.create()
+              .disableAutomaticRetries()
+              .disableContentCompression()
+              .disableRedirectHandling()
+              .setDefaultRequestConfig(
+                  RequestConfig.custom()
+                      .setMaxRedirects(0)
+                      .setConnectionRequestTimeout(3000)
+                      .setConnectTimeout(3000)
+                      .build());
 
       try (CloseableHttpClient httpclient = clientBuilder.build()) {
         try (CloseableHttpResponse response = httpclient.execute(request)) {
@@ -109,8 +108,8 @@ public class HttpRequest {
           int statusCode = statusLine.getStatusCode();
           String reasonPhrase = statusLine.getReasonPhrase();
           Header[] allHeaders = response.getAllHeaders();
-          
-          byte [] responseBody = null;
+
+          byte[] responseBody = null;
           HttpEntity entity = response.getEntity();
           if (entity != null) {
             responseBody = EntityUtils.toByteArray(entity);

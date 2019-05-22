@@ -8,9 +8,12 @@ public class AttrStringTest extends TestBase {
   @Test
   public void testToFromMap() {
     class Clazz extends AttrComposite {
-      public AttrString defValue = attributes.register("defValue", AttrString.builder().defaultValue("foo"));
-      public AttrString nullValue = attributes.register("nullValue", AttrString.builder().defaultValue(null));
-      public AttrString otherValue = attributes.register("otherValue", AttrString.builder().defaultValue(null));
+      public AttrString defValue =
+          attributes.register("defValue", AttrString.builder().defaultValue("foo"));
+      public AttrString nullValue =
+          attributes.register("nullValue", AttrString.builder().defaultValue(null));
+      public AttrString otherValue =
+          attributes.register("otherValue", AttrString.builder().defaultValue(null));
     }
 
     AliasMapper mapper = new AliasMapper();
@@ -30,4 +33,3 @@ public class AttrStringTest extends TestBase {
     Assertions.assertThat(clazz.otherValue.get()).isEqualTo("bar");
   }
 }
-

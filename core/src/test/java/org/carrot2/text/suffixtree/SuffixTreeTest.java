@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,199 +11,178 @@
 
 package org.carrot2.text.suffixtree;
 
+import static org.junit.Assert.*;
+
+import com.carrotsearch.hppc.IntArrayList;
 import java.util.ArrayList;
 import java.util.Collections;
-
 import org.carrot2.TestBase;
 import org.carrot2.text.suffixtree.SuffixTree.VisitorAdapter;
 import org.junit.Test;
 
-import com.carrotsearch.hppc.IntArrayList;
+/** Sanity and validation tests for the {@link SuffixTree} class. */
+public class SuffixTreeTest extends TestBase {
+  @Test
+  public void checkMississipi() {
+    checkAllSuffixes("mississippi$");
+  }
 
-import static org.junit.Assert.*;
+  @Test
+  public void checkBanana() {
+    checkAllSuffixes("banana$");
+  }
 
-/**
- * Sanity and validation tests for the {@link SuffixTree} class.
- */
-public class SuffixTreeTest extends TestBase
-{
-    @Test
-    public void checkMississipi()
-    {
-        checkAllSuffixes("mississippi$");
+  @Test
+  public void checkCocoa() {
+    checkAllSuffixes("cocoa$");
+  }
+
+  @Test
+  public void checkTransitionsCount() {
+    final SuffixTree st = checkAllSuffixes("cocoa$");
+    assertEquals(8, st.getTransitionsCount());
+  }
+
+  @Test
+  public void checkStatesCount() {
+    final SuffixTree st = checkAllSuffixes("cocoa$");
+    assertEquals(9, st.getStatesCount());
+  }
+
+  @Test
+  public void checkRandomSymbols() {
+    final int[] input = new int[scaledRandomIntBetween(1, 25000)];
+    for (int i = 0; i < input.length; i++) {
+      input[i] = randomIntBetween(0, 100);
     }
+    input[input.length - 1] = Integer.MAX_VALUE;
 
-    @Test
-    public void checkBanana()
-    {
-        checkAllSuffixes("banana$");
+    final SuffixTree stree =
+        SuffixTreeBuilder.from(
+                new Sequence() {
+                  public int objectAt(int i) {
+                    return input[i];
+                  }
+
+                  public int size() {
+                    return input.length;
+                  }
+                })
+            .build();
+
+    for (int i = 0; i < Math.min(5000, input.length); i++) {
+      stree.containsSuffix(new IntegerSequence(input, i, input.length - i));
     }
+  }
 
-    @Test
-    public void checkCocoa()
-    {
-        checkAllSuffixes("cocoa$");
-    }
+  @Test
+  public void testContainsSuffix() {
+    final SuffixTree stree = SuffixTreeBuilder.from(new CharacterSequence("cocoa$")).build();
 
-    @Test
-    public void checkTransitionsCount()
-    {
-        final SuffixTree st = checkAllSuffixes("cocoa$");
-        assertEquals(8, st.getTransitionsCount());
-    }
+    assertFalse(stree.containsSuffix(new CharacterSequence("c")));
+    assertFalse(stree.containsSuffix(new CharacterSequence("co")));
+    assertFalse(stree.containsSuffix(new CharacterSequence("coc")));
+    assertFalse(stree.containsSuffix(new CharacterSequence("coco")));
+    assertFalse(stree.containsSuffix(new CharacterSequence("cocoa")));
 
-    @Test
-    public void checkStatesCount()
-    {
-        final SuffixTree st = checkAllSuffixes("cocoa$");
-        assertEquals(9, st.getStatesCount());
-    }
+    assertFalse(stree.containsSuffix(new CharacterSequence("cx")));
+    assertFalse(stree.containsSuffix(new CharacterSequence("cox")));
+    assertFalse(stree.containsSuffix(new CharacterSequence("cocx")));
+    assertFalse(stree.containsSuffix(new CharacterSequence("cocox")));
+    assertFalse(stree.containsSuffix(new CharacterSequence("cocoax")));
+    assertFalse(stree.containsSuffix(new CharacterSequence("cocoa$x")));
 
-    @Test
-    public void checkRandomSymbols()
-    {
-        final int [] input = new int [scaledRandomIntBetween(1, 25000)];
-        for (int i = 0; i < input.length; i++)
-        {
-            input[i] = randomIntBetween(0, 100);
-        }
-        input[input.length - 1] = Integer.MAX_VALUE;
+    assertFalse(stree.containsSuffix(new CharacterSequence("x")));
+  }
 
-        final SuffixTree stree = SuffixTreeBuilder.from(new Sequence() {
-            public int objectAt(int i)
-            {
-                return input[i];
+  @Test
+  public void testTreeVisitor() {
+    final SuffixTree stree = SuffixTreeBuilder.from(new CharacterSequence("cocoa$")).build();
+
+    class CountingVisitor extends SuffixTree.VisitorAdapter {
+      int states, edges;
+
+      public void post(int state) {
+        states++;
+      }
+
+      public boolean edge(int fromNode, int toNode, int startIndex, int endIndex) {
+        edges++;
+        return true;
+      }
+    };
+
+    final CountingVisitor v = new CountingVisitor();
+    stree.visit(v);
+    assertEquals(stree.getStatesCount(), v.states);
+    assertEquals(stree.getTransitionsCount(), v.edges);
+  }
+
+  @Test
+  public void testInternalNodes() {
+    final ArrayList<String> nodes = new ArrayList<String>();
+    final CharacterSequence seq = new CharacterSequence("cocoa$");
+    final SuffixTree stree = SuffixTreeBuilder.from(seq).build();
+
+    stree.visit(
+        new VisitorAdapter() {
+          final IntArrayList states = new IntArrayList();
+
+          public void post(int state) {
+            if (stree.getRootState() != state) {
+              final StringBuilder buffer = new StringBuilder();
+              for (int i = 0; i < states.size(); i += 2)
+                for (int j = states.get(i); j <= states.get(i + 1); j++)
+                  buffer.append((char) seq.objectAt(j));
+
+              if (stree.isLeaf(state)) buffer.append(" [leaf]");
+              nodes.add(buffer.toString());
+
+              states.remove(states.size() - 1);
+              states.remove(states.size() - 1);
             }
+          };
 
-            public int size()
-            {
-                return input.length;
-            }
-        }).build();
-
-        for (int i = 0; i < Math.min(5000, input.length); i++)
-        {
-            stree.containsSuffix(new IntegerSequence(input, i, input.length - i));
-        }
-    }
-
-    @Test
-    public void testContainsSuffix()
-    {
-        final SuffixTree stree = SuffixTreeBuilder.from(new CharacterSequence("cocoa$")).build();
-
-        assertFalse(stree.containsSuffix(new CharacterSequence("c")));
-        assertFalse(stree.containsSuffix(new CharacterSequence("co")));
-        assertFalse(stree.containsSuffix(new CharacterSequence("coc")));
-        assertFalse(stree.containsSuffix(new CharacterSequence("coco")));
-        assertFalse(stree.containsSuffix(new CharacterSequence("cocoa")));
-
-        assertFalse(stree.containsSuffix(new CharacterSequence("cx")));
-        assertFalse(stree.containsSuffix(new CharacterSequence("cox")));
-        assertFalse(stree.containsSuffix(new CharacterSequence("cocx")));
-        assertFalse(stree.containsSuffix(new CharacterSequence("cocox")));
-        assertFalse(stree.containsSuffix(new CharacterSequence("cocoax")));
-        assertFalse(stree.containsSuffix(new CharacterSequence("cocoa$x")));
-
-        assertFalse(stree.containsSuffix(new CharacterSequence("x")));
-    }
-
-    @Test
-    public void testTreeVisitor()
-    {
-        final SuffixTree stree = SuffixTreeBuilder.from(new CharacterSequence("cocoa$")).build();
-
-        class CountingVisitor extends SuffixTree.VisitorAdapter {
-            int states, edges;
-
-            public void post(int state)
-            {
-                states++;
-            }
-
-            public boolean edge(int fromNode, int toNode, int startIndex, int endIndex)
-            {
-                edges++;
-                return true;
-            }
-        };
-
-        final CountingVisitor v = new CountingVisitor();
-        stree.visit(v);
-        assertEquals(stree.getStatesCount(), v.states);
-        assertEquals(stree.getTransitionsCount(), v.edges);
-    }
-
-    @Test
-    public void testInternalNodes()
-    {
-        final ArrayList<String> nodes = new ArrayList<String>();
-        final CharacterSequence seq = new CharacterSequence("cocoa$");
-        final SuffixTree stree = SuffixTreeBuilder.from(seq).build();
-
-        stree.visit(new VisitorAdapter()
-        {
-            final IntArrayList states = new IntArrayList();
-
-            public void post(int state)
-            {
-                if (stree.getRootState() != state)
-                {
-                    final StringBuilder buffer = new StringBuilder();
-                    for (int i = 0; i < states.size(); i += 2)
-                        for (int j = states.get(i); j <= states.get(i + 1); j++)
-                            buffer.append((char) seq.objectAt(j));
-
-                    if (stree.isLeaf(state)) buffer.append(" [leaf]");
-                    nodes.add(buffer.toString());
-
-                    states.remove(states.size() - 1);
-                    states.remove(states.size() - 1);
-                }
-            };
-
-            public boolean edge(int fromState, int toState, int startIndex, int endIndex)
-            {
-                states.add(startIndex);
-                states.add(endIndex);
-                return true;
-            }
+          public boolean edge(int fromState, int toState, int startIndex, int endIndex) {
+            states.add(startIndex);
+            states.add(endIndex);
+            return true;
+          }
         });
 
-        Collections.sort(nodes);
-        assertArrayEquals(new Object [] {
-            "$ [leaf]",
-            "a$ [leaf]",
-            "co",
-            "coa$ [leaf]",
-            "cocoa$ [leaf]",
-            "o",
-            "oa$ [leaf]",
-            "ocoa$ [leaf]",
-        }, nodes.toArray());
+    Collections.sort(nodes);
+    assertArrayEquals(
+        new Object[] {
+          "$ [leaf]",
+          "a$ [leaf]",
+          "co",
+          "coa$ [leaf]",
+          "cocoa$ [leaf]",
+          "o",
+          "oa$ [leaf]",
+          "ocoa$ [leaf]",
+        },
+        nodes.toArray());
+  }
+
+  /**
+   * Build a suffix tree for a given sequence and check if it contains all suffixes of the input
+   * sequence (ending in leaves).
+   */
+  private SuffixTree checkAllSuffixes(String word) {
+    final SuffixTree stree = SuffixTreeBuilder.from(new CharacterSequence(word)).build();
+
+    // Check all suffixes are in the suffix tree.
+    for (int i = 0; i < word.length(); i++) {
+      assertTrue(stree.containsSuffix(new CharacterSequence(word.substring(i))));
     }
 
-    /**
-     * Build a suffix tree for a given sequence and check if it contains all suffixes of
-     * the input sequence (ending in leaves).
-     */
-    private SuffixTree checkAllSuffixes(String word)
-    {
-        final SuffixTree stree = SuffixTreeBuilder.from(new CharacterSequence(word)).build();
-
-        // Check all suffixes are in the suffix tree.
-        for (int i = 0; i < word.length(); i++)
-        {
-            assertTrue(stree.containsSuffix(new CharacterSequence(word.substring(i))));
-        }
-
-        // Check that all infixes are not in the suffix set.
-        for (int i = 0; i < word.length() - 1; i++)
-        {
-            assertFalse(stree.containsSuffix(
-                new CharacterSequence(word.substring(i, word.length() - 1))));
-        }
-        
-        return stree;
+    // Check that all infixes are not in the suffix set.
+    for (int i = 0; i < word.length() - 1; i++) {
+      assertFalse(
+          stree.containsSuffix(new CharacterSequence(word.substring(i, word.length() - 1))));
     }
+
+    return stree;
+  }
 }

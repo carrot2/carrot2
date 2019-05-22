@@ -2,6 +2,13 @@ package org.carrot2.dcs.examples;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.config.RequestConfig;
@@ -17,30 +24,24 @@ import org.carrot2.dcs.client.ListResponse;
 import org.carrot2.examples.ExamplesCommon;
 import org.carrot2.examples.ExamplesData;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 public class E01_DcsClusteringBasics implements Runnable, Closeable {
   private final CloseableHttpClient httpClient;
   private final URI dcsService;
   private final ObjectMapper om;
 
   public E01_DcsClusteringBasics(URI dcsService) {
-    this.httpClient = HttpClientBuilder.create()
-        .disableAutomaticRetries()
-        .disableContentCompression()
-        .disableRedirectHandling()
-        .setDefaultRequestConfig(RequestConfig.custom()
-            .setMaxRedirects(0)
-            .setConnectionRequestTimeout(2000)
-            .setConnectTimeout(2000)
-            .build())
-        .build();
+    this.httpClient =
+        HttpClientBuilder.create()
+            .disableAutomaticRetries()
+            .disableContentCompression()
+            .disableRedirectHandling()
+            .setDefaultRequestConfig(
+                RequestConfig.custom()
+                    .setMaxRedirects(0)
+                    .setConnectionRequestTimeout(2000)
+                    .setConnectTimeout(2000)
+                    .build())
+            .build();
 
     this.dcsService = Objects.requireNonNull(dcsService);
     this.om = new ObjectMapper();
@@ -52,7 +53,8 @@ public class E01_DcsClusteringBasics implements Runnable, Closeable {
     try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
       expect(httpResponse, HttpStatus.SC_OK);
 
-      ListResponse response = om.readValue(httpResponse.getEntity().getContent(), ListResponse.class);
+      ListResponse response =
+          om.readValue(httpResponse.getEntity().getContent(), ListResponse.class);
       System.out.println("Available algorithms: " + response.algorithms.keySet());
       System.out.println("Available templates: " + response.templates);
     }
@@ -62,23 +64,29 @@ public class E01_DcsClusteringBasics implements Runnable, Closeable {
     ClusterRequest request = new ClusterRequest();
     request.algorithm = "Lingo";
     request.language = "English";
-    request.documents = ExamplesData.documentStream()
-        .map(exDoc -> {
-          ClusterRequest.Document doc = new ClusterRequest.Document();
-          exDoc.visitFields((fld, value) -> doc.setField(fld, value));
-          return doc;
-        })
-        .collect(Collectors.toList());
+    request.documents =
+        ExamplesData.documentStream()
+            .map(
+                exDoc -> {
+                  ClusterRequest.Document doc = new ClusterRequest.Document();
+                  exDoc.visitFields((fld, value) -> doc.setField(fld, value));
+                  return doc;
+                })
+            .collect(Collectors.toList());
 
-    HttpUriRequest httpRequest = RequestBuilder.post(dcsService.resolve("cluster"))
-        .setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
-        .setEntity(new ByteArrayEntity(om.writeValueAsString(request).getBytes(StandardCharsets.UTF_8)))
-        .build();
+    HttpUriRequest httpRequest =
+        RequestBuilder.post(dcsService.resolve("cluster"))
+            .setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+            .setEntity(
+                new ByteArrayEntity(
+                    om.writeValueAsString(request).getBytes(StandardCharsets.UTF_8)))
+            .build();
 
     try (CloseableHttpResponse httpResponse = httpClient.execute(httpRequest)) {
       expect(httpResponse, HttpStatus.SC_OK);
 
-      ClusterResponse response = om.readValue(httpResponse.getEntity().getContent(), ClusterResponse.class);
+      ClusterResponse response =
+          om.readValue(httpResponse.getEntity().getContent(), ClusterResponse.class);
       System.out.println("Clusters returned:");
       ExamplesCommon.printClusters(response.clusters);
     }
@@ -105,13 +113,13 @@ public class E01_DcsClusteringBasics implements Runnable, Closeable {
     httpClient.close();
   }
 
-  public static void main(String [] args) throws IOException {
+  public static void main(String[] args) throws IOException {
     if (args.length != 1) {
       System.err.println("Provide DCS service URI, typically: http://localhost:8080/service/");
       System.exit(-1);
     }
 
-    System.out.println("Connecting to: " +  args[0]);
+    System.out.println("Connecting to: " + args[0]);
     try (E01_DcsClusteringBasics ex = new E01_DcsClusteringBasics(URI.create(args[0]))) {
       ex.run();
     }

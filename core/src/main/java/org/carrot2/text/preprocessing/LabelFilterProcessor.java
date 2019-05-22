@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,117 +12,128 @@
 package org.carrot2.text.preprocessing;
 
 import com.carrotsearch.hppc.IntArrayList;
+import java.util.Arrays;
+import java.util.stream.Stream;
+import org.carrot2.attrs.AttrComposite;
+import org.carrot2.attrs.AttrObject;
 import org.carrot2.language.LexicalData;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllPhrases;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.text.preprocessing.filter.*;
-import org.carrot2.attrs.AttrComposite;
-import org.carrot2.attrs.AttrObject;
-
-import java.util.Arrays;
-import java.util.stream.Stream;
 
 /**
- * Applies basic filtering to words and phrases to produce candidates for cluster labels.
- * Filtering is applied to {@link AllWords} and {@link AllPhrases}, the results are saved
- * to {@link AllLabels}. Currently, the following filters are applied:
+ * Applies basic filtering to words and phrases to produce candidates for cluster labels. Filtering
+ * is applied to {@link AllWords} and {@link AllPhrases}, the results are saved to {@link
+ * AllLabels}. Currently, the following filters are applied:
+ *
  * <ol>
- * <li>{@link StopWordLabelFilter}</li>
- * <li>{@link CompleteLabelFilter}</li>
+ *   <li>{@link StopWordLabelFilter}
+ *   <li>{@link CompleteLabelFilter}
  * </ol>
+ *
  * This class saves the following results to the {@link PreprocessingContext}:
+ *
  * <ul>
- * <li>{@link AllLabels#featureIndex}</li>
+ *   <li>{@link AllLabels#featureIndex}
  * </ul>
- * <p>
- * This class requires that {@link InputTokenizer}, {@link CaseNormalizer},
- * {@link StopListMarker} and {@link PhraseExtractor} be invoked first.
+ *
+ * <p>This class requires that {@link InputTokenizer}, {@link CaseNormalizer}, {@link
+ * StopListMarker} and {@link PhraseExtractor} be invoked first.
  */
 public class LabelFilterProcessor extends AttrComposite {
   // For the time being we include filters as instance fields here. If there is a need
   // to add custom label filters as parameters, we'll need to come up with something.
 
-  /**
-   * Query word label filter for this processor.
-   */
+  /** Query word label filter for this processor. */
   public QueryLabelFilter queryLabelFilter;
+
   {
-    attributes.register("queryLabelFilter", AttrObject.builder(QueryLabelFilter.class)
-        .label("Filters out labels consisting of query hint terms")
-        .getset(() -> queryLabelFilter, (v) -> queryLabelFilter = v)
-        .defaultValue(QueryLabelFilter::new));
+    attributes.register(
+        "queryLabelFilter",
+        AttrObject.builder(QueryLabelFilter.class)
+            .label("Filters out labels consisting of query hint terms")
+            .getset(() -> queryLabelFilter, (v) -> queryLabelFilter = v)
+            .defaultValue(QueryLabelFilter::new));
   }
 
-  /**
-   * Stop word label filter for this processor.
-   */
+  /** Stop word label filter for this processor. */
   public StopWordLabelFilter stopWordLabelFilter;
+
   {
-    attributes.register("stopWordLabelFilter", AttrObject.builder(StopWordLabelFilter.class)
-        .label("Filters out labels starting or ending with ignorable words")
-        .getset(() -> stopWordLabelFilter, (v) -> stopWordLabelFilter = v)
-        .defaultValue(StopWordLabelFilter::new));
+    attributes.register(
+        "stopWordLabelFilter",
+        AttrObject.builder(StopWordLabelFilter.class)
+            .label("Filters out labels starting or ending with ignorable words")
+            .getset(() -> stopWordLabelFilter, (v) -> stopWordLabelFilter = v)
+            .defaultValue(StopWordLabelFilter::new));
   }
 
-  /**
-   * Stop label filter.
-   */
+  /** Stop label filter. */
   public StopLabelFilter stopLabelFilter;
+
   {
-    attributes.register("stopLabelFilter", AttrObject.builder(StopLabelFilter.class)
-        .label("Filters out labels that are declared ignorable by the " + LexicalData.class.getSimpleName() + " implementation")
-        .getset(() -> stopLabelFilter, (v) -> stopLabelFilter = v)
-        .defaultValue(StopLabelFilter::new));
+    attributes.register(
+        "stopLabelFilter",
+        AttrObject.builder(StopLabelFilter.class)
+            .label(
+                "Filters out labels that are declared ignorable by the "
+                    + LexicalData.class.getSimpleName()
+                    + " implementation")
+            .getset(() -> stopLabelFilter, (v) -> stopLabelFilter = v)
+            .defaultValue(StopLabelFilter::new));
   }
 
-  /**
-   * Numeric label filter for this processor.
-   */
+  /** Numeric label filter for this processor. */
   public NumericLabelFilter numericLabelFilter;
+
   {
-    attributes.register("numericLabelFilter", AttrObject.builder(NumericLabelFilter.class)
-        .label("Filters out labels that start with numerics")
-        .getset(() -> numericLabelFilter, (v) -> numericLabelFilter = v)
-        .defaultValue(NumericLabelFilter::new));
+    attributes.register(
+        "numericLabelFilter",
+        AttrObject.builder(NumericLabelFilter.class)
+            .label("Filters out labels that start with numerics")
+            .getset(() -> numericLabelFilter, (v) -> numericLabelFilter = v)
+            .defaultValue(NumericLabelFilter::new));
   }
 
-  /**
-   * Truncated phrase filter for this processor.
-   */
+  /** Truncated phrase filter for this processor. */
   public CompleteLabelFilter completeLabelFilter;
+
   {
-    attributes.register("completeLabelFilter", AttrObject.builder(CompleteLabelFilter.class)
-        .label("Filters out labels that appear to be sub-sequences of other good candidate phrases")
-        .getset(() -> completeLabelFilter, (v) -> completeLabelFilter = v)
-        .defaultValue(CompleteLabelFilter::new));
+    attributes.register(
+        "completeLabelFilter",
+        AttrObject.builder(CompleteLabelFilter.class)
+            .label(
+                "Filters out labels that appear to be sub-sequences of other good candidate phrases")
+            .getset(() -> completeLabelFilter, (v) -> completeLabelFilter = v)
+            .defaultValue(CompleteLabelFilter::new));
   }
 
-  /**
-   * Min length label filter.
-   */
+  /** Min length label filter. */
   public MinLengthLabelFilter minLengthLabelFilter;
+
   {
-    attributes.register("minLengthLabelFilter", AttrObject.builder(MinLengthLabelFilter.class)
-        .label("Filters out labels that are shorter than the provided threshold")
-        .getset(() -> minLengthLabelFilter, (v) -> minLengthLabelFilter = v)
-        .defaultValue(MinLengthLabelFilter::new));
+    attributes.register(
+        "minLengthLabelFilter",
+        AttrObject.builder(MinLengthLabelFilter.class)
+            .label("Filters out labels that are shorter than the provided threshold")
+            .getset(() -> minLengthLabelFilter, (v) -> minLengthLabelFilter = v)
+            .defaultValue(MinLengthLabelFilter::new));
   }
 
-  /**
-   * Genitive length label filter.
-   */
+  /** Genitive length label filter. */
   public GenitiveLabelFilter genitiveLabelFilter;
+
   {
-    attributes.register("genitiveLabelFilter", AttrObject.builder(GenitiveLabelFilter.class)
-        .label("Filters out labels ending with Saxon Genitive ('s)")
-        .getset(() -> genitiveLabelFilter, (v) -> genitiveLabelFilter = v)
-        .defaultValue(GenitiveLabelFilter::new));
+    attributes.register(
+        "genitiveLabelFilter",
+        AttrObject.builder(GenitiveLabelFilter.class)
+            .label("Filters out labels ending with Saxon Genitive ('s)")
+            .getset(() -> genitiveLabelFilter, (v) -> genitiveLabelFilter = v)
+            .defaultValue(GenitiveLabelFilter::new));
   }
 
-  /**
-   * Processes all filters declared as fields of this class.
-   */
+  /** Processes all filters declared as fields of this class. */
   public void process(PreprocessingContext context) {
     final int wordCount = context.allWords.image.length;
     final boolean[] acceptedStems = new boolean[context.allStems.image.length];
@@ -132,20 +142,22 @@ public class LabelFilterProcessor extends AttrComposite {
     Arrays.fill(acceptedPhrases, true);
 
     Stream.of(
-        minLengthLabelFilter,
-        genitiveLabelFilter,
-        queryLabelFilter,
-        stopWordLabelFilter,
-        numericLabelFilter,
-        stopLabelFilter,
-        completeLabelFilter)
-    .forEachOrdered((LabelFilter filter) -> {
-      if (filter != null) {
-        filter.filter(context, acceptedStems, acceptedPhrases);
-      }
-    });
+            minLengthLabelFilter,
+            genitiveLabelFilter,
+            queryLabelFilter,
+            stopWordLabelFilter,
+            numericLabelFilter,
+            stopLabelFilter,
+            completeLabelFilter)
+        .forEachOrdered(
+            (LabelFilter filter) -> {
+              if (filter != null) {
+                filter.filter(context, acceptedStems, acceptedPhrases);
+              }
+            });
 
-    final IntArrayList acceptedFeatures = new IntArrayList(acceptedStems.length + acceptedPhrases.length);
+    final IntArrayList acceptedFeatures =
+        new IntArrayList(acceptedStems.length + acceptedPhrases.length);
 
     final int[] mostFrequentOriginalWordIndex = context.allStems.mostFrequentOriginalWordIndex;
     for (int i = 0; i < acceptedStems.length; i++) {

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,8 +13,7 @@ package org.carrot2.math.mahout;
 
 public final class Algebra {
 
-  private Algebra() {
-  }
+  private Algebra() {}
 
   public static Vector mult(Matrix m, Vector v) {
     if (m.numRows() != v.size()) {
@@ -23,15 +21,14 @@ public final class Algebra {
     }
     // Use a Dense Vector for the moment,
     Vector result = new DenseVector(m.numRows());
-    
+
     for (int i = 0; i < m.numRows(); i++) {
       result.set(i, m.viewRow(i).dot(v));
     }
-    
+
     return result;
   }
-  
-  
+
   public static double hypot(double a, double b) {
     double r;
     if (Math.abs(a) > Math.abs(b)) {
@@ -45,8 +42,7 @@ public final class Algebra {
     }
     return r;
   }
-  
-  
+
   public static double getNorm(Matrix m) {
     double max = 0.0;
     for (int i = 0; i < m.numRows(); i++) {
@@ -61,5 +57,4 @@ public final class Algebra {
     }
     return max;
   }
-
 }

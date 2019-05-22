@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -38,22 +37,22 @@ public class LanguageComponentsTest extends TestBase {
             "Russian",
             "Spanish",
             "Swedish",
-            "Turkish"
-        );
+            "Turkish");
 
     for (String lang : LanguageComponents.languages()) {
       LanguageComponents actual = CachedLangComponents.loadCached(lang);
       Assertions.assertThat(actual.get(Tokenizer.class)).as("Tokenizer for " + lang).isNotNull();
       Assertions.assertThat(actual.get(Stemmer.class)).as("Stemmer for " + lang).isNotNull();
-      Assertions.assertThat(actual.get(LexicalData.class)).as("Lexical data for " + lang).isNotNull();
+      Assertions.assertThat(actual.get(LexicalData.class))
+          .as("Lexical data for " + lang)
+          .isNotNull();
     }
   }
 
   @Test
   public void testCustomComponentInjection() {
     LanguageComponents english = CachedLangComponents.loadCached("English");
-    Assertions.assertThat(english.components())
-        .contains(Runnable.class);
+    Assertions.assertThat(english.components()).contains(Runnable.class);
     english.get(Runnable.class).run();
   }
 }

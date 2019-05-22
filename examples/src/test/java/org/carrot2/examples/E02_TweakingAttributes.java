@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,6 +11,10 @@
 
 package org.carrot2.examples;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Stream;
 import org.carrot2.attrs.*;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.Document;
@@ -24,14 +27,7 @@ import org.carrot2.math.matrix.FactorizationQuality;
 import org.carrot2.math.matrix.LocalNonnegativeMatrixFactorizationFactory;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-import java.util.stream.Stream;
-
-/**
- * This example shows how to tweak clustering algorithm parameters, prior to clustering.
- */
+/** This example shows how to tweak clustering algorithm parameters, prior to clustering. */
 public class E02_TweakingAttributes {
   @Test
   public void tweakLingo() throws IOException {
@@ -49,11 +45,13 @@ public class E02_TweakingAttributes {
     // For attributes that are interfaces, provide concrete implementations of that
     // interface, configuring it separately. Programming editors provide support for listing
     // all interface implementations, use it to inspect the possibilities.
-    LocalNonnegativeMatrixFactorizationFactory factorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
+    LocalNonnegativeMatrixFactorizationFactory factorizationFactory =
+        new LocalNonnegativeMatrixFactorizationFactory();
     factorizationFactory.factorizationQuality.set(FactorizationQuality.HIGH);
     algorithm.matrixReducer.factorizationFactory = factorizationFactory;
 
-    List<Cluster<Document>> clusters = algorithm.cluster(ExamplesData.documentStream(), languageComponents);
+    List<Cluster<Document>> clusters =
+        algorithm.cluster(ExamplesData.documentStream(), languageComponents);
     System.out.println("Clusters from Lingo:");
     ExamplesCommon.printClusters(clusters);
   }
@@ -70,7 +68,8 @@ public class E02_TweakingAttributes {
     algorithm.ignoreWordIfInHigherDocsPercent.set(.8);
     algorithm.preprocessing.wordDfThreshold.set(5);
 
-    List<Cluster<Document>> clusters = algorithm.cluster(ExamplesData.documentStream(), languageComponents);
+    List<Cluster<Document>> clusters =
+        algorithm.cluster(ExamplesData.documentStream(), languageComponents);
     System.out.println("Clusters from STC:");
     ExamplesCommon.printClusters(clusters);
   }
@@ -119,8 +118,11 @@ public class E02_TweakingAttributes {
       @Override
       public <T extends AcceptingVisitor> void visit(String key, AttrObject<T> attr) {
         AcceptingVisitor value = attr.get();
-        print(key, value == null ? "null" : value.getClass().getSimpleName(),
-            "<" + attr.getInterfaceClass().getSimpleName() + ">", attr);
+        print(
+            key,
+            value == null ? "null" : value.getClass().getSimpleName(),
+            "<" + attr.getInterfaceClass().getSimpleName() + ">",
+            attr);
         if (value != null) {
           value.accept(new Lister(lead + key + "."));
         }
@@ -129,8 +131,11 @@ public class E02_TweakingAttributes {
       @Override
       public <T extends AcceptingVisitor> void visit(String key, AttrObjectArray<T> attr) {
         List<T> value = attr.get();
-        print(key, value == null ? "null" : "list[" + value.size() + "]",
-            "array of <" + attr.getInterfaceClass().getSimpleName() + ">", attr);
+        print(
+            key,
+            value == null ? "null" : "list[" + value.size() + "]",
+            "array of <" + attr.getInterfaceClass().getSimpleName() + ">",
+            attr);
         if (value != null) {
           for (AcceptingVisitor v : value) {
             v.accept(new Lister(lead + key + "[]."));
@@ -139,19 +144,26 @@ public class E02_TweakingAttributes {
       }
 
       private void print(String key, Object value, String type, Attr<?> attr) {
-        System.out.println(String.format(Locale.ROOT,
-            "%s%s = %s (%s, %s)",
-            lead, key, value, type, attr.getDescription() == null ? "--" : attr.getDescription()));
+        System.out.println(
+            String.format(
+                Locale.ROOT,
+                "%s%s = %s (%s, %s)",
+                lead,
+                key,
+                value,
+                type,
+                attr.getDescription() == null ? "--" : attr.getDescription()));
       }
     }
 
     Stream.of(
-      new LingoClusteringAlgorithm(),
-      new STCClusteringAlgorithm(),
-      new BisectingKMeansClusteringAlgorithm())
-        .forEachOrdered(algorithm -> {
-          System.out.println("\n# Attributes of " + algorithm.getClass().getSimpleName());
-          algorithm.accept(new Lister(""));
-        });
+            new LingoClusteringAlgorithm(),
+            new STCClusteringAlgorithm(),
+            new BisectingKMeansClusteringAlgorithm())
+        .forEachOrdered(
+            algorithm -> {
+              System.out.println("\n# Attributes of " + algorithm.getClass().getSimpleName());
+              algorithm.accept(new Lister(""));
+            });
   }
 }

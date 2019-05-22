@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,14 +11,11 @@
 
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.text.preprocessing.PreprocessingContext;
-
 import static org.carrot2.language.TokenTypeUtils.isCommon;
 
-/**
- * Accepts words that are not stop words and phrases that do not start nor end in a stop
- * word.
- */
+import org.carrot2.text.preprocessing.PreprocessingContext;
+
+/** Accepts words that are not stop words and phrases that do not start nor end in a stop word. */
 public class StopWordLabelFilter extends SingleLabelFilterBase {
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {

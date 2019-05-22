@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,18 +11,16 @@
 
 package org.carrot2.clustering.kmeans;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.Arrays;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.carrot2.AwaitsFix;
 import org.carrot2.clustering.*;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
-import org.junit.Ignore;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class BisectingKMeansClusteringAlgorithmTest extends ClusteringAlgorithmTestBase {
   @Override
@@ -33,20 +30,23 @@ public class BisectingKMeansClusteringAlgorithmTest extends ClusteringAlgorithmT
 
   @Test
   public void smokeTest() {
-    final List<TestDocument> documents = Arrays.asList(
-        new TestDocument("WordA . WordA"),
-        new TestDocument("WordB . WordB"),
-        new TestDocument("WordC . WordC"),
-        new TestDocument("WordA . WordA"),
-        new TestDocument("WordB . WordB"),
-        new TestDocument("WordC . WordC"));
+    final List<TestDocument> documents =
+        Arrays.asList(
+            new TestDocument("WordA . WordA"),
+            new TestDocument("WordB . WordB"),
+            new TestDocument("WordC . WordC"),
+            new TestDocument("WordA . WordA"),
+            new TestDocument("WordB . WordB"),
+            new TestDocument("WordC . WordC"));
 
     BisectingKMeansClusteringAlgorithm algorithm = new BisectingKMeansClusteringAlgorithm();
     algorithm.labelCount.set(1);
     algorithm.partitionCount.set(3);
 
-    final List<Cluster<TestDocument>> clusters = algorithm.cluster(documents.stream(),
-        CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant1.NAME));
+    final List<Cluster<TestDocument>> clusters =
+        algorithm.cluster(
+            documents.stream(),
+            CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant1.NAME));
 
     assertNotNull(clusters);
     assertEquals(3, clusters.size());
@@ -55,7 +55,8 @@ public class BisectingKMeansClusteringAlgorithmTest extends ClusteringAlgorithmT
     Assertions.assertThat(clusters.get(2).getLabels()).containsExactly("WordC");
   }
 
-  @AwaitsFix("https://issues.carrot2.org/browse/CARROT-1195") // TODO: CARROT-1195 (clustering not deterministic)
+  @AwaitsFix("https://issues.carrot2.org/browse/CARROT-1195") // TODO: CARROT-1195 (clustering not
+  // deterministic)
   @Override
   public void testResultsStableFromRandomShuffle() throws Exception {
     super.testResultsStableFromRandomShuffle();

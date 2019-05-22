@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,23 +11,22 @@
 
 package org.carrot2.util;
 
+import com.carrotsearch.hppc.predicates.ShortPredicate;
 import java.util.Iterator;
 
-import com.carrotsearch.hppc.predicates.ShortPredicate;
-
 /**
- * Iterates over <i>ranges</i> between elements for which a given predicate returns
- * <code>true</code>. The returned range may be of zero length ({@link #getLength()}).
- * <p>
- * An example probably best explains what this class does. Consider the following array:
- * 
+ * Iterates over <i>ranges</i> between elements for which a given predicate returns <code>true
+ * </code>. The returned range may be of zero length ({@link #getLength()}).
+ *
+ * <p>An example probably best explains what this class does. Consider the following array:
+ *
  * <pre>
- * [SEP, SEP, 1, SEP] 
+ * [SEP, SEP, 1, SEP]
  * </pre>
- * 
- * where <code>SEP</code> is something for which the predicate returns <code>true</code>.
- * If so, then the returned subranges would be equal to (start index, length):
- * 
+ *
+ * where <code>SEP</code> is something for which the predicate returns <code>true</code>. If so,
+ * then the returned subranges would be equal to (start index, length):
+ *
  * <pre>
  * [0,0]  (empty range before the first separator)
  * [1,0]  (empty range after the first separator)
@@ -36,73 +34,63 @@ import com.carrotsearch.hppc.predicates.ShortPredicate;
  * [4,0]  (empty range after last separator)
  * </pre>
  */
-public final class IntArrayPredicateIterator implements Iterator<Integer>
-{
-    private ShortPredicate separator;
-    private short [] array;
+public final class IntArrayPredicateIterator implements Iterator<Integer> {
+  private ShortPredicate separator;
+  private short[] array;
 
-    private int rangeStart;
-    private int rangeLength;
-    
-    private final int length;
-    private final int toIndex;
+  private int rangeStart;
+  private int rangeLength;
 
-    public IntArrayPredicateIterator(short [] array, int from, int length, ShortPredicate separator)
-    {
-        this.separator = separator;
-        this.array = array;
-        
-        this.length = length;
-        this.toIndex = from + length;
+  private final int length;
+  private final int toIndex;
 
-        rangeStart = from - 1;
-    }
+  public IntArrayPredicateIterator(short[] array, int from, int length, ShortPredicate separator) {
+    this.separator = separator;
+    this.array = array;
 
-    public IntArrayPredicateIterator(short [] array, ShortPredicate separator)
-    {
-        this(array, 0, array.length, separator);
-    }
+    this.length = length;
+    this.toIndex = from + length;
 
-    public boolean hasNext()
-    {
-        return length > 0 && rangeStart < toIndex;
-    }
+    rangeStart = from - 1;
+  }
 
-    public Integer next()
-    {
-        final int result = rangeStart;
+  public IntArrayPredicateIterator(short[] array, ShortPredicate separator) {
+    this(array, 0, array.length, separator);
+  }
 
-        rangeStart = nextSeparator(rangeStart);
-        rangeLength = rangeStart - result - 1;
+  public boolean hasNext() {
+    return length > 0 && rangeStart < toIndex;
+  }
 
-        return result + 1;
-    }
+  public Integer next() {
+    final int result = rangeStart;
 
-    public void remove()
-    {
-        throw new UnsupportedOperationException();
-    }
+    rangeStart = nextSeparator(rangeStart);
+    rangeLength = rangeStart - result - 1;
 
-    /**
-     * Returns the length (number of elements) of the range most recently acquired from
-     * {@link #next()}.
-     */
-    public int getLength()
-    {
-        return rangeLength;
-    }
+    return result + 1;
+  }
 
-    /*
-     * 
-     */
-    private int nextSeparator(int position)
-    {
-        do
-        {
-            position++;
-        }
-        while (position < toIndex && !separator.apply(array[position]));
+  public void remove() {
+    throw new UnsupportedOperationException();
+  }
 
-        return position;
-    }
+  /**
+   * Returns the length (number of elements) of the range most recently acquired from {@link
+   * #next()}.
+   */
+  public int getLength() {
+    return rangeLength;
+  }
+
+  /*
+   *
+   */
+  private int nextSeparator(int position) {
+    do {
+      position++;
+    } while (position < toIndex && !separator.apply(array[position]));
+
+    return position;
+  }
 }

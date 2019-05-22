@@ -10,7 +10,14 @@ public class AttrObject<T extends AcceptingVisitor> extends Attr<T> {
   private Consumer<T> setter;
   private Supplier<? extends T> newInstance;
 
-  AttrObject(Class<T> clazz, T defaultValue, String label, Consumer<T> constraint, Supplier<? extends T> newInstance, Supplier<T> getter, Consumer<T> setter) {
+  AttrObject(
+      Class<T> clazz,
+      T defaultValue,
+      String label,
+      Consumer<T> constraint,
+      Supplier<? extends T> newInstance,
+      Supplier<T> getter,
+      Consumer<T> setter) {
     super(null, label, constraint);
     this.clazz = clazz;
 
@@ -43,9 +50,9 @@ public class AttrObject<T extends AcceptingVisitor> extends Attr<T> {
   public boolean isDefaultClass(Object value) {
     Objects.requireNonNull(value);
     T def = newDefaultValue();
-    return def != null &&
-        Objects.equals(def.getClass(), value.getClass()) &&
-        Objects.equals(clazz, value.getClass());
+    return def != null
+        && Objects.equals(def.getClass(), value.getClass())
+        && Objects.equals(clazz, value.getClass());
   }
 
   public T newDefaultValue() {
@@ -80,7 +87,8 @@ public class AttrObject<T extends AcceptingVisitor> extends Attr<T> {
 
     public AttrObject<T> defaultValue(T defaultValue, Supplier<? extends T> newInstance) {
       Objects.requireNonNull(newInstance, "New instance supplier must not be null.");
-      return new AttrObject<T>(clazz, defaultValue, label, getConstraint(), newInstance, getter, setter);
+      return new AttrObject<T>(
+          clazz, defaultValue, label, getConstraint(), newInstance, getter, setter);
     }
   }
 

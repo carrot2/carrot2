@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,20 +12,17 @@
 package org.carrot2.text.suffixtree;
 
 /**
- * A sequence of elements from which a {@link SuffixTree} can be built. Elements are
- * indexed with integers starting at position 0. Elements themselves must be represented
- * as integers, where equal values at different indices indicate equal objects, whatever
- * the underlying objects might be.
+ * A sequence of elements from which a {@link SuffixTree} can be built. Elements are indexed with
+ * integers starting at position 0. Elements themselves must be represented as integers, where equal
+ * values at different indices indicate equal objects, whatever the underlying objects might be.
  */
 public interface Sequence {
-  /**
-   * Returns the number of elements in the sequence.
-   */
+  /** Returns the number of elements in the sequence. */
   int size();
 
   /**
-   * Returns a unique integer code for object at index <code>i</code> (the first element
-   * has 0 index).
+   * Returns a unique integer code for object at index <code>i</code> (the first element has 0
+   * index).
    */
   int objectAt(int i);
 }

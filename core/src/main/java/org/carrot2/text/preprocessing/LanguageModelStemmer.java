@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,37 +14,35 @@ package org.carrot2.text.preprocessing;
 import com.carrotsearch.hppc.ByteArrayList;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.sorting.IndirectSort;
-import org.carrot2.language.Tokenizer;
-import org.carrot2.language.Stemmer;
-import org.carrot2.text.preprocessing.PreprocessingContext.AllStems;
-import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
-import org.carrot2.util.CharArrayComparators;
-import org.carrot2.util.MutableCharArray;
-import org.carrot2.util.CharArrayUtils;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import org.carrot2.language.Stemmer;
+import org.carrot2.language.Tokenizer;
+import org.carrot2.text.preprocessing.PreprocessingContext.AllStems;
+import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
+import org.carrot2.util.CharArrayComparators;
+import org.carrot2.util.CharArrayUtils;
+import org.carrot2.util.MutableCharArray;
 
 /**
  * Applies stemming to words and calculates a number of frequency statistics for stems.
- * <p>
- * This class saves the following results to the {@link PreprocessingContext}:
+ *
+ * <p>This class saves the following results to the {@link PreprocessingContext}:
+ *
  * <ul>
- * <li>{@link AllWords#stemIndex}</li>
- * <li>{@link AllStems#image}</li>
- * <li>{@link AllStems#mostFrequentOriginalWordIndex}</li>
- * <li>{@link AllStems#tf}</li>
- * <li>{@link AllStems#tfByDocument}</li>
- * <li>{@link AllWords#type} is populated with {@link Tokenizer#TF_QUERY_WORD}</li>
+ *   <li>{@link AllWords#stemIndex}
+ *   <li>{@link AllStems#image}
+ *   <li>{@link AllStems#mostFrequentOriginalWordIndex}
+ *   <li>{@link AllStems#tf}
+ *   <li>{@link AllStems#tfByDocument}
+ *   <li>{@link AllWords#type} is populated with {@link Tokenizer#TF_QUERY_WORD}
  * </ul>
- * <p>
- * This class requires that {@link InputTokenizer} and {@link CaseNormalizer} be invoked first.
+ *
+ * <p>This class requires that {@link InputTokenizer} and {@link CaseNormalizer} be invoked first.
  */
 final class LanguageModelStemmer {
-  /**
-   * Performs stemming and saves the results to the <code>context</code>.
-   */
+  /** Performs stemming and saves the results to the <code>context</code>. */
   public void stem(PreprocessingContext context, String queryHint) {
     final Stemmer stemmer = context.languageComponents.get(Stemmer.class);
 
@@ -77,13 +74,15 @@ final class LanguageModelStemmer {
     addStemStatistics(context, stemImages, prepareQueryWords(queryHint, stemmer));
   }
 
-  /**
-   * Adds frequency statistics to the stems.
-   */
-  private void addStemStatistics(PreprocessingContext context, char[][] wordStemImages,
-                                 Set<MutableCharArray> queryStems) {
-    final int[] stemImagesOrder = IndirectSort.mergesort(wordStemImages, 0, wordStemImages.length,
-                                                         CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR);
+  /** Adds frequency statistics to the stems. */
+  private void addStemStatistics(
+      PreprocessingContext context, char[][] wordStemImages, Set<MutableCharArray> queryStems) {
+    final int[] stemImagesOrder =
+        IndirectSort.mergesort(
+            wordStemImages,
+            0,
+            wordStemImages.length,
+            CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR);
 
     // Local array references
     final int[] wordTfArray = context.allWords.tf;
@@ -144,7 +143,8 @@ final class LanguageModelStemmer {
       }
 
       // Now check if token image is changing
-      final boolean sameStem = CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR.compare(stem, nextStem) == 0;
+      final boolean sameStem =
+          CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR.compare(stem, nextStem) == 0;
 
       if (sameStem) {
         totalTf += wordTfArray[nextInOrderIndex];
@@ -191,16 +191,15 @@ final class LanguageModelStemmer {
     context.allStems.image = stemImages.toArray(new char[stemImages.size()][]);
     context.allStems.mostFrequentOriginalWordIndex = stemMostFrequentWordIndexes.toArray();
     context.allStems.tf = stemTf.toArray();
-    context.allStems.tfByDocument = stemTfByDocumentList.toArray(new int[stemTfByDocumentList.size()][]);
+    context.allStems.tfByDocument =
+        stemTfByDocumentList.toArray(new int[stemTfByDocumentList.size()][]);
     context.allStems.fieldIndices = fieldIndexList.toArray();
 
     // References in allWords
     context.allWords.stemIndex = stemIndexesArray;
   }
 
-  /**
-   *
-   */
+  /** */
   private void storeTfByDocument(ArrayList<int[]> target, ArrayList<int[]> source) {
     assert source.size() > 0 : "Empty source document list?";
 

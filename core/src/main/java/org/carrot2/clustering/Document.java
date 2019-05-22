@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -15,10 +14,9 @@ package org.carrot2.clustering;
 import java.util.function.BiConsumer;
 
 /**
- * A representation of a single document for clustering. The document
- * must provide named fields to a clustering algorithm. The fields are
- * only required once, so any content may be cleared after the visitor
- * returns.
+ * A representation of a single document for clustering. The document must provide named fields to a
+ * clustering algorithm. The fields are only required once, so any content may be cleared after the
+ * visitor returns.
  */
 public interface Document {
   void visitFields(BiConsumer<String, String> fieldConsumer);

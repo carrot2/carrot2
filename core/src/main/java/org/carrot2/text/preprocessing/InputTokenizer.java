@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,6 +15,11 @@ import com.carrotsearch.hppc.ByteArrayList;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.ShortArrayList;
 import com.carrotsearch.hppc.cursors.IntCursor;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.stream.Stream;
 import org.carrot2.clustering.Document;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
@@ -24,37 +28,26 @@ import org.carrot2.util.CharArrayUtils;
 import org.carrot2.util.MutableCharArray;
 import org.carrot2.util.StringUtils;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.stream.Stream;
-
 /**
  * Performs tokenization of documents.
- * <p>
- * This class saves the following results to the {@link PreprocessingContext}:
+ *
+ * <p>This class saves the following results to the {@link PreprocessingContext}:
+ *
  * <ul>
- * <li>{@link AllTokens#image}</li>
- * <li>{@link AllTokens#documentIndex}</li>
- * <li>{@link AllTokens#fieldIndex}</li>
- * <li>{@link AllTokens#type}</li>
+ *   <li>{@link AllTokens#image}
+ *   <li>{@link AllTokens#documentIndex}
+ *   <li>{@link AllTokens#fieldIndex}
+ *   <li>{@link AllTokens#type}
  * </ul>
  */
 final class InputTokenizer {
-  /**
-   * Token images.
-   */
+  /** Token images. */
   private ArrayList<char[]> images;
 
-  /**
-   * An array of token types.
-   */
+  /** An array of token types. */
   private ShortArrayList tokenTypes;
 
-  /**
-   * An array of document indexes.
-   */
+  /** An array of document indexes. */
   private IntArrayList documentIndices;
 
   /**
@@ -74,9 +67,7 @@ final class InputTokenizer {
     }
   }
 
-  /**
-   * Performs tokenization and saves the results to the <code>context</code>.
-   */
+  /** Performs tokenization and saves the results to the <code>context</code>. */
   public void tokenize(PreprocessingContext context, Stream<? extends Document> docStream) {
     images = new ArrayList<>();
     tokenTypes = new ShortArrayList();
@@ -90,23 +81,25 @@ final class InputTokenizer {
     ArrayList<FieldValue> fields = new ArrayList<>();
 
     IntCursor docCount = new IntCursor();
-    docStream
-      .forEachOrdered((doc) -> {
+    docStream.forEachOrdered(
+        (doc) -> {
           int documentIndex = docCount.value;
           if (documentIndex > 0) {
             addDocumentSeparator();
           }
 
           fields.clear();
-          doc.visitFields((fieldName, fieldValue) -> {
-            if (!StringUtils.isNullOrEmpty(fieldValue)) {
-              fields.add(new FieldValue(fieldName, fieldValue));
-            }
-          });
+          doc.visitFields(
+              (fieldName, fieldValue) -> {
+                if (!StringUtils.isNullOrEmpty(fieldValue)) {
+                  fields.add(new FieldValue(fieldName, fieldValue));
+                }
+              });
 
           boolean hadTokens = false;
           for (FieldValue fv : fields) {
-            final int fieldIndex = fieldIndexes.computeIfAbsent(fv.field, (k) -> fieldIndexes.size());
+            final int fieldIndex =
+                fieldIndexes.computeIfAbsent(fv.field, (k) -> fieldIndexes.size());
             if (fieldIndex > Byte.MAX_VALUE) {
               throw new RuntimeException("Too many fields (>" + fieldIndex + ")");
             }
@@ -154,30 +147,22 @@ final class InputTokenizer {
     documentIndices = null;
   }
 
-  /**
-   * Adds a special terminating token required at the very end of all documents.
-   */
+  /** Adds a special terminating token required at the very end of all documents. */
   void addTerminator() {
     add(-1, (byte) -1, null, Tokenizer.TF_TERMINATOR);
   }
 
-  /**
-   * Adds a document separator to the lists.
-   */
+  /** Adds a document separator to the lists. */
   void addDocumentSeparator() {
     add(-1, (byte) -1, null, Tokenizer.TF_SEPARATOR_DOCUMENT);
   }
 
-  /**
-   * Adds a field separator to the lists.
-   */
+  /** Adds a field separator to the lists. */
   void addFieldSeparator(int documentIndex) {
     add(documentIndex, (byte) -1, null, Tokenizer.TF_SEPARATOR_FIELD);
   }
 
-  /**
-   * Adds custom token code to the sequence. May be used to add separator constants.
-   */
+  /** Adds custom token code to the sequence. May be used to add separator constants. */
   void add(int documentIndex, byte fieldIndex, char[] image, short tokenTypeCode) {
     documentIndices.add(documentIndex);
     fieldIndices.add(fieldIndex);

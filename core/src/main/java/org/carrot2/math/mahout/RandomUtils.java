@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,22 +11,16 @@
 
 package org.carrot2.math.mahout;
 
-
-
-
 public final class RandomUtils {
 
-  private RandomUtils() { }
-  
-  
+  private RandomUtils() {}
+
   public static int hashDouble(double value) {
     long v = Double.doubleToLongBits(value);
     return (int) (v ^ (v >>> 32));
   }
 
-  
   public static int hashFloat(float value) {
     return Float.floatToIntBits(value);
   }
-  
 }

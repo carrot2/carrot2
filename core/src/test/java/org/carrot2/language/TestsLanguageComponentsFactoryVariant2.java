@@ -1,14 +1,12 @@
 package org.carrot2.language;
 
-import org.carrot2.util.MutableCharArray;
-import org.carrot2.util.ResourceLookup;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
+import org.carrot2.util.ResourceLookup;
 
 public class TestsLanguageComponentsFactoryVariant2 implements LanguageComponentsProvider {
   public static final String NAME = "_tests_language_variant2_";
@@ -36,7 +34,8 @@ public class TestsLanguageComponentsFactoryVariant2 implements LanguageComponent
   }
 
   @Override
-  public Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup) throws IOException {
+  public Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup)
+      throws IOException {
     LinkedHashMap<Class<?>, Supplier<?>> components = new LinkedHashMap<>();
     components.put(Stemmer.class, this::createStemmer);
     components.put(Tokenizer.class, ExtendedWhitespaceTokenizer::new);

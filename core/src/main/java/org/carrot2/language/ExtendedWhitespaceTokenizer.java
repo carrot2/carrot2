@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,28 +11,23 @@
 
 package org.carrot2.language;
 
-import org.carrot2.util.MutableCharArray;
-
 import java.io.IOException;
 import java.io.Reader;
+import org.carrot2.util.MutableCharArray;
 
 /**
- * A tokenizer separating input characters on whitespace, but capable of extracting more
- * complex tokens, such as URLs, e-mail addresses and sentence delimiters.
+ * A tokenizer separating input characters on whitespace, but capable of extracting more complex
+ * tokens, such as URLs, e-mail addresses and sentence delimiters.
  */
 public final class ExtendedWhitespaceTokenizer implements Tokenizer {
-  /**
-   * JFlex parser used to split the input into tokens.
-   */
+  /** JFlex parser used to split the input into tokens. */
   private final ExtendedWhitespaceTokenizerImpl parser;
 
   public ExtendedWhitespaceTokenizer() {
     parser = new ExtendedWhitespaceTokenizerImpl((Reader) null);
   }
 
-  /**
-   * Reset this tokenizer to start parsing another stream.
-   */
+  /** Reset this tokenizer to start parsing another stream. */
   @Override
   public void reset(Reader input) {
     this.parser.yyreset(input);

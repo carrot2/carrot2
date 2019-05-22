@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,20 +13,16 @@ package org.carrot2.math.matrix;
 
 import org.carrot2.math.mahout.matrix.*;
 
-/**
- * {@link KMeansMatrixFactorization} factory.
- */
-public class KMeansMatrixFactorizationFactory extends IterativeMatrixFactorizationFactory
-{
-    public MatrixFactorization factorize(DoubleMatrix2D A)
-    {
-        KMeansMatrixFactorization factorization = new KMeansMatrixFactorization(A);
-        factorization.setK(k);
-        factorization.setMaxIterations(maxIterations);
-        factorization.setStopThreshold(stopThreshold);
+/** {@link KMeansMatrixFactorization} factory. */
+public class KMeansMatrixFactorizationFactory extends IterativeMatrixFactorizationFactory {
+  public MatrixFactorization factorize(DoubleMatrix2D A) {
+    KMeansMatrixFactorization factorization = new KMeansMatrixFactorization(A);
+    factorization.setK(k);
+    factorization.setMaxIterations(maxIterations);
+    factorization.setStopThreshold(stopThreshold);
 
-        factorization.compute();
+    factorization.compute();
 
-        return factorization;
-    }
+    return factorization;
+  }
 }

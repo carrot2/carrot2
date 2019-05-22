@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,39 +11,27 @@
 
 package org.carrot2.text.preprocessing;
 
+import com.carrotsearch.hppc.IntIntHashMap;
+import com.carrotsearch.hppc.procedures.IntIntProcedure;
 import java.util.*;
-
 import org.assertj.core.api.Assertions;
 import org.carrot2.language.TokenTypeUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllPhrases;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.util.CharArrayComparators;
 import org.carrot2.util.IntMapUtils;
-
-import com.carrotsearch.hppc.IntIntHashMap;
-import com.carrotsearch.hppc.procedures.IntIntProcedure;
 import org.carrot2.util.ObjectUtils;
 
-/**
- * Fest-style assertions on the content of {@link PreprocessingContext}.
- */
+/** Fest-style assertions on the content of {@link PreprocessingContext}. */
 public class PreprocessingContextAssert {
-  /**
-   * missing word constant.
-   */
-  public final static String MW = "<MW>";
-  /**
-   * document separator constant.
-   */
-  public final static String DS = "<DS>";
-  /**
-   * field separator constant.
-   */
-  public final static String FS = "<FS>";
-  /**
-   * end of stream constant.
-   */
-  public final static String EOS = "<EOS>";
+  /** missing word constant. */
+  public static final String MW = "<MW>";
+  /** document separator constant. */
+  public static final String DS = "<DS>";
+  /** field separator constant. */
+  public static final String FS = "<FS>";
+  /** end of stream constant. */
+  public static final String EOS = "<EOS>";
 
   public final PreprocessingContext context;
 
@@ -65,14 +52,19 @@ public class PreprocessingContextAssert {
         }
       }
 
-      org.junit.Assert.fail("No document " + documentIndex + " for this phrase: "
-          + context.allPhrases.getPhrase(phraseIndex) + "\n" + context.allPhrases);
+      org.junit.Assert.fail(
+          "No document "
+              + documentIndex
+              + " for this phrase: "
+              + context.allPhrases.getPhrase(phraseIndex)
+              + "\n"
+              + context.allPhrases);
       return this;
     }
 
     /**
-     * Asserts exact mapping of document-tf (the number of mappings and their value, regardless
-     * of their order).
+     * Asserts exact mapping of document-tf (the number of mappings and their value, regardless of
+     * their order).
      */
     public PreprocessingContextPhraseAssert withExactDocumentTfs(int[][] docTfPairs) {
       for (int[] docTf : docTfPairs) {
@@ -81,7 +73,10 @@ public class PreprocessingContextAssert {
       }
 
       Assertions.assertThat(context.allPhrases.tfByDocument[phraseIndex].length / 2)
-          .describedAs("tfByDocument array size for phrase: '" + context.allPhrases.getPhrase(phraseIndex) + "'")
+          .describedAs(
+              "tfByDocument array size for phrase: '"
+                  + context.allPhrases.getPhrase(phraseIndex)
+                  + "'")
           .isEqualTo(docTfPairs.length);
 
       return this;
@@ -89,7 +84,8 @@ public class PreprocessingContextAssert {
 
     public PreprocessingContextPhraseAssert withTf(int expectedTf) {
       Assertions.assertThat(context.allPhrases.tf[phraseIndex])
-          .describedAs("tf different for phrase '" + context.allPhrases.getPhrase(phraseIndex) + "'")
+          .describedAs(
+              "tf different for phrase '" + context.allPhrases.getPhrase(phraseIndex) + "'")
           .isEqualTo(expectedTf);
       return this;
     }
@@ -101,7 +97,8 @@ public class PreprocessingContextAssert {
 
   public List<String> wordImages() {
     Assertions.assertThat(context.allWords.image)
-        .describedAs("the context's allWords is not properly initialized.").isNotNull();
+        .describedAs("the context's allWords is not properly initialized.")
+        .isNotNull();
 
     List<String> result = new ArrayList<>();
     for (int i = context.allWords.image.length; --i >= 0; ) {
@@ -111,12 +108,11 @@ public class PreprocessingContextAssert {
     return result;
   }
 
-  /**
-   * Return a list of random-ordered, space-separated phrase images.
-   */
+  /** Return a list of random-ordered, space-separated phrase images. */
   public List<String> phraseImages() {
     Assertions.assertThat(context.allPhrases.wordIndices)
-        .describedAs("the context's allPhrases is not properly initialized.").isNotNull();
+        .describedAs("the context's allPhrases is not properly initialized.")
+        .isNotNull();
 
     List<String> result = new ArrayList<>();
     for (int i = context.allPhrases.wordIndices.length; --i >= 0; ) {
@@ -128,7 +124,8 @@ public class PreprocessingContextAssert {
 
   public List<String> labelImages() {
     Assertions.assertThat(context.allLabels.featureIndex)
-        .describedAs("the context's allPhrases is not properly initialized.").isNotNull();
+        .describedAs("the context's allPhrases is not properly initialized.")
+        .isNotNull();
 
     List<String> result = new ArrayList<>();
     for (int i = context.allLabels.size(); --i >= 0; ) {
@@ -138,51 +135,51 @@ public class PreprocessingContextAssert {
     return result;
   }
 
-  /**
-   * Assert the context contains a phrase consisting of these exact images.
-   */
+  /** Assert the context contains a phrase consisting of these exact images. */
   public PreprocessingContextPhraseAssert containsPhrase(List<String> processedTermImages) {
-    return containsPhrase(processedTermImages.toArray(
-        new String[processedTermImages.size()]));
+    return containsPhrase(processedTermImages.toArray(new String[processedTermImages.size()]));
   }
 
-  /**
-   * Assert the context contains a phrase consisting of these exact images.
-   */
+  /** Assert the context contains a phrase consisting of these exact images. */
   public PreprocessingContextPhraseAssert containsPhrase(String... processedTermImages) {
     Assertions.assertThat(processedTermImages).isNotEmpty();
     Assertions.assertThat(context.allPhrases.wordIndices)
-        .describedAs("the context's allPhrases is not properly initialized.").isNotNull();
+        .describedAs("the context's allPhrases is not properly initialized.")
+        .isNotNull();
 
     // Naive scan over the set of extracted phrases.
     final String phraseImage = String.join(" ", processedTermImages);
     int foundAt = -1;
     for (int i = context.allPhrases.wordIndices.length; --i >= 0; ) {
       if (phraseImage.equals(context.allPhrases.getPhrase(i).toString())) {
-        if (foundAt >= 0) org.junit.Assert.fail("More than one phrase with an identical image '"
-            + phraseImage + "'?\n\n" + context.allPhrases);
+        if (foundAt >= 0)
+          org.junit.Assert.fail(
+              "More than one phrase with an identical image '"
+                  + phraseImage
+                  + "'?\n\n"
+                  + context.allPhrases);
         foundAt = i;
       }
     }
 
     if (foundAt < 0)
-      org.junit.Assert.fail("No phrase '" + phraseImage + "' in allPhrases:\n" + context.allPhrases);
+      org.junit.Assert.fail(
+          "No phrase '" + phraseImage + "' in allPhrases:\n" + context.allPhrases);
 
     return new PreprocessingContextPhraseAssert(foundAt);
   }
 
   /**
-   * Looks up a phrase that matches the list of stemmed images. Stem images
-   * are preprocessed in this method and underscore "_"
-   * character is removed.
+   * Looks up a phrase that matches the list of stemmed images. Stem images are preprocessed in this
+   * method and underscore "_" character is removed.
    */
   public PreprocessingContextPhraseAssert containsPhraseStemmedAs(String... stemImages) {
     Assertions.assertThat(stemImages).isNotEmpty();
     Assertions.assertThat(context.allPhrases.wordIndices)
-        .describedAs("the context's allPhrases is not properly initialized.").isNotNull();
+        .describedAs("the context's allPhrases is not properly initialized.")
+        .isNotNull();
 
-    for (int i = 0; i < stemImages.length; i++)
-      stemImages[i] = stemImages[i].replaceAll("_", "");
+    for (int i = 0; i < stemImages.length; i++) stemImages[i] = stemImages[i].replaceAll("_", "");
 
     // Naive scan over the set of extracted phrases.
     Comparator<char[]> comp = CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR;
@@ -194,23 +191,30 @@ public class PreprocessingContextAssert {
       if (wordIdxs.length == stemImages.length) {
         for (int j = 0; j < wordIdxs.length; j++) {
           if (comp.compare(
-              context.allStems.image[context.allWords.stemIndex[wordIdxs[j]]],
-              stemImages[j].toCharArray()) != 0) {
+                  context.allStems.image[context.allWords.stemIndex[wordIdxs[j]]],
+                  stemImages[j].toCharArray())
+              != 0) {
             continue nextPhrase;
           }
         }
 
         if (foundAt >= 0) {
-          org.junit.Assert.fail("More than one phrase corresponds to stem sequence '" +
-              Arrays.toString(stemImages) + "':\n" + context.allPhrases);
+          org.junit.Assert.fail(
+              "More than one phrase corresponds to stem sequence '"
+                  + Arrays.toString(stemImages)
+                  + "':\n"
+                  + context.allPhrases);
         }
         foundAt = i;
       }
     }
 
     if (foundAt < 0)
-      org.junit.Assert.fail("No phrase corresponding to stem sequence '" +
-          Arrays.toString(stemImages) + "' in allPhrases:\n" + context.allPhrases);
+      org.junit.Assert.fail(
+          "No phrase corresponding to stem sequence '"
+              + Arrays.toString(stemImages)
+              + "' in allPhrases:\n"
+              + context.allPhrases);
 
     return new PreprocessingContextPhraseAssert(foundAt);
   }
@@ -248,8 +252,13 @@ public class PreprocessingContextAssert {
         }
       }
 
-      org.junit.Assert.fail("No document " + documentIndex + " for this stem: "
-          + stemImage + "\n" + context.allPhrases);
+      org.junit.Assert.fail(
+          "No document "
+              + documentIndex
+              + " for this stem: "
+              + stemImage
+              + "\n"
+              + context.allPhrases);
       return this;
     }
 
@@ -268,7 +277,8 @@ public class PreprocessingContextAssert {
 
     public StemAssert withFieldIndices(int... expectedIndices) {
       int[] indices = PreprocessingContext.toFieldIndexes(context.allStems.fieldIndices[stemIndex]);
-      Assertions.assertThat(expectedIndices).as("field indices of stem '" + stemImage + "'")
+      Assertions.assertThat(expectedIndices)
+          .as("field indices of stem '" + stemImage + "'")
           .isEqualTo(indices);
       return this;
     }
@@ -277,22 +287,23 @@ public class PreprocessingContextAssert {
   StemAssert constainsStem(String stemImage) {
     Assertions.assertThat(stemImage).isNotEmpty();
     Assertions.assertThat(context.allStems.image)
-        .describedAs("the context's allStems is not properly initialized.").isNotNull();
+        .describedAs("the context's allStems is not properly initialized.")
+        .isNotNull();
 
     Comparator<char[]> comp = CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR;
     int found = -1;
     for (int i = 0; i < context.allStems.image.length; i++) {
       if (comp.compare(context.allStems.image[i], stemImage.toCharArray()) == 0) {
         if (found >= 0)
-          org.junit.Assert.fail("Duplicate stem with image '" + stemImage + "' in stems:\n"
-              + context.allStems);
+          org.junit.Assert.fail(
+              "Duplicate stem with image '" + stemImage + "' in stems:\n" + context.allStems);
         found = i;
       }
     }
 
     if (found == -1)
-      org.junit.Assert.fail("No stem with image '" + stemImage + "' in stems:\n"
-          + context.allStems);
+      org.junit.Assert.fail(
+          "No stem with image '" + stemImage + "' in stems:\n" + context.allStems);
 
     return new StemAssert(found);
   }
@@ -322,8 +333,13 @@ public class PreprocessingContextAssert {
         }
       }
 
-      org.junit.Assert.fail("No document " + documentIndex + " for this word: "
-          + wordImage + "\n" + context.allPhrases);
+      org.junit.Assert.fail(
+          "No document "
+              + documentIndex
+              + " for this word: "
+              + wordImage
+              + "\n"
+              + context.allPhrases);
       return this;
     }
 
@@ -342,23 +358,20 @@ public class PreprocessingContextAssert {
 
     public WordAssert withFieldIndices(int... expectedIndices) {
       int[] indices = PreprocessingContext.toFieldIndexes(context.allWords.fieldIndices[wordIndex]);
-      Assertions.assertThat(expectedIndices).as("field indices of word '" + wordImage + "'")
+      Assertions.assertThat(expectedIndices)
+          .as("field indices of word '" + wordImage + "'")
           .isEqualTo(indices);
       return this;
     }
 
-    /**
-     * type masked to token type only.
-     */
+    /** type masked to token type only. */
     public void withTokenType(int tokenType) {
       Assertions.assertThat(TokenTypeUtils.maskType(context.allWords.type[wordIndex]))
           .as("token type (masked) of word '" + wordImage + "'")
           .isEqualTo(tokenType);
     }
 
-    /**
-     * raw value of token type field.
-     */
+    /** raw value of token type field. */
     public void withExactTokenType(int tokenType) {
       Assertions.assertThat(tokenType)
           .as("token type of word '" + wordImage + "'")
@@ -369,22 +382,23 @@ public class PreprocessingContextAssert {
   public WordAssert containsWord(String wordImage) {
     Assertions.assertThat(wordImage).isNotEmpty();
     Assertions.assertThat(context.allWords.image)
-        .describedAs("the context's allWords is not properly initialized.").isNotNull();
+        .describedAs("the context's allWords is not properly initialized.")
+        .isNotNull();
 
     Comparator<char[]> comp = CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR;
     int found = -1;
     for (int i = 0; i < context.allWords.image.length; i++) {
       if (comp.compare(context.allWords.image[i], wordImage.toCharArray()) == 0) {
         if (found >= 0)
-          org.junit.Assert.fail("Duplicate word with image '" + wordImage + "' in words:\n"
-              + context.allWords);
+          org.junit.Assert.fail(
+              "Duplicate word with image '" + wordImage + "' in words:\n" + context.allWords);
         found = i;
       }
     }
 
     if (found == -1)
-      org.junit.Assert.fail("No word with image '" + wordImage + "' in words:\n"
-          + context.allStems);
+      org.junit.Assert.fail(
+          "No word with image '" + wordImage + "' in words:\n" + context.allStems);
 
     return new WordAssert(found);
   }
@@ -397,30 +411,24 @@ public class PreprocessingContextAssert {
     }
 
     public String getTokenImage() {
-      if (context.allTokens.image[tokenIndex] == null)
-        return null;
+      if (context.allTokens.image[tokenIndex] == null) return null;
       return new String(context.allTokens.image[tokenIndex]);
     }
 
     public String getWordImage() {
       if (context.allTokens.image[tokenIndex] == null) {
-        if (TokenTypeUtils.isDocumentSeparator(context.allTokens.type[tokenIndex]))
-          return DS;
-        if (TokenTypeUtils.isFieldSeparator(context.allTokens.type[tokenIndex]))
-          return FS;
-        if (TokenTypeUtils.isTerminator(context.allTokens.type[tokenIndex]))
-          return EOS;
+        if (TokenTypeUtils.isDocumentSeparator(context.allTokens.type[tokenIndex])) return DS;
+        if (TokenTypeUtils.isFieldSeparator(context.allTokens.type[tokenIndex])) return FS;
+        if (TokenTypeUtils.isTerminator(context.allTokens.type[tokenIndex])) return EOS;
         throw new RuntimeException();
       }
       int wordIndex = context.allTokens.wordIndex[tokenIndex];
-      if (wordIndex < 0)
-        return MW;
+      if (wordIndex < 0) return MW;
       return new String(context.allWords.image[wordIndex]);
     }
 
     public String getStemImage() {
-      if (getTokenImage() == null)
-        return null;
+      if (getTokenImage() == null) return null;
 
       int wordIndex = context.allTokens.wordIndex[tokenIndex];
       int stemIndex = context.allWords.stemIndex[wordIndex];
@@ -428,8 +436,7 @@ public class PreprocessingContextAssert {
     }
 
     public Integer getWordType() {
-      if (getTokenImage() == null)
-        return null;
+      if (getTokenImage() == null) return null;
 
       return (int) context.allWords.type[context.allTokens.wordIndex[tokenIndex]];
     }
@@ -437,8 +444,7 @@ public class PreprocessingContextAssert {
 
   public List<TokenEntry> tokens() {
     List<TokenEntry> result = new ArrayList<>();
-    for (int i = 0; i < context.allTokens.image.length; i++)
-      result.add(new TokenEntry(i));
+    for (int i = 0; i < context.allTokens.image.length; i++) result.add(new TokenEntry(i));
     return result;
   }
 
@@ -448,13 +454,15 @@ public class PreprocessingContextAssert {
 
     public TokenAssert(int tokenIndex) {
       this.tokenIndex = tokenIndex;
-      this.tokenImage = tokenIndex + ":"
-          + (context.allTokens.image[tokenIndex] != null ? new String(context.allTokens.image[tokenIndex]) : "<null>");
+      this.tokenImage =
+          tokenIndex
+              + ":"
+              + (context.allTokens.image[tokenIndex] != null
+                  ? new String(context.allTokens.image[tokenIndex])
+                  : "<null>");
     }
 
-    /**
-     * type masked to token type only.
-     */
+    /** type masked to token type only. */
     public TokenAssert hasTokenType(int tokenType) {
       Assertions.assertThat(tokenType)
           .as("token type (masked) of token '" + tokenImage + "'")
@@ -462,9 +470,7 @@ public class PreprocessingContextAssert {
       return this;
     }
 
-    /**
-     * raw value of token type field.
-     */
+    /** raw value of token type field. */
     public TokenAssert hasExactTokenType(int tokenType) {
       Assertions.assertThat(tokenType)
           .as("token type of token '" + tokenImage + "'")
@@ -474,11 +480,17 @@ public class PreprocessingContextAssert {
 
     public TokenAssert hasImage(String image) {
       Assertions.assertThat(
-          CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR.compare(
-              image != null ? image.toCharArray() : null,
-              context.allTokens.image[tokenIndex]) == 0)
-          .as("token image equality: " + image + " vs. " +
-              new String(ObjectUtils.firstNonNull(context.allTokens.image[tokenIndex], "<null>" .toCharArray())))
+              CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR.compare(
+                      image != null ? image.toCharArray() : null,
+                      context.allTokens.image[tokenIndex])
+                  == 0)
+          .as(
+              "token image equality: "
+                  + image
+                  + " vs. "
+                  + new String(
+                      ObjectUtils.firstNonNull(
+                          context.allTokens.image[tokenIndex], "<null>".toCharArray())))
           .isTrue();
       return this;
     }
@@ -502,40 +514,39 @@ public class PreprocessingContextAssert {
     return new TokenAssert(tokenIndex);
   }
 
-
-  /**
-   * Make sure term frequencies and
-   */
+  /** Make sure term frequencies and */
   public void phraseTfsCorrect() {
     // for each discovered phrase, do manual count and verify if tf and tfByDocument are correct.
     AllPhrases allPhrases = context.allPhrases;
     for (int index = 0; index < allPhrases.size(); index++) {
       IntIntHashMap realTfByDocuments = countManually(context, allPhrases.wordIndices[index]);
-      final int realTf = realTfByDocuments.forEach(new IntIntProcedure() {
-        int tf;
+      final int realTf =
+          realTfByDocuments.forEach(
+                  new IntIntProcedure() {
+                    int tf;
 
-        public void apply(int key, int value) {
-          tf += value;
-        }
-      }).tf;
+                    public void apply(int key, int value) {
+                      tf += value;
+                    }
+                  })
+              .tf;
 
-      Assertions.assertThat(allPhrases.tf[index]).as("Phrase: " + allPhrases.getPhrase(index))
+      Assertions.assertThat(allPhrases.tf[index])
+          .as("Phrase: " + allPhrases.getPhrase(index))
           .isEqualTo(realTf);
 
       // Phrase extractor does not sort the byDocumentTf, so we need to addAllFromFlattened
       // to a map and then flatten with sorting.
-      Assertions
-          .assertThat(
-              IntMapUtils.flattenSortedByKey(IntMapUtils.addAllFromFlattened(
-                  new IntIntHashMap(), allPhrases.tfByDocument[index])))
+      Assertions.assertThat(
+              IntMapUtils.flattenSortedByKey(
+                  IntMapUtils.addAllFromFlattened(
+                      new IntIntHashMap(), allPhrases.tfByDocument[index])))
           .as("Phrase: " + allPhrases.getPhrase(index))
           .isEqualTo(IntMapUtils.flattenSortedByKey(realTfByDocuments));
     }
   }
 
-  /**
-   * Manually and naively count doc->tf for the given word sequence.
-   */
+  /** Manually and naively count doc->tf for the given word sequence. */
   private IntIntHashMap countManually(PreprocessingContext context, int[] phraseWordIndices) {
     IntIntHashMap tfByDoc = new IntIntHashMap();
     AllTokens allTokens = context.allTokens;
@@ -544,8 +555,7 @@ public class PreprocessingContextAssert {
       for (int j = 0; j < phraseWordIndices.length; j++) {
         int wordInPhrase = phraseWordIndices[j];
         int wordInTokens = allTokens.wordIndex[i + j];
-        if (wordInPhrase != wordInTokens)
-          continue outer;
+        if (wordInPhrase != wordInTokens) continue outer;
       }
       tfByDoc.putOrAdd(allTokens.documentIndex[i], 1, 1);
     }

@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,48 +13,36 @@ package org.carrot2.clustering.stc;
 
 import static org.carrot2.text.suffixtree.SuffixTree.NO_EDGE;
 
+import com.carrotsearch.hppc.BitSet;
+import com.carrotsearch.hppc.IntStack;
 import java.util.ArrayList;
-
-import org.carrot2.text.suffixtree.Sequence;
 import org.carrot2.text.suffixtree.IntegerSequence;
+import org.carrot2.text.suffixtree.Sequence;
 import org.carrot2.text.suffixtree.SuffixTree;
 import org.carrot2.text.suffixtree.SuffixTreeBuilder;
 
-import com.carrotsearch.hppc.BitSet;
-import com.carrotsearch.hppc.IntStack;
-
-/**
- * A suffix tree dedicated to finding frequent phrases in documents.
- */
+/** A suffix tree dedicated to finding frequent phrases in documents. */
 final class GeneralizedSuffixTree {
   /**
-   * Builds an {@link Sequence} suitable for detection of frequently occurring phrases
-   * in many documents using a {@link SuffixTree}. Marks ends of phrases with unique
-   * symbols and stores the information about document boundaries.
+   * Builds an {@link Sequence} suitable for detection of frequently occurring phrases in many
+   * documents using a {@link SuffixTree}. Marks ends of phrases with unique symbols and stores the
+   * information about document boundaries.
    */
   static class SequenceBuilder {
     private int separator = -1;
 
     public final IntStack input = new IntStack();
 
-    /**
-     * Positions in {@link #input} where documents end.
-     */
+    /** Positions in {@link #input} where documents end. */
     public IntStack documentMarkers = new IntStack();
 
-    /**
-     * We keep the document number for each leaf state.
-     */
+    /** We keep the document number for each leaf state. */
     public IntStack stateOriginDocument = new IntStack();
 
-    /**
-     * A suffix tree built from the input phrases.
-     */
+    /** A suffix tree built from the input phrases. */
     public SuffixTree stree;
 
-    /**
-     * Callbacks for marking leaf states.
-     */
+    /** Callbacks for marking leaf states. */
     private final class LeafStateMarker
         implements SuffixTree.IStateCallback, SuffixTree.IProgressCallback {
       private int currentDocument = 0;
@@ -69,77 +56,59 @@ final class GeneralizedSuffixTree {
       }
 
       public void newState(int state, int position) {
-        while (stateOriginDocument.size() < state)
-          stateOriginDocument.push(-1);
+        while (stateOriginDocument.size() < state) stateOriginDocument.push(-1);
         stateOriginDocument.push(currentDocument);
       }
     }
 
-    /**
-     *
-     */
+    /** */
     public void addPhrase(int[] terms, int start, int len) {
       input.push(terms, start, len);
       input.push(separator--);
     }
 
-    /**
-     *
-     */
+    /** */
     public void addPhrase(int... terms) {
       addPhrase(terms, 0, terms.length);
     }
 
-    /**
-     *
-     */
+    /** */
     public void endDocument() {
       documentMarkers.push(input.size());
     }
 
-    /**
-     *
-     */
+    /** */
     public void buildSuffixTree() {
       this.stateOriginDocument.clear();
 
       final LeafStateMarker marker = new LeafStateMarker();
       final Sequence seq = new IntegerSequence(input.buffer, 0, input.elementsCount);
-      this.stree = SuffixTreeBuilder.from(seq)
-          .withProgressCallback(marker)
-          .withStateCallback(marker)
-          .build();
+      this.stree =
+          SuffixTreeBuilder.from(seq)
+              .withProgressCallback(marker)
+              .withStateCallback(marker)
+              .build();
     }
   }
 
   /**
-   * Recursive walk over the suffix tree (with additional information provided by
-   * {@link SequenceBuilder}), extracting paths that occurred more than once.
+   * Recursive walk over the suffix tree (with additional information provided by {@link
+   * SequenceBuilder}), extracting paths that occurred more than once.
    */
-  static abstract class Visitor {
-    /**
-     * Path from the root (edges index ranges) when walking through the tree.
-     */
+  abstract static class Visitor {
+    /** Path from the root (edges index ranges) when walking through the tree. */
     private final IntStack edges = new IntStack();
 
-    /**
-     * Bitsets used to compute cardinality in each node.
-     */
+    /** Bitsets used to compute cardinality in each node. */
     private final ArrayList<BitSet> bsets = new ArrayList<BitSet>();
 
-    /**
-     * Suffix tree on all the input.
-     */
+    /** Suffix tree on all the input. */
     private final SuffixTree stree;
 
-    /**
-     * Sequence builder with the input.
-     */
+    /** Sequence builder with the input. */
     protected final SequenceBuilder sb;
 
-    /**
-     * Minimum cardinality (inclusive) in an internal state to visit it.
-     */
+    /** Minimum cardinality (inclusive) in an internal state to visit it. */
     private int minCardinality;
 
     public Visitor(SequenceBuilder sb, int minCardinality) {
@@ -152,8 +121,7 @@ final class GeneralizedSuffixTree {
 
     public void visit() {
       // In a suffix tree without any documents, this will be the case.
-      if (stree.isLeaf(stree.getRootState()))
-        return;
+      if (stree.isLeaf(stree.getRootState())) return;
 
       countDocs(0, stree.getRootState());
     }
@@ -191,11 +159,8 @@ final class GeneralizedSuffixTree {
       while (bsets.size() <= level) bsets.add(new BitSet());
       return bsets.get(level);
     }
-  }
-
-  ;
+  };
 
   /* */
-  private GeneralizedSuffixTree() {
-  }
+  private GeneralizedSuffixTree() {}
 }

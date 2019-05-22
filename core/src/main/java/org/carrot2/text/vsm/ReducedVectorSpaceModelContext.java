@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -16,22 +15,20 @@ import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 
 /**
  * Stores data related a Vector Space Model with reduced dimensionality.
- * 
+ *
  * @see TermDocumentMatrixReducer
  */
-public class ReducedVectorSpaceModelContext
-{
-    /** Vector Space Model context for the underlying documents. */
-    public final VectorSpaceModelContext vsmContext;
+public class ReducedVectorSpaceModelContext {
+  /** Vector Space Model context for the underlying documents. */
+  public final VectorSpaceModelContext vsmContext;
 
-    /** Base vectors of the reduced term document matrix */
-    public DoubleMatrix2D baseMatrix;
+  /** Base vectors of the reduced term document matrix */
+  public DoubleMatrix2D baseMatrix;
 
-    /** Coefficient vectors of the reduced term document matrix */
-    public DoubleMatrix2D coefficientMatrix;
-    
-    public ReducedVectorSpaceModelContext(VectorSpaceModelContext vectorSpaceModelContext)
-    {
-        this.vsmContext = vectorSpaceModelContext;
-    }
+  /** Coefficient vectors of the reduced term document matrix */
+  public DoubleMatrix2D coefficientMatrix;
+
+  public ReducedVectorSpaceModelContext(VectorSpaceModelContext vectorSpaceModelContext) {
+    this.vsmContext = vectorSpaceModelContext;
+  }
 }

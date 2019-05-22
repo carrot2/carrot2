@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,13 +11,8 @@
 
 package org.carrot2.math.matrix;
 
-/**
- * A factory that produces objects implementing the {@link SeedingStrategy}
- * interface.
- */
+/** A factory that produces objects implementing the {@link SeedingStrategy} interface. */
 public interface SeedingStrategyFactory {
-  /**
-   * Creates a {@link SeedingStrategy}.
-   */
+  /** Creates a {@link SeedingStrategy}. */
   SeedingStrategy createSeedingStrategy();
 }

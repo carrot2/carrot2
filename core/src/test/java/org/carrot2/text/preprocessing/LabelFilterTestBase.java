@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,6 +11,9 @@
 
 package org.carrot2.text.preprocessing;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.stream.Stream;
 import org.carrot2.TestBase;
 import org.carrot2.clustering.CachedLangComponents;
 import org.carrot2.clustering.Document;
@@ -21,23 +23,14 @@ import org.carrot2.language.TestsLanguageComponentsFactoryVariant2;
 import org.carrot2.text.preprocessing.filter.CompleteLabelFilter;
 import org.junit.Before;
 
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-/**
- * Test cases for {@link CompleteLabelFilter}.
- */
+/** Test cases for {@link CompleteLabelFilter}. */
 public class LabelFilterTestBase extends TestBase {
-  /**
-   * Filter processor under tests
-   */
+  /** Filter processor under tests */
   protected LabelFilterProcessor labelFilterProcessor;
 
-  /**
-   * Other preprocessing components required for the test
-   */
+  /** Other preprocessing components required for the test */
   private InputTokenizer tokenizer = new InputTokenizer();
+
   private CaseNormalizer caseNormalizer = new CaseNormalizer();
   private LanguageModelStemmer languageModelStemmer = new LanguageModelStemmer();
   private PhraseExtractor phraseExtractor = new PhraseExtractor(1);
@@ -56,30 +49,37 @@ public class LabelFilterTestBase extends TestBase {
     initializeFilters(labelFilterProcessor);
   }
 
-  protected void initializeFilters(LabelFilterProcessor filterProcessor) {
-  }
+  protected void initializeFilters(LabelFilterProcessor filterProcessor) {}
 
   protected void check(Stream<? extends Document> documents, int[] expectedLabelsFeatureIndex) {
     check(documents, expectedLabelsFeatureIndex, -1);
   }
 
-  protected PreprocessingContext check(Stream<? extends Document> documents, int[] expectedLabelsFeatureIndex, int expectedFirstPhraseIndex) {
-    LanguageComponents langComponents = CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant2.NAME);
+  protected PreprocessingContext check(
+      Stream<? extends Document> documents,
+      int[] expectedLabelsFeatureIndex,
+      int expectedFirstPhraseIndex) {
+    LanguageComponents langComponents =
+        CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant2.NAME);
     PreprocessingContext context = runPreprocessing(documents, langComponents);
 
-    assertThat(context.allLabels.featureIndex).as("allLabels.featureIndex")
+    assertThat(context.allLabels.featureIndex)
+        .as("allLabels.featureIndex")
         .isEqualTo(expectedLabelsFeatureIndex);
-    assertThat(context.allLabels.firstPhraseIndex).as("allLabels.firstPhraseIndex")
+    assertThat(context.allLabels.firstPhraseIndex)
+        .as("allLabels.firstPhraseIndex")
         .isEqualTo(expectedFirstPhraseIndex);
 
     return context;
   }
 
-  protected PreprocessingContext runPreprocessing(Stream<? extends Document> documents, LanguageComponents langComponents) {
+  protected PreprocessingContext runPreprocessing(
+      Stream<? extends Document> documents, LanguageComponents langComponents) {
     return runPreprocessing(documents, langComponents, null);
   }
 
-  protected PreprocessingContext runPreprocessing(Stream<? extends Document> documents, LanguageComponents langComponents, String query) {
+  protected PreprocessingContext runPreprocessing(
+      Stream<? extends Document> documents, LanguageComponents langComponents, String query) {
     PreprocessingContext context = new PreprocessingContext(langComponents);
     tokenizer.tokenize(context, documents);
     caseNormalizer.normalize(context, 1);
@@ -91,10 +91,12 @@ public class LabelFilterTestBase extends TestBase {
   }
 
   protected PreprocessingContextAssert preprocess(TestDocument... docs) {
-    return preprocess(null, CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant2.NAME), docs);
+    return preprocess(
+        null, CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant2.NAME), docs);
   }
 
-  protected PreprocessingContextAssert preprocess(String query, LanguageComponents langComponents, TestDocument... docs) {
+  protected PreprocessingContextAssert preprocess(
+      String query, LanguageComponents langComponents, TestDocument... docs) {
     PreprocessingContext ctx = runPreprocessing(Stream.of(docs), langComponents, query);
     return PreprocessingContextAssert.assertThat(ctx);
   }

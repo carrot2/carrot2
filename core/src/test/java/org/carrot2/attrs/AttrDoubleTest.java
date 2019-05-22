@@ -8,11 +8,17 @@ public class AttrDoubleTest extends TestBase {
   @Test
   public void testToFromMap() {
     class Clazz extends AttrComposite {
-      public AttrDouble defValue = attributes.register("defValue", AttrDouble.builder().defaultValue(36.6));
-      public AttrDouble nullValue = attributes.register("nullValue", AttrDouble.builder().defaultValue(null));
-      public AttrDouble otherValue = attributes.register("otherValue", AttrDouble.builder().defaultValue(null));
-      public AttrDouble nanValue = attributes.register("nanValue", AttrDouble.builder().defaultValue(Double.NaN));
-      public AttrDouble infValue = attributes.register("infValue", AttrDouble.builder().defaultValue(Double.POSITIVE_INFINITY));
+      public AttrDouble defValue =
+          attributes.register("defValue", AttrDouble.builder().defaultValue(36.6));
+      public AttrDouble nullValue =
+          attributes.register("nullValue", AttrDouble.builder().defaultValue(null));
+      public AttrDouble otherValue =
+          attributes.register("otherValue", AttrDouble.builder().defaultValue(null));
+      public AttrDouble nanValue =
+          attributes.register("nanValue", AttrDouble.builder().defaultValue(Double.NaN));
+      public AttrDouble infValue =
+          attributes.register(
+              "infValue", AttrDouble.builder().defaultValue(Double.POSITIVE_INFINITY));
     }
 
     AliasMapper mapper = new AliasMapper();
@@ -38,10 +44,7 @@ public class AttrDoubleTest extends TestBase {
 
   @Test
   public void testConstraintValidation() {
-    AttrDouble attr = AttrDouble.builder()
-        .min(10)
-        .max(20)
-        .defaultValue(null);
+    AttrDouble attr = AttrDouble.builder().min(10).max(20).defaultValue(null);
 
     attr.set(10d);
     attr.set(20d);
@@ -51,4 +54,3 @@ public class AttrDoubleTest extends TestBase {
         .isThrownBy(() -> attr.set(21d));
   }
 }
-

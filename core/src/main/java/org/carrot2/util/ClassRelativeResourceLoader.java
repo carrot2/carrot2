@@ -16,8 +16,12 @@ public class ClassRelativeResourceLoader implements ResourceLookup {
   public InputStream open(String resource) throws IOException {
     InputStream is = clazz.getResourceAsStream(Objects.requireNonNull(resource));
     if (is == null) {
-      throw new IOException(String.format(Locale.ROOT,
-          "Resource %s does not exist relative to class %s.", resource, clazz.getName()));
+      throw new IOException(
+          String.format(
+              Locale.ROOT,
+              "Resource %s does not exist relative to class %s.",
+              resource,
+              clazz.getName()));
     }
     return is;
   }

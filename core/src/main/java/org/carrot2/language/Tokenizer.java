@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,20 +13,20 @@ package org.carrot2.language;
 
 import java.io.IOException;
 import java.io.Reader;
-
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.util.MutableCharArray;
 
 /**
- * Splits input characters into tokens representing e.g. words, digits, acronyms,
- * punctuation. For each token, the following information is available:
+ * Splits input characters into tokens representing e.g. words, digits, acronyms, punctuation. For
+ * each token, the following information is available:
+ *
  * <dl>
- * <dt>token type</dt>
- * <dd>Types of tokens: numbers, URIs, punctuation, acronyms and others. See all constants
- * in this class declared with <code>TT_</code> prefix, e.g. {@link #TT_TERM}.</dd>
- * <dt>token flags</dt>
- * <dd>Additional token flags such as an indication whether a punctuation token is a
- * sentence delimiter ({@link #TF_SEPARATOR_SENTENCE}).</dd>
+ *   <dt>token type
+ *   <dd>Types of tokens: numbers, URIs, punctuation, acronyms and others. See all constants in this
+ *       class declared with <code>TT_</code> prefix, e.g. {@link #TT_TERM}.
+ *   <dt>token flags
+ *   <dd>Additional token flags such as an indication whether a punctuation token is a sentence
+ *       delimiter ({@link #TF_SEPARATOR_SENTENCE}).
  * </dl>
  *
  * @see TokenTypeUtils
@@ -48,33 +47,23 @@ public interface Tokenizer {
   public static final int TT_FILE = 0x0008;
   public static final int TT_HYPHTERM = 0x0009;
 
-  /**
-   * Indicates the end of the token stream.
-   */
+  /** Indicates the end of the token stream. */
   public static final int TT_EOF = -1;
 
   /*
    * Additional token flags, mask: 0xFF00
    */
 
-  /**
-   * Current token is a sentence separator.
-   */
+  /** Current token is a sentence separator. */
   public static final short TF_SEPARATOR_SENTENCE = 0x0100;
 
-  /**
-   * Current token is a document separator (never returned from parsing).
-   */
+  /** Current token is a document separator (never returned from parsing). */
   public static final short TF_SEPARATOR_DOCUMENT = 0x0200;
 
-  /**
-   * Current token separates document's logical fields.
-   */
+  /** Current token separates document's logical fields. */
   public static final short TF_SEPARATOR_FIELD = 0x0400;
 
-  /**
-   * Current token terminates the input (never returned from parsing).
-   */
+  /** Current token terminates the input (never returned from parsing). */
   public static final short TF_TERMINATOR = 0x0800;
 
   /*
@@ -84,16 +73,14 @@ public interface Tokenizer {
    */
 
   /**
-   * The current token is a common word. This flag is not directly available from the
-   * tokenizer.
+   * The current token is a common word. This flag is not directly available from the tokenizer.
    *
    * @see AllWords#type
    */
   public static final short TF_COMMON_WORD = 0x1000;
 
   /**
-   * The current token is part of the query. This flag is not directly available from
-   * the tokenizer.
+   * The current token is part of the query. This flag is not directly available from the tokenizer.
    *
    * @see AllWords#type
    */
@@ -102,17 +89,16 @@ public interface Tokenizer {
   /**
    * Resets the tokenizer to process new data
    *
-   * @param reader the input to tokenize. The reader <strong>will not be closed</strong>
-   *               by the tokenizer when the end of stream is reached.
+   * @param reader the input to tokenize. The reader <strong>will not be closed</strong> by the
+   *     tokenizer when the end of stream is reached.
    */
   void reset(Reader reader) throws IOException;
 
   /**
    * Returns the next token from the input stream.
    *
-   * @return the type of the token as defined by the {@link #TT_TERM} and other
-   * constants or {@link #TT_EOF} when the end of the data stream has been
-   * reached.
+   * @return the type of the token as defined by the {@link #TT_TERM} and other constants or {@link
+   *     #TT_EOF} when the end of the data stream has been reached.
    * @see TokenTypeUtils
    */
   short nextToken() throws IOException;

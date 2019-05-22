@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -13,14 +12,14 @@
 package org.carrot2.language;
 
 /**
- * Simple lemmatization engine transforming an inflected form of a word to its base form
- * or some other unique token.
+ * Simple lemmatization engine transforming an inflected form of a word to its base form or some
+ * other unique token.
  */
 public interface Stemmer {
   /**
-   * Returns the base form of the provided word or <code>null</code> if the base form
-   * cannot be determined. In the latter case, the base form will be assumed to be the
-   * same as the original word.
+   * Returns the base form of the provided word or <code>null</code> if the base form cannot be
+   * determined. In the latter case, the base form will be assumed to be the same as the original
+   * word.
    */
   CharSequence stem(CharSequence word);
 }

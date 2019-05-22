@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -22,7 +21,11 @@ public class MatrixSlice {
     this.index = index;
   }
 
-  public Vector vector() { return v; }
-  public int index() { return index; }
-}
+  public Vector vector() {
+    return v;
+  }
 
+  public int index() {
+    return index;
+  }
+}

@@ -1,4 +1,4 @@
-/* Imported from Mahout. */package org.carrot2.math.mahout.matrix;
+/* Imported from Mahout. */ package org.carrot2.math.mahout.matrix;
 
 import org.carrot2.math.mahout.DenseVector;
 import org.carrot2.math.mahout.Vector;
@@ -12,30 +12,26 @@ import org.carrot2.math.mahout.matrix.impl.AbstractMatrix1D;
 
 public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneable {
 
-  
-  protected DoubleMatrix1D() {
-  }
+  protected DoubleMatrix1D() {}
 
-  public double aggregate(DoubleDoubleFunction aggr,
-                          DoubleFunction f) {
+  public double aggregate(DoubleDoubleFunction aggr, DoubleFunction f) {
     if (size == 0) {
       return Double.NaN;
     }
     double a = f.apply(getQuick(size - 1));
-    for (int i = size - 1; --i >= 0;) {
+    for (int i = size - 1; --i >= 0; ) {
       a = aggr.apply(a, f.apply(getQuick(i)));
     }
     return a;
   }
 
-  public double aggregate(DoubleMatrix1D other, DoubleDoubleFunction aggr,
-                          DoubleDoubleFunction f) {
+  public double aggregate(DoubleMatrix1D other, DoubleDoubleFunction aggr, DoubleDoubleFunction f) {
     checkSize(other);
     if (size == 0) {
       return Double.NaN;
     }
     double a = f.apply(getQuick(size - 1), other.getQuick(size - 1));
-    for (int i = size - 1; --i >= 0;) {
+    for (int i = size - 1; --i >= 0; ) {
       a = aggr.apply(a, f.apply(getQuick(i), other.getQuick(i)));
     }
     return a;
@@ -46,19 +42,19 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
       throw new IllegalArgumentException(
           "Must have same number of cells: length=" + values.length + "size()=" + size());
     }
-    for (int i = size; --i >= 0;) {
+    for (int i = size; --i >= 0; ) {
       setQuick(i, values[i]);
     }
   }
 
   public void assign(double value) {
-    for (int i = size; --i >= 0;) {
+    for (int i = size; --i >= 0; ) {
       setQuick(i, value);
     }
   }
 
   public void assign(DoubleFunction function) {
-    for (int i = size; --i >= 0;) {
+    for (int i = size; --i >= 0; ) {
       setQuick(i, function.apply(getQuick(i)));
     }
   }
@@ -72,7 +68,7 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
       other = other.copy();
     }
 
-    for (int i = size; --i >= 0;) {
+    for (int i = size; --i >= 0; ) {
       setQuick(i, other.getQuick(i));
     }
     return this;
@@ -88,26 +84,25 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
 
   public DoubleMatrix1D assign(DoubleMatrix1D y, DoubleDoubleFunction function) {
     checkSize(y);
-    for (int i = size; --i >= 0;) {
+    for (int i = size; --i >= 0; ) {
       setQuick(i, function.apply(getQuick(i), y.getQuick(i)));
     }
     return this;
   }
 
-  public void assign(DoubleMatrix1D y, DoubleDoubleFunction function,
-                     IntArrayList nonZeroIndexes) {
+  public void assign(DoubleMatrix1D y, DoubleDoubleFunction function, IntArrayList nonZeroIndexes) {
     checkSize(y);
     int[] nonZeroElements = nonZeroIndexes.elements();
 
     // specialized for speed
-    if (function == Functions.MULT) {  // x[i] = x[i] * y[i]
+    if (function == Functions.MULT) { // x[i] = x[i] * y[i]
       int j = 0;
-      for (int index = nonZeroIndexes.size(); --index >= 0;) {
+      for (int index = nonZeroIndexes.size(); --index >= 0; ) {
         int i = nonZeroElements[index];
         for (; j < i; j++) {
           setQuick(j, 0);
         } // x[i] = 0 for all zeros
-        setQuick(i, getQuick(i) * y.getQuick(i));  // x[i] * y[i] for all nonZeros
+        setQuick(i, getQuick(i) * y.getQuick(i)); // x[i] * y[i] for all nonZeros
         j++;
       }
     } else if (function instanceof PlusMult) {
@@ -115,17 +110,17 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
       if (multiplicator == 0.0) { // x[i] = x[i] + 0*y[i]
         // do nothing
       } else if (multiplicator == 1.0) { // x[i] = x[i] + y[i]
-        for (int index = nonZeroIndexes.size(); --index >= 0;) {
+        for (int index = nonZeroIndexes.size(); --index >= 0; ) {
           int i = nonZeroElements[index];
           setQuick(i, getQuick(i) + y.getQuick(i));
         }
       } else if (multiplicator == -1.0) { // x[i] = x[i] - y[i]
-        for (int index = nonZeroIndexes.size(); --index >= 0;) {
+        for (int index = nonZeroIndexes.size(); --index >= 0; ) {
           int i = nonZeroElements[index];
           setQuick(i, getQuick(i) - y.getQuick(i));
         }
       } else { // the general case x[i] = x[i] + mult*y[i]
-        for (int index = nonZeroIndexes.size(); --index >= 0;) {
+        for (int index = nonZeroIndexes.size(); --index >= 0; ) {
           int i = nonZeroElements[index];
           setQuick(i, getQuick(i) + multiplicator * y.getQuick(i));
         }
@@ -135,10 +130,9 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     }
   }
 
-  
   public int cardinality() {
     int cardinality = 0;
-    for (int i = size; --i >= 0;) {
+    for (int i = size; --i >= 0; ) {
       if (getQuick(i) != 0) {
         cardinality++;
       }
@@ -146,7 +140,6 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     return cardinality;
   }
 
-  
   protected int cardinality(int maxCardinality) {
     int cardinality = 0;
     int i = size;
@@ -158,19 +151,16 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     return cardinality;
   }
 
-  
   public DoubleMatrix1D copy() {
     DoubleMatrix1D copy = like();
     copy.assign(this);
     return copy;
   }
 
-  
   public boolean equals(double value) {
     return org.carrot2.math.mahout.matrix.linalg.Property.DEFAULT.equals(this, value);
   }
 
-  
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -183,7 +173,8 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
       return false;
     }
 
-    return org.carrot2.math.mahout.matrix.linalg.Property.DEFAULT.equals(this, (DoubleMatrix1D) obj);
+    return org.carrot2.math.mahout.matrix.linalg.Property.DEFAULT.equals(
+        this, (DoubleMatrix1D) obj);
   }
 
   public double get(int index) {
@@ -193,7 +184,6 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     return getQuick(index);
   }
 
-  
   protected DoubleMatrix1D getContent() {
     return this;
   }
@@ -271,18 +261,14 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     return false;
   }
 
-  
   public DoubleMatrix1D like() {
     return like(size);
   }
 
-  
   public abstract DoubleMatrix1D like(int size);
 
-  
   public abstract DoubleMatrix2D like2D(int rows, int columns);
 
-  
   public void set(int index, double value) {
     if (index < 0 || index >= size) {
       checkIndex(index);
@@ -290,37 +276,32 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     setQuick(index, value);
   }
 
-  
   public abstract void setQuick(int index, double value);
 
-  
   public void swap(DoubleMatrix1D other) {
     checkSize(other);
-    for (int i = size; --i >= 0;) {
+    for (int i = size; --i >= 0; ) {
       double tmp = getQuick(i);
       setQuick(i, other.getQuick(i));
       other.setQuick(i, tmp);
     }
   }
 
-  
   public double[] toArray() {
     double[] values = new double[size];
     toArray(values);
     return values;
   }
 
-  
   public void toArray(double[] values) {
     if (values.length < size) {
       throw new IllegalArgumentException("values too small");
     }
-    for (int i = size; --i >= 0;) {
+    for (int i = size; --i >= 0; ) {
       values[i] = getQuick(i);
     }
   }
 
-  
   protected DoubleMatrix1D view() {
     try {
       return (DoubleMatrix1D) clone();
@@ -329,20 +310,16 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     }
   }
 
-  
   public DoubleMatrix1D viewPart(int index, int width) {
     return (DoubleMatrix1D) view().vPart(index, width);
   }
 
-  
   protected abstract DoubleMatrix1D viewSelectionLike(int[] offsets);
 
-  
   public double zDotProduct(DoubleMatrix1D y) {
     return zDotProduct(y, 0, size);
   }
 
-  
   public double zDotProduct(DoubleMatrix1D y, int from, int length) {
     if (from < 0 || length <= 0) {
       return 0;
@@ -365,7 +342,6 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     return sum;
   }
 
-  
   public double zDotProduct(DoubleMatrix1D y, int from, int length, IntArrayList nonZeroIndexes) {
     // determine minimum length
     if (from < 0 || length <= 0) {
@@ -405,7 +381,6 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     return sum;
   }
 
-  
   protected double zDotProduct(DoubleMatrix1D y, IntArrayList nonZeroIndexes) {
     return zDotProduct(y, 0, size, nonZeroIndexes);
     /*
@@ -419,7 +394,6 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D implements Cloneab
     */
   }
 
-  
   public double zSum() {
     if (size() == 0) {
       return 0;

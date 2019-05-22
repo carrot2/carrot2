@@ -1,5 +1,15 @@
 package org.carrot2.dcs.servlets;
 
+import static org.mockito.Mockito.when;
+
+import java.io.InputStream;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.function.Function;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.carrot2.TestBase;
 import org.junit.Before;
 import org.mockito.Mock;
@@ -7,31 +17,16 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.function.Function;
-
-import static org.mockito.Mockito.when;
-
 public abstract class AbstractServletTest extends TestBase {
   protected final Logger log = LoggerFactory.getLogger(getClass());
 
-  @Mock
-  protected HttpServletRequest request;
+  @Mock protected HttpServletRequest request;
 
-  @Mock
-  protected HttpServletResponse response;
+  @Mock protected HttpServletResponse response;
 
-  @Mock
-  protected ServletConfig config;
+  @Mock protected ServletConfig config;
 
-  @Mock
-  protected ServletContext context;
+  @Mock protected ServletContext context;
 
   @Before
   public void setUp() {
@@ -41,21 +36,19 @@ public abstract class AbstractServletTest extends TestBase {
     when(request.getParameter(ClusterServlet.PARAM_INDENT)).thenReturn("true");
   }
 
-  protected void setupMockTemplates(Function<String, InputStream> streamSupplier, String... templates) {
+  protected void setupMockTemplates(
+      Function<String, InputStream> streamSupplier, String... templates) {
     String templatesPath = "/templates";
-    when(context.getInitParameter(DcsContext.PARAM_TEMPLATES))
-        .thenReturn(templatesPath);
+    when(context.getInitParameter(DcsContext.PARAM_TEMPLATES)).thenReturn(templatesPath);
 
     Set<String> set = new LinkedHashSet<>();
     for (String template : templates) {
       String path = templatesPath + "/" + template;
-      when(context.getResourceAsStream(path))
-          .thenReturn(streamSupplier.apply(template));
+      when(context.getResourceAsStream(path)).thenReturn(streamSupplier.apply(template));
       set.add(path);
     }
 
-    when(context.getResourcePaths(templatesPath))
-        .thenReturn(set);
+    when(context.getResourcePaths(templatesPath)).thenReturn(set);
   }
 
   protected void setupMockTemplates(String... templates) {

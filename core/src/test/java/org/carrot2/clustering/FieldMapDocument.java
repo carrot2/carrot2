@@ -3,9 +3,7 @@ package org.carrot2.clustering;
 import java.util.LinkedHashMap;
 import java.util.function.BiConsumer;
 
-/**
- * An implementation of {@link Document} that stores explicit key-value fields.
- */
+/** An implementation of {@link Document} that stores explicit key-value fields. */
 public class FieldMapDocument implements Document {
   private final LinkedHashMap<String, String> fields = new LinkedHashMap<>();
 

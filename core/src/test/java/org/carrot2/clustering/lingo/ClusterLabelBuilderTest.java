@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,6 +11,7 @@
 
 package org.carrot2.clustering.lingo;
 
+import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
@@ -20,15 +20,9 @@ import org.carrot2.text.vsm.TfTermWeighting;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.stream.Stream;
-
-/**
- * Test cases for label building in {@link ClusterBuilder}.
- */
+/** Test cases for label building in {@link ClusterBuilder}. */
 public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase {
-  /**
-   * Label builder under tests
-   */
+  /** Label builder under tests */
   private ClusterBuilder clusterBuilder;
 
   @Before
@@ -45,16 +39,15 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase {
 
   @Test
   public void testNoPhrases() {
-    final int[] expectedFeatureIndex = {
-        0, 1, 2
-    };
+    final int[] expectedFeatureIndex = {0, 1, 2};
 
     desiredClusterCountBase = 30;
-    buildModelAndCheck(Stream.of(
-        new TestDocument("", "aa . bb"),
-        new TestDocument("", "bb . cc"),
-        new TestDocument("", "cc . aa")
-    ), expectedFeatureIndex);
+    buildModelAndCheck(
+        Stream.of(
+            new TestDocument("", "aa . bb"),
+            new TestDocument("", "bb . cc"),
+            new TestDocument("", "cc . aa")),
+        expectedFeatureIndex);
   }
 
   @Test
@@ -62,41 +55,38 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase {
     final int[] expectedFeatureIndex = {2};
 
     desiredClusterCountBase = 10;
-    buildModelAndCheck(Stream.of(
-        new TestDocument("aa bb", "aa bb"),
-        new TestDocument("aa bb", "aa bb")
-    ), expectedFeatureIndex);
+    buildModelAndCheck(
+        Stream.of(new TestDocument("aa bb", "aa bb"), new TestDocument("aa bb", "aa bb")),
+        expectedFeatureIndex);
   }
 
   @Test
   public void testSinglePhraseSingleWords() {
-    final int[] expectedFeatureIndex = {
-        2, 3
-    };
+    final int[] expectedFeatureIndex = {2, 3};
 
     clusterBuilder.phraseLabelBoost.set(0.5);
     desiredClusterCountBase = 15;
-    buildModelAndCheck(Stream.of(
-        new TestDocument("aa bb", "aa bb"),
-        new TestDocument("cc", "cc"),
-        new TestDocument("aa bb", "aa bb . cc")
-    ), expectedFeatureIndex);
+    buildModelAndCheck(
+        Stream.of(
+            new TestDocument("aa bb", "aa bb"),
+            new TestDocument("cc", "cc"),
+            new TestDocument("aa bb", "aa bb . cc")),
+        expectedFeatureIndex);
   }
 
   @Test
   public void testQueryWordsRemoval() {
-    final int[] expectedFeatureIndex = {
-        0
-    };
+    final int[] expectedFeatureIndex = {0};
 
     clusterBuilder.phraseLabelBoost.set(0.5);
     desiredClusterCountBase = 10;
     queryHint = "query word";
 
-    buildModelAndCheck(Stream.of(
-        new TestDocument("query word . aa", "query word . aa"),
-        new TestDocument("query . word", "query . word . aa")
-    ), expectedFeatureIndex);
+    buildModelAndCheck(
+        Stream.of(
+            new TestDocument("query word . aa", "query word . aa"),
+            new TestDocument("query . word", "query . word . aa")),
+        expectedFeatureIndex);
   }
 
   @Test
@@ -104,29 +94,26 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase {
     clusterBuilder.phraseLabelBoost.set(0.5);
     desiredClusterCountBase = 15;
 
-    final int[] expectedFeatureIndex = {
-        6, 7, 2, 3
-    };
+    final int[] expectedFeatureIndex = {6, 7, 2, 3};
 
-    buildModelAndCheck(Stream.of(
-        new TestDocument("aa bb", "aa bb"),
-        new TestDocument("cc", "cc"),
-        new TestDocument("cc", "cc"),
-        new TestDocument("aa bb", "aa bb"),
-        new TestDocument("dd", "dd"),
-        new TestDocument("dd", "dd"),
-        new TestDocument("ee ff", "ee ff"),
-        new TestDocument("ee ff", "ee ff")
-    ), expectedFeatureIndex);
+    buildModelAndCheck(
+        Stream.of(
+            new TestDocument("aa bb", "aa bb"),
+            new TestDocument("cc", "cc"),
+            new TestDocument("cc", "cc"),
+            new TestDocument("aa bb", "aa bb"),
+            new TestDocument("dd", "dd"),
+            new TestDocument("dd", "dd"),
+            new TestDocument("ee ff", "ee ff"),
+            new TestDocument("ee ff", "ee ff")),
+        expectedFeatureIndex);
 
     // Make a copy of feature indices
     final int[] featureIndex = lingoContext.preprocessingContext.allLabels.featureIndex;
 
     for (int i = 0; i < featureIndex.length; i++) {
       clusterBuilder.featureScorer = new OneLabelFeatureScorer(i, 2);
-      check(new int[]{
-          featureIndex[i], featureIndex[i], featureIndex[i], featureIndex[i]
-      });
+      check(new int[] {featureIndex[i], featureIndex[i], featureIndex[i], featureIndex[i]});
     }
   }
 
@@ -140,13 +127,15 @@ public class ClusterLabelBuilderTest extends LingoProcessingComponentTestBase {
     }
 
     public double[] getFeatureScores(LingoProcessingContext lingoContext) {
-      final double[] scores = new double[lingoContext.preprocessingContext.allLabels.featureIndex.length];
+      final double[] scores =
+          new double[lingoContext.preprocessingContext.allLabels.featureIndex.length];
       scores[labelIndex] = score;
       return scores;
     }
   }
 
-  private void buildModelAndCheck(Stream<? extends Document> documents, int[] expectedFeatureIndex) {
+  private void buildModelAndCheck(
+      Stream<? extends Document> documents, int[] expectedFeatureIndex) {
     buildLingoModel(documents);
     check(expectedFeatureIndex);
   }

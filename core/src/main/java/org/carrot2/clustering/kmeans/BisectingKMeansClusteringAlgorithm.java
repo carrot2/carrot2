@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -19,11 +18,14 @@ import com.carrotsearch.hppc.cursors.IntCursor;
 import com.carrotsearch.hppc.cursors.IntIntCursor;
 import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.carrot2.attrs.*;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
-import org.carrot2.clustering.SharedInfrastructure;
 import org.carrot2.clustering.Document;
+import org.carrot2.clustering.SharedInfrastructure;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.LexicalData;
 import org.carrot2.language.Stemmer;
@@ -41,112 +43,94 @@ import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 /**
- * A very simple implementation of bisecting k-means clustering. Unlike other algorithms
- * in Carrot2, this one creates hard clustering (one document belongs only to one
- * cluster). On the other hand, the clusters are labeled only with individual words that
- * may not always fully correspond to all documents in the cluster.
+ * A very simple implementation of bisecting k-means clustering. Unlike other algorithms in Carrot2,
+ * this one creates hard clustering (one document belongs only to one cluster). On the other hand,
+ * the clusters are labeled only with individual words that may not always fully correspond to all
+ * documents in the cluster.
  */
-public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements ClusteringAlgorithm {
-  private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS = new HashSet<>(Arrays.asList(
-      Stemmer.class,
-      Tokenizer.class,
-      LexicalData.class
-  ));
+public class BisectingKMeansClusteringAlgorithm extends AttrComposite
+    implements ClusteringAlgorithm {
+  private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS =
+      new HashSet<>(Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class));
 
   /**
-   * The number of clusters to create. The algorithm will create at most the specified
-   * number of clusters.
+   * The number of clusters to create. The algorithm will create at most the specified number of
+   * clusters.
    */
-  public final AttrInteger clusterCount = attributes.register(
-      "clusterCount", AttrInteger.builder()
-          .label("Cluster count")
-          .min(2)
-          .defaultValue(25));
+  public final AttrInteger clusterCount =
+      attributes.register(
+          "clusterCount", AttrInteger.builder().label("Cluster count").min(2).defaultValue(25));
 
-  /**
-   * The maximum number of k-means iterations to perform.
-   */
-  public final AttrInteger maxIterations = attributes.register(
-      "maxIterations", AttrInteger.builder()
-          .label("Maximum iterations")
-          .min(1)
-          .defaultValue(15));
+  /** The maximum number of k-means iterations to perform. */
+  public final AttrInteger maxIterations =
+      attributes.register(
+          "maxIterations",
+          AttrInteger.builder().label("Maximum iterations").min(1).defaultValue(15));
 
-  /**
-   * Partition count. The number of partitions to create at each k-means clustering
-   * iteration.
-   */
-  public final AttrInteger partitionCount = attributes.register(
-      "partitionCount", AttrInteger.builder()
-          .label("Partition count")
-          .min(2)
-          .max(10)
-          .defaultValue(2));
+  /** Partition count. The number of partitions to create at each k-means clustering iteration. */
+  public final AttrInteger partitionCount =
+      attributes.register(
+          "partitionCount",
+          AttrInteger.builder().label("Partition count").min(2).max(10).defaultValue(2));
 
-  /**
-   * Label count. The minimum number of labels to return for each cluster.
-   */
-  public final AttrInteger labelCount = attributes.register(
-      "labelCount", AttrInteger.builder()
-          .label("Label count")
-          .min(1)
-          .max(10)
-          .defaultValue(3));
+  /** Label count. The minimum number of labels to return for each cluster. */
+  public final AttrInteger labelCount =
+      attributes.register(
+          "labelCount", AttrInteger.builder().label("Label count").min(1).max(10).defaultValue(3));
 
   /**
    * Query terms used to retrieve documents. The query is used as a hint to avoid trivial clusters.
    */
-  public final AttrString queryHint = attributes.register("queryHint", SharedInfrastructure.queryHintAttribute());
+  public final AttrString queryHint =
+      attributes.register("queryHint", SharedInfrastructure.queryHintAttribute());
 
   /**
    * Use dimensionality reduction. If <code>true</code>, k-means will be applied on the
-   * dimensionality-reduced term-document matrix with the number of dimensions being
-   * equal to twice the number of requested clusters. If the number of dimensions is
-   * lower than the number of input documents, reduction will not be performed.
-   * If <code>false</code>, the k-means will
-   * be performed directly on the original term-document matrix.
+   * dimensionality-reduced term-document matrix with the number of dimensions being equal to twice
+   * the number of requested clusters. If the number of dimensions is lower than the number of input
+   * documents, reduction will not be performed. If <code>false</code>, the k-means will be
+   * performed directly on the original term-document matrix.
    */
-  public final AttrBoolean useDimensionalityReduction = attributes.register(
-      "useDimensionalityReduction", AttrBoolean.builder()
-          .label("Use dimensionality reduction")
-          .defaultValue(true));
+  public final AttrBoolean useDimensionalityReduction =
+      attributes.register(
+          "useDimensionalityReduction",
+          AttrBoolean.builder().label("Use dimensionality reduction").defaultValue(true));
 
-  /**
-   * Term-document matrix builder for the algorithm.
-   */
+  /** Term-document matrix builder for the algorithm. */
   public TermDocumentMatrixBuilder matrixBuilder;
+
   {
-    attributes.register("matrixBuilder", AttrObject.builder(TermDocumentMatrixBuilder.class)
-        .label("Term-document matrix builder")
-        .getset(() -> matrixBuilder, (v) -> matrixBuilder = v)
-        .defaultValue(TermDocumentMatrixBuilder::new));
+    attributes.register(
+        "matrixBuilder",
+        AttrObject.builder(TermDocumentMatrixBuilder.class)
+            .label("Term-document matrix builder")
+            .getset(() -> matrixBuilder, (v) -> matrixBuilder = v)
+            .defaultValue(TermDocumentMatrixBuilder::new));
   }
 
-  /**
-   * Term-document matrix reducer for the algorithm.
-   */
+  /** Term-document matrix reducer for the algorithm. */
   public TermDocumentMatrixReducer matrixReducer;
+
   {
-    attributes.register("matrixReducer", AttrObject.builder(TermDocumentMatrixReducer.class)
-        .label("Term-document matrix reducer")
-        .getset(() -> matrixReducer, (v) -> matrixReducer = v)
-        .defaultValue(TermDocumentMatrixReducer::new));
+    attributes.register(
+        "matrixReducer",
+        AttrObject.builder(TermDocumentMatrixReducer.class)
+            .label("Term-document matrix reducer")
+            .getset(() -> matrixReducer, (v) -> matrixReducer = v)
+            .defaultValue(TermDocumentMatrixReducer::new));
   }
 
-  /**
-   * Preprocessing pipeline.
-   */
+  /** Preprocessing pipeline. */
   public BasicPreprocessingPipeline preprocessing;
+
   {
-    attributes.register("preprocessing", AttrObject.builder(BasicPreprocessingPipeline.class)
-        .label("Input preprocessing components")
-        .getset(() -> preprocessing, (v) -> preprocessing = v)
-        .defaultValue(BasicPreprocessingPipeline::new));
+    attributes.register(
+        "preprocessing",
+        AttrObject.builder(BasicPreprocessingPipeline.class)
+            .label("Input preprocessing components")
+            .getset(() -> preprocessing, (v) -> preprocessing = v)
+            .defaultValue(BasicPreprocessingPipeline::new));
   }
 
   @Override
@@ -155,7 +139,8 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
   }
 
   @Override
-  public <T extends Document> List<Cluster<T>> cluster(Stream<? extends T> docStream, LanguageComponents languageComponents) {
+  public <T extends Document> List<Cluster<T>> cluster(
+      Stream<? extends T> docStream, LanguageComponents languageComponents) {
     List<T> documents = docStream.collect(Collectors.toList());
 
     // Preprocessing of documents
@@ -168,7 +153,8 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
     final IntArrayList featureIndices = new IntArrayList(stemsMfow.length);
     for (int i = 0; i < stemsMfow.length; i++) {
       final short flag = wordsType[stemsMfow[i]];
-      if ((flag & (Tokenizer.TF_COMMON_WORD | Tokenizer.TF_QUERY_WORD | Tokenizer.TT_NUMERIC)) == 0) {
+      if ((flag & (Tokenizer.TF_COMMON_WORD | Tokenizer.TF_QUERY_WORD | Tokenizer.TT_NUMERIC))
+          == 0) {
         featureIndices.add(stemsMfow[i]);
       }
     }
@@ -179,10 +165,9 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
     ArrayList<Cluster<T>> clusters = new ArrayList<>();
     if (preprocessingContext.hasLabels()) {
       // Term-document matrix building and reduction
-      final VectorSpaceModelContext vsmContext = new VectorSpaceModelContext(
-          preprocessingContext);
-      final ReducedVectorSpaceModelContext reducedVsmContext = new ReducedVectorSpaceModelContext(
-          vsmContext);
+      final VectorSpaceModelContext vsmContext = new VectorSpaceModelContext(preprocessingContext);
+      final ReducedVectorSpaceModelContext reducedVsmContext =
+          new ReducedVectorSpaceModelContext(vsmContext);
 
       matrixBuilder.buildTermDocumentMatrix(vsmContext);
       matrixBuilder.buildTermPhraseMatrix(vsmContext);
@@ -194,7 +179,8 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
       }
 
       final DoubleMatrix2D tdMatrix;
-      if (useDimensionalityReduction.get() && clusterCount.get() * 2 < preprocessingContext.documentCount) {
+      if (useDimensionalityReduction.get()
+          && clusterCount.get() * 2 < preprocessingContext.documentCount) {
         matrixReducer.reduce(reducedVsmContext, clusterCount.get() * 2);
         tdMatrix = reducedVsmContext.coefficientMatrix.viewDice();
       } else {
@@ -221,7 +207,8 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
           break;
         }
 
-        final List<IntArrayList> split = split(partitionCount.get(), tdMatrix, largest, maxIterations.get());
+        final List<IntArrayList> split =
+            split(partitionCount.get(), tdMatrix, largest, maxIterations.get());
         if (split.size() > 1) {
           rawClusters.remove(largestIndex);
           rawClusters.addAll(split);
@@ -235,9 +222,11 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
       for (IntArrayList rawCluster : rawClusters) {
         final Cluster<T> cluster = new Cluster<>();
         if (rawCluster.size() > 1) {
-          getLabels(cluster,
+          getLabels(
+              cluster,
               rawCluster,
-              vsmContext.termDocumentMatrix, rowToStemIndex,
+              vsmContext.termDocumentMatrix,
+              rowToStemIndex,
               preprocessingContext.allStems.mostFrequentOriginalWordIndex,
               preprocessingContext.allWords.image);
           for (int j = 0; j < rawCluster.size(); j++) {
@@ -251,12 +240,16 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
     return SharedInfrastructure.reorderByDescendingSizeAndLabel(clusters);
   }
 
-  private static final Comparator<IntArrayList> BY_SIZE_DESCENDING = (o1, o2) -> o2.size() - o1.size();
+  private static final Comparator<IntArrayList> BY_SIZE_DESCENDING =
+      (o1, o2) -> o2.size() - o1.size();
 
-  private void getLabels(Cluster<?> cluster,
-                                 IntArrayList documents,
-                                 DoubleMatrix2D termDocumentMatrix, IntIntHashMap rowToStemIndex,
-                                 int[] mostFrequentOriginalWordIndex, char[][] wordImage) {
+  private void getLabels(
+      Cluster<?> cluster,
+      IntArrayList documents,
+      DoubleMatrix2D termDocumentMatrix,
+      IntIntHashMap rowToStemIndex,
+      int[] mostFrequentOriginalWordIndex,
+      char[][] wordImage) {
     // Prepare a centroid. If dimensionality reduction was used,
     // the centroid from k-means will not be based on real terms,
     // so we need to calculate the centroid here once again based
@@ -266,33 +259,38 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
       centroid.assign(termDocumentMatrix.viewColumn(d.value), Functions.PLUS);
     }
 
-    final int[] order = IndirectSort.mergesort(0, centroid.size(),
-        new IndirectComparator() {
-          @Override
-          public int compare(int a, int b) {
-            final double valueA = centroid.get(a);
-            final double valueB = centroid.get(b);
-            return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
-          }
-        });
-    final double minValueForLabel = centroid.get(order[order.length - Math.min(labelCount.get(), order.length)]);
+    final int[] order =
+        IndirectSort.mergesort(
+            0,
+            centroid.size(),
+            new IndirectComparator() {
+              @Override
+              public int compare(int a, int b) {
+                final double valueA = centroid.get(a);
+                final double valueB = centroid.get(b);
+                return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
+              }
+            });
+    final double minValueForLabel =
+        centroid.get(order[order.length - Math.min(labelCount.get(), order.length)]);
 
     for (int i = 0; i < centroid.size(); i++) {
       if (centroid.getQuick(i) >= minValueForLabel) {
-        cluster.addLabel(LabelFormatter.format(wordImage[mostFrequentOriginalWordIndex[rowToStemIndex.get(i)]], false));
+        cluster.addLabel(
+            LabelFormatter.format(
+                wordImage[mostFrequentOriginalWordIndex[rowToStemIndex.get(i)]], false));
       }
     }
   }
 
   /**
-   * Splits the input documents into the specified number of partitions using the
-   * standard k-means routine.
+   * Splits the input documents into the specified number of partitions using the standard k-means
+   * routine.
    */
-  private List<IntArrayList> split(int partitions, DoubleMatrix2D input,
-                                   IntArrayList columns, int iterations) {
+  private List<IntArrayList> split(
+      int partitions, DoubleMatrix2D input, IntArrayList columns, int iterations) {
     // Prepare selected matrix
-    final DoubleMatrix2D selected = input.viewSelection(null, columns.toArray())
-        .copy();
+    final DoubleMatrix2D selected = input.viewSelection(null, columns.toArray()).copy();
     final IntIntMap selectedToInput = new IntIntHashMap(selected.columns());
     for (int i = 0; i < columns.size(); i++) {
       selectedToInput.put(i, columns.get(i));
@@ -309,10 +307,10 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite implements
     }
 
     // Matrices for centroids and document-centroid similarities
-    final DoubleMatrix2D centroids = new DenseDoubleMatrix2D(selected.rows(),
-        partitions).assign(selected.viewPart(0, 0, selected.rows(), partitions));
-    final DoubleMatrix2D similarities = new DenseDoubleMatrix2D(partitions,
-        selected.columns());
+    final DoubleMatrix2D centroids =
+        new DenseDoubleMatrix2D(selected.rows(), partitions)
+            .assign(selected.viewPart(0, 0, selected.rows(), partitions));
+    final DoubleMatrix2D similarities = new DenseDoubleMatrix2D(partitions, selected.columns());
 
     // Run a fixed number of K-means iterations
     for (int it = 0; it < iterations; it++) {

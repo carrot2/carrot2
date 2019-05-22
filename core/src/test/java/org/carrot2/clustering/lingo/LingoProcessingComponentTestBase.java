@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,15 +11,12 @@
 
 package org.carrot2.clustering.lingo;
 
+import java.util.stream.Stream;
 import org.carrot2.clustering.Document;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.ReducedTermDocumentMatrixBuilderTestBase;
 
-import java.util.stream.Stream;
-
-/**
- * Test cases for cluster merging in {@link ClusterBuilder}.
- */
+/** Test cases for cluster merging in {@link ClusterBuilder}. */
 public class LingoProcessingComponentTestBase extends ReducedTermDocumentMatrixBuilderTestBase {
   protected LingoProcessingContext lingoContext;
   protected int desiredClusterCountBase = 0;
@@ -32,7 +28,6 @@ public class LingoProcessingComponentTestBase extends ReducedTermDocumentMatrixB
 
   @Override
   protected int getDimensions(PreprocessingContext ctx) {
-    return LingoClusteringAlgorithm.computeClusterCount(
-        desiredClusterCountBase, ctx.documentCount);
+    return LingoClusteringAlgorithm.computeClusterCount(desiredClusterCountBase, ctx.documentCount);
   }
 }

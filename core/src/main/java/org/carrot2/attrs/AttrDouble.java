@@ -9,20 +9,22 @@ public class AttrDouble extends Attr<Double> {
 
   public static class Builder extends BuilderScaffold<Double> {
     public Builder min(double minInclusive) {
-      addConstraint((v) -> {
-        if (v != null && v < minInclusive) {
-          throw new IllegalArgumentException("Value must be >= " + minInclusive + ": " + v);
-        }
-      });
+      addConstraint(
+          (v) -> {
+            if (v != null && v < minInclusive) {
+              throw new IllegalArgumentException("Value must be >= " + minInclusive + ": " + v);
+            }
+          });
       return this;
     }
 
     public Builder max(double maxInclusive) {
-      addConstraint((v) -> {
-        if (v != null && v > maxInclusive) {
-          throw new IllegalArgumentException("Value must be <= " + maxInclusive + ": " + v);
-        }
-      });
+      addConstraint(
+          (v) -> {
+            if (v != null && v > maxInclusive) {
+              throw new IllegalArgumentException("Value must be <= " + maxInclusive + ": " + v);
+            }
+          });
       return this;
     }
 

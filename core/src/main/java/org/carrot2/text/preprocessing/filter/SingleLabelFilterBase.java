@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,22 +11,19 @@
 
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.attrs.AttrComposite;
+import org.carrot2.text.preprocessing.PreprocessingContext;
 
-/**
- * A base for {@link LabelFilter} implementations that handle each label independently.
- */
+/** A base for {@link LabelFilter} implementations that handle each label independently. */
 public abstract class SingleLabelFilterBase extends AttrComposite implements LabelFilter {
 
-  public void filter(PreprocessingContext context, boolean[] acceptedStems,
-                     boolean[] acceptedPhrases) {
+  public void filter(
+      PreprocessingContext context, boolean[] acceptedStems, boolean[] acceptedPhrases) {
     final int[] mostFrequentOriginalWordIndex = context.allStems.mostFrequentOriginalWordIndex;
 
     for (int stemIndex = 0; stemIndex < acceptedStems.length; stemIndex++) {
       if (acceptedStems[stemIndex]) {
-        acceptedStems[stemIndex] = acceptWord(context,
-            mostFrequentOriginalWordIndex[stemIndex]);
+        acceptedStems[stemIndex] = acceptWord(context, mostFrequentOriginalWordIndex[stemIndex]);
       }
     }
 
@@ -39,19 +35,19 @@ public abstract class SingleLabelFilterBase extends AttrComposite implements Lab
   }
 
   /**
-   * Should return <code>true</code> if the word located at <code>wordIndex</code> is to
-   * be accepted, <code>false</code> otherwise.
+   * Should return <code>true</code> if the word located at <code>wordIndex</code> is to be
+   * accepted, <code>false</code> otherwise.
    *
-   * @param context   provides access to all information about the word
+   * @param context provides access to all information about the word
    * @param wordIndex index of the word for which decision is to be made
    */
   public abstract boolean acceptWord(PreprocessingContext context, int wordIndex);
 
   /**
-   * Should return <code>true</code> if the phrase located at <code>phraseIndex</code>
-   * is to be accepted, <code>false</code> otherwise.
+   * Should return <code>true</code> if the phrase located at <code>phraseIndex</code> is to be
+   * accepted, <code>false</code> otherwise.
    *
-   * @param context     provides access to all information about the phrase
+   * @param context provides access to all information about the phrase
    * @param phraseIndex index of the phrase for which decision is to be made
    */
   public abstract boolean acceptPhrase(PreprocessingContext context, int phraseIndex);

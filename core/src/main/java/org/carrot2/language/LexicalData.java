@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,24 +11,17 @@
 
 package org.carrot2.language;
 
-import org.carrot2.util.MutableCharArray;
-
-/**
- * Provides additional miscellaneous lexical information for a given language.
- */
+/** Provides additional miscellaneous lexical information for a given language. */
 public interface LexicalData {
   /**
-   * @return Return true if the provided term is common (meaningless).
-   * Such words are referred to as "stop words" and are usually
-   * ignored in information retrieval tasks.
+   * @return Return true if the provided term is common (meaningless). Such words are referred to as
+   *     "stop words" and are usually ignored in information retrieval tasks.
    */
   default boolean ignoreWord(CharSequence word) {
     return false;
   }
 
-  /**
-   * @return Return {@code true} if the label candidate should be ignored in processing.
-   */
+  /** @return Return {@code true} if the label candidate should be ignored in processing. */
   default boolean ignoreLabel(CharSequence labelCandidate) {
     return false;
   }

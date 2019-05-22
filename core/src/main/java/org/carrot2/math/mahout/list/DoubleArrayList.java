@@ -1,34 +1,27 @@
-/* Imported from Mahout. */package org.carrot2.math.mahout.list;
+/* Imported from Mahout. */ package org.carrot2.math.mahout.list;
 
 import org.carrot2.math.mahout.Arithmetic;
 import org.carrot2.math.mahout.Arrays;
 import org.carrot2.math.mahout.Sorting;
 import org.carrot2.math.mahout.function.DoubleProcedure;
 
-
-
 public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
 
-  
   private double[] elements;
 
-  
   public DoubleArrayList() {
     this(10);
   }
 
-  
   public DoubleArrayList(double[] elements) {
     elements(elements);
   }
 
-  
   public DoubleArrayList(int initialCapacity) {
     this(new double[initialCapacity]);
     setSizeRaw(0);
   }
 
-  
   public void add(double element) {
     // overridden for performance only.
     if (size == elements.length) {
@@ -37,7 +30,6 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     elements[size++] = element;
   }
 
-  
   public void beforeInsert(int index, double element) {
     // overridden for performance only.
     if (size == index) {
@@ -53,13 +45,11 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     size++;
   }
 
-  
   @Override
   public int binarySearchFromTo(double key, int from, int to) {
     return Sorting.binarySearchFromTo(elements, key, from, to);
   }
-  
-  
+
   @Override
   public Object clone() {
     // overridden for performance only.
@@ -68,31 +58,25 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     return clone;
   }
 
-  
   public DoubleArrayList copy() {
     return (DoubleArrayList) clone();
   }
 
-  
-  
   public double[] elements() {
     return elements;
   }
 
-  
   public AbstractDoubleList elements(double[] elements) {
     this.elements = elements;
     this.size = elements.length;
     return this;
   }
 
-  
   public void ensureCapacity(int minCapacity) {
     elements = Arrays.ensureCapacity(elements, minCapacity);
   }
 
-  
-  public boolean equals(Object otherObj) { //delta
+  public boolean equals(Object otherObj) { // delta
     if (otherObj == null) {
       return false;
     }
@@ -110,7 +94,7 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
 
     double[] theElements = elements();
     double[] otherElements = other.elements();
-    for (int i = size(); --i >= 0;) {
+    for (int i = size(); --i >= 0; ) {
       if (theElements[i] != otherElements[i]) {
         return false;
       }
@@ -118,13 +102,12 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     return true;
   }
 
-  
   public boolean forEach(DoubleProcedure procedure) {
     // overridden for performance only.
     double[] theElements = elements;
     int theSize = size;
 
-    for (int i = 0; i < theSize;) {
+    for (int i = 0; i < theSize; ) {
       if (!procedure.apply(theElements[i++])) {
         return false;
       }
@@ -132,7 +115,6 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     return true;
   }
 
-  
   public double get(int index) {
     // overridden for performance only.
     if (index >= size || index < 0) {
@@ -141,13 +123,11 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     return elements[index];
   }
 
-  
   @Override
   public double getQuick(int index) {
     return elements[index];
   }
 
-  
   @Override
   public int indexOfFromTo(double element, int from, int to) {
     // overridden for performance only.
@@ -160,12 +140,11 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     for (int i = from; i <= to; i++) {
       if (element == theElements[i]) {
         return i;
-      } //found
+      } // found
     }
-    return -1; //not found
+    return -1; // not found
   }
 
-  
   @Override
   public int lastIndexOfFromTo(double element, int from, int to) {
     // overridden for performance only.
@@ -178,12 +157,11 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     for (int i = to; i >= from; i--) {
       if (element == theElements[i]) {
         return i;
-      } //found
+      } // found
     }
-    return -1; //not found
+    return -1; // not found
   }
 
-  
   @Override
   public AbstractDoubleList partFromTo(int from, int to) {
     if (size == 0) {
@@ -197,7 +175,6 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     return new DoubleArrayList(part);
   }
 
-  
   @Override
   public boolean removeAll(AbstractDoubleList other) {
     // overridden for performance only.
@@ -217,7 +194,7 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     */
     if (other.isEmpty()) {
       return false;
-    } //nothing to do
+    } // nothing to do
     int limit = other.size() - 1;
     int j = 0;
     double[] theElements = elements;
@@ -249,7 +226,6 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     return modified;
   }
 
-  
   @Override
   public void replaceFromToWithFrom(int from, int to, AbstractDoubleList other, int otherFrom) {
     // overridden for performance only.
@@ -266,7 +242,6 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     }
   }
 
-  
   @Override
   public boolean retainAll(AbstractDoubleList other) {
     // overridden for performance only.
@@ -315,7 +290,6 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     return modified;
   }
 
-  
   @Override
   public void reverse() {
     // overridden for performance only.
@@ -323,14 +297,13 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     int j = size - 1;
 
     double[] theElements = elements;
-    for (int i = 0; i < limit;) { //swap
+    for (int i = 0; i < limit; ) { // swap
       double tmp = theElements[i];
       theElements[i++] = theElements[j];
       theElements[j--] = tmp;
     }
   }
 
-  
   @Override
   public void set(int index, double element) {
     // overridden for performance only.
@@ -340,21 +313,17 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     elements[index] = element;
   }
 
-  
   @Override
   public void setQuick(int index, double element) {
     elements[index] = element;
   }
 
-  
-
-  
   @Override
   public void sortFromTo(int from, int to) {
     /*
-    * Computes min and max and decides on this basis.
-    * In practice the additional overhead is very small compared to the potential gains.
-    */
+     * Computes min and max and decides on this basis.
+     * In practice the additional overhead is very small compared to the potential gains.
+     */
 
     if (size == 0) {
       return;
@@ -366,7 +335,7 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
     double max = elements[from];
 
     double[] theElements = elements;
-    for (int i = from + 1; i <= to;) {
+    for (int i = from + 1; i <= to; ) {
       double elem = theElements[i++];
       if (elem > max) {
         max = elem;
@@ -375,10 +344,9 @@ public class DoubleArrayList extends AbstractDoubleList implements Cloneable {
       }
     }
 
-        quickSortFromTo(from, to);
-      }
+    quickSortFromTo(from, to);
+  }
 
-  
   @Override
   public void trimToSize() {
     elements = Arrays.trimToCapacity(elements, size());

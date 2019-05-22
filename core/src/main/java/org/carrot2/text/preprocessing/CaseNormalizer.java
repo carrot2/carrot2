@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,37 +13,34 @@ package org.carrot2.text.preprocessing;
 
 import com.carrotsearch.hppc.*;
 import com.carrotsearch.hppc.sorting.IndirectSort;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllTokens;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.util.CharArrayComparators;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
- * Performs case normalization and calculates a number of frequency statistics for words.
- * The aim of case normalization is to find the most frequently appearing variants of
- * words in terms of case. For example, if in the input documents <i>MacOS</i> appears 20
- * times, <i>Macos</i> 5 times and <i>macos</i> 2 times, case normalizer will select
- * <i>MacOS</i> to represent all variants and assign the aggregated term frequency of 27
- * to it.
- * <p>
- * This class saves the following results to the {@link PreprocessingContext}:
+ * Performs case normalization and calculates a number of frequency statistics for words. The aim of
+ * case normalization is to find the most frequently appearing variants of words in terms of case.
+ * For example, if in the input documents <i>MacOS</i> appears 20 times, <i>Macos</i> 5 times and
+ * <i>macos</i> 2 times, case normalizer will select <i>MacOS</i> to represent all variants and
+ * assign the aggregated term frequency of 27 to it.
+ *
+ * <p>This class saves the following results to the {@link PreprocessingContext}:
+ *
  * <ul>
- * <li>{@link AllTokens#wordIndex}</li>
- * <li>{@link AllWords#image}</li>
- * <li>{@link AllWords#tf}</li>
- * <li>{@link AllWords#tfByDocument}</li>
+ *   <li>{@link AllTokens#wordIndex}
+ *   <li>{@link AllWords#image}
+ *   <li>{@link AllWords#tf}
+ *   <li>{@link AllWords#tfByDocument}
  * </ul>
- * <p>
- * This class requires that {@link InputTokenizer} be invoked first.
+ *
+ * <p>This class requires that {@link InputTokenizer} be invoked first.
  */
 final class CaseNormalizer {
-  /**
-   * Performs normalization and saves the results to the <code>context</code>.
-   */
+  /** Performs normalization and saves the results to the <code>context</code>. */
   public void normalize(PreprocessingContext context, int dfThreshold) {
     // Local references to already existing arrays
     final char[][] tokenImages = context.allTokens.image;
@@ -54,8 +50,12 @@ final class CaseNormalizer {
     final int tokenCount = tokenImages.length;
 
     // Sort token images
-    final int[] tokenImagesOrder = IndirectSort.mergesort(tokenImages, 0, tokenImages.length,
-                                                          CharArrayComparators.NORMALIZING_CHAR_ARRAY_COMPARATOR);
+    final int[] tokenImagesOrder =
+        IndirectSort.mergesort(
+            tokenImages,
+            0,
+            tokenImages.length,
+            CharArrayComparators.NORMALIZING_CHAR_ARRAY_COMPARATOR);
 
     // Create holders for new arrays
     final List<char[]> normalizedWordImages = new ArrayList<>();
@@ -101,14 +101,16 @@ final class CaseNormalizer {
         variantStartIndex = i + 1;
         maxTfVariantIndex = tokenImagesOrder[i + 1];
 
-        resetForNewTokenImage(documentIndexesArray, tokenImagesOrder, fieldIndices, wordDocuments, i);
+        resetForNewTokenImage(
+            documentIndexesArray, tokenImagesOrder, fieldIndices, wordDocuments, i);
         continue;
       }
 
       fieldIndices.set(tokensFieldIndex[tokenImagesOrder[i]]);
 
       // Now check if image case is changing
-      final boolean sameCase = CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR.compare(image, nextImage) == 0;
+      final boolean sameCase =
+          CharArrayComparators.FAST_CHAR_ARRAY_COMPARATOR.compare(image, nextImage) == 0;
       if (sameCase) {
         // Case has not changed, just increase counters
         tf++;
@@ -126,7 +128,8 @@ final class CaseNormalizer {
       }
 
       final boolean sameImage =
-          CharArrayComparators.CASE_INSENSITIVE_CHAR_ARRAY_COMPARATOR.compare(image, nextImage) == 0;
+          CharArrayComparators.CASE_INSENSITIVE_CHAR_ARRAY_COMPARATOR.compare(image, nextImage)
+              == 0;
 
       // Check if token image has changed
       if (sameImage) {
@@ -169,7 +172,8 @@ final class CaseNormalizer {
         variantStartIndex = i + 1;
 
         // Re-initialize int set used for document frequency calculation
-        resetForNewTokenImage(documentIndexesArray, tokenImagesOrder, fieldIndices, wordDocuments, i);
+        resetForNewTokenImage(
+            documentIndexesArray, tokenImagesOrder, fieldIndices, wordDocuments, i);
       }
     }
 
@@ -178,16 +182,19 @@ final class CaseNormalizer {
 
     context.allWords.image = normalizedWordImages.toArray(new char[normalizedWordImages.size()][]);
     context.allWords.tf = normalizedWordTf.toArray();
-    context.allWords.tfByDocument = wordTfByDocumentList.toArray(new int[wordTfByDocumentList.size()][]);
+    context.allWords.tfByDocument =
+        wordTfByDocumentList.toArray(new int[wordTfByDocumentList.size()][]);
     context.allWords.fieldIndices = fieldIndexList.toArray();
     context.allWords.type = types.toArray();
   }
 
-  /**
-   * Initializes the counters for the a token image.
-   */
-  private void resetForNewTokenImage(final int[] documentIndexesArray, final int[] tokenImagesOrder,
-                                     final BitSet fieldIndices, IntStack wordDocuments, int i) {
+  /** Initializes the counters for the a token image. */
+  private void resetForNewTokenImage(
+      final int[] documentIndexesArray,
+      final int[] tokenImagesOrder,
+      final BitSet fieldIndices,
+      IntStack wordDocuments,
+      int i) {
     fieldIndices.clear();
     wordDocuments.clear();
     if (documentIndexesArray[tokenImagesOrder[i + 1]] >= 0) {
@@ -195,10 +202,10 @@ final class CaseNormalizer {
     }
   }
 
-  /**
-   * Determines whether we should include the token in AllWords.
-   */
+  /** Determines whether we should include the token in AllWords. */
   private boolean isNotIndexed(final int tokenType) {
-    return tokenType == Tokenizer.TT_PUNCTUATION || tokenType == Tokenizer.TT_FULL_URL || (tokenType & Tokenizer.TF_SEPARATOR_SENTENCE) != 0;
+    return tokenType == Tokenizer.TT_PUNCTUATION
+        || tokenType == Tokenizer.TT_FULL_URL
+        || (tokenType & Tokenizer.TF_SEPARATOR_SENTENCE) != 0;
   }
 }

@@ -12,10 +12,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-/**
- * Tabular output data dump with automatically adjusted column widths and some other
- * utilities.
- */
+/** Tabular output data dump with automatically adjusted column widths and some other utilities. */
 public final class TabularOutput {
   /** Column separator. */
   private final String columnSeparator;
@@ -26,14 +23,10 @@ public final class TabularOutput {
   /** Buffered rows. */
   private final List<List<Object>> data = new ArrayList<>();
 
-  /**
-   * A writer to write the output to.
-   */
+  /** A writer to write the output to. */
   private final Writer writer;
 
-  /**
-   * Flush rows every n-th line.
-   */
+  /** Flush rows every n-th line. */
   private final int flushCount;
 
   /** */
@@ -41,7 +34,7 @@ public final class TabularOutput {
 
   private final List<ColumnData> columns;
 
-  private final static class ColumnData {
+  private static final class ColumnData {
     final String name;
     final ColumnSpec spec;
     int width;
@@ -49,45 +42,37 @@ public final class TabularOutput {
     public ColumnData(String name, ColumnSpec spec) {
       this.name = name;
       this.spec = spec;
-    } 
+    }
   }
 
-  /**
-   * Column alignment.
-   */
+  /** Column alignment. */
   public static enum Alignment {
-    LEFT, RIGHT, CENTER;
+    LEFT,
+    RIGHT,
+    CENTER;
   }
 
-  /**
-   * Column specification.
-   */
-  public final static class ColumnSpec {
+  /** Column specification. */
+  public static final class ColumnSpec {
     /** Alignment. */
     Alignment alignment = Alignment.LEFT;
 
     /** Formatter for the value. */
     String format = "%s";
 
-    /**
-     * Sets column flush on the last added column.
-     */
+    /** Sets column flush on the last added column. */
     public ColumnSpec alignLeft() {
       this.alignment = Alignment.LEFT;
       return this;
     }
 
-    /**
-     * Sets column flush on the last added column.
-     */
+    /** Sets column flush on the last added column. */
     public ColumnSpec alignRight() {
       this.alignment = Alignment.RIGHT;
       return this;
     }
 
-    /**
-     * Sets column flush on the last added column.
-     */
+    /** Sets column flush on the last added column. */
     public ColumnSpec alignCenter() {
       this.alignment = Alignment.CENTER;
       return this;
@@ -110,9 +95,7 @@ public final class TabularOutput {
       this.writer = Objects.requireNonNull(writer);
     }
 
-    /**
-     * Emit or skip the header.
-     */
+    /** Emit or skip the header. */
     public Builder outputHeaders(boolean outputHeader) {
       this.outputHeader = outputHeader;
       return this;
@@ -120,6 +103,7 @@ public final class TabularOutput {
 
     /**
      * Flush automatically every n-lines.
+     *
      * @see #flush()
      */
     public Builder flushEvery(int n) {
@@ -127,9 +111,7 @@ public final class TabularOutput {
       return this;
     }
 
-    /**
-     * Don't flush lines automatically.
-     */
+    /** Don't flush lines automatically. */
     public Builder noAutoFlush() {
       return flushEvery(Integer.MAX_VALUE);
     }
@@ -139,9 +121,7 @@ public final class TabularOutput {
       return this;
     }
 
-    /**
-     * Adds a column to the tabular's layout.
-     */
+    /** Adds a column to the tabular's layout. */
     public Builder addColumn(String name, Consumer<ColumnSpec> columnConfig) {
       if (columnsByName.containsKey(name)) {
         throw new IllegalArgumentException("Two columns with the same name: " + name);
@@ -158,10 +138,7 @@ public final class TabularOutput {
     }
 
     public TabularOutput build() {
-      return new TabularOutput(writer, columnsByName,
-          columnSeparator,
-          flushCount,
-          outputHeader);
+      return new TabularOutput(writer, columnsByName, columnSeparator, flushCount, outputHeader);
     }
 
     public Builder addColumns(String... names) {
@@ -174,10 +151,10 @@ public final class TabularOutput {
     return new Builder(writer);
   }
 
-  /**
-   * Where to write the output to.
-   */
-  public TabularOutput(Writer writer, LinkedHashMap<String, ColumnSpec> columns,
+  /** Where to write the output to. */
+  public TabularOutput(
+      Writer writer,
+      LinkedHashMap<String, ColumnSpec> columns,
       String colSeparator,
       int flushCount,
       boolean outputHeader) {
@@ -185,17 +162,20 @@ public final class TabularOutput {
     this.outputHeader = outputHeader;
     this.flushCount = flushCount;
     this.columnSeparator = colSeparator;
-    this.columns = columns.entrySet().stream()
-        .map((e) -> new ColumnData(e.getKey(), e.getValue())).collect(Collectors.toList());
+    this.columns =
+        columns.entrySet().stream()
+            .map((e) -> new ColumnData(e.getKey(), e.getValue()))
+            .collect(Collectors.toList());
   }
 
   public TabularOutput append(Object... values) {
     this.currentRow.addAll(Arrays.asList(values));
     if (currentRow.size() > columns.size()) {
-      throw new RuntimeException("Current row has more values than declared columns: " + currentRow); 
+      throw new RuntimeException(
+          "Current row has more values than declared columns: " + currentRow);
     }
     return this;
-  }  
+  }
 
   public TabularOutput nextRow() {
     while (currentRow.size() < columns.size()) {
@@ -208,7 +188,6 @@ public final class TabularOutput {
     }
     return this;
   }
-
 
   public Writer getWriter() {
     return writer;
@@ -246,7 +225,7 @@ public final class TabularOutput {
         String value = formatValue(colData, row.get(i));
         formattedRow.add(value);
 
-        int vlen = value.length(); 
+        int vlen = value.length();
         if (vlen > colData.width) {
           colData.width = vlen;
           columnWidthsChanged = true;
@@ -260,7 +239,12 @@ public final class TabularOutput {
         cd.width = Math.max(cd.name.length(), cd.width);
       }
 
-      writer.write(String.join(columnSeparator, columns.stream().map((d) -> align(d.spec.alignment, d.name, d.width)).collect(Collectors.toList())));
+      writer.write(
+          String.join(
+              columnSeparator,
+              columns.stream()
+                  .map((d) -> align(d.spec.alignment, d.name, d.width))
+                  .collect(Collectors.toList())));
       writer.write("\n");
     }
 
@@ -269,7 +253,7 @@ public final class TabularOutput {
         ColumnData cd = columns.get(i);
         row.set(i, align(cd.spec.alignment, row.get(i), cd.width));
       }
-      
+
       writer.write(String.join(columnSeparator, row));
       writer.write("\n");
     }
@@ -298,7 +282,7 @@ public final class TabularOutput {
 
     return value;
   }
-  
+
   private Object toStringAdapter(Object object) {
     if (object == null) return object;
     if (object instanceof char[]) return new String((char[]) object);
@@ -310,7 +294,7 @@ public final class TabularOutput {
     if (object instanceof double[]) return Arrays.toString((double[]) object);
     return object;
   }
-  
+
   private static String padStart(String string, int minLength, char padChar) {
     Objects.requireNonNull(string);
     if (string.length() >= minLength) {
@@ -325,7 +309,7 @@ public final class TabularOutput {
   }
 
   private static String padEnd(String string, int minLength, char padChar) {
-    Objects.requireNonNull(string);  // eager for GWT.
+    Objects.requireNonNull(string); // eager for GWT.
     if (string.length() >= minLength) {
       return string;
     }

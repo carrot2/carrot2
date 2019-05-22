@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -19,9 +18,7 @@ import org.carrot2.text.preprocessing.LabelFilterTestBase;
 import org.carrot2.text.preprocessing.PreprocessingContextAssert;
 import org.junit.Test;
 
-/**
- * Test cases for {@link NumericLabelFilter}.
- */
+/** Test cases for {@link NumericLabelFilter}. */
 public class NumericLabelFilterTest extends LabelFilterTestBase {
   @Override
   protected void initializeFilters(LabelFilterProcessor filterProcessor) {
@@ -31,35 +28,30 @@ public class NumericLabelFilterTest extends LabelFilterTestBase {
   @Test
   public void testEmpty() {
     PreprocessingContextAssert a = preprocess();
-    Assertions.assertThat(a.labelImages())
-        .isEmpty();
+    Assertions.assertThat(a.labelImages()).isEmpty();
   }
 
   @Test
   public void testNonNumericWords() {
     PreprocessingContextAssert a = preprocess(new TestDocument("aa . aa", "bb.com.pl . bb.com.pl"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("aa", "bb.com.pl");
+    Assertions.assertThat(a.labelImages()).containsOnly("aa", "bb.com.pl");
   }
 
   @Test
   public void testNumericWords() {
     PreprocessingContextAssert a = preprocess(new TestDocument("10,12 . 10,12", "bb . bb"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("bb");
+    Assertions.assertThat(a.labelImages()).containsOnly("bb");
   }
 
   @Test
   public void testPhraseStartingWithNumbers() {
     PreprocessingContextAssert a = preprocess(new TestDocument("5 xx", "5 xx"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("xx");
+    Assertions.assertThat(a.labelImages()).containsOnly("xx");
   }
 
   @Test
   public void testPhraseStartingWithNonNumbers() {
     PreprocessingContextAssert a = preprocess(new TestDocument("xx 5", "xx 5"));
-    Assertions.assertThat(a.labelImages())
-        .containsOnly("xx 5", "xx");
+    Assertions.assertThat(a.labelImages()).containsOnly("xx 5", "xx");
   }
 }

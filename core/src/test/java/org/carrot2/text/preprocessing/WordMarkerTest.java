@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,41 +11,43 @@
 
 package org.carrot2.text.preprocessing;
 
+import static org.carrot2.text.preprocessing.PreprocessingContextAssert.assertThat;
+
 import org.carrot2.TestBase;
 import org.carrot2.language.Tokenizer;
 import org.junit.Test;
 
-import static org.carrot2.text.preprocessing.PreprocessingContextAssert.assertThat;
-
-/**
- * Test cases for {@link StopListMarker}.
- */
+/** Test cases for {@link StopListMarker}. */
 public class WordMarkerTest extends TestBase {
   @Test
   public void testNonStopWords() {
-    PreprocessingContext ctx = new PreprocessingContextBuilder()
-        .newDoc("data mining", "data mining")
-        .buildContext(new BasicPreprocessingPipeline());
+    PreprocessingContext ctx =
+        new PreprocessingContextBuilder()
+            .newDoc("data mining", "data mining")
+            .buildContext(new BasicPreprocessingPipeline());
 
-    assertThat(ctx).containsWord("data")
-        .withExactTokenType(Tokenizer.TT_TERM);
-    assertThat(ctx).containsWord("mining")
-        .withExactTokenType(Tokenizer.TT_TERM);
+    assertThat(ctx).containsWord("data").withExactTokenType(Tokenizer.TT_TERM);
+    assertThat(ctx).containsWord("mining").withExactTokenType(Tokenizer.TT_TERM);
   }
 
   @Test
   public void testStopWords() {
-    PreprocessingContext ctx = new PreprocessingContextBuilder()
-        .newDoc("this you", "have are")
-        .buildContext(new BasicPreprocessingPipeline());
+    PreprocessingContext ctx =
+        new PreprocessingContextBuilder()
+            .newDoc("this you", "have are")
+            .buildContext(new BasicPreprocessingPipeline());
 
-    assertThat(ctx).containsWord("this")
+    assertThat(ctx)
+        .containsWord("this")
         .withExactTokenType(Tokenizer.TT_TERM | Tokenizer.TF_COMMON_WORD);
-    assertThat(ctx).containsWord("you")
+    assertThat(ctx)
+        .containsWord("you")
         .withExactTokenType(Tokenizer.TT_TERM | Tokenizer.TF_COMMON_WORD);
-    assertThat(ctx).containsWord("have")
+    assertThat(ctx)
+        .containsWord("have")
         .withExactTokenType(Tokenizer.TT_TERM | Tokenizer.TF_COMMON_WORD);
-    assertThat(ctx).containsWord("are")
+    assertThat(ctx)
+        .containsWord("are")
         .withExactTokenType(Tokenizer.TT_TERM | Tokenizer.TF_COMMON_WORD);
   }
 }

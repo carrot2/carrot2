@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,10 +13,9 @@ package org.carrot2.math.matrix;
 
 import org.carrot2.math.mahout.matrix.*;
 
-/**
- * {@link LocalNonnegativeMatrixFactorization} factory.
- */
-public class LocalNonnegativeMatrixFactorizationFactory extends IterativeMatrixFactorizationFactory {
+/** {@link LocalNonnegativeMatrixFactorization} factory. */
+public class LocalNonnegativeMatrixFactorizationFactory
+    extends IterativeMatrixFactorizationFactory {
   public MatrixFactorization factorize(DoubleMatrix2D A) {
     LocalNonnegativeMatrixFactorization factorization = new LocalNonnegativeMatrixFactorization(A);
     factorization.setK(k);

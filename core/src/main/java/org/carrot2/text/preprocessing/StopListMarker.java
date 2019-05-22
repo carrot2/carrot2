@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,26 +11,25 @@
 
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.language.Tokenizer;
 import org.carrot2.language.LexicalData;
+import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
-import org.carrot2.util.MutableCharArray;
 import org.carrot2.util.CharArrayUtils;
+import org.carrot2.util.MutableCharArray;
 
 /**
  * Marks stop words based on the current language model.
- * <p>
- * This class saves the following results to the {@link PreprocessingContext}:
+ *
+ * <p>This class saves the following results to the {@link PreprocessingContext}:
+ *
  * <ul>
- * <li>{@link AllWords#type}</li>
+ *   <li>{@link AllWords#type}
  * </ul>
- * <p>
- * This class requires that {@link InputTokenizer} and {@link CaseNormalizer} be invoked first.
+ *
+ * <p>This class requires that {@link InputTokenizer} and {@link CaseNormalizer} be invoked first.
  */
 final class StopListMarker {
-  /**
-   * Marks stop words and saves the results to the <code>context</code>.
-   */
+  /** Marks stop words and saves the results to the <code>context</code>. */
   public void mark(PreprocessingContext context) {
     final char[][] wordImages = context.allWords.image;
     final short[] types = context.allWords.type;

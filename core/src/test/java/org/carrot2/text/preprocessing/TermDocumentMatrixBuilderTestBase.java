@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,6 +11,7 @@
 
 package org.carrot2.text.preprocessing;
 
+import java.util.stream.Stream;
 import org.carrot2.TestBase;
 import org.carrot2.clustering.CachedLangComponents;
 import org.carrot2.clustering.Document;
@@ -23,20 +23,12 @@ import org.carrot2.text.vsm.TfTermWeighting;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
 import org.junit.Before;
 
-import java.util.stream.Stream;
-
-/**
- * A base class for tests requiring that the main term-document document matrix is built.
- */
+/** A base class for tests requiring that the main term-document document matrix is built. */
 public class TermDocumentMatrixBuilderTestBase extends TestBase {
-  /**
-   * Matrix builder
-   */
+  /** Matrix builder */
   protected TermDocumentMatrixBuilder matrixBuilder;
 
-  /**
-   * VSM processing context with all the data
-   */
+  /** VSM processing context with all the data */
   protected VectorSpaceModelContext vsmContext;
 
   protected CompletePreprocessingPipeline preprocessingPipeline;
@@ -54,9 +46,11 @@ public class TermDocumentMatrixBuilderTestBase extends TestBase {
   }
 
   protected PreprocessingContext buildTermDocumentMatrix(Stream<? extends Document> documents) {
-    LanguageComponents languageComponents = CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant2.NAME);
+    LanguageComponents languageComponents =
+        CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant2.NAME);
 
-    PreprocessingContext context = preprocessingPipeline.preprocess(documents, queryHint, languageComponents);
+    PreprocessingContext context =
+        preprocessingPipeline.preprocess(documents, queryHint, languageComponents);
 
     vsmContext = new VectorSpaceModelContext(context);
     matrixBuilder.buildTermDocumentMatrix(vsmContext);

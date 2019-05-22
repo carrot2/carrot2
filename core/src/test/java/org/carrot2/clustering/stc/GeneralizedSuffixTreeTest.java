@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,18 +11,16 @@
 
 package org.carrot2.clustering.stc;
 
+import static org.junit.Assert.*;
+
+import com.carrotsearch.hppc.BitSet;
+import com.carrotsearch.hppc.IntStack;
 import java.util.ArrayList;
 import java.util.Collections;
-
 import org.carrot2.TestBase;
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
 import org.carrot2.text.suffixtree.SuffixTree;
 import org.junit.Test;
-
-import com.carrotsearch.hppc.BitSet;
-import com.carrotsearch.hppc.IntStack;
-
-import static org.junit.Assert.*;
 
 /**
  * Tests running GST-functionality on top of a {@link SuffixTree}. This is for demonstration
@@ -40,8 +37,7 @@ public class GeneralizedSuffixTreeTest extends TestBase {
     protected void visit(int state, int card, BitSet bset, IntStack edges) {
       final StringBuilder b = new StringBuilder();
       for (int i = 0; i < edges.size(); i += 2)
-        for (int j = edges.get(i); j <= edges.get(i + 1); j++)
-          b.append(sb.input.get(j) + " ");
+        for (int j = edges.get(i); j <= edges.get(i + 1); j++) b.append(sb.input.get(j) + " ");
 
       nodes.add(b.toString() + "[" + card + "]");
     }
@@ -64,17 +60,14 @@ public class GeneralizedSuffixTreeTest extends TestBase {
     gst.visit();
 
     Collections.sort(gst.nodes);
-    assertArrayEquals(new Object[]{
-        "1 2 3 [2]",
-        "2 3 [3]",
-        "3 [3]",
-        "4 [2]",
-    }, gst.nodes.toArray());
+    assertArrayEquals(
+        new Object[] {
+          "1 2 3 [2]", "2 3 [3]", "3 [3]", "4 [2]",
+        },
+        gst.nodes.toArray());
   }
 
-  /**
-   *
-   */
+  /** */
   @Test
   public void testSinglephraseGST() {
     final SequenceBuilder sb = new SequenceBuilder();
@@ -93,18 +86,14 @@ public class GeneralizedSuffixTreeTest extends TestBase {
     gst.visit();
 
     Collections.sort(gst.nodes);
-    assertArrayEquals(new Object[]{
-        "0 1 2 3 [2]",
-        "1 2 3 [3]",
-        "2 3 [4]",
-        "3 [4]",
-        "4 [2]",
-    }, gst.nodes.toArray());
+    assertArrayEquals(
+        new Object[] {
+          "0 1 2 3 [2]", "1 2 3 [3]", "2 3 [4]", "3 [4]", "4 [2]",
+        },
+        gst.nodes.toArray());
   }
 
-  /**
-   *
-   */
+  /** */
   @Test
   public void testEmptyGST() {
     final SequenceBuilder sb = new SequenceBuilder();

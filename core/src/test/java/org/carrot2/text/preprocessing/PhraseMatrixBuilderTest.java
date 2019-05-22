@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -12,19 +11,15 @@
 
 package org.carrot2.text.preprocessing;
 
+import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 import org.carrot2.math.matrix.MatrixAssertions;
-import org.carrot2.text.preprocessing.TermDocumentMatrixBuilderTestBase;
 import org.junit.Test;
 
-import java.util.stream.Stream;
-
-/**
- * Test cases for phrase matrix building.
- */
+/** Test cases for phrase matrix building. */
 public class PhraseMatrixBuilderTest extends TermDocumentMatrixBuilderTestBase {
   @Test
   public void testEmpty() {
@@ -33,10 +28,8 @@ public class PhraseMatrixBuilderTest extends TermDocumentMatrixBuilderTestBase {
 
   @Test
   public void testNoPhrases() {
-    Stream<TestDocument> documents = createDocumentsWithTitles(
-        "aa . bb",
-        "bb . cc",
-        "aa . cc . cc");
+    Stream<TestDocument> documents =
+        createDocumentsWithTitles("aa . bb", "bb . cc", "aa . cc . cc");
     check(documents, null);
   }
 
@@ -50,47 +43,45 @@ public class PhraseMatrixBuilderTest extends TermDocumentMatrixBuilderTestBase {
   @Test
   public void testTwoPhrasesNoSingleWords() {
     double[][] expectedPhraseMatrixElements = {
-        {0.707, 0.707, 0, 0, 0},
-        {0, 0, 0.577, 0.577, 0.577}
+      {0.707, 0.707, 0, 0, 0},
+      {0, 0, 0.577, 0.577, 0.577}
     };
 
-    check(Stream.of(
-        new TestDocument("ee ff", "aa bb cc"),
-        new TestDocument("ee ff", "aa bb cc"),
-        new TestDocument("ee ff", "aa bb cc")
-    ), expectedPhraseMatrixElements);
+    check(
+        Stream.of(
+            new TestDocument("ee ff", "aa bb cc"),
+            new TestDocument("ee ff", "aa bb cc"),
+            new TestDocument("ee ff", "aa bb cc")),
+        expectedPhraseMatrixElements);
   }
 
   @Test
   public void testSinglePhraseSingleWords() {
-    Stream<TestDocument> documents = Stream.of(
-        new TestDocument("", "aa bb cc"),
-        new TestDocument("", "aa bb cc"),
-        new TestDocument("", "aa bb cc"),
-        new TestDocument("ff . gg . ff . gg"),
-        new TestDocument("ff . gg . ff . gg")
-    );
+    Stream<TestDocument> documents =
+        Stream.of(
+            new TestDocument("", "aa bb cc"),
+            new TestDocument("", "aa bb cc"),
+            new TestDocument("", "aa bb cc"),
+            new TestDocument("ff . gg . ff . gg"),
+            new TestDocument("ff . gg . ff . gg"));
 
-    double[][] expectedPhraseMatrixElements = {
-        {0, 0, 0.577, 0.577, 0.577}
-    };
+    double[][] expectedPhraseMatrixElements = {{0, 0, 0.577, 0.577, 0.577}};
 
     check(documents, expectedPhraseMatrixElements);
   }
 
   @Test
   public void testSinglePhraseWithStopWord() {
-    Stream<TestDocument> documents = createDocumentsWithTitles(
-        "aa stop cc", "aa stop cc", "aa stop cc");
+    Stream<TestDocument> documents =
+        createDocumentsWithTitles("aa stop cc", "aa stop cc", "aa stop cc");
 
-    double[][] expectedPhraseMatrixElements = {
-        {0.707, 0.707}
-    };
+    double[][] expectedPhraseMatrixElements = {{0.707, 0.707}};
 
     check(documents, expectedPhraseMatrixElements);
   }
 
-  private void check(Stream<? extends Document> documents, double[][] expectedPhraseMatrixElements) {
+  private void check(
+      Stream<? extends Document> documents, double[][] expectedPhraseMatrixElements) {
     buildTermDocumentMatrix(documents);
     matrixBuilder.buildTermPhraseMatrix(vsmContext);
     final DoubleMatrix2D phraseMatrix = vsmContext.termPhraseMatrix;

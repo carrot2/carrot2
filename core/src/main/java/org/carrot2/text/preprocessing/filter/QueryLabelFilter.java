@@ -1,4 +1,3 @@
-
 /*
  * Carrot2 project.
  *
@@ -14,11 +13,8 @@ package org.carrot2.text.preprocessing.filter;
 
 import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext;
-import org.carrot2.attrs.AttrBoolean;
 
-/**
- * Accepts labels that do not consist only of query words.
- */
+/** Accepts labels that do not consist only of query words. */
 public class QueryLabelFilter extends SingleLabelFilterBase {
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {

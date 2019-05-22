@@ -14,7 +14,8 @@ public final class AttrGroup {
     return attr;
   }
 
-  public <T extends AcceptingVisitor> AttrObjectArray<T> register(String key, AttrObjectArray<T> attr) {
+  public <T extends AcceptingVisitor> AttrObjectArray<T> register(
+      String key, AttrObjectArray<T> attr) {
     checkNewKey(key);
     attrs.put(key, (visitor) -> visitor.visit(key, attr));
     return attr;
@@ -58,9 +59,8 @@ public final class AttrGroup {
 
   private void checkNewKey(String key) {
     if (attrs.containsKey(key)) {
-      throw new RuntimeException(String.format(Locale.ROOT,
-          "An attribute with key '%s' already exists.", key));
-
+      throw new RuntimeException(
+          String.format(Locale.ROOT, "An attribute with key '%s' already exists.", key));
     }
   }
 
@@ -68,4 +68,3 @@ public final class AttrGroup {
     attrs.values().forEach(c -> c.accept(visitor));
   }
 }
-

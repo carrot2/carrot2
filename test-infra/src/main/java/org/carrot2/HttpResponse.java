@@ -4,7 +4,6 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Objects;
-
 import org.apache.http.Header;
 
 public class HttpResponse {
@@ -14,7 +13,8 @@ public class HttpResponse {
   private byte[] responseBody;
   private String statusPhrase;
 
-  public HttpResponse(int statusCode, String statusPhrase, Header[] allHeaders, byte[] responseBody) {
+  public HttpResponse(
+      int statusCode, String statusPhrase, Header[] allHeaders, byte[] responseBody) {
     this.statusCode = statusCode;
     this.statusPhrase = statusPhrase;
     this.headers = allHeaders;
@@ -29,7 +29,7 @@ public class HttpResponse {
     }
     throw new RuntimeException("No header named: " + headerName);
   }
-  
+
   public int getStatusCode() {
     return statusCode;
   }
@@ -47,23 +47,27 @@ public class HttpResponse {
 
   public HttpResponse assertStatus(int responseCode) {
     if (statusCode != responseCode) {
-      throw new AssertionError(String.format(Locale.ROOT,
-          "Expected status code: %s but was: %s (%s); body: %s",
-          responseCode,
-          statusCode,
-          statusPhrase,
-          bodyAsUtf8()));
+      throw new AssertionError(
+          String.format(
+              Locale.ROOT,
+              "Expected status code: %s but was: %s (%s); body: %s",
+              responseCode,
+              statusCode,
+              statusPhrase,
+              bodyAsUtf8()));
     }
     return this;
   }
 
   public HttpResponse assertHeader(String name, String value) {
     if (!Objects.equals(header(name), value)) {
-      throw new AssertionError(String.format(Locale.ROOT, 
-          "Expected header %s with value %s, but was: %s",
-          name, 
-          value,
-          header(name)));
+      throw new AssertionError(
+          String.format(
+              Locale.ROOT,
+              "Expected header %s with value %s, but was: %s",
+              name,
+              value,
+              header(name)));
     }
     return this;
   }

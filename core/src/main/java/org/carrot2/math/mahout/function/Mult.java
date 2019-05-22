@@ -1,6 +1,4 @@
-/* Imported from Mahout. */package org.carrot2.math.mahout.function;
-
-
+/* Imported from Mahout. */ package org.carrot2.math.mahout.function;
 
 public final class Mult implements DoubleFunction {
 
@@ -10,18 +8,15 @@ public final class Mult implements DoubleFunction {
     this.multiplicator = multiplicator;
   }
 
-  
   @Override
   public double apply(double a) {
     return a * multiplicator;
   }
 
-  
   public static Mult div(double constant) {
     return mult(1 / constant);
   }
 
-  
   public static Mult mult(double constant) {
     return new Mult(constant);
   }

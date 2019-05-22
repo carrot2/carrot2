@@ -4,16 +4,6 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.ParametersDelegate;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.AbstractConfiguration;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.ConfigurationFactory;
-import org.apache.logging.log4j.core.config.Configurator;
-import org.apache.logging.log4j.core.config.composite.CompositeConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -27,6 +17,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.AbstractConfiguration;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.ConfigurationFactory;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.composite.CompositeConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Launcher {
   private static final String LAUNCHER_SCRIPT_NAME = "dcs";
@@ -35,13 +34,19 @@ public class Launcher {
   public static final String OPT_PORT = "--port";
   public static final String OPT_HOME = "--home";
 
-  @Parameter(names = {"-p", OPT_PORT}, description = "Port number to bind to.")
+  @Parameter(
+      names = {"-p", OPT_PORT},
+      description = "Port number to bind to.")
   public int port = 8080;
 
-  @Parameter(names = {OPT_HOME}, description = "DCS's home folder (for resource and application lookup).")
+  @Parameter(
+      names = {OPT_HOME},
+      description = "DCS's home folder (for resource and application lookup).")
   public Path home;
 
-  @Parameter(names = {OPT_SHUTDOWN_TOKEN}, description = "Shutdown service's validation token.")
+  @Parameter(
+      names = {OPT_SHUTDOWN_TOKEN},
+      description = "Shutdown service's validation token.")
   public String shutdownToken;
 
   @ParametersDelegate
@@ -54,10 +59,11 @@ public class Launcher {
   private final String tstamp;
 
   public Launcher() {
-    tstamp = new DateTimeFormatterBuilder()
-        .appendPattern("yyyy_MM_dd-HH_mm_ss-SSS")
-        .toFormatter(Locale.ROOT)
-        .format(LocalDateTime.now(ZoneOffset.systemDefault()));
+    tstamp =
+        new DateTimeFormatterBuilder()
+            .appendPattern("yyyy_MM_dd-HH_mm_ss-SSS")
+            .toFormatter(Locale.ROOT)
+            .format(LocalDateTime.now(ZoneOffset.systemDefault()));
   }
 
   public void start() throws Exception {
@@ -74,19 +80,19 @@ public class Launcher {
       home = Paths.get(".").normalize().toAbsolutePath();
     }
 
-    if (Files.exists(home.resolve("dcs.cmd")) ||
-        Files.exists(home.resolve("dcs.sh")) ||
-        Files.exists(home.resolve("web"))) {
+    if (Files.exists(home.resolve("dcs.cmd"))
+        || Files.exists(home.resolve("dcs.sh"))
+        || Files.exists(home.resolve("web"))) {
       return home;
     } else {
-      throw new ParameterException("Application's home folder not valid: "
-         + home.toAbsolutePath());
+      throw new ParameterException("Application's home folder not valid: " + home.toAbsolutePath());
     }
   }
 
   private static void configureLog4jInitial() {
     try {
-      Configurator.initialize("log4j2-default.xml",
+      Configurator.initialize(
+          "log4j2-default.xml",
           Launcher.class.getClassLoader(),
           Launcher.class.getResource("log4j2-default.xml").toURI());
     } catch (URISyntaxException e) {
@@ -94,9 +100,7 @@ public class Launcher {
     }
   }
 
-  /**
-   * Configure logging.
-   */
+  /** Configure logging. */
   private void reconfigureLogging(Path home, LoggingConfigurationParameters loggingParameters) {
     List<Path> configurations = new ArrayList<>();
     if (loggingParameters.configuration != null) {
@@ -116,8 +120,11 @@ public class Launcher {
     }
 
     if (configurations.size() > 1) {
-      throw new ParameterException("Conflicting logging configuration options:\n\t- "
-          + configurations.stream().map(p -> p.toString()).collect(Collectors.joining("\n\t- ")));
+      throw new ParameterException(
+          "Conflicting logging configuration options:\n\t- "
+              + configurations.stream()
+                  .map(p -> p.toString())
+                  .collect(Collectors.joining("\n\t- ")));
     }
 
     if (configurations.size() == 0) {
@@ -158,7 +165,8 @@ public class Launcher {
 
     List<AbstractConfiguration> configs = new ArrayList<AbstractConfiguration>();
     for (URI configUri : configurations) {
-      Configuration configuration = configFactory.getConfiguration(ctx, configUri.toString(), configUri);
+      Configuration configuration =
+          configFactory.getConfiguration(ctx, configUri.toString(), configUri);
       if (configuration == null || !(configuration instanceof AbstractConfiguration)) {
         throw new RuntimeException("Oddball config problem: " + configUri);
       }
@@ -220,4 +228,3 @@ public class Launcher {
     }
   }
 }
-

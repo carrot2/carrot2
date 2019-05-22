@@ -1,8 +1,7 @@
 package org.carrot2.examples;
 
-import org.carrot2.clustering.Cluster;
-
 import java.util.List;
+import org.carrot2.clustering.Cluster;
 
 public class ExamplesCommon {
   public static <T> void printClusters(List<Cluster<T>> clusters) {
