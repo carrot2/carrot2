@@ -59,6 +59,9 @@ subprojects {
 
     project.archivesBaseName = "carrot2" + project.path.replace(':', '-')
 
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
     idea {
       module {
         outputDir file('build/idea/classes/main')
@@ -87,9 +90,6 @@ subprojects {
     tasks.withType(JavaCompile) {
       options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
       options.encoding = "UTF-8"
-
-      sourceCompatibility = 1.8
-      targetCompatibility = 1.8
     }
 
     tasks.withType(Jar) {
