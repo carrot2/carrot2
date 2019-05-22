@@ -16,6 +16,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
+import org.carrot2.text.preprocessing.LabelFormatter;
+import org.carrot2.text.preprocessing.LabelFormatterImpl;
 import org.carrot2.util.ResourceLookup;
 
 public class TestsLanguageComponentsFactoryVariant1 implements LanguageComponentsProvider {
@@ -32,7 +34,9 @@ public class TestsLanguageComponentsFactoryVariant1 implements LanguageComponent
     LinkedHashMap<Class<?>, Supplier<?>> components = new LinkedHashMap<>();
     components.put(Stemmer.class, (Supplier<Stemmer>) () -> (word) -> null);
     components.put(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
-    components.put(LexicalData.class, () -> new LexicalData() {});
+    components.put(LexicalData.class, () -> new AcceptAllLexicalData());
+    components.put(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
+
     return components;
   }
 

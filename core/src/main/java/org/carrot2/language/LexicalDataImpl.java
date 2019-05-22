@@ -26,25 +26,15 @@ import org.carrot2.util.ResourceLookup;
 public final class LexicalDataImpl implements LexicalData {
   private final HashSet<String> stopwords;
   private final Pattern stoplabelPattern;
-  private final boolean usesSpaceDelimiters;
 
-  public LexicalDataImpl(
-      HashSet<String> stopwords, Pattern stoplabelPattern, boolean usesSpaceDelimiters) {
+  public LexicalDataImpl(HashSet<String> stopwords, Pattern stoplabelPattern) {
     this.stopwords = stopwords;
     this.stoplabelPattern = stoplabelPattern;
-    this.usesSpaceDelimiters = usesSpaceDelimiters;
   }
 
-  public LexicalDataImpl(
-      ResourceLookup loader,
-      String stopwordsResource,
-      String stoplabelsResource,
-      boolean usesSpaceDelimiters)
+  public LexicalDataImpl(ResourceLookup loader, String stopwordsResource, String stoplabelsResource)
       throws IOException {
-    this(
-        loadStopwords(loader, stopwordsResource),
-        loadStoplabels(loader, stoplabelsResource),
-        usesSpaceDelimiters);
+    this(loadStopwords(loader, stopwordsResource), loadStoplabels(loader, stoplabelsResource));
   }
 
   /*
@@ -63,11 +53,6 @@ public final class LexicalDataImpl implements LexicalData {
     if (this.stoplabelPattern == null) return false;
 
     return stoplabelPattern.matcher(label).matches();
-  }
-
-  @Override
-  public boolean usesSpaceDelimiters() {
-    return usesSpaceDelimiters;
   }
 
   private static Pattern loadStoplabels(ResourceLookup loader, String stoplabelsResource)

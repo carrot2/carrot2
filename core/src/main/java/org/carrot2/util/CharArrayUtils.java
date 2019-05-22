@@ -25,7 +25,7 @@ public class CharArrayUtils {
 
   /** To lower case conversion. A copy of the input array will be created. */
   public static char[] toLowerCaseCopy(char[] array) {
-    return toLowerCaseInPlace((char[]) array.clone());
+    return toLowerCaseInPlace(array.clone());
   }
 
   /**

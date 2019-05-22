@@ -16,6 +16,8 @@ import java.util.function.Supplier;
 import morfologik.stemming.WordData;
 import morfologik.stemming.polish.PolishStemmer;
 import org.carrot2.language.*;
+import org.carrot2.text.preprocessing.LabelFormatter;
+import org.carrot2.text.preprocessing.LabelFormatterImpl;
 import org.carrot2.util.ClassRelativeResourceLoader;
 import org.carrot2.util.ResourceLookup;
 
@@ -38,8 +40,10 @@ public class PolishLanguageComponents implements LanguageComponentsProvider {
     String langPrefix = language.toLowerCase(Locale.ROOT);
     LexicalData lexicalData =
         new LexicalDataImpl(
-            resourceLookup, langPrefix + ".stopwords.utf8", langPrefix + ".stoplabels.utf8", true);
+            resourceLookup, langPrefix + ".stopwords.utf8", langPrefix + ".stoplabels.utf8");
     components.put(LexicalData.class, () -> lexicalData);
+
+    components.put(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
 
     return components;
   }

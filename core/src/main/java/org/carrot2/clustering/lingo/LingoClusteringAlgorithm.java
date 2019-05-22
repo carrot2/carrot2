@@ -42,7 +42,8 @@ import org.carrot2.text.vsm.VectorSpaceModelContext;
  */
 public class LingoClusteringAlgorithm extends AttrComposite implements ClusteringAlgorithm {
   private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS =
-      new HashSet<>(Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class));
+      new HashSet<>(
+          Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class, LabelFormatter.class));
 
   /**
    * Balance between cluster score and size during cluster sorting. Value equal to 0.0 will cause
@@ -161,8 +162,7 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
 
       // Format final clusters
       final LabelFormatter labelFormatter =
-          new LabelFormatter(
-              lingoContext.preprocessingContext.languageComponents.get(LexicalData.class));
+          lingoContext.preprocessingContext.languageComponents.get(LabelFormatter.class);
 
       final int[] clusterLabelIndex = lingoContext.clusterLabelFeatureIndex;
       final BitSet[] clusterDocuments = lingoContext.clusterDocuments;
@@ -177,7 +177,7 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
         }
 
         // Add label and score
-        cluster.addLabel(labelFormatter.format(context, labelFeature));
+        cluster.addLabel(context.format(labelFormatter, labelFeature));
         cluster.setScore(clusterLabelScore[i]);
 
         // Add documents

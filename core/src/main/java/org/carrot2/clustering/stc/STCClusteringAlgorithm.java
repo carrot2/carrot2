@@ -42,7 +42,8 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
  */
 public final class STCClusteringAlgorithm extends AttrComposite implements ClusteringAlgorithm {
   private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS =
-      new HashSet<>(Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class));
+      new HashSet<>(
+          Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class, LabelFormatter.class));
 
   /**
    * Query terms used to retrieve documents. The query is used as a hint to avoid trivial clusters.
@@ -209,6 +210,8 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
             .defaultValue(BasicPreprocessingPipeline::new));
   }
 
+  private LabelFormatter labelFormatter;
+
   /**
    * Helper class for computing merged cluster labels.
    *
@@ -241,7 +244,6 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
 
   private GeneralizedSuffixTree.SequenceBuilder sb;
   private PreprocessingContext context;
-  private LexicalData lexicalData;
 
   @Override
   public boolean supports(LanguageComponents languageComponents) {
@@ -259,7 +261,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
      * Step 1. Preprocessing: tokenization, stop word marking and stemming (if available).
      */
     context = preprocessing.preprocess(documents.stream(), queryHint.get(), languageComponents);
-    lexicalData = context.languageComponents.get(LexicalData.class);
+    labelFormatter = context.languageComponents.get(LabelFormatter.class);
 
     /*
      * Step 2: Create a generalized suffix tree from phrases in the input.
@@ -873,7 +875,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       }
     }
 
-    return LabelFormatter.format(images, stopwords, lexicalData.usesSpaceDelimiters());
+    return labelFormatter.format(images, stopwords);
   }
 
   @SuppressWarnings("unused")

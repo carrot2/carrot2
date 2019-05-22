@@ -10,22 +10,14 @@
  */
 package org.carrot2.language;
 
-/** Provides additional miscellaneous lexical information for a given language. */
+/** Provides additional word and label filtering information for a given language. */
 public interface LexicalData {
   /**
    * @return Return true if the provided term is common (meaningless). Such words are referred to as
    *     "stop words" and are usually ignored in information retrieval tasks.
    */
-  default boolean ignoreWord(CharSequence word) {
-    return false;
-  }
+  boolean ignoreWord(CharSequence word);
 
   /** @return Return {@code true} if the label candidate should be ignored in processing. */
-  default boolean ignoreLabel(CharSequence labelCandidate) {
-    return false;
-  }
-
-  default boolean usesSpaceDelimiters() {
-    return true;
-  }
+  boolean ignoreLabel(CharSequence labelCandidate);
 }

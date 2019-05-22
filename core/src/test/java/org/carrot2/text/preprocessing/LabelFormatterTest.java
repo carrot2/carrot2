@@ -18,7 +18,6 @@ import org.carrot2.clustering.CachedLangComponents;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.LanguageComponents;
-import org.carrot2.language.LexicalData;
 import org.junit.Test;
 
 /** Test cases for {@link LabelFormatter}. */
@@ -129,7 +128,8 @@ public class LabelFormatterTest extends TestBase {
 
   private void checkWithoutPreprocessing(
       char[][] words, boolean[] stopWords, String expectedFormattedLabel, boolean joinWithSpace) {
-    Assertions.assertThat(LabelFormatter.format(words, stopWords, joinWithSpace))
+    LabelFormatter labelFormatter = new LabelFormatterImpl(joinWithSpace ? " " : "");
+    Assertions.assertThat(labelFormatter.format(words, stopWords))
         .isEqualTo(expectedFormattedLabel);
   }
 
@@ -145,12 +145,11 @@ public class LabelFormatterTest extends TestBase {
     stopListMarker.mark(context);
     labelFilterProcessor.process(context);
 
-    LabelFormatter labelFormatter =
-        new LabelFormatter(context.languageComponents.get(LexicalData.class));
+    LabelFormatter labelFormatter = context.languageComponents.get(LabelFormatter.class);
     final int[] labelsFeatureIndex = context.allLabels.featureIndex;
     Assertions.assertThat(
             IntStream.of(labelsFeatureIndex)
-                .mapToObj(feature -> labelFormatter.format(context, feature)))
+                .mapToObj(feature -> context.format(labelFormatter, feature)))
         .containsExactly(expectedFormattedLabels);
   }
 }

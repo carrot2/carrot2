@@ -23,20 +23,20 @@ public class StopLabelFilter extends SingleLabelFilterBase {
   public void filter(
       PreprocessingContext context, boolean[] acceptedStems, boolean[] acceptedPhrases) {
     lexicalData = context.languageComponents.get(LexicalData.class);
-    labelFormatter = new LabelFormatter(lexicalData);
+    labelFormatter = context.languageComponents.get(LabelFormatter.class);
     super.filter(context, acceptedStems, acceptedPhrases);
   }
 
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {
     final String formatedLabel =
-        labelFormatter.format(context, phraseIndex + context.allWords.image.length);
+        context.format(labelFormatter, phraseIndex + context.allWords.image.length);
     return !lexicalData.ignoreLabel(formatedLabel);
   }
 
   @Override
   public boolean acceptWord(PreprocessingContext context, int wordIndex) {
-    final String formattedLabel = labelFormatter.format(context, wordIndex);
+    final String formattedLabel = context.format(labelFormatter, wordIndex);
     return !lexicalData.ignoreLabel(formattedLabel);
   }
 }

@@ -16,6 +16,7 @@ import java.io.StringWriter;
 import java.util.Arrays;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.Stemmer;
+import org.carrot2.language.TokenTypeUtils;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.util.MutableCharArray;
 import org.carrot2.util.TabularOutput;
@@ -620,6 +621,30 @@ public final class PreprocessingContext implements Closeable {
   /** Returns <code>true</code> if this context contains any label candidates. */
   public boolean hasLabels() {
     return allLabels.featureIndex != null && allLabels.featureIndex.length > 0;
+  }
+
+  /**
+   * Applies label formatter to a given word or phrase (depending on the feature index provided).
+   */
+  public String format(LabelFormatter formatter, int featureIndex) {
+    final char[][] wordsImage = allWords.image;
+
+    if (featureIndex < wordsImage.length) {
+      return formatter.format(new char[][] {wordsImage[featureIndex]}, new boolean[] {false});
+    } else {
+      final int[] wordIndices = allPhrases.wordIndices[featureIndex - wordsImage.length];
+      final short[] termTypes = allWords.type;
+
+      char[][] wordImages = new char[wordIndices.length][];
+      boolean[] stopwordFlags = new boolean[wordIndices.length];
+      for (int i = 0; i < wordIndices.length; i++) {
+        final int wordIndex = wordIndices[i];
+        wordImages[i] = wordsImage[wordIndex];
+        stopwordFlags[i] = TokenTypeUtils.isCommon(termTypes[wordIndex]);
+      }
+
+      return formatter.format(wordImages, stopwordFlags);
+    }
   }
 
   @Override

@@ -16,6 +16,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
+import org.carrot2.text.preprocessing.LabelFormatter;
+import org.carrot2.text.preprocessing.LabelFormatterImpl;
 import org.carrot2.util.ResourceLookup;
 
 public class TestsLanguageComponentsFactoryVariant2 implements LanguageComponentsProvider {
@@ -31,11 +33,6 @@ public class TestsLanguageComponentsFactoryVariant2 implements LanguageComponent
     public boolean ignoreLabel(CharSequence formattedLabel) {
       return formattedLabel.toString().startsWith("stoplabel");
     }
-
-    @Override
-    public boolean usesSpaceDelimiters() {
-      return true;
-    }
   }
 
   @Override
@@ -44,12 +41,12 @@ public class TestsLanguageComponentsFactoryVariant2 implements LanguageComponent
   }
 
   @Override
-  public Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup)
-      throws IOException {
+  public Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup) {
     LinkedHashMap<Class<?>, Supplier<?>> components = new LinkedHashMap<>();
     components.put(Stemmer.class, this::createStemmer);
     components.put(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
     components.put(LexicalData.class, LexicalDataImpl::new);
+    components.put(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
     return components;
   }
 

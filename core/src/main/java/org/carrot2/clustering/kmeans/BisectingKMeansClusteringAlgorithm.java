@@ -51,7 +51,8 @@ import org.carrot2.text.vsm.VectorSpaceModelContext;
 public class BisectingKMeansClusteringAlgorithm extends AttrComposite
     implements ClusteringAlgorithm {
   private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS =
-      new HashSet<>(Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class));
+      new HashSet<>(
+          Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class, LabelFormatter.class));
 
   /**
    * The number of clusters to create. The algorithm will create at most the specified number of
@@ -218,6 +219,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
         }
       }
 
+      LabelFormatter labelFormatter = languageComponents.get(LabelFormatter.class);
       for (IntArrayList rawCluster : rawClusters) {
         final Cluster<T> cluster = new Cluster<>();
         if (rawCluster.size() > 1) {
@@ -227,7 +229,8 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
               vsmContext.termDocumentMatrix,
               rowToStemIndex,
               preprocessingContext.allStems.mostFrequentOriginalWordIndex,
-              preprocessingContext.allWords.image);
+              preprocessingContext.allWords.image,
+              labelFormatter);
           for (int j = 0; j < rawCluster.size(); j++) {
             cluster.addDocument(documents.get(rawCluster.get(j)));
           }
@@ -248,7 +251,8 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
       DoubleMatrix2D termDocumentMatrix,
       IntIntHashMap rowToStemIndex,
       int[] mostFrequentOriginalWordIndex,
-      char[][] wordImage) {
+      char[][] wordImage,
+      LabelFormatter labelFormatter) {
     // Prepare a centroid. If dimensionality reduction was used,
     // the centroid from k-means will not be based on real terms,
     // so we need to calculate the centroid here once again based
@@ -276,8 +280,9 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
     for (int i = 0; i < centroid.size(); i++) {
       if (centroid.getQuick(i) >= minValueForLabel) {
         cluster.addLabel(
-            LabelFormatter.format(
-                wordImage[mostFrequentOriginalWordIndex[rowToStemIndex.get(i)]], false));
+            labelFormatter.format(
+                new char[][] {wordImage[mostFrequentOriginalWordIndex[rowToStemIndex.get(i)]]},
+                new boolean[] {false}));
       }
     }
   }
