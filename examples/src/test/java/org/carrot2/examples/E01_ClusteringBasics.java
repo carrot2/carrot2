@@ -29,7 +29,8 @@ public class E01_ClusteringBasics {
   @Test
   public void clusterDocumentStream() throws IOException {
     // Our documents are in English so we load appropriate language resources. This call can be
-    // heavy and an instance of LanguageComponents should be reused across different clustering calls.
+    // heavy and an instance of LanguageComponents should be reused across different clustering
+    // calls.
     LanguageComponents languageComponents = LanguageComponents.load("English");
 
     // Create a stream of "documents" for clustering. Each such document provides

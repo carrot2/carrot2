@@ -159,6 +159,10 @@ allprojects {
     }
   }
 
+  googleJavaFormat {
+    toolVersion = '1.7'
+  }
+
   afterEvaluate {
     if (project.plugins.hasPlugin(JavaPlugin)) {
       sourceCompatibility = 1.8
@@ -179,17 +183,16 @@ allprojects {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
       }
 
+      check {
+        dependsOn(verifyGoogleJavaFormat)
+      }
+
       tasks.withType(Jar) {
         manifest {
           attributes("Implementation-Title": project.name,
                      "Implementation-Version": "${version} (${gitRev}, ${buildDateTrimmed})")
         }
       }
-
-      googleJavaFormat {
-        toolVersion = '1.7'
-      }
-      check.dependsOn(googleJavaFormat)
 
       javadoc {
         title = "Carrot<sup>2</sup> ${project.version} API Documentation"
