@@ -12,9 +12,26 @@ FoamTree.propTypes = {
 const impl = {
   embed: (options) => new CarrotSearchFoamTree(options),
   set: (instance, ...rest) => {
+    const reloadNeeded = willChange("layout") || willChange("stacking");
+
     instance.set.apply(instance, rest);
     if (!rest.dataObject && rest[0] !== "dataObject") {
-      instance.redraw();
+      if (reloadNeeded) {
+        const selection = instance.get("selection");
+        const fadeDuration = instance.get("fadeDuration");
+        instance.set({
+          dataObject: instance.get("dataObject"),
+          fadeDuration: 0
+        });
+        instance.select(selection);
+        instance.set("fadeDuration", fadeDuration);
+      } else {
+        instance.redraw();
+      }
+    }
+
+    function willChange(option) {
+      return instance.get(option) !== rest[0][option];
     }
   },
   select: (instance, selection) => {

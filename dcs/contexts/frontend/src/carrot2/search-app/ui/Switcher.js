@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-export function PanelSwitcher(props) {
+export function Switcher(props) {
   const panels = props.panels;
   return <React.Fragment>
     {
       panels.map(p => {
-        return <Switch key={p.id} visible={p.id === props.visible}
+        return <Switch key={p.id} visible={p.isVisible(props.visible, p)}
                        createElement={p.createElement} />
       })
     }
   </React.Fragment>;
 }
 
-PanelSwitcher.propTypes = {
+Switcher.propTypes = {
   panels: PropTypes.array.isRequired,
   visible: PropTypes.string.isRequired
 };

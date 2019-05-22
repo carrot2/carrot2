@@ -40,17 +40,42 @@ const lightThemeOptions = {
   }
 };
 
-function buildOptions(theme, clusterSelectionStore, documentSelectionStore) {
+function buildOptions(theme, layout, stacking, clusterSelectionStore, documentSelectionStore) {
+  const flattened = stacking === "flattened";
+
   return {
     rolloutDuration: 0,
     pullbackDuration: 0,
+
     groupLabelFontFamily: "Cabin Condensed, sans-serif",
     wireframeDrawMaxDuration: 1000,
     finalCompleteDrawMaxDuration: 20000,
     finalIncrementalDrawMaxDuration: 20000,
     wireframeLabelDrawing: "always",
+
+
+    layout: layout,
+    stacking: stacking,
+    groupLabelVerticalPadding: flattened ? 0.05 : 1.0,
+    groupLabelMaxTotalHeight: flattened ? 1.0 : 0.9,
+    descriptionGroupType: "stab",
+    descriptionGroupSize: 0.2,
+    descriptionGroupMinHeight: 40,
+    descriptionGroupMaxHeight: 0.3,
+    descriptionGroupPosition: "top",
+    rectangleAspectRatioPreference: 0,
+
+    groupBorderWidth: 2.5,
+    groupInsetWidth: 5,
+    groupBorderRadius: 0.1,
+    groupBorderRadiusCorrection: 1,
+    groupBorderWidthScaling: 0.6,
+
     groupFillType: "plain",
     groupStrokeWidth: 1,
+    groupStrokeType: "plain",
+    groupSelectionOutlineWidth: 3.5,
+
     onGroupSelectionChanged: function (e) {
       clusterSelectionStore.replaceSelection(e.groups.filter(g => !!g.cluster).map(g => g.cluster));
       documentSelectionStore.replaceSelection(e.groups.filter(g => !!g.document).map(g => g.document));
@@ -76,8 +101,10 @@ export const Treemap = props => {
 
   const [ options, setOptions ] = useState({});
   useEffect(() => {
-    setOptions(buildOptions(props.themeStore.theme, props.clusterSelectionStore, props.documentSelectionStore));
-  }, [ props.themeStore.theme, props.clusterSelectionStore, props.documentSelectionStore ]);
+    setOptions(buildOptions(props.themeStore.theme, props.configStore.layout, props.configStore.stacking,
+      props.clusterSelectionStore, props.documentSelectionStore));
+  }, [ props.themeStore.theme, props.configStore.layout, props.configStore.stacking,
+    props.clusterSelectionStore, props.documentSelectionStore ]);
 
   return (
     <FoamTree options={options} dataObject={dataObject} selection={selection} />

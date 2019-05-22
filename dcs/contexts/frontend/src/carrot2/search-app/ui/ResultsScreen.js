@@ -1,6 +1,6 @@
 import './ResultsScreen.css';
 
-import { ControlGroup, Button, Tab, Tabs, Classes, Popover, Position } from "@blueprintjs/core";
+import { ControlGroup, Button, Classes, Popover, Position } from "@blueprintjs/core";
 import { IconNames } from "@blueprintjs/icons";
 import React, { Component } from 'react';
 
@@ -17,10 +17,11 @@ import logo from './assets/carrot-search-logo.svg';
 
 import { ClusterSelectionSummary } from "./ClusterSelectionSummary";
 import { ResultList } from "./ResultList";
-import { PanelSwitcher } from "./PanelSwitcher.js";
+import { Switcher } from "./Switcher.js";
 import { SearchForm } from "./SearchForm";
 
 import { ResultListConfig } from "./ResultListConfig.js";
+import { ViewTabs } from "./Views.js";
 
 const ResultListView = view(ResultList);
 const ClusterSelectionSummaryView = view(ClusterSelectionSummary);
@@ -82,10 +83,13 @@ export class ResultsScreen extends Component {
       themeStore
     };
 
-    const panels = Object.keys(views)
+    const contentPanels = Object.keys(views)
       .map(v => {
         return {
           id: v,
+          isVisible: (visibleId, p) => {
+            return p.id === visibleId;
+          },
           createElement: () => {
             return views[v].createContentElement(panelProps);
           }
@@ -105,21 +109,15 @@ export class ResultsScreen extends Component {
                     onSourceChange={this.onSourceChange.bind(this)}
                     onSubmit={this.onQueryChange.bind(this)} />
         <div className="clusters-tabs">
-          <Tabs id="views" selectedTabId={this.getView()} onChange={this.onViewChange.bind(this)} className="views">
-            {
-              Object.keys(views).map(v => (
-                <Tab key={v} id={v} title={views[v].label} />
-              ))
-            }
-          </Tabs>
+          <ViewTabs activeView={this.getView()} views={views} onViewChange={this.onViewChange.bind(this)} />
         </div>
         <div className="docs-tabs">
           <ControlGroup fill={true} vertical={false}>
             <ClusterSelectionSummaryView clusterSelectionStore={clusterSelectionStore}
               documentVisibilityStore={documentVisibilityStore}
               searchResultStore={searchResultStore} />
-            <Popover style={{position: "absolute"}} className={Classes.FIXED}
-                     position={Position.BOTTOM_RIGHT}
+            <Popover className={Classes.FIXED}
+                     position={Position.BOTTOM_RIGHT} autoFocus={true}
                      popoverClassName="bp3-popover-content-sizing">
               <Button icon={IconNames.COG} minimal={true} />
               <ResultListConfigView store={resultListConfigStore} />
@@ -127,7 +125,7 @@ export class ResultsScreen extends Component {
           </ControlGroup>
         </div>
         <div className="clusters">
-          <PanelSwitcher panels={panels} visible={this.getView()} />
+          <Switcher panels={contentPanels} visible={this.getView()} />
         </div>
         <div className="docs">
           <div>

@@ -21,15 +21,15 @@
 }
 
 .DocumentList > a > strong > span {
-  font-size: 80%;
+  font-size: 70%;
   font-weight: normal;
   background-color: rgba(59, 131, 192, 0.05);
   box-shadow: 0 0 0 1px rgba(59, 131, 192, 0.3);
   padding: 0 0.125rem;
   margin-right: 0.25rem;
-  vertical-align: 10%;
+  vertical-align: 15%;
   border-radius: 0.125rem;
-  color: var(--text-color-lighter);
+  color: var(--text-color-secondary);
 }
 
 .DocumentList > a > div {
