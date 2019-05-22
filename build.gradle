@@ -1,6 +1,6 @@
 
 plugins {
-  id 'com.github.sherter.google-java-format' version '0.8' apply false
+  id 'com.diffplug.gradle.spotless' version "3.23.0" apply false
 }
 
 apply from: file('gradle/min-gradle-version.gradle')
@@ -8,9 +8,11 @@ apply from: file('gradle/loadProperties.gradle')
 apply from: file('gradle/gitinfo.gradle')
 apply from: file('gradle/buildinfo.gradle')
 
-allprojects {
-  version = '4.0'
-}
+def currentVersion = '4.0'
+
+def publishedProjects = [
+  ":core"
+]
 
 ext {
   versions = [:]
@@ -23,6 +25,8 @@ ext {
 
   isIdea = System.getProperty("idea.active") != null || gradle.startParameter.taskNames.contains('idea') || gradle.startParameter.taskNames.contains('cleanIdea')
 
+  licenseHeader = file('etc/license-header.txt')
+
   replaceTokens = [
     'version': rootProject.version,
     'gitRev': gitRev,
@@ -30,22 +34,109 @@ ext {
     'buildDateTrimmed': buildDateTrimmed
   ]
 }
-  
+
 configure(rootProject) { project ->
   loadProperties(file('dependencies.versions'), ext.versions)
 }
 
-subprojects { project ->
+allprojects {
+  version = currentVersion
+
+  repositories {
+    mavenCentral()
+  }
+}
+
+subprojects {
   group "org." + project.group
 
-  afterEvaluate {
-    if (project.plugins.hasPlugin(JavaPlugin)) {
-      project.archivesBaseName = "carrot2" + project.path.replace(':', '-')
+  if (project.file("src/main/java").exists() ||
+      project.file("src/test/java").exists() ||
+      project.file("src/main/webapp").exists()) {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'com.diffplug.gradle.spotless'
+
+    project.archivesBaseName = "carrot2" + project.path.replace(':', '-')
+
+    idea {
+      module {
+        outputDir file('build/idea/classes/main')
+        testOutputDir file('build/idea/classes/test')
+        downloadSources = true
+      }
+    }
+
+    spotless {
+      java {
+        licenseHeaderFile licenseHeader
+        lineEndings 'UNIX'
+        endWithNewline()
+        googleJavaFormat('1.7')
+      }
+    }
+
+    test {
+      maxParallelForks = (int) Math.max(Runtime.runtime.availableProcessors() / 2.0, 4.0)
+    }
+
+    dependencies {
+      testImplementation project(':test-infra')
+    }
+
+    tasks.withType(JavaCompile) {
+      options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+      options.encoding = "UTF-8"
+
+      sourceCompatibility = 1.8
+      targetCompatibility = 1.8
+    }
+
+    tasks.withType(Jar) {
+      manifest {
+        attributes("Implementation-Title": project.name,
+                   "Implementation-Version": "${project.version} (${gitRev}, ${buildDateTrimmed})")
+      }
+    }
+
+    javadoc {
+      title = "Carrot<sup>2</sup> ${project.name} ${project.version} API Documentation"
+
+      if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+        options.addStringOption('Xdoclint:all,-missing', '-noindex')
+      }
+
+      options.encoding = 'UTF-8'
+
+      exclude 'org/carrot2/math/mahout/**'
+    }
+
+    afterEvaluate {
+      check.dependsOn(spotlessCheck)
+
+      tasks.withType(AbstractArchiveTask) {
+        duplicatesStrategy = 'fail'
+      }
+
+      if (project.plugins.hasPlugin(WarPlugin)) {
+        configurations {
+          war {}
+        }
+
+        artifacts {
+          war tasks.war
+        }
+
+        dependencies {
+          providedCompile "javax.servlet:javax.servlet-api:${versions.servletapi}@jar"
+        }
+      }
     }
   }
 }
 
-configure(subprojects.findAll { it.name == "core" }) {
+configure(subprojects.findAll { it.path in publishedProjects }) {
   apply plugin: 'maven-publish'
   apply plugin: 'signing'
 
@@ -86,7 +177,7 @@ configure(subprojects.findAll { it.name == "core" }) {
             }
             if (project.hasProperty('nexusPassword')) {
               password project.nexusPassword
-            } 
+            }
         }
       }
     }
@@ -141,96 +232,4 @@ configure(subprojects.findAll { it.name == "core" }) {
   signing {
     sign publishing.publications.maven
   }
-}
-
-allprojects {
-  apply plugin: 'idea'
-  apply plugin: 'com.github.sherter.google-java-format'
-
-  repositories {
-    mavenCentral()
-  }
-
-  idea {
-    module {
-      outputDir file('build/idea/classes/main')
-      testOutputDir file('build/idea/classes/test')
-      downloadSources = true
-    }
-  }
-
-  googleJavaFormat {
-    toolVersion = '1.7'
-  }
-
-  afterEvaluate {
-    if (project.plugins.hasPlugin(JavaPlugin)) {
-      sourceCompatibility = 1.8
-      targetCompatibility = 1.8
-
-      compileJava.options.encoding = "UTF-8"
-      compileTestJava.options.encoding = "UTF-8"
-
-      test {
-        maxParallelForks = Math.max(Runtime.runtime.availableProcessors() / 2.0, 4.0)
-      }
-
-      dependencies {
-        testImplementation project(':test-infra')
-      }
-
-      tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-      }
-
-      check {
-        dependsOn(verifyGoogleJavaFormat)
-      }
-
-      tasks.withType(Jar) {
-        manifest {
-          attributes("Implementation-Title": project.name,
-                     "Implementation-Version": "${version} (${gitRev}, ${buildDateTrimmed})")
-        }
-      }
-
-      javadoc {
-        title = "Carrot<sup>2</sup> ${project.version} API Documentation"
-
-        if (JavaVersion.current().isJava9Compatible()) {
-          options.addBooleanOption('html5', true)
-          options.addStringOption('Xdoclint:all,-missing', '-noindex')
-          options.encoding = 'UTF-8'
-        }
-
-        exclude 'org/carrot2/math/mahout/**'
-      }
-    }
-  }
-
-  afterEvaluate {
-    project.tasks.withType(AbstractArchiveTask) { task ->
-      duplicatesStrategy = 'fail'
-    }
-  }
-
-  afterEvaluate {
-    if (project.plugins.hasPlugin(WarPlugin)) {
-      configurations {
-        war {}
-      }
-
-      artifacts {
-        war tasks.war
-      }
-
-      dependencies {
-        providedCompile "javax.servlet:javax.servlet-api:${versions.servletapi}@jar"
-      }
-    }
-  }
-}
-
-task clean(type: Delete) {
-  delete rootProject.buildDir
 }
