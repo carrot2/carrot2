@@ -1,8 +1,6 @@
- - documentation subproject (scaffolding)
-- DCS: add a switch between available clustering service templates (?)
-
 - Add support for additional languages from the Lucene project.
-- Add checkstyle, header license checks?
-- Clean up I* interface convention.
 
+- documentation subproject (scaffolding)
+- DCS: add a switch between available clustering service templates (?)
 - Add an IT that verifies what happens if we saturate the server with requests.
+
