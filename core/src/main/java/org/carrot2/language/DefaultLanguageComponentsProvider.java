@@ -72,6 +72,6 @@ public class DefaultLanguageComponentsProvider implements LanguageComponentsProv
 
   @Override
   public String name() {
-    return "Carrot2 Default";
+    return "Carrot2 (" + String.join(", ", STEMMER_SUPPLIERS.keySet()) + ")";
   }
 }

@@ -67,6 +67,6 @@ public class PolishLanguageComponents implements LanguageComponentsProvider {
 
   @Override
   public String name() {
-    return "Carrot2 (Polish)";
+    return "Carrot2 (" + NAME + ")";
   }
 }

@@ -1,6 +1,7 @@
 
 plugins {
   id 'com.diffplug.gradle.spotless' version "3.23.0" apply false
+  id "com.github.ben-manes.versions" version "0.21.0"
 }
 
 apply from: file('gradle/min-gradle-version.gradle')
@@ -15,16 +16,10 @@ def publishedProjects = [
 ]
 
 ext {
-  versions = [:]
-
-  mavenBuildRepo = "${rootProject.buildDir}/maven"
-
-  legal = files('carrot2.LICENSE')
-
+  versions = loadProperties(file('dependencies.versions'))
   gitRev = gitStatus.id
 
-  isIdea = System.getProperty("idea.active") != null || gradle.startParameter.taskNames.contains('idea') || gradle.startParameter.taskNames.contains('cleanIdea')
-
+  legal = files('carrot2.LICENSE')
   licenseHeader = file('etc/license-header.txt')
 
   replaceTokens = [
@@ -33,17 +28,30 @@ ext {
     'buildDate': buildDate,
     'buildDateTrimmed': buildDateTrimmed
   ]
-}
 
-configure(rootProject) { project ->
-  loadProperties(file('dependencies.versions'), ext.versions)
+  mavenBuildRepo = "${rootProject.buildDir}/maven"
+  isIdea = System.getProperty("idea.active") != null || gradle.startParameter.taskNames.contains('idea') || gradle.startParameter.taskNames.contains('cleanIdea')
 }
 
 allprojects {
+  apply plugin: 'idea'
+
   version = currentVersion
 
   repositories {
     mavenCentral()
+  }
+
+  configurations.all {
+    resolutionStrategy.failOnVersionConflict()
+  }
+
+  idea {
+    module {
+      outputDir file('build/idea/classes/main')
+      testOutputDir file('build/idea/classes/test')
+      downloadSources = true
+    }
   }
 }
 
@@ -54,21 +62,12 @@ subprojects {
       project.file("src/test/java").exists() ||
       project.file("src/main/webapp").exists()) {
     apply plugin: 'java'
-    apply plugin: 'idea'
     apply plugin: 'com.diffplug.gradle.spotless'
 
     project.archivesBaseName = "carrot2" + project.path.replace(':', '-')
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
-
-    idea {
-      module {
-        outputDir file('build/idea/classes/main')
-        testOutputDir file('build/idea/classes/test')
-        downloadSources = true
-      }
-    }
 
     spotless {
       java {
