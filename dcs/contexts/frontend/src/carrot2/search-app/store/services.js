@@ -4,25 +4,25 @@ import { fetchClusters } from "../../service/dcs";
 
 import { etools } from "../../service/sources/etools";
 
-const EMTPTY_ARRAY = [];
+const EMPTY_ARRAY = [];
 
 export const clusterStore = store({
   loading: false,
-  clusters: EMTPTY_ARRAY,
-  documents: EMTPTY_ARRAY,
+  clusters: EMPTY_ARRAY,
+  documents: EMPTY_ARRAY,
   error: false,
   load: async function (searchResult) {
     const documents = searchResult.documents;
     const query = searchResult.query;
 
     if (query.length === 0 || documents.length === 0) {
-      clusterStore.clusters = EMTPTY_ARRAY;
-      clusterStore.documents = EMTPTY_ARRAY;
+      clusterStore.clusters = EMPTY_ARRAY;
+      clusterStore.documents = EMPTY_ARRAY;
       clusterStore.loading = false;
     } else {
       // TODO: cancel currently running request
       clusterStore.loading = true;
-      clusterStore.clusters = EMTPTY_ARRAY;
+      clusterStore.clusters = EMPTY_ARRAY;
       clusterStore.documents = documents;
       clusterStore.clusters = await fetchClusters(query, documents);
       clusterStore.loading = false;
@@ -66,6 +66,6 @@ observe(function () {
 observe(function () {
   if (searchResultStore.loading) {
     clusterStore.loading = true;
-    clusterStore.clusters = EMTPTY_ARRAY;
+    clusterStore.clusters = EMPTY_ARRAY;
   }
 });
