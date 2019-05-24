@@ -14,7 +14,7 @@
             <param-name>proxy-target</param-name>
             <param-value>https://eutils.ncbi.nlm.nih.gov/entrez/eutils/</param-value>
         </init-param>
-        <load-on-startup>1</load-on-startup>
+        <!-- <load-on-startup>0</load-on-startup> -->
     </servlet>
 
     <servlet-mapping>
