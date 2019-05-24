@@ -1,6 +1,7 @@
 {
   "algorithms" : {
     "Bisecting K-Means" : [
+      "Arabic",
       "Danish",
       "Dutch",
       "English",
@@ -19,6 +20,7 @@
       "Turkish"
     ],
     "Dummy" : [
+      "Arabic",
       "Danish",
       "Dutch",
       "English",
@@ -37,6 +39,7 @@
       "Turkish"
     ],
     "Lingo" : [
+      "Arabic",
       "Danish",
       "Dutch",
       "English",
@@ -55,6 +58,7 @@
       "Turkish"
     ],
     "STC" : [
+      "Arabic",
       "Danish",
       "Dutch",
       "English",

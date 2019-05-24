@@ -1,5 +1,29 @@
 - Add support for additional languages from the Lucene project.
-
+    BULGARIAN ("bg"),
+bengali(bn)
+brazilian(br)
+catalan(ca)
+sorani(ckb)
+    CZECH ("cs"),
+    CHINESE_SIMPLIFIED ("zh_cn"),
+    CROATIAN("hr"),
+    ESTONIAN ("et"),
+    GREEK ("el"),  
+    HINDI("hi"),
+    IRISH ("ga"), // (Gaelic)
+galician(gl)
+armenian(hy)
+indonesian(id)
+serbian
+    JAPANESE ("ja"), // kuromoji
+    KOREAN ("ko"),  (nori?)
+    LATVIAN ("lv"),
+    LITHUANIAN ("lt"),
+    MALTESE ("mt"),
+    SLOVAK ("sk"),
+    SLOVENE ("sl"),
+    THAI ("th"),
+    
 - documentation subproject (scaffolding)
 - DCS: add a switch between available clustering service templates (?)
 - Add an IT that verifies what happens if we saturate the server with requests.

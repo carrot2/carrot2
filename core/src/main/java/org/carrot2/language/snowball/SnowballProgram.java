@@ -271,11 +271,13 @@ public abstract class SnowballProgram {
       if (common_i >= w.s_size) {
         cursor = c + w.s_size;
         if (w.method == null) return w.result;
-        boolean res = false;
+        boolean res;
         try {
           res = (boolean) w.method.invokeExact(this);
+        } catch (RuntimeException | Error e) {
+          throw e;
         } catch (Throwable e) {
-          rethrow(e);
+          throw new RuntimeException(e);
         }
         cursor = c + w.s_size;
         if (res) return w.result;
@@ -333,11 +335,13 @@ public abstract class SnowballProgram {
         cursor = c - w.s_size;
         if (w.method == null) return w.result;
 
-        boolean res = false;
+        boolean res;
         try {
           res = (boolean) w.method.invokeExact(this);
+        } catch (RuntimeException | Error e) {
+          throw e;
         } catch (Throwable e) {
-          rethrow(e);
+          throw new RuntimeException(e);
         }
         cursor = c - w.s_size;
         if (res) return w.result;
@@ -408,37 +412,5 @@ public abstract class SnowballProgram {
     s.setLength(0);
     s.append(current, 0, limit);
     return s;
-  }
-
-  /*
-  extern void debug(struct SN_env * z, int number, int line_count)
-  {   int i;
-      int limit = SIZE(z->p);
-      //if (number >= 0) printf("%3d (line %4d): '", number, line_count);
-      if (number >= 0) printf("%3d (line %4d): [%d]'", number, line_count,limit);
-      for (i = 0; i <= limit; i++)
-      {   if (z->lb == i) printf("{");
-          if (z->bra == i) printf("[");
-          if (z->c == i) printf("|");
-          if (z->ket == i) printf("]");
-          if (z->l == i) printf("}");
-          if (i < limit)
-          {   int ch = z->p[i];
-              if (ch == 0) ch = '#';
-              printf("%c", ch);
-          }
-      }
-      printf("'\n");
-  }
-  */
-
-  // Hack to rethrow unknown Exceptions from {@link MethodHandle#invoke}:
-  private static void rethrow(Throwable t) {
-    SnowballProgram.<Error>rethrow0(t);
-  }
-
-  @SuppressWarnings("unchecked")
-  private static <T extends Throwable> void rethrow0(Throwable t) throws T {
-    throw (T) t;
   }
 }

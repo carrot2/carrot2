@@ -1,0 +1,12 @@
+apply plugin: 'java-library'
+
+configurations {
+  langResources
+}
+
+dependencies {
+  implementation project(':core')
+  implementation "org.apache.lucene:lucene-analyzers-common:${versions.lucene}"
+
+  langResources fileTree(dir: 'src/main/resources', includes: ['**/*.stopwords.utf8', '**/*.stoplabels.utf8'])
+}
