@@ -37,7 +37,7 @@ import org.apache.logging.log4j.core.config.composite.CompositeConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Launcher {
+public class DcsLauncher {
   private static final String LAUNCHER_SCRIPT_NAME = "dcs";
 
   public static final String OPT_SHUTDOWN_TOKEN = "--shutdown-token";
@@ -68,7 +68,7 @@ public class Launcher {
 
   private final String tstamp;
 
-  public Launcher() {
+  public DcsLauncher() {
     tstamp =
         new DateTimeFormatterBuilder()
             .appendPattern("yyyy_MM_dd-HH_mm_ss-SSS")
@@ -103,8 +103,8 @@ public class Launcher {
     try {
       Configurator.initialize(
           "log4j2-default.xml",
-          Launcher.class.getClassLoader(),
-          Launcher.class.getResource("log4j2-default.xml").toURI());
+          DcsLauncher.class.getClassLoader(),
+          DcsLauncher.class.getResource("log4j2-default.xml").toURI());
     } catch (URISyntaxException e) {
       throw new RuntimeException(e);
     }
@@ -216,8 +216,8 @@ public class Launcher {
   public static void main(String[] args) {
     configureLog4jInitial();
 
-    Logger logger = LoggerFactory.getLogger(Launcher.class);
-    Launcher launcher = new Launcher();
+    Logger logger = LoggerFactory.getLogger(DcsLauncher.class);
+    DcsLauncher launcher = new DcsLauncher();
     try {
       JCommander jcommander = JCommander.newBuilder().addObject(launcher).build();
       jcommander.setProgramName(LAUNCHER_SCRIPT_NAME);

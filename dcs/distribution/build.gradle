@@ -20,6 +20,8 @@ configurations {
   ctxService
   ctxRoot
   ctxFrontend
+  ctxProxy
+
   examples
 
   integTestImplementation.extendsFrom testImplementation
@@ -32,6 +34,7 @@ configurations {
 dependencies {
   ctxService project(path: ":dcs:contexts:service", configuration: 'war')
   ctxRoot project(path: ":dcs:contexts:root", configuration: 'war')
+  ctxProxy project(path: ":dcs:contexts:proxy", configuration: 'war')
   ctxFrontend project(path: ":dcs:contexts:frontend")
 
   examples    project(path: ":dcs:examples", configuration: "distribution")
@@ -45,9 +48,6 @@ dependencies {
   implementation "org.apache.logging.log4j:log4j-slf4j-impl:${versions.log4j2}"
 
   integTestImplementation project(":dcs:examples")
-
-  // Fairly neat agent for I/O leak detection.
-  // testCompile "org.kohsuke:file-leak-detector:1.13"
 }
 
 ext {
@@ -58,11 +58,11 @@ ext {
 
 jar {
   manifest {
-    attributes("Main-Class": "org.carrot2.dcs.Launcher")
+    attributes("Main-Class": "org.carrot2.dcs.DcsLauncher")
     attributes("Class-Path": configurations.runtimeClasspath.collect { it.getName() }.join(' '))
   }
 
-  baseName = replaceTokens.jarname
+  archiveBaseName = replaceTokens.jarname.toString()
 }
 
 task collectDependencies(type: Sync) {
@@ -110,6 +110,12 @@ task collectCtxRoot(type: Sync) {
   into "$outputDir/web/root"
 }
 
+task collectCtxProxy(type: Sync) {
+  dependsOn configurations.ctxProxy
+  from zipTree(configurations.ctxProxy.asPath)
+  into "$outputDir/web/proxy"
+}
+
 task collectCtxFrontend(type: Sync) {
   from configurations.ctxFrontend
   into "$outputDir/web/frontend"
@@ -121,9 +127,13 @@ task collectExamples(type: Sync) {
 }
 
 task distDir {
-  dependsOn collectScripts, collectDependencies, collectCtxService, collectCtxRoot, collectExamples
-  if (!hasProperty("fastBuild")) {
+  dependsOn collectScripts, collectDependencies, collectCtxService, collectCtxRoot,
+            collectExamples, collectCtxProxy
+
+  if (!project.hasProperty("fastBuild")) {
     dependsOn collectCtxFrontend
+  } else {
+    project.logger.warn("NOTE: Frontend will not be included in DCS distribution (fastBuild).")
   }
 
   outputs.file("$outputDir")

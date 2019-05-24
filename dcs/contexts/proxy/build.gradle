@@ -1,0 +1,10 @@
+
+apply plugin: 'java'
+apply plugin: 'war'
+
+dependencies {
+  compileOnly "org.slf4j:slf4j-api:${versions.slf4j}"
+  implementation "org.apache.httpcomponents:httpclient:${versions.httpclient}"
+
+  testCompile "org.apache.logging.log4j:log4j-slf4j-impl:${versions.log4j2}"
+}
