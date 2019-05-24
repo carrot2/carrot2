@@ -126,6 +126,7 @@ public class ProxyServlet extends HttpServlet {
   }
 
   @Override
+  @SuppressWarnings("deprecated")
   protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     String delegate = req.getPathInfo();
     if (delegate == null || !delegate.startsWith("/")) {
