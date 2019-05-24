@@ -1,9 +1,7 @@
 .ClusterSelectionSummary {
   text-align: left;
-  line-height: 30px; /** line height to match tabs on the cluster side */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  padding: 0.25em 0.25em 0.25em 0.5em;
+  margin-bottom: 1rem;
 }
 
 .ClusterInSummary .icon {

@@ -1,7 +1,5 @@
 import './ResultsScreen.css';
 
-import { ControlGroup, Button, Classes, Popover, Position } from "@blueprintjs/core";
-import { IconNames } from "@blueprintjs/icons";
 import React, { Component } from 'react';
 
 import { view } from 'react-easy-state';
@@ -11,21 +9,17 @@ import { resultListConfigStore } from "../store/ui-config.js";
 import { themeStore } from "./ThemeSwitch.js";
 
 import { routes } from "../routes";
-import { views } from "../../config.js";
+import { clusterViews, resultsViews } from "../../config.js";
 
 import logo from './assets/carrot-search-logo.svg';
 
-import { ClusterSelectionSummary } from "./ClusterSelectionSummary";
 import { ResultList } from "./ResultList";
 import { Switcher } from "./Switcher.js";
 import { SearchForm } from "./SearchForm";
 
-import { ResultListConfig } from "./ResultListConfig.js";
 import { ViewTabs } from "./Views.js";
 
 const ResultListView = view(ResultList);
-const ClusterSelectionSummaryView = view(ClusterSelectionSummary);
-const ResultListConfigView = view(ResultListConfig);
 
 export class ResultsScreen extends Component {
   runSearch() {
@@ -83,7 +77,7 @@ export class ResultsScreen extends Component {
       themeStore
     };
 
-    const contentPanels = Object.keys(views)
+    const contentPanels = Object.keys(clusterViews)
       .map(v => {
         return {
           id: v,
@@ -91,7 +85,7 @@ export class ResultsScreen extends Component {
             return p.id === visibleId;
           },
           createElement: () => {
-            return views[v].createContentElement(panelProps);
+            return clusterViews[v].createContentElement(panelProps);
           }
         };
       });
@@ -109,13 +103,12 @@ export class ResultsScreen extends Component {
                     onSourceChange={this.onSourceChange.bind(this)}
                     onSubmit={this.onQueryChange.bind(this)} />
         <div className="clusters-tabs">
-          <ViewTabs activeView={this.getView()} views={views} onViewChange={this.onViewChange.bind(this)} />
+          <ViewTabs activeView={this.getView()} views={clusterViews} onViewChange={this.onViewChange.bind(this)} />
         </div>
         <div className="docs-tabs">
+          <ViewTabs views={resultsViews} activeView="list" onViewChange={() => {}} />
+{/*
           <ControlGroup fill={true} vertical={false}>
-            <ClusterSelectionSummaryView clusterSelectionStore={clusterSelectionStore}
-              documentVisibilityStore={documentVisibilityStore}
-              searchResultStore={searchResultStore} />
             <Popover className={Classes.FIXED}
                      position={Position.BOTTOM_RIGHT} autoFocus={true}
                      popoverClassName="bp3-popover-content-sizing">
@@ -123,13 +116,16 @@ export class ResultsScreen extends Component {
               <ResultListConfigView store={resultListConfigStore} />
             </Popover>
           </ControlGroup>
+*/}
         </div>
         <div className="clusters">
           <Switcher panels={contentPanels} visible={this.getView()} />
         </div>
         <div className="docs">
           <div>
-            <ResultListView store={searchResultStore} visibilityStore={documentVisibilityStore}
+            <ResultListView store={searchResultStore}
+                            visibilityStore={documentVisibilityStore}
+                            clusterSelectionStore={clusterSelectionStore}
                             configStore={resultListConfigStore} />
           </div>
         </div>

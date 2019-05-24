@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import React from 'react';
 
 import { view } from "react-easy-state";
+import { ClusterSelectionSummary } from "./ClusterSelectionSummary.js";
 
 import { Loading } from "./Loading";
 
@@ -40,11 +41,15 @@ function Document(props) {
 }
 
 const DocumentView = view(Document);
+const ClusterSelectionSummaryView = view(ClusterSelectionSummary);
 
 export function ResultList(props) {
   return (
     <div className="DocumentList">
       <Loading loading={props.store.loading}>
+        <ClusterSelectionSummaryView clusterSelectionStore={props.clusterSelectionStore}
+                                     documentVisibilityStore={props.visibilityStore}
+                                     searchResultStore={props.store} />
         {
           props.store.searchResult.documents.map((document, index) =>
             <DocumentView document={document} key={document.id} visibilityStore={props.visibilityStore}

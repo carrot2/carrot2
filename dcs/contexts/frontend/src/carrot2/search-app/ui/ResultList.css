@@ -4,6 +4,10 @@
   padding-left: 0.25em;
 }
 
+.DocumentList .Loading {
+  padding: 0.25em 0.25em 0.25em 0.5em;
+}
+
 .DocumentList > a {
   color: var(--text-color);
   margin-bottom: 1em;

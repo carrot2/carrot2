@@ -7,14 +7,14 @@ import text from './assets/carrot-search-text.svg';
 import { SearchForm } from "./SearchForm";
 
 import { routes } from "../routes";
-import { sources, views } from "../../config.js";
+import { sources, clusterViews } from "../../config.js";
 
 export class StartScreen extends Component {
   runSearch(query) {
     this.props.history.push(routes.search.buildUrl({
       query: query,
       source: this.props.match.params.source,
-      view: Object.keys(views)[0] // start with the first view by default
+      view: Object.keys(clusterViews)[0] // start with the first view by default
     }));
   }
 

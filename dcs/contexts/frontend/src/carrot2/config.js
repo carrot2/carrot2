@@ -6,7 +6,11 @@ import { PieChart } from "./search-app/ui/views/PieChart.js";
 
 import { IconNames } from "@blueprintjs/icons";
 import { TreemapConfig } from "./search-app/ui/views/TreemapConfig.js";
+import { ResultListConfig } from "./search-app/ui/ResultListConfig.js";
+
 import { persistentStore } from "./util/persistent-store.js";
+import { resultListConfigStore } from "./search-app/store/ui-config.js";
+
 
 export const config = {
   dcsServiceUrl: process.env.REACT_APP_DCS_SERVICE_URL || "http://localhost:8080/service/cluster?template=frontend-default"
@@ -26,6 +30,8 @@ const TreemapView = view(Treemap);
 const TreemapConfigView = view(TreemapConfig);
 const PieChartView = view(PieChart);
 
+const ResultListConfigView = view(ResultListConfig);
+
 const treemapConfigStore = persistentStore("treemapConfig",
   {
     layout: "relaxed",
@@ -33,7 +39,7 @@ const treemapConfigStore = persistentStore("treemapConfig",
   }
 );
 
-export const views = {
+export const clusterViews = {
   "folders": {
     label: "Folders",
     createContentElement: (props) => {
@@ -64,5 +70,20 @@ export const views = {
       return <PieChartView {...props} />;
     },
     tools: []
+  }
+};
+
+export const resultsViews = {
+  "list": {
+    label: "Results",
+    tools: [
+      {
+        id: "config",
+        icon: IconNames.COG,
+        createContentElement: (props) => {
+          return <ResultListConfigView store={resultListConfigStore} />;
+        }
+      }
+    ]
   }
 };
