@@ -127,8 +127,14 @@ task collectExamples(type: Sync) {
 }
 
 task distDir {
-  dependsOn collectScripts, collectDependencies, collectCtxService, collectCtxRoot,
-            collectExamples, collectCtxProxy
+  dependsOn collectScripts,
+            collectDependencies,
+            collectCtxService,
+            collectCtxRoot,
+            collectExamples
+
+  // Until we have a need for it, don't include the proxy context in the distribution.
+  // dependsOn collectCtxProxy
 
   if (!project.hasProperty("fastBuild")) {
     dependsOn collectCtxFrontend

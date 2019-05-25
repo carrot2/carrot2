@@ -132,9 +132,7 @@ public class ProxyServlet extends HttpServlet {
     super.destroy();
   }
 
-  /**
-   * A hack to close resource URL connections httpclient initiates.
-   */
+  /** A hack to close resource URL connections httpclient initiates. */
   private void closeHttpClientJar() {
     final URL url = PublicSuffixMatcherLoader.class.getResource("/mozilla/public-suffix-list.txt");
     try {
