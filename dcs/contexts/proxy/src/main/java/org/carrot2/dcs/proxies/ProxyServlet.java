@@ -12,8 +12,11 @@ package org.carrot2.dcs.proxies;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.JarURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -34,6 +37,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpOptions;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.conn.util.PublicSuffixMatcherLoader;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
@@ -41,6 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ProxyServlet extends HttpServlet {
+
   private static final String PARAM_PROXY_TARGET = "proxy-target";
 
   private Logger logger = LoggerFactory.getLogger(getClass());
@@ -122,11 +127,29 @@ public class ProxyServlet extends HttpServlet {
         logger.error("Could not close HTTP client.", e);
       }
     }
+    closeHttpClientJar();
+
     super.destroy();
   }
 
+  /**
+   * A hack to close resource URL connections httpclient initiates.
+   */
+  private void closeHttpClientJar() {
+    final URL url = PublicSuffixMatcherLoader.class.getResource("/mozilla/public-suffix-list.txt");
+    try {
+      URLConnection conn = url.openConnection();
+      if (conn instanceof JarURLConnection) {
+        JarURLConnection juc = (JarURLConnection) conn;
+        juc.getJarFile().close();
+      }
+    } catch (IOException e) {
+      // Ignore.
+    }
+  }
+
   @Override
-  @SuppressWarnings("deprecated")
+  @SuppressWarnings("deprecation")
   protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     String delegate = req.getPathInfo();
     if (delegate == null || !delegate.startsWith("/")) {
