@@ -10,7 +10,6 @@ Features:
 
 
 Performance:
-* Update visualizations only when they are visible?
 * Changing source or cluster view re-renders the whole application.
   Check if this can be reasonably contained to the actual components involved.
 * Add code splitting.

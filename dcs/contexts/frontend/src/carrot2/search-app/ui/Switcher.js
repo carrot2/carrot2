@@ -31,7 +31,7 @@ function Switch(props) {
   }
 
   return <div style={{display: props.visible ? "block" : "none", position: "relative"}}>
-    { props.createElement() }
+    { props.createElement(props.visible) }
   </div>;
 }
 

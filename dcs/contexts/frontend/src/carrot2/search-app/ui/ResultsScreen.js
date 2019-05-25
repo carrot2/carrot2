@@ -84,8 +84,8 @@ export class ResultsScreen extends Component {
           isVisible: (visibleId, p) => {
             return p.id === visibleId;
           },
-          createElement: () => {
-            return clusterViews[v].createContentElement(panelProps);
+          createElement: (visible) => {
+            return clusterViews[v].createContentElement({ visible: visible, ...panelProps});
           }
         };
       });

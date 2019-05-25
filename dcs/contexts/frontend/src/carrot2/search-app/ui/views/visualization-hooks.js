@@ -1,9 +1,26 @@
 import { unobserve } from "@nx-js/observer-util";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { observeBatched } from "../../../util/batch-observe.js";
 
-export const useDataObject = clusterStore => {
-  const [ dataObject, setDataObject ] = useState({});
+const EMPTY_OBJECT = {};
+
+/**
+ * Manages the process of setting new dataObject instances
+ * on the visualization, ensuring that:
+ *
+ * - new dataObject is set when clusters change
+ * - new dataObject is set only when the visualization panel is visible,
+ *   if the panel is not visible, the new dataObject is set when the visualization
+ *   becomes visible. This is to avoid slow-down caused by, for example,
+ *   treemap computation when only pie chart is visible.
+ * - an empty dataObject is set on an invisible visualization when clusters
+ *   change. This is to avoid a flash of old content when the user switches
+ *   between visualizations.
+ */
+export const useDataObject = (clusterStore, visible) => {
+  const [ dataObject, setDataObject ] = useState(EMPTY_OBJECT);
+  const [ dataObjectInternal, setDataObjectInternal ] = useState(EMPTY_OBJECT);
+  const prevDataObjectInternal = useRef(dataObjectInternal);
 
   // Get references to arrays before setting up the side effect.
   // If we referenced clusterStore inside the effect function,
@@ -12,9 +29,10 @@ export const useDataObject = clusterStore => {
   const clusters = clusterStore.clusters;
   const documents = clusterStore.documents;
 
+  // Builds an internal dataObject when clusters or documents change.
   useEffect(() => {
     let groupId = 0;
-    setDataObject({
+    setDataObjectInternal({
       groups: clusters.map(function clusters(c) {
         return {
           id: (groupId++).toString(),
@@ -35,7 +53,22 @@ export const useDataObject = clusterStore => {
     });
   }, [ clusters, documents ]);
 
-  return [ dataObject, setDataObject ];
+  // Transfers the internal dataObject to the visualization, if the visualization
+  // panel is visible. If the panel is not visible, an empty dataObject is set
+  // to avoid a flash of old content when the visualization becomes visible.
+  useEffect(() => {
+    if (visible) {
+      setDataObject(dataObjectInternal);
+      prevDataObjectInternal.current = dataObjectInternal;
+    } else {
+      if (prevDataObjectInternal.current !== dataObjectInternal) {
+        setDataObject(EMPTY_OBJECT);
+        prevDataObjectInternal.current = dataObjectInternal;
+      }
+    }
+  }, [ dataObjectInternal, visible ]);
+
+  return [ dataObject ];
 };
 
 export const useSelection = (clusterSelectionStore, documentSelectionStore, dataObject) => {

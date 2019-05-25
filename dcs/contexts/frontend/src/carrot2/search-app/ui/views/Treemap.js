@@ -95,7 +95,7 @@ export const Treemap = props => {
   });
   props.clusterStore.documents.forEach(ignored => {});
 
-  const [ dataObject ] = useDataObject(props.clusterStore);
+  const [ dataObject ] = useDataObject(props.clusterStore, props.visible);
   const [ selection ] = useSelection(props.clusterSelectionStore,
     props.documentSelectionStore, dataObject);
 

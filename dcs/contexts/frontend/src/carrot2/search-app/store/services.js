@@ -23,8 +23,8 @@ export const clusterStore = store({
       // TODO: cancel currently running request
       clusterStore.loading = true;
       clusterStore.clusters = EMPTY_ARRAY;
-      clusterStore.documents = documents;
       clusterStore.clusters = await fetchClusters(query, documents);
+      clusterStore.documents = documents;
       clusterStore.loading = false;
     }
   }
