@@ -2,7 +2,7 @@ import { observe } from '@nx-js/observer-util';
 import { store } from 'react-easy-state';
 import { fetchClusters } from "../../service/dcs";
 
-import { etools } from "../../service/sources/etools";
+import { sources } from "../../config.js";
 
 const EMPTY_ARRAY = [];
 
@@ -39,9 +39,11 @@ export const searchResultStore = store({
   },
   error: false,
   load: async function (source, query) {
+    const src = sources[source] || sources.etools;
+
     // TODO: cancel currently running request
     searchResultStore.loading = true;
-    searchResultStore.searchResult = assignDocumentIds(await etools(query, {}));
+    searchResultStore.searchResult = assignDocumentIds(await src.source(query, {}));
     searchResultStore.loading = false;
   }
 });

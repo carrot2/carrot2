@@ -1,4 +1,4 @@
-import { config } from "../config";
+import { dcsConfig } from "../config";
 
 export function fetchClusters(query, documents) {
   // Just pick the content fields we want to cluster. No IDs, URLs, or anything else.
@@ -14,7 +14,7 @@ export function fetchClusters(query, documents) {
     })
   };
 
-  return fetch(config.dcsServiceUrl, {
+  return fetch(dcsConfig.dcsServiceUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -11,17 +11,22 @@ import { ResultListConfig } from "./search-app/ui/ResultListConfig.js";
 import { persistentStore } from "./util/persistent-store.js";
 import { resultListConfigStore } from "./search-app/store/ui-config.js";
 
+import { etools } from "./service/sources/etools.js";
+import { pubmed } from "./service/sources/pubmed.js";
 
-export const config = {
+
+export const dcsConfig = {
   dcsServiceUrl: process.env.REACT_APP_DCS_SERVICE_URL || "http://localhost:8080/service/cluster?template=frontend-default"
 };
 
 export const sources = {
   "web": {
-    label: "Web"
+    label: "Web",
+    source: etools
   },
   "pubmed": {
-    label: "PubMed"
+    label: "PubMed",
+    source: pubmed
   }
 };
 
