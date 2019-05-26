@@ -46,14 +46,15 @@ export function pubmed(query, params) {
       const xpathProcessor = new XPathProcessor(xml);
       const articles = xpathProcessor.getNodes("//PubmedArticle");
 
-      const documents = articles.map((article, index) => {
+      const documents = articles.map((article) => {
+        const id = xpathProcessor.getString(".//PMID", article);
         return {
-          id: index.toString(),
+          id: id,
           title: xpathProcessor.getString(".//ArticleTitle", article),
           snippet: xpathProcessor.getStrings(".//AbstractText", article)
                       .map(a => a.replace("\u2003", ""))
                       .join(" "),
-          url: "#"
+          url: `https://www.ncbi.nlm.nih.gov/pubmed/${id}`
         };
       });
       console.timeEnd("parse");
