@@ -3,13 +3,12 @@ import './ResultsScreen.css';
 import React, { Component } from 'react';
 
 import { view } from 'react-easy-state';
+import { clusterViews, resultListConfigStore, resultsViews } from "../../config-views.js";
 import { clusterStore, searchResultStore } from "../store/services";
 import { clusterSelectionStore, documentSelectionStore, documentVisibilityStore } from "../store/selection";
-import { resultListConfigStore } from "../store/ui-config.js";
 import { themeStore } from "./ThemeSwitch.js";
 
 import { routes } from "../routes";
-import { clusterViews, resultsViews } from "../../config.js";
 
 import logo from './assets/carrot-search-logo.svg';
 

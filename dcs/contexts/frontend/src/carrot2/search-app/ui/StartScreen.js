@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { Redirect } from "react-router-dom";
 
 import './StartScreen.css';
+import { sources } from "../../config-sources.js";
+import { clusterViews } from "../../config-views.js";
 import logo from './assets/carrot-search-logo.svg';
 import text from './assets/carrot-search-text.svg';
 import { SearchForm } from "./SearchForm";
 
 import { routes } from "../routes";
-import { sources, clusterViews } from "../../config.js";
 
 export class StartScreen extends Component {
   runSearch(query) {

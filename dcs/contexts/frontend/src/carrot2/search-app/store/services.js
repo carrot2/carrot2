@@ -1,8 +1,7 @@
 import { observe } from '@nx-js/observer-util';
 import { store } from 'react-easy-state';
+import { sources } from "../../config-sources.js";
 import { fetchClusters } from "../../service/dcs";
-
-import { sources } from "../../config.js";
 
 const EMPTY_ARRAY = [];
 

@@ -42,22 +42,21 @@ export function pubmed(query, params) {
       return serviceEFetchh(eSearchResult.esearchresult.idlist);
     })
     .then(xml => {
-      console.time("parse");
       const xpathProcessor = new XPathProcessor(xml);
       const articles = xpathProcessor.getNodes("//PubmedArticle");
 
       const documents = articles.map((article) => {
         const id = xpathProcessor.getString(".//PMID", article);
+        const paragraphs = xpathProcessor.getStrings(".//AbstractText", article)
+                            .map(a => a.replace("\u2003", ""));
         return {
           id: id,
           title: xpathProcessor.getString(".//ArticleTitle", article),
-          snippet: xpathProcessor.getStrings(".//AbstractText", article)
-                      .map(a => a.replace("\u2003", ""))
-                      .join(" "),
+          snippet: paragraphs.join(" "),
+          paragraphs: paragraphs,
           url: `https://www.ncbi.nlm.nih.gov/pubmed/${id}`
         };
       });
-      console.timeEnd("parse");
 
       return {
         query: query,
