@@ -5,10 +5,10 @@ import { view } from "react-easy-state";
 import { persistentStore } from "./util/persistent-store.js";
 
 import { ResultListConfig } from "./search-app/ui/ResultListConfig.js";
-import { ClusterList } from "./search-app/ui/views/ClusterList.js";
-import { PieChart } from "./search-app/ui/views/PieChart.js";
-import { Treemap } from "./search-app/ui/views/Treemap.js";
-import { TreemapConfig } from "./search-app/ui/views/TreemapConfig.js";
+import { ClusterList } from "./search-app/ui/view/clusters/ClusterList.js";
+import { PieChart } from "./search-app/ui/view/clusters/PieChart.js";
+import { Treemap } from "./search-app/ui/view/clusters/Treemap.js";
+import { TreemapConfig } from "./search-app/ui/view/clusters/TreemapConfig.js";
 
 const ClusterListView = view(ClusterList);
 const TreemapView = view(Treemap);

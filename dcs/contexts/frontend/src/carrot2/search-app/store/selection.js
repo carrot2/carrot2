@@ -65,6 +65,9 @@ export const documentSelectionStore = itemSelectionStore();
 export const documentVisibilityStore = store({
   visibleDocumentIds: new Set(),
   isVisible: function (document) {
+    // TODO: Checking size is suboptimal here
+    // It causes re-rendering of the the document list on every selection change
+    // instead of updating only the affected documents. Leaving as it its for now.
     return documentVisibilityStore.visibleDocumentIds.size === 0 ?
       true : documentVisibilityStore.visibleDocumentIds.has(document.id);
   },
