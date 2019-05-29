@@ -1,4 +1,5 @@
 import React from 'react';
+import { Optional } from "../../Optional.js";
 import { TitleAndRank, Url } from "./result-components.js";
 
 /**
@@ -19,7 +20,12 @@ export const PubMedResult = (props) => {
       <div>
       {
         (document.paragraphs || []).map((p, index) => {
-          return <p key={index}>{p}</p>;
+          return (
+            <p key={index}>
+              <Optional visible={!!p.label} content={() => <span>{p.label}</span>}/>
+              {p.text}
+            </p>
+          );
         })
       }
       </div>

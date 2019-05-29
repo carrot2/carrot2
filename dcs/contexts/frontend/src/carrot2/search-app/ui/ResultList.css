@@ -25,6 +25,7 @@
 }
 
 .DocumentList > a > strong > span,
+.DocumentList > a > div > p > span,
 .DocumentList > a > .sources > span {
   font-size: 70%;
   font-weight: normal;
@@ -32,10 +33,11 @@
   box-shadow: 0 0 0 1px rgba(59, 131, 192, 0.3);
   padding: 0 0.125rem;
   margin-right: 0.25rem;
-  vertical-align: 15%;
+  vertical-align: 10%;
   border-radius: 0.125rem;
   color: var(--text-color-secondary);
 }
+.DocumentList > a > div > p > span,
 .DocumentList > a > .sources > span {
   background-color: hsla(258, 10%, 38%, 0.03);
   box-shadow: 0 0 0 1px hsla(208, 10%, 49%, 0.2);
