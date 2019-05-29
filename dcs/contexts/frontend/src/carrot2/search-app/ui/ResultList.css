@@ -44,6 +44,11 @@
   color: var(--text-color-secondary);
 }
 
+.DocumentList > a > div > p {
+  margin-top: 0.5em;
+  margin-bottom: 0
+}
+
 .DocumentList > a > div {
   color: var(--text-color-light);
   margin: 0.25em 0;

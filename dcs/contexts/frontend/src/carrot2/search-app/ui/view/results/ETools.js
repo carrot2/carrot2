@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch } from "@blueprintjs/core";
+import { Optional } from "../../Optional.js";
 import { TitleAndRank, Url } from "./result-components.js";
 
 import { persistentStore } from "../../../../util/persistent-store.js";
@@ -7,7 +8,7 @@ import { persistentStore } from "../../../../util/persistent-store.js";
 export const etoolsConfigStore = persistentStore("etoolsConfig",
   {
     showSiteIcons: true,
-    showRank: true
+    showSources: true
   }
 );
 
@@ -19,6 +20,7 @@ export const EToolsResult = (props) => {
   const slashIndex = document.url.indexOf("/", 8);
   const domain = slashIndex > 0 ? document.url.substring(0, slashIndex) : document.url;
   const config = props.configStore;
+  const commonConfig = props.commonConfigStore;
 
   let urlWithIcon = null;
   if (config.showSiteIcons) {
@@ -33,14 +35,16 @@ export const EToolsResult = (props) => {
 
   return (
     <>
-      <TitleAndRank title={document.title} rank={props.rank} showRank={config.showRank} />
+      <TitleAndRank title={document.title} rank={props.rank} showRank={commonConfig.showRank} />
       <div>{document.snippet}</div>
       {urlWithIcon}
-      <div className="sources">
-        {
-          document.sources.map((source, index) => <span key={index}>{source}</span>)
-        }
-      </div>
+      <Optional visible={config.showSources} content={() => (
+        <div className="sources">
+          {
+            document.sources.map((source, index) => <span key={index}>{source}</span>)
+          }
+        </div>
+      )}/>
     </>
   );
 };
@@ -50,9 +54,9 @@ export const EToolsResultConfig = (props) => {
   return (
     <>
       <Switch label="Show site icons" checked={store.showSiteIcons}
-        onChange={e => store.showSiteIcons = e.target.checked } />
-      <Switch label="Show search rank" checked={store.showRank}
-        onChange={e => store.showRank = e.target.checked } />
+              onChange={e => store.showSiteIcons = e.target.checked } />
+      <Switch label="Show sources" checked={store.showSources}
+              onChange={e => store.showSources = e.target.checked } />
     </>
   );
 };

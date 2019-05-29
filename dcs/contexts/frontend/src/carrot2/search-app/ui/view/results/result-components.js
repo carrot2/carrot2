@@ -1,11 +1,13 @@
 import React from "react";
+import { Optional } from "../../Optional.js";
 
 export const TitleAndRank = (props) => {
-  let rank = null;
-  if (props.showRank) {
-    rank = <span>{props.rank}</span>;
-  }
-  return <strong>{rank}{props.title}</strong>;
+  return (
+    <strong>
+      <Optional visible={props.showRank} content={() => <span>{props.rank}</span>} />
+      {props.title}
+    </strong>
+  );
 };
 
 export const Url = (props) => {

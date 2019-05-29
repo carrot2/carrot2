@@ -8,6 +8,8 @@ export const ResultListConfig = (props) => {
       <h4>Result list appearance</h4>
       {props.children}
       <hr />
+      <Switch label="Show search rank" checked={store.showRank}
+              onChange={e => store.showRank = e.target.checked } />
       <Switch label="Open links in a new tab" checked={store.openInNewTab}
               onChange={e => store.openInNewTab = e.target.checked } />
     </>
