@@ -101,9 +101,9 @@ export const Treemap = props => {
 
   const [ options, setOptions ] = useState({});
   useEffect(() => {
-    setOptions(buildOptions(props.themeStore.theme, props.commonConfigStore.layout, props.commonConfigStore.stacking,
+    setOptions(buildOptions(props.themeStore.theme, props.configStore.layout, props.configStore.stacking,
       props.clusterSelectionStore, props.documentSelectionStore));
-  }, [ props.themeStore.theme, props.commonConfigStore.layout, props.commonConfigStore.stacking,
+  }, [ props.themeStore.theme, props.configStore.layout, props.configStore.stacking,
     props.clusterSelectionStore, props.documentSelectionStore ]);
 
   return (
