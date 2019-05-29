@@ -1,0 +1,71 @@
+.DocumentList {
+  text-align: left;
+  padding-right: 0.5em;
+  padding-left: 0.25em;
+}
+
+.DocumentList .Loading {
+  padding: 0.25em 0.25em 0.25em 0.5em;
+}
+
+.DocumentList > a {
+  color: var(--text-color);
+  margin-bottom: 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  border-radius: 0.1875em;
+  text-decoration: none;
+  padding: 0.25em 0.25em 0.25em 0.5em;
+}
+.DocumentList > a:hover {
+  color: inherit;
+  background-color: rgba(59, 131, 192, 0.05);
+  box-shadow: 0 0 0 2px rgba(59, 131, 192, 0.3);
+}
+
+.DocumentList > a > strong > span,
+.DocumentList > a > .sources > span {
+  font-size: 70%;
+  font-weight: normal;
+  background-color: rgba(59, 131, 192, 0.05);
+  box-shadow: 0 0 0 1px rgba(59, 131, 192, 0.3);
+  padding: 0 0.125rem;
+  margin-right: 0.25rem;
+  vertical-align: 15%;
+  border-radius: 0.125rem;
+  color: var(--text-color-secondary);
+}
+.DocumentList > a > .sources > span {
+  background-color: hsla(258, 10%, 38%, 0.03);
+  box-shadow: 0 0 0 1px hsla(208, 10%, 49%, 0.2);
+  font-weight: 300;
+  text-transform: uppercase;
+  color: var(--text-color-secondary);
+}
+
+.DocumentList > a > div {
+  color: var(--text-color-light);
+  margin: 0.25em 0;
+}
+
+.DocumentList > a > span.url {
+  display: block;
+  height: 1.5em;
+  white-space: nowrap;
+  font-weight: 300;
+  color: inherit;
+}
+.DocumentList > a > span.url.with-site-icon {
+  background-size: auto 75%;
+  background-position: 0 0.0625em;
+  background-repeat: no-repeat;
+  padding-left: 1.5em;
+}
+.DocumentList > a > span.url:hover {
+  color: inherit;
+}
+
+.DocumentList > a > span.url > span {
+  opacity: 0.7;
+}
