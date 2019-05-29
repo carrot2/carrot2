@@ -1,1 +1,6 @@
-org.carrot2.language.arabic.ArabicLanguageComponents
+org.carrot2.language.extras.ArabicLanguageComponents
+org.carrot2.language.extras.BulgarianLanguageComponents
+org.carrot2.language.extras.CzechLanguageComponents
+org.carrot2.language.extras.CroatianLanguageComponents
+org.carrot2.language.extras.EstonianLanguageComponents
+org.carrot2.language.extras.GreekLanguageComponents

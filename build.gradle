@@ -23,7 +23,7 @@ ext {
   licenseHeader = file('etc/license-header.txt')
 
   replaceTokens = [
-    'version': rootProject.version,
+    'version': currentVersion,
     'gitRev': gitRev,
     'buildDate': buildDate,
     'buildDateTrimmed': buildDateTrimmed

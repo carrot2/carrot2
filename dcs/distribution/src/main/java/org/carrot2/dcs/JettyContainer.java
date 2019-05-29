@@ -136,7 +136,7 @@ public class JettyContainer {
         }
 
         try {
-          server.stop();
+          JettyContainer.this.stop();
         } catch (Exception e) {
           CONSOLE.error("Could not stop the server.", e);
         }
