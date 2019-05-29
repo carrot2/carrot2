@@ -3,14 +3,14 @@ import PropTypes from "prop-types";
 
 import { Button, Classes, ControlGroup, Popover, Position, Tab, Tabs } from "@blueprintjs/core";
 
-const createToolElement = (view, tool, visible) => {
+const createToolElement = (view, tool, visible, props) => {
   if (tool.icon) {
     return (
       <Popover className={Classes.FIXED} position={Position.BOTTOM_RIGHT}
                autoFocus={true} popoverClassName="bp3-popover-content-sizing"
                disabled={!visible} key={view + "." + tool.id}>
         <span style={visible ? {} : {display: "none"}}><Button icon={tool.icon} minimal={true} /></span>
-        {tool.createContentElement()}
+        {tool.createContentElement(props)}
       </Popover>
     );
   } else {
@@ -35,7 +35,7 @@ export const ViewTabs = (props) => {
           .filter(v => views[v].tools && views[v].tools.length > 0)
           .reduce(function (tools, v) {
             views[v].tools.forEach(t => {
-              tools.push(createToolElement(v, t, props.activeView === v));
+              tools.push(createToolElement(v, t, props.activeView === v, props));
             });
             return tools;
           }, [])

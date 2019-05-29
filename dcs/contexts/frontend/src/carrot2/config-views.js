@@ -10,6 +10,8 @@ import { PieChart } from "./search-app/ui/view/clusters/PieChart.js";
 import { Treemap } from "./search-app/ui/view/clusters/Treemap.js";
 import { TreemapConfig } from "./search-app/ui/view/clusters/TreemapConfig.js";
 
+import { sources } from "./config-sources.js";
+
 const ClusterListView = view(ClusterList);
 const TreemapView = view(Treemap);
 const TreemapConfigView = view(TreemapConfig);
@@ -59,11 +61,8 @@ export const clusterViews = {
 
 export const resultListConfigStore = persistentStore("resultListConfig",
   {
-    showSiteIcons: true,
-    showRank: true,
     openInNewTab: true
-  },
-  {}
+  }
 );
 
 export const resultsViews = {
@@ -74,7 +73,11 @@ export const resultsViews = {
         id: "config",
         icon: IconNames.COG,
         createContentElement: (props) => {
-          return <ResultListConfigView store={resultListConfigStore} />;
+          return (
+            <ResultListConfigView store={resultListConfigStore}>
+              {sources[props.source].createConfig()}
+            </ResultListConfigView>
+          );
         }
       }
     ]
