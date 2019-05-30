@@ -26,6 +26,7 @@
 
 .DocumentList > a > strong > span,
 .DocumentList > a > div > p > span,
+.DocumentList > a > .keywords > span,
 .DocumentList > a > .sources > span {
   font-size: 70%;
   font-weight: normal;
@@ -37,6 +38,7 @@
   border-radius: 0.125rem;
   color: var(--text-color-secondary);
 }
+.DocumentList > a > .keywords > span,
 .DocumentList > a > div > p > span,
 .DocumentList > a > .sources > span {
   background-color: hsla(258, 10%, 38%, 0.03);

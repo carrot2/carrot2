@@ -1,11 +1,14 @@
 import React from 'react';
+
+import { view } from "react-easy-state";
+
 import { Switch } from "@blueprintjs/core";
 import { Optional } from "../../Optional.js";
 import { TitleAndRank, Url } from "./result-components.js";
 
 import { persistentStore } from "../../../../util/persistent-store.js";
 
-export const etoolsConfigStore = persistentStore("etoolsConfig",
+const etoolsConfigStore = persistentStore("etoolsResultConfig",
   {
     showSiteIcons: true,
     showSources: true
@@ -15,11 +18,11 @@ export const etoolsConfigStore = persistentStore("etoolsConfig",
 /**
  * Renders a single web search result from eTools.
  */
-export const EToolsResult = (props) => {
+export const EToolsResult = view((props) => {
   const document = props.document;
   const slashIndex = document.url.indexOf("/", 8);
   const domain = slashIndex > 0 ? document.url.substring(0, slashIndex) : document.url;
-  const config = props.configStore;
+  const config = etoolsConfigStore;
   const commonConfig = props.commonConfigStore;
 
   let urlWithIcon = null;
@@ -47,10 +50,10 @@ export const EToolsResult = (props) => {
       )}/>
     </>
   );
-};
+});
 
-export const EToolsResultConfig = (props) => {
-  const store = props.configStore;
+export const EToolsResultConfig = view(() => {
+  const store = etoolsConfigStore;
   return (
     <>
       <Switch label="Show site icons" checked={store.showSiteIcons}
@@ -59,4 +62,4 @@ export const EToolsResultConfig = (props) => {
               onChange={e => store.showSources = e.target.checked } />
     </>
   );
-};
+});

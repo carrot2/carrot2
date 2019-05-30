@@ -1,7 +1,7 @@
 Features:
-* PubMed document source
-* Document source settings
+* Reset scroll on selection change
 * Switching clustering algorithm
+* Document source settings
 * Limit the number of results displayed at once?
 * Per-source document rendering, per-source document list configuration section
 * Option to include/exclude documents in visualizations.
