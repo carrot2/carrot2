@@ -35,9 +35,12 @@ public class E03_CustomLanguageComponents {
 
   @Test
   public void customLanguageComponents() throws IOException {
-    // The language-specific components required for clustering algorithms are:
-    // a tokenizer, a stemmer and a lexical resource provider. These components
-    // can be supplied directly in case of a custom processing requirements. Here,
+    // There are language-specific components required for clustering and each algorithm may
+    // require a different sub-set of these. Typically, algorithms will require
+    // a tokenizer, a stemmer and a lexical resource provider.
+    //
+    // These components
+    // can be supplied directly in case of a custom language processing requirements. Here,
     // we modify the stemmer and lexical data for the default English component set,
     // leaving any other components as they were originally defined for English.
 
@@ -78,7 +81,7 @@ public class E03_CustomLanguageComponents {
 
     // The custom set of language components can be reused for multiple clustering requests.
     LanguageComponents customLanguage =
-        new LanguageComponents("English-custom", componentSuppliers);
+        new LanguageComponents("English (customized)", componentSuppliers);
 
     LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
     algorithm.desiredClusterCount.set(10);

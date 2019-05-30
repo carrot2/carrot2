@@ -1,6 +1,5 @@
 - Add support for additional languages from the Lucene project.
 
-CHINESE_SIMPLIFIED ("zh_cn"),
 CHINESE_TRADITIONAL (ICUTokenizerFactory)
 JAPANESE ("ja"), // kuromoji
 KOREAN ("ko"),  (nori?)

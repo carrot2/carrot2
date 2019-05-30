@@ -6,6 +6,7 @@ include 'test-infra'
 
 include 'lang:polish'
 include 'lang:lucene'
+include 'lang:lucene-chinese'
 
 include 'dcs:distribution'
 include 'dcs:client'

@@ -9,7 +9,8 @@ configurations {
 def aggregateProjects = [
   ":core",
   ":lang:polish",
-  ":lang:lucene"
+  ":lang:lucene",
+  ":lang:lucene-chinese"
 ]
 
 dependencies {
