@@ -10,14 +10,14 @@
  */
 package org.carrot2.language.extras;
 
-public class BulgarianLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public BulgarianLanguageComponentsTest() {
+public class BrazilianLanguageComponentsTest extends AbstractLanguageComponentsTest {
+  public BrazilianLanguageComponentsTest() {
     super(
-        BulgarianLanguageComponents.NAME,
-        new String[] {"благодаря"},
+        BrazilianLanguageComponents.NAME,
+        new String[] {"diversas", "qualquer"},
         new String[][] {
-          {"кризи", "криз"},
-          {"градове", "град"}
+          {"bobalhões", "bobalho"},
+          {"quintão", "quinta"},
         });
   }
 }

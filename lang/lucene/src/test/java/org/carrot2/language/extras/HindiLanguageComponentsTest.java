@@ -11,12 +11,8 @@
 package org.carrot2.language.extras;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.carrot2.language.Tokenizer;
-import org.carrot2.util.MutableCharArray;
 import org.junit.Test;
 
 public class HindiLanguageComponentsTest extends AbstractLanguageComponentsTest {
@@ -39,16 +35,5 @@ public class HindiLanguageComponentsTest extends AbstractLanguageComponentsTest 
 
     Assertions.assertThat(tokenize(tokenizer, "रिडनडेंसी कहलाता है । डाटा माइनिंग"))
         .containsExactly("रिडनडेंसी", "कहलाता", "है", "।", "डाटा", "माइनिंग");
-  }
-
-  private List<String> tokenize(Tokenizer tokenizer, String input) throws IOException {
-    tokenizer.reset(new StringReader(input));
-    MutableCharArray buffer = new MutableCharArray();
-    ArrayList<String> tokens = new ArrayList<>();
-    while (tokenizer.nextToken() >= 0) {
-      tokenizer.setTermBuffer(buffer);
-      tokens.add(buffer.toString());
-    }
-    return tokens;
   }
 }

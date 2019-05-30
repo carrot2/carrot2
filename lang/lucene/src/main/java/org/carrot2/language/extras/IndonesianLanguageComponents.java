@@ -14,21 +14,22 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
+import org.apache.lucene.analysis.id.IndonesianStemmer;
 import org.carrot2.language.ExtendedWhitespaceTokenizer;
 import org.carrot2.language.LanguageComponentsProviderImpl;
 import org.carrot2.language.LexicalData;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
+import org.carrot2.language.extras.LuceneStemmerAdapter.StemmingFunction;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.LabelFormatterImpl;
 import org.carrot2.util.ResourceLookup;
-import org.tartarus.snowball.ext.IrishStemmer;
 
 /** */
-public class IrishLanguageComponents extends LanguageComponentsProviderImpl {
-  public static final String NAME = "Irish";
+public class IndonesianLanguageComponents extends LanguageComponentsProviderImpl {
+  public static final String NAME = "Indonesian";
 
-  public IrishLanguageComponents() {
+  public IndonesianLanguageComponents() {
     super("Carrot2 (extras)", NAME);
   }
 
@@ -38,11 +39,20 @@ public class IrishLanguageComponents extends LanguageComponentsProviderImpl {
     LexicalData lexicalData = loadLexicalData(NAME, resourceLookup);
 
     LinkedHashMap<Class<?>, Supplier<?>> components = new LinkedHashMap<>();
-    components.put(Stemmer.class, () -> new LuceneSnowballStemmerAdapter(new IrishStemmer()));
+    components.put(Stemmer.class, () -> new LuceneStemmerAdapter(new IndonesianStemming()));
     components.put(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
     components.put(LexicalData.class, () -> lexicalData);
     components.put(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
 
     return components;
+  }
+
+  private class IndonesianStemming implements StemmingFunction {
+    private final IndonesianStemmer stemmer = new IndonesianStemmer();
+
+    @Override
+    public int apply(char[] buffer, int length) {
+      return stemmer.stem(buffer, length, true);
+    }
   }
 }

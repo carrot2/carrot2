@@ -12,10 +12,15 @@ package org.carrot2.language.extras;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.LexicalData;
 import org.carrot2.language.Stemmer;
+import org.carrot2.language.Tokenizer;
 import org.carrot2.util.MutableCharArray;
 import org.junit.Test;
 
@@ -54,5 +59,16 @@ public abstract class AbstractLanguageComponentsTest {
     for (String word : testData) {
       Assertions.assertThat(lexicalData.ignoreWord(new MutableCharArray(word))).as(word).isTrue();
     }
+  }
+
+  protected List<String> tokenize(Tokenizer tokenizer, String input) throws IOException {
+    tokenizer.reset(new StringReader(input));
+    MutableCharArray buffer = new MutableCharArray();
+    ArrayList<String> tokens = new ArrayList<>();
+    while (tokenizer.nextToken() >= 0) {
+      tokenizer.setTermBuffer(buffer);
+      tokens.add(buffer.toString());
+    }
+    return tokens;
   }
 }

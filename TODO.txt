@@ -1,15 +1,5 @@
 - Add support for additional languages from the Lucene project.
 
-armenian(hy)
-indonesian(id)
-serbian
-LATVIAN ("lv"),
-LITHUANIAN ("lt"),
-MALTESE ("mt"),
-SLOVAK ("sk"),
-SLOVENE ("sl"),
-THAI ("th"),
-
 CHINESE_SIMPLIFIED ("zh_cn"),
 CHINESE_TRADITIONAL (ICUTokenizerFactory)
 JAPANESE ("ja"), // kuromoji

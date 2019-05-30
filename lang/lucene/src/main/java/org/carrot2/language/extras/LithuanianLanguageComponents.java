@@ -22,13 +22,13 @@ import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.LabelFormatterImpl;
 import org.carrot2.util.ResourceLookup;
-import org.tartarus.snowball.ext.IrishStemmer;
+import org.tartarus.snowball.ext.LithuanianStemmer;
 
 /** */
-public class IrishLanguageComponents extends LanguageComponentsProviderImpl {
-  public static final String NAME = "Irish";
+public class LithuanianLanguageComponents extends LanguageComponentsProviderImpl {
+  public static final String NAME = "Lithuanian";
 
-  public IrishLanguageComponents() {
+  public LithuanianLanguageComponents() {
     super("Carrot2 (extras)", NAME);
   }
 
@@ -38,7 +38,7 @@ public class IrishLanguageComponents extends LanguageComponentsProviderImpl {
     LexicalData lexicalData = loadLexicalData(NAME, resourceLookup);
 
     LinkedHashMap<Class<?>, Supplier<?>> components = new LinkedHashMap<>();
-    components.put(Stemmer.class, () -> new LuceneSnowballStemmerAdapter(new IrishStemmer()));
+    components.put(Stemmer.class, () -> new LuceneSnowballStemmerAdapter(new LithuanianStemmer()));
     components.put(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
     components.put(LexicalData.class, () -> lexicalData);
     components.put(LabelFormatter.class, () -> new LabelFormatterImpl(" "));

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
+import org.apache.lucene.analysis.lv.LatvianStemmer;
 import org.carrot2.language.ExtendedWhitespaceTokenizer;
 import org.carrot2.language.LanguageComponentsProviderImpl;
 import org.carrot2.language.LexicalData;
@@ -22,13 +23,12 @@ import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.LabelFormatterImpl;
 import org.carrot2.util.ResourceLookup;
-import org.tartarus.snowball.ext.IrishStemmer;
 
 /** */
-public class IrishLanguageComponents extends LanguageComponentsProviderImpl {
-  public static final String NAME = "Irish";
+public class LatvianLanguageComponents extends LanguageComponentsProviderImpl {
+  public static final String NAME = "Latvian";
 
-  public IrishLanguageComponents() {
+  public LatvianLanguageComponents() {
     super("Carrot2 (extras)", NAME);
   }
 
@@ -38,7 +38,7 @@ public class IrishLanguageComponents extends LanguageComponentsProviderImpl {
     LexicalData lexicalData = loadLexicalData(NAME, resourceLookup);
 
     LinkedHashMap<Class<?>, Supplier<?>> components = new LinkedHashMap<>();
-    components.put(Stemmer.class, () -> new LuceneSnowballStemmerAdapter(new IrishStemmer()));
+    components.put(Stemmer.class, () -> new LuceneStemmerAdapter(new LatvianStemmer()::stem));
     components.put(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
     components.put(LexicalData.class, () -> lexicalData);
     components.put(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
