@@ -20,7 +20,7 @@ import org.carrot2.util.MutableCharArray;
 import org.junit.Test;
 
 public abstract class AbstractLanguageComponentsTest {
-  private final LanguageComponents components;
+  protected final LanguageComponents components;
   private final String[][] stemmingPairs;
   private final String[] stopWords;
 

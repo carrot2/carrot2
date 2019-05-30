@@ -4,3 +4,6 @@ org.carrot2.language.extras.CzechLanguageComponents
 org.carrot2.language.extras.CroatianLanguageComponents
 org.carrot2.language.extras.EstonianLanguageComponents
 org.carrot2.language.extras.GreekLanguageComponents
+org.carrot2.language.extras.HindiLanguageComponents
+org.carrot2.language.extras.IrishLanguageComponents
+org.carrot2.language.extras.GalicianLanguageComponents

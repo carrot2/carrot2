@@ -1,20 +1,19 @@
 - Add support for additional languages from the Lucene project.
 
-CHINESE_SIMPLIFIED ("zh_cn"),
-HINDI("hi"),
-IRISH ("ga"), // (Gaelic)
-galician(gl)
 armenian(hy)
 indonesian(id)
 serbian
-JAPANESE ("ja"), // kuromoji
-KOREAN ("ko"),  (nori?)
 LATVIAN ("lv"),
 LITHUANIAN ("lt"),
 MALTESE ("mt"),
 SLOVAK ("sk"),
 SLOVENE ("sl"),
 THAI ("th"),
+
+CHINESE_SIMPLIFIED ("zh_cn"),
+CHINESE_TRADITIONAL (ICUTokenizerFactory)
+JAPANESE ("ja"), // kuromoji
+KOREAN ("ko"),  (nori?)
 
 - documentation subproject (scaffolding)
 - DCS: add a switch between available clustering service templates (?)

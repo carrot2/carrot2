@@ -19,20 +19,26 @@ final class LuceneStemmerAdapter implements Stemmer {
     int apply(char[] buffer, int length);
   }
 
+  private final int extraBufferPadding;
   private final StemmingFunction stemmer;
   private char[] buffer = new char[128];
 
-  LuceneStemmerAdapter(StemmingFunction stemmer) {
+  LuceneStemmerAdapter(StemmingFunction stemmer, int extraBufferPadding) {
     this.stemmer = stemmer;
+    this.extraBufferPadding = extraBufferPadding;
+  }
+
+  LuceneStemmerAdapter(StemmingFunction stemmer) {
+    this(stemmer, 0);
   }
 
   @Override
   public CharSequence stem(CharSequence word) {
-    if (word.length() > buffer.length) {
-      buffer = new char[word.length()];
+    if (word.length() + extraBufferPadding > buffer.length) {
+      buffer = new char[word.length() + extraBufferPadding];
     }
 
-    for (int i = 0; i < word.length(); i++) {
+    for (int i = 0, max = word.length(); i < max; i++) {
       buffer[i] = word.charAt(i);
     }
 

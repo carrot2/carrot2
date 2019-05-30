@@ -10,16 +10,14 @@
  */
 package org.carrot2.language.extras;
 
-import java.util.Locale;
-
-public class BulgarianLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public BulgarianLanguageComponentsTest() {
+public class GalicianLanguageComponentsTest extends AbstractLanguageComponentsTest {
+  public GalicianLanguageComponentsTest() {
     super(
-        BulgarianLanguageComponents.NAME,
-        new String[] {"благодаря"},
+        GalicianLanguageComponents.NAME,
+        new String[] {"vosos", "miñas"},
         new String[][] {
-          {"кризи", "криз"},
-          {"градове", "град"}
+          {"correspondente", "correspond"},
+          {"corresponderá", "correspond"},
         });
   }
 }

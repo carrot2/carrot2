@@ -10,16 +10,14 @@
  */
 package org.carrot2.language.extras;
 
-import java.util.Locale;
-
-public class BulgarianLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public BulgarianLanguageComponentsTest() {
+public class IrishLanguageComponentsTest extends AbstractLanguageComponentsTest {
+  public IrishLanguageComponentsTest() {
     super(
-        BulgarianLanguageComponents.NAME,
-        new String[] {"благодаря"},
+        IrishLanguageComponents.NAME,
+        new String[] {"ceathrar", "seachtar"},
         new String[][] {
-          {"кризи", "криз"},
-          {"градове", "град"}
+          {"siopadóireacht", "siopadóir"},
+          {"síceapatacha", "síceapaite"},
         });
   }
 }

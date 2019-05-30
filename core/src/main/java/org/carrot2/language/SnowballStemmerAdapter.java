@@ -15,7 +15,7 @@ import org.carrot2.language.snowball.SnowballProgram;
 import org.carrot2.util.MutableCharArray;
 
 /** An adapter converting Snowball programs into {@link Stemmer} interface. */
-final class SnowballStemmerAdapter implements Stemmer {
+public final class SnowballStemmerAdapter implements Stemmer {
   private final SnowballProgram s;
 
   public SnowballStemmerAdapter(SnowballProgram s) {
