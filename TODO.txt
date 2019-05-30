@@ -1,9 +1,3 @@
-- Add support for additional languages from the Lucene project.
-
-CHINESE_TRADITIONAL (ICUTokenizerFactory)
-JAPANESE ("ja"), // kuromoji
-KOREAN ("ko"),  (nori?)
-
 - documentation subproject (scaffolding)
 - DCS: add a switch between available clustering service templates (?)
 - Add an IT that verifies what happens if we saturate the server with requests.
