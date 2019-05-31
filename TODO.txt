@@ -1,3 +1,4 @@
+- korean stop words are empty
 - documentation subproject (scaffolding)
 - DCS: add a switch between available clustering service templates (?)
 - Add an IT that verifies what happens if we saturate the server with requests.
