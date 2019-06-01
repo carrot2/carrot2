@@ -63,13 +63,15 @@ const SubClusterView = view(SubCluster);
 
 export function ClusterList(props) {
   return (
-    <div className="ClusterList ">
-      <Loading loading={props.clusterStore.loading}>
-        {
-          props.clusterStore.clusters.map(cluster =>
-            <TopClusterView cluster={cluster} key={cluster.id} clusterSelectionStore={props.clusterSelectionStore} />)
-        }
-      </Loading>
+    <div className="ClusterList">
+      <div>
+        <Loading loading={props.clusterStore.loading}>
+          {
+            props.clusterStore.clusters.map(cluster =>
+              <TopClusterView cluster={cluster} key={cluster.id} clusterSelectionStore={props.clusterSelectionStore} />)
+          }
+        </Loading>
+      </div>
     </div>
   );
 }

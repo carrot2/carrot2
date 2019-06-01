@@ -66,21 +66,16 @@
 
 .ResultsScreen .clusters {
   grid-area: clusters;
-  overflow-y: auto;
+  overflow-x: hidden;
   padding-left: 0.125em;
 }
 .ResultsScreen .docs {
   grid-area: docs;
-  overflow-y: auto;
 }
 
 .ResultsScreen .clusters > div,
 .ResultsScreen .docs > div {
-  overflow-y: auto;
   height: 100%;
-  padding-top: calc(0.25em - var(--selection-border-width));
-}
-.ResultsScreen .docs > div {
   padding-top: 0.25em;
 }
 

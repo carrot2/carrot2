@@ -1,4 +1,9 @@
 .ClusterList {
+  overflow-y: auto;
+  height: 100%;
+}
+
+.ClusterList > div {
   text-align: left;
   column-width: 18em;
   column-gap: 1em;

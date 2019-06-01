@@ -27,18 +27,20 @@ const ClusterSelectionSummaryView = view(ClusterSelectionSummary);
 
 export function ResultList(props) {
   return (
-    <div className="DocumentList">
-      <Loading loading={props.store.loading}>
-        <ClusterSelectionSummaryView clusterSelectionStore={props.clusterSelectionStore}
-                                     documentVisibilityStore={props.visibilityStore}
-                                     searchResultStore={props.store} />
-        {
-          props.store.searchResult.documents.map((document, index) =>
-            <DocumentView source={props.source} document={document} rank={index + 1} key={document.id}
-                          visibilityStore={props.visibilityStore}
-                          commonConfigStore={props.commonConfigStore} />)
-        }
-      </Loading>
+    <div className="ResultList">
+      <div>
+        <Loading loading={props.store.loading}>
+          <ClusterSelectionSummaryView clusterSelectionStore={props.clusterSelectionStore}
+                                       documentVisibilityStore={props.visibilityStore}
+                                       searchResultStore={props.store} />
+          {
+            props.store.searchResult.documents.map((document, index) =>
+              <DocumentView source={props.source} document={document} rank={index + 1} key={document.id}
+                            visibilityStore={props.visibilityStore}
+                            commonConfigStore={props.commonConfigStore} />)
+          }
+        </Loading>
+      </div>
     </div>
   );
 }
