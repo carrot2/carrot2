@@ -62,7 +62,8 @@ export const clusterViews = {
 export const resultListConfigStore = persistentStore("resultListConfig",
   {
     showRank: true,
-    openInNewTab: true
+    openInNewTab: true,
+    maxCharsPerResult: 400
   }
 );
 

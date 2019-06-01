@@ -27,6 +27,7 @@ export const PubMedResult = view((props) => {
     rank = <span>{props.rank}</span>;
   }
 
+  const maxContentChars = commonConfig.maxCharsPerResult;
   return (
     <>
       <TitleAndRank title={result.title} rank={rank} showRank={commonConfig.showRank} />
@@ -37,14 +38,31 @@ export const PubMedResult = view((props) => {
       )} />
       <div>
       {
-        (result.paragraphs || []).map((p, index) => {
-          return (
-            <p key={index}>
-              <Optional visible={!!p.label} content={() => <span>{p.label}</span>}/>
-              {p.text}
-            </p>
-          );
-        })
+        (result.paragraphs || []).map((() => {
+          let contentCharsOutput = 0;
+          return (p, index) => {
+            let text;
+
+            // Allow some reasonable number of characters for a new paragraph, hence the +80.
+            if (contentCharsOutput + 80 >= maxContentChars) {
+              return null;
+            }
+
+            if (contentCharsOutput + p.text.length < maxContentChars) {
+              text = p.text;
+            } else {
+              text = p.text.substring(0, maxContentChars - contentCharsOutput) + "\u2026";
+            }
+            contentCharsOutput += text.length;
+
+            return (
+              <p key={index}>
+                <Optional visible={!!p.label} content={() => <span>{p.label}</span>} />
+                {text}
+              </p>
+            );
+          }
+        })())
       }
       </div>
       <Optional visible={config.showKeywords && result.keywords.length > 0} content={() => (

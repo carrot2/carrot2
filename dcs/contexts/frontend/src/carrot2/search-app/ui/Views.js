@@ -3,11 +3,13 @@ import PropTypes from "prop-types";
 
 import { Button, Classes, ControlGroup, Popover, Position, Tab, Tabs } from "@blueprintjs/core";
 
+import "./Views.css";
+
 const createToolElement = (view, tool, visible, props) => {
   if (tool.icon) {
     return (
       <Popover className={Classes.FIXED} position={Position.BOTTOM_RIGHT}
-               autoFocus={true} popoverClassName="bp3-popover-content-sizing"
+               autoFocus={true} popoverClassName="bp3-popover-content-sizing view-tool-content"
                disabled={!visible} key={view + "." + tool.id}>
         <span style={visible ? {} : {display: "none"}}><Button icon={tool.icon} minimal={true} /></span>
         {tool.createContentElement(props)}

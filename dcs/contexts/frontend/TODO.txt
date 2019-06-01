@@ -1,15 +1,15 @@
 Features:
 * Reset scroll on selection change
+* No clusters when very few documents? Why there's no Other Topics?
 * Switching clustering algorithm
 * Document source settings
 * Limit the number of results displayed at once?
-* Per-source document rendering, per-source document list configuration section
 * Option to include/exclude documents in visualizations.
 * Pass query to the clustering engine
 * Error handling
   * Per-source messages (IP banned exception for eTools, for example)
 * Interaction hints for FoamTree and Circles?
-* Put query in document title
+* Put query in HTML document title
 * For each document, list the clusters the document belongs to.
   Clicking on the cluster reference should select the cluster.
 * Option to highlight clusters to which the hovered-on document belongs.
@@ -21,6 +21,6 @@ Performance:
 * Move querying and parsing source results to a web worker?
 * Changing source or cluster view re-renders the whole application.
   Check if this can be reasonably contained to the actual components involved.
-* Add code splitting.
+* Add code splitting, prefetching.
 * Per-source document renderers (code splitting?).
 * Choose theme based on dark-mode media query.
