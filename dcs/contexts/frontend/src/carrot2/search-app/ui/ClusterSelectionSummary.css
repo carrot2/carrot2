@@ -7,4 +7,5 @@
 .ClusterInSummary .icon {
   vertical-align: baseline;
   padding-left: 0.25em;
+  color: var(--cluster-icon-color);
 }
