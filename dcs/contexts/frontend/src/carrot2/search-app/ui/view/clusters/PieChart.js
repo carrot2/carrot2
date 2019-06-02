@@ -59,7 +59,7 @@ export const PieChart = props => {
   });
   props.clusterStore.documents.forEach(ignored => {});
 
-  const [ dataObject ] = useDataObject(props.clusterStore, props.visible);
+  const [ dataObject ] = useDataObject(props.clusterStore, props.visible, props.configStore.includeResults);
   const [ selection ] = useSelection(props.clusterSelectionStore,
     props.documentSelectionStore, dataObject);
 
@@ -74,5 +74,6 @@ export const PieChart = props => {
 };
 
 PieChart.propTypes = {
-  clusterStore: PropTypes.object.isRequired
+  clusterStore: PropTypes.object.isRequired,
+  configStore: PropTypes.object.isRequired
 };

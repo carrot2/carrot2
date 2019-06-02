@@ -3,7 +3,6 @@ Features:
 * Switching clustering algorithm
 * Document source settings
 * Limit the number of results displayed at once?
-* Option to include/exclude documents in visualizations.
 * Pass query to the clustering engine
 * Error handling
   * Per-source messages (IP banned exception for eTools, for example)

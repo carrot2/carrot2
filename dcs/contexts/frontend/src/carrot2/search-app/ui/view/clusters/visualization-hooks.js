@@ -17,7 +17,7 @@ const EMPTY_OBJECT = {};
  *   change. This is to avoid a flash of old content when the user switches
  *   between visualizations.
  */
-export const useDataObject = (clusterStore, visible) => {
+export const useDataObject = (clusterStore, visible, includeResults) => {
   const [ dataObject, setDataObject ] = useState(EMPTY_OBJECT);
   const [ dataObjectInternal, setDataObjectInternal ] = useState(EMPTY_OBJECT);
   const prevDataObjectInternal = useRef(dataObjectInternal);
@@ -39,7 +39,7 @@ export const useDataObject = (clusterStore, visible) => {
           cluster: c,
           label: `${c.labels.join(", ")} (${c.size})`,
           weight: c.size,
-          groups: c.documents.map(d => {
+          groups: (includeResults ? c.documents : []).map(d => {
             let document = documents[d];
             return {
               id: (groupId++).toString(),
@@ -51,7 +51,7 @@ export const useDataObject = (clusterStore, visible) => {
         }
       })
     });
-  }, [ clusters, documents ]);
+  }, [ clusters, documents, includeResults ]);
 
   // Transfers the internal dataObject to the visualization, if the visualization
   // panel is visible. If the panel is not visible, an empty dataObject is set

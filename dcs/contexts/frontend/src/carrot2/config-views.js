@@ -8,22 +8,30 @@ import { ResultListConfig } from "./search-app/ui/ResultListConfig.js";
 import { ClusterList } from "./search-app/ui/view/clusters/ClusterList.js";
 import { PieChart } from "./search-app/ui/view/clusters/PieChart.js";
 import { Treemap } from "./search-app/ui/view/clusters/Treemap.js";
+import { PieChartConfig } from "./search-app/ui/view/clusters/PieChartConfig.js";
 import { TreemapConfig } from "./search-app/ui/view/clusters/TreemapConfig.js";
 
 import { sources } from "./config-sources.js";
 
 const ClusterListView = view(ClusterList);
 const TreemapView = view(Treemap);
-const TreemapConfigView = view(TreemapConfig);
 const PieChartView = view(PieChart);
 const ResultListConfigView = view(ResultListConfig);
 
 const treemapConfigStore = persistentStore("treemapConfig",
   {
     layout: "relaxed",
-    stacking: "hierarchical"
+    stacking: "hierarchical",
+    includeResults: true
   }
 );
+
+const pieChartConfigStore = persistentStore("pieChartConfig",
+  {
+    includeResults: true
+  }
+);
+
 
 export const clusterViews = {
   "folders": {
@@ -44,7 +52,7 @@ export const clusterViews = {
         id: "config",
         icon: IconNames.COG,
         createContentElement: (props) => {
-          return <TreemapConfigView store={treemapConfigStore} />;
+          return <TreemapConfig store={treemapConfigStore} />;
         }
       }
     ]
@@ -53,9 +61,17 @@ export const clusterViews = {
   "pie-chart": {
     label: "Pie-chart",
     createContentElement: (props) => {
-      return <PieChartView {...props} />;
+      return <PieChartView {...props} configStore={pieChartConfigStore} />;
     },
-    tools: []
+    tools: [
+      {
+        id: "config",
+        icon: IconNames.COG,
+        createContentElement: (props) => {
+          return <PieChartConfig store={pieChartConfigStore} />;
+        }
+      }
+    ]
   }
 };
 

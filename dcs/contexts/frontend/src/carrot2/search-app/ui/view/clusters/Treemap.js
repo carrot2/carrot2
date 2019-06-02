@@ -95,15 +95,17 @@ export const Treemap = props => {
   });
   props.clusterStore.documents.forEach(ignored => {});
 
-  const [ dataObject ] = useDataObject(props.clusterStore, props.visible);
+  const configStore = props.configStore;
+
+  const [ dataObject ] = useDataObject(props.clusterStore, props.visible, configStore.includeResults);
   const [ selection ] = useSelection(props.clusterSelectionStore,
     props.documentSelectionStore, dataObject);
 
   const [ options, setOptions ] = useState({});
   useEffect(() => {
-    setOptions(buildOptions(props.themeStore.theme, props.configStore.layout, props.configStore.stacking,
+    setOptions(buildOptions(props.themeStore.theme, configStore.layout, configStore.stacking,
       props.clusterSelectionStore, props.documentSelectionStore));
-  }, [ props.themeStore.theme, props.configStore.layout, props.configStore.stacking,
+  }, [ props.themeStore.theme, configStore.layout, configStore.stacking,
     props.clusterSelectionStore, props.documentSelectionStore ]);
 
   return (
