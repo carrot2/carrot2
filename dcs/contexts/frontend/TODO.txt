@@ -1,5 +1,4 @@
 Features:
-* Reset scroll on selection change
 * No clusters when very few documents? Why there's no Other Topics?
 * Switching clustering algorithm
 * Document source settings

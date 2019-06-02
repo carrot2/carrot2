@@ -1,9 +1,10 @@
 import './ResultList.css';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from "prop-types";
 
 import { view } from "react-easy-state";
+import { observe, unobserve } from "@nx-js/observer-util";
 import { ClusterSelectionSummary } from "./ClusterSelectionSummary.js";
 
 import { Loading } from "./Loading";
@@ -26,8 +27,26 @@ const DocumentView = view(Document);
 const ClusterSelectionSummaryView = view(ClusterSelectionSummary);
 
 export function ResultList(props) {
+  const container = useRef(undefined);
+
+  // Reset document list scroll on cluster selection changes.
+  useEffect(() => {
+    const resetScroll = () => {
+      const selected = props.clusterSelectionStore.selected;
+
+      // A dummy always-true condition to prevent removal of this code.
+      // We need to read some property of the selected cluster set to
+      // get notifications of changes.
+      if (selected.size >= 0) {
+        container.current.scrollTop = 0;
+      }
+    };
+    observe(resetScroll);
+    return () => unobserve(resetScroll);
+  }, [ props.clusterSelectionStore.selected ]);
+
   return (
-    <div className="ResultList">
+    <div className="ResultList" ref={container}>
       <div>
         <Loading loading={props.store.loading}>
           <ClusterSelectionSummaryView clusterSelectionStore={props.clusterSelectionStore}
