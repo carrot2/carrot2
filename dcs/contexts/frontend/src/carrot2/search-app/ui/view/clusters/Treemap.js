@@ -10,7 +10,9 @@ const darkThemeOptions = {
   groupSelectionOutlineColor: "rgba(255, 255, 255, 0.6)",
   attributionTheme: "dark",
   groupColorDecorator: function(opts, props, vars) {
-    vars.groupColor.s = 60;
+    if (props.level === 0) {
+      vars.groupColor.s = props.group.cluster && props.group.cluster.unclustered ? 0 : 60;
+    }
     vars.groupColor.l = 25;
     if (!props.hasChildren && !props.selected && !props.hovered) {
       vars.groupColor.a = 0.95;
@@ -28,7 +30,9 @@ const lightThemeOptions = {
   attributionTheme: "light",
   groupSelectionOutlineColor: "rgba(0, 0, 0, 0.6)",
   groupColorDecorator: function(opts, props, vars) {
-    vars.groupColor.s = 50;
+    if (props.level === 0) {
+      vars.groupColor.s = props.group.cluster && props.group.cluster.unclustered ? 0 : 60;
+    }
     vars.groupColor.l = 55;
     if (!props.hasChildren && !props.selected && !props.hovered) {
       vars.groupColor.a = 0.95;

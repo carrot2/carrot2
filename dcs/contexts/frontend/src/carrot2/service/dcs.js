@@ -23,7 +23,7 @@ export function fetchClusters(query, documents) {
   }).then(function (response) {
     return response.json();
   }).then(function (json) {
-    return enrichClusters(json.clusters, "");
+    return addOtherTopicsCluster(documents, enrichClusters(json.clusters, ""));
   });
 
   // Assign unique IDs to clusters and compute additional information about
@@ -46,5 +46,26 @@ export function fetchClusters(query, documents) {
     }
 
     return clusters;
+  }
+
+  function addOtherTopicsCluster(documents, topClusters) {
+    const clusteredDocs = new Set();
+    topClusters.forEach(c => {
+      c.uniqueDocuments.forEach(clusteredDocs.add.bind(clusteredDocs));
+    });
+
+    if (clusteredDocs.size < documents.length) {
+      const unclustered = documents.map(d => d.id).filter(d => !clusteredDocs.has(d));
+      topClusters.push({
+        id: "unclustered",
+        labels: [ "Other topics "],
+        documents: unclustered,
+        uniqueDocuments: unclustered,
+        size: unclustered.length,
+        unclustered: true
+      });
+    }
+
+    return topClusters;
   }
 }

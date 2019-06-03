@@ -10,7 +10,9 @@ const darkThemeOptions = {
   expanderColor: "rgba(255, 255, 255, 0.15)",
   expanderOutlineColor: "rgba(255, 255, 255, 0.2)",
   groupColorDecorator: function(opts, props, vars) {
-    vars.groupColor.s = 60;
+    if (props.level === 0) {
+      vars.groupColor.s = props.group.cluster && props.group.cluster.unclustered ? 0 : 60;
+    }
     vars.groupColor.l = 20;
     if (props.group.rank) {
       vars.groupColor.l = 10 + 40 * props.group.rank
@@ -25,7 +27,9 @@ const lightThemeOptions = {
   expanderColor: "rgba(0, 0, 0, 0.15)",
   expanderOutlineColor: "rgba(0, 0, 0, 0.2)",
   groupColorDecorator: function(opts, props, vars) {
-    vars.groupColor.s = 60;
+    if (props.level === 0) {
+      vars.groupColor.s = props.group.cluster && props.group.cluster.unclustered ? 0 : 60;
+    }
     vars.groupColor.l = 70;
     if (props.group.rank) {
       vars.groupColor.l = 35 + 40 * props.group.rank

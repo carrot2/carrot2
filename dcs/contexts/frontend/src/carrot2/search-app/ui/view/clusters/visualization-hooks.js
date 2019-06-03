@@ -38,7 +38,7 @@ export const useDataObject = (clusterStore, visible, includeResults) => {
           id: (groupId++).toString(),
           cluster: c,
           label: `${c.labels.join(", ")} (${c.size})`,
-          weight: c.size,
+          weight: c.unclustered ? 0 : c.size,
           groups: (includeResults ? c.documents : []).map(d => {
             let document = documents[d];
             return {
