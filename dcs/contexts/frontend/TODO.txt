@@ -1,6 +1,5 @@
 Features:
 * Verify maxResults implementation in PubMed
-* Implement result maxChars in eTools
 * Close popovers on Esc
 * Switching clustering algorithm
 * Parse site: qualifier in eTools and pass to the eTools API

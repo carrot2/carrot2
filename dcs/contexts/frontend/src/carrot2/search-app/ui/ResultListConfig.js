@@ -13,7 +13,7 @@ export const ResultListConfig = (props) => {
       <Switch label="Open links in a new tab" checked={store.openInNewTab}
               onChange={e => store.openInNewTab = e.target.checked } />
       <FormGroup inline={true} label="Max chars per result">
-        <NumericInput value={store.maxCharsPerResult}
+        <NumericInput min={0} value={store.maxCharsPerResult}
                       onValueChange={v => store.maxCharsPerResult = v}
                       majorStepSize={200} stepSize={50} minorStepSize={10} />
       </FormGroup>

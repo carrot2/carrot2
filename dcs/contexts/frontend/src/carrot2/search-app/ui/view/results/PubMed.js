@@ -54,6 +54,10 @@ export const PubMedResult = view((props) => {
         (result.paragraphs || []).map((() => {
           let contentCharsOutput = 0;
           return (p, index) => {
+            if (maxContentChars === 0) {
+              return null;
+            }
+
             let text;
 
             // Allow some reasonable number of characters for a new paragraph, hence the +80.

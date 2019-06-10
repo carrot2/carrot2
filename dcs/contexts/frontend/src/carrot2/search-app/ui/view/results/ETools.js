@@ -58,10 +58,20 @@ export const EToolsResult = view((props) => {
     urlWithIcon = <Url url={document.url} />;
   }
 
+  const maxContentChars = commonConfig.maxCharsPerResult;
+  let snippet;
+  if (maxContentChars === 0) {
+    snippet = null;
+  } else if (document.snippet && document.snippet.length > maxContentChars) {
+    snippet = document.snippet.substring(0, maxContentChars) + "\u2026";
+  } else {
+    snippet = document.snippet;
+  }
+
   return (
     <>
       <TitleAndRank title={document.title} rank={props.rank} showRank={commonConfig.showRank} />
-      <div>{document.snippet}</div>
+      <div>{snippet}</div>
       {urlWithIcon}
       <Optional visible={config.showSources} content={() => (
         <div className="sources">
