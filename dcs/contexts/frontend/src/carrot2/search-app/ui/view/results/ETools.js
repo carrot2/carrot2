@@ -96,12 +96,13 @@ export const EToolsResultConfig = view(() => {
   );
 });
 
-export const EToolsSourceConfig = view(() => {
+export const EToolsSourceConfig = view((props) => {
   const store = etoolsSourceConfigStore;
   return (
     <div className="EToolsSourceConfig">
       <FormGroup label="Language" inline={true}>
-        <HTMLSelect onChange={e => store.language = e.currentTarget.value} value={store.language}>
+        <HTMLSelect onChange={e => { store.language = e.currentTarget.value; props.onChange(); }}
+                    value={store.language}>
           <option value="all">All</option>
           <option value="en">English</option>
           <option value="fr">French</option>
@@ -111,7 +112,8 @@ export const EToolsSourceConfig = view(() => {
         </HTMLSelect>
       </FormGroup>
       <FormGroup label="Country" inline={true}>
-        <HTMLSelect onChange={e => store.country = e.currentTarget.value} value={store.country}>
+        <HTMLSelect onChange={e => { store.country = e.currentTarget.value; props.onChange(); }}
+                    value={store.country}>
           <option value="web">All</option>
           <option value="AT">Austria</option>
           <option value="FR">France</option>
@@ -124,7 +126,7 @@ export const EToolsSourceConfig = view(() => {
         </HTMLSelect>
       </FormGroup>
       <FormGroup inline={true} label="Sources">
-        <RadioGroup onChange={e => store.dataSources = e.currentTarget.value}
+        <RadioGroup onChange={e => { store.dataSources = e.currentTarget.value; props.onChange(); }}
                     selectedValue={store.dataSources}
                     inline={true}>
           <Radio label="All" value="all" />
@@ -133,7 +135,7 @@ export const EToolsSourceConfig = view(() => {
       </FormGroup>
       <FormGroup inline={true} label=" ">
         <Switch label="Safe search" checked={store.safeSearch}
-                onChange={e => store.safeSearch = e.target.checked } />
+                onChange={e => { store.safeSearch = e.target.checked; props.onChange(); } } />
       </FormGroup>
     </div>
   );

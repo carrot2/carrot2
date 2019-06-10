@@ -108,14 +108,14 @@ export const PubMedResultConfig = view(() => {
 });
 
 
-export const PubMedSourceConfig = view(() => {
+export const PubMedSourceConfig = view((props) => {
   const store = pubmedSourceConfigStore;
 
   return (
     <div className="PubMedSourceConfig">
       <FormGroup inline={true} label="Max results">
         <NumericInput min={50} max={400} value={store.maxResults}
-                      onValueChange={v => store.maxResults = v}
+                      onValueChange={v => { store.maxResults = v; props.onChange(); } }
                       majorStepSize={100} stepSize={50} minorStepSize={10} />
       </FormGroup>
     </div>

@@ -13,8 +13,8 @@ export const sources = {
     createConfig: () => {
       return <EToolsResultConfig />;
     },
-    createSourceConfig: () => {
-      return <EToolsSourceConfig />;
+    createSourceConfig: (props) => {
+      return <EToolsSourceConfig {...props} />;
     }
   },
   "pubmed": {
@@ -26,8 +26,8 @@ export const sources = {
     createConfig: () => {
       return <PubMedResultConfig />;
     },
-    createSourceConfig: () => {
-      return <PubMedSourceConfig />;
+    createSourceConfig: (props) => {
+      return <PubMedSourceConfig {...props} />;
     }
   }
 };
