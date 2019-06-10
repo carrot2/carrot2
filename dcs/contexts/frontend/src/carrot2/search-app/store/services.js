@@ -42,7 +42,7 @@ export const searchResultStore = store({
 
     // TODO: cancel currently running request
     searchResultStore.loading = true;
-    searchResultStore.searchResult = assignDocumentIds(await src.source(query, {}));
+    searchResultStore.searchResult = assignDocumentIds(await src.source(query));
     searchResultStore.loading = false;
   }
 });

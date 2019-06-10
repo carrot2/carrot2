@@ -30,10 +30,6 @@ export class ResultsScreen extends Component {
     this.prevSource = this.getSource();
   }
 
-  componentWillUnmount() {
-    this.unlisten();
-  }
-
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.getQuery(prevProps) !== this.getQuery() || this.getSource(prevProps) !== this.getSource()) {
       this.runSearch();
@@ -70,7 +66,12 @@ export class ResultsScreen extends Component {
   }
 
   pushNewUrl(params) {
-    this.props.history.push(routes.search.buildUrl(params));
+    const newPath = routes.search.buildUrl(params);
+    if (newPath === this.props.history.location.pathname) {
+      this.runSearch();
+    } else {
+      this.props.history.push(newPath);
+    }
   }
 
   render() {

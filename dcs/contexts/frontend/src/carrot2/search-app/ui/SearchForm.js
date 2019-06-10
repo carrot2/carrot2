@@ -1,8 +1,9 @@
-import { Button, Classes, ControlGroup, InputGroup } from "@blueprintjs/core";
+import { Button, Classes, ControlGroup, InputGroup, Popover, Position } from "@blueprintjs/core";
 import * as PropTypes from "prop-types";
 import React, { Component } from "react";
 
 import './SearchForm.css';
+import { SearchAppSettings } from "./SearchAppSettings.js";
 import { SourceTabs } from "./SourceTabs";
 
 export class SearchForm extends Component {
@@ -17,6 +18,10 @@ export class SearchForm extends Component {
 
   submit(e) {
     e.preventDefault();
+    this.triggerOnSubmit();
+  }
+
+  triggerOnSubmit() {
     const trimmed = this.state.query.trim();
     if (trimmed.length > 0) {
       this.props.onSubmit(trimmed);
@@ -39,6 +44,11 @@ export class SearchForm extends Component {
             <InputGroup inputRef={(input) => this.searchInput = input}
                         value={this.state.query} onChange={(e) => this.setState({ query: e.target.value })} />
             <Button className={Classes.FIXED} icon="search" type="submit" />
+            <Popover position={Position.BOTTOM} className={Classes.FIXED}
+                     popoverClassName="bp3-popover-content-sizing SearchAppSettingsContainer">
+              <Button icon="wrench" minimal={true} />
+              <SearchAppSettings source={this.props.source} onApply={this.triggerOnSubmit.bind(this)} />
+            </Popover>
           </ControlGroup>
         </form>
       </div>

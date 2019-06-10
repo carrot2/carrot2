@@ -1,20 +1,22 @@
 import React from "react";
 
-import { etools } from "./service/sources/etools.js";
 import { pubmed } from "./service/sources/pubmed.js";
 
-import { EToolsResult, EToolsResultConfig } from "./search-app/ui/view/results/ETools.js";
-import { PubMedResult, PubMedResultConfig } from "./search-app/ui/view/results/PubMedResult.js";
+import { EToolsResult, EToolsResultConfig, EToolsSourceConfig, etoolsSource } from "./search-app/ui/view/results/ETools.js";
+import { PubMedResult, PubMedResultConfig, PubMedSourceConfig } from "./search-app/ui/view/results/PubMedResult.js";
 
 export const sources = {
   "web": {
     label: "Web",
-    source: etools,
+    source: etoolsSource,
     createResult: (props) => {
       return <EToolsResult {...props} />;
     },
     createConfig: () => {
       return <EToolsResultConfig />;
+    },
+    createSourceConfig: () => {
+      return <EToolsSourceConfig />;
     }
   },
   "pubmed": {
@@ -25,6 +27,9 @@ export const sources = {
     },
     createConfig: () => {
       return <PubMedResultConfig />;
+    },
+    createSourceConfig: () => {
+      return <PubMedSourceConfig />;
     }
   }
 };

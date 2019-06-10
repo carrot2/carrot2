@@ -7,3 +7,8 @@
   margin-bottom: 1em;
   margin-left: 0.125em;
 }
+
+.SearchForm button[type="submit"] {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}

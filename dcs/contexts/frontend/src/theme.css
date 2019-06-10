@@ -13,6 +13,7 @@ body.light, body {
   --text-color-inverted: white;
   --text-color-light: rgba(0, 0, 0, 0.8);
   --text-color-lighter: rgba(0, 0, 0, 0.5);
+  --text-color-faint: rgba(0, 0, 0, 0.15);
   --text-color-secondary: hsla(208, 30%, 50%, 1.0);
   --link-color: hsl(203, 82%, 35%);
   --logo-color: #1d2a4c;
@@ -29,6 +30,7 @@ body.dark {
   --text-color: rgba(255, 255, 255, 1.0);
   --text-color-light: rgba(255, 255, 255, 0.75);
   --text-color-lighter: rgba(255, 255, 255, 0.5);
+  --text-color-faint: rgba(255, 255, 255, 0.15);
   --text-color-secondary: hsla(208, 30%, 70%, 1.0);
   --text-color-inverted: black;
   --link-color: hsl(203, 85%, 61%);

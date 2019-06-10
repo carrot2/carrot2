@@ -89,3 +89,10 @@ export const PubMedResultConfig = view((props) => {
     </>
   );
 });
+
+
+export const PubMedSourceConfig = view(() => {
+  return (
+    <div>PubMed source config</div>
+  );
+});

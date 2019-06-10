@@ -1,6 +1,9 @@
 Features:
+* Implement result maxChars in eTools
+* Close popovers on Esc
 * Switching clustering algorithm
 * Document source settings
+* Parse site: qualifier in eTools and pass to the eTools API
 * Limit the number of results displayed at once?
 * Pass query to the clustering engine
 * Error handling

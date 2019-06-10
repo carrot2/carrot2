@@ -14,18 +14,19 @@ export const themeStore = persistentStore("uiConfig",
   });
 
 
-function ThemeSwitchImpl () {
-  function updateTheme() {
-    const classList = document.body.classList;
-    if (themeStore.isDarkTheme()) {
-      classList.remove("light");
-      classList.add("bp3-dark", "dark");
-    } else {
-      classList.remove("bp3-dark", "dark");
-      classList.add("light");
-    }
+function updateTheme() {
+  const classList = document.body.classList;
+  if (themeStore.isDarkTheme()) {
+    classList.remove("light");
+    classList.add("bp3-dark", "dark");
+  } else {
+    classList.remove("bp3-dark", "dark");
+    classList.add("light");
   }
+}
+updateTheme();
 
+function ThemeSwitchImpl () {
   function flipTheme() {
     themeStore.flipTheme();
     updateTheme();

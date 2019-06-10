@@ -48,7 +48,9 @@
   padding-left: 1em;
 }
 
-.ResultsScreen .SearchForm,
+.ResultsScreen .SearchForm {
+  padding-right: 1em;
+}
 .ResultsScreen .docs {
   padding-right: 1em;
   overflow-x: hidden;
