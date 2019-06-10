@@ -70,13 +70,13 @@ export function pubmed(query, params) {
 
 function liveESearch(query, params) {
   const url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?" + queryString.stringify(
-    Object.assign({
+    {
       db: "pubmed",
       term: query,
-      retmax: 100,
+      retmax: params.maxResults,
       retmode: "json",
       partner: "Carrot2Json",
-    }, params)
+    }
   );
 
   return window.fetch(url).then(response => response.json());

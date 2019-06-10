@@ -1,10 +1,13 @@
+import { FormGroup, NumericInput, Switch } from "@blueprintjs/core";
+
 import React from 'react';
 
 import { view } from "react-easy-state";
 
-import { Switch } from "@blueprintjs/core";
+import { pubmed } from "../../../../service/sources/pubmed.js";
 import { persistentStore } from "../../../../util/persistent-store.js";
 import { Optional } from "../../Optional.js";
+import "./PubMed.css";
 import { TitleAndRank, Url } from "./result-components.js";
 
 const pubmedConfigStore = persistentStore("pubmedResultConfig",
@@ -13,6 +16,16 @@ const pubmedConfigStore = persistentStore("pubmedResultConfig",
     showKeywords: true
   }
 );
+
+const pubmedSourceConfigStore = persistentStore("pubmedSourceResultConfig",
+  {
+    maxResults: 100
+  }
+);
+
+export const pubmedSource = (query) => {
+  return pubmed(query, { maxResults: pubmedSourceConfigStore.maxResults });
+};
 
 /**
  * Renders a single search result from PubMed.
@@ -78,7 +91,7 @@ export const PubMedResult = view((props) => {
   )
 });
 
-export const PubMedResultConfig = view((props) => {
+export const PubMedResultConfig = view(() => {
   const store = pubmedConfigStore;
   return (
     <>
@@ -92,7 +105,15 @@ export const PubMedResultConfig = view((props) => {
 
 
 export const PubMedSourceConfig = view(() => {
+  const store = pubmedSourceConfigStore;
+
   return (
-    <div>PubMed source config</div>
+    <div className="PubMedSourceConfig">
+      <FormGroup inline={true} label="Max results">
+        <NumericInput min={50} max={400} value={store.maxResults}
+                      onValueChange={v => store.maxResults = v}
+                      majorStepSize={100} stepSize={50} minorStepSize={10} />
+      </FormGroup>
+    </div>
   );
 });

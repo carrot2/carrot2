@@ -1,8 +1,8 @@
 Features:
+* Verify maxResults implementation in PubMed
 * Implement result maxChars in eTools
 * Close popovers on Esc
 * Switching clustering algorithm
-* Document source settings
 * Parse site: qualifier in eTools and pass to the eTools API
 * Limit the number of results displayed at once?
 * Pass query to the clustering engine
@@ -17,6 +17,7 @@ Features:
 * Option to highlight clusters to which the hovered-on document belongs.
 * Single document preview
 * Message for IE users
+* Polish numeric inputs (min/max, enforce on keyboard input, NaN when typing "-")
 * Mobile version
 
 

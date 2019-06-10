@@ -1,9 +1,7 @@
 import React from "react";
 
-import { pubmed } from "./service/sources/pubmed.js";
-
 import { EToolsResult, EToolsResultConfig, EToolsSourceConfig, etoolsSource } from "./search-app/ui/view/results/ETools.js";
-import { PubMedResult, PubMedResultConfig, PubMedSourceConfig } from "./search-app/ui/view/results/PubMed.js";
+import { PubMedResult, PubMedResultConfig, PubMedSourceConfig, pubmedSource } from "./search-app/ui/view/results/PubMed.js";
 
 export const sources = {
   "web": {
@@ -21,7 +19,7 @@ export const sources = {
   },
   "pubmed": {
     label: "PubMed",
-    source: pubmed,
+    source: pubmedSource,
     createResult: (props) => {
       return <PubMedResult {...props} />;
     },
