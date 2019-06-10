@@ -3,7 +3,7 @@ import React from "react";
 import { pubmed } from "./service/sources/pubmed.js";
 
 import { EToolsResult, EToolsResultConfig, EToolsSourceConfig, etoolsSource } from "./search-app/ui/view/results/ETools.js";
-import { PubMedResult, PubMedResultConfig, PubMedSourceConfig } from "./search-app/ui/view/results/PubMedResult.js";
+import { PubMedResult, PubMedResultConfig, PubMedSourceConfig } from "./search-app/ui/view/results/PubMed.js";
 
 export const sources = {
   "web": {
