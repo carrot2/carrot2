@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import React from 'react';
 import { pluralize } from "../../util/pluralize.js";
 
-function ClusterInSummary(props) {
+export const ClusterInSummary = props => {
   const cluster = props.cluster;
   const subclusters = cluster.clusters || [];
   const hasSubclusters = subclusters.length > 0;
@@ -13,11 +13,11 @@ function ClusterInSummary(props) {
 
   return (
     <span className="ClusterInSummary">
-      <Icon icon={hasSubclusters ? "lightbulb" : "folder-close"} className="icon" iconSize="0.9em" intent="warning" />{" "}
+      <Icon icon={hasSubclusters ? "lightbulb" : "folder-close"} className="icon" iconSize="1em" intent="warning" />{" "}
       <span className="labels">{labels}</span>
     </span>
   );
-}
+};
 
 /**
  * @return {null}

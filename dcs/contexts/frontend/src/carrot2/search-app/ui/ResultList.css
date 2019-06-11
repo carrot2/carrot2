@@ -83,3 +83,7 @@
 .ResultList > div > a > span.url > span {
   opacity: 0.7;
 }
+
+.ResultList .ResultClusters {
+  min-height: 18px;
+}

@@ -23,8 +23,33 @@ export const clusterStore = store({
       clusterStore.loading = true;
       clusterStore.clusters = EMPTY_ARRAY;
       clusterStore.clusters = await fetchClusters(query, documents);
-      clusterStore.documents = documents;
+      clusterStore.documents = addClusterReferences(documents, clusterStore.clusters);
       clusterStore.loading = false;
+    }
+
+    // For each document, adds references to clusters to which the document below.
+    function addClusterReferences(documents, clusters) {
+      const docToClusters = clusters.reduce(function process(map, cluster) {
+        for (let doc of cluster.uniqueDocuments) {
+          addToMap(map, doc, cluster);
+        }
+        return (cluster.clusters || EMPTY_ARRAY).reduce(process, map);
+
+        function addToMap(map, doc, cluster) {
+          if (map.has(doc)) {
+            map.get(doc).push(cluster);
+          } else {
+            map.set(doc, [ cluster ]);
+          }
+        }
+      }, new Map());
+
+      // Modify the existing documents, these are proxies and components
+      // that reference those documents will render the clusters automatically.
+      for (let doc of documents) {
+        doc.clusters = docToClusters.get(doc.id);
+      }
+      return documents;
     }
   }
 });

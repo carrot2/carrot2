@@ -5,13 +5,23 @@ import PropTypes from "prop-types";
 
 import { view } from "react-easy-state";
 import { observe, unobserve } from "@nx-js/observer-util";
-import { ClusterSelectionSummary } from "./ClusterSelectionSummary.js";
+import { ClusterSelectionSummary, ClusterInSummary } from "./ClusterSelectionSummary.js";
 
 import { Loading } from "./Loading";
 
 import { sources } from "../../config-sources.js";
 
-function Document(props) {
+const ResultClusters = view(props => {
+  return (
+    <div className="ResultClusters">
+      {
+        (props.result.clusters || []).map(c => <ClusterInSummary cluster={c} key={c.id} />)
+      }
+    </div>
+  );
+});
+
+const Result = view(props => {
   const document = props.document;
   const config = props.commonConfigStore;
 
@@ -19,11 +29,11 @@ function Document(props) {
     <a href={document.url} target={config.openInNewTab ? "_blank" : "_self"} rel="noopener noreferrer"
        style={{display: props.visibilityStore.isVisible(document) ? "block" : "none"}}>
       {sources[props.source].createResult(props)}
+      <ResultClusters result={document} />
     </a>
   );
-}
+});
 
-const DocumentView = view(Document);
 const ClusterSelectionSummaryView = view(ClusterSelectionSummary);
 
 export function ResultList(props) {
@@ -54,9 +64,9 @@ export function ResultList(props) {
                                        searchResultStore={props.store} />
           {
             props.store.searchResult.documents.map((document, index) =>
-              <DocumentView source={props.source} document={document} rank={index + 1} key={document.id}
-                            visibilityStore={props.visibilityStore}
-                            commonConfigStore={props.commonConfigStore} />)
+              <Result source={props.source} document={document} rank={index + 1} key={document.id}
+                      visibilityStore={props.visibilityStore}
+                      commonConfigStore={props.commonConfigStore} />)
           }
         </Loading>
       </div>
