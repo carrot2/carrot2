@@ -10,10 +10,11 @@ import { ClusterSelectionSummary, ClusterInSummary } from "./ClusterSelectionSum
 import { Loading } from "./Loading";
 
 import { sources } from "../../config-sources.js";
+import { Optional } from "./Optional.js";
 
 const ResultClusters = view(props => {
   return (
-    <div className="ResultClusters">
+    <div className="ResultClusters" title="Clusters to which this result belongs.">
       {
         (props.result.clusters || []).map(c => <ClusterInSummary cluster={c} key={c.id} />)
       }
@@ -29,7 +30,7 @@ const Result = view(props => {
     <a href={document.url} target={config.openInNewTab ? "_blank" : "_self"} rel="noopener noreferrer"
        style={{display: props.visibilityStore.isVisible(document) ? "block" : "none"}}>
       {sources[props.source].createResult(props)}
-      <ResultClusters result={document} />
+      <Optional visible={config.showClusters} content={ () => <ResultClusters result={document} /> } />
     </a>
   );
 });

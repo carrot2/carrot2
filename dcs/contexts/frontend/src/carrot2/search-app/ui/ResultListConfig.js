@@ -10,6 +10,8 @@ export const ResultListConfig = (props) => {
       <hr />
       <Switch label="Show search rank" checked={store.showRank}
               onChange={e => store.showRank = e.target.checked } />
+      <Switch label="Show clusters to which results belong" checked={store.showClusters}
+              onChange={e => store.showClusters = e.target.checked } />
       <Switch label="Open links in a new tab" checked={store.openInNewTab}
               onChange={e => store.openInNewTab = e.target.checked } />
       <FormGroup inline={true} label="Max chars per result">

@@ -95,6 +95,7 @@ export const resultListConfigStore = persistentStore("resultListConfig",
   {
     showRank: true,
     openInNewTab: true,
+    showClusters: true,
     maxCharsPerResult: 400
   }
 );
