@@ -3,11 +3,9 @@ Features:
 * Close popovers on Esc
 * Switching clustering algorithm
 * Parse site: qualifier in eTools and pass to the eTools API
-* Limit the number of results displayed at once?
 * Pass query to the clustering engine
 * Error handling
   * Per-source messages (IP banned exception for eTools, for example)
-* Interaction hints for FoamTree and Circles?
 * Save visualization as image
 * Copy/save results as CSV
 * Put query in HTML document title
@@ -17,6 +15,9 @@ Features:
 * Single document preview
 * Message for IE users
 * Polish numeric inputs (min/max, enforce on keyboard input, NaN when typing "-")
+
+Later:
+* Limit the number of results displayed at once?
 * Mobile version
 
 

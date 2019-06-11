@@ -2,6 +2,8 @@ import { IconNames } from "@blueprintjs/icons";
 import React from "react";
 
 import { view } from "react-easy-state";
+import { PieChartHints } from "./search-app/ui/view/clusters/PieChartHints.js";
+import { TreemapHints } from "./search-app/ui/view/clusters/TreemapHints.js";
 import { persistentStore } from "./util/persistent-store.js";
 
 import { ResultListConfig } from "./search-app/ui/ResultListConfig.js";
@@ -49,6 +51,13 @@ export const clusterViews = {
     },
     tools: [
       {
+        id: "interaction",
+        icon: IconNames.HELP,
+        createContentElement: (props) => {
+          return <TreemapHints />;
+        }
+      },
+      {
         id: "config",
         icon: IconNames.COG,
         createContentElement: (props) => {
@@ -64,6 +73,13 @@ export const clusterViews = {
       return <PieChartView {...props} configStore={pieChartConfigStore} />;
     },
     tools: [
+      {
+        id: "interaction",
+        icon: IconNames.HELP,
+        createContentElement: (props) => {
+          return <PieChartHints />;
+        }
+      },
       {
         id: "config",
         icon: IconNames.COG,

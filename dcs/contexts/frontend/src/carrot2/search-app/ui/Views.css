@@ -1,3 +1,13 @@
 .view-tool-content .bp3-input {
   max-width: 4.5em;
 }
+
+.view-tool-content h4 {
+  border-bottom: 1px solid var(--hr);
+  padding-bottom: var(--leading);
+  margin-bottom: var(--leading);
+}
+
+.view-tool-content.bp3-popover-content-sizing .bp3-popover-content {
+  max-width: none;
+}

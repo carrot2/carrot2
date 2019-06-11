@@ -19,6 +19,9 @@ body.light, body {
   --logo-color: #1d2a4c;
   --cluster-icon-color: #ffa64d;
   --hr: hsla(0, 0%, 0%, 0.15);
+  --kbd-outer-border-color: var(--background-color-intense);
+  --kbd-inner-border-color: var(--background-color);
+  --kbd-background-color: var(--background-color-dimmed);
 }
 
 body.dark {
@@ -37,6 +40,9 @@ body.dark {
   --logo-color: var(--text-color);
   --cluster-icon-color: #ffb366;
   --hr: hsla(0, 0%, 100%, 0.15);
+  --kbd-outer-border-color: var(--background-color-intense);
+  --kbd-inner-border-color: hsl(207, 23%, 27%);
+  --kbd-background-color: var(--background-color-dimmed);
 }
 
 body {
@@ -62,4 +68,15 @@ a {
 hr {
   border: 1px solid var(--hr);
   border-top: none;
+}
+
+kbd {
+  color: var(--text-color);
+  display: inline-block;
+  border: 1px solid var(--kbd-outer-border-color);
+  border-radius: 4px;
+  padding: 0.0em 0.35em;
+  margin: 0 0.2em;
+  box-shadow: 0 2px 0 var(--kbd-outer-border-color), 0 0 0 2px var(--kbd-inner-border-color) inset;
+  background-color: var(--kbd-background-color);
 }
