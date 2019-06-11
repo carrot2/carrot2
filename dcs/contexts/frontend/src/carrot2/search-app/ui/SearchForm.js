@@ -43,10 +43,10 @@ export class SearchForm extends Component {
           <ControlGroup fill={true}>
             <InputGroup inputRef={(input) => this.searchInput = input}
                         value={this.state.query} onChange={(e) => this.setState({ query: e.target.value })} />
-            <Button className={Classes.FIXED} icon="search" type="submit" />
+            <Button className={Classes.FIXED} icon="search" type="submit" text="Search" />
             <Popover position={Position.BOTTOM} className={Classes.FIXED}
                      popoverClassName="bp3-popover-content-sizing SearchAppSettingsContainer">
-              <Button icon="wrench" minimal={true} />
+              <Button icon="wrench" minimal={true} title="Search and clustering settings" />
               <SearchAppSettings source={this.props.source} onApply={this.triggerOnSubmit.bind(this)} />
             </Popover>
           </ControlGroup>
