@@ -18,11 +18,14 @@ import { SearchForm } from "./SearchForm";
 
 import { ViewTabs } from "./Views.js";
 
+import { applicationTitle } from "../../config.js";
+
 const ResultListView = view(ResultList);
 
 export class ResultsScreen extends Component {
   runSearch() {
     searchResultStore.load(this.getSource(), this.getQuery());
+    document.title = this.getQuery() + (this.getQuery().length > 0 ? " - " : "") + applicationTitle;
   }
 
   componentDidMount() {

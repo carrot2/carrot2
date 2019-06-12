@@ -8,7 +8,6 @@ Features:
   * Per-source messages (IP banned exception for eTools, for example)
 * Save visualization as image
 * Copy/save results as CSV
-* Put query in HTML document title
 * Option to highlight clusters to which the hovered-on document belongs.
 * Single document preview
 * Message for IE users
