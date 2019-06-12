@@ -6,19 +6,21 @@ import PropTypes from "prop-types";
 import { view } from "react-easy-state";
 import { observe, unobserve } from "@nx-js/observer-util";
 import { ClusterSelectionSummary, ClusterInSummary } from "./ClusterSelectionSummary.js";
-
+import { Optional } from "./Optional.js";
 import { Loading } from "./Loading";
 
 import { sources } from "../../config-sources.js";
-import { Optional } from "./Optional.js";
+import { clusterSelectionStore } from "../store/selection.js";
 
 const ResultClusters = view(props => {
+  const selectionStore = clusterSelectionStore;
   return (
-    <div className="ResultClusters" title="Clusters to which this result belongs.">
+    <span className="ResultClusters">
       {
-        (props.result.clusters || []).map(c => <ClusterInSummary cluster={c} key={c.id} />)
+        (props.result.clusters || []).map(c =>
+          <ClusterInSummary cluster={c} key={c.id} onClick={() => selectionStore.toggleSelection(c)} />)
       }
-    </div>
+    </span>
   );
 });
 

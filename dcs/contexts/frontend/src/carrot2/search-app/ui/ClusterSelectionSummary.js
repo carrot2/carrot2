@@ -12,7 +12,7 @@ export const ClusterInSummary = props => {
   const labels = cluster.labels.join(", ");
 
   return (
-    <span className="ClusterInSummary">
+    <span className="ClusterInSummary" onClick={(e) => { e.preventDefault(); props.onClick && props.onClick() }}>
       <Icon icon={hasSubclusters ? "lightbulb" : "folder-close"} className="icon" iconSize="1em" intent="warning" />{" "}
       <span className="labels">{labels}</span>
     </span>

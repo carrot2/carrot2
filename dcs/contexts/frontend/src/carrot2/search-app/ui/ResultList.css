@@ -87,3 +87,13 @@
 .ResultList .ResultClusters {
   min-height: 18px;
 }
+
+.ResultList .ResultClusters:hover .ClusterInSummary {
+  opacity: 0.5;
+}
+.ResultList .ResultClusters:hover .ClusterInSummary:hover {
+  opacity: 1.0;
+}
+.ResultList .ResultClusters:hover .ClusterInSummary:hover .bp3-icon {
+  color: var(--cluster-icon-color);
+}
