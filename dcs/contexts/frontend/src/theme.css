@@ -7,17 +7,20 @@
 
 body.light, body {
   --background-color: #f4f4f4;
-  --background-color-intense: #ccc;
+  --background-color-main: white;
+  --background-color-intense: rgba(0, 0, 0, 0.07);
   --background-color-dimmed: hsla(0, 0%, 0%, 0.07);
   --text-color: black;
   --text-color-inverted: white;
   --text-color-light: rgba(0, 0, 0, 0.8);
   --text-color-lighter: rgba(0, 0, 0, 0.5);
   --text-color-faint: rgba(0, 0, 0, 0.15);
-  --text-color-secondary: hsla(208, 30%, 50%, 1.0);
+  --text-color-secondary: hsl(208, 30%, 39%);
   --link-color: hsl(203, 82%, 35%);
   --logo-color: #1d2a4c;
   --cluster-icon-color: #ffa64d;
+  --warning-background-color: hsla(40, 80%, 60%, 0.06);
+  --warning-border-color: hsla(40, 80%, 60%, 0.7);
   --hr: hsla(0, 0%, 0%, 0.15);
   --kbd-outer-border-color: var(--background-color-intense);
   --kbd-inner-border-color: var(--background-color);
@@ -28,6 +31,7 @@ body.dark {
   -webkit-font-smoothing: antialiased;
 
   --background-color: hsl(207, 23%, 17%);
+  --background-color-main: rgba(16, 22, 26, 0.3);
   --background-color-intense: hsl(207, 28%, 11%);
   --background-color-dimmed: hsl(207, 23%, 22%);
   --text-color: rgba(255, 255, 255, 1.0);
@@ -52,7 +56,7 @@ body {
   transition: background-color 300ms;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, button {
   font-family: Lato, sans-serif;
 }
 
@@ -60,9 +64,13 @@ h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, 
   margin-top: 0;
 }
 
-a {
+a, button.link {
   color: var(--link-color);
   text-underline-width: 1px;
+}
+a:hover, button.link:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 hr {
@@ -79,4 +87,15 @@ kbd {
   margin: 0 0.2em;
   box-shadow: 0 2px 0 var(--kbd-outer-border-color), 0 0 0 2px var(--kbd-inner-border-color) inset;
   background-color: var(--kbd-background-color);
+}
+
+button.link {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  font-size: 100%;
+}
+
+p:last-child {
+  margin-bottom: 0;
 }

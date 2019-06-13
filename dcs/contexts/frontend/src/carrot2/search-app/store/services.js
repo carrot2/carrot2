@@ -60,16 +60,26 @@ export const searchResultStore = store({
   searchResult: {
     query: "",
     matches: 0,
-    documents: []
+    documents: EMPTY_ARRAY
   },
-  error: false,
+  error: undefined,
   load: async function (source, query) {
     const src = sources[source] || sources.etools;
 
     // TODO: cancel currently running request
     searchResultStore.loading = true;
+    searchResultStore.error = undefined;
     searchResultStore.source = source;
-    searchResultStore.searchResult = assignDocumentIds(await src.source(query));
+    try {
+      searchResultStore.searchResult = assignDocumentIds(await src.source(query));
+    } catch (e) {
+      searchResultStore.error = e;
+      searchResultStore.searchResult = {
+        query: query,
+        matches: 0,
+        documents: EMPTY_ARRAY
+      }
+    }
     searchResultStore.loading = false;
   }
 });

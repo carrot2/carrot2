@@ -27,15 +27,25 @@ const ResultClusters = view(props => {
 const Result = view(props => {
   const document = props.document;
   const config = props.commonConfigStore;
+  const source = sources[props.source];
 
   return (
     <a href={document.url} target={config.openInNewTab ? "_blank" : "_self"} rel="noopener noreferrer"
        style={{display: props.visibilityStore.isVisible(document) ? "block" : "none"}}>
-      {sources[props.source].createResult(props)}
+      {source.createResult(props)}
       <Optional visible={config.showClusters} content={ () => <ResultClusters result={document} /> } />
     </a>
   );
 });
+
+export const Error = (props) => {
+  const source = sources[props.source];
+  return (
+    <div className="Error">
+      { source.createError(props) }
+    </div>
+  );
+};
 
 const ClusterSelectionSummaryView = view(ClusterSelectionSummary);
 
@@ -58,18 +68,26 @@ export function ResultList(props) {
     return () => unobserve(resetScroll);
   }, [ props.clusterSelectionStore.selected ]);
 
+  const store = props.store;
   return (
     <div className="ResultList" ref={container}>
       <div>
-        <Loading loading={props.store.loading}>
-          <ClusterSelectionSummaryView clusterSelectionStore={props.clusterSelectionStore}
-                                       documentVisibilityStore={props.visibilityStore}
-                                       searchResultStore={props.store} />
+        <Loading loading={store.loading}>
           {
-            props.store.searchResult.documents.map((document, index) =>
-              <Result source={props.source} document={document} rank={index + 1} key={document.id}
-                      visibilityStore={props.visibilityStore}
-                      commonConfigStore={props.commonConfigStore} />)
+            store.error !== undefined ?
+              <Error source={props.source} error={store.error} runSearch={props.runSearch} />
+              :
+              <>
+                <ClusterSelectionSummaryView clusterSelectionStore={props.clusterSelectionStore}
+                                             documentVisibilityStore={props.visibilityStore}
+                                             searchResultStore={store} />
+                {
+                  store.searchResult.documents.map((document, index) =>
+                  <Result source={props.source} document={document} rank={index + 1} key={document.id}
+                          visibilityStore={props.visibilityStore}
+                          commonConfigStore={props.commonConfigStore} />)
+                }
+              </>
           }
         </Loading>
       </div>

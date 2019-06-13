@@ -132,7 +132,8 @@ export class ResultsScreen extends Component {
             <ResultListView source={this.getSource()} store={searchResultStore}
                             visibilityStore={documentVisibilityStore}
                             clusterSelectionStore={clusterSelectionStore}
-                            commonConfigStore={resultListConfigStore} />
+                            commonConfigStore={resultListConfigStore}
+                            runSearch={this.runSearch.bind(this)} />
           </div>
         </div>
       </main>

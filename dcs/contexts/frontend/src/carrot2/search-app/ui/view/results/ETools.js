@@ -2,9 +2,9 @@ import "./ETools.css";
 
 import React from 'react';
 
-import { view } from "react-easy-state";
+import { view, store } from "react-easy-state";
 
-import { FormGroup, HTMLSelect, Radio, RadioGroup, Switch } from "@blueprintjs/core";
+import { Button, FormGroup, HTMLSelect, InputGroup, Radio, RadioGroup, Switch } from "@blueprintjs/core";
 import { Optional } from "../../Optional.js";
 import { TitleAndRank, Url } from "./result-components.js";
 
@@ -23,7 +23,9 @@ const etoolsSourceConfigStore = persistentStore("etoolsSourceConfig",
     safeSearch: true,
     dataSources: "all",
     language: "all",
-    country: "web"
+    country: "web",
+    partner: "Carrot2Json",
+    customerId: ""
   }
 );
 
@@ -138,5 +140,58 @@ export const EToolsSourceConfig = view((props) => {
                 onChange={e => { store.safeSearch = e.target.checked; props.onChange(); } } />
       </FormGroup>
     </div>
+  );
+});
+
+export const EToolsAccessDetails = view(() => {
+  const store = etoolsSourceConfigStore;
+  return (
+    <div className="EToolsAccessDetails">
+      <h4>eTools access tokens</h4>
+      <FormGroup label="Partner ID" inline={true}>
+        <InputGroup value={store.partner} onChange={e => store.partner = e.target.value} />
+      </FormGroup>
+      <FormGroup label="Customer ID" inline={true}>
+        <InputGroup value={store.customerId} onChange={e => store.customerId = e.target.value } />
+      </FormGroup>
+    </div>
+  );
+});
+
+const detailsVisibleStore = store({
+  detailsVisible: false
+});
+
+export const EToolsIpBannedError = view((props) => {
+  const store = detailsVisibleStore;
+  const detailsVisible = store.detailsVisible;
+
+  return (
+    <>
+      <h3>Search limit exceeded</h3>
+
+      <p>
+        <a href="https://etools.ch" target="_blank" rel="noopener noreferrer">eTools</a>, our web search results provider,
+        blocked your IP address due to the excessive number of searches.
+      </p>
+
+      <p>
+        The block may be lifted after some time, but if you keep getting this
+        message, you may need to <a href="mailto:sschmid@comcepta.com" target="_blank" rel="noopener noreferrer">contact
+        eTools</a> to arrange for an unlimited search service.
+      </p>
+
+      <p>
+        Once you get your eTools access
+        tokens, <button className="link" onClick={(e) => { e.preventDefault(); store.detailsVisible = !detailsVisible; } }>provide them here</button>.
+      </p>
+
+      <div style={{display: detailsVisible ? "block" : "none", marginTop: "2em"}}>
+        <EToolsAccessDetails />
+
+        <Button onClick={props.runSearch}
+                intent="primary">Apply and re-run search</Button>
+      </div>
+    </>
   );
 });

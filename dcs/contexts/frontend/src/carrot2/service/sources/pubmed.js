@@ -83,8 +83,9 @@ function liveESearch(query, params) {
 }
 
 function cachedESearch() {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     window.setTimeout(() => {
+      // reject({ code: 404, message: "Server error." });
       resolve(import("./pubmed.esearch.result.json" /* webpackChunkName: "pubmed-esearch-result-json" */));
     }, 300);
   });

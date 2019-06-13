@@ -5,3 +5,7 @@
 .EToolsSourceConfig .bp3-radio {
   margin-bottom: 0;
 }
+
+.EToolsAccessDetails .bp3-label {
+  min-width: 6em;
+}

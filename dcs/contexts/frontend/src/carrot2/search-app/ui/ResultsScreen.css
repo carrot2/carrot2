@@ -104,24 +104,13 @@
 
 .ResultsScreen .clusters,
 .ResultsScreen .docs {
-  background-color: #fff;
+  background-color: var(--background-color-main);
   transition: background-color 0.15s ease;
 }
 
 .ResultsScreen .clusters-tabs,
 .ResultsScreen .docs-tabs {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-
-.bp3-dark .ResultsScreen .clusters,
-.bp3-dark .ResultsScreen .docs {
-  background-color: rgba(16, 22, 26, 0.3);
-}
-
-.bp3-dark .ResultsScreen .clusters-tabs,
-.bp3-dark .ResultsScreen .docs-tabs {
-  border-bottom: 1px solid rgba(16, 22, 26, 0.5);
+  border-bottom: 1px solid var(--background-color-intense);
 }
 
 ::-webkit-scrollbar {
