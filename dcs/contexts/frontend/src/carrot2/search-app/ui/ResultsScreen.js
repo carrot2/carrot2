@@ -48,9 +48,9 @@ export class ResultsScreen extends Component {
     });
   }
 
-  getSource(props) { return (props || this.props).match.params.source; }
-  getQuery(props) { return (props || this.props).match.params.query; }
-  getView(props) { return (props || this.props).match.params.view; }
+  getSource(props) { return decodeURIComponent((props || this.props).match.params.source); }
+  getQuery(props) { return decodeURIComponent((props || this.props).match.params.query); }
+  getView(props) { return decodeURIComponent((props || this.props).match.params.view); }
 
   onSourceChange(newSource) {
     this.pushNewUrl({
