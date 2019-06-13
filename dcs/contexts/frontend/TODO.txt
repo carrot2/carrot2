@@ -7,7 +7,6 @@ Features:
 * Error handling
   * Per-source messages (IP banned exception for eTools, for example)
 * Copy/save results as CSV
-* Option to highlight clusters to which the hovered-on document belongs.
 * Single document preview
 * Message for IE users
 * Polish numeric inputs (min/max, enforce on keyboard input, NaN when typing "-")
