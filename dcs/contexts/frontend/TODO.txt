@@ -6,7 +6,6 @@ Features:
 * Pass query to the clustering engine
 * Error handling
   * Per-source messages (IP banned exception for eTools, for example)
-* Save visualization as image
 * Copy/save results as CSV
 * Option to highlight clusters to which the hovered-on document belongs.
 * Single document preview
@@ -15,6 +14,7 @@ Features:
 
 Later:
 * Limit the number of results displayed at once?
+* Check background color on Circles export when implemented.
 * Mobile version
 
 

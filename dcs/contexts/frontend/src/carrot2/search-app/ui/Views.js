@@ -5,18 +5,25 @@ import { Button, Classes, ControlGroup, Popover, Position, Tab, Tabs } from "@bl
 
 import "./Views.css";
 
+const ShowHide = props => {
+  return <span className={props.className} title={props.title}
+               style={props.visible ? {} : {display: "none"}}>{props.children}</span>;
+};
+
 const createToolElement = (view, tool, visible, props) => {
+  const key = view + "." + tool.id;
   if (tool.icon) {
     return (
       <Popover className={Classes.FIXED} position={Position.BOTTOM_RIGHT}
                autoFocus={true} popoverClassName="bp3-popover-content-sizing view-tool-content"
-               disabled={!visible} key={view + "." + tool.id}>
-        <span style={visible ? {} : {display: "none"}}><Button icon={tool.icon} minimal={true} /></span>
+               disabled={!visible} key={key}>
+        <ShowHide visible={visible}><Button icon={tool.icon} minimal={true} title={tool.title} /></ShowHide>
         {tool.createContentElement(props)}
       </Popover>
     );
   } else {
-    return tool.createContentElement();
+    return <ShowHide key={key} visible={visible} className={Classes.FIXED}
+                     title={tool.title}>{tool.createContentElement()}</ShowHide>
   }
 };
 

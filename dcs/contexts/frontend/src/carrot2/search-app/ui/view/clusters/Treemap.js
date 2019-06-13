@@ -113,7 +113,7 @@ export const Treemap = props => {
     props.clusterSelectionStore, props.documentSelectionStore ]);
 
   return (
-    <FoamTree options={options} dataObject={dataObject} selection={selection} />
+    <FoamTree implRef={props.implRef} options={options} dataObject={dataObject} selection={selection} />
   );
 };
 

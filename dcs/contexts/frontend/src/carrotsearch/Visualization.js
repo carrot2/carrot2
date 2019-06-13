@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 Visualization.propTypes = {
   impl: PropTypes.object.isRequired,
+  implRef: PropTypes.object,
   options: PropTypes.object,
   dataObject: PropTypes.object.isRequired,
   selection: PropTypes.array
@@ -32,8 +33,11 @@ export function Visualization(props) {
         pixelRatio: window.devicePixelRatio || 1,
         ...props.options
       });
+      if (props.implRef) {
+        props.implRef.current = instance.current;
+      }
     }
-  }, [ props.options, props.impl ]);
+  }, [ props.options, props.impl, props.implRef ]);
 
   useEffect(() => {
     if (instance.current) {

@@ -4,6 +4,7 @@ import React from "react";
 import { view } from "react-easy-state";
 import { PieChartHints } from "./search-app/ui/view/clusters/PieChartHints.js";
 import { TreemapHints } from "./search-app/ui/view/clusters/TreemapHints.js";
+import { VisualizationExport } from "./search-app/ui/view/clusters/VisualizationExport.js";
 import { persistentStore } from "./util/persistent-store.js";
 
 import { ResultListConfig } from "./search-app/ui/ResultListConfig.js";
@@ -34,7 +35,10 @@ const pieChartConfigStore = persistentStore("pieChartConfig",
   }
 );
 
+const treemapImplRef = { current: undefined };
+const piechartImplRef = { current: undefined };
 
+// TODO: convert to a series of some internal API calls?
 export const clusterViews = {
   "folders": {
     label: "Folders",
@@ -47,7 +51,7 @@ export const clusterViews = {
   "treemap": {
     label: "Treemap",
     createContentElement: (props) => {
-      return <TreemapView {...props} configStore={treemapConfigStore} />;
+      return <TreemapView {...props} configStore={treemapConfigStore} implRef={treemapImplRef} />;
     },
     tools: [
       {
@@ -55,14 +59,23 @@ export const clusterViews = {
         icon: IconNames.HELP,
         createContentElement: (props) => {
           return <TreemapHints />;
-        }
+        },
+        title: "Treemap interaction help"
+      },
+      {
+        id: "export-image",
+        createContentElement: (props) => {
+          return <VisualizationExport implRef={treemapImplRef} fileNameSuffix="treemap" />;
+        },
+        title: "Export treemap as JPEG"
       },
       {
         id: "config",
         icon: IconNames.COG,
         createContentElement: (props) => {
           return <TreemapConfig store={treemapConfigStore} />;
-        }
+        },
+        title: "Treemap settings"
       }
     ]
   },
@@ -70,7 +83,7 @@ export const clusterViews = {
   "pie-chart": {
     label: "Pie-chart",
     createContentElement: (props) => {
-      return <PieChartView {...props} configStore={pieChartConfigStore} />;
+      return <PieChartView {...props} configStore={pieChartConfigStore} implRef={piechartImplRef} />;
     },
     tools: [
       {
@@ -79,6 +92,13 @@ export const clusterViews = {
         createContentElement: (props) => {
           return <PieChartHints />;
         }
+      },
+      {
+        id: "export-image",
+        createContentElement: (props) => {
+          return <VisualizationExport implRef={piechartImplRef} fileNameSuffix="pie-chart" />;
+        },
+        title: "Export pie-chart as JPEG"
       },
       {
         id: "config",

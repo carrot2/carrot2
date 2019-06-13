@@ -16,6 +16,7 @@
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.1",
     "store2": "^2.7.1",
+    "file-saver": "^2.0.2",
     "typeface-cabin-condensed": "^0.0.72",
     "typeface-lato": "^0.0.54",
     "webpack-bundle-analyzer": "^3.3.2"

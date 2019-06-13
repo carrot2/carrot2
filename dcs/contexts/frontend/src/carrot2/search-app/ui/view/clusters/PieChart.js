@@ -73,7 +73,7 @@ export const PieChart = props => {
   }, [ props.themeStore.theme, props.clusterSelectionStore, props.documentSelectionStore ]);
 
   return (
-    <Circles options={options} dataObject={dataObject} selection={selection} />
+    <Circles implRef={props.implRef} options={options} dataObject={dataObject} selection={selection} />
   );
 };
 

@@ -56,6 +56,7 @@ export const clusterStore = store({
 
 export const searchResultStore = store({
   loading: false,
+  source: undefined,
   searchResult: {
     query: "",
     matches: 0,
@@ -67,6 +68,7 @@ export const searchResultStore = store({
 
     // TODO: cancel currently running request
     searchResultStore.loading = true;
+    searchResultStore.source = source;
     searchResultStore.searchResult = assignDocumentIds(await src.source(query));
     searchResultStore.loading = false;
   }
