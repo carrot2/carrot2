@@ -21,11 +21,7 @@ export function fetchClusters(query, documents) {
     },
     body: JSON.stringify(request)
   }).then(function (response) {
-    return new Promise((resolve) => {
-      window.setTimeout(() => {
-        resolve(response.json());
-      }, 0);
-    });
+    return response.json();
   }).then(function (json) {
     return addOtherTopicsCluster(documents, enrichClusters(json.clusters, ""));
   });
