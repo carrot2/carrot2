@@ -16,6 +16,7 @@
 .SearchAppSettings > div > div:first-child {
   border-right: 1px solid var(--text-color-faint);
   margin-right: -1em;
+  padding-right: 1em;
 }
 .SearchAppSettings > div > div + div {
   margin-left: 1em;

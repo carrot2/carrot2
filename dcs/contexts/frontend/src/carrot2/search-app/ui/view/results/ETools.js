@@ -1,15 +1,14 @@
-import "./ETools.css";
+import { Button, FormGroup, HTMLSelect, InputGroup, Radio, RadioGroup, Switch } from "@blueprintjs/core";
 
 import React from 'react';
 
-import { view, store } from "react-easy-state";
-
-import { Button, FormGroup, HTMLSelect, InputGroup, Radio, RadioGroup, Switch } from "@blueprintjs/core";
-import { Optional } from "../../Optional.js";
-import { TitleAndRank, Url } from "./result-components.js";
+import { store, view } from "react-easy-state";
 
 import { etools } from "../../../../service/sources/etools.js";
 import { persistentStore } from "../../../../util/persistent-store.js";
+import { Optional } from "../../Optional.js";
+import "./ETools.css";
+import { TitleAndRank, Url } from "./result-components.js";
 
 const etoolsResultsConfigStore = persistentStore("etoolsResultConfig",
   {
@@ -98,6 +97,53 @@ export const EToolsResultConfig = view(() => {
   );
 });
 
+const detailsVisibleStore = store({
+  detailsVisible: false
+});
+
+const EToolsTokensForm = view(props => {
+  const store = etoolsSourceConfigStore;
+  const onChange = () => { props.onChange && props.onChange(); };
+
+  return (
+    <div className="EToolsAccessDetails">
+      <h4>eTools access tokens</h4>
+      <FormGroup label="Partner ID" inline={true}>
+        <InputGroup value={store.partner} onChange={e => { onChange(); return store.partner = e.target.value; } } />
+      </FormGroup>
+      <FormGroup label="Customer ID" inline={true}>
+        <InputGroup value={store.customerId} onChange={e => { onChange(); return store.customerId = e.target.value; } } />
+      </FormGroup>
+    </div>
+  );
+});
+
+const EToolsTokensButton = props => {
+  const store = detailsVisibleStore;
+
+  return (
+    <button onClick={(e) => { e.preventDefault(); store.detailsVisible = !store.detailsVisible; } }
+            className="link">{props.children}</button>
+  );
+};
+
+const EToolsTokensFormContainer = view((props) => {
+  const detailsVisible = detailsVisibleStore.detailsVisible;
+
+  return (
+    <div style={{display: detailsVisible ? "block" : "none", marginTop: "2em"}}>
+      <EToolsTokensForm onChange={props.onChange} />
+      {props.children}
+    </div>
+  );
+});
+
+export const EToolsLink = () => {
+  return (
+    <a href="https://etools.ch" target="_blank" rel="noopener noreferrer">eTools</a>
+  );
+};
+
 export const EToolsSourceConfig = view((props) => {
   const store = etoolsSourceConfigStore;
   return (
@@ -139,39 +185,24 @@ export const EToolsSourceConfig = view((props) => {
         <Switch label="Safe search" checked={store.safeSearch}
                 onChange={e => { store.safeSearch = e.target.checked; props.onChange(); } } />
       </FormGroup>
+
+      <p><small>
+        Web search feed is kindly provided to us by <EToolsLink />.
+        If you have custom eTools access tokens, <EToolsTokensButton>provide them here</EToolsTokensButton>.
+      </small></p>
+
+      <EToolsTokensFormContainer onChange={props.onChange} />
     </div>
   );
-});
-
-export const EToolsAccessDetails = view(() => {
-  const store = etoolsSourceConfigStore;
-  return (
-    <div className="EToolsAccessDetails">
-      <h4>eTools access tokens</h4>
-      <FormGroup label="Partner ID" inline={true}>
-        <InputGroup value={store.partner} onChange={e => store.partner = e.target.value} />
-      </FormGroup>
-      <FormGroup label="Customer ID" inline={true}>
-        <InputGroup value={store.customerId} onChange={e => store.customerId = e.target.value } />
-      </FormGroup>
-    </div>
-  );
-});
-
-const detailsVisibleStore = store({
-  detailsVisible: false
 });
 
 export const EToolsIpBannedError = view((props) => {
-  const store = detailsVisibleStore;
-  const detailsVisible = store.detailsVisible;
-
   return (
     <>
       <h3>Search limit exceeded</h3>
 
       <p>
-        <a href="https://etools.ch" target="_blank" rel="noopener noreferrer">eTools</a>, our web search results provider,
+        <EToolsLink/>, our web search results provider,
         blocked your IP address due to the excessive number of searches.
       </p>
 
@@ -182,16 +213,12 @@ export const EToolsIpBannedError = view((props) => {
       </p>
 
       <p>
-        Once you get your eTools access
-        tokens, <button className="link" onClick={(e) => { e.preventDefault(); store.detailsVisible = !detailsVisible; } }>provide them here</button>.
+        Once you get your eTools access tokens, <EToolsTokensButton>provide them here</EToolsTokensButton>.
       </p>
 
-      <div style={{display: detailsVisible ? "block" : "none", marginTop: "2em"}}>
-        <EToolsAccessDetails />
-
-        <Button onClick={props.runSearch}
-                intent="primary">Apply and re-run search</Button>
-      </div>
+      <EToolsTokensFormContainer>
+        <Button onClick={props.runSearch} intent="primary">Apply and re-run search</Button>
+      </EToolsTokensFormContainer>
     </>
   );
 });
