@@ -21,6 +21,9 @@ export function fetchClusters(query, documents) {
     },
     body: JSON.stringify(request)
   }).then(function (response) {
+    if (!response.ok) {
+      throw response;
+    }
     return response.json();
   }).then(function (json) {
     return addOtherTopicsCluster(documents, enrichClusters(json.clusters, ""));

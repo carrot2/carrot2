@@ -70,17 +70,27 @@
   grid-area: clusters;
   overflow-x: hidden;
   padding-left: 0.125em;
+  position: relative;
 }
 .ResultsScreen .docs {
   grid-area: docs;
 }
 
-.ResultsScreen .clusters > div,
+.ResultsScreen .clusters > div:not(.Error),
 .ResultsScreen .docs > div {
   height: 100%;
   padding-top: 0.25em;
+  text-align: left;
 }
 
+.ResultsScreen .clusters .Error {
+  text-align: left;
+  position: absolute;
+  width: 32em;
+  left: 0;
+  right: 0;
+  margin: 4rem auto 0;
+}
 
 .ResultsScreen .clusters-tabs {
   grid-area: clusters-tabs;

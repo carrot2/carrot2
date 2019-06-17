@@ -14,25 +14,11 @@
 }
 
 .ResultList .Error {
-  padding: 2em 2.5em;
   position: absolute;
   width: 32em;
   left: 0;
   right: 0;
   margin: 4rem auto 0;
-  background-color: var(--warning-background-color);
-  border: 1px solid var(--warning-border-color);
-  border-radius: 0.5em;
-}
-
-.ResultList .Error pre {
-  margin: 1.5em 0;
-}
-
-.ResultList .Error a,
-.ResultList .Error button.link {
-  background-color: var(--background-color-main);
-  padding: 0.0625em 0.125em;
 }
 
 .ResultList > div > a {

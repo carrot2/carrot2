@@ -1,18 +1,8 @@
 import React from "react";
+import { SearchEngineErrorMessage } from "./search-app/ui/ErrorMessage.js";
 
 import { EToolsResult, EToolsResultConfig, EToolsSourceConfig, EToolsIpBannedError, etoolsSource } from "./search-app/ui/view/results/ETools.js";
 import { PubMedResult, PubMedResultConfig, PubMedSourceConfig, pubmedSource } from "./search-app/ui/view/results/PubMed.js";
-
-const GenericError = (props) => {
-  return (
-    <>
-      <h3>Search engine error</h3>
-      <p>Search could not be performed due to the following error:</p>
-      <pre>{props.error.message}</pre>
-      <p>That's all we know.</p>
-    </>
-  );
-};
 
 export const sources = {
   "web": {
@@ -25,7 +15,7 @@ export const sources = {
       if (props.error.status === 402) {
         return <EToolsIpBannedError {...props} />;
       }
-      return <GenericError {...props} />
+      return <SearchEngineErrorMessage {...props} />
     },
     createConfig: () => {
       return <EToolsResultConfig />;
@@ -41,7 +31,7 @@ export const sources = {
       return <PubMedResult {...props} />;
     },
     createError: (props) => {
-      return <GenericError {...props} />
+      return <SearchEngineErrorMessage {...props} />
     },
     createConfig: () => {
       return <PubMedResultConfig />;

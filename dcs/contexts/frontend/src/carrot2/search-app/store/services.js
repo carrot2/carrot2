@@ -9,7 +9,7 @@ export const clusterStore = store({
   loading: false,
   clusters: EMPTY_ARRAY,
   documents: EMPTY_ARRAY,
-  error: false,
+  error: undefined,
   load: async function (searchResult) {
     const documents = searchResult.documents;
     const query = searchResult.query;
@@ -22,8 +22,15 @@ export const clusterStore = store({
       // TODO: cancel currently running request
       clusterStore.loading = true;
       clusterStore.clusters = EMPTY_ARRAY;
-      clusterStore.clusters = await fetchClusters(query, documents);
-      clusterStore.documents = addClusterReferences(documents, clusterStore.clusters);
+      clusterStore.error = undefined;
+      try {
+        clusterStore.clusters = await fetchClusters(query, documents);
+        clusterStore.documents = addClusterReferences(documents, clusterStore.clusters);
+      } catch (e) {
+        clusterStore.clusters = EMPTY_ARRAY;
+        clusterStore.documents = EMPTY_ARRAY;
+        clusterStore.error = e;
+      }
       clusterStore.loading = false;
     }
 
