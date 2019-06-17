@@ -38,8 +38,8 @@ function live(query, params) {
 function cached() {
   return new Promise(function (resolve, reject) {
     window.setTimeout(function () {
-      // reject({ status: 402, statusText: "IP banned" });
-      resolve(import("./etools.result" /* webpackChunkName: "etools-result-json" */));
+      reject({ status: 402, statusText: "IP banned" });
+      // resolve(import("./etools.result" /* webpackChunkName: "etools-result-json" */));
     }, 300);
   });
 }

@@ -40,11 +40,7 @@ const Result = view(props => {
 
 export const Error = (props) => {
   const source = sources[props.source];
-  return (
-    <div className="Error">
-      { source.createError(props) }
-    </div>
-  );
+  return source.createError(props);
 };
 
 const ClusterSelectionSummaryView = view(ClusterSelectionSummary);
