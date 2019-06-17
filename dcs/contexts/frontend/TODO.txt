@@ -1,11 +1,11 @@
 Features:
+* FoamTree is very slow on Firefox.
 * Verify maxResults implementation in PubMed
 * Close popovers on Esc
 * Switching clustering algorithm
 * Parse site: qualifier in eTools and pass to the eTools API
 * Pass query to the clustering engine
 * Error handling
-  * Clustering engine errors
   * Option to copy error message to clipboard
 * A dialog with simple "about" information and hints
 * Copy/save results as CSV

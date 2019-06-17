@@ -108,11 +108,11 @@ const EToolsTokensForm = view(props => {
   return (
     <div className="EToolsAccessDetails">
       <h4>eTools access tokens</h4>
-      <FormGroup label="Partner ID" inline={true}>
-        <InputGroup value={store.partner} onChange={e => { onChange(); return store.partner = e.target.value; } } />
+      <FormGroup label="Partner ID" labelFor="partner-id" inline={true}>
+        <InputGroup id="partner-id" value={store.partner} onChange={e => { onChange(); return store.partner = e.target.value; } } />
       </FormGroup>
-      <FormGroup label="Customer ID" inline={true}>
-        <InputGroup value={store.customerId} onChange={e => { onChange(); return store.customerId = e.target.value; } } />
+      <FormGroup label="Customer ID" labelFor="customer-id" inline={true}>
+        <InputGroup id="customer-id" value={store.customerId} onChange={e => { onChange(); return store.customerId = e.target.value; } } />
       </FormGroup>
     </div>
   );
@@ -148,9 +148,9 @@ export const EToolsSourceConfig = view((props) => {
   const store = etoolsSourceConfigStore;
   return (
     <div className="EToolsSourceConfig">
-      <FormGroup label="Language" inline={true}>
+      <FormGroup label="Language" labelFor="etools-language" inline={true}>
         <HTMLSelect onChange={e => { store.language = e.currentTarget.value; props.onChange(); }}
-                    value={store.language}>
+                    id="etools-language" value={store.language}>
           <option value="all">All</option>
           <option value="en">English</option>
           <option value="fr">French</option>
@@ -159,9 +159,9 @@ export const EToolsSourceConfig = view((props) => {
           <option value="es">Spanish</option>
         </HTMLSelect>
       </FormGroup>
-      <FormGroup label="Country" inline={true}>
+      <FormGroup label="Country" labelFor="etools-country" inline={true}>
         <HTMLSelect onChange={e => { store.country = e.currentTarget.value; props.onChange(); }}
-                    value={store.country}>
+                    id="etools-country" value={store.country}>
           <option value="web">All</option>
           <option value="AT">Austria</option>
           <option value="FR">France</option>
@@ -173,10 +173,10 @@ export const EToolsSourceConfig = view((props) => {
           <option value="CH">Switzerland</option>
         </HTMLSelect>
       </FormGroup>
-      <FormGroup inline={true} label="Sources">
+      <FormGroup inline={true} label="Sources" labelFor="etools-sources">
         <RadioGroup onChange={e => { store.dataSources = e.currentTarget.value; props.onChange(); }}
                     selectedValue={store.dataSources}
-                    inline={true}>
+                    id="etools-sources" inline={true}>
           <Radio label="All" value="all" />
           <Radio label="Fastest" value="fastest" />
         </RadioGroup>

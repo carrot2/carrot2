@@ -13,14 +13,6 @@
   padding: 0.25em 0.25em 0.25em 0.5em;
 }
 
-.ResultList .Error {
-  position: absolute;
-  width: 32em;
-  left: 0;
-  right: 0;
-  margin: 4rem auto 0;
-}
-
 .ResultList > div > a {
   color: var(--text-color);
   margin-bottom: 1em;

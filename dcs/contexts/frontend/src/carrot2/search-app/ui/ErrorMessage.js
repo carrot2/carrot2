@@ -3,8 +3,9 @@ import "./ErrorMessage.css";
 import React from "react";
 
 import { view } from "react-easy-state";
-
 import { ShowHide } from "./Optional.js";
+
+import { sources } from "../../config-sources.js";
 
 export const ErrorMessage = props => {
   return (
@@ -17,6 +18,11 @@ export const ErrorMessage = props => {
 };
 
 export const SearchEngineErrorMessage = view(props => {
+  const source = sources[props.source];
+  return source.createError(props);
+});
+
+export const GenericSearchEngineErrorMessage = view(props => {
   return (
     <ErrorMessage {...props}>
       <h3>Search engine error</h3>

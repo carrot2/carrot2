@@ -77,14 +77,26 @@
 }
 
 .ResultsScreen .clusters > div:not(.Error),
-.ResultsScreen .docs > div {
+.ResultsScreen .docs > div:not(.Error) {
   height: 100%;
   padding-top: 0.25em;
   text-align: left;
 }
 
+.ResultsScreen .docs .Error,
 .ResultsScreen .clusters .Error {
   text-align: left;
+}
+
+.ResultsScreen .docs .Error {
+  position: absolute;
+  width: 32em;
+  left: 0;
+  right: 0;
+  margin: 4rem auto 0;
+}
+
+.ResultsScreen .clusters .Error {
   position: absolute;
   width: 32em;
   left: 0;

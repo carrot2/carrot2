@@ -6,7 +6,7 @@ import { view } from 'react-easy-state';
 import { clusterViews, resultListConfigStore, resultsViews } from "../../config-views.js";
 import { clusterStore, searchResultStore } from "../store/services";
 import { clusterSelectionStore, documentSelectionStore, documentVisibilityStore } from "../store/selection";
-import { ClusteringEngineErrorMessage } from "./ErrorMessage.js";
+import { ClusteringEngineErrorMessage, SearchEngineErrorMessage } from "./ErrorMessage.js";
 import { themeStore } from "./ThemeSwitch.js";
 
 import { routes } from "../routes";
@@ -130,12 +130,12 @@ export class ResultsScreen extends Component {
           <Switcher panels={contentPanels} visible={this.getView()} />
         </div>
         <div className="docs">
+          <SearchEngineErrorMessage source={this.getSource()} store={searchResultStore} runSearch={this.runSearch.bind(this)} />
           <div>
             <ResultListView source={this.getSource()} store={searchResultStore}
                             visibilityStore={documentVisibilityStore}
                             clusterSelectionStore={clusterSelectionStore}
-                            commonConfigStore={resultListConfigStore}
-                            runSearch={this.runSearch.bind(this)} />
+                            commonConfigStore={resultListConfigStore} />
           </div>
         </div>
       </main>

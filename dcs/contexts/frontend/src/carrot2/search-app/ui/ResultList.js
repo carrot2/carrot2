@@ -70,20 +70,17 @@ export function ResultList(props) {
       <div>
         <Loading loading={store.loading}>
           {
-            store.error !== undefined ?
-              <Error source={props.source} error={store.error} runSearch={props.runSearch} />
-              :
-              <>
-                <ClusterSelectionSummaryView clusterSelectionStore={props.clusterSelectionStore}
-                                             documentVisibilityStore={props.visibilityStore}
-                                             searchResultStore={store} />
-                {
-                  store.searchResult.documents.map((document, index) =>
-                  <Result source={props.source} document={document} rank={index + 1} key={document.id}
-                          visibilityStore={props.visibilityStore}
-                          commonConfigStore={props.commonConfigStore} />)
-                }
-              </>
+            <>
+              <ClusterSelectionSummaryView clusterSelectionStore={props.clusterSelectionStore}
+                                           documentVisibilityStore={props.visibilityStore}
+                                           searchResultStore={store} />
+              {
+                store.searchResult.documents.map((document, index) =>
+                <Result source={props.source} document={document} rank={index + 1} key={document.id}
+                        visibilityStore={props.visibilityStore}
+                        commonConfigStore={props.commonConfigStore} />)
+              }
+            </>
           }
         </Loading>
       </div>

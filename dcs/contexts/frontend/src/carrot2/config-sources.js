@@ -1,5 +1,5 @@
 import React from "react";
-import { SearchEngineErrorMessage } from "./search-app/ui/ErrorMessage.js";
+import { GenericSearchEngineErrorMessage } from "./search-app/ui/ErrorMessage.js";
 
 import { EToolsResult, EToolsResultConfig, EToolsSourceConfig, EToolsIpBannedError, etoolsSource } from "./search-app/ui/view/results/ETools.js";
 import { PubMedResult, PubMedResultConfig, PubMedSourceConfig, pubmedSource } from "./search-app/ui/view/results/PubMed.js";
@@ -12,10 +12,11 @@ export const sources = {
       return <EToolsResult {...props} />;
     },
     createError: (props) => {
-      if (props.error.status === 402) {
+      const error = props.store.error;
+      if (error && error.status === 402) {
         return <EToolsIpBannedError {...props} />;
       }
-      return <SearchEngineErrorMessage {...props} />
+      return <GenericSearchEngineErrorMessage {...props} />
     },
     createConfig: () => {
       return <EToolsResultConfig />;
@@ -31,7 +32,7 @@ export const sources = {
       return <PubMedResult {...props} />;
     },
     createError: (props) => {
-      return <SearchEngineErrorMessage {...props} />
+      return <GenericSearchEngineErrorMessage {...props} />
     },
     createConfig: () => {
       return <PubMedResultConfig />;

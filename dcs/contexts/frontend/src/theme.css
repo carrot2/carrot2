@@ -19,7 +19,7 @@ body.light, body {
   --link-color: hsl(203, 82%, 35%);
   --logo-color: #1d2a4c;
   --cluster-icon-color: #ffa64d;
-  --warning-background-color: hsla(40, 80%, 60%, 0.06);
+  --warning-background-color: hsla(40, 100%, 80%, 0.1);
   --warning-border-color: hsla(40, 80%, 60%, 0.7);
   --hr: hsla(0, 0%, 0%, 0.15);
   --kbd-outer-border-color: var(--background-color-intense);

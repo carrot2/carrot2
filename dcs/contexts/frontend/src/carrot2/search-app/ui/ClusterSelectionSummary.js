@@ -24,7 +24,7 @@ export const ClusterInSummary = props => {
  */
 export function ClusterSelectionSummary (props) {
   const searchResultStore = props.searchResultStore;
-  if (searchResultStore.loading) {
+  if (searchResultStore.loading || searchResultStore.error) {
     return null;
   }
 
