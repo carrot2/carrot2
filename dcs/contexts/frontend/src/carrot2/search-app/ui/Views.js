@@ -17,12 +17,14 @@ const createToolElement = (view, tool, visible, props) => {
       <Popover className={Classes.FIXED} position={Position.BOTTOM_RIGHT}
                autoFocus={true} popoverClassName="bp3-popover-content-sizing view-tool-content"
                disabled={!visible} key={key}>
-        <ShowHide visible={visible}><Button icon={tool.icon} minimal={true} title={tool.title} /></ShowHide>
+        <ShowHide visible={visible} className="view-tool-trigger">
+          <Button icon={tool.icon} minimal={true} title={tool.title} />
+        </ShowHide>
         {tool.createContentElement(props)}
       </Popover>
     );
   } else {
-    return <ShowHide key={key} visible={visible} className={Classes.FIXED}
+    return <ShowHide key={key} visible={visible} className={Classes.FIXED + " view-tool-trigger"}
                      title={tool.title}>{tool.createContentElement()}</ShowHide>
   }
 };

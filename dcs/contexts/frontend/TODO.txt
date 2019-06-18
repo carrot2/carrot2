@@ -8,14 +8,14 @@ Features:
 * Error handling
   * Option to copy error message to clipboard
 * A dialog with simple "about" information and hints
-* Copy/save results as CSV
-* Single document preview
 * Message for IE users
 * Polish numeric inputs (min/max, enforce on keyboard input, NaN when typing "-")
 
 Later:
 * Limit the number of results displayed at once?
 * Check background color on Circles export when implemented.
+* Copy/save results as CSV
+* Single document preview
 * Mobile version
 
 

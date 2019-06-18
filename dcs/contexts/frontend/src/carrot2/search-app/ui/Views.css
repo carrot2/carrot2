@@ -11,3 +11,7 @@
 .view-tool-content.bp3-popover-content-sizing .bp3-popover-content {
   max-width: none;
 }
+
+.view-tool-trigger svg {
+  width: 14px;
+}
