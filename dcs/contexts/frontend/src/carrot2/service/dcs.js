@@ -20,6 +20,8 @@ export function fetchClusters(query, documents) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(request)
+  }).catch(function (e) {
+    return { statusText: `Failed to connect to the DCS at ${dcsConfig.dcsServiceUrl}: ${e.message}.` };
   }).then(function (response) {
     if (!response.ok) {
       throw response;
