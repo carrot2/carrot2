@@ -1,6 +1,5 @@
 Features:
 * FoamTree is very slow on Firefox.
-* Verify maxResults implementation in PubMed
 * Close popovers on Esc
 * Switching clustering algorithm
 * Parse site: qualifier in eTools and pass to the eTools API
