@@ -38,11 +38,6 @@ const Result = view(props => {
   );
 });
 
-export const Error = (props) => {
-  const source = sources[props.source];
-  return source.createError(props);
-};
-
 const ClusterSelectionSummaryView = view(ClusterSelectionSummary);
 
 export function ResultList(props) {

@@ -11,7 +11,7 @@ export const ErrorMessage = props => {
   return (
     <ShowHide visible={props.error !== undefined} className="Error">
       {props.children}
-      <pre>{props.error && props.error.statusText}</pre>
+      <pre>{props.error && props.error.statusText.replace(/([&/?])/g, "$1\u200b")}</pre>
       <p>That's all we know.</p>
     </ShowHide>
   );
@@ -24,7 +24,7 @@ export const SearchEngineErrorMessage = view(props => {
 
 export const GenericSearchEngineErrorMessage = view(props => {
   return (
-    <ErrorMessage {...props}>
+    <ErrorMessage error={props.store.error}>
       <h3>Search engine error</h3>
       <p>Search could not be performed due to the following error:</p>
     </ErrorMessage>

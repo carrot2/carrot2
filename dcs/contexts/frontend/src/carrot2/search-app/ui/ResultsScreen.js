@@ -130,7 +130,8 @@ export class ResultsScreen extends Component {
           <Switcher panels={contentPanels} visible={this.getView()} />
         </div>
         <div className="docs">
-          <SearchEngineErrorMessage source={this.getSource()} store={searchResultStore} runSearch={this.runSearch.bind(this)} />
+          <SearchEngineErrorMessage source={this.getSource()} store={searchResultStore}
+                                    runSearch={this.runSearch.bind(this)} />
           <div>
             <ResultListView source={this.getSource()} store={searchResultStore}
                             visibilityStore={documentVisibilityStore}

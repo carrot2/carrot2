@@ -79,7 +79,14 @@ function liveESearch(query, params) {
     }
   );
 
-  return window.fetch(url).then(response => response.json());
+  return window.fetch(url)
+    .catch(e => {
+      return { statusText: `Failed to connect to PubMed service at ${url}: ${e.message}.`};
+    })
+    .then(response => {
+      if (!response.ok) { throw response; }
+      return response.json();
+    });
 }
 
 function cachedESearch() {
@@ -100,7 +107,14 @@ function liveEFetch(ids) {
     }
   );
 
-  return window.fetch(url).then(response => response.text());
+  return window.fetch(url)
+    .catch(e => {
+      return { statusText: `Failed to connect to PubMed service at ${url.substring(0, 100) + "..."}: ${e.message}.`};
+    })
+    .then(response => {
+      if (!response.ok) { throw response; }
+      return response.text();
+    });
 }
 
 function cachedEFetch(ids) {

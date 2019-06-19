@@ -30,7 +30,13 @@ function live(query, params) {
   );
 
   return window.fetch(url)
+    .catch(e => {
+      return { statusText: `Failed to connect to eTools service at ${url}: ${e.message}.`};
+    })
     .then(function (response) {
+      if (!response.ok) {
+        throw response;
+      }
       return response.json();
     });
 }
