@@ -1,16 +1,25 @@
 import { observe } from '@nx-js/observer-util';
 import { store } from 'react-easy-state';
+import { algorithms } from "../../config-algorithms.js";
 import { sources } from "../../config-sources.js";
 import { fetchClusters } from "../../service/dcs";
+import { persistentStore } from "../../util/persistent-store.js";
 
 const EMPTY_ARRAY = [];
+
+export const algorithmStore = persistentStore("clusteringAlgorithm",{
+  clusteringAlgorithm: undefined
+});
+if (!algorithms[algorithmStore.clusteringAlgorithm]) {
+  algorithmStore.clusteringAlgorithm = Object.keys(algorithms)[0];
+}
 
 export const clusterStore = store({
   loading: false,
   clusters: EMPTY_ARRAY,
   documents: EMPTY_ARRAY,
   error: undefined,
-  load: async function (searchResult) {
+  load: async function (searchResult, algorithm) {
     const documents = searchResult.documents;
     const query = searchResult.query;
 
@@ -24,7 +33,7 @@ export const clusterStore = store({
       clusterStore.clusters = EMPTY_ARRAY;
       clusterStore.error = undefined;
       try {
-        clusterStore.clusters = await fetchClusters(query, documents);
+        clusterStore.clusters = await fetchClusters(query, documents, algorithm);
         clusterStore.documents = addClusterReferences(documents, clusterStore.clusters);
       } catch (e) {
         clusterStore.clusters = EMPTY_ARRAY;
@@ -102,9 +111,9 @@ function assignDocumentIds(result) {
   };
 }
 
-// Invoke clustering once search results are available.
+// Invoke clustering once search results are available or algorithm changes.
 observe(function () {
-  clusterStore.load(searchResultStore.searchResult);
+  clusterStore.load(searchResultStore.searchResult, algorithmStore.clusteringAlgorithm);
 });
 
 // When search result is loading, also show that clusters are loading.

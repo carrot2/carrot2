@@ -1,0 +1,8 @@
+.SearchEngineSettings {
+  width: 18em;
+}
+
+.SearchEngineSettings small {
+  display: block;
+  color: var(--text-color-light);
+}

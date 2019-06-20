@@ -1,22 +1,22 @@
 export const algorithms = {
-  "lingo3g": {
+  "Lingo3G": {
     label: "Lingo3G",
-    description: "Meaningful, well-described hierarchical clusters.",
+    description: "Meaningful, well-described hierarchical clusters. Very fast, many tuning options.",
     tag: "commercial"
   },
-  "lingo": {
+  "Lingo": {
     label: "Lingo",
     description: "Well-described flat clusters.",
     tag: "open source"
   },
-  "stc": {
+  "STC": {
     label: "STC",
     description: "Flat clusters, fast algorithm.",
     tag: "open source"
   },
-  "k-means": {
+  "Bisecting K-Means": {
     label: "k-means",
-    description: "Base line algorithm, not very accurate labels.",
+    description: "Base line algorithm, bag-of-words labels.",
     tag: "open source"
   }
 };

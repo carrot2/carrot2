@@ -1,9 +1,10 @@
 import { dcsConfig } from "../config";
 
-export function fetchClusters(query, documents) {
+export function fetchClusters(query, documents, algorithm) {
   // Just pick the content fields we want to cluster. No IDs, URLs, or anything else.
   const fields = ['title', 'snippet'];
   const request = {
+    "algorithm": algorithm,
     "documents": documents.map((doc) => {
       return fields.reduce((obj, key) => {
         return {
