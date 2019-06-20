@@ -1,7 +1,6 @@
 Features:
 * Limit title length displayed in visualizations, display full on hover?
 * Close popovers on Esc
-* Switching clustering algorithm
 * Parse site: qualifier in eTools and pass to the eTools API
 * Pass query to the clustering engine
 * Error handling
