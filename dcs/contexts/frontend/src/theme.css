@@ -65,11 +65,11 @@ h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, 
 }
 
 a, button.link {
-  color: var(--link-color);
+  color: var(--link-color) !important;
   text-underline-width: 1px;
 }
 a:hover, button.link:hover {
-  text-decoration: underline;
+  text-decoration: underline !important;
   cursor: pointer;
 }
 
@@ -91,8 +91,8 @@ kbd {
 
 button.link {
   border: none;
-  background-color: transparent;
-  padding: 0;
+  background-color: transparent !important;
+  padding: 0 !important;
   font-size: 100%;
 }
 

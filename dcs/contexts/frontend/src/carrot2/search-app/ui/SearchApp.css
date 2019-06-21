@@ -5,6 +5,11 @@
 .ThemeSwitch {
   position: absolute;
   top: var(--leading);
+  right: 5em;
+}
+.About {
+  position: absolute;
+  top: 1em;
   right: var(--leading);
 }
 

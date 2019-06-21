@@ -1,3 +1,4 @@
+import { Button } from "@blueprintjs/core";
 import React from 'react';
 import { HashRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 
@@ -12,6 +13,7 @@ function SearchApp() {
   return (
     <React.Fragment>
       <div className="ThemeSwitch"><ThemeSwitch /></div>
+      <Button className="About link" text="About" minimal={true} small={true} />
       <div className="SearchApp">
         <Router>
           <Switch>
