@@ -1,4 +1,5 @@
 Features:
+* Filter out algorithms not available in the DCS?
 * Limit title length displayed in visualizations, display full on hover?
 * Close popovers on Esc
 * Parse site: qualifier in eTools and pass to the eTools API
