@@ -7,6 +7,7 @@ import { PubMedResult, PubMedResultConfig, PubMedSourceConfig, pubmedSource } fr
 export const sources = {
   "web": {
     label: "Web",
+    descriptionHtml: "web search results provided by <a href='https://etools.ch'>etools.ch</a>. Extensive use may require special arrangements with the <a href='mailto:sschmid@comcepta.com' target='_blank'>owner</a> of the etools.ch service.",
     source: etoolsSource,
     createResult: (props) => {
       return <EToolsResult {...props} />;
@@ -27,6 +28,7 @@ export const sources = {
   },
   "pubmed": {
     label: "PubMed",
+    descriptionHtml: "abstracts of medical papers from the PubMed database provided by NCBI.",
     source: pubmedSource,
     createResult: (props) => {
       return <PubMedResult {...props} />;

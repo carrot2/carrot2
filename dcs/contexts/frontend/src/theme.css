@@ -104,3 +104,7 @@ button.link:hover {
 p:last-child {
   margin-bottom: 0;
 }
+
+sup {
+  vertical-align: 10%;
+}

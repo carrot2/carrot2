@@ -4,12 +4,13 @@ import React from "react";
 
 import { view} from "react-easy-state";
 
-import { Radio, RadioGroup, Tag} from "@blueprintjs/core";
+import { Radio, RadioGroup, Tag } from "@blueprintjs/core";
 import { Optional } from "./Optional.js";
 
 import { algorithms } from "../../config-algorithms.js";
 
 import { algorithmStore } from "../store/services.js";
+import { ShowAppInfoButton } from "./SearchAppInfoButton.js";
 
 export const ClusteringEngineSettings = view(() => {
   const store = algorithmStore;
@@ -37,6 +38,7 @@ export const ClusteringEngineSettings = view(() => {
           })
         }
       </RadioGroup>
+      <ShowAppInfoButton text="more information" />
     </div>
   );
 });

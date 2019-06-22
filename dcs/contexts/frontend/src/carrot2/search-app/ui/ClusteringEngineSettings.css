@@ -21,3 +21,7 @@
   width: 10px;
   height: 10px;
 }
+
+.ClusteringEngineSettings button.link {
+  margin-top: 1em;
+}

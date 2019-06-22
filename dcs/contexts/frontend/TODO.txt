@@ -9,7 +9,6 @@ Features:
 * A dialog with simple "about" information and hints
 * Message for IE users
 * Polish numeric inputs (min/max, enforce on keyboard input, NaN when typing "-")
-* Clean up configuration code.
 
 Later:
 * Limit the number of results displayed at once?
@@ -17,6 +16,7 @@ Later:
 * Copy/save results as CSV
 * Single document preview
 * Mobile version
+* Clean up configuration code.
 
 
 Performance:
