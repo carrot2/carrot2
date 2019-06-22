@@ -3,14 +3,14 @@ import PropTypes from "prop-types";
 
 export function Switcher(props) {
   const panels = props.panels;
-  return <React.Fragment>
+  return <>
     {
       panels.map(p => {
         return <Switch key={p.id} visible={p.isVisible(props.visible, p)}
                        createElement={p.createElement} />
       })
     }
-  </React.Fragment>;
+  </>;
 }
 
 Switcher.propTypes = {
