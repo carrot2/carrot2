@@ -10,13 +10,12 @@ const ShowHide = props => {
                style={props.visible ? {} : {display: "none"}}>{props.children}</span>;
 };
 
-const createToolElement = (view, tool, visible, props) => {
-  const key = view + "." + tool.id;
+export const Tool = ({tool, visible, props}) => {
   if (tool.icon) {
     return (
       <Popover className={Classes.FIXED} position={Position.BOTTOM_RIGHT}
                autoFocus={true} popoverClassName="bp3-popover-content-sizing view-tool-content"
-               disabled={!visible} key={key}>
+               disabled={!visible}>
         <ShowHide visible={visible} className="view-tool-trigger">
           <Button icon={tool.icon} minimal={true} title={tool.title} />
         </ShowHide>
@@ -24,7 +23,7 @@ const createToolElement = (view, tool, visible, props) => {
       </Popover>
     );
   } else {
-    return <ShowHide key={key} visible={visible} className={Classes.FIXED + " view-tool-trigger"}
+    return <ShowHide visible={visible} className={Classes.FIXED + " view-tool-trigger"}
                      title={tool.title}>{tool.createContentElement()}</ShowHide>
   }
 };
@@ -46,7 +45,8 @@ export const ViewTabs = (props) => {
           .filter(v => views[v].tools && views[v].tools.length > 0)
           .reduce(function (tools, v) {
             views[v].tools.forEach(t => {
-              tools.push(createToolElement(v, t, props.activeView === v, props));
+              const key = v + "." + t.id;
+              tools.push(<Tool key={key} tool={t} visible={props.activeView === v} props={props} />);
             });
             return tools;
           }, [])

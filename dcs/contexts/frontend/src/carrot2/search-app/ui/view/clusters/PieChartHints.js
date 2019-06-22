@@ -7,7 +7,7 @@ import { view } from "react-easy-state";
 export const PieChartHints = view(() => {
   return (
     <div className="VisualizationHints">
-      <h4>PieChart interaction help</h4>
+      <h4>Pie-chart interaction help</h4>
       <table>
         <tbody>
           <tr>

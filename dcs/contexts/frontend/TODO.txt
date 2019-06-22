@@ -1,12 +1,10 @@
 Features:
 * Filter out algorithms not available in the DCS?
 * Limit title length displayed in visualizations, display full on hover?
-* Close popovers on Esc
 * Parse site: qualifier in eTools and pass to the eTools API
 * Pass query to the clustering engine
 * Error handling
   * Option to copy error message to clipboard
-* A dialog with simple "about" information and hints
 * Message for IE users
 * Polish numeric inputs (min/max, enforce on keyboard input, NaN when typing "-")
 
@@ -17,6 +15,7 @@ Later:
 * Single document preview
 * Mobile version
 * Clean up configuration code.
+* Close popovers on Esc (should work, might be a BlueprintJS bug)
 
 
 Performance:
