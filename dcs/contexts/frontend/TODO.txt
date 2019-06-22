@@ -1,5 +1,4 @@
 Features:
-* Filter out algorithms not available in the DCS?
 * Limit title length displayed in visualizations, display full on hover?
 * Parse site: qualifier in eTools and pass to the eTools API
 * Pass query to the clustering engine
