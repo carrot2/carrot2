@@ -18,7 +18,6 @@ Later:
 
 
 Performance:
-* Move querying and parsing source results to a web worker?
 * Changing source or cluster view re-renders the whole application.
   Check if this can be reasonably contained to the actual components involved.
 * Choose theme based on dark-mode media query.
