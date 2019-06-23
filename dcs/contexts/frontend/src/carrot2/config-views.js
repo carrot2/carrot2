@@ -5,20 +5,17 @@ import { view } from "react-easy-state";
 import { PieChartHints } from "./search-app/ui/view/clusters/PieChartHints.js";
 import { TreemapHints } from "./search-app/ui/view/clusters/TreemapHints.js";
 import { VisualizationExport } from "./search-app/ui/view/clusters/VisualizationExport.js";
+import { Lazy } from "./ui/Lazy.js";
 import { persistentStore } from "./util/persistent-store.js";
 
 import { ResultListConfig } from "./search-app/ui/ResultListConfig.js";
 import { ClusterList } from "./search-app/ui/view/clusters/ClusterList.js";
-import { PieChart } from "./search-app/ui/view/clusters/PieChart.js";
-import { Treemap } from "./search-app/ui/view/clusters/Treemap.js";
 import { PieChartConfig } from "./search-app/ui/view/clusters/PieChartConfig.js";
 import { TreemapConfig } from "./search-app/ui/view/clusters/TreemapConfig.js";
 
 import { sources } from "./config-sources.js";
 
 const ClusterListView = view(ClusterList);
-const TreemapView = view(Treemap);
-const PieChartView = view(PieChart);
 const ResultListConfigView = view(ResultListConfig);
 
 const treemapConfigStore = persistentStore("treemapConfig",
@@ -38,6 +35,22 @@ const pieChartConfigStore = persistentStore("pieChartConfig",
 const treemapImplRef = { current: undefined };
 const piechartImplRef = { current: undefined };
 
+const treemapLoader = () => {
+  return import(
+    /* webpackChunkName: "treemap" */
+    /* webpackPrefetch: true */
+    "./search-app/ui/view/clusters/Treemap.js")
+    .then(module => view(module.Treemap));
+};
+
+const piechartLoader = () => {
+  return import(
+    /* webpackChunkName: "piechart" */
+    /* webpackPrefetch: true */
+    "./search-app/ui/view/clusters/PieChart.js")
+    .then(module => view(module.PieChart));
+};
+
 // TODO: convert to a series of some internal API calls?
 export const clusterViews = {
   "folders": {
@@ -51,7 +64,12 @@ export const clusterViews = {
   "treemap": {
     label: "Treemap",
     createContentElement: (props) => {
-      return <TreemapView {...props} configStore={treemapConfigStore} implRef={treemapImplRef} />;
+      const treemapProps = {
+        ...props,
+        configStore: treemapConfigStore,
+        implRef: treemapImplRef
+      };
+      return <Lazy loader={treemapLoader} props={treemapProps} />;
     },
     tools: [
       {
@@ -83,7 +101,12 @@ export const clusterViews = {
   "pie-chart": {
     label: "Pie-chart",
     createContentElement: (props) => {
-      return <PieChartView {...props} configStore={pieChartConfigStore} implRef={piechartImplRef} />;
+      const piechartProps = {
+        ...props,
+        configStore: pieChartConfigStore,
+        implRef: piechartImplRef
+      };
+      return <Lazy loader={piechartLoader} props={piechartProps} />;
     },
     tools: [
       {
