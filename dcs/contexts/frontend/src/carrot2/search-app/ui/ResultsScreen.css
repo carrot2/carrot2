@@ -127,7 +127,6 @@
 .ResultsScreen .clusters,
 .ResultsScreen .docs {
   background-color: var(--background-color-main);
-  transition: background-color 0.15s ease;
 }
 
 .ResultsScreen .clusters-tabs,
