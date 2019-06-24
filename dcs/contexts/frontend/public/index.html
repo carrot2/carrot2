@@ -20,11 +20,38 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Lingo3G Document Clustering Engine</title>
+    <style>
+      .ie {
+        margin: 2em auto;
+        padding: 2em 2em 0.5em 2em;
+        border: 1px solid hsla(200, 50%, 50%, 0.2);
+        background-color: hsla(200, 50%, 50%, 0.04);
+        width: 24em;
+        border-radius: 0.5em;
+      }
+    </style>
   </head>
   <body>
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
+    <script>
+      window.onerror = function() {
+        if (!("Symbol" in window) || !("Promise" in window)) {
+          // We don't support IE, Edge is supported though.
+          var root = document.getElementById("root");
+          root.className = "ie";
+          root.innerHTML = "<p><strong>Internet Explorer is not supported, sorry.</strong></p>" +
+              "<p>Try any modern browser, such as: </p>" +
+              "<ul>" +
+              "<li><a href='https://www.microsoft.com/en-us/windows/microsoft-edge'>Microsoft Edge</a></li>" +
+              "<li><a href='https://www.mozilla.org/en-US/firefox/new/'>Firefox</a></li>" +
+              "<li><a href='https://www.google.com/chrome/'>Google Chrome</a></li>" +
+              "<li><a href='https://www.opera.com/'>Opera</a></li>" +
+              "</ul>";
+        }
+      };
+    </script>
     <div id="root"></div>
     <!--
       This HTML file is a template.

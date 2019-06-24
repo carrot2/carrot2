@@ -3,7 +3,6 @@ Features:
 * Pass query to the clustering engine
 * Error handling
   * Option to copy error message to clipboard
-* Message for IE users
 
 Build & deployment:
 * build customized Lingo3G distribution
