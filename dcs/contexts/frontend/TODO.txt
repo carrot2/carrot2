@@ -6,6 +6,11 @@ Features:
   * Option to copy error message to clipboard
 * Message for IE users
 
+Build & deployment:
+* build customized Lingo3G distribution
+* support for combined deployment: frontend served from CDN, clustering on our VPS
+  (the frontend needs to come with an absolute DCS service URL compiled in)
+
 Later:
 * Limit the number of results displayed at once?
 * Check background color on Circles export when implemented.
