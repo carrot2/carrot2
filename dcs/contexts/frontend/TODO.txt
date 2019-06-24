@@ -1,6 +1,5 @@
 Features:
 * Limit title length displayed in visualizations, display full on hover?
-* Parse site: qualifier in eTools and pass to the eTools API
 * Pass query to the clustering engine
 * Error handling
   * Option to copy error message to clipboard
