@@ -84,6 +84,21 @@ function buildOptions(theme, layout, stacking, clusterSelectionStore, documentSe
       clusterSelectionStore.replaceSelection(e.groups.filter(g => !!g.cluster).map(g => g.cluster));
       documentSelectionStore.replaceSelection(e.groups.filter(g => !!g.document).map(g => g.document));
     },
+
+    groupLabelDecorator: (opts, props, vars) => {
+      if (vars.labelText.length > 80) {
+        vars.labelText = vars.labelText.substring(0, 100) + "...";
+      }
+    },
+
+    titleBarDecorator: (opts, props, vars) => {
+      if (vars.titleBarText && vars.titleBarText.length > 100) {
+        vars.titleBarText = props.group.label;
+        vars.titleBarShown = true;
+      }
+    },
+    maxLabelSizeForTitleBar: 12,
+
     ...getThemeOptions()
   };
 

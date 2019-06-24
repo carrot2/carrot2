@@ -1,8 +1,5 @@
 Features:
-* Limit title length displayed in visualizations, display full on hover?
 * Pass query to the clustering engine
-* Error handling
-  * Option to copy error message to clipboard
 
 Build & deployment:
 * build customized Lingo3G distribution
@@ -18,6 +15,8 @@ Later:
 * Clean up configuration code.
 * Close popovers on Esc (should work, might be a BlueprintJS bug)
 * Polish numeric inputs (min/max, enforce on keyboard input, NaN when typing "-")
+* Error handling
+  * Option to copy error message to clipboard
 
 
 Performance:
