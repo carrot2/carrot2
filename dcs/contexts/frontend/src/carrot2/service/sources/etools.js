@@ -1,4 +1,5 @@
 import queryString from "query-string";
+import { finishingPeriod } from "../../util/humanize.js";
 
 // TODO: add support for aborting running requests a'la fetch API.
 export function etools(query, params) {
@@ -31,7 +32,7 @@ function live(query, params) {
 
   return window.fetch(url)
     .catch(e => {
-      return { statusText: `Failed to connect to eTools service at ${url}: ${e.message}.`};
+      return { statusText: finishingPeriod(`Failed to connect to eTools service at ${url}: ${e.message}`)};
     })
     .then(function (response) {
       if (!response.ok) {

@@ -3,7 +3,7 @@ import { Icon } from "@blueprintjs/core";
 import PropTypes from "prop-types";
 
 import React from 'react';
-import { pluralize } from "../../util/pluralize.js";
+import { pluralize } from "../../util/humanize.js";
 
 export const ClusterInSummary = props => {
   const cluster = props.cluster;
