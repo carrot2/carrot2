@@ -1,6 +1,7 @@
 .ClusterList {
   overflow-y: auto;
   height: 100%;
+  margin-left: -0.5em;
 }
 
 .ClusterList > div {

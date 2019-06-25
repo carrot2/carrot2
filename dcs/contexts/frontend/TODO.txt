@@ -1,5 +1,7 @@
 Features:
 * Pass query to the clustering engine
+* Preallocate space for one line of cluster labels per result
+* missing icons in clustering algorithm tags
 
 Build & deployment:
 * build customized Lingo3G distribution

@@ -7,8 +7,6 @@ import { Icon } from "@blueprintjs/core/lib/esm/index.js";
 import { view } from 'react-easy-state';
 import classNames from "classnames";
 
-import { Loading } from "../../Loading.js";
-
 function TopCluster(props) {
   const cluster = props.cluster;
   const subclusters = cluster.clusters || [];
@@ -66,12 +64,10 @@ export function ClusterList(props) {
   return (
     <div className="ClusterList">
       <div>
-        <Loading loading={store.loading}>
-          {
-            store.clusters.map(cluster =>
-              <TopClusterView cluster={cluster} key={cluster.id} clusterSelectionStore={props.clusterSelectionStore} />)
-          }
-        </Loading>
+        {
+          store.clusters.map(cluster =>
+            <TopClusterView cluster={cluster} key={cluster.id} clusterSelectionStore={props.clusterSelectionStore} />)
+        }
       </div>
     </div>
   );

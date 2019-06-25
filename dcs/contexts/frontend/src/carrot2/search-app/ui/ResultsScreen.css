@@ -76,11 +76,23 @@
   grid-area: docs;
 }
 
-.ResultsScreen .clusters > div:not(.Error),
-.ResultsScreen .docs > div:not(.Error) {
+.ResultsScreen .clusters > div:not(.Error):not(.Loading),
+.ResultsScreen .docs > div:not(.Error):not(.Loading) {
   height: 100%;
   padding-top: 0.25em;
   text-align: left;
+}
+.ResultsScreen .clusters > div:not(.Error):not(.Loading) {
+  margin-left: 0.5em;
+}
+
+.ResultsScreen .docs .Loading,
+.ResultsScreen .clusters .Loading {
+  position: absolute;
+  padding: 0.5em 0.5em 0.5em 0.75em;
+}
+.ResultsScreen .clusters .Loading {
+  padding: 0.5em 0.5em 0.5em 0.875em;
 }
 
 .ResultsScreen .docs .Error,

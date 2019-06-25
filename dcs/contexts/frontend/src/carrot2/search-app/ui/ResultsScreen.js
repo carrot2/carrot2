@@ -7,6 +7,7 @@ import { clusterViews, resultListConfigStore, resultsViews } from "../../config-
 import { clusterStore, searchResultStore } from "../store/services";
 import { clusterSelectionStore, documentSelectionStore, documentVisibilityStore } from "../store/selection";
 import { ClusteringEngineErrorMessage, SearchEngineErrorMessage } from "./ErrorMessage.js";
+import { ShowHide } from "./Optional.js";
 import { themeStore } from "./ThemeSwitch.js";
 
 import { routes } from "../routes";
@@ -22,6 +23,12 @@ import { ViewTabs } from "./Views.js";
 import { applicationTitle } from "../../config.js";
 
 const ResultListView = view(ResultList);
+
+const Loading = view(props => (
+  <ShowHide className="Loading" visible={props.store.loading}>
+    Loading
+  </ShowHide>
+));
 
 export class ResultsScreen extends Component {
   runSearch() {
@@ -126,10 +133,12 @@ export class ResultsScreen extends Component {
           <ViewTabs views={resultsViews} activeView="list" onViewChange={() => {}} source={this.getSource()} />
         </div>
         <div className="clusters">
+          <Loading store={clusterStore} />
           <ClusteringEngineErrorMessage store={clusterStore}/>
           <Switcher panels={contentPanels} visible={this.getView()} />
         </div>
         <div className="docs">
+          <Loading store={searchResultStore} />
           <SearchEngineErrorMessage source={this.getSource()} store={searchResultStore}
                                     runSearch={this.runSearch.bind(this)} />
           <div>
