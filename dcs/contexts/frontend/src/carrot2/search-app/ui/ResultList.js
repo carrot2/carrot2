@@ -14,12 +14,14 @@ import { clusterSelectionStore } from "../store/selection.js";
 const ResultClusters = view(props => {
   const selectionStore = clusterSelectionStore;
   return (
-    <span className="ResultClusters">
+    <div className="ResultClusters">
+      <span>
       {
         (props.result.clusters || []).map(c =>
           <ClusterInSummary cluster={c} key={c.id} onClick={() => selectionStore.toggleSelection(c)} />)
       }
-    </span>
+      </span>
+    </div>
   );
 });
 

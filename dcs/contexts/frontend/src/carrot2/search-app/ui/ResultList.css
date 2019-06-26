@@ -88,10 +88,10 @@
   min-height: 18px;
 }
 
-.ResultList .ResultClusters:hover .ClusterInSummary {
+.ResultList .ResultClusters > span:hover .ClusterInSummary {
   opacity: 0.5;
 }
-.ResultList .ResultClusters:hover .ClusterInSummary:hover {
+.ResultList .ResultClusters > span:hover .ClusterInSummary:hover {
   opacity: 1.0;
 }
 .ResultList .ResultClusters:hover .ClusterInSummary:hover .bp3-icon {
