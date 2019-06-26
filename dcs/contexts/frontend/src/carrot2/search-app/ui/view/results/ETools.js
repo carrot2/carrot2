@@ -111,7 +111,7 @@ const EToolsTokensForm = view(props => {
       <FormGroup label="Partner ID" labelFor="partner-id" inline={true}>
         <InputGroup id="partner-id" value={store.partner} onChange={e => { onChange(); return store.partner = e.target.value; } } />
       </FormGroup>
-      <FormGroup label="Customer ID" labelFor="customer-id" inline={true}>
+      <FormGroup label="Customer ID" labelInfo="(optional)" labelFor="customer-id" inline={true}>
         <InputGroup id="customer-id" value={store.customerId} onChange={e => { onChange(); return store.customerId = e.target.value; } } />
       </FormGroup>
     </div>
@@ -202,12 +202,13 @@ export const EToolsIpBannedError = view((props) => {
       <h3>Search limit exceeded</h3>
 
       <p>
-        <EToolsLink/>, our web search results provider,
-        blocked your IP address due to the excessive number of searches.
+        <EToolsLink/>, our web search results provider, blocked access to the service
+        due automated querying or excessive number of searches issued
+        from your IP address.
       </p>
 
       <p>
-        The block may be lifted after some time, but if you keep getting this
+        The block may be lifted after some time, but if you keep seeing this
         message, you may need to <a href="mailto:sschmid@comcepta.com" target="_blank" rel="noopener noreferrer">contact
         eTools</a> to arrange for an unlimited search service.
       </p>

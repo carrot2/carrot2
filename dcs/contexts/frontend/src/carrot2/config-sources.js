@@ -14,7 +14,7 @@ export const sources = {
     },
     createError: (props) => {
       const error = props.store.error;
-      if (error && error.status === 402) {
+      if (error && error.status === 403) {
         return <EToolsIpBannedError {...props} />;
       }
       return <GenericSearchEngineErrorMessage {...props} />
