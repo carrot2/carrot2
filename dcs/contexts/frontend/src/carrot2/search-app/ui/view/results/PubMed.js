@@ -82,7 +82,7 @@ export const PubMedResult = view((props) => {
         })())
       }
       </div>
-      <Optional visible={config.showKeywords && result.keywords.length > 0} content={() => (
+      <Optional visible={config.showKeywords && result.keywords && result.keywords.length > 0} content={() => (
         <div className="keywords">
           <span>Keywords</span>
           {
