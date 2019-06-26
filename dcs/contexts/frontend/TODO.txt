@@ -1,6 +1,5 @@
 Features:
 * Pass query to the clustering engine
-* missing icons in clustering algorithm tags
 
 Build & deployment:
 * build customized Lingo3G distribution
