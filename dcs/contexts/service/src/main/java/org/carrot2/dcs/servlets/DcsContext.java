@@ -17,11 +17,14 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.ClusteringAlgorithmProvider;
+import org.carrot2.clustering.Document;
 import org.carrot2.dcs.client.ClusterRequest;
 import org.carrot2.language.ComponentLoader;
 import org.carrot2.language.LanguageComponents;
@@ -62,12 +65,31 @@ class DcsContext {
 
     this.templates = processTemplates(om, servletContext);
     this.languages = computeLanguageComponents(servletContext);
+
+    this.algorithmSuppliers
+        .entrySet()
+        .removeIf(e -> !isAlgorithmAvailable(e.getValue(), languages.values()));
+
     this.algorithmLanguages = computeAlgorithmLanguagePairs(algorithmSuppliers, languages.values());
 
     console.info(
         "DCS context initialized [algorithms: {}, templates: {}]",
         algorithmSuppliers.keySet(),
         templates.keySet());
+  }
+
+  private static boolean isAlgorithmAvailable(
+      ClusteringAlgorithmProvider provider, Collection<LanguageComponents> languages) {
+    ClusteringAlgorithm algorithm = provider.get();
+    Optional<LanguageComponents> first =
+        languages.stream().filter(lang -> algorithm.supports(lang)).findFirst();
+    if (!first.isPresent()) {
+      console.warn(
+          "Algorithm does not support any of the available languages: {}", provider.name());
+      return false;
+    } else {
+      return true;
+    }
   }
 
   private static LinkedHashMap<String, LanguageComponents> computeLanguageComponents(

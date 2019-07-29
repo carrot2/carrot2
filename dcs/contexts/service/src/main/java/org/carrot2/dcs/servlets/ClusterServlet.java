@@ -88,8 +88,6 @@ public class ClusterServlet extends RestEndpoint {
       List<Cluster<DocumentRef>> clusters = runClustering(clusteringRequest, algorithm, language);
 
       writeJsonResponse(response, shouldIndent(request), new ClusterResponse(adapt(clusters)));
-    } catch (TerminateRequestException e) {
-      handleException(response, e);
     } catch (Exception e) {
       handleException(response, e);
     }

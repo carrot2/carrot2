@@ -3,6 +3,7 @@ import java.time.*
 import java.time.temporal.*
 
 def now = ZonedDateTime.now().withFixedOffsetZone()
+ext.buildInstant = now.toInstant().toString()
 ext.buildDate = now.toString()
 ext.buildDateTrimmed = now.truncatedTo(ChronoUnit.HOURS)
 
