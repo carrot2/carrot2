@@ -1,0 +1,39 @@
+{
+  "chapters": [
+    {
+      "title": "Getting started",
+      "articles": [
+        "getting-started",
+        "user-quick-start",
+        "rest-api-quick-start",
+        "java-quick-start"
+      ]
+    },
+    {
+      "title": "Basic usage",
+      "articles": [
+        "using-rest-api",
+        "using-java-api",
+        "customizing-stop-words"
+      ]
+    },
+    {
+      "title": "Advanced topics",
+      "articles": [
+        "choosing-algorithm",
+        "tuning-clustering",
+        "solr-clustering-plugin",
+        "es-clustering-plugin"
+      ]
+    },
+    {
+      "title": "Reference",
+      "articles": [
+        "rest-api-reference",
+        "lingo-algorithm-reference",
+        "stc-algorithm-reference",
+        "kmeans-algorithm-reference"
+      ]
+    }
+  ]
+}

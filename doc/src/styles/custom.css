@@ -1,0 +1,80 @@
+.logo > a {
+  text-decoration: none;
+  display: flex;
+}
+
+footer .about .logo {
+  padding-left: 0;
+}
+footer .about .logo svg {
+  height: 2em;
+}
+footer .about p {
+  font-weight: 300;
+}
+
+footer nav {
+  flex: 1;
+  font-family: var(--heading-font-family);
+  margin-top: calc(2 * var(--leading));
+  margin-bottom: calc(2 * var(--leading));
+}
+footer nav strong {
+  text-transform: uppercase;
+  font-size: calc(100% / var(--scale));
+  color: var(--text-color-muted);
+}
+
+footer nav > ul {
+  display: flex;
+  flex-direction: row;
+}
+footer nav > ul > li:not(:last-child) {
+  margin-right: var(--leading);
+}
+footer nav > ul > li > ul {
+  margin-top: calc(0.5 * var(--leading));
+}
+footer nav ul {
+  list-style: none;
+  padding-inline-start: 0;
+  margin: 0;
+}
+footer .copyright a,
+footer nav a {
+  color: var(--text-color-muted) !important;
+  text-decoration: none;
+}
+footer .copyright a:hover,
+footer nav a:hover {
+  text-decoration: underline;
+}
+footer .copyright {
+  margin-top: var(--leading);
+  font-weight: 300;
+}
+
+@media (min-width: 768px) {
+  footer .about {
+    max-width: 16em;
+  }
+
+  footer .main {
+    display: flex;
+    flex-direction: row;
+  }
+
+  footer nav {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  footer nav > ul {
+    justify-content: flex-end;
+  }
+
+  footer nav > ul > li {
+    margin-left: var(--leading);
+    margin-right: 0;
+  }
+}
