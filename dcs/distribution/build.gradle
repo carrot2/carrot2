@@ -131,16 +131,11 @@ task distDir {
             collectDependencies,
             collectCtxService,
             collectCtxRoot,
-            collectExamples
+            collectExamples,
+            collectCtxFrontend
 
   // Until we have a need for it, don't include the proxy context in the distribution.
   // dependsOn collectCtxProxy
-
-  if (!project.hasProperty("fastBuild")) {
-    dependsOn collectCtxFrontend
-  } else {
-    project.logger.warn("NOTE: Frontend will not be included in DCS distribution (fastBuild).")
-  }
 
   outputs.file("$outputDir")
 }

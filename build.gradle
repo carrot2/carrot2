@@ -2,6 +2,7 @@
 plugins {
   id 'com.diffplug.gradle.spotless' version "3.23.0" apply false
   id "com.github.ben-manes.versions" version "0.21.0"
+  id 'com.moowork.node' version '1.3.1' apply false
 }
 
 apply from: file('gradle/min-gradle-version.gradle')
@@ -132,6 +133,98 @@ subprojects {
           providedCompile "javax.servlet:javax.servlet-api:${versions.servletapi}@jar"
         }
       }
+    }
+  }
+}
+
+// Configure gradle projects
+
+project(':doc') {
+  // Gatsby has a non-configurable output folder, sigh.
+  // https://github.com/gatsbyjs/gatsby/issues/1878
+  buildDir = file("public")
+}
+
+configure(subprojects.findAll { it.path in [":dcs:contexts:frontend", ":doc"] }) {
+  apply plugin: 'base'
+  apply plugin: 'com.moowork.node'
+
+  configurations {
+    it.default.extendsFrom archives
+  }
+
+  node {
+    // node/yarn versions
+    version = '10.15.1'
+    yarnVersion = '1.13.0'
+    download = true
+  }
+
+  task yarnInstall(type: YarnTask) {
+    group 'build'
+
+    inputs.file('package.json')
+    inputs.file('yarn.lock')
+
+    outputs.upToDateWhen {
+      return project.file('node_modules').exists()
+    }
+    outputs.file('node_modules/.yarn-integrity')
+
+    args = [ 'install']
+  }
+
+  task yarnBuild(type: YarnTask) {
+    group 'build'
+    dependsOn yarnInstall
+
+    if (project.path == ":doc") {
+      inputs.files(fileTree('src'))
+      inputs.files(fileTree('static'))
+    } else {
+      inputs.files(fileTree('public'))
+      inputs.files(fileTree('src'))
+    }
+
+    inputs.file('package.json')
+    inputs.file('yarn.lock')
+
+    outputs.dir(project.buildDir)
+
+    args = ['run', 'build']
+  }
+
+  task fakeBuild {
+    doFirst {
+      logger.warn("Omitting full yarn build in fast build: ${project.path}")
+    }
+  }
+
+  artifacts {
+    archives project.buildDir, {
+      if (project.hasProperty("fastBuild")) {
+        builtBy fakeBuild
+      } else {
+        builtBy yarnBuild
+      }
+    }
+  }
+
+  assemble.dependsOn configurations.archives
+}
+
+// Apply yarn scheduling fix so that dependencies are not fetched in parallel.
+def first = null
+configure(subprojects) {
+  afterEvaluate {
+    project.tasks.findAll({ it.name == "yarnInstall" }).each {
+      if (first != null) {
+        it.mustRunAfter(first)
+        it.doFirst {
+          logger.warn("Scheduled ${it} to run after ${first} (to prevent concurrent install clashes).")
+        }
+      }
+      first = it
     }
   }
 }

@@ -20,5 +20,6 @@ include 'dcs:contexts:root'
 include 'dcs:contexts:proxy'
 
 include 'distribution'
+include 'doc'
 
 rootProject.name = 'carrot2'
