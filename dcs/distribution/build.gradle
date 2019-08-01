@@ -21,6 +21,7 @@ configurations {
   ctxRoot
   ctxFrontend
   ctxProxy
+  ctxDoc
 
   examples
 
@@ -32,12 +33,13 @@ configurations {
 }
 
 dependencies {
-  ctxService project(path: ":dcs:contexts:service", configuration: 'war')
-  ctxRoot project(path: ":dcs:contexts:root", configuration: 'war')
-  ctxProxy project(path: ":dcs:contexts:proxy", configuration: 'war')
-  ctxFrontend project(path: ":dcs:contexts:frontend")
+  ctxService   project(path: ":dcs:contexts:service", configuration: 'war')
+  ctxRoot      project(path: ":dcs:contexts:root", configuration: 'war')
+  ctxProxy     project(path: ":dcs:contexts:proxy", configuration: 'war')
+  ctxFrontend  project(path: ":dcs:contexts:frontend")
+  ctxDoc       project(path: ":doc")
 
-  examples    project(path: ":dcs:examples", configuration: "distribution")
+  examples     project(path: ":dcs:examples", configuration: "distribution")
 
   implementation "com.beust:jcommander:1.72"
 
@@ -121,6 +123,11 @@ task collectCtxFrontend(type: Sync) {
   into "$outputDir/web/frontend"
 }
 
+task collectCtxDoc(type: Sync) {
+  from configurations.ctxDoc
+  into "$outputDir/web/doc"
+}
+
 task collectExamples(type: Sync) {
   from configurations.examples
   into "$outputDir/examples"
@@ -131,8 +138,9 @@ task distDir {
             collectDependencies,
             collectCtxService,
             collectCtxRoot,
-            collectExamples,
-            collectCtxFrontend
+            collectCtxDoc,
+            collectCtxFrontend,
+            collectExamples
 
   // Until we have a need for it, don't include the proxy context in the distribution.
   // dependsOn collectCtxProxy
