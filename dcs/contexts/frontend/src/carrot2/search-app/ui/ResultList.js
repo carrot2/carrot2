@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import { view } from "react-easy-state";
 import { observe, unobserve } from "@nx-js/observer-util";
 import { ClusterSelectionSummary, ClusterInSummary } from "./ClusterSelectionSummary.js";
-import { Optional, ShowHide } from "./Optional.js";
+import { Optional } from "./Optional.js";
 
 import { sources } from "../../config-sources.js";
 import { clusterSelectionStore } from "../store/selection.js";
@@ -63,19 +63,20 @@ export function ResultList(props) {
   const store = props.store;
   return (
     <div className="ResultList" ref={container}>
-      <ShowHide visible={!store.loading}>
-        <>
+      <Optional visible={!store.loading} content={() => (
+        <div>
           <ClusterSelectionSummaryView clusterSelectionStore={props.clusterSelectionStore}
                                        documentVisibilityStore={props.visibilityStore}
                                        searchResultStore={store} />
           {
             store.searchResult.documents.map((document, index) =>
-            <Result source={props.source} document={document} rank={index + 1} key={document.id}
-                    visibilityStore={props.visibilityStore}
-                    commonConfigStore={props.commonConfigStore} />)
+              <Result source={props.source} document={document} rank={index + 1} key={document.id}
+                      visibilityStore={props.visibilityStore}
+                      commonConfigStore={props.commonConfigStore} />)
           }
-        </>
-      </ShowHide>
+        </div>
+      )}>
+      </Optional>
     </div>
   );
 }
