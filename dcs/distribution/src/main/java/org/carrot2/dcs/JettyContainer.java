@@ -10,7 +10,7 @@
  */
 package org.carrot2.dcs;
 
-import static org.carrot2.dcs.Loggers.CONSOLE;
+import static com.carrotsearch.console.launcher.Loggers.CONSOLE;
 
 import java.io.IOException;
 import java.net.BindException;

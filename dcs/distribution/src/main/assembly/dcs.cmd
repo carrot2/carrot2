@@ -13,8 +13,8 @@ SETLOCAL
 TITLE DCS @version@
 
 REM Determine installation home
-IF NOT "%DCS_HOME%"=="" GOTO homeSet
-SET DCS_HOME=%~dp0
+IF NOT "%SCRIPT_HOME%"=="" GOTO homeSet
+SET SCRIPT_HOME=%~dp0
 :homeSet
 
 REM Set other non-default options, if not set by the user.
@@ -23,7 +23,7 @@ SET DCS_OPTS=
 :optsSet
 
 REM Launch DCS.
-java %DCS_OPTS% -jar "%DCS_HOME%\lib\@jarname@-@version@.jar" %*
+java %DCS_OPTS% -jar "%SCRIPT_HOME%\lib\@jarname@-@version@.jar" %*
 SET DCS_EXITVAL=%errorlevel%
 
 REM Set cmd's window title and return with the exit code.

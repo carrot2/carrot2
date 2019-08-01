@@ -43,7 +43,9 @@ public abstract class TestBase extends RandomizedTest {
    * @see SystemPropertiesInvariantRule
    * @see #classRules
    */
-  private static final String[] IGNORED_INVARIANT_PROPERTIES = {"user.timezone", "jetty.git.hash"};
+  private static final String[] IGNORED_INVARIANT_PROPERTIES = {
+    "user.timezone", "jetty.git.hash", "org.apache.logging.log4j.assignedSequences"
+  };
 
   /** Class {@link TestRule}s. */
   @ClassRule public static final TestRule classRules;

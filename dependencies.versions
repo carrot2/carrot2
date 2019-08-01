@@ -1,13 +1,14 @@
 assertj=3.11.1
+console=1.0.1
 hppc=0.8.1
 httpclient=4.5.7
 jackson=2.9.8
 jetty=9.4.15.v20190215
 junit=4.12
-log4j2=2.11.2
+log4j2=2.12.0
 lucene=8.1.1
-mockito: 2.25.0
+mockito=2.25.0
 morfologik=2.1.5
 randomizedtesting=2.7.3
 servletapi=3.1.0
-slf4j=1.7.25
+slf4j=1.8.0-beta2

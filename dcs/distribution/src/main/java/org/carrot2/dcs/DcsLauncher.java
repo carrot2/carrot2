@@ -10,35 +10,30 @@
  */
 package org.carrot2.dcs;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.ParametersDelegate;
+import com.carrotsearch.console.jcommander.Parameter;
+import com.carrotsearch.console.launcher.Command;
+import com.carrotsearch.console.launcher.ExitCode;
+import com.carrotsearch.console.launcher.ExitCodes;
+import com.carrotsearch.console.launcher.Launcher;
+import com.carrotsearch.console.launcher.Loggers;
+import com.carrotsearch.console.launcher.ReportCommandException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatterBuilder;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.AbstractConfiguration;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.ConfigurationFactory;
-import org.apache.logging.log4j.core.config.Configurator;
-import org.apache.logging.log4j.core.config.composite.CompositeConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
-public class DcsLauncher {
-  private static final String LAUNCHER_SCRIPT_NAME = "dcs";
+public class DcsLauncher extends Command<ExitCode> {
+  public static final String ENV_SCRIPT_HOME = "SCRIPT_HOME";
 
   public static final String OPT_SHUTDOWN_TOKEN = "--shutdown-token";
   public static final String OPT_PORT = "--port";
@@ -51,7 +46,7 @@ public class DcsLauncher {
 
   @Parameter(
       names = {OPT_HOME},
-      description = "DCS's home folder (for resource and application lookup).")
+      description = "DCS's home folder (conf/ and web/ subfolder lookup).")
   public Path home;
 
   @Parameter(
@@ -59,35 +54,33 @@ public class DcsLauncher {
       description = "Shutdown service's validation token.")
   public String shutdownToken;
 
-  @ParametersDelegate
-  public LoggingConfigurationParameters loggingParameters = new LoggingConfigurationParameters();
+  private final String tstamp =
+      new DateTimeFormatterBuilder()
+          .appendPattern("yyyy_MM_dd-HH_mm_ss-SSS")
+          .toFormatter(Locale.ROOT)
+          .format(LocalDateTime.now(ZoneOffset.systemDefault()));
 
-  @SuppressWarnings("unused")
-  @Parameter(names = "--help", help = true, hidden = true)
-  private boolean help;
-
-  private final String tstamp;
-
-  public DcsLauncher() {
-    tstamp =
-        new DateTimeFormatterBuilder()
-            .appendPattern("yyyy_MM_dd-HH_mm_ss-SSS")
-            .toFormatter(Locale.ROOT)
-            .format(LocalDateTime.now(ZoneOffset.systemDefault()));
-  }
-
-  public void start() throws Exception {
-    autodetectHome();
-    reconfigureLogging(home, loggingParameters);
-
-    JettyContainer c = new JettyContainer(port, home.resolve("web"), shutdownToken);
-    c.start();
-    c.join();
+  @Override
+  public ExitCode run() {
+    try {
+      JettyContainer c = new JettyContainer(port, home.resolve("web"), shutdownToken);
+      c.start();
+      c.join();
+      return ExitCodes.SUCCESS;
+    } catch (Exception e) {
+      Loggers.CONSOLE.error("Built-in HTTP server ended with an exception.", e);
+      return ExitCodes.ERROR_INTERNAL;
+    }
   }
 
   private Path autodetectHome() {
     if (home == null) {
-      home = Paths.get(".").normalize().toAbsolutePath();
+      home =
+          Stream.of(System.getenv(ENV_SCRIPT_HOME), ".")
+              .filter(Objects::nonNull)
+              .map(s -> Paths.get(s))
+              .findFirst()
+              .get();
     }
 
     if (Files.exists(home.resolve("dcs.cmd"))
@@ -95,146 +88,42 @@ public class DcsLauncher {
         || Files.exists(home.resolve("web"))) {
       return home;
     } else {
-      throw new ParameterException("Application's home folder not valid: " + home.toAbsolutePath());
+      throw new ReportCommandException(
+          "Application's home folder not valid: " + home.toAbsolutePath(),
+          ExitCodes.ERROR_INVALID_ARGUMENTS);
     }
   }
 
-  private static void configureLog4jInitial() {
-    try {
-      Configurator.initialize(
-          "log4j2-default.xml",
-          DcsLauncher.class.getClassLoader(),
-          DcsLauncher.class.getResource("log4j2-default.xml").toURI());
-    } catch (URISyntaxException e) {
-      throw new RuntimeException(e);
-    }
-  }
+  @Override
+  protected List<URI> configureLogging(List<URI> defaults) {
+    autodetectHome();
 
-  /** Configure logging. */
-  private void reconfigureLogging(Path home, LoggingConfigurationParameters loggingParameters) {
-    List<Path> configurations = new ArrayList<>();
-    if (loggingParameters.configuration != null) {
-      configurations.add(loggingParameters.configuration);
-    }
+    Map<String, String> envVars = new HashMap<>();
+    envVars.put("home", home.toAbsolutePath().toString());
+    envVars.put("tstamp", tstamp);
+    DcsLookup.setup(envVars);
 
-    if (loggingParameters.trace) {
-      configurations.add(Paths.get("log4j2-trace.xml"));
-    }
+    Path conf = home.resolve("conf").resolve("logging");
+    Path configuration;
 
-    if (loggingParameters.verbose) {
-      configurations.add(Paths.get("log4j2-verbose.xml"));
-    }
-
-    if (loggingParameters.quiet) {
-      configurations.add(Paths.get("log4j2-quiet.xml"));
+    if (super.logging.configuration != null) {
+      // An explicit configuration is used. Leave as-is.
+      return defaults;
+    } else if (super.logging.trace) {
+      configuration = conf.resolve("log4j2-trace.xml");
+    } else if (super.logging.verbose) {
+      configuration = conf.resolve("log4j2-verbose.xml");
+    } else if (super.logging.quiet) {
+      configuration = conf.resolve("log4j2-quiet.xml");
+    } else {
+      configuration = conf.resolve("log4j2-default.xml");
     }
 
-    if (configurations.size() > 1) {
-      throw new ParameterException(
-          "Conflicting logging configuration options:\n\t- "
-              + configurations.stream()
-                  .map(p -> p.toString())
-                  .collect(Collectors.joining("\n\t- ")));
-    }
-
-    if (configurations.size() == 0) {
-      configurations.add(Paths.get("log4j2-default.xml"));
-    }
-
-    Path configuration = configurations.iterator().next();
-
-    // Try to be smart and resolve it if not absolute.
-    if (!configuration.isAbsolute()) {
-      configuration = resolveRelativeConfiguration(home, configuration);
-      configuration = configuration.toAbsolutePath().normalize();
-    }
-
-    if (!Files.isRegularFile(configuration)) {
-      throw new ParameterException("Configuration file does not exist: " + configuration);
-    }
-
-    try {
-      HashMap<String, String> properties = new HashMap<>();
-      properties.put("home", home.toString());
-      properties.put("tstamp", tstamp);
-      DcsLookup.setup(properties);
-
-      List<URI> multiConfigs = new ArrayList<>();
-      multiConfigs.add(configuration.toUri());
-
-      ClassLoader cl = getClass().getClassLoader();
-      LoggerContext ctx = (LoggerContext) LogManager.getContext(cl, false);
-      reloadLoggingConfiguration(ctx, multiConfigs.toArray(new URI[multiConfigs.size()]));
-    } catch (Exception e) {
-      throw new RuntimeException("Configuration could not be parsed: " + configuration, e);
-    }
-  }
-
-  public static void reloadLoggingConfiguration(LoggerContext ctx, URI... configurations) {
-    ConfigurationFactory configFactory = ConfigurationFactory.getInstance();
-
-    List<AbstractConfiguration> configs = new ArrayList<AbstractConfiguration>();
-    for (URI configUri : configurations) {
-      Configuration configuration =
-          configFactory.getConfiguration(ctx, configUri.toString(), configUri);
-      if (configuration == null || !(configuration instanceof AbstractConfiguration)) {
-        throw new RuntimeException("Oddball config problem: " + configUri);
-      }
-      configs.add((AbstractConfiguration) configuration);
-    }
-
-    ctx.start(new CompositeConfiguration(configs));
-  }
-
-  private static Path resolveRelativeConfiguration(Path home, Path configuration) {
-    Path candidate;
-
-    // cwd
-    String userDir = System.getProperty("user.dir");
-    if (userDir != null) {
-      candidate = Paths.get(userDir).resolve(configuration);
-      if (Files.isRegularFile(candidate)) {
-        return candidate;
-      }
-    }
-
-    // {home}/conf/logging
-    candidate = home.resolve("conf").resolve("logging").resolve(configuration);
-    if (Files.isRegularFile(candidate)) {
-      return candidate;
-    }
-
-    // {home}.home/
-    candidate = home.resolve(configuration);
-    if (Files.isRegularFile(candidate)) {
-      return candidate;
-    }
-
-    return configuration;
+    return Collections.singletonList(configuration.toUri());
   }
 
   public static void main(String[] args) {
-    configureLog4jInitial();
-
-    Logger logger = LoggerFactory.getLogger(DcsLauncher.class);
-    DcsLauncher launcher = new DcsLauncher();
-    try {
-      JCommander jcommander = JCommander.newBuilder().addObject(launcher).build();
-      jcommander.setProgramName(LAUNCHER_SCRIPT_NAME);
-      jcommander.parse(args);
-
-      if (launcher.help) {
-        StringBuilder v = new StringBuilder();
-        jcommander.usage(v);
-        logger.info(v.toString());
-      } else {
-        launcher.start();
-      }
-    } catch (ParameterException e) {
-      logger.error(e.getMessage());
-      logger.error("(pass --help to display all options).");
-    } catch (Exception e) {
-      logger.error("Unhandled program error: " + e.getMessage(), e);
-    }
+    int retCode = new Launcher().runCommand(new DcsLauncher(), args).processReturnValue();
+    System.exit(retCode);
   }
 }

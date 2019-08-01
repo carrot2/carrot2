@@ -10,6 +10,7 @@
  */
 package org.carrot2.dcs.it;
 
+import com.carrotsearch.console.launcher.Loggers;
 import com.carrotsearch.randomizedtesting.LifecycleScope;
 import com.carrotsearch.randomizedtesting.RandomizedTest;
 import com.carrotsearch.randomizedtesting.rules.TestRuleAdapter;
@@ -43,6 +44,8 @@ public abstract class AbstractDistributionTest extends TestBase {
 
               if (!Files.isDirectory(distDir)) {
                 throw new AssertionError("Distribution not assembled at path: " + distDir);
+              } else {
+                Loggers.CONSOLE.info("Using distribution from: {}", distDir);
               }
 
               // Sometimes add awkward or problematic characters to distribution path.

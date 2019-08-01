@@ -1,10 +1,10 @@
 #!/bin/sh
 
 # Determine installation home
-if [ -z "$DCS_HOME" ]; then
-  DCS_HOME=`dirname "$0"`
-  cd "$DCS_HOME"
-  export DCS_HOME="`pwd`"
+if [ -z "$SCRIPT_HOME" ]; then
+  SCRIPT_HOME=`dirname "$0"`
+  cd "$SCRIPT_HOME"
+  export SCRIPT_HOME="`pwd`"
   cd - >/dev/null
 fi
 
@@ -18,7 +18,7 @@ fi
 SHELLNAME=`uname`
 case "$SHELLNAME" in
   CYGWIN*)
-    DCS_HOME=`cygpath -m "$DCS_HOME"`
+    SCRIPT_HOME=`cygpath -m "$SCRIPT_HOME"`
     echo "> DCS expects Windows paths in descriptors and arguments (Unix'ish shell detected: $SHELLNAME)"
 
     if [ -t 1 ]; then
@@ -47,5 +47,5 @@ for arg in "$@" ; do
 done
 
 # Launch DCS.
-eval java $DCS_OPTS -jar \"$DCS_HOME/lib/@jarname@-@version@.jar\" "$all_args"
+eval java $DCS_OPTS -jar \"$SCRIPT_HOME/lib/@jarname@-@version@.jar\" "$all_args"
 exit $?
