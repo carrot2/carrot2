@@ -1,10 +1,12 @@
 export const algorithms = {
+  /*
   "Lingo3G": {
     label: "Lingo3G",
     description: "Meaningful, well-described hierarchical clusters. Very fast, many tuning options.",
     descriptionHtml: "produces meaningful, well-described hierarchical clusters. Very fast, scalable, many tuning options (not exposed in this demo). Commercially available from <a href='https://carrotsearch.com' target='_blank'>Carrot Search</a>.",
     tag: "commercial"
   },
+   */
   "Lingo": {
     label: "Lingo",
     description: "Well-described flat clusters.",
