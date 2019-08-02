@@ -1,3 +1,9 @@
+figure.round .preview,
+figure.round img {
+  border-radius: calc(0.125 * var(--leading));
+}
+
+
 .logo > a {
   text-decoration: none;
   display: flex;

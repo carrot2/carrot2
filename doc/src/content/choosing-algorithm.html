@@ -1,0 +1,50 @@
+<article>
+  <h1>Choosing algorithm</h1>
+
+  <p>
+    Carrot<sup>2</sup> offers two specialized search results clustering
+    algorithms: Lingo and STC as well the generic bisecting k-means clustering. This article
+    describes briefly the algorithms and provides some recommendations for
+    choosing the most suitable one.
+  </p>
+
+  <p>
+    The <strong>Lingo algorithm</strong> reverses the
+    traditional clustering pipeline: it first identifies cluster labels and only
+    then assigns documents to the labels to form final clusters. To find the
+    labels, Lingo builds a term-document matrix for all input documents and
+    decomposes the matrix to obtain a number of base vectors that well
+    approximate the matrix in a low-dimensional space. Each such vector gives
+    rise to one cluster label. To complete the clustering process, each label is
+    assigned documents that contain the label's words.
+  </p>
+
+  <p>
+    The key data structure used in the <strong>Suffix Tree Clustering</strong> (STC) algorithm is
+    a Generalized Suffix Tree (GST) built for all input documents. The algorithm
+    traverses the GST to identify words and phrases that occurred more than once
+    in the input documents. Each such word or phrase gives rise to one base
+    cluster. The last stage of the clustering process is merging base clusters
+    to form the final clusters.
+  </p>
+
+  <p>
+    The two algorithms have two features in common. They both create overlapping
+    clusterings, in which one document can be assigned to more than one cluster.
+    Also, in case of both algorithms a certain number of documents can remain
+    unclustered and fall in the <em>Other topics</em> group.
+  </p>
+
+  <p>
+    Bisecting k-means is a generic clustering algorithm that can also be applied
+    to clustering textual data. As opposed to Lingo and STC, bisecting k-means
+    creates non-overlapping clusters and does not produce the <em>Other Topics</em>
+    group. Its current limitation is that it labels clusters using individual
+    words and not all cluster's documents may correspond to the words included
+    in the cluster label.
+  </p>
+
+  <p>
+    ...
+  </p>
+</article>

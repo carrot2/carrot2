@@ -4,9 +4,7 @@
       "title": "Getting started",
       "articles": [
         "getting-started",
-        "user-quick-start",
-        "rest-api-quick-start",
-        "java-quick-start"
+        "quick-start"
       ]
     },
     {
@@ -22,6 +20,7 @@
       "articles": [
         "choosing-algorithm",
         "tuning-clustering",
+        "non-english-content",
         "solr-clustering-plugin",
         "es-clustering-plugin"
       ]
@@ -30,9 +29,7 @@
       "title": "Reference",
       "articles": [
         "rest-api-reference",
-        "lingo-algorithm-reference",
-        "stc-algorithm-reference",
-        "kmeans-algorithm-reference"
+        "algorithm-parameters-reference"
       ]
     }
   ]

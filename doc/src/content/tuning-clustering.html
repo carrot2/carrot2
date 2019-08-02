@@ -1,0 +1,73 @@
+<article>
+  <h1>Tuning clustering</h1>
+
+  <p>
+    This article discusses typical areas for tuning of Carrot<sup>2</sup>
+    clustering
+    algorithms.
+  </p>
+
+  <section id="input-characteristics">
+    <h2>Desirable characteristics of documents for clustering</h2>
+
+    <p>
+      The quality of clusters and their labels largely depends on the
+      characteristics of documents provided on the input. Although there is no
+      general rule for optimum document content, below are some tips worth
+      considering.
+    </p>
+
+    <ul>
+      <li>
+        <p>
+          <strong>Carrot<sup>2</sup> is designed for small to medium collections
+            of documents</strong>. Carrot<sup>2</sup> algorithms perform in-memory
+          clustering. For this reason, as a rule of thumb, Carrot<sup>2</sup>
+          should successfully deal with up to a thousand of documents, a few
+          paragraphs each. For algorithms designed to process millions of
+          documents, check out the Mahout project or Carrot Search Lingo4G.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          <strong>Provide a minimum of 20 documents</strong>. Carrot<sup>2</sup>
+          clustering algorithms will work best with a set of documents similar
+          to what is normally returned by a typical search engine. While about
+          20 is the minimum number of documents you can reasonably cluster, the
+          optimum would fall in the 100 &ndash; 500 range.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          <strong>Provide contextual snippets if possible</strong>. If the input
+          documents are a result of some search query, provide contextual
+          snippets related to that query, similar to what web search engines
+          return, instead of full document content. Not only will this speed up
+          processing, but also should help the clustering algorithm to cover the
+          full spectrum of topics dealt with in the search results.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          <strong>Minimize "noise" in the input documents</strong>. All kinds of "noise" in the
+          documents, such as truncated sentences (sometimes resulting from contextual
+          snippet extraction suggested above) or random alphanumerical strings may
+          decrease the quality of cluster labels. If you have access to e.g. a few
+          sentences' abstract of each document, it is worth checking the quality of
+          clustering based on those abstracts. Extracting complete sentences
+          matching user's query should improve the clusters even further.
+        </p>
+      </li>
+    </ul>
+
+    <p>
+      Let us once again stress that there are no definite generic guidelines for
+      the best content for clustering, it is always worth experimenting with
+      different combinations. You can also describe your specific application on
+      Carrot<sup>2</sup> mailing list and ask for advice.
+    </p>
+  </section>
+</article>
