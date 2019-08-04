@@ -1,5 +1,5 @@
 module.exports = {
-  pathPrefix: "/doc",
+  pathPrefix: '__RELATIVIZE_PREFIX__',
   siteMetadata: {
     title: `Carrot2 docs`,
     description: `User and developer manual for the Carrot2 text clustering engine.`,
@@ -34,6 +34,7 @@ module.exports = {
     `gatsby-plugin-dark-mode`,
     `@carrotsearch/gatsby-transformer-html`,
     '@carrotsearch/gatsby-plugin-content-search',
+    '@carrotsearch/gatsby-plugin-relativize',
     `gatsby-plugin-offline`,
     `gatsby-plugin-catch-links`
   ]
