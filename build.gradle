@@ -154,6 +154,13 @@ project(':doc') {
   // Gatsby has a non-configurable output folder, sigh.
   // https://github.com/gatsbyjs/gatsby/issues/1878
   buildDir = file("public")
+
+  afterEvaluate {
+    yarnBuild.doFirst {
+      delete project.files(".cache")
+      delete project.files("public")
+    }
+  }
 }
 
 configure(subprojects.findAll { it.path in [":dcs:contexts:frontend", ":doc"] }) {
