@@ -157,71 +157,7 @@ project(':doc') {
 }
 
 configure(subprojects.findAll { it.path in [":dcs:contexts:frontend", ":doc"] }) {
-  apply plugin: 'base'
-  apply plugin: 'com.moowork.node'
-
-  configurations {
-    it.default.extendsFrom archives
-  }
-
-  node {
-    // node/yarn versions
-    version = '10.15.1'
-    yarnVersion = '1.13.0'
-    download = true
-  }
-
-  task yarnInstall(type: YarnTask) {
-    group 'build'
-
-    inputs.file('package.json')
-    inputs.file('yarn.lock')
-
-    outputs.upToDateWhen {
-      return project.file('node_modules').exists()
-    }
-    outputs.file('node_modules/.yarn-integrity')
-
-    args = [ 'install']
-  }
-
-  task yarnBuild(type: YarnTask) {
-    group 'build'
-    dependsOn yarnInstall
-
-    if (project.path == ":doc") {
-      inputs.files(fileTree('src'))
-      inputs.files(fileTree('static'))
-    } else {
-      inputs.files(fileTree('public'))
-      inputs.files(fileTree('src'))
-    }
-
-    inputs.file('package.json')
-    inputs.file('yarn.lock')
-
-    outputs.dir(project.buildDir)
-
-    args = ['run', 'build']
-  }
-
-  task fakeBuild {
-    doFirst {
-      logger.warn("Omitting full yarn build in fast build: ${project.path}")
-    }
-  }
-
-  artifacts {
-    archives project.buildDir, {
-      if (project.hasProperty("fastBuild")) {
-        builtBy fakeBuild
-      } else {
-        builtBy yarnBuild
-      }
-    }
-  }
-
-  assemble.dependsOn configurations.archives
+  apply from: rootProject.file("gradle/yarn-project.gradle")
 }
 
 // Apply yarn scheduling fix so that dependencies are not fetched in parallel.

@@ -1,0 +1,66 @@
+
+apply plugin: 'base'
+apply plugin: 'com.moowork.node'
+
+configurations {
+    it.default.extendsFrom archives
+}
+
+node {
+    version = "${versions.node}"
+    yarnVersion = "${versions.yarn}"
+    download = true
+}
+
+task yarnInstall(type: YarnTask) {
+    group 'build'
+
+    inputs.file('package.json')
+    inputs.file('yarn.lock')
+
+    outputs.upToDateWhen {
+        return project.file('node_modules').exists()
+    }
+    outputs.file('node_modules/.yarn-integrity')
+
+    args = [ 'install']
+}
+
+task yarnBuild(type: YarnTask) {
+    group 'build'
+    dependsOn yarnInstall
+
+    if (project.path == ":doc") {
+        inputs.files(fileTree('src'))
+        inputs.files(fileTree('static'))
+    } else {
+        inputs.files(fileTree('src'))
+        inputs.files(fileTree('public'))
+    }
+
+    inputs.file('package.json')
+    inputs.file('yarn.lock')
+
+    outputs.dir(project.buildDir)
+
+    args = ['run', 'build']
+}
+
+task fastBuild {
+    doFirst {
+        logger.warn("Omitting full yarn build in fast build: ${project.path}")
+    }
+}
+
+artifacts {
+    archives project.buildDir, {
+        if (project.hasProperty("fast")) {
+            builtBy fastBuild
+        } else {
+            builtBy yarnBuild
+        }
+    }
+}
+
+assemble.dependsOn configurations.archives
+

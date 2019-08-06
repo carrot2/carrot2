@@ -12,3 +12,6 @@ morfologik=2.1.5
 randomizedtesting=2.7.3
 servletapi=3.1.0
 slf4j=1.8.0-beta2
+
+node=10.15.1
+yarn=1.13.0
