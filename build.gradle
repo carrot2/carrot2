@@ -156,7 +156,8 @@ project(':doc') {
   buildDir = file("public")
 
   afterEvaluate {
-    yarnBuild.doFirst {
+    yarnInstall.doFirst {
+      logger.warn("Gatsby/ yarn hack: cleaning up .cache/public.")
       delete project.files(".cache")
       delete project.files("public")
     }
