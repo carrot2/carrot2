@@ -1,5 +1,5 @@
 assertj=3.11.1
-console=1.0.1
+console=1.0.3
 hppc=0.8.1
 httpclient=4.5.7
 jackson=2.9.8
