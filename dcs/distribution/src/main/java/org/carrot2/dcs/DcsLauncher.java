@@ -33,6 +33,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 public class DcsLauncher extends Command<ExitCode> {
+  public static final String DCS_HOME_SYSPROP = "dcs.home";
   public static final String ENV_SCRIPT_HOME = "SCRIPT_HOME";
 
   public static final String OPT_SHUTDOWN_TOKEN = "--shutdown-token";
@@ -73,24 +74,25 @@ public class DcsLauncher extends Command<ExitCode> {
     }
   }
 
-  private Path autodetectHome() {
+  private void autodetectHome() {
     if (home == null) {
       home =
-          Stream.of(System.getenv(ENV_SCRIPT_HOME), ".")
+          Stream.of(System.getProperty(DCS_HOME_SYSPROP), System.getenv(ENV_SCRIPT_HOME), ".")
               .filter(Objects::nonNull)
               .map(s -> Paths.get(s))
               .findFirst()
               .get();
     }
 
+    home = home.toAbsolutePath();
+
     if (Files.exists(home.resolve("dcs.cmd"))
         || Files.exists(home.resolve("dcs.sh"))
         || Files.exists(home.resolve("web"))) {
-      return home;
+      System.setProperty(DCS_HOME_SYSPROP, home.toString());
     } else {
       throw new ReportCommandException(
-          "Application's home folder not valid: " + home.toAbsolutePath(),
-          ExitCodes.ERROR_INVALID_ARGUMENTS);
+          "Application's home folder not valid: " + home, ExitCodes.ERROR_INVALID_ARGUMENTS);
     }
   }
 
