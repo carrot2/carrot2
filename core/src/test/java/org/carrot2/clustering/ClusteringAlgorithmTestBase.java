@@ -170,7 +170,7 @@ public abstract class ClusteringAlgorithmTestBase<E extends ClusteringAlgorithm 
     Map<String, Object> map = Attrs.toMap(algorithm, JvmNameMapper.INSTANCE::toName);
     Attrs.fromMap(AcceptingVisitor.class, map, JvmNameMapper.INSTANCE::fromName);
 
-    System.out.println(Attrs.toPrettyString(algorithm, AliasMapper.SPI_DEFAULTS));
+    System.out.println(Attrs.toJson(algorithm, AliasMapper.SPI_DEFAULTS));
   }
 
   /** Runs the algorithm concurrently, verifying stability of results. */

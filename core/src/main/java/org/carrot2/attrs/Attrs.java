@@ -13,6 +13,7 @@ package org.carrot2.attrs;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.carrot2.other.nanojson.JsonWriter;
 
 public final class Attrs {
   static final String KEY_TYPE = "@type";
@@ -390,94 +391,12 @@ public final class Attrs {
     }
   }
 
-  public static String toPrettyString(AcceptingVisitor ob, ClassNameMapper mapper) {
-    StringBuilder builder = new StringBuilder();
-    StringBuilder indent = new StringBuilder();
+  public static String toJson(AcceptingVisitor composite, ClassNameMapper classNameMapper) {
+    return toJson(composite, classNameMapper::toName);
+  }
 
-    ob.accept(
-        new AttrVisitor() {
-          @Override
-          public void visit(String key, AttrBoolean attr) {
-            append(key, attr.get());
-          }
-
-          @Override
-          public void visit(String key, AttrInteger attr) {
-            append(key, attr.get());
-          }
-
-          @Override
-          public void visit(String key, AttrDouble attr) {
-            append(key, attr.get());
-          }
-
-          @Override
-          public <T extends Enum<T>> void visit(String key, AttrEnum<T> attr) {
-            T value = attr.get();
-            append(key, value == null ? value : "\"" + value + '"');
-          }
-
-          @Override
-          public void visit(String key, AttrString attr) {
-            append(key, attr.get());
-          }
-
-          @Override
-          public void visit(String key, AttrStringArray attr) {
-            String[] value = attr.get();
-            if (value == null) {
-              append(key, value);
-            } else {
-              builder.append(indent).append(key).append(": [\n");
-              for (String v : value) {
-                builder.append(indent).append("  \"").append(v).append("\"\n");
-              }
-              builder.append(indent).append("]\n");
-            }
-          }
-
-          @Override
-          public <T extends AcceptingVisitor> void visit(String key, AttrObject<T> attr) {
-            AcceptingVisitor value = attr.get();
-            if (value == null) {
-              append(key, value);
-            } else {
-              builder.append(indent).append(key).append(": {\n");
-              int len = indent.length();
-              indent.append("  ");
-              value.accept(this);
-              indent.setLength(len);
-              builder.append(indent).append("}\n");
-            }
-          }
-
-          @Override
-          public <T extends AcceptingVisitor> void visit(String key, AttrObjectArray<T> attr) {
-            List<T> value = attr.get();
-            if (value == null) {
-              append(key, value);
-            } else {
-              int len1 = indent.length();
-              builder.append(indent).append(key).append(": [\n");
-              indent.append("  ");
-              for (AcceptingVisitor v : value) {
-                builder.append(indent).append("{\n");
-                int len2 = indent.length();
-                indent.append("  ");
-                v.accept(this);
-                indent.setLength(len2);
-                builder.append(indent).append("}\n");
-              }
-              indent.setLength(len1);
-              builder.append(indent).append("]\n");
-            }
-          }
-
-          private void append(String key, Object value) {
-            builder.append(indent).append(key).append(": ").append(value).append('\n');
-          }
-        });
-
-    return builder.toString();
+  public static String toJson(AcceptingVisitor composite, Function<Object, String> classToName) {
+    Map<String, Object> asMap = toMap(composite, classToName);
+    return JsonWriter.indent("  ").string().object(asMap).done();
   }
 }

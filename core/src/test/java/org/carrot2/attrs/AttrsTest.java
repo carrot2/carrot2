@@ -81,7 +81,7 @@ public class AttrsTest extends TestBase {
 
     Clazz ob = new Clazz();
     ob.adHocDict.entries = Arrays.asList(entry, entry);
-    System.out.println(Attrs.toPrettyString(ob, JvmNameMapper.INSTANCE));
+    System.out.println(Attrs.toJson(ob, JvmNameMapper.INSTANCE));
   }
 
   private enum EnumClazz {

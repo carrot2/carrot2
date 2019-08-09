@@ -49,9 +49,10 @@ allprojects {
         details.useTarget "org.slf4j:slf4j-api:${versions.slf4j}"
         details.because "Force-use slf4j-api ${versions.slf4j}"
       }
-      if (details.requested.name == 'log4j-core') {
-        details.useTarget "org.apache.logging.log4j:log4j-core:${versions.log4j2}"
-        details.because "Force-use log4j-core ${versions.log4j}"
+
+      if (details.requested.group == 'org.apache.logging.log4j') {
+        details.useTarget group: details.requested.group, name: details.requested.name, version: versions.log4j2
+        details.because "Force-use log4j dependencies to ${versions.log4j2}"
       }
     }
 
@@ -155,7 +156,7 @@ project(':doc') {
   buildDir = file("public")
 
   afterEvaluate {
-    yarnInstall.doFirst {
+    yarnBuild.doFirst {
       logger.warn("Gatsby/ yarn hack: cleaning up .cache/public.")
       delete project.files(".cache")
       delete project.files("public")

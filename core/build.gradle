@@ -28,3 +28,12 @@ task jflex(type: JavaExec) {
   args file('src/main/jflex/org/carrot2/language/ExtendedWhitespaceTokenizerImpl.jflex')
 }
 
+spotless {
+  java {
+    targetExclude "**/nanojson/*"
+  }
+}
+
+javadoc {
+  exclude '**/nanojson/**'
+}

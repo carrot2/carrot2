@@ -29,7 +29,7 @@ dependencies {
   compileOnly "org.slf4j:slf4j-api:${versions.slf4j}"
 
   testCompile "org.mockito:mockito-core:${versions.mockito}"
-  testCompile "org.apache.logging.log4j:log4j-slf4j-impl:${versions.log4j2}"
+  testCompile "org.apache.logging.log4j:log4j-slf4j18-impl:${versions.log4j2}"
 }
 
 war {
