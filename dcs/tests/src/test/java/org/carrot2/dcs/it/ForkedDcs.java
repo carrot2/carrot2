@@ -13,6 +13,7 @@ package org.carrot2.dcs.it;
 import com.carrotsearch.console.launcher.Loggers;
 import com.carrotsearch.procfork.ForkedProcess;
 import com.carrotsearch.procfork.ProcessBuilderLauncher;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
@@ -44,7 +45,7 @@ public class ForkedDcs implements DcsService {
             .cwd(distributionDir)
             .envvar("DCS_OPTS", "-Xmx256m")
             .envvar("JAVA_CMD", javaCmd.toAbsolutePath().toString())
-            .executable(Paths.get("dcs"))
+            .executable(Paths.get(File.separatorChar == '\\' ? "dcs": "./dcs"))
             .args(DcsLauncher.OPT_SHUTDOWN_TOKEN, shutdownToken)
             .viaShellLauncher()
             .execute();
