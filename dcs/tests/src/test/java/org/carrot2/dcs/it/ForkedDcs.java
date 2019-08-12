@@ -105,7 +105,17 @@ public class ForkedDcs implements DcsService {
       }
 
       Instant deadline = Instant.now().plusSeconds(5);
-      while (Instant.now().isBefore(deadline) && process.getProcess().isAlive()) {
+      while (Instant.now().isBefore(deadline)) {
+        if (!process.getProcess().isAlive()) {
+          Loggers.CONSOLE.info("isAlive() indicates DCS is dead.");
+          try {
+            process.waitFor();
+          } catch (InterruptedException e) {
+            // Fall through.
+          }
+          break;
+        }
+
         try {
           Thread.sleep(250);
         } catch (InterruptedException e) {
