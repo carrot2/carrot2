@@ -23,8 +23,6 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.http.NoHttpResponseException;
-import org.apache.http.conn.HttpHostConnectException;
 import org.carrot2.HttpRequest;
 import org.carrot2.dcs.DcsLauncher;
 import org.carrot2.dcs.JettyContainer;
