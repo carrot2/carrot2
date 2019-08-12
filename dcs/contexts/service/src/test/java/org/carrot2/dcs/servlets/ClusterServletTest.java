@@ -23,8 +23,8 @@ import java.io.StringWriter;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletResponse;
 import org.assertj.core.api.Assertions;
-import org.carrot2.dcs.client.ClusterResponse;
-import org.carrot2.dcs.client.ErrorResponse;
+import org.carrot2.dcs.model.ClusterResponse;
+import org.carrot2.dcs.model.ErrorResponse;
 import org.carrot2.math.mahout.Arrays;
 import org.junit.Test;
 

@@ -6,23 +6,15 @@ configurations {
   langResources
 }
 
-def aggregateProjects = [
-  ":core",
-  ":lang:polish",
-  ":lang:lucene"
-]
-
 dependencies {
-  implementation(project(':dcs:client')) {
-    exclude group: 'org.slf4j'
-  }
   implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
 
-  aggregateProjects.each { prj ->
-    implementation(project(prj)) {
-      exclude group: 'org.slf4j'
-    }
+  implementation(project(':dcs:model'))
 
+  [":core",
+   ":lang:polish",
+   ":lang:lucene"].each { prj ->
+    implementation(project(prj))
     langResources project(path: prj, configuration: 'langResources')
   }
 
@@ -30,6 +22,11 @@ dependencies {
 
   testCompile "org.mockito:mockito-core:${versions.mockito}"
   testCompile "org.apache.logging.log4j:log4j-slf4j18-impl:${versions.log4j2}"
+}
+
+// Exclude slf4j from any dependency, it should be part of the container.
+configurations.implementation.dependencies.each { module ->
+  module.exclude group: 'org.slf4j'
 }
 
 war {

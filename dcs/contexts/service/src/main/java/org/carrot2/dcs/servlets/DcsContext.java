@@ -31,7 +31,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.ClusteringAlgorithmProvider;
-import org.carrot2.dcs.client.ClusterRequest;
+import org.carrot2.dcs.model.ClusterRequest;
 import org.carrot2.language.ComponentLoader;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.util.ResourceLookup;

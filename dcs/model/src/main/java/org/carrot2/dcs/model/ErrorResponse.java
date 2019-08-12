@@ -8,7 +8,7 @@
  * in the root folder of the repository checkout or at:
  * https://www.carrot2.org/carrot2.LICENSE
  */
-package org.carrot2.dcs.client;
+package org.carrot2.dcs.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

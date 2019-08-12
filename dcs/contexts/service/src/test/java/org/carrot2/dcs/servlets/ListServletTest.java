@@ -18,7 +18,7 @@ import java.io.StringWriter;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
-import org.carrot2.dcs.client.ListResponse;
+import org.carrot2.dcs.model.ListResponse;
 import org.carrot2.language.LanguageComponents;
 import org.junit.Test;
 

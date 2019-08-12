@@ -28,9 +28,9 @@ import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.carrot2.dcs.client.ClusterRequest;
-import org.carrot2.dcs.client.ClusterResponse;
-import org.carrot2.dcs.client.ListResponse;
+import org.carrot2.dcs.model.ClusterRequest;
+import org.carrot2.dcs.model.ClusterResponse;
+import org.carrot2.dcs.model.ListResponse;
 import org.carrot2.examples.ExamplesCommon;
 import org.carrot2.examples.ExamplesData;
 
