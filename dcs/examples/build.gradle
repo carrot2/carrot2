@@ -1,11 +1,11 @@
 
-apply plugin: 'java-library'
+apply plugin: 'java'
 
 archivesBaseName = 'carrot2-dcs-examples'
 
 if (file('lib').exists()) {
   dependencies {
-    implementation fileTree(dir: 'lib', include: "**/*.jar")
+    implementation fileTree(dir: 'lib', include: "**/*.jar", exclude: "**/${archivesBaseName}*")
   }
 } else {
   dependencies {
@@ -15,11 +15,20 @@ if (file('lib').exists()) {
 
     implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
     implementation "org.apache.httpcomponents:httpclient:${versions.httpclient}"
-  }
-}
+    implementation "com.carrotsearch.console:launcher:${versions.console}"
+  }}
 
 configurations {
   distribution
+}
+
+jar {
+  doFirst {
+    manifest {
+      attributes("Main-Class": "com.carrotsearch.console.launcher.Launcher")
+      attributes("Class-Path": configurations.runtimeClasspath.collect { it.getName() }.join(' '))
+    }
+  }
 }
 
 task buildDistribution(type: Sync) {
@@ -37,6 +46,10 @@ task buildDistribution(type: Sync) {
     into 'lib'
   }
 
+  from(jar) {
+    into 'lib'
+  }
+
   into "$buildDir/distribution"
 }
 
@@ -45,3 +58,4 @@ artifacts {
     builtBy tasks.buildDistribution
   }
 }
+
