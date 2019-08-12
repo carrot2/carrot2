@@ -18,4 +18,5 @@ task syncDistribution(type: Sync) {
 
 test {
     dependsOn syncDistribution
+    maxParallelForks = 1
 }
