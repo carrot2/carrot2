@@ -11,6 +11,7 @@ include 'lang:lucene-japanese'
 include 'lang:lucene-korean'
 
 include 'dcs:distribution'
+include 'dcs:tests'
 include 'dcs:model'
 include 'dcs:examples'
 

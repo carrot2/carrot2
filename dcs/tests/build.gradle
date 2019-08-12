@@ -1,0 +1,20 @@
+
+apply plugin: 'java'
+
+dependencies {
+    testImplementation project(":dcs:distribution")
+    testImplementation project(":dcs:examples")
+
+    implementation "com.carrotsearch.console:launcher:${versions.console}"
+    implementation "org.eclipse.jetty:jetty-server:${versions.jetty}"
+    implementation "org.eclipse.jetty:jetty-webapp:${versions.jetty}"
+}
+
+task syncDistribution(type: Sync) {
+    from project(":dcs:distribution").distDir
+    into file("${buildDir}/distribution")
+}
+
+test {
+    dependsOn syncDistribution
+}

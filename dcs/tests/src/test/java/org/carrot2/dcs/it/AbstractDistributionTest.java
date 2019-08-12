@@ -38,7 +38,7 @@ public abstract class AbstractDistributionTest extends TestBase {
 
             protected void before() throws Throwable {
               Path distDir =
-                  Paths.get(System.getProperty("dist.dir", "./build/dist"))
+                  Paths.get(System.getProperty("dist.dir", "./build/distribution"))
                       .normalize()
                       .toAbsolutePath();
 

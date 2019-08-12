@@ -5,17 +5,6 @@ import java.time.temporal.ChronoUnit
 
 apply plugin: 'java'
 
-sourceSets {
-  integTest {
-    java {
-      compileClasspath += main.output + test.output
-      runtimeClasspath += main.output + test.output
-      srcDir file('src/integ-test/java')
-    }
-    resources.srcDir file('src/integ-test/resources')
-  }
-}
-
 configurations {
   ctxService
   ctxRoot
@@ -24,9 +13,6 @@ configurations {
   ctxDoc
 
   examples
-
-  integTestImplementation.extendsFrom testImplementation
-  integTestRuntimeOnly.extendsFrom testRuntimeOnly
 
   distZip
   distDir
@@ -42,11 +28,8 @@ dependencies {
   examples     project(path: ":dcs:examples", configuration: "distribution")
 
   implementation "com.carrotsearch.console:launcher:${versions.console}"
-
   implementation "org.eclipse.jetty:jetty-server:${versions.jetty}"
   implementation "org.eclipse.jetty:jetty-webapp:${versions.jetty}"
-
-  integTestImplementation project(":dcs:examples")
 }
 
 ext {
@@ -153,23 +136,6 @@ task distZip(type: Zip) {
   into "${archivesBaseName}/"
 }
 
-task runIntegTest(type: Test) {
-  dependsOn assemble, ":dcs:contexts:service:test"
-  testClassesDirs = sourceSets.integTest.output.classesDirs
-  classpath = sourceSets.integTest.runtimeClasspath
-
-  systemProperty "dist.dir", "$outputDir"
-
-  outputs.upToDateWhen { false }
-}
-
-task integTest(dependsOn: runIntegTest) {
-  group "verification"
-  description "Run integration tests"
-}
-
-integTest.mustRunAfter test
-check.dependsOn integTest
 assemble.dependsOn distDir
 
 artifacts {
