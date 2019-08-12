@@ -45,8 +45,9 @@ public class ForkedDcs implements DcsService {
             .cwd(distributionDir)
             .envvar("DCS_OPTS", "-Xmx256m")
             .envvar("JAVA_CMD", javaCmd.toAbsolutePath().toString())
-            .executable(Paths.get(File.separatorChar == '\\' ? "dcs": "./dcs"))
+            .executable(Paths.get(File.separatorChar == '\\' ? "dcs" : "./dcs.sh"))
             .args(DcsLauncher.OPT_SHUTDOWN_TOKEN, shutdownToken)
+            .args(DcsLauncher.OPT_PORT, "0")
             .viaShellLauncher()
             .execute();
 
