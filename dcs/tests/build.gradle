@@ -5,6 +5,7 @@ dependencies {
     testImplementation project(":dcs:distribution")
     testImplementation project(":dcs:examples")
 
+    implementation "com.carrotsearch:procfork:${versions.procfork}"
     implementation "com.carrotsearch.console:launcher:${versions.console}"
     implementation "org.eclipse.jetty:jetty-server:${versions.jetty}"
     implementation "org.eclipse.jetty:jetty-webapp:${versions.jetty}"

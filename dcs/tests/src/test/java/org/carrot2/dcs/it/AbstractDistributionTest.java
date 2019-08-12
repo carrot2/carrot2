@@ -64,7 +64,10 @@ public abstract class AbstractDistributionTest extends TestBase {
 
   protected final DcsService startDcs(String shutdownToken) {
     try {
-      return new EmbeddedDcs(getDistributionDir(), shutdownToken);
+      if (shutdownToken == null) {
+        shutdownToken = "_shutdown_";
+      }
+      return new ForkedDcs(getDistributionDir(), shutdownToken);
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }

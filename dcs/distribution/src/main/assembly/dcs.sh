@@ -13,6 +13,11 @@ if [ -z "$DCS_OPTS" ]; then
   DCS_OPTS=""
 fi
 
+# Determine java command
+if [ -z "$JAVA_CMD" ]; then
+  JAVA_CMD="java"
+fi
+
 # Convert to real Windows paths from Unix-ish environments on Windows
 # because the java process will be Windows-native.
 SHELLNAME=`uname`
@@ -47,5 +52,5 @@ for arg in "$@" ; do
 done
 
 # Launch DCS.
-eval java $DCS_OPTS -jar \"$SCRIPT_HOME/lib/@jarname@-@version@.jar\" "$all_args"
+eval $JAVA_CMD $DCS_OPTS -jar \"$SCRIPT_HOME/lib/@jarname@-@version@.jar\" "$all_args"
 exit $?

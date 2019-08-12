@@ -22,8 +22,13 @@ IF NOT "%DCS_OPTS%"=="" GOTO optsSet
 SET DCS_OPTS=
 :optsSet
 
+REM Override the default java if requested.
+IF NOT "%JAVA_CMD%"=="" GOTO javaSet
+SET JAVA_CMD=java
+:javaSet
+
 REM Launch DCS.
-java %DCS_OPTS% -jar "%SCRIPT_HOME%\lib\@jarname@-@version@.jar" %*
+%JAVA_CMD% %DCS_OPTS% -jar "%SCRIPT_HOME%\lib\@jarname@-@version@.jar" %*
 SET DCS_EXITVAL=%errorlevel%
 
 REM Set cmd's window title and return with the exit code.

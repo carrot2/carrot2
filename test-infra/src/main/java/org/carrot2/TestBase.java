@@ -32,6 +32,9 @@ import org.slf4j.LoggerFactory;
 @TimeoutSuite(millis = 180 * 1000) // No suite should run longer than 180 seconds.
 @ThreadLeakGroup(Group.MAIN)
 @ThreadLeakScope(Scope.TEST)
+@ThreadLeakFilters(
+    defaultFilters = true,
+    filters = {IgnoreThreads.class})
 @ThreadLeakZombies(Consequence.IGNORE_REMAINING_TESTS)
 @ThreadLeakLingering(linger = 1000)
 @ThreadLeakAction({Action.WARN, Action.INTERRUPT})

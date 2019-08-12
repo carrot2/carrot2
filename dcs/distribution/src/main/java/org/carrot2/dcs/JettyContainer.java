@@ -34,6 +34,7 @@ import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 public class JettyContainer {
+  public static final String SERVICE_STARTED_ON = "Service started on port ";
   public static final String CTX_PARAM_SHUTDOWN_TOKEN = "dcs.shutdownToken";
 
   private final int port;
@@ -114,7 +115,7 @@ public class JettyContainer {
     return new AbstractLifeCycle.AbstractLifeCycleListener() {
       @Override
       public void lifeCycleStarted(LifeCycle event) {
-        CONSOLE.info("Service started on port {}.", connector.getLocalPort());
+        CONSOLE.info("{}{}.", SERVICE_STARTED_ON, connector.getLocalPort());
       }
 
       @Override
