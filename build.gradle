@@ -79,8 +79,8 @@ subprojects {
 
     project.archivesBaseName = "carrot2" + project.path.replace(':', '-')
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = 9
+    targetCompatibility = 9
 
     spotless {
       java {
