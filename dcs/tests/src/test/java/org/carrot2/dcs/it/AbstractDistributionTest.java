@@ -20,7 +20,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
+import org.assertj.core.api.Assertions;
 import org.carrot2.RestoreFolderStateRule;
 import org.carrot2.TestBase;
 import org.junit.ClassRule;
@@ -44,11 +46,10 @@ public abstract class AbstractDistributionTest extends TestBase {
 
               if (!Files.isDirectory(distDir)) {
                 throw new AssertionError("Distribution not assembled at path: " + distDir);
-              } else {
-                Loggers.CONSOLE.info("Using distribution from: {}", distDir);
               }
 
               // Sometimes add awkward or problematic characters to distribution path.
+              Assertions.assertThat(mirrorPath).isNull();
               mirrorPath =
                   RandomizedTest.randomFrom(
                           Arrays.<Function<Path, Path>>asList(
@@ -57,6 +58,16 @@ public abstract class AbstractDistributionTest extends TestBase {
 
               Files.createDirectories(mirrorPath);
               restoreDistRule = new RestoreFolderStateRule(distDir, mirrorPath);
+
+              Loggers.CONSOLE.info(
+                  "Using distribution from: {} mirrored to: {}", distDir, mirrorPath);
+            }
+
+            @Override
+            protected void afterAlways(List<Throwable> errors) throws Throwable {
+              mirrorPath = null;
+              restoreDistRule = null;
+              super.afterAlways(errors);
             }
           });
 

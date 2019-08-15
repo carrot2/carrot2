@@ -32,9 +32,11 @@ public class ForkedDcs implements DcsService {
   private final ForkedProcess process;
   private final String shutdownToken;
   private Integer port;
+  private Path distributionDir;
 
   public ForkedDcs(Path distributionDir, String shutdownToken) throws IOException {
     this.shutdownToken = Objects.requireNonNull(shutdownToken);
+    this.distributionDir = distributionDir.toAbsolutePath();
 
     // Try to launch the DCS from exactly the same JVM as we're currently running.
     // This avoids problems with PATH pointing to Java 1.8 on IntelliJ, for example.
@@ -52,8 +54,9 @@ public class ForkedDcs implements DcsService {
             .execute();
 
     // Wait for the process to become alive.
+    Loggers.CONSOLE.info("Launching DCS at: {}", distributionDir);
     Path stdout = process.getProcessOutputFile();
-    Instant deadline = Instant.now().plusSeconds(5);
+    Instant deadline = Instant.now().plusSeconds(15);
     Pattern pattern =
         Pattern.compile(Pattern.quote(JettyContainer.SERVICE_STARTED_ON) + "(?<port>[0-9]+)");
     while (Instant.now().isBefore(deadline) && process.getProcess().isAlive()) {
@@ -107,7 +110,7 @@ public class ForkedDcs implements DcsService {
       Instant deadline = Instant.now().plusSeconds(5);
       while (Instant.now().isBefore(deadline)) {
         if (!process.getProcess().isAlive()) {
-          Loggers.CONSOLE.info("isAlive() indicates DCS is dead.");
+          Loggers.CONSOLE.info("isAlive() indicates DCS is dead at: {}", distributionDir);
           try {
             process.waitFor();
           } catch (InterruptedException e) {
