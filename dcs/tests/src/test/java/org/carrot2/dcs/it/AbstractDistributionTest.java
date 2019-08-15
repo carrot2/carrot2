@@ -30,6 +30,8 @@ import org.junit.Rule;
 import org.junit.rules.RuleChain;
 
 public abstract class AbstractDistributionTest extends TestBase {
+  protected static String DCS_SHUTDOWN_TOKEN = "_shutdown_";
+
   private static Path mirrorPath;
   private static RestoreFolderStateRule restoreDistRule;
 
@@ -73,19 +75,12 @@ public abstract class AbstractDistributionTest extends TestBase {
 
   @Rule public final RuleChain testChain = RuleChain.outerRule(restoreDistRule);
 
-  protected final DcsService startDcs(String shutdownToken) {
+  protected final DcsService startDcs() {
     try {
-      if (shutdownToken == null) {
-        shutdownToken = "_shutdown_";
-      }
-      return new ForkedDcs(getDistributionDir(), shutdownToken);
+      return new ForkedDcs(getDistributionDir(), DCS_SHUTDOWN_TOKEN);
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
-  }
-
-  protected final DcsService startDcs() {
-    return startDcs(null);
   }
 
   protected final Path getDistributionDir() {

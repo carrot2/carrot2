@@ -42,11 +42,10 @@ public class DcsServiceTest extends AbstractDistributionTest {
 
   @Test
   public void verifyShutdownToken() throws IOException, InterruptedException {
-    String shutdownToken = "_shutdown_";
-    try (DcsService service = startDcs(shutdownToken)) {
+    try (DcsService service = startDcs()) {
       try {
         HttpRequest.builder()
-            .queryParam("token", shutdownToken)
+            .queryParam("token", DCS_SHUTDOWN_TOKEN)
             .sendPost(service.getAddress().resolve("/shutdown"));
       } catch (NoHttpResponseException e) {
         // We don't care about the result of /shutdown call since
