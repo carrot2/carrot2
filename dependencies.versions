@@ -16,3 +16,5 @@ slf4j=1.8.0-beta2
 
 node=10.15.1
 yarn=1.13.0
+
+jflex=1.5.1

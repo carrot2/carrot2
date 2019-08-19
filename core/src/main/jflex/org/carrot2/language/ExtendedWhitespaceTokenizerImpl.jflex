@@ -47,32 +47,32 @@ URL_PATH   = ([!*'();:@&=+$,/?%#_.~] | "-" | "[" | "]" | {LETTER} | {DIGIT})+
 %%
 
 
-{DIGIT}+  ((":" | "-" | "/" | "," | ".") {DIGIT}+)*          { return ITokenizer.TT_NUMERIC; }
+{DIGIT}+  ((":" | "-" | "/" | "," | ".") {DIGIT}+)*          { return Tokenizer.TT_NUMERIC; }
 
-({LETTER} "." ({LETTER} ".")+) | ({TERM} ("&" {TERM})+)      { return ITokenizer.TT_ACRONYM; }
+({LETTER} "." ({LETTER} ".")+) | ({TERM} ("&" {TERM})+)      { return Tokenizer.TT_ACRONYM; }
 
-{LETTER} "."                                                 { return ITokenizer.TT_TERM; }
+{LETTER} "."                                                 { return Tokenizer.TT_TERM; }
 
-("." | "?" | "!" | ";" | [\u0964-\u0965] )+                  { return ITokenizer.TT_PUNCTUATION | ITokenizer.TF_SEPARATOR_SENTENCE; }
+("." | "?" | "!" | ";" | [\u0964-\u0965] )+                  { return Tokenizer.TT_PUNCTUATION | Tokenizer.TF_SEPARATOR_SENTENCE; }
 
-{TERM} ( "-" {TERM})+                                        { return ITokenizer.TT_HYPHTERM; }
+{TERM} ( "-" {TERM})+                                        { return Tokenizer.TT_HYPHTERM; }
 
-{TERM} ("'" | "`") {LETTER}{1,2}                             { return ITokenizer.TT_TERM; }
+{TERM} ("'" | "`") {LETTER}{1,2}                             { return Tokenizer.TT_TERM; }
 
-{TERM} "s" ("'" | "`")                                       { return ITokenizer.TT_TERM; }
+{TERM} "s" ("'" | "`")                                       { return Tokenizer.TT_TERM; }
 
-{TERM}                                                       { return ITokenizer.TT_TERM; }
+{TERM}                                                       { return Tokenizer.TT_TERM; }
 
-("mailto:")?{SYMBOL}("."{SYMBOL})*"@"{SYMBOL}("."{SYMBOL})*  { return ITokenizer.TT_EMAIL; }
+("mailto:")?{SYMBOL}("."{SYMBOL})*"@"{SYMBOL}("."{SYMBOL})*  { return Tokenizer.TT_EMAIL; }
 
-{BARE_URL}                                                   { return ITokenizer.TT_BARE_URL;}
+{BARE_URL}                                                   { return Tokenizer.TT_BARE_URL;}
 	
-{SYMBOL}("."{SYMBOL})*                                       { return ITokenizer.TT_FILE;}
+{SYMBOL}("."{SYMBOL})*                                       { return Tokenizer.TT_FILE;}
 	
-(("http" | "https" | "ftp") "://")? {BARE_URL} {URL_PATH}?   { return ITokenizer.TT_FULL_URL; }
+(("http" | "https" | "ftp") "://")? {BARE_URL} {URL_PATH}?   { return Tokenizer.TT_FULL_URL; }
 
 
-"," | "'" | "`" | ":" | "-"                                  { return ITokenizer.TT_PUNCTUATION; }
+"," | "'" | "`" | ":" | "-"                                  { return Tokenizer.TT_PUNCTUATION; }
 
 /** Ignore HTML entities */
 "&" [a-zA-Z0-9#]+ ";"                                        { ; }
