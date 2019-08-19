@@ -17,14 +17,14 @@ import java.util.List;
 
 public class RestoreFolderStateRule extends TestRuleAdapter {
   /** The distribution under testing. Read-only! */
-  private final Path distDir;
+  private final Path source;
 
   /** A folder with unpacked distribution. Restored to pristine state before each test. */
-  private Path distMirror;
+  private Path mirror;
 
-  public RestoreFolderStateRule(Path distDir, Path distMirror) {
-    this.distDir = distDir;
-    this.distMirror = distMirror;
+  public RestoreFolderStateRule(Path source, Path mirror) {
+    this.source = source;
+    this.mirror = mirror;
   }
 
   @Override
@@ -39,6 +39,10 @@ public class RestoreFolderStateRule extends TestRuleAdapter {
   }
 
   public void restore() throws IOException {
-    new Sync().sync(distDir, distMirror);
+    new Sync().sync(source, mirror);
+  }
+
+  public Path getMirror() {
+    return mirror;
   }
 }

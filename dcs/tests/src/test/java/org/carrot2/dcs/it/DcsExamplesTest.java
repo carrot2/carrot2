@@ -20,26 +20,27 @@ import org.carrot2.dcs.examples.E01_DcsConfiguration;
 import org.carrot2.dcs.examples.E02_DcsCluster;
 import org.junit.Test;
 
-public class DcsExamplesTest extends AbstractDistributionTest {
+public class DcsExamplesTest extends AbstractDcsTest {
   @Test
-  public void runExamples() throws IOException {
-    try (DcsService service = startDcs()) {
-      URI dcsService = service.getAddress().resolve("/service/");
+  public void runE01() throws IOException {
+    URI dcsService = dcs().getAddress().resolve("/service/");
 
-      ExitCode exitCode;
+    ExitCode exitCode =
+        new Launcher()
+            .runCommand(
+                new E01_DcsConfiguration(),
+                E01_DcsConfiguration.ARG_DCS_URI,
+                dcsService.toString());
+    Assertions.assertThat(exitCode).isEqualTo(ExitCodes.SUCCESS);
+  }
 
-      exitCode =
-          new Launcher()
-              .runCommand(
-                  new E01_DcsConfiguration(),
-                  E01_DcsConfiguration.ARG_DCS_URI,
-                  dcsService.toString());
-      Assertions.assertThat(exitCode).isEqualTo(ExitCodes.SUCCESS);
+  @Test
+  public void runE02() throws IOException {
+    URI dcsService = dcs().getAddress().resolve("/service/");
 
-      exitCode =
-          new Launcher()
-              .runCommand(new E02_DcsCluster(), E02_DcsCluster.ARG_DCS_URI, dcsService.toString());
-      Assertions.assertThat(exitCode).isEqualTo(ExitCodes.SUCCESS);
-    }
+    ExitCode exitCode =
+        new Launcher()
+            .runCommand(new E02_DcsCluster(), E02_DcsCluster.ARG_DCS_URI, dcsService.toString());
+    Assertions.assertThat(exitCode).isEqualTo(ExitCodes.SUCCESS);
   }
 }
