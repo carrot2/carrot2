@@ -12,7 +12,6 @@ package org.carrot2.dcs.it;
 
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Path;
 import org.carrot2.dcs.JettyContainer;
 import org.eclipse.jetty.util.resource.Resource;
 
@@ -20,11 +19,17 @@ public class EmbeddedDcs implements DcsService {
   private final JettyContainer container;
   private final URI serviceUri;
 
-  public EmbeddedDcs(Path distributionDir, String shutdownToken) throws IOException {
+  public EmbeddedDcs(DcsConfig config) throws IOException {
     // Disable JAR caches, otherwise we get locked files on Windows.
     Resource.setDefaultUseCaches(false);
 
-    container = new JettyContainer(0, distributionDir.resolve("web"), shutdownToken);
+    if (config.enableTestServlet) {
+      System.setProperty(SYSPROP_TESTSERVLET_ENABLE, "true");
+    }
+
+    container =
+        new JettyContainer(
+            0, config.distributionDir.resolve("web"), config.shutdownToken, config.maxThreads);
     try {
       container.start();
       serviceUri = URI.create("http://localhost:" + container.getPort());
@@ -48,6 +53,7 @@ public class EmbeddedDcs implements DcsService {
     try {
       this.container.stop();
       this.container.join();
+      System.clearProperty(SYSPROP_TESTSERVLET_ENABLE);
     } catch (Exception e) {
       throw new IOException(e);
     }

@@ -28,6 +28,12 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <servlet>
+        <servlet-name>TestServlet</servlet-name>
+        <servlet-class>org.carrot2.dcs.servlets.TestServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>ClusterServlet</servlet-name>
         <url-pattern>/cluster/*</url-pattern>
@@ -36,5 +42,10 @@
     <servlet-mapping>
         <servlet-name>ListServlet</servlet-name>
         <url-pattern>/list/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>TestServlet</servlet-name>
+        <url-pattern>/test/*</url-pattern>
     </servlet-mapping>
 </web-app>

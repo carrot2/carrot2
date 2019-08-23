@@ -14,6 +14,8 @@ import java.io.Closeable;
 import java.net.URI;
 
 public interface DcsService extends Closeable {
+  String SYSPROP_TESTSERVLET_ENABLE = "testservlet.enable";
+
   URI getAddress();
 
   boolean isRunning();

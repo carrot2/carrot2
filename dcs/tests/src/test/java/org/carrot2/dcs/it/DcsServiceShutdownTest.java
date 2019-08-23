@@ -23,7 +23,7 @@ public class DcsServiceShutdownTest extends AbstractDistributionTest {
   @Test
   public void verifyShutdownToken() throws IOException, InterruptedException {
     try (DcsService service =
-        new ForkedDcs(createTempDistMirror.mirrorPath(), DCS_SHUTDOWN_TOKEN)) {
+        new ForkedDcs(new DcsConfig(createTempDistMirror.mirrorPath(), DCS_SHUTDOWN_TOKEN))) {
       try {
         HttpRequest.builder()
             .queryParam("token", DCS_SHUTDOWN_TOKEN)

@@ -39,6 +39,7 @@ public class DcsLauncher extends Command<ExitCode> {
   public static final String OPT_SHUTDOWN_TOKEN = "--shutdown-token";
   public static final String OPT_PORT = "--port";
   public static final String OPT_HOME = "--home";
+  public static final String OPT_MAX_THREADS = "--threads";
 
   @Parameter(
       names = {"-p", OPT_PORT},
@@ -49,6 +50,12 @@ public class DcsLauncher extends Command<ExitCode> {
       names = {OPT_HOME},
       description = "DCS's home folder (conf/ and web/ subfolder lookup).")
   public Path home;
+
+  @Parameter(
+      names = {OPT_MAX_THREADS},
+      description = "Maximum number of processing threads for Jetty.",
+      hidden = true)
+  public Integer maxThreads;
 
   @Parameter(
       names = {OPT_SHUTDOWN_TOKEN},
@@ -64,7 +71,7 @@ public class DcsLauncher extends Command<ExitCode> {
   @Override
   public ExitCode run() {
     try {
-      JettyContainer c = new JettyContainer(port, home.resolve("web"), shutdownToken);
+      JettyContainer c = new JettyContainer(port, home.resolve("web"), shutdownToken, maxThreads);
       c.start();
       c.join();
       return ExitCodes.SUCCESS;

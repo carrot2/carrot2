@@ -21,7 +21,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.carrot2.HttpRequest;
@@ -30,31 +32,41 @@ import org.carrot2.dcs.JettyContainer;
 
 public class ForkedDcs implements DcsService {
   private final ForkedProcess process;
-  private final String shutdownToken;
+  private final DcsConfig config;
   private Integer port;
-  private Path distributionDir;
 
-  public ForkedDcs(Path distributionDir, String shutdownToken) throws IOException {
-    this.shutdownToken = Objects.requireNonNull(shutdownToken);
-    this.distributionDir = distributionDir.toAbsolutePath();
+  public ForkedDcs(DcsConfig config) throws IOException {
+    this.config = config;
 
     // Try to launch the DCS from exactly the same JVM as we're currently running.
     // This avoids problems with PATH pointing to Java 1.8 on IntelliJ, for example.
     Path javaCmd = Paths.get(System.getProperty("java.home")).resolve("bin").resolve("java");
 
+    ArrayList<String> args = new ArrayList<>();
+    args.addAll(Arrays.asList(DcsLauncher.OPT_SHUTDOWN_TOKEN, config.shutdownToken));
+    args.addAll(Arrays.asList(DcsLauncher.OPT_PORT, "0"));
+    if (config.maxThreads != null) {
+      args.addAll(Arrays.asList(DcsLauncher.OPT_MAX_THREADS, Integer.toString(config.maxThreads)));
+    }
+
+    List<String> dcsOpts = new ArrayList<>();
+    dcsOpts.add("-Xmx256m");
+    if (config.enableTestServlet) {
+      dcsOpts.add("-D" + SYSPROP_TESTSERVLET_ENABLE + "=true");
+    }
+
     this.process =
         new ProcessBuilderLauncher()
-            .cwd(distributionDir)
-            .envvar("DCS_OPTS", "-Xmx256m")
+            .cwd(config.distributionDir)
+            .envvar("DCS_OPTS", String.join(" ", dcsOpts))
             .envvar("JAVA_CMD", javaCmd.toAbsolutePath().toString())
             .executable(Paths.get(File.separatorChar == '\\' ? "dcs" : "./dcs.sh"))
-            .args(DcsLauncher.OPT_SHUTDOWN_TOKEN, shutdownToken)
-            .args(DcsLauncher.OPT_PORT, "0")
+            .args(args.toArray(new String[args.size()]))
             .viaShellLauncher()
             .execute();
 
     // Wait for the process to become alive.
-    Loggers.CONSOLE.info("Launching DCS at: {}", distributionDir);
+    Loggers.CONSOLE.info("Launching DCS at: {}", config.distributionDir);
     Path stdout = process.getProcessOutputFile();
     Instant deadline = Instant.now().plusSeconds(15);
     Pattern pattern =
@@ -96,7 +108,7 @@ public class ForkedDcs implements DcsService {
                 () -> {
                   try {
                     HttpRequest.builder()
-                        .queryParam("token", shutdownToken)
+                        .queryParam("token", config.shutdownToken)
                         .sendPost(getAddress().resolve("/shutdown"));
                   } catch (Exception e) {
                     // We don't care about the result of /shutdown call since
@@ -110,7 +122,7 @@ public class ForkedDcs implements DcsService {
       Instant deadline = Instant.now().plusSeconds(5);
       while (Instant.now().isBefore(deadline)) {
         if (!process.getProcess().isAlive()) {
-          Loggers.CONSOLE.info("isAlive() indicates DCS is dead at: {}", distributionDir);
+          Loggers.CONSOLE.info("isAlive() indicates DCS is dead at: {}", config.distributionDir);
           try {
             process.waitFor();
           } catch (InterruptedException e) {

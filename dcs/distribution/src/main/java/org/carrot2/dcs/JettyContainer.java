@@ -35,7 +35,6 @@ import org.eclipse.jetty.webapp.WebAppContext;
 
 public class JettyContainer {
   public static final String SERVICE_STARTED_ON = "Service started on port ";
-  public static final String CTX_PARAM_SHUTDOWN_TOKEN = "dcs.shutdownToken";
 
   private final int port;
   private final Path webappContexts;
@@ -43,11 +42,13 @@ public class JettyContainer {
 
   private Server server;
   private ServerConnector connector;
+  private Integer maxThreads;
 
-  public JettyContainer(int port, Path contexts, String shutdownToken) {
+  public JettyContainer(int port, Path contexts, String shutdownToken, Integer maxThreads) {
     this.port = port;
     this.webappContexts = contexts;
     this.shutdownToken = shutdownToken;
+    this.maxThreads = maxThreads;
   }
 
   public void start() throws Exception {
@@ -159,7 +160,10 @@ public class JettyContainer {
                 });
           }
         };
-    threadPool.setMaxThreads(50);
+
+    if (maxThreads != null) {
+      threadPool.setMaxThreads(maxThreads);
+    }
 
     Server server = new Server(threadPool);
     connector = new ServerConnector(server);
