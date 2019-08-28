@@ -31,6 +31,7 @@ import org.carrot2.clustering.ClusteringAlgorithmProvider;
 import org.carrot2.clustering.Document;
 import org.carrot2.dcs.model.ClusterRequest;
 import org.carrot2.dcs.model.ClusterResponse;
+import org.carrot2.dcs.model.ClusterServletParameters;
 import org.carrot2.dcs.model.ErrorResponse;
 import org.carrot2.dcs.model.ErrorResponseType;
 import org.carrot2.language.LanguageComponents;
@@ -39,8 +40,6 @@ import org.slf4j.LoggerFactory;
 
 public class ClusterServlet extends RestEndpoint {
   private static Logger console = LoggerFactory.getLogger("console");
-
-  public static final String PARAM_TEMPLATE = "template";
 
   private DcsContext dcsContext;
   private ClusterRequest templateDefault = new ClusterRequest();
@@ -152,7 +151,7 @@ public class ClusterServlet extends RestEndpoint {
 
   private ClusterRequest parseTemplate(HttpServletRequest request)
       throws TerminateRequestException {
-    String templateName = request.getParameter(PARAM_TEMPLATE);
+    String templateName = request.getParameter(ClusterServletParameters.PARAM_TEMPLATE);
     if (templateName == null) {
       return templateDefault;
     }

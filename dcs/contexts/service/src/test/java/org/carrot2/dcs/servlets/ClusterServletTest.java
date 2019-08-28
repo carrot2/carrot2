@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpServletResponse;
 import org.assertj.core.api.Assertions;
 import org.carrot2.dcs.model.ClusterResponse;
+import org.carrot2.dcs.model.ClusterServletParameters;
 import org.carrot2.dcs.model.ErrorResponse;
 import org.carrot2.math.mahout.Arrays;
 import org.junit.Test;
@@ -38,7 +39,7 @@ public class ClusterServletTest extends AbstractServletTest {
   public void testTemplateRequest() throws Exception {
     setupMockTemplates("template1.json", "template2.json");
 
-    when(request.getParameter(ClusterServlet.PARAM_TEMPLATE)).thenReturn("template1");
+    when(request.getParameter(ClusterServletParameters.PARAM_TEMPLATE)).thenReturn("template1");
     verifyRequest("template.request.json", "template.response.json");
   }
 
@@ -51,7 +52,7 @@ public class ClusterServletTest extends AbstractServletTest {
   public void testAttrInTemplate() throws Exception {
     setupMockTemplates("template1.json", "template2.json");
 
-    when(request.getParameter(ClusterServlet.PARAM_TEMPLATE)).thenReturn("template2");
+    when(request.getParameter(ClusterServletParameters.PARAM_TEMPLATE)).thenReturn("template2");
     verifyRequest("attrInTemplate.request.json", "attrInTemplate.response.json");
   }
 

@@ -16,6 +16,7 @@ import com.carrotsearch.console.launcher.ExitCode;
 import com.carrotsearch.console.launcher.ExitCodes;
 import com.carrotsearch.console.launcher.Launcher;
 import com.carrotsearch.console.launcher.Loggers;
+import com.carrotsearch.console.launcher.ReportCommandException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -32,9 +33,20 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.carrot2.dcs.model.ClusterRequest;
 import org.carrot2.dcs.model.ClusterResponse;
+import org.carrot2.dcs.model.ClusterServletParameters;
+import org.carrot2.dcs.model.ListResponse;
 
 @Parameters(commandNames = "cluster")
 public class E02_DcsCluster extends CommandScaffold {
+  @Parameter(names = "--algorithm", description = "The algorithm to use for clustering.")
+  public String algorithm;
+
+  @Parameter(names = "--language", description = "The language to use for clustering.")
+  public String language;
+
+  @Parameter(names = "--template", description = "The named template to use for clustering.")
+  public String template;
+
   @Parameter(description = "Input data files for clustering (JSON).", required = true)
   public List<Path> inputs;
 
@@ -45,23 +57,32 @@ public class E02_DcsCluster extends CommandScaffold {
       return ExitCodes.ERROR_INVALID_ARGUMENTS;
     }
 
+    if ((algorithm == null || language == null) && template == null) {
+      template = resolveFirstTemplate(httpClient, om);
+    }
+
     for (Path input : inputs) {
       ClusterRequest request = new ClusterRequest();
-      request.algorithm = "Lingo";
-      request.language = "English";
+      if (algorithm != null) {
+        request.algorithm = algorithm;
+      }
+      if (language != null) {
+        request.language = language;
+      }
       request.documents =
           om.readValue(
               Files.readAllBytes(input), new TypeReference<List<ClusterRequest.Document>>() {});
 
-      HttpUriRequest httpRequest =
+      RequestBuilder requestBuilder =
           RequestBuilder.post(dcsService.resolve("cluster"))
-              .setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
-              .setEntity(
-                  new ByteArrayEntity(
-                      om.writeValueAsString(request).getBytes(StandardCharsets.UTF_8)))
-              .build();
+              .setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+      if (template != null) {
+        requestBuilder.addParameter(ClusterServletParameters.PARAM_TEMPLATE, template);
+      }
+      requestBuilder.setEntity(
+          new ByteArrayEntity(om.writeValueAsString(request).getBytes(StandardCharsets.UTF_8)));
 
-      try (CloseableHttpResponse httpResponse = httpClient.execute(httpRequest)) {
+      try (CloseableHttpResponse httpResponse = httpClient.execute(requestBuilder.build())) {
         expect(httpResponse, HttpStatus.SC_OK);
 
         ClusterResponse response =
@@ -73,6 +94,27 @@ public class E02_DcsCluster extends CommandScaffold {
     }
 
     return ExitCodes.SUCCESS;
+  }
+
+  private String resolveFirstTemplate(CloseableHttpClient httpClient, ObjectMapper om)
+      throws IOException {
+    HttpUriRequest request = RequestBuilder.get(dcsService.resolve("list")).build();
+    try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
+      expect(httpResponse, HttpStatus.SC_OK);
+
+      ListResponse config = om.readValue(httpResponse.getEntity().getContent(), ListResponse.class);
+
+      if (config.templates.isEmpty()) {
+        Loggers.CONSOLE.error(
+            "No templates declared in the DCS and optional parameters are empty.");
+        throw new ReportCommandException(ExitCodes.ERROR_INVALID_ARGUMENTS);
+      }
+
+      String template = config.templates.get(0);
+      Loggers.CONSOLE.info(
+          "No algorithm or language specified. Using the first available template: {}", template);
+      return template;
+    }
   }
 
   public static void main(String[] args) {
