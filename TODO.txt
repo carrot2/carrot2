@@ -1,9 +1,3 @@
-
-- examples-java, examples-js
-- DCS: more examples (Node.JS, other languages?, passing algorithm attributes)
-- Add an example of customizing LanguageComponents with a Lucene Analyzer (ICU, for instance).
-
-
 Documentation
 * which bits should go to the docs and which to the website?
   - docs: things that can change when a new version is released

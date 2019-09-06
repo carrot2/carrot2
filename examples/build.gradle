@@ -9,6 +9,8 @@ if (file('lib').exists()) {
   dependencies {
     implementation project(':core')
     testImplementation project(':lang:polish')
+    testImplementation project(':lang:lucene')
+    testImplementation "org.apache.lucene:lucene-analyzers-icu:${versions.lucene}"
   }
 }
 
