@@ -11,11 +11,11 @@ configurations {
 
 dependencies {
   dcs project(path: ":dcs:distribution", configuration: "distDir" )
-
-  examples project(path: ":examples", configuration: "distribution" )
+  examples project(path: ":core-examples", configuration: "distribution" )
 }
 
 task collectDependencies(type: Sync) {
+  dependsOn ":mavenLocal"
   from legal
 
   from(configurations.dcs) {
@@ -24,6 +24,10 @@ task collectDependencies(type: Sync) {
 
   from(configurations.examples) {
     into "examples/"
+  }
+
+  from(rootProject.mavenBuildRepo) {
+    into "artifacts/"
   }
 
   into "$buildDir/${project.name}"

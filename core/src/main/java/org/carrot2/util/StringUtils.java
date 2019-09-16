@@ -10,30 +10,10 @@
  */
 package org.carrot2.util;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Iterator;
-import java.util.regex.Pattern;
 
 /** */
 public final class StringUtils {
-  private static final Pattern CAMEL_CASE_FRAGMENT =
-      Pattern.compile(
-          // a sequence of upper case letters followed by digits
-          "([A-Z]{1,}(?=[0-9]+))|"
-              +
-              // a sequence of upper case letters followed by an upper letter, followed by lower
-              // case or digits
-              "([A-Z]{1,}(?=[A-Z][a-z0-9]+))|"
-              +
-              // upper case letters followed by lower case letters or digits
-              "([A-Z]?[A-Z]+[a-z0-9]+)|"
-              +
-              // sequence of digits
-              "([0-9]+)");
-  private static final Pattern HTML_TAG_PATTERN =
-      Pattern.compile("<.+?>", Pattern.CASE_INSENSITIVE);
-
   private StringUtils() {}
 
   public static <T> String toString(Iterable<T> iterable, String separator) {
@@ -48,26 +28,6 @@ public final class StringUtils {
     }
 
     return stringBuilder.toString();
-  }
-
-  public static String urlEncodeWrapException(String string, String encoding) {
-    try {
-      return URLEncoder.encode(string, encoding);
-    } catch (UnsupportedEncodingException e) {
-      throw ExceptionUtils.wrapAsRuntimeException(e);
-    }
-  }
-
-  /** Join a list of non-null objects with <code>delim</code> and return it as a string. */
-  public static String join(String delim, Object... objects) {
-    final StringBuilder b = new StringBuilder();
-    for (Object s : objects) {
-      if (s != null) {
-        if (b.length() > 0) b.append(delim);
-        b.append(s.toString());
-      }
-    }
-    return b.toString();
   }
 
   public static boolean isNullOrEmpty(String s) {

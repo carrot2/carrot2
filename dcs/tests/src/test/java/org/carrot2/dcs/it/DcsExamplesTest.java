@@ -18,6 +18,7 @@ import java.net.URI;
 import org.assertj.core.api.Assertions;
 import org.carrot2.dcs.examples.E01_DcsConfiguration;
 import org.carrot2.dcs.examples.E02_DcsCluster;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class DcsExamplesTest extends AbstractDcsTest {
@@ -35,6 +36,7 @@ public class DcsExamplesTest extends AbstractDcsTest {
   }
 
   @Test
+  @Ignore
   public void runE02() throws IOException {
     URI dcsService = dcs().getAddress().resolve("/service/");
 

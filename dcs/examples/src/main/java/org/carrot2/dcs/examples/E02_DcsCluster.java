@@ -10,15 +10,19 @@
  */
 package org.carrot2.dcs.examples;
 
+import com.carrotsearch.console.jcommander.Parameter;
 import com.carrotsearch.console.jcommander.Parameters;
 import com.carrotsearch.console.launcher.ExitCode;
 import com.carrotsearch.console.launcher.ExitCodes;
 import com.carrotsearch.console.launcher.Launcher;
 import com.carrotsearch.console.launcher.Loggers;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.stream.Collectors;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -28,42 +32,44 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.carrot2.dcs.model.ClusterRequest;
 import org.carrot2.dcs.model.ClusterResponse;
-import org.carrot2.examples.ExamplesCommon;
-import org.carrot2.examples.ExamplesData;
 
 @Parameters(commandNames = "cluster")
 public class E02_DcsCluster extends CommandScaffold {
+  @Parameter(description = "Input data files for clustering (JSON).", required = true)
+  public List<Path> inputs;
+
   @Override
   ExitCode run(CloseableHttpClient httpClient, ObjectMapper om) throws IOException {
-    ClusterRequest request = new ClusterRequest();
-    request.algorithm = "Lingo";
-    request.language = "English";
-    request.documents =
-        ExamplesData.documentStream()
-            .map(
-                exDoc -> {
-                  ClusterRequest.Document doc = new ClusterRequest.Document();
-                  exDoc.visitFields((fld, value) -> doc.setField(fld, value));
-                  return doc;
-                })
-            .collect(Collectors.toList());
+    if (inputs.isEmpty()) {
+      Loggers.CONSOLE.warn("Provide input JSON files with data to be sent to the DCS.");
+      return ExitCodes.ERROR_INVALID_ARGUMENTS;
+    }
 
-    HttpUriRequest httpRequest =
-        RequestBuilder.post(dcsService.resolve("cluster"))
-            .setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
-            .setEntity(
-                new ByteArrayEntity(
-                    om.writeValueAsString(request).getBytes(StandardCharsets.UTF_8)))
-            .build();
+    for (Path input : inputs) {
+      ClusterRequest request = new ClusterRequest();
+      request.algorithm = "Lingo";
+      request.language = "English";
+      request.documents =
+          om.readValue(
+              Files.readAllBytes(input), new TypeReference<List<ClusterRequest.Document>>() {});
 
-    try (CloseableHttpResponse httpResponse = httpClient.execute(httpRequest)) {
-      expect(httpResponse, HttpStatus.SC_OK);
+      HttpUriRequest httpRequest =
+          RequestBuilder.post(dcsService.resolve("cluster"))
+              .setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+              .setEntity(
+                  new ByteArrayEntity(
+                      om.writeValueAsString(request).getBytes(StandardCharsets.UTF_8)))
+              .build();
 
-      ClusterResponse response =
-          om.readValue(httpResponse.getEntity().getContent(), ClusterResponse.class);
+      try (CloseableHttpResponse httpResponse = httpClient.execute(httpRequest)) {
+        expect(httpResponse, HttpStatus.SC_OK);
 
-      Loggers.CONSOLE.info("Clusters returned:");
-      ExamplesCommon.printClusters(response.clusters);
+        ClusterResponse response =
+            om.readValue(httpResponse.getEntity().getContent(), ClusterResponse.class);
+
+        Loggers.CONSOLE.info("Clusters returned for file {}:", input);
+        printClusters(response.clusters);
+      }
     }
 
     return ExitCodes.SUCCESS;

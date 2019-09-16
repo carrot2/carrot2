@@ -1,0 +1,41 @@
+
+apply plugin: 'java'
+
+repositories {
+  mavenCentral()
+
+  def localRepo = file('../../artifacts')
+  if (localRepo.isDirectory()) {
+    maven {
+      name 'local'
+      url localRepo
+    }
+  }
+}
+
+dependencies {
+  implementation "org.carrot2:carrot2-core:${versions.carrot2}"
+  implementation "org.carrot2.dcs:carrot2-dcs-model:${versions.carrot2}"
+
+  implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
+  implementation "org.apache.httpcomponents:httpclient:${versions.httpclient}"
+  implementation "com.carrotsearch.console:launcher:${versions.console}"
+}
+
+jar {
+  doFirst {
+    manifest {
+      attributes("Main-Class": "com.carrotsearch.console.launcher.Launcher")
+      attributes("Class-Path": configurations.runtimeClasspath.collect { it.getName() }.join(' '))
+    }
+  }
+}
+
+task copyJars(type: Sync) {
+  from(configurations.runtimeClasspath)
+  from(jar)
+
+  into "$buildDir/assembled"
+}
+
+assemble.dependsOn copyJars

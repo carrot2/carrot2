@@ -13,7 +13,14 @@ apply from: file('gradle/buildinfo.gradle')
 def currentVersion = '4.0'
 
 def publishedProjects = [
-  ":core"
+  ":core",
+  ":lang:polish",
+  ":lang:lucene",
+  ":dcs:model"
+]
+
+def excludeTestsInfra = [
+   ":core-examples"
 ]
 
 ext {
@@ -95,8 +102,10 @@ subprojects {
       maxParallelForks = (int) Math.max(Runtime.runtime.availableProcessors() / 2.0, 4.0)
     }
 
-    dependencies {
-      testImplementation project(':test-infra')
+    if (!excludeTestsInfra.contains(project.path)) {
+      dependencies {
+        testImplementation project(':test-infra')
+      }
     }
 
     tasks.withType(JavaCompile) {
@@ -184,6 +193,15 @@ configure(subprojects) {
   }
 }
 
+task mavenLocalClean(type: Delete) {
+  delete mavenBuildRepo
+}
+
+task mavenLocal() {
+  group "Publishing"
+  description "Publish Maven artifacts locally to " + file(mavenBuildRepo)
+}
+
 configure(subprojects.findAll { it.path in publishedProjects }) {
   apply plugin: 'maven-publish'
   apply plugin: 'signing'
@@ -197,16 +215,6 @@ configure(subprojects.findAll { it.path in publishedProjects }) {
     task javadocJar(type: Jar, dependsOn: javadoc) {
       archiveClassifier = 'javadoc'
       from javadoc.destinationDir
-    }
-
-    task mavenLocal(dependsOn: publishAllPublicationsToBuildRepository) {
-      group "Publishing"
-      description "Publish Maven artifacts locally to " + file(mavenBuildRepo)
-    }
-
-    task mavenSonatype(dependsOn: publishAllPublicationsToSonatypeRepository) {
-      group "Publishing"
-      description "Publish Maven artifacts to Sonatype OSS Nexus"
     }
   }
 
@@ -234,6 +242,7 @@ configure(subprojects.findAll { it.path in publishedProjects }) {
       maven(MavenPublication) {
         afterEvaluate {
           from components.java
+          group = project.group
           artifactId = project.archivesBaseName
 
           artifact sourcesJar
@@ -276,6 +285,14 @@ configure(subprojects.findAll { it.path in publishedProjects }) {
       }
     }
   }
+
+  task mavenSonatype(dependsOn: publishAllPublicationsToSonatypeRepository) {
+    group "Publishing"
+    description "Publish Maven artifacts to Sonatype OSS Nexus"
+  }
+
+  publishAllPublicationsToBuildRepository.dependsOn mavenLocalClean
+  mavenLocal.dependsOn publishAllPublicationsToBuildRepository
 
   signing {
     sign publishing.publications.maven

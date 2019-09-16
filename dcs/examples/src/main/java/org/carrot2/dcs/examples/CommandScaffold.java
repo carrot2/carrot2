@@ -19,10 +19,12 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
+import java.util.List;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.carrot2.clustering.Cluster;
 
 abstract class CommandScaffold extends Command<ExitCode> {
   public static final String ARG_DCS_URI = "--dcs";
@@ -36,8 +38,8 @@ abstract class CommandScaffold extends Command<ExitCode> {
   @Override
   public final ExitCode run() {
     if (dcsService == null) {
-      dcsService = URI.create("http://localhost:8080/dcs/service/");
-      Loggers.CONSOLE.warn(
+      dcsService = URI.create("http://localhost:8080/service/");
+      Loggers.CONSOLE.info(
           "Connecting to the default DCS address at: {} (use {} parameter to change)",
           dcsService,
           ARG_DCS_URI);
@@ -73,4 +75,15 @@ abstract class CommandScaffold extends Command<ExitCode> {
   }
 
   abstract ExitCode run(CloseableHttpClient httpClient, ObjectMapper om) throws IOException;
+
+  protected static <T> void printClusters(List<Cluster<T>> clusters) {
+    printClusters(clusters, "");
+  }
+
+  private static <T> void printClusters(List<Cluster<T>> clusters, String indent) {
+    for (Cluster<T> c : clusters) {
+      System.out.println(indent + c);
+      printClusters(c.getClusters(), indent + "  ");
+    }
+  }
 }

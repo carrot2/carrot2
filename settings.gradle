@@ -1,6 +1,6 @@
 
 include 'core'
-include 'examples'
+include 'core-examples'
 
 include 'test-infra'
 
