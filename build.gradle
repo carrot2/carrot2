@@ -295,6 +295,7 @@ configure(subprojects.findAll { it.path in publishedProjects }) {
   mavenLocal.dependsOn publishAllPublicationsToBuildRepository
 
   signing {
+    required false
     sign publishing.publications.maven
   }
 }
