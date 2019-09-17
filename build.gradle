@@ -173,11 +173,13 @@ project(':doc') {
   }
 }
 
-configure(subprojects.findAll { it.path in [":dcs:contexts:frontend", ":doc"] }) {
+configure(subprojects.findAll { it.path in [
+        ":dcs:contexts:frontend",
+        ":doc"] }) {
   apply from: rootProject.file("gradle/yarn-project.gradle")
 }
 
-// Apply yarn scheduling fix so that dependencies are not fetched in parallel.
+// Apply yarn scheduling fix so that yarn dependencies are not fetched in parallel.
 def first = null
 configure(subprojects) {
   afterEvaluate {
@@ -202,20 +204,24 @@ task mavenLocal() {
   description "Publish Maven artifacts locally to " + file(mavenBuildRepo)
 }
 
+task mavenSonatype() {
+  group "Publishing"
+  description "Publish Maven artifacts to Sonatype OSS Nexus"
+}
+
+
 configure(subprojects.findAll { it.path in publishedProjects }) {
   apply plugin: 'maven-publish'
   apply plugin: 'signing'
 
-  afterEvaluate {
-    task sourcesJar(type: Jar, dependsOn: classes) {
-      archiveClassifier = 'sources'
-      from sourceSets.main.allJava
-    }
+  task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allJava
+  }
 
-    task javadocJar(type: Jar, dependsOn: javadoc) {
-      archiveClassifier = 'javadoc'
-      from javadoc.destinationDir
-    }
+  task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier = 'javadoc'
+    from javadoc.destinationDir
   }
 
   publishing {
@@ -238,64 +244,68 @@ configure(subprojects.findAll { it.path in publishedProjects }) {
       }
     }
 
+    def configurePom = {
+      name = "Carrot2 (${project.name})"
+      description = "Carrot2 Text Clustering Library"
+      url = 'https://project.carrot2.org'
+      inceptionYear = "2001"
+      licenses {
+        license {
+          name = 'BSD License'
+          url = 'https://www.carrot2.org/carrot2.LICENSE'
+        }
+      }
+      organization {
+        name = "Carrot Search s.c."
+        url = "https://www.carrotsearch.com"
+      }
+      developers {
+        developer {
+          id = 'stanislaw.osinski'
+          name = 'Stanisław Osiński'
+          email = 'stanislaw.osinski@carrotsearch.com'
+        }
+        developer {
+          id = 'dawid.weiss'
+          name = 'Dawid Weiss'
+          email = 'dawid.weiss@carrotsearch.com'
+        }
+      }
+      scm {
+        connection = 'scm:git:git@github.com:carrot2/carrot2.git'
+        developerConnection = 'scm:git:git@github.com:carrot2/carrot2.git'
+        url = 'https://github.com/carrot2/carrot2'
+      }
+    }
+
     publications {
+      jars(MavenPublication) {
+        from components.java
+        group = project.group
+        artifactId = project.archivesBaseName
+
+        pom(configurePom)
+      }
+
       maven(MavenPublication) {
-        afterEvaluate {
-          from components.java
-          group = project.group
-          artifactId = project.archivesBaseName
+        from components.java
+        group = project.group
+        artifactId = project.archivesBaseName
 
-          artifact sourcesJar
-          artifact javadocJar
-        }
+        artifact sourcesJar
+        artifact javadocJar
 
-        pom {
-          name = "Carrot2 (${project.name})"
-          description = "Carrot2 Text Clustering Library"
-          url = 'https://project.carrot2.org'
-          inceptionYear = "2001"
-          licenses {
-            license {
-              name = 'BSD License'
-              url = 'https://www.carrot2.org/carrot2.LICENSE'
-            }
-          }
-          organization {
-            name = "Carrot Search s.c."
-            url = "https://www.carrotsearch.com"
-          }
-          developers {
-            developer {
-              id = 'stanislaw.osinski'
-              name = 'Stanisław Osiński'
-              email = 'stanislaw.osinski@carrotsearch.com'
-            }
-            developer {
-              id = 'dawid.weiss'
-              name = 'Dawid Weiss'
-              email = 'dawid.weiss@carrotsearch.com'
-            }
-          }
-          scm {
-            connection = 'scm:git:git@github.com:carrot2/carrot2.git'
-            developerConnection = 'scm:git:git@github.com:carrot2/carrot2.git'
-            url = 'https://github.com/carrot2/carrot2'
-          }
-        }
+        pom(configurePom)
       }
     }
   }
 
-  task mavenSonatype(dependsOn: publishAllPublicationsToSonatypeRepository) {
-    group "Publishing"
-    description "Publish Maven artifacts to Sonatype OSS Nexus"
-  }
+  publishJarsPublicationToBuildRepository.dependsOn mavenLocalClean
+  mavenLocal.dependsOn publishJarsPublicationToBuildRepository
 
-  publishAllPublicationsToBuildRepository.dependsOn mavenLocalClean
-  mavenLocal.dependsOn publishAllPublicationsToBuildRepository
+  mavenSonatype.dependsOn publishMavenPublicationToSonatypeRepository
 
   signing {
-    required false
     sign publishing.publications.maven
   }
 }
