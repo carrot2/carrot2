@@ -10,7 +10,7 @@ apply from: file('gradle/loadProperties.gradle')
 apply from: file('gradle/gitinfo.gradle')
 apply from: file('gradle/buildinfo.gradle')
 
-def currentVersion = '4.0'
+def currentVersion = '4.0.0-beta1'
 
 def publishedProjects = [
   ":core",
