@@ -1,3 +1,4 @@
+import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
   id 'base'
@@ -6,12 +7,12 @@ plugins {
 ext {
   distTarget = file("$buildDir/dist")
   distShadow = file("$buildDir/distCheck")
+  distZip = file("$buildDir/distZip")
 }
 
 configurations {
   dcs
   examples
-  legal
 }
 
 dependencies {
@@ -19,9 +20,14 @@ dependencies {
   examples project(path: ":core-examples", configuration: "distribution" )
 }
 
-task collectDependencies(type: Sync) {
+task syncDist(type: Sync) {
   dependsOn ":mavenLocal"
   from legal
+
+  from(files('src/main/assembly'), {
+    filteringCharset = 'UTF-8'
+    filter(ReplaceTokens, tokens: replaceTokens)
+  })
 
   from(configurations.dcs) {
     into "dcs/"
@@ -57,8 +63,16 @@ task checkDcsExamples(type: GradleBuild) {
   tasks = ["compileJava"]
 }
 
-assemble.dependsOn(
-  collectDependencies
-)
+task zip(type: Zip) {
+  dependsOn syncDist
+
+  archiveFileName = "carrot2-${project.version}.zip"
+  destinationDirectory = distZip
+
+  from distTarget
+  into "carrot2-${project.version}/"
+}
+
+assemble.dependsOn syncDist
 
 check.dependsOn(checkExamples, checkDcsExamples)

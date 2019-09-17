@@ -38,7 +38,7 @@ export class StartScreen extends Component {
                     onSubmit={this.runSearch.bind(this)} />
 
         <div className="slogan">
-          Carrot Search <a href="https://carrotsearch.com/lingo3g">Lingo3G</a> organizes search results into thematical
+          Carrot Search <a href="https://carrotsearch.com/lingo3g">Lingo3G</a> organizes search results into thematic
           folders.
         </div>
       </main>
