@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import org.assertj.core.api.Assertions;
 import org.carrot2.dcs.examples.E01_DcsConfiguration;
 import org.carrot2.dcs.examples.E02_DcsCluster;
+import org.carrot2.dcs.examples.E03_DcsClusterWithParams;
 import org.junit.Test;
 
 public class DcsExamplesTest extends AbstractDcsTest {
@@ -50,6 +51,23 @@ public class DcsExamplesTest extends AbstractDcsTest {
             .runCommand(
                 new E02_DcsCluster(),
                 E02_DcsCluster.ARG_DCS_URI,
+                dcsService.toString(),
+                input.toAbsolutePath().toString());
+    Assertions.assertThat(exitCode).isEqualTo(ExitCodes.SUCCESS);
+  }
+
+  @Test
+  public void runE03() throws IOException {
+    URI dcsService = dcs().getAddress().resolve("/service/");
+
+    Path input = RandomizedTest.newTempFile(LifecycleScope.TEST);
+    Files.write(input, resourceBytes("exampleData.json"));
+
+    ExitCode exitCode =
+        new Launcher()
+            .runCommand(
+                new E03_DcsClusterWithParams(),
+                E03_DcsClusterWithParams.ARG_DCS_URI,
                 dcsService.toString(),
                 input.toAbsolutePath().toString());
     Assertions.assertThat(exitCode).isEqualTo(ExitCodes.SUCCESS);

@@ -45,6 +45,8 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       new HashSet<>(
           Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class, LabelFormatter.class));
 
+  public static final String NAME = "STC";
+
   /**
    * Query terms used to retrieve documents. The query is used as a hint to avoid trivial clusters.
    */

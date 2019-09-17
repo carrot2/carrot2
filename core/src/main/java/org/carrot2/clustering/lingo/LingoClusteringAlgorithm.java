@@ -41,6 +41,8 @@ import org.carrot2.text.vsm.VectorSpaceModelContext;
  * (vol. 20), 2005, pp. 48—54."</i>.
  */
 public class LingoClusteringAlgorithm extends AttrComposite implements ClusteringAlgorithm {
+  public static final String NAME = "Lingo";
+
   private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS =
       new HashSet<>(
           Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class, LabelFormatter.class));

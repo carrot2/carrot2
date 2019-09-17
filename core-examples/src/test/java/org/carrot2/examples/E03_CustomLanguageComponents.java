@@ -31,10 +31,8 @@ public class E03_CustomLanguageComponents {
   @Test
   public void listAllAvailableLanguages() throws IOException {
     // Preprocessing components for several languages are provided in the Carrot2 distribution (and
-    // in
-    // optional JAR libraries named carrot2-lang-*. These languages self-register with
-    // LanguageComponents
-    // factory and can be enumerated, as shown here:
+    // in optional JAR libraries named carrot2-lang-*. These languages self-register with
+    // LanguageComponents factory and can be enumerated, as shown here:
     System.out.println(
         "Language preprocessing components for the following languages are available:\n  "
             + String.join(", ", LanguageComponents.languages()));
@@ -46,10 +44,9 @@ public class E03_CustomLanguageComponents {
     // require a different sub-set of these. Typically, algorithms will require
     // a tokenizer, a stemmer and a lexical resource provider.
     //
-    // These components
-    // can be supplied directly in case of a custom language processing requirements. Here,
-    // we modify the stemmer and lexical data for the default English component set,
-    // leaving any other components as they were originally defined for English.
+    // These components can be supplied directly in case of a custom language processing
+    // requirements. Here, we modify the stemmer and lexical data for the default English
+    // component set, leaving any other components as they were originally defined for English.
 
     LanguageComponents english = LanguageComponents.load("English");
 
@@ -60,8 +57,7 @@ public class E03_CustomLanguageComponents {
     }
 
     // Now override the suppliers of Stemmer and LexicalData interfaces. These suppliers should be
-    // thread-safe, but the
-    // instances of corresponding components will not be reused across threads.
+    // thread-safe, but the instances of corresponding components will not be reused across threads.
 
     // Override the Stemmer supplier.
     componentSuppliers.put(

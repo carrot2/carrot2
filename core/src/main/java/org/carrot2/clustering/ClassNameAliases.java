@@ -44,12 +44,16 @@ public class ClassNameAliases implements AliasMappingFactory {
   @Override
   public AliasMapper mapper() {
     return new AliasMapper()
-        .alias("Lingo", LingoClusteringAlgorithm.class, LingoClusteringAlgorithm::new)
         .alias(
-            "BisectingKMeans",
+            LingoClusteringAlgorithm.NAME,
+            LingoClusteringAlgorithm.class,
+            LingoClusteringAlgorithm::new)
+        .alias(
+            BisectingKMeansClusteringAlgorithm.NAME,
             BisectingKMeansClusteringAlgorithm.class,
             BisectingKMeansClusteringAlgorithm::new)
-        .alias("STC", STCClusteringAlgorithm.class, STCClusteringAlgorithm::new)
+        .alias(
+            STCClusteringAlgorithm.NAME, STCClusteringAlgorithm.class, STCClusteringAlgorithm::new)
         .alias("SimpleLabelAssigner", SimpleLabelAssigner.class, SimpleLabelAssigner::new)
         .alias("UniqueLabelAssigner", UniqueLabelAssigner.class, UniqueLabelAssigner::new)
         .alias(

@@ -16,8 +16,9 @@ import java.util.stream.Collectors;
 import org.carrot2.other.nanojson.JsonWriter;
 
 public final class Attrs {
-  static final String KEY_TYPE = "@type";
-  static final String KEY_WRAPPED = "@value";
+  public static final String KEY_TYPE = "@type";
+
+  private static final String KEY_WRAPPED = "@value";
 
   private static class Wrapper implements AcceptingVisitor {
     AttrObject<AcceptingVisitor> value =
@@ -65,6 +66,17 @@ public final class Attrs {
     visitor.ensureKeysConsumed();
 
     return instance;
+  }
+
+  public static Map<String, Object> extract(
+      AcceptingVisitor instance, Function<Object, String> classToName) {
+    Map<String, Object> attrs = toMap(instance, classToName);
+    attrs.remove(KEY_TYPE);
+    return attrs;
+  }
+
+  public static Map<String, Object> extract(AcceptingVisitor instance) {
+    return extract(instance, AliasMapper.SPI_DEFAULTS::toName);
   }
 
   private static class FromMapVisitor implements AttrVisitor {
