@@ -1,5 +1,0 @@
-
-1. Import as "Existing sources" into IntelliJ Idea.
-
-2. Copy over 'codeStyles' to the created .idea folder.
-
