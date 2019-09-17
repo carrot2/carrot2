@@ -3,6 +3,11 @@ plugins {
   id 'base'
 }
 
+ext {
+  distTarget = file("$buildDir/dist")
+  distShadow = file("$buildDir/distCheck")
+}
+
 configurations {
   dcs
   examples
@@ -30,9 +35,30 @@ task collectDependencies(type: Sync) {
     into "artifacts/"
   }
 
-  into "$buildDir/${project.name}"
+  into distTarget
+}
+
+task syncDistShadow(type: Sync) {
+  from distTarget
+  into distShadow
+}
+
+task checkExamples(type: GradleBuild) {
+  dependsOn assemble, syncDistShadow
+
+  dir = file("${distShadow}/examples")
+  tasks = ["test"]
+}
+
+task checkDcsExamples(type: GradleBuild) {
+  dependsOn assemble, syncDistShadow
+
+  dir = file("${distShadow}/dcs/examples")
+  tasks = ["compileJava"]
 }
 
 assemble.dependsOn(
   collectDependencies
 )
+
+check.dependsOn(checkExamples, checkDcsExamples)

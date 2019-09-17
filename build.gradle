@@ -136,6 +136,10 @@ subprojects {
     afterEvaluate {
       check.dependsOn(spotlessCheck)
 
+      task cleanup {
+        dependsOn spotlessApply
+      }
+
       tasks.withType(AbstractArchiveTask) {
         duplicatesStrategy = 'fail'
       }
