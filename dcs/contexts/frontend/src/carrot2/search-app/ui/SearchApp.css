@@ -17,3 +17,7 @@
 .bp3-dark .text {
   filter: invert(1.0) grayscale(100%) contrast(1000%);
 }
+
+.carrot2.text {
+  position: relative;
+}

@@ -4,9 +4,8 @@ import { Redirect } from "react-router-dom";
 import './StartScreen.css';
 import { sources } from "../../config-sources.js";
 import { clusterViews } from "../../config-views.js";
-import logo from './assets/carrot-search-logo.svg';
-import text from './assets/carrot-search-text.svg';
 import { SearchForm } from "./SearchForm";
+import { branding } from "../../config-branding.js";
 
 import { routes } from "../routes";
 
@@ -30,16 +29,14 @@ export class StartScreen extends Component {
 
     return (
       <main className="StartScreen">
-        <img src={logo} className="logo" alt="Carrot Search logo" />
-        <img src={text} className="text" alt="Carrot Search" />
+        {branding.createStartPageLogo()}
 
         <SearchForm source={this.props.match.params.source}
                     onSourceChange={this.changeSource.bind(this)}
                     onSubmit={this.runSearch.bind(this)} />
 
         <div className="slogan">
-          Carrot Search <a href="https://carrotsearch.com/lingo3g">Lingo3G</a> organizes search results into thematic
-          folders.
+          {branding.createSlogan()}
         </div>
       </main>
     );

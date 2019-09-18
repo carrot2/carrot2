@@ -4,6 +4,10 @@
   overflow-y: auto;
 }
 
+.SearchAppInfo h3:not(:first-child) {
+  margin-top: 2em;
+}
+
 .SearchAppInfo ul {
   padding: 0 0 0 1em;
 }

@@ -11,6 +11,10 @@
   width: 10em;
   transform: translateX(8%);
 }
+.StartScreen .carrot2.text {
+  position: relative;
+  left: 0.25em;
+}
 .StartScreen .text {
   width: 8em;
   margin-top: 1em;
@@ -19,4 +23,5 @@
 
 .StartScreen > .slogan {
   margin-top: 2em;
+  max-width: 32em;
 }

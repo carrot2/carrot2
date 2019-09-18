@@ -20,7 +20,7 @@ import { SearchForm } from "./SearchForm";
 
 import { ViewTabs } from "./Views.js";
 
-import { applicationTitle } from "../../config.js";
+import { branding } from "../../config-branding.js";
 
 const ResultListView = view(ResultList);
 
@@ -33,7 +33,7 @@ const Loading = view(props => (
 export class ResultsScreen extends Component {
   runSearch() {
     searchResultStore.load(this.getSource(), this.getQuery());
-    document.title = this.getQuery() + (this.getQuery().length > 0 ? " - " : "") + applicationTitle;
+    document.title = this.getQuery() + (this.getQuery().length > 0 ? " - " : "") + branding.pageTitle;
   }
 
   componentDidMount() {

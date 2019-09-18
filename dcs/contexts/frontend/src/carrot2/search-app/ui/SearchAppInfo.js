@@ -3,10 +3,7 @@ import { Icon } from "@blueprintjs/core";
 
 import React from "react";
 
-import introHtml from "../../about-intro.html";
-import detailsHtml from "../../about-details.html";
-import { applicationTitle } from "../../config.js";
-
+import { branding } from "../../config-branding.js";
 import { sources } from "../../config-sources.js";
 import { algorithms } from "../../config-algorithms.js";
 
@@ -51,8 +48,8 @@ export const ClusteringEnginesInfo = () => {
 export const SearchAppInfo = () => {
   return (
     <div className="SearchAppInfo">
-      <h3>{applicationTitle}</h3>
-      <div dangerouslySetInnerHTML={{__html: introHtml}} />
+      <h3>{branding.pageTitle}</h3>
+      {branding.createAboutIntro()}
 
       <h3>Search engines</h3>
       <SearchEnginesInfo />
@@ -60,7 +57,7 @@ export const SearchAppInfo = () => {
       <h3>Clustering algorithms</h3>
       <ClusteringEnginesInfo />
 
-      <div dangerouslySetInnerHTML={{__html: detailsHtml}} />
+      {branding.createAboutDetails()}
     </div>
   );
 };

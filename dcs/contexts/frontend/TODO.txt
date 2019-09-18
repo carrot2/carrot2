@@ -1,8 +1,11 @@
-Features:
-* Pass query to the clustering engine
+Branding:
+* pass variable
+* rewrite public/index.html to replace page title?
+
+Throttling:
+* we'll need to handle that in the application to display a message
 
 Build & deployment:
-* build customized Lingo3G distribution
 * support for combined deployment: frontend served from CDN, clustering on our VPS
   (the frontend needs to come with an absolute DCS service URL compiled in)
 

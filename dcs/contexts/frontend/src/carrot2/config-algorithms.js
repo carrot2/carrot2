@@ -1,4 +1,15 @@
-export const algorithms = {
+import { isCarrot2Distribution } from "./config.js";
+
+const lingo3g = {
+  "Lingo3G": {
+    label: "Lingo3G",
+    description: "Meaningful, well-described hierarchical clusters. Very fast, many tuning options.",
+    descriptionHtml: "produces meaningful, well-described hierarchical clusters. Very fast, scalable, many tuning options (not exposed in this demo). Commercially available from <a href='https://carrotsearch.com' target='_blank'>Carrot Search</a>.",
+    tag: "commercial"
+  }
+};
+
+export const algorithms = Object.assign(isCarrot2Distribution() ? {} : lingo3g, {
   "Lingo": {
     label: "Lingo",
     description: "Well-described flat clusters.",
@@ -17,4 +28,4 @@ export const algorithms = {
     descriptionHtml: "base line clustering algorithm, produces bag-of-words style cluster descriptions. Available as part of the open source <a href='http://project.carrot2.org' target='_blank'>Carrot<sup>2</sup> framework</a>",
     tag: "open source"
   }
-};
+});
