@@ -1,5 +1,7 @@
-import { dcsConfig } from "../config";
+import { dcsServiceUrl } from "../config";
 import { finishingPeriod } from "../util/humanize.js";
+
+console.log(dcsServiceUrl());
 
 export function fetchClusters(query, documents, algorithm) {
   // Just pick the content fields we want to cluster. No IDs, URLs, or anything else.
@@ -16,14 +18,14 @@ export function fetchClusters(query, documents, algorithm) {
     })
   };
 
-  return fetch(dcsConfig.dcsServiceUrl, {
+  return fetch(dcsServiceUrl(), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(request)
   }).catch(function (e) {
-    return { statusText: finishingPeriod(`Failed to connect to the DCS at ${dcsConfig.dcsServiceUrl}: ${e.message}`)};
+    return { statusText: finishingPeriod(`Failed to connect to the DCS at ${dcsServiceUrl()}: ${e.message}`)};
   }).then(function (response) {
     if (!response.ok) {
       throw response;

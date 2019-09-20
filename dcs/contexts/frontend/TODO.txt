@@ -1,9 +1,5 @@
-Branding:
-* pass variable
 * rewrite public/index.html to replace page title?
-
-Throttling:
-* we'll need to handle that in the application to display a message
+* we'll need to handle clustering service throttling in the application to display a message
 
 Build & deployment:
 * support for combined deployment: frontend served from CDN, clustering on our VPS
