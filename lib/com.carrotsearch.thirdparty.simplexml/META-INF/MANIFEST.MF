@@ -14,5 +14,5 @@ Export-Package: org.simpleframework.xml,
  org.simpleframework.xml.transform,
  org.simpleframework.xml.util
 Eclipse-BuddyPolicy: dependent
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: com.carrotsearch.thirdparty.simplexml

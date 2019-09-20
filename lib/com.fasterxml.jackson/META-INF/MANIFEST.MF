@@ -7,7 +7,7 @@ Bundle-ClassPath: jackson-annotations-2.9.9.jar,
  jackson-core-2.9.9.jar,
  jackson-databind-2.9.9.3.jar
 Bundle-Vendor: https://github.com/FasterXML
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: com.fasterxml.jackson.annotation,
  com.fasterxml.jackson.core,
  com.fasterxml.jackson.core.base,

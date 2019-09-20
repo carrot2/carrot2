@@ -7,7 +7,7 @@ Require-Bundle: com.carrotsearch.thirdparty.simplexml;visibility:=reexport,
  org.carrot2.shaded.guava;bundle-version="18.0";visibility:=reexport
 Bundle-Vendor: Carrot2.org
 Eclipse-BuddyPolicy: registered
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: attributes-processor-1.3.3.jar
 Export-Package: org.carrot2.util.attribute,
  org.carrot2.util.attribute.constraint
