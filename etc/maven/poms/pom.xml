@@ -66,7 +66,7 @@
     <net.java.dev.rome.fetcher.version>1.0.0</net.java.dev.rome.fetcher.version>
     <commons.lang3.version>3.5</commons.lang3.version>
     <commons.codec.version>1.10</commons.codec.version>
-    <com.fasterxml.jackson.version>2.8.11</com.fasterxml.jackson.version>
+    <com.fasterxml.jackson.version>2.9.9</com.fasterxml.jackson.version>
     <org.slf4j.version>1.7.13</org.slf4j.version>
     <org.apache.httpclient.version>4.5.9</org.apache.httpclient.version>
     <org.apache.httpmime.version>4.5.9</org.apache.httpmime.version>
@@ -121,7 +121,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${com.fasterxml.jackson.version}.1</version>
+      <version>${com.fasterxml.jackson.version}.3</version>
     </dependency>
 
     <dependency>
