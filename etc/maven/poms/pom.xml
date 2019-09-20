@@ -66,33 +66,20 @@
     <net.java.dev.rome.fetcher.version>1.0.0</net.java.dev.rome.fetcher.version>
     <commons.lang3.version>3.5</commons.lang3.version>
     <commons.codec.version>1.10</commons.codec.version>
-    <com.fasterxml.jackson.version>2.8.11</com.fasterxml.jackson.version>
+    <com.fasterxml.jackson.version>2.9.9</com.fasterxml.jackson.version>
     <org.slf4j.version>1.7.13</org.slf4j.version>
-    <org.apache.httpcomponents.version>4.4.1</org.apache.httpcomponents.version>
+    <org.apache.httpclient.version>4.5.9</org.apache.httpclient.version>
+    <org.apache.httpmime.version>4.5.9</org.apache.httpmime.version>
     <org.apache.lucene.version>5.5.5</org.apache.lucene.version>
-    <org.simpleframework.version>2.7.1</org.simpleframework.version>
+    <com.carrotsearch.thirdparty.simplexml.version>2.7.1</com.carrotsearch.thirdparty.simplexml.version>
     <org.carrot2.attributes>1.3.3</org.carrot2.attributes>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>org.simpleframework</groupId>
-      <artifactId>simple-xml</artifactId>
-      <version>${org.simpleframework.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>stax</groupId>
-          <artifactId>stax-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>xpp3</groupId>
-          <artifactId>xpp3</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>stax</groupId>
-          <artifactId>stax</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>com.carrotsearch.thirdparty</groupId>
+      <artifactId>simple-xml-safe</artifactId>
+      <version>${com.carrotsearch.thirdparty.simplexml.version}</version>
     </dependency> 
 
     <dependency>
@@ -134,7 +121,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${com.fasterxml.jackson.version}.1</version>
+      <version>${com.fasterxml.jackson.version}.3</version>
     </dependency>
 
     <dependency>

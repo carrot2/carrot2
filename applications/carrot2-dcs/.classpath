@@ -6,7 +6,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.kohsuke.args4j"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-component-suites"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/javax.servlet"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.simpleframework.xml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.carrotsearch.thirdparty.simplexml"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="src" path="/org.junit4-ext"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/carrot2-util-log4j"/>

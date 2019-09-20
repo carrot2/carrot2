@@ -11,5 +11,5 @@ Require-Bundle: org.carrot2.core,
 Bundle-ClassPath: META-INF/,
  .
 Export-Package: org.carrot2.clustering.lingo
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: org.carrot2.algorithm.lingo

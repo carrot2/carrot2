@@ -26,5 +26,5 @@ Export-Package: org.apache.velocity,
  org.apache.velocity.util.introspection
 Require-Bundle: org.apache.commons;visibility:=reexport,
  org.slf4j;bundle-version="1.7.13"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: org.apache.velocity

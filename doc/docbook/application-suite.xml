@@ -190,7 +190,8 @@
       
       <orderedlist>
         <listitem>
-          <para>Download and install <link xlink:href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java Runtime Environment</link> (version 1.8 or newer) if you have not done so.</para>
+          <para>Download and install <link xlink:href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java Runtime Environment</link> (version 1.8 is required, no newer version
+          is supported) if you have not done so.</para>
         </listitem>
       
         <listitem role="private">
@@ -333,7 +334,7 @@
       
       <orderedlist>
         <listitem>
-          <para>Download and install <link xlink:href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java Runtime Environment</link> (version 1.8.0 or newer) if you have not done so.</para>
+          <para>Download and install <link xlink:href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java Runtime Environment</link> (version 1.8 or newer) if you have not done so.</para>
         </listitem>
       
         <listitem role="private">
@@ -490,7 +491,7 @@
       
       <orderedlist>
         <listitem>
-          <para>Download and install <link xlink:href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java Runtime Environment</link> (version 1.8.0 or newer) if you have not done so.</para>
+          <para>Download and install <link xlink:href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java Runtime Environment</link> (version 1.8 or newer) if you have not done so.</para>
         </listitem>
       
         <listitem role="private">
