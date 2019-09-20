@@ -80,20 +80,6 @@
       <groupId>com.carrotsearch.thirdparty</groupId>
       <artifactId>simple-xml-safe</artifactId>
       <version>${com.carrotsearch.thirdparty.simplexml.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>stax</groupId>
-          <artifactId>stax-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>xpp3</groupId>
-          <artifactId>xpp3</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>stax</groupId>
-          <artifactId>stax</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency> 
 
     <dependency>
