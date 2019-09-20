@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Carrot2 Attribute Utils
 Bundle-SymbolicName: org.carrot2.attributes
 Bundle-Version: 1.3.3.QUALIFIER
-Require-Bundle: org.simpleframework.xml;visibility:=reexport,
+Require-Bundle: com.carrotsearch.thirdparty.simplexml;visibility:=reexport,
  org.carrot2.shaded.guava;bundle-version="18.0";visibility:=reexport
 Bundle-Vendor: Carrot2.org
 Eclipse-BuddyPolicy: registered

@@ -86,7 +86,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.simpleframework.xml"
+         id="com.carrotsearch.thirdparty.simplexml"
          download-size="0"
          install-size="0"
          version="0.0.0"

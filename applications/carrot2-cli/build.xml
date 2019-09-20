@@ -103,8 +103,8 @@
         <include name="lib/**/slf4j-log4j*.jar" />
         <include name="lib/org.kohsuke.args4j/args4j*.jar" />
         <include name="lib/org.kohsuke.args4j/args4j*.LICENSE" />
-        <include name="lib/org.simpleframework.xml/simple-xml*.jar" />
-        <include name="lib/org.simpleframework.xml/simple-xml*.LICENSE" />
+        <include name="lib/com.carrotsearch.thirdparty.simplexml/simple-xml*.jar" />
+        <include name="lib/com.carrotsearch.thirdparty.simplexml/simple-xml*.LICENSE" />
         <include name="lib/org.carrot2.attributes/attributes-binder-*.jar" />
         <include name="lib/org.apache.log4j/log4j*.jar" />
         <include name="lib/org.apache.log4j/log4j*.LICENSE" />

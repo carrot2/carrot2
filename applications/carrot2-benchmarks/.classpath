@@ -7,7 +7,7 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-core"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.google.guava"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.junit4-ext"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.simpleframework.xml"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com.carrotsearch.thirdparty.simplexml"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-text"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-util-common"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/carrot2-algorithm-lingo"/>
