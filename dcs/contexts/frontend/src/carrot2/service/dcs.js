@@ -1,8 +1,6 @@
 import { dcsServiceUrl } from "../config";
 import { finishingPeriod } from "../util/humanize.js";
 
-console.log(dcsServiceUrl());
-
 export function fetchClusters(query, documents, algorithm) {
   // Just pick the content fields we want to cluster. No IDs, URLs, or anything else.
   const fields = ['title', 'snippet'];
