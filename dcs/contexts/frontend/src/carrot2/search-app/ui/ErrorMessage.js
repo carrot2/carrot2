@@ -31,7 +31,25 @@ export const GenericSearchEngineErrorMessage = view(props => {
   );
 });
 
+export const ClusteringServerRateLimitExceededError = () => {
+  return (
+    <div className="Error">
+      <h3>Too many clustering requests :-(</h3>
+
+      <p>
+        You are making too many clustering requests for our little demo
+        server to handle. Please check back in a while.
+      </p>
+    </div>
+  );
+};
+
 export const ClusteringEngineErrorMessage = view(props => {
+  const error = props.store.error;
+  if (error && error.status === 429) {
+    return <ClusteringServerRateLimitExceededError />;
+  }
+
   return (
     <ErrorMessage error={props.store.error}>
       <h3>Clustering engine error</h3>
