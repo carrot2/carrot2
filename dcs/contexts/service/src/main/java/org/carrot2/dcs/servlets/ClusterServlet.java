@@ -88,11 +88,12 @@ public class ClusterServlet extends RestEndpoint {
 
       writeJsonResponse(response, shouldIndent(request), new ClusterResponse(adapt(clusters)));
     } catch (Exception e) {
-      handleException(response, e);
+      handleException(request, response, e);
     }
   }
 
-  private void handleException(HttpServletResponse response, Throwable exception)
+  private void handleException(
+      HttpServletRequest request, HttpServletResponse response, Throwable exception)
       throws IOException {
     if (response.isCommitted()) {
       console.debug("Response already committed. Ignoring: {}", exception);
@@ -102,6 +103,11 @@ public class ClusterServlet extends RestEndpoint {
       if (exception instanceof TerminateRequestException) {
         type = ((TerminateRequestException) exception).type;
         exception = exception.getCause();
+      }
+
+      if (console.isDebugEnabled()) {
+        console.debug(
+            "Request resulted in an error {}: {}", type, request.getRequestURI(), exception);
       }
 
       response.sendError(type.httpStatusCode, type.name());
