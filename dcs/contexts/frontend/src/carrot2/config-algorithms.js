@@ -1,6 +1,6 @@
 import { isCarrot2Distribution } from "./config.js";
 
-const lingo3g = {
+const lingo3gAlgorithm = {
   "Lingo3G": {
     label: "Lingo3G",
     description: "Meaningful, well-described hierarchical clusters. Very fast, many tuning options.",
@@ -9,7 +9,7 @@ const lingo3g = {
   }
 };
 
-export const algorithms = Object.assign(isCarrot2Distribution() ? {} : lingo3g, {
+const opensourceAlgorithms = {
   "Lingo": {
     label: "Lingo",
     description: "Well-described flat clusters.",
@@ -28,4 +28,6 @@ export const algorithms = Object.assign(isCarrot2Distribution() ? {} : lingo3g, 
     descriptionHtml: "base line clustering algorithm, produces bag-of-words style cluster descriptions. Available as part of the open source <a href='http://project.carrot2.org' target='_blank'>Carrot<sup>2</sup> framework</a>",
     tag: "open source"
   }
-});
+};
+
+export const algorithms = isCarrot2Distribution() ? opensourceAlgorithms : lingo3gAlgorithm;
