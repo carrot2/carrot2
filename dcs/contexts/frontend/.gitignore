@@ -23,4 +23,5 @@ yarn-debug.log*
 
 .gradle/
 
-.env.local
+# Ignore local env overrides.
+.env.development.local
