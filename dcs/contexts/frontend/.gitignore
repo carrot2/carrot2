@@ -22,3 +22,5 @@ yarn-debug.log*
 /.idea/
 
 .gradle/
+
+.env.local
