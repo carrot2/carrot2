@@ -43,15 +43,16 @@ export const etoolsSource = (query) => {
  */
 export const EToolsResult = view((props) => {
   const document = props.document;
-  const slashIndex = document.url.indexOf("/", 8);
-  const domain = slashIndex > 0 ? document.url.substring(0, slashIndex) : document.url;
+  const appProtocol = new URL(window.location).protocol;
+  const docHostname = new URL(document.url.startsWith("//") ?
+    appProtocol + document.url : document.url).hostname;
   const config = etoolsResultsConfigStore;
   const commonConfig = props.commonConfigStore;
 
   let urlWithIcon = null;
   if (config.showSiteIcons) {
     urlWithIcon = (
-      <span className="url with-site-icon" style={{ backgroundImage: `url(${domain + "/favicon.ico"})` }}>
+      <span className="url with-site-icon" style={{ backgroundImage: `url(${appProtocol}//${docHostname + "/favicon.ico"})` }}>
         <span>{document.url}</span>
       </span>
     );
