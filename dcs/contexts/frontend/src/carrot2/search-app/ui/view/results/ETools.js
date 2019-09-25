@@ -20,7 +20,7 @@ const etoolsResultsConfigStore = persistentStore("etoolsResultConfig",
 const etoolsSourceConfigStore = persistentStore("etoolsSourceConfig",
   {
     safeSearch: true,
-    dataSources: "all",
+    dataSources: "en",
     language: "all",
     country: "web",
     partner: "Carrot2Json",
