@@ -30,6 +30,17 @@ task yarnBuild(type: YarnTask) {
     group 'build'
     dependsOn yarnInstall
 
+    def yarnEnv = [:]
+    project.properties.each { k,v ->
+        if (k.startsWith("REACT_APP_")) {
+            doFirst { logger.warn("Using external env variable for yarn ({}={})", k, v) } 
+            yarnEnv.put(k, v)
+        }
+    }
+
+    inputs.properties yarnEnv
+    environment = yarnEnv
+
     if (project.path == ":doc") {
         inputs.files(fileTree('src'))
         inputs.files(fileTree('static'))
@@ -43,7 +54,7 @@ task yarnBuild(type: YarnTask) {
 
     outputs.dir(project.buildDir)
 
-    args = ['run', 'build']
+    args = ['build']
 }
 
 task fastBuild {
