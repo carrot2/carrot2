@@ -25,17 +25,22 @@ import org.assertj.core.api.Assertions;
 import org.carrot2.RestoreFolderStateRule;
 
 class DistMirrorRule extends TestRuleAdapter {
-  private Path realDistDir;
+  private Path distribution;
   private Path mirrorPath;
 
   protected void before() throws Throwable {
-    realDistDir =
-        Paths.get(System.getProperty("dist.dir", "./build/distribution"))
-            .normalize()
-            .toAbsolutePath();
+    distribution =
+        Paths.get(System.getProperty("dist", "../distribution/build/dist"))
+            .toAbsolutePath()
+            .normalize();
 
-    if (!Files.isDirectory(realDistDir)) {
-      throw new AssertionError("Distribution not assembled at path: " + realDistDir);
+    if (!Files.exists(distribution)) {
+      throw new AssertionError(
+          "Distribution (zip or directory) not assembled at path: " + distribution);
+    }
+
+    if (!Files.isDirectory(distribution)) {
+      throw new AssertionError("ZIP distribution tests not yet implemented.");
     }
 
     // Sometimes add awkward or problematic characters to distribution path.
@@ -47,7 +52,7 @@ class DistMirrorRule extends TestRuleAdapter {
             .apply(RandomizedTest.newTempDir(LifecycleScope.SUITE).toAbsolutePath().normalize());
 
     Files.createDirectories(mirrorPath);
-    Loggers.CONSOLE.info("Using distribution from: {} mirrored to: {}", realDistDir, mirrorPath);
+    Loggers.CONSOLE.info("Using distribution from: {} mirrored to: {}", distribution, mirrorPath);
   }
 
   @Override
@@ -57,7 +62,7 @@ class DistMirrorRule extends TestRuleAdapter {
   }
 
   public RestoreFolderStateRule createRestoreRule() {
-    return new RestoreFolderStateRule(realDistDir, mirrorPath);
+    return new RestoreFolderStateRule(distribution, mirrorPath);
   }
 
   public Path mirrorPath() {

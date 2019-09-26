@@ -110,7 +110,7 @@ public class ClusterServlet extends RestEndpoint {
             "Request resulted in an error {}: {}", type, request.getRequestURI(), exception);
       }
 
-      response.sendError(type.httpStatusCode, type.name());
+      response.setStatus(type.httpStatusCode);
       writeJsonResponse(response, true, new ErrorResponse(type, exception));
     }
   }

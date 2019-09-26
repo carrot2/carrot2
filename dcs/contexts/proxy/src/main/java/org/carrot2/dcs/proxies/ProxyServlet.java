@@ -228,7 +228,7 @@ public class ProxyServlet extends HttpServlet {
     if (resp.isCommitted()) {
       logger.trace("Response already committed, can't send proper reply code.");
     } else {
-      resp.sendError(responseCode);
+      resp.setStatus(responseCode);
       resp.setContentType("text/plain");
       resp.setCharacterEncoding("UTF-8");
       message = String.format(Locale.ROOT, message, args);

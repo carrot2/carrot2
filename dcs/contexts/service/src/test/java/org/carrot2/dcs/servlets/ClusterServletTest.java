@@ -11,7 +11,6 @@
 package org.carrot2.dcs.servlets;
 
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
@@ -26,7 +25,6 @@ import org.assertj.core.api.Assertions;
 import org.carrot2.dcs.model.ClusterResponse;
 import org.carrot2.dcs.model.ClusterServletParameters;
 import org.carrot2.dcs.model.ErrorResponse;
-import org.carrot2.math.mahout.Arrays;
 import org.junit.Test;
 
 public class ClusterServletTest extends AbstractServletTest {
@@ -89,7 +87,7 @@ public class ClusterServletTest extends AbstractServletTest {
               return null;
             })
         .when(response)
-        .sendError(anyInt(), anyString());
+        .setStatus(anyInt());
 
     ClusterServlet servlet = new ClusterServlet();
     servlet.init(config);
@@ -123,14 +121,6 @@ public class ClusterServletTest extends AbstractServletTest {
     PrintWriter pw = new PrintWriter(sw);
     when(response.getWriter()).thenReturn(pw);
     when(request.getInputStream()).thenReturn(new StringServletInputStream(requestData));
-
-    doAnswer(
-            (a) -> {
-              throw new RuntimeException(
-                  "Unexpected sendError(): " + Arrays.toString(a.getArguments()));
-            })
-        .when(response)
-        .sendError(anyInt(), anyString());
 
     ClusterServlet servlet = new ClusterServlet();
     servlet.init(config);

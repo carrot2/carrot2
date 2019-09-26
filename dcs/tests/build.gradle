@@ -4,19 +4,16 @@ apply plugin: 'java'
 dependencies {
     testImplementation project(":dcs:distribution")
     testImplementation project(":dcs:examples")
+    testImplementation project(":dcs:model")
+    testImplementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
 
-    implementation "com.carrotsearch:procfork:${versions.procfork}"
-    implementation "com.carrotsearch.console:launcher:${versions.console}"
-    implementation "org.eclipse.jetty:jetty-server:${versions.jetty}"
-    implementation "org.eclipse.jetty:jetty-webapp:${versions.jetty}"
-}
-
-task syncDistribution(type: Sync) {
-    from project(":dcs:distribution").distDir
-    into file("${buildDir}/distribution")
+    testImplementation "com.carrotsearch:procfork:${versions.procfork}"
+    testImplementation "com.carrotsearch.console:launcher:${versions.console}"
+    testImplementation "org.eclipse.jetty:jetty-server:${versions.jetty}"
+    testImplementation "org.eclipse.jetty:jetty-webapp:${versions.jetty}"
 }
 
 test {
-    dependsOn syncDistribution
+    dependsOn project(":dcs:distribution").distDir
     maxParallelForks = 1
 }

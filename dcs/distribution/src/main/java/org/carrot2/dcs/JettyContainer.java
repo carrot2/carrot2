@@ -95,6 +95,7 @@ public class JettyContainer {
       ctx.setContextPath(ctxPath);
       ctx.setThrowUnavailableOnStartupException(true);
       ctx.setWar(context.normalize().toAbsolutePath().toString());
+      ctx.setParentLoaderPriority(true);
 
       // Don't allow directory listings and don't use mmap buffers for serving static content.
       ctx.setInitParameter(DefaultServlet.CONTEXT_INIT + "dirAllowed", "false");
