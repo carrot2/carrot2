@@ -69,10 +69,17 @@ task zip(type: Zip) {
   archiveFileName = "carrot2-${project.version}.zip"
   destinationDirectory = distZip
 
-  from distTarget
+  from(distTarget, {
+    exclude "**/*.sh"
+  })
+  from(distTarget, {
+    include  "**/*.sh"
+    fileMode 0755
+  })
+
   into "carrot2-${project.version}/"
 }
 
-assemble.dependsOn syncDist
+assemble.dependsOn zip
 
 check.dependsOn(checkExamples, checkDcsExamples)
