@@ -99,10 +99,13 @@ public class ClusterServlet extends RestEndpoint {
       console.debug("Response already committed. Ignoring: {}", exception);
     } else {
       ErrorResponseType type = ErrorResponseType.UNHANDLED_ERROR;
+      ErrorResponse errorResponse;
 
       if (exception instanceof TerminateRequestException) {
         type = ((TerminateRequestException) exception).type;
-        exception = exception.getCause();
+        errorResponse = new ErrorResponse(type, exception.getMessage(), exception.getCause());
+      } else {
+        errorResponse = new ErrorResponse(type, "Unhandled internal exception.", exception);
       }
 
       if (console.isDebugEnabled()) {
@@ -111,7 +114,7 @@ public class ClusterServlet extends RestEndpoint {
       }
 
       response.setStatus(type.httpStatusCode);
-      writeJsonResponse(response, true, new ErrorResponse(type, exception));
+      writeJsonResponse(response, true, errorResponse);
     }
   }
 

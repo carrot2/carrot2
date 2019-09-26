@@ -30,12 +30,12 @@ public class ErrorResponse {
 
   public ErrorResponse() {}
 
-  public ErrorResponse(ErrorResponseType type, Throwable exception) {
+  public ErrorResponse(ErrorResponseType type, String message, Throwable exception) {
     this.type = Objects.requireNonNull(type);
+    this.message = message;
 
     if (exception != null) {
       this.exception = exception.getClass().getName();
-      this.message = exception.getMessage();
 
       StringWriter sw = new StringWriter();
       PrintWriter pw = new PrintWriter(sw);
@@ -43,5 +43,13 @@ public class ErrorResponse {
       pw.flush();
       this.stacktrace = sw.toString();
     }
+  }
+
+  public ErrorResponse(ErrorResponseType type, Throwable exception) {
+    this(type, exception != null ? exception.getMessage() : null, exception);
+  }
+
+  public ErrorResponse(ErrorResponseType type) {
+    this(type, null, null);
   }
 }
