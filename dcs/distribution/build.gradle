@@ -55,10 +55,19 @@ task collectDependencies(type: Sync) {
 }
 
 task collectScripts(type: Sync) {
-  from files('src/main/assembly') {
+  from(files('src/main/assembly'), {
+    include "**/*.sh"
     filteringCharset = 'UTF-8'
     filter(ReplaceTokens, tokens: replaceTokens)
-  }
+    filter(FixCrLfFilter, eol: FixCrLfFilter.CrLf.LF)
+    fileMode 0755
+  })
+  from(files('src/main/assembly'), {
+    exclude "**/*.sh"
+    filteringCharset = 'UTF-8'
+    filter(ReplaceTokens, tokens: replaceTokens)
+  })
+
   from legal
 
   inputs.properties([
@@ -132,7 +141,15 @@ task distZip(type: Zip) {
   archiveFileName = "carrot2-dcs-${project.version}.zip"
   destinationDirectory = file("$outputZip")
 
-  from distDir
+  from(distDir, {
+    exclude "**/*.sh"
+  })
+
+  from(distDir, {
+    include  "**/*.sh"
+    fileMode 0755
+  })
+
   into "${archivesBaseName}/"
 }
 
