@@ -52,7 +52,8 @@ public class DistributionSanityTest extends AbstractDistributionTest {
             Assertions.assertThat(Files.getPosixFilePermissions(p))
                 .contains(PosixFilePermission.OWNER_EXECUTE);
           } catch (UnsupportedOperationException e) {
-            throw new AssumptionViolatedException("Expected a posix-compliant file system: " + p, e);
+            throw new AssumptionViolatedException(
+                "Expected a posix-compliant file system: " + p, e);
           }
         }
       }
