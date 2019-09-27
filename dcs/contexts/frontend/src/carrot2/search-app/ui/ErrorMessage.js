@@ -51,10 +51,33 @@ export const ClusteringServerRateLimitExceededError = () => {
   );
 };
 
+export const ClusteringRequestSizeLimitExceededError = () => {
+  return (
+    <div className="Error">
+      <h3>Too much data to cluster :-(</h3>
+
+      <p>
+        You sent too much data for our little demo
+        server to handle. Lower the number of documents and try again.
+      </p>
+
+      <p>
+        <small className="light">
+          {branding.createUnlimitedDistributionInfo()}
+        </small>
+      </p>
+    </div>
+  );
+};
+
 export const ClusteringEngineErrorMessage = view(props => {
   const error = props.store.error;
   if (error && error.status === 429) {
     return <ClusteringServerRateLimitExceededError />;
+  }
+
+  if (error && error.status === 413) {
+    return <ClusteringRequestSizeLimitExceededError />;
   }
 
   return (
