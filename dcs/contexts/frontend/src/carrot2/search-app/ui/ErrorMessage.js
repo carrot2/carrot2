@@ -6,6 +6,7 @@ import { view } from "react-easy-state";
 import { ShowHide } from "./Optional.js";
 
 import { sources } from "../../config-sources.js";
+import { branding } from "../../config-branding.js";
 
 export const ErrorMessage = props => {
   return (
@@ -38,7 +39,13 @@ export const ClusteringServerRateLimitExceededError = () => {
 
       <p>
         You are making too many clustering requests for our little demo
-        server to handle. Please check back in a while.
+        server to handle. Please check back in a minute.
+      </p>
+
+      <p>
+        <small className="light">
+          {branding.createUnlimitedDistributionInfo()}
+        </small>
       </p>
     </div>
   );

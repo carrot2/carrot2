@@ -24,7 +24,18 @@ const carrot2Branding = {
     </>
   ),
   createAboutIntro: () => <div dangerouslySetInnerHTML={{ __html: carrot2IntroHtml }} />,
-  createAboutDetails: () => <div dangerouslySetInnerHTML={{ __html: carrot2DetailsHtml }} />
+  createAboutDetails: () => <div dangerouslySetInnerHTML={{ __html: carrot2DetailsHtml }} />,
+  createUnlimitedDistributionInfo: () => {
+    return (
+      <>
+        <strong>Note:</strong> If you have IT and programming skills, you can install
+        this application on your own hardware. This will remove limits on
+        the rate and size of clustering requests. Please see
+        <a href="http://project.carrot2.org" target="_blank" rel="noopener noreferrer">http://project.carrot2.org</a> for
+        more details.
+      </>
+    );
+  }
 };
 
 const lingo3gBranding = {
@@ -43,7 +54,18 @@ const lingo3gBranding = {
     </>
   ),
   createAboutIntro: () => <div dangerouslySetInnerHTML={{ __html: carrot2IntroHtml }} />,
-  createAboutDetails: () => <div dangerouslySetInnerHTML={{ __html: carrot2DetailsHtml }} />
+  createAboutDetails: () => <div dangerouslySetInnerHTML={{ __html: carrot2DetailsHtml }} />,
+  createUnlimitedDistributionInfo: () => {
+    return (
+      <>
+        <strong>Tip:</strong> If you have IT and programming skills, you can install
+        this application on your own hardware. This will remove limits on
+        the rate and size of clustering requests. Get in touch at
+        <a href="mailto:info@carrotsearch.com" target="_blank" rel="noopener noreferrer">info@carrotsearch.com</a> for
+        an evaluation package.
+      </>
+    );
+  }
 };
 
 export const branding = carrot2 ? carrot2Branding : lingo3gBranding;

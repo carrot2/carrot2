@@ -19,3 +19,7 @@
   background-color: var(--background-color-main);
   padding: 0.0625em 0.125em;
 }
+
+.Error small {
+  opacity: 0.65;
+}
