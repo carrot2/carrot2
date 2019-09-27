@@ -86,7 +86,7 @@ export class ResultsScreen extends Component {
   }
 
   goToStartScreen() {
-    this.props.history.push(routes._root.buildUrl({}));
+    this.props.history.push(routes._root.buildUrl({ source: this.getSource() }));
   }
 
   render() {
