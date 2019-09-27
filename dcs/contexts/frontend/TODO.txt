@@ -1,4 +1,4 @@
-* rewrite public/index.html to replace page title?
+* rewrite public/index.html to replace page title and meta tags
 
 Later:
 * Limit the number of results displayed at once?
