@@ -4,9 +4,11 @@ import { view } from 'react-easy-state';
 import { LightDarkSwitch } from "../../../carrotsearch/ui/LightDarkSwitch.js";
 import { persistentStore } from "../../util/persistent-store.js";
 
+const isDarkSchemePreferred = () => window.matchMedia("(prefers-color-scheme: dark)").matches;
+
 export const themeStore = persistentStore("uiConfig",
   {
-    theme: "dark"
+    theme: isDarkSchemePreferred() ? "dark" : "light"
   },
   {
     flipTheme: () => themeStore.theme = themeStore.isDarkTheme() ? "light" : "dark",
