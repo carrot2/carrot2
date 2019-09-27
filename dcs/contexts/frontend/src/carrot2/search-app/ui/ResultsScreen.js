@@ -12,7 +12,7 @@ import { themeStore } from "./ThemeSwitch.js";
 
 import { routes } from "../routes";
 
-import logo from './assets/carrot-search-logo.svg';
+import { ReactComponent as CarrotLogo } from "../ui/assets/carrot-search-logo.svg";
 
 import { ResultList } from "./ResultList";
 import { Switcher } from "./Switcher.js";
@@ -120,8 +120,8 @@ export class ResultsScreen extends Component {
 
     return (
       <main className="ResultsScreen">
-        <img src={logo} className="logo" alt="Carrot Search logo"
-             onClick={this.goToStartScreen.bind(this)} />
+        <CarrotLogo className="logo" onClick={this.goToStartScreen.bind(this)} />
+
         {/**
            * The key prop is used to re-create the component on query changes,
            * so that the internal state holding value is thrown away and
