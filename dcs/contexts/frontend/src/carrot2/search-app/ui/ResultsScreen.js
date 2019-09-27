@@ -85,6 +85,10 @@ export class ResultsScreen extends Component {
     }
   }
 
+  goToStartScreen() {
+    this.props.history.push(routes._root.buildUrl({}));
+  }
+
   render() {
     // Set loading state when source changes, so that the to-be-replaced
     // document list is not re-rendered with incompatible (new) source renderer
@@ -116,7 +120,8 @@ export class ResultsScreen extends Component {
 
     return (
       <main className="ResultsScreen">
-        <img src={logo} className="logo" alt="Carrot Search logo" />
+        <img src={logo} className="logo" alt="Carrot Search logo"
+             onClick={this.goToStartScreen.bind(this)} />
         {/**
            * The key prop is used to re-create the component on query changes,
            * so that the internal state holding value is thrown away and

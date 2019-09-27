@@ -37,6 +37,7 @@
 
 .ResultsScreen .logo {
   padding-right: 0;
+  cursor: pointer;
 }
 
 .ResultsScreen .SearchForm {
