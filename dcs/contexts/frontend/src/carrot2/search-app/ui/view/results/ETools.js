@@ -12,7 +12,7 @@ import { TitleAndRank, Url } from "./result-components.js";
 
 const etoolsResultsConfigStore = persistentStore("etoolsResultConfig",
   {
-    showSiteIcons: true,
+    showSiteIcons: false,
     showSources: true
   }
 );
