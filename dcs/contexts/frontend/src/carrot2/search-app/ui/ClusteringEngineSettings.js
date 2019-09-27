@@ -15,6 +15,11 @@ import { ShowAppInfoButton } from "./SearchAppInfoButton.js";
 export const ClusteringEngineSettings = view(() => {
   const store = algorithmStore;
 
+  const differentTags = Object.keys(algorithms).reduce((set, alg) => {
+    set.add(alg.tag);
+    return set;
+  }, new Set()).size > 1;
+
   return (
     <div className={"ClusteringEngineSettings"}>
       <h4>Clustering algorithm</h4>
@@ -27,7 +32,7 @@ export const ClusteringEngineSettings = view(() => {
             const label = (
               <>
                 <strong>{algorithm.label}</strong>
-                <Optional visible={!!algorithm.tag}
+                <Optional visible={differentTags && !!algorithm.tag}
                           content={() => <Tag intent={commercial ? "warning" : "success"}
                                               icon={commercial ? "dollar" : "git-branch"}
                                               minimal={true}>{algorithm.tag}</Tag>} />

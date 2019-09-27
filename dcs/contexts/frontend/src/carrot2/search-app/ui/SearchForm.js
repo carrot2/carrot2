@@ -8,6 +8,8 @@ import { SourceTabs } from "./SourceTabs";
 import { SearchEngineSettings } from "./SearchEngineSettings.js";
 import { ClusteringEngineSettings } from "./ClusteringEngineSettings.js";
 
+import { algorithms } from "../../config-algorithms.js";
+
 export class SearchForm extends Component {
   constructor(props) {
     super(props);
@@ -45,7 +47,7 @@ export class SearchForm extends Component {
       </Popover>
     );
 
-    const clusteringEngineSettings = (
+    const clusteringEngineSettings = Object.keys(algorithms).length < 2 ? null : (
       <Popover position={Position.RIGHT_TOP} className={Classes.FIXED}
                popoverClassName="bp3-popover-content-sizing SearchAppSettingsContainer">
         <Button icon="wrench" minimal={true} title="Clustering algorithm" />
