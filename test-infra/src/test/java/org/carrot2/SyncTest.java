@@ -75,7 +75,7 @@ public class SyncTest extends TestBase {
                     if (posix != null) {
                       perms =
                           posix.readAttributes().permissions().stream()
-                              .map(Enum::name)
+                              .map(e -> e.name())
                               .collect(Collectors.joining(", "));
                     }
 
