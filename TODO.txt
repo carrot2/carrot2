@@ -1,4 +1,0 @@
-Documentation
-* which bits should go to the docs and which to the website?
-  - docs: things that can change when a new version is released
-  - website: more general stuff, FAQ, publications
