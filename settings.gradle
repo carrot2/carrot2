@@ -18,7 +18,6 @@ include 'dcs:examples'
 include 'dcs:contexts:service'
 include 'dcs:contexts:frontend'
 include 'dcs:contexts:root'
-include 'dcs:contexts:proxy'
 
 include 'distribution'
 include 'doc'

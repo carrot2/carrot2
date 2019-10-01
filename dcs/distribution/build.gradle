@@ -9,7 +9,6 @@ configurations {
   ctxService
   ctxRoot
   ctxFrontend
-  ctxProxy
   ctxDoc
 
   examples
@@ -21,7 +20,6 @@ configurations {
 dependencies {
   ctxService   project(path: ":dcs:contexts:service", configuration: 'war')
   ctxRoot      project(path: ":dcs:contexts:root", configuration: 'war')
-  ctxProxy     project(path: ":dcs:contexts:proxy", configuration: 'war')
   ctxFrontend  project(path: ":dcs:contexts:frontend")
   ctxDoc       project(path: ":doc")
 
@@ -101,12 +99,6 @@ task collectCtxRoot(type: Sync) {
   into "$outputDir/web/root"
 }
 
-task collectCtxProxy(type: Sync) {
-  dependsOn configurations.ctxProxy
-  from zipTree(configurations.ctxProxy.asPath)
-  into "$outputDir/web/proxy"
-}
-
 task collectCtxFrontend(type: Sync) {
   from configurations.ctxFrontend
   into "$outputDir/web/frontend"
@@ -130,9 +122,6 @@ task distDir {
             collectCtxDoc,
             collectCtxFrontend,
             collectExamples
-
-  // Until we have a need for it, don't include the proxy context in the distribution.
-  // dependsOn collectCtxProxy
 
   outputs.file("$outputDir")
 }
