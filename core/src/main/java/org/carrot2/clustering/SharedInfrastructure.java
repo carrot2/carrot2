@@ -41,8 +41,8 @@ public class SharedInfrastructure {
 
   public static <T> List<Cluster<T>> reorderByWeightedScoreAndSize(
       List<Cluster<T>> clusters, double scoreWeight) {
-    Comparator<ClusterData> comparator =
-        Comparator.<ClusterData>comparingDouble(data -> data.score)
+    Comparator<ClusterData<T>> comparator =
+        Comparator.<ClusterData<T>>comparingDouble(data -> data.score)
             .reversed()
             .thenComparing(Comparator.nullsFirst(Comparator.comparing(data -> data.label)));
 
@@ -61,8 +61,8 @@ public class SharedInfrastructure {
 
   public static <T extends Document> List<Cluster<T>> reorderByDescendingSizeAndLabel(
       ArrayList<Cluster<T>> clusters) {
-    Comparator<ClusterData> comparator =
-        Comparator.<ClusterData>comparingInt(data -> data.recursiveDocumentCount)
+    Comparator<ClusterData<T>> comparator =
+        Comparator.<ClusterData<T>>comparingInt(data -> data.recursiveDocumentCount)
             .reversed()
             .thenComparing(Comparator.nullsFirst(Comparator.comparing(data -> data.label)));
 

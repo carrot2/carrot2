@@ -12,6 +12,7 @@ package org.carrot2.dcs.servlets;
 
 import org.carrot2.dcs.model.ErrorResponseType;
 
+@SuppressWarnings("serial")
 public class TerminateRequestException extends Exception {
   public final ErrorResponseType type;
 

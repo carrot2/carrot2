@@ -85,4 +85,9 @@ public abstract class AbstractList extends PersistentObject {
   }
 
   public void trimToSize() {}
+
+  @Override
+  public int hashCode() {
+    throw new RuntimeException("Not implemented.");
+  }
 }

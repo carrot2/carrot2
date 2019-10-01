@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.carrot2.dcs.model.ListResponse;
 
+@SuppressWarnings("serial")
 public class ListServlet extends RestEndpoint {
   private DcsContext dcsContext;
   private ListResponse defaultResponse;

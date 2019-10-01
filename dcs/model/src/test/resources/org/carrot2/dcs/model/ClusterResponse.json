@@ -1,0 +1,27 @@
+{
+  "clusters": [
+    {
+      "labels": [
+        "foo",
+        "bar"
+      ],
+      "documents": [
+        3,
+        2,
+        1
+      ],
+      "clusters": [],
+      "score": 36.6
+    },
+    {
+      "labels": [
+        "baz"
+      ],
+      "documents": [
+        4
+      ],
+      "clusters": [],
+      "score": null
+    }
+  ]
+}

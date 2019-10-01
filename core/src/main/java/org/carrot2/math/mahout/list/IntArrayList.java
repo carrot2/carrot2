@@ -78,7 +78,7 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     }
     checkRangeFromTo(from, to, size);
 
-    int width = (int) (max - min + 1);
+    int width = (max - min + 1);
 
     int[] counts = new int[width];
     int[] theElements = elements;
@@ -304,8 +304,8 @@ public class IntArrayList extends AbstractIntList implements Cloneable {
     int[] theElements = elements;
     int mySize = size();
 
-    double N = (double) other.size();
-    double M = (double) mySize;
+    double N = other.size();
+    double M = mySize;
     if ((N + M) * Arithmetic.log2(N) < M * N) {
       // it is faster to sort other before searching in it
       IntArrayList sortedList = (IntArrayList) other.clone();

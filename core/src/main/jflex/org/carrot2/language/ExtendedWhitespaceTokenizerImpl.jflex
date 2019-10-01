@@ -1,7 +1,7 @@
 package org.carrot2.language;
 
-@SuppressWarnings("all")
 /** JFlex-generated scanner. */
+@SuppressWarnings("all")
 %%
 
 %public
@@ -75,7 +75,7 @@ URL_PATH   = ([!*'();:@&=+$,/?%#_.~] | "-" | "[" | "]" | {LETTER} | {DIGIT})+
 "," | "'" | "`" | ":" | "-"                                  { return Tokenizer.TT_PUNCTUATION; }
 
 /** Ignore HTML entities */
-"&" [a-zA-Z0-9#]+ ";"                                        { ; }
+"&" [a-zA-Z0-9#]+ ";"                                        { /* html entities. */ break; }
 
 /** Ignore the rest */
-. |	{WHITESPACE}		                                         { ; }
+. |	{WHITESPACE}		                                         { /* ignorable . */ break; }

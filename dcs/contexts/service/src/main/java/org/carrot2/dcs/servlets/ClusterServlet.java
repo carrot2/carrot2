@@ -38,6 +38,7 @@ import org.carrot2.language.LanguageComponents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("serial")
 public class ClusterServlet extends RestEndpoint {
   private static Logger console = LoggerFactory.getLogger("console");
 

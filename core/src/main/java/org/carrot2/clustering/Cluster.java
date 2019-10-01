@@ -35,7 +35,7 @@ public class Cluster<T> {
   }
 
   /** Add a single label to this cluster. */
-  public Cluster addLabel(String label) {
+  public Cluster<T> addLabel(String label) {
     labels.add(label);
     return this;
   }
@@ -68,7 +68,7 @@ public class Cluster<T> {
   }
 
   /** Sets this cluster's score. */
-  public Cluster setScore(Double score) {
+  public Cluster<T> setScore(Double score) {
     this.score = score;
     return this;
   }
@@ -80,9 +80,7 @@ public class Cluster<T> {
         "[\"%s\", docs: %,d%s]",
         String.join(", ", getLabels()),
         getDocuments().size(),
-        getScore() == null
-            ? ""
-            : String.format(Locale.ROOT, ", score: %.2f", getScore().doubleValue()));
+        getScore() == null ? "" : String.format(Locale.ROOT, ", score: %.2f", getScore()));
   }
 
   @Override

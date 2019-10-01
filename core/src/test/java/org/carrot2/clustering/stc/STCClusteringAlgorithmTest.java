@@ -26,7 +26,8 @@ import org.junit.Test;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-public class STCClusteringAlgorithmTest extends ClusteringAlgorithmTestBase {
+public class STCClusteringAlgorithmTest
+    extends ClusteringAlgorithmTestBase<STCClusteringAlgorithm> {
   @Override
   protected STCClusteringAlgorithm algorithm() {
     return new STCClusteringAlgorithm();

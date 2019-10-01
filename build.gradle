@@ -109,7 +109,7 @@ subprojects {
     }
 
     tasks.withType(JavaCompile) {
-      options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+      options.compilerArgs << "-Xlint:all" << "-Werror"
       options.encoding = "UTF-8"
     }
 

@@ -259,7 +259,7 @@ public abstract class AbstractIntDoubleMap extends AbstractSet {
   public double adjustOrPutValue(int key, double newValue, double incrValue) {
     boolean present = containsKey(key);
     if (present) {
-      newValue = (double) (get(key) + incrValue);
+      newValue = (get(key) + incrValue);
       put(key, newValue);
     } else {
       put(key, newValue);

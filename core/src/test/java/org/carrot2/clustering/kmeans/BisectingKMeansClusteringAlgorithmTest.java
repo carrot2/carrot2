@@ -21,9 +21,10 @@ import org.carrot2.clustering.*;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
 import org.junit.Test;
 
-public class BisectingKMeansClusteringAlgorithmTest extends ClusteringAlgorithmTestBase {
+public class BisectingKMeansClusteringAlgorithmTest
+    extends ClusteringAlgorithmTestBase<BisectingKMeansClusteringAlgorithm> {
   @Override
-  protected ClusteringAlgorithm algorithm() {
+  protected BisectingKMeansClusteringAlgorithm algorithm() {
     return new BisectingKMeansClusteringAlgorithm();
   }
 
@@ -54,8 +55,8 @@ public class BisectingKMeansClusteringAlgorithmTest extends ClusteringAlgorithmT
     Assertions.assertThat(clusters.get(2).getLabels()).containsExactly("WordC");
   }
 
-  @AwaitsFix("https://issues.carrot2.org/browse/CARROT-1195") // TODO: CARROT-1195 (clustering not
-  // deterministic)
+  // TODO: CARROT-1195 (clustering not deterministic)
+  @AwaitsFix("https://issues.carrot2.org/browse/CARROT-1195")
   @Override
   public void testResultsStableFromRandomShuffle() throws Exception {
     super.testResultsStableFromRandomShuffle();

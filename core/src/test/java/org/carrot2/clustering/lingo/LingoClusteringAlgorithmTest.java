@@ -20,7 +20,8 @@ import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.Document;
 import org.junit.Test;
 
-public class LingoClusteringAlgorithmTest extends ClusteringAlgorithmTestBase {
+public class LingoClusteringAlgorithmTest
+    extends ClusteringAlgorithmTestBase<LingoClusteringAlgorithm> {
   @Override
   protected LingoClusteringAlgorithm algorithm() {
     return new LingoClusteringAlgorithm();
@@ -75,8 +76,8 @@ public class LingoClusteringAlgorithmTest extends ClusteringAlgorithmTestBase {
         .containsOnly("program");
   }
 
-  @AwaitsFix("https://issues.carrot2.org/browse/CARROT-1195") // TODO: CARROT-1195 (clustering not
-  // deterministic)
+  // TODO: CARROT-1195 (clustering not deterministic)
+  @AwaitsFix("https://issues.carrot2.org/browse/CARROT-1195")
   @Override
   public void testResultsStableFromRandomShuffle() throws Exception {
     super.testResultsStableFromRandomShuffle();

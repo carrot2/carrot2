@@ -14,10 +14,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
+import org.assertj.core.api.Assertions;
+import org.carrot2.TestBase;
 import org.carrot2.clustering.Cluster;
 import org.junit.Test;
 
-public class ClusterResponseTest {
+public class ClusterResponseTest extends TestBase {
   @Test
   public void testStructure() throws JsonProcessingException {
     List<Cluster<Integer>> clusters = new ArrayList<>();
@@ -38,7 +40,9 @@ public class ClusterResponseTest {
 
     ClusterResponse response = new ClusterResponse(clusters);
     ObjectMapper om = new ObjectMapper();
-    String s = om.writerWithDefaultPrettyPrinter().writeValueAsString(response);
-    System.out.println(s);
+    String actual = om.writerWithDefaultPrettyPrinter().writeValueAsString(response);
+
+    Assertions.assertThat(actual)
+        .isEqualToIgnoringWhitespace(resourceString("ClusterResponse.json"));
   }
 }
