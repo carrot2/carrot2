@@ -1093,9 +1093,9 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       if (i <= max) {
         int j = i + 1;
         int end = j + targetCount - 1;
-        for (int k = targetOffset + 1; j < end && source[j] == target[k]; j++, k++)
+        for (int k = targetOffset + 1; j < end && source[j] == target[k]; j++, k++) {
           /* do nothing */
-          ;
+        }
 
         if (j == end) {
           /* Found whole pattern. */

@@ -187,7 +187,7 @@ class DcsContext {
 
     Pattern NAME_PATTERN =
         Pattern.compile(
-            "(/)?(?<ordering>[0-9]+)?+(?<separator>\\s*\\-?\\s*)?+(?<id>[^/]+)(.json)$",
+            "(/)?(?<ordering>[0-9]+)?+(?<separator>\\s*-?\\s*)?+(?<id>[^/]+)(.json)$",
             Pattern.CASE_INSENSITIVE);
 
     Map<String, ClusterRequest> templates = new LinkedHashMap<>();
@@ -235,7 +235,7 @@ class DcsContext {
     private static Pattern NAME_PATTERN =
         Pattern.compile("(/)?(?<name>[^/]+)(.json)$", Pattern.CASE_INSENSITIVE);
     private static Pattern ID_PATTERN =
-        Pattern.compile("^(?:[0-9]+)?+(?:\\s*\\-?\\s*)?+", Pattern.CASE_INSENSITIVE);
+        Pattern.compile("^(?:[0-9]+)?+(?:\\s*-?\\s*)?+", Pattern.CASE_INSENSITIVE);
 
     private final String path;
     private final String name;

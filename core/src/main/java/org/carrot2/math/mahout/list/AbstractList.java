@@ -70,7 +70,7 @@ public abstract class AbstractList extends PersistentObject {
     if (newSize != currentSize) {
       if (newSize > currentSize) {
         beforeInsertDummies(currentSize, newSize - currentSize);
-      } else if (newSize < currentSize) {
+      } else {
         removeFromTo(newSize, currentSize - 1);
       }
     }

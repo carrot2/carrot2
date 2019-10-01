@@ -21,6 +21,7 @@ import java.io.PrintStream;
 import java.io.Writer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Map;
 
@@ -128,7 +129,7 @@ public final class JsonWriter {
 		//@formatter:on
 		public JsonAppendableWriter on(OutputStream out) {
 			return new JsonAppendableWriter(new OutputStreamWriter(out,
-					Charset.forName("UTF-8")), indent);
+					StandardCharsets.UTF_8), indent);
 		}
 
 	}
