@@ -10,8 +10,6 @@ apply from: file('gradle/loadProperties.gradle')
 apply from: file('gradle/gitinfo.gradle')
 apply from: file('gradle/buildinfo.gradle')
 
-def currentVersion = '4.0.0-beta1'
-
 def publishedProjects = [
   ":core",
   ":lang:polish",
@@ -23,6 +21,8 @@ def excludeTestsInfra = [
    ":core-examples"
 ]
 
+version = '4.0.0-beta1'
+
 ext {
   versions = loadProperties(file('dependencies.versions'))
   gitRev = gitStatus.id
@@ -31,7 +31,7 @@ ext {
   licenseHeader = file('etc/license-header.txt')
 
   replaceTokens = [
-    'version': currentVersion,
+    'version': version,
     'gitRev': gitRev,
     'buildDate': buildDate,
     'buildDateTrimmed': buildDateTrimmed
@@ -44,7 +44,7 @@ ext {
 allprojects {
   apply plugin: 'idea'
 
-  version = currentVersion
+  version = rootProject.version
 
   repositories {
     mavenCentral()

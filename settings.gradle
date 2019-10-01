@@ -1,4 +1,6 @@
 
+rootProject.name = 'carrot2'
+
 include 'core'
 include 'core-examples'
 
@@ -21,5 +23,3 @@ include 'dcs:contexts:root'
 
 include 'distribution'
 include 'doc'
-
-rootProject.name = 'carrot2'
