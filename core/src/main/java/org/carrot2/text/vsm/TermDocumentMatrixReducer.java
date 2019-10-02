@@ -55,17 +55,15 @@ public class TermDocumentMatrixReducer extends AttrComposite {
     MatrixUtils.normalizeColumnL2(vsmContext.termDocumentMatrix, null);
     final MatrixFactorization factorization =
         factorizationFactory.factorize(vsmContext.termDocumentMatrix);
-    context.baseMatrix = factorization.getU();
-    context.coefficientMatrix = factorization.getV();
     context.baseMatrix = trim(factorizationFactory, factorization.getU(), dimensions);
     context.coefficientMatrix = trim(factorizationFactory, factorization.getV(), dimensions);
   }
 
   private final DoubleMatrix2D trim(
-      MatrixFactorizationFactory factorizationFactory, DoubleMatrix2D matrix, int dimensions) {
+      MatrixFactorizationFactory factorizationFactory, DoubleMatrix2D matrix, int maxColumns) {
     if (!(factorizationFactory instanceof IterativeMatrixFactorizationFactory)
-        && matrix.columns() > dimensions) {
-      return matrix.viewPart(0, 0, matrix.rows(), dimensions);
+        && matrix.columns() > maxColumns) {
+      return matrix.viewPart(0, 0, matrix.rows(), maxColumns);
     } else {
       return matrix;
     }

@@ -234,7 +234,9 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
               preprocessingContext.allWords.image,
               labelFormatter);
           for (int j = 0; j < rawCluster.size(); j++) {
-            cluster.addDocument(documents.get(rawCluster.get(j)));
+            int colIndex = rawCluster.get(j);
+            int docIndex = vsmContext.columnMapper.colToDoc(colIndex);
+            cluster.addDocument(documents.get(docIndex));
           }
           clusters.add(cluster);
         }

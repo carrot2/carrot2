@@ -12,8 +12,10 @@ package org.carrot2.math.matrix;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.assertj.core.api.Assertions;
 import org.assertj.core.data.Offset;
 import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
+import org.carrot2.math.mahout.matrix.impl.DenseDoubleMatrix2D;
 
 /** Assertions on <code>DoubleMatrix2D</code>. */
 public class DoubleMatrix2DAssertion {
@@ -69,5 +71,11 @@ public class DoubleMatrix2DAssertion {
   public DoubleMatrix2DAssertion as(String description) {
     this.description = description;
     return this;
+  }
+
+  public void hasEquivalentColumns(double[][] expectedColumns) {
+    double[][] actualColumns = actualMatrix.viewDice().toArray();
+    Assertions.assertThat(actualColumns).containsOnly(
+        new DenseDoubleMatrix2D(expectedColumns).viewDice().toArray());
   }
 }

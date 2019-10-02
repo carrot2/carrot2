@@ -193,7 +193,7 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
         .as("tdMatrix.rowCount")
         .isEqualTo(expectedTdMatrixStemIndices.length);
     MatrixAssertions.assertThat(vsmContext.termDocumentMatrix)
-        .isEquivalentTo(expectedTdMatrixElements);
+        .hasEquivalentColumns(expectedTdMatrixElements);
 
     final IntIntHashMap expectedStemToRowIndex = new IntIntHashMap();
     for (int i = 0; i < expectedTdMatrixStemIndices.length; i++) {

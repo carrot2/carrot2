@@ -10,10 +10,12 @@
  */
 package org.carrot2.text.vsm;
 
+import com.carrotsearch.hppc.BitMixer;
 import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
+import java.util.Comparator;
 import org.carrot2.attrs.AttrComposite;
 import org.carrot2.attrs.AttrDouble;
 import org.carrot2.attrs.AttrInteger;
@@ -83,6 +85,32 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
             .defaultValue(LogTfIdfTermWeighting::new));
   }
 
+  private static class DocOrder {
+    int hash = 1;
+
+    void addToHash(int value) {
+      hash = 31 * hash + value;
+    }
+  }
+
+  public static class ColumnMapper {
+    final int[] docToCol;
+    final int[] colToDoc;
+
+    public ColumnMapper(int[] docToCol, int[] colToDoc) {
+      this.docToCol = docToCol;
+      this.colToDoc = colToDoc;
+    }
+
+    public int docToCol(int docIndex) {
+      return docToCol[docIndex];
+    }
+
+    public int colToDoc(int colIndex) {
+      return colToDoc[colIndex];
+    }
+  }
+
   /**
    * Builds a term document matrix from data provided in the <code>context</code>, stores the result
    * in there.
@@ -105,6 +133,7 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
     int titleFieldIndex = -1;
     final String[] fieldsName = preprocessingContext.allFields.name;
     for (int i = 0; i < fieldsName.length; i++) {
+      // TODO: CARROT-1231: hardcoded title field
       if ("title".equals(fieldsName[i])) {
         titleFieldIndex = i;
         break;
@@ -134,6 +163,12 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
     final DoubleMatrix2D tdMatrix =
         new DenseDoubleMatrix2D(Math.min(maxRows, stemsToInclude.length), documentCount);
 
+    // CARROT-1195: sort the tdMatrix to ensure stability of subsequent computations for reordered
+    // input documents.
+    ColumnMapper columnMapper =
+        computeStableDocOrdering(
+            documentCount, stemsTfByDocument, stemsToInclude, stemWeightOrder, maxRows);
+
     for (int i = 0; i < stemWeightOrder.length && i < maxRows; i++) {
       final int stemIndex = stemsToInclude[stemWeightOrder[i]];
       final int[] tfByDocument = stemsTfByDocument[stemIndex];
@@ -141,11 +176,13 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
       final byte fieldIndices = stemsFieldIndices[stemIndex];
 
       for (int j = 0; j < df; j++) {
-        double weight =
-            termWeighting.calculateTermWeight(tfByDocument[j * 2 + 1], df, documentCount);
+        int docId = tfByDocument[j * 2];
+        int tf = tfByDocument[j * 2 + 1];
+
+        double weight = termWeighting.calculateTermWeight(tf, df, documentCount);
 
         weight *= getWeightBoost(titleFieldIndex, fieldIndices);
-        tdMatrix.set(i, tfByDocument[j * 2], weight);
+        tdMatrix.set(i, columnMapper.docToCol(docId), weight);
       }
     }
 
@@ -158,6 +195,49 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
     // Store the results
     vsmContext.termDocumentMatrix = tdMatrix;
     vsmContext.stemToRowIndex = stemToRowIndex;
+    vsmContext.columnMapper = columnMapper;
+  }
+
+  /*
+   * The input matrix already has stable rows (stems are sorted in the preprocessing context) but
+   * columns depend on document ordering. We will compute a hopefully unique
+   * hash value for each document (matrix column), define the ordering of columns based on this
+   * value and use it when filling-in the final tdMatrix.
+   */
+  private ColumnMapper computeStableDocOrdering(
+      int documentCount,
+      int[][] stemsTfByDocument,
+      int[] stemsToInclude,
+      int[] stemWeightOrder,
+      int maxRows) {
+    DocOrder[] docOrdering = new DocOrder[documentCount];
+    for (int i = 0; i < docOrdering.length; i++) {
+      docOrdering[i] = new DocOrder();
+    }
+
+    for (int i = 0; i < stemWeightOrder.length && i < maxRows; i++) {
+      final int stemIndex = stemsToInclude[stemWeightOrder[i]];
+      final int[] tfByDocument = stemsTfByDocument[stemIndex];
+      final int df = tfByDocument.length / 2;
+
+      int rowHash = BitMixer.mix(i + 1);
+      for (int j = 0; j < df; j++) {
+        int docId = tfByDocument[j * 2];
+        int tf = tfByDocument[j * 2 + 1];
+        docOrdering[docId].addToHash(rowHash + tf);
+      }
+    }
+
+    int[] docToCol = new int[documentCount];
+    int[] colToDoc =
+        IndirectSort.mergesort(
+            docOrdering, 0, docOrdering.length, Comparator.comparingInt(a -> a.hash));
+    for (int stableIndex = 0; stableIndex < documentCount; stableIndex++) {
+      int originalIndex = colToDoc[stableIndex];
+      docToCol[originalIndex] = stableIndex;
+    }
+
+    return new ColumnMapper(docToCol, colToDoc);
   }
 
   /**

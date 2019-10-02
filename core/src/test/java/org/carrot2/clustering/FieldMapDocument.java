@@ -28,4 +28,9 @@ public class FieldMapDocument implements Document {
     }
     fields.put(field, value);
   }
+
+  @Override
+  public String toString() {
+    return fields.toString();
+  }
 }

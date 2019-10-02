@@ -16,8 +16,10 @@ import static org.junit.Assert.assertNotNull;
 import java.util.Arrays;
 import java.util.List;
 import org.assertj.core.api.Assertions;
-import org.carrot2.AwaitsFix;
-import org.carrot2.clustering.*;
+import org.carrot2.clustering.CachedLangComponents;
+import org.carrot2.clustering.Cluster;
+import org.carrot2.clustering.ClusteringAlgorithmTestBase;
+import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
 import org.junit.Test;
 
@@ -49,16 +51,10 @@ public class BisectingKMeansClusteringAlgorithmTest
             CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant1.NAME));
 
     assertNotNull(clusters);
+    System.out.println(clusters);
     assertEquals(3, clusters.size());
     Assertions.assertThat(clusters.get(0).getLabels()).containsExactly("WordA");
     Assertions.assertThat(clusters.get(1).getLabels()).containsExactly("WordB");
     Assertions.assertThat(clusters.get(2).getLabels()).containsExactly("WordC");
-  }
-
-  // TODO: CARROT-1195 (clustering not deterministic)
-  @AwaitsFix("https://issues.carrot2.org/browse/CARROT-1195")
-  @Override
-  public void testResultsStableFromRandomShuffle() throws Exception {
-    super.testResultsStableFromRandomShuffle();
   }
 }

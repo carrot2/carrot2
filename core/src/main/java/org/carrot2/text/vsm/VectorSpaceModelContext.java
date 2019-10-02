@@ -15,6 +15,7 @@ import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllStems;
+import org.carrot2.text.vsm.TermDocumentMatrixBuilder.ColumnMapper;
 
 /** Stores data related to the Vector Space Model of the processed documents. */
 public class VectorSpaceModelContext {
@@ -23,8 +24,12 @@ public class VectorSpaceModelContext {
 
   /**
    * Term-document matrix. Rows of the matrix correspond to word stems, columns correspond to the
-   * processed documents. For mapping between rows of this matrix and {@link AllStems}, see {@link
-   * #stemToRowIndex}.
+   * processed documents.
+   *
+   * <p>For mapping between rows of this matrix and {@link AllStems}, see {@link #stemToRowIndex}.
+   *
+   * <p>For mapping between columns of this matrix and indexes of input documents, see {@link
+   * #columnMapper}.
    *
    * <p>This matrix is produced by {@link
    * TermDocumentMatrixBuilder#buildTermDocumentMatrix(VectorSpaceModelContext)}.
@@ -51,6 +56,12 @@ public class VectorSpaceModelContext {
    * TermDocumentMatrixBuilder#buildTermDocumentMatrix(VectorSpaceModelContext)}.
    */
   public IntIntHashMap stemToRowIndex;
+
+  /**
+   * The {@link #termDocumentMatrix} columns may be reordered with respect to the original document
+   * order. This mapper provides bidirectional mapping between column indexes and document indexes.
+   */
+  public ColumnMapper columnMapper;
 
   /** Creates a vector space model context with the provided preprocessing context. */
   public VectorSpaceModelContext(PreprocessingContext preprocessingContext) {
