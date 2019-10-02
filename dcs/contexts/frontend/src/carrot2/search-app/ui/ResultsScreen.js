@@ -78,7 +78,7 @@ export class ResultsScreen extends Component {
 
   pushNewUrl(params) {
     const newPath = routes.search.buildUrl(params);
-    if (newPath === this.props.history.location.pathname) {
+    if (newPath === encodeURI(this.props.history.location.pathname)) {
       this.runSearch();
     } else {
       this.props.history.push(newPath);
