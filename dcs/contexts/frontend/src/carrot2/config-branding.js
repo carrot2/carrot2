@@ -10,7 +10,7 @@ import { ReactComponent as CarrotSearchText } from './search-app/ui/assets/carro
 const carrot2 = isCarrot2Distribution();
 
 const carrot2Branding = {
-  pageTitle: "Carrot2 clustering engine demo",
+  pageTitle: process.env.REACT_APP_META_TITLE,
   createSlogan: () => (
     <>
       <a href="http://project.carrot2.org">Carrot<sup>2</sup></a> organizes
@@ -40,7 +40,7 @@ const carrot2Branding = {
 };
 
 const lingo3gBranding = {
-  pageTitle: "Lingo3G document clustering engine demo",
+  pageTitle: process.env.REACT_APP_META_TITLE,
   createSlogan: () => (
     <>
       This app uses Carrot Search <a href="https://carrotsearch.com/lingo3g">Lingo3G</a> to

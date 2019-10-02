@@ -1,5 +1,3 @@
-* rewrite public/index.html to replace page title and meta tags
-
 Later:
 * Limit the number of results displayed at once?
 * Check background color on Circles export when implemented.
