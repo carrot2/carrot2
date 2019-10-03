@@ -1,5 +1,8 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
+import java.nio.file.Files
+import java.io.*
+
 plugins {
   id 'base'
 }
@@ -80,6 +83,23 @@ task zip(type: Zip) {
   into "carrot2-${project.version}/"
 }
 
+task bambooProps {
+  def storedProps = replaceTokens.collectEntries { k,v -> [k, v.toString()] }
+  def bambooPropsFile = file("${buildDir}/build.properties")
+
+  inputs.properties(storedProps)
+  outputs.file bambooPropsFile
+
+  doFirst {
+    def Properties p = new Properties();
+    p.putAll(storedProps);
+    Files.newBufferedWriter(bambooPropsFile.toPath()).withCloseable { w ->
+      p.store(w, "Build properties file")
+    }
+  }
+}
+
+assemble.dependsOn bambooProps
 assemble.dependsOn zip
 
 check.dependsOn(checkExamples, checkDcsExamples)
