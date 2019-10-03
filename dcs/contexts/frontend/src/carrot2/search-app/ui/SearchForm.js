@@ -1,76 +1,77 @@
 import { Button, Classes, ControlGroup, InputGroup, Popover, Position } from "@blueprintjs/core";
 import * as PropTypes from "prop-types";
-import React, { Component } from "react";
+import React, { useRef, useState, useEffect } from "react";
+
+import { algorithms } from "../../config-algorithms.js";
+import { ClusteringEngineSettings } from "./ClusteringEngineSettings.js";
+
+import { SearchEngineSettings } from "./SearchEngineSettings.js";
 
 import './SearchForm.css';
 import { SourceTabs } from "./SourceTabs";
 
-import { SearchEngineSettings } from "./SearchEngineSettings.js";
-import { ClusteringEngineSettings } from "./ClusteringEngineSettings.js";
+export const SearchForm = props => {
+  const inputRef = useRef(null);
+  const [ query, setQuery ] = useState(props.initialQuery || "");
 
-import { algorithms } from "../../config-algorithms.js";
-
-export class SearchForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { query: this.props.initialQuery || "" };
-  }
-
-  componentDidMount() {
-    this.searchInput.focus();
-  }
-
-  submit(e) {
-    e.preventDefault();
-    this.triggerOnSubmit();
-  }
-
-  triggerOnSubmit() {
-    const trimmed = this.state.query.trim();
-    if (trimmed.length > 0) {
-      this.props.onSubmit(trimmed);
+  const focus = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
     }
-  }
+  };
 
-  onSourceChange(newSource, oldSource, e) {
+  useEffect(focus, []);
+
+  const submit = e => {
     e.preventDefault();
-    this.searchInput.focus();
-    this.props.onSourceChange && this.props.onSourceChange(newSource);
-  }
+    triggerOnSubmit();
+  };
 
-  render() {
-    const searchEngineSettings = (
-      <Popover position={Position.BOTTOM} className={Classes.FIXED}
-               popoverClassName="bp3-popover-content-sizing SearchAppSettingsContainer">
-        <Button rightIcon="caret-down" text="options" minimal={true} title="Search engine options" />
-        <SearchEngineSettings source={this.props.source} onApply={this.triggerOnSubmit.bind(this)} />
-      </Popover>
-    );
+  const triggerOnSubmit = () => {
+    const trimmed = query.trim();
+    if (trimmed.length > 0) {
+      props.onSubmit(trimmed);
+    }
+  };
 
-    const clusteringEngineSettings = Object.keys(algorithms).length < 2 ? null : (
-      <Popover position={Position.RIGHT_TOP} className={Classes.FIXED}
-               popoverClassName="bp3-popover-content-sizing SearchAppSettingsContainer">
-        <Button icon="wrench" minimal={true} title="Clustering algorithm" />
-        <ClusteringEngineSettings/>
-      </Popover>
-    );
+  const onSourceChange = (newSource, oldSource, e) => {
+    e.preventDefault();
+    focus();
+    props.onSourceChange && props.onSourceChange(newSource);
+  };
 
-    return (
-      <div className="SearchForm">
-        <SourceTabs active={this.props.source} onChange={this.onSourceChange.bind(this)} />
 
-        <form onSubmit={this.submit.bind(this)}>
-          <ControlGroup fill={true}>
-            <InputGroup inputRef={(input) => this.searchInput = input} rightElement={searchEngineSettings}
-                        value={this.state.query} onChange={(e) => this.setState({ query: e.target.value })} />
-            <Button className={Classes.FIXED} icon="search" type="submit" text="Search" />
-            { clusteringEngineSettings }
-          </ControlGroup>
-        </form>
-      </div>
-    );
-  }
-}
+  const searchEngineSettings = (
+    <Popover position={Position.BOTTOM} className={Classes.FIXED}
+             popoverClassName="bp3-popover-content-sizing SearchAppSettingsContainer">
+      <Button rightIcon="caret-down" text="options" minimal={true} title="Search engine options" />
+      <SearchEngineSettings source={props.source} onApply={triggerOnSubmit} />
+    </Popover>
+  );
+
+  const clusteringEngineSettings = Object.keys(algorithms).length < 2 ? null : (
+    <Popover position={Position.RIGHT_TOP} className={Classes.FIXED}
+             popoverClassName="bp3-popover-content-sizing SearchAppSettingsContainer">
+      <Button icon="wrench" minimal={true} title="Clustering algorithm" />
+      <ClusteringEngineSettings/>
+    </Popover>
+  );
+
+  return (
+    <div className="SearchForm">
+      <SourceTabs active={props.source} onChange={onSourceChange} />
+
+      <form onSubmit={submit}>
+        <ControlGroup fill={true}>
+          <InputGroup inputRef={inputRef} rightElement={searchEngineSettings}
+                      defaultValue={props.initialQuery} onChange={e => setQuery(e.target.value)} />
+          <Button className={Classes.FIXED} icon="search" type="submit" text="Search" />
+          { clusteringEngineSettings }
+        </ControlGroup>
+      </form>
+    </div>
+  );
+};
 
 SearchForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
