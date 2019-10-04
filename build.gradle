@@ -178,6 +178,12 @@ configure(subprojects.findAll { it.path in [
         ":dcs:contexts:frontend",
         ":doc"] }) {
   apply from: rootProject.file("gradle/yarn-project.gradle")
+
+  project.ext.yarnEnv += [
+    'REACT_APP_VERSION': rootProject.version,
+    'REACT_APP_BUILD_DATE': buildDateTrimmed,
+    'REACT_APP_GIT_REV': gitRev
+  ]
 }
 
 // Apply yarn scheduling fix so that yarn dependencies are not fetched in parallel.
