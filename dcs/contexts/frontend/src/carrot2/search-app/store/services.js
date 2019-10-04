@@ -36,9 +36,11 @@ export const clusterStore = store({
         clusterStore.clusters = await fetchClusters(query, documents, algorithm);
         clusterStore.documents = addClusterReferences(documents, clusterStore.clusters);
       } catch (e) {
+        const body = await e.json();
         clusterStore.clusters = EMPTY_ARRAY;
         clusterStore.documents = EMPTY_ARRAY;
         clusterStore.error = e;
+        clusterStore.error.bodyParsed = body;
       }
       clusterStore.loading = false;
     }
