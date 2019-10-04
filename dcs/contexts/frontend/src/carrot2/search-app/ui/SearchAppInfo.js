@@ -60,7 +60,7 @@ export const VersionInfo = () => {
 export const SearchAppInfo = () => {
   return (
     <div className="SearchAppInfo">
-      <h3>{branding.pageTitle}</h3>
+      <h2>{branding.pageTitle}</h2>
       {branding.createAboutIntro()}
 
       <h3>Search engines</h3>

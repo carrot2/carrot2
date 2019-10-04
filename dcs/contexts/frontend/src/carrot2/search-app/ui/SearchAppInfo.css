@@ -3,6 +3,10 @@
   padding-right: 1em;
   overflow-y: auto;
 }
+.SearchAppInfo h2 {
+  font-size: 1.8rem;
+  line-height: 1.1;
+}
 
 .SearchAppInfo h3:not(:first-child) {
   margin-top: 2em;
