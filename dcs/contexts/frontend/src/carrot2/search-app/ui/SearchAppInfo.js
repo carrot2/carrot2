@@ -45,6 +45,18 @@ export const ClusteringEnginesInfo = () => {
   );
 };
 
+export const VersionInfo = () => {
+  return (
+    <div className="VersionInfo">
+      <ul>
+        <li><span>version:</span> {process.env.REACT_APP_VERSION}</li>
+        <li><span>build date:</span> {process.env.REACT_APP_BUILD_DATE}</li>
+        <li><span>git rev:</span> {process.env.REACT_APP_GIT_REV}</li>
+      </ul>
+    </div>
+  );
+};
+
 export const SearchAppInfo = () => {
   return (
     <div className="SearchAppInfo">
@@ -58,6 +70,8 @@ export const SearchAppInfo = () => {
       <ClusteringEnginesInfo />
 
       {branding.createAboutDetails()}
+
+      <VersionInfo/>
     </div>
   );
 };
