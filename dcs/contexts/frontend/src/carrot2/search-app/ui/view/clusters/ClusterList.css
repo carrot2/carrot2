@@ -16,7 +16,7 @@
 }
 
 .ClusterList .TopCluster {
-  margin-bottom: 1em;
+  margin-bottom: 0.5em;
   padding: 0.25em 0.25em 0.25em 1.75em;
   position: relative;
   border-radius: 0.25em;
@@ -29,6 +29,10 @@
 .ClusterList .TopCluster.with-subclusters {
   margin-bottom: 2em;
 }
+.ClusterList.flat .TopCluster {
+  padding-bottom: 0.25em;
+  margin-bottom: 0;
+}
 
 .ClusterList .TopCluster > .icon {
   position: absolute;
@@ -36,7 +40,7 @@
   margin-top: 0.125em;
 }
 
-.ClusterList .TopCluster > .labels {
+.ClusterList:not(.flat) .TopCluster > .labels {
   text-transform: uppercase;
 }
 

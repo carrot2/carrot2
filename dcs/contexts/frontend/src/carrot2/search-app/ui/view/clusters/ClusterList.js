@@ -61,8 +61,12 @@ const SubClusterView = view(SubCluster);
 
 export function ClusterList(props) {
   const store = props.clusterStore;
+  const flatClusters = store.clusters.reduce((flat, c) => {
+    return flat && (!c.clusters || c.clusters.length === 0);
+  }, true);
+
   return (
-    <div className="ClusterList">
+    <div className={"ClusterList" + (flatClusters ? " flat" : "")}>
       <div>
         {
           store.clusters.map(cluster =>
