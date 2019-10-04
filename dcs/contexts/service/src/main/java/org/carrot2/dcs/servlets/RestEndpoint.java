@@ -15,17 +15,28 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.carrot2.dcs.model.ErrorResponse;
+import org.carrot2.dcs.model.ErrorResponseHandler;
+import org.carrot2.dcs.model.ErrorResponseType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 class RestEndpoint extends HttpServlet {
+  private static Logger CONSOLE = LoggerFactory.getLogger("console");
+
   public static final String PARAM_INDENT = "indent";
 
   private static final String CONTENT_TYPE_JSON_UTF8 = "application/json; charset=UTF-8";
@@ -33,11 +44,31 @@ class RestEndpoint extends HttpServlet {
 
   private ObjectMapper om;
 
+  private ArrayList<ErrorResponseHandler> errorResponseHandlers;
+
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
 
-    om = new ObjectMapper();
+    this.errorResponseHandlers =
+        StreamSupport.stream(ServiceLoader.load(ErrorResponseHandler.class).spliterator(), false)
+            .collect(Collectors.toCollection(ArrayList::new));
+
+    // Always add fallback handler at the end.
+    this.errorResponseHandlers.add(
+        exception -> {
+          if (exception instanceof TerminateRequestException) {
+            return new ErrorResponse(
+                ((TerminateRequestException) exception).type,
+                exception.getMessage(),
+                exception.getCause());
+          } else {
+            return new ErrorResponse(
+                ErrorResponseType.UNHANDLED_ERROR, "Unhandled internal exception.", exception);
+          }
+        });
+
+    this.om = new ObjectMapper();
   }
 
   @Override
@@ -49,6 +80,32 @@ class RestEndpoint extends HttpServlet {
         "Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     response.setHeader("Access-Control-Allow-Methods", "GET, POST");
     super.service(request, response);
+  }
+
+  protected void handleException(
+      HttpServletRequest request, HttpServletResponse response, Throwable exception)
+      throws IOException {
+    if (response.isCommitted()) {
+      CONSOLE.debug("Response already committed. Ignoring: {}", exception);
+    } else {
+      ErrorResponse errorResponse = null;
+      for (ErrorResponseHandler handler : errorResponseHandlers) {
+        errorResponse = handler.handle(exception);
+        if (errorResponse != null) {
+          break;
+        }
+      }
+
+      ErrorResponseType type = errorResponse.type;
+
+      if (CONSOLE.isDebugEnabled()) {
+        CONSOLE.debug(
+            "Request resulted in an error {}: {}", type, request.getRequestURI(), exception);
+      }
+
+      response.setStatus(type.httpStatusCode);
+      writeJsonResponse(response, true, errorResponse);
+    }
   }
 
   protected void writeJsonResponse(

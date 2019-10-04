@@ -32,16 +32,11 @@ import org.carrot2.clustering.Document;
 import org.carrot2.dcs.model.ClusterRequest;
 import org.carrot2.dcs.model.ClusterResponse;
 import org.carrot2.dcs.model.ClusterServletParameters;
-import org.carrot2.dcs.model.ErrorResponse;
 import org.carrot2.dcs.model.ErrorResponseType;
 import org.carrot2.language.LanguageComponents;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 public class ClusterServlet extends RestEndpoint {
-  private static Logger console = LoggerFactory.getLogger("console");
-
   private DcsContext dcsContext;
   private ClusterRequest templateDefault = new ClusterRequest();
 
@@ -90,32 +85,6 @@ public class ClusterServlet extends RestEndpoint {
       writeJsonResponse(response, shouldIndent(request), new ClusterResponse(adapt(clusters)));
     } catch (Exception e) {
       handleException(request, response, e);
-    }
-  }
-
-  private void handleException(
-      HttpServletRequest request, HttpServletResponse response, Throwable exception)
-      throws IOException {
-    if (response.isCommitted()) {
-      console.debug("Response already committed. Ignoring: {}", exception);
-    } else {
-      ErrorResponseType type = ErrorResponseType.UNHANDLED_ERROR;
-      ErrorResponse errorResponse;
-
-      if (exception instanceof TerminateRequestException) {
-        type = ((TerminateRequestException) exception).type;
-        errorResponse = new ErrorResponse(type, exception.getMessage(), exception.getCause());
-      } else {
-        errorResponse = new ErrorResponse(type, "Unhandled internal exception.", exception);
-      }
-
-      if (console.isDebugEnabled()) {
-        console.debug(
-            "Request resulted in an error {}: {}", type, request.getRequestURI(), exception);
-      }
-
-      response.setStatus(type.httpStatusCode);
-      writeJsonResponse(response, true, errorResponse);
     }
   }
 
