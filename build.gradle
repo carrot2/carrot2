@@ -186,19 +186,21 @@ configure(subprojects.findAll { it.path in [
   ]
 }
 
-// Apply yarn scheduling fix so that yarn dependencies are not fetched in parallel.
-def first = null
-configure(subprojects) {
-  afterEvaluate {
-    project.tasks.findAll({ it.name == "yarnInstall" }).each {
-      if (first != null) {
-        it.mustRunAfter(first)
-        it.doFirst {
-          logger.warn("Scheduled ${it} to run after ${first} (to prevent concurrent install clashes).")
-        }
-      }
-      first = it
-    }
+// Yarn install creates many problems when multiple instances try to run concurrently. Enforce
+// sequential ordering here.
+afterEvaluate {
+  rootProject.tasks.create("yarnOrdering")
+
+  def sequence = []
+
+  [":dcs:contexts:frontend:yarnInstall",
+   ":dcs:contexts:frontend:yarnBuild",
+   ":doc:yarnInstall",
+   ":doc:yarnBuild",
+   ":yarnOrdering"].each { path ->
+    def task = tasks.findByPath(path)
+    task.mustRunAfter(sequence)
+    sequence += task
   }
 }
 
