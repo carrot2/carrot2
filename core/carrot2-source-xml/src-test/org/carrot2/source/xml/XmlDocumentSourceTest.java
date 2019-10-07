@@ -280,24 +280,6 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         }
     }
 
-    @Test
-    public void testRemoteUrl() throws MalformedURLException
-    {
-        String base = System.getProperty("carrot2.xml.feed.url.base");
-        assumeTrue("carrot2.xml.feed.url.base property undefined.", !Strings.isNullOrEmpty(base));
-
-        IResource xml = new URLResourceWithParams(new URL(base + "&q=${query}&results=${results}"));
-        final String query = "apple computer";
-
-        processingAttributes.put(AttributeUtils.getKey(XmlDocumentSource.class, "xml"),
-            xml);
-        processingAttributes.put(AttributeNames.QUERY, query);
-        processingAttributes.put(AttributeNames.RESULTS, 50);
-        final int documentCount = runQuery();
-        assertEquals(50, documentCount);
-        assertEquals(query, resultAttributes.get(AttributeNames.QUERY));
-    }
-
     private void assertTransformedDocumentsEqual(final int documentCount)
     {
         assertEquals(2, documentCount);
