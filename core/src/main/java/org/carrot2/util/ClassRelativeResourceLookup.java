@@ -15,10 +15,10 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.Objects;
 
-public class ClassRelativeResourceLoader implements ResourceLookup {
+public class ClassRelativeResourceLookup implements ResourceLookup {
   private final Class<?> clazz;
 
-  public ClassRelativeResourceLoader(Class<?> clazz) {
+  public ClassRelativeResourceLookup(Class<?> clazz) {
     this.clazz = clazz;
   }
 

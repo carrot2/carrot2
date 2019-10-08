@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.carrot2.other.nanojson;
+package org.carrot2.internal.nanojson;
 
 /**
  * Thrown when {@link JsonWriter} is used to write invalid JSON.

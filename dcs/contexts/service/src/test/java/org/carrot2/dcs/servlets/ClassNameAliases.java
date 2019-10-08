@@ -11,9 +11,9 @@
 package org.carrot2.dcs.servlets;
 
 import org.carrot2.attrs.AliasMapper;
-import org.carrot2.attrs.AliasMappingFactory;
+import org.carrot2.attrs.AliasMapperFactory;
 
-public class ClassNameAliases implements AliasMappingFactory {
+public class ClassNameAliases implements AliasMapperFactory {
   @Override
   public AliasMapper mapper() {
     return new AliasMapper()

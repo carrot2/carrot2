@@ -16,7 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
-import org.carrot2.util.ClassRelativeResourceLoader;
+import org.carrot2.util.ClassRelativeResourceLookup;
 import org.carrot2.util.ResourceLookup;
 
 public class LanguageComponentsProviderImpl implements LanguageComponentsProvider {
@@ -46,7 +46,7 @@ public class LanguageComponentsProviderImpl implements LanguageComponentsProvide
 
   @Override
   public Map<Class<?>, Supplier<?>> load(String language) throws IOException {
-    return load(language, new ClassRelativeResourceLoader(this.getClass()));
+    return load(language, new ClassRelativeResourceLookup(this.getClass()));
   }
 
   protected static final LexicalData loadLexicalData(String language, ResourceLookup resourceLookup)

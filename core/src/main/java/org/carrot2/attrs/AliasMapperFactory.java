@@ -10,8 +10,8 @@
  */
 package org.carrot2.attrs;
 
-public interface AliasMappingFactory {
-  AliasMapper mapper();
-
+public interface AliasMapperFactory {
   String name();
+
+  AliasMapper mapper();
 }

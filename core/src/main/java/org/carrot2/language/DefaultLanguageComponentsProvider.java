@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 import org.carrot2.language.snowball.*;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.LabelFormatterImpl;
-import org.carrot2.util.ClassRelativeResourceLoader;
+import org.carrot2.util.ClassRelativeResourceLookup;
 import org.carrot2.util.ResourceLookup;
 
 public class DefaultLanguageComponentsProvider implements LanguageComponentsProvider {
@@ -67,7 +67,7 @@ public class DefaultLanguageComponentsProvider implements LanguageComponentsProv
 
   @Override
   public Map<Class<?>, Supplier<?>> load(String language) throws IOException {
-    return load(language, new ClassRelativeResourceLoader(this.getClass()));
+    return load(language, new ClassRelativeResourceLookup(this.getClass()));
   }
 
   @Override

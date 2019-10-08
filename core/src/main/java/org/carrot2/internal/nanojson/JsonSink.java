@@ -1,4 +1,4 @@
-package org.carrot2.other.nanojson;
+package org.carrot2.internal.nanojson;
 
 import java.util.Collection;
 import java.util.Map;

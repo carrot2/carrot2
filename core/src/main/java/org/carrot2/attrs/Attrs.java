@@ -13,7 +13,7 @@ package org.carrot2.attrs;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.carrot2.other.nanojson.JsonWriter;
+import org.carrot2.internal.nanojson.JsonWriter;
 
 public final class Attrs {
   public static final String KEY_TYPE = "@type";

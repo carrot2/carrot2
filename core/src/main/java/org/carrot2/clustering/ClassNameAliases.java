@@ -11,7 +11,7 @@
 package org.carrot2.clustering;
 
 import org.carrot2.attrs.AliasMapper;
-import org.carrot2.attrs.AliasMappingFactory;
+import org.carrot2.attrs.AliasMapperFactory;
 import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
 import org.carrot2.clustering.lingo.ClusterBuilder;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
@@ -40,7 +40,7 @@ import org.carrot2.text.vsm.TermDocumentMatrixBuilder;
 import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.TfTermWeighting;
 
-public class ClassNameAliases implements AliasMappingFactory {
+public class ClassNameAliases implements AliasMapperFactory {
   @Override
   public AliasMapper mapper() {
     return new AliasMapper()
