@@ -36,7 +36,8 @@ module.exports = {
       resolve: `@carrotsearch/gatsby-transformer-html`,
       options: {
         variables: {
-          "CARROT2_VERSION": process.env.CARROT2_VERSION || "unset"
+          "CARROT2_VERSION": process.env.CARROT2_VERSION || "unset",
+          "JAVA_EXAMPLES": `${__dirname}/../core-examples/src/test/java/org/carrot2/examples`
         }
       }
     },

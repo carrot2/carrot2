@@ -27,31 +27,34 @@ import org.junit.Test;
 public class E01_ClusteringBasics {
   @Test
   public void clusterDocumentStream() throws IOException {
-    // Our documents are in English so we load appropriate language resources. This call can be
-    // heavy and an instance of LanguageComponents should be reused across different clustering
-    // calls.
+    // fragment-start{clustering-document-stream}
+    // Our documents are in English so we load appropriate language resources.
+    // This call can be heavy and an instance of LanguageComponents should be
+    // reused across different clustering calls.
     LanguageComponents languageComponents = LanguageComponents.load("English");
 
-    // Create a stream of "documents" for clustering. Each such document provides
-    // text content fields to a visitor.
+    // Create a stream of "documents" for clustering.
+    // Each such document provides text content fields to a visitor.
     Stream<Document> documentStream =
-        Arrays.stream(ExamplesData.DOCUMENTS_DATA_MINING)
-            .map(
-                fields ->
-                    (fieldVisitor) -> {
-                      fieldVisitor.accept("title", fields[1]);
-                      fieldVisitor.accept("content", fields[2]);
-                    });
+      Arrays.stream(ExamplesData.DOCUMENTS_DATA_MINING)
+        .map(
+          fields ->
+            (fieldVisitor) -> {
+              fieldVisitor.accept("title", fields[1]);
+              fieldVisitor.accept("content", fields[2]);
+            });
 
     // Perform clustering.
     LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
-    List<Cluster<Document>> clusters = algorithm.cluster(documentStream, languageComponents);
+    List<Cluster<Document>> clusters = algorithm.cluster(
+      documentStream, languageComponents);
 
     // Print cluster labels and a document count in each top-level cluster.
     for (Cluster<Document> c : clusters) {
-      System.out.println(
-          String.join("; ", c.getLabels()) + ", documents: " + c.getDocuments().size());
+      System.out.println(String.join("; ", c.getLabels()) +
+        ", documents: " + c.getDocuments().size());
     }
+    // fragment-end{clustering-document-stream}
   }
 
   @Test
