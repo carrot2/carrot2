@@ -46,12 +46,14 @@ public class E01_ClusteringBasics {
 
     // Perform clustering.
     LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
-    List<Cluster<Document>> clusters = algorithm.cluster(documentStream, languageComponents);
+
+    List<Cluster<Document>> clusters;
+    clusters = algorithm.cluster(documentStream, languageComponents);
 
     // Print cluster labels and a document count in each top-level cluster.
     for (Cluster<Document> c : clusters) {
-      System.out.println(
-          String.join("; ", c.getLabels()) + ", documents: " + c.getDocuments().size());
+      String label = String.join("; ", c.getLabels());
+      System.out.println(label + ", documents: " + c.getDocuments().size());
     }
     // fragment-end{clustering-document-stream}
   }
