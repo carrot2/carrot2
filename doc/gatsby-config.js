@@ -32,7 +32,14 @@ module.exports = {
     },
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-dark-mode`,
-    `@carrotsearch/gatsby-transformer-html`,
+    {
+      resolve: `@carrotsearch/gatsby-transformer-html`,
+      options: {
+        variables: {
+          "CARROT2_VERSION": process.env.CARROT2_VERSION || "unset"
+        }
+      }
+    },
     '@carrotsearch/gatsby-plugin-content-search',
     '@carrotsearch/gatsby-plugin-relativize',
     `gatsby-plugin-offline`,
