@@ -12,20 +12,20 @@
     "serve": "gatsby serve --prefix-paths"
   },
   "dependencies": {
-    "gatsby": "^2.13.50",
-    "gatsby-plugin-catch-links": "^2.1.2",
+    "gatsby": "^2.15.35",
+    "gatsby-plugin-catch-links": "^2.1.13",
     "gatsby-plugin-dark-mode": "^1.1.0",
-    "gatsby-plugin-react-helmet": "^3.1.3",
-    "gatsby-source-filesystem": "^2.1.8",
-    "gatsby-plugin-offline": "^2.2.4",
-    "gatsby-plugin-nprogress": "^2.1.2",
+    "gatsby-plugin-react-helmet": "^3.1.11",
+    "gatsby-source-filesystem": "^2.1.31",
+    "gatsby-plugin-offline": "^2.2.10",
+    "gatsby-plugin-nprogress": "^2.1.10",
     "@carrotsearch/gatsby-plugin-apidocs": "^1.0.10",
     "@carrotsearch/gatsby-transformer-html": "^1.0.13",
     "@carrotsearch/gatsby-plugin-content-search": "^1.0.0",
     "@carrotsearch/gatsby-plugin-relativize": "^1.0.1",
 
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
     "react-helmet": "^5.2.1"
   },
   "devDependencies": {
