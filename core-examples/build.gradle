@@ -2,19 +2,12 @@ import org.apache.tools.ant.filters.*
 
 apply plugin: 'java-library'
 
-ext {
-  replaceTokens = [
-    *: versions.collectEntries { k, v -> ["versions." + k, v] },
-    'versions.carrot2': project.version
-  ]
-}
-
 dependencies {
   implementation project(':core')
   testImplementation project(':lang:polish')
   testImplementation project(':lang:lucene')
-  testImplementation "org.apache.lucene:lucene-analyzers-icu:${versions.lucene}"
-  testImplementation "junit:junit:${versions.junit}"
+  testImplementation "org.apache.lucene:lucene-analyzers-icu"
+  testImplementation "junit:junit"
 }
 
 configurations {
@@ -22,17 +15,26 @@ configurations {
 }
 
 task buildDistribution(type: Sync) {
-  inputs.properties(replaceTokens)
+  def antPrj = new org.apache.tools.ant.Project()
+  afterEvaluate {
+    replaceTokens.each { k, v -> antPrj.setProperty(k.toString(), v.toString()) }
+  }
+
+  inputs.properties replaceTokensTrigger
+
+  doFirst {
+    antPrj.setProperty("version.lucene-analyzers-icu", getVersion("org.apache.lucene:lucene-analyzers-icu"))
+    antPrj.setProperty("version.junit", getVersion("junit:junit"))
+  }
 
   from(project.projectDir, {
     include 'src/**'
     exclude 'src/main/assembly/**'
   })
 
-  from(files('src/main/assembly'), {
-    include '**/*'
+  from(files("src/main/assembly"), {
     filteringCharset = 'UTF-8'
-    filter(ReplaceTokens, tokens: replaceTokens, beginToken: '${', endToken: '}')
+    filter(ExpandProperties, project: antPrj)
   })
 
   into "$buildDir/distribution"

@@ -1,15 +1,15 @@
 apply plugin: 'java-library'
 
 dependencies {
-  api "org.slf4j:slf4j-api:${versions.slf4j}"
+  api "org.slf4j:slf4j-api"
 
-  api "junit:junit:${versions.junit}"
-  api "org.assertj:assertj-core:${versions.assertj}"
-  api "com.carrotsearch.randomizedtesting:randomizedtesting-runner:${versions.randomizedtesting}"
+  api "junit:junit"
+  api "org.assertj:assertj-core"
+  api "com.carrotsearch.randomizedtesting:randomizedtesting-runner"
 
-  api "org.apache.httpcomponents:httpclient:${versions.httpclient}"
+  api "org.apache.httpcomponents:httpclient"
 
-  api "org.apache.logging.log4j:log4j-core:${versions.log4j2}"
-  api "org.apache.logging.log4j:log4j-slf4j18-impl:${versions.log4j2}"
+  api "org.apache.logging.log4j:log4j-core"
+  api "org.apache.logging.log4j:log4j-slf4j18-impl"
 }
 

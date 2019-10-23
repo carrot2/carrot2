@@ -7,7 +7,7 @@ configurations {
 }
 
 dependencies {
-  implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
+  implementation "com.fasterxml.jackson.core:jackson-databind"
 
   implementation(project(':dcs:model'))
 
@@ -18,10 +18,10 @@ dependencies {
     langResources project(path: prj, configuration: 'langResources')
   }
 
-  compileOnly "org.slf4j:slf4j-api:${versions.slf4j}"
+  compileOnly "org.slf4j:slf4j-api"
 
-  testCompile "org.mockito:mockito-core:${versions.mockito}"
-  testCompile "org.apache.logging.log4j:log4j-slf4j18-impl:${versions.log4j2}"
+  testCompile "org.mockito:mockito-core"
+  testCompile "org.apache.logging.log4j:log4j-slf4j18-impl"
 }
 
 // Exclude slf4j from any dependency, it should be part of the container.

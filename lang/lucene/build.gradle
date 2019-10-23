@@ -6,7 +6,7 @@ configurations {
 
 dependencies {
   implementation project(':core')
-  implementation "org.apache.lucene:lucene-analyzers-common:${versions.lucene}"
+  implementation "org.apache.lucene:lucene-analyzers-common"
 
   langResources fileTree(dir: 'src/main/resources', includes: ['**/*.stopwords.utf8', '**/*.stoplabels.utf8'])
 }

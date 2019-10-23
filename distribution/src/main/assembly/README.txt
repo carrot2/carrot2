@@ -2,7 +2,7 @@
 Carrot2
 -------
 
-This is a binary release of Carrot2 (version @version@). It contains:
+This is a binary release of Carrot2 ${product.version}. It contains:
   * Java API examples,
   * a prebuilt HTTP/JSON REST service
   * developer documentation,
@@ -17,4 +17,4 @@ then:
   * REST service is at: http://localhost:8080/service
   * demo application is at: http://localhost:8080/frontend
 
-Build: @version@, @gitRev@, @buildDate@
+Build: ${product.version}, ${product.gitrev}, ${product.buildDate}

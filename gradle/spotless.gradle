@@ -1,0 +1,25 @@
+
+allprojects {
+  afterEvaluate {
+    def tasks = tasks.findByName("spotlessCheck")
+    if (tasks) {
+      spotless {
+        java {
+          licenseHeaderFile licenseHeader
+          lineEndings 'UNIX'
+          endWithNewline()
+          googleJavaFormat('1.7')
+        }
+
+        check.dependsOn(spotlessCheck)
+      }
+
+      task tidy() {
+        description "Applies formatters and cleanups to sources."
+        group "verification"
+
+        dependsOn spotlessApply
+      }
+    }
+  }
+}

@@ -1,7 +1,6 @@
-import org.apache.tools.ant.filters.ReplaceTokens
+import org.apache.tools.ant.filters.*
 
 import java.nio.file.Files
-import java.io.*
 
 plugins {
   id 'base'
@@ -24,12 +23,19 @@ dependencies {
 }
 
 task syncDist(type: Sync) {
+  def antPrj = new org.apache.tools.ant.Project()
+  afterEvaluate {
+    replaceTokens.each { k, v -> antPrj.setProperty(k.toString(), v.toString()) }
+  }
+
+  inputs.properties replaceTokensTrigger
+
   dependsOn ":mavenLocal"
   from legal
 
   from(files('src/main/assembly'), {
     filteringCharset = 'UTF-8'
-    filter(ReplaceTokens, tokens: replaceTokens)
+    filter(ExpandProperties, project: antPrj)
   })
 
   from(configurations.dcs) {

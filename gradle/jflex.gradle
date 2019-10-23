@@ -1,29 +1,24 @@
 
-apply plugin: 'java-library'
-
 configurations {
   jflex
-  langResources
 }
 
 dependencies {
-  api "org.slf4j:slf4j-api"
-  api "com.carrotsearch:hppc"
-
   jflex "de.jflex:jflex"
-
-  langResources fileTree(dir: 'src/main/resources', includes: ['**/*.stopwords.utf8', '**/*.stoplabels.utf8'])
 }
 
 sourceSets {
   main {
     java {
-      srcDirs = ["src/main/java", "src/main/java-jflex"]
+      srcDirs += ["src/main/java-jflex"]
     }
   }
 }
 
 task jflex {
+  description "Recompile jflex grammar files."
+  group "build"
+
   def jflexSource = file('src/main/jflex').toPath()
   def jflexTarget = file('src/main/java-jflex').toPath()
 
@@ -46,17 +41,4 @@ task jflex {
       }
     }
   }
-}
-
-compileJava.dependsOn jflex
-
-spotless {
-  java {
-    targetExclude "**/nanojson/*", "**/ExtendedWhitespaceTokenizerImpl.java*"
-  }
-}
-
-javadoc {
-  exclude '**/nanojson/**'
-  exclude '**/ExtendedWhitespaceTokenizerImpl*'
 }

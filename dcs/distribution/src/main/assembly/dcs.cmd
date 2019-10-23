@@ -28,7 +28,7 @@ SET JAVA_CMD=java
 :javaSet
 
 REM Launch DCS.
-%JAVA_CMD% %DCS_OPTS% -jar "%SCRIPT_HOME%\lib\@jarname@-@version@.jar" %*
+%JAVA_CMD% %DCS_OPTS% -jar "%SCRIPT_HOME%\lib\dcs-launcher-${product.version}.jar" %*
 SET DCS_EXITVAL=%errorlevel%
 
 REM Set cmd's window title and return with the exit code.

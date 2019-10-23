@@ -46,12 +46,14 @@ task yarnBuild(type: YarnTask) {
         environment = yarnEnv
     }
 
-    if (project.path == ":doc") {
-        inputs.files(fileTree('src'))
-        inputs.files(fileTree('static'))
-    } else {
-        inputs.files(fileTree('src'))
-        inputs.files(fileTree('public'))
+    afterEvaluate {
+      if (project.hasProperty("srclayout") && project.srclayout == 'gatsby') {
+          inputs.files(fileTree('src'))
+          inputs.files(fileTree('static'))
+      } else {
+          inputs.files(fileTree('src'))
+          inputs.files(fileTree('public'))
+      }
     }
 
     inputs.file('package.json')
@@ -78,5 +80,11 @@ artifacts {
     }
 }
 
-assemble.dependsOn configurations.archives
+task cleanNodeDirs(type: Delete) {
+    delete ".gradle"
+    delete "node_modules"
+}
 
+cleanall.dependsOn cleanNodeDirs
+
+assemble.dependsOn configurations.archives

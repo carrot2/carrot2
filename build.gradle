@@ -1,105 +1,79 @@
-
 plugins {
-  id 'com.diffplug.gradle.spotless' version "3.23.0" apply false
-  id "com.github.ben-manes.versions" version "0.21.0"
+  id 'base'
+
   id 'com.moowork.node' version '1.3.1' apply false
+  id "com.palantir.consistent-versions" version '1.12.4'
+
+  id 'com.diffplug.gradle.spotless' version "3.25.0" apply false
+  id "com.github.ben-manes.versions" version "0.26.0"
+
+  id 'de.thetaphi.forbiddenapis' version '2.7' apply false
+
+  // Task dependency inspector (gradle <task 1>...<task N> taskTree)
+  // id "com.dorongold.task-tree" version "1.4"
 }
 
+rootProject.version = '4.0.0-SNAPSHOT'
+rootProject.ext.fullName = 'Carrot2'
+
+apply from: file('gradle/common.gradle')
+apply from: file('gradle/idea.gradle')
 apply from: file('gradle/min-gradle-version.gradle')
-apply from: file('gradle/loadProperties.gradle')
 apply from: file('gradle/gitinfo.gradle')
 apply from: file('gradle/buildinfo.gradle')
+apply from: file('gradle/java-defaults.gradle')
+apply from: file('gradle/spotless.gradle')
+
+// apply from: file("gradle/test-stats.gradle")
+// apply from: file("gradle/forbidden-apis.gradle")
+
+ext {
+  versions = [
+      node: '10.16.3',
+      yarn: '1.19.0',
+  ]
+
+  licenseHeader = file("etc/spotless/license-header.txt")
+  legal = files('carrot2.LICENSE')
+
+  mavenBuildRepo = "${rootProject.buildDir}/maven"
+}
 
 def publishedProjects = [
-  ":core",
-  ":lang:polish",
-  ":lang:lucene",
-  ":dcs:model"
+    ":core",
+    ":dcs:model",
+    ":lang:lucene",
+    ":lang:polish",
 ]
 
 def excludeTestsInfra = [
-   ":core-examples"
+    ":core-examples"
 ]
 
-version = '4.0.0-SNAPSHOT'
-
-ext {
-  versions = loadProperties(file('dependencies.versions'))
-  gitRev = gitStatus.id
-
-  legal = files('carrot2.LICENSE')
-  licenseHeader = file('etc/license-header.txt')
-
-  replaceTokens = [
-    'version': version,
-    'gitRev': gitRev,
-    'buildDate': buildDate,
-    'buildDateTrimmed': buildDateTrimmed
-  ]
-
-  mavenBuildRepo = "${rootProject.buildDir}/maven"
-  isIdea = System.getProperty("idea.active") != null || gradle.startParameter.taskNames.contains('idea') || gradle.startParameter.taskNames.contains('cleanIdea')
-}
-
 allprojects {
-  apply plugin: 'idea'
-
-  version = rootProject.version
-
-  repositories {
-    mavenCentral()
-  }
-
-  configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-      if (details.requested.name == 'slf4j-api') {
-        details.useTarget "org.slf4j:slf4j-api:${versions.slf4j}"
-        details.because "Force-use slf4j-api ${versions.slf4j}"
-      }
-
-      if (details.requested.group == 'org.apache.logging.log4j') {
-        details.useTarget group: details.requested.group, name: details.requested.name, version: versions.log4j2
-        details.because "Force-use log4j dependencies to ${versions.log4j2}"
-      }
-    }
-
-    resolutionStrategy.failOnVersionConflict()
-  }
-
-  idea {
-    module {
-      outputDir file('build/idea/classes/main')
-      testOutputDir file('build/idea/classes/test')
-      downloadSources = true
-    }
-  }
+  group "org." + project.group
 }
 
 subprojects {
-  group "org." + project.group
-
   if (project.file("src/main/java").exists() ||
       project.file("src/test/java").exists() ||
       project.file("src/main/webapp").exists()) {
-    apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'com.diffplug.gradle.spotless'
+    apply plugin: 'de.thetaphi.forbiddenapis'
 
     project.archivesBaseName = "carrot2" + project.path.replace(':', '-')
 
     sourceCompatibility = 9
     targetCompatibility = 9
 
-    spotless {
-      java {
-        licenseHeaderFile licenseHeader
-        lineEndings 'UNIX'
-        endWithNewline()
-        googleJavaFormat('1.7')
-      }
-    }
-
     test {
       maxParallelForks = (int) Math.max(Runtime.runtime.availableProcessors() / 2.0, 4.0)
+
+      // Pass any tests.* property to the runner.
+      project.properties.each { k, v ->
+        systemProperty k.toString(), v.toString()
+      }
     }
 
     if (!excludeTestsInfra.contains(project.path)) {
@@ -108,40 +82,12 @@ subprojects {
       }
     }
 
-    tasks.withType(JavaCompile) {
-      options.compilerArgs << "-Xlint:all" << "-Werror"
-      options.encoding = "UTF-8"
-    }
-
-    tasks.withType(Jar) {
-      manifest {
-        attributes("Implementation-Title": project.name,
-                   "Implementation-Version": "${project.version} (${gitRev}, ${buildDateTrimmed})")
-      }
-    }
-
     javadoc {
-      title = "Carrot<sup>2</sup> ${project.name} ${project.version} API Documentation"
-
-      options.addBooleanOption('html5', true)
-      options.addStringOption('Xdoclint:all,-missing', '-noindex')
-      options.encoding = 'UTF-8'
-
       exclude 'org/carrot2/math/mahout/**'
     }
 
-    afterEvaluate {
-      check.dependsOn(spotlessCheck)
-
-      task cleanup {
-        dependsOn spotlessApply
-      }
-
-      tasks.withType(AbstractArchiveTask) {
-        duplicatesStrategy = 'fail'
-      }
-
-      if (project.plugins.hasPlugin(WarPlugin)) {
+    allprojects {
+      plugins.withType(WarPlugin) {
         configurations {
           war {}
         }
@@ -151,7 +97,8 @@ subprojects {
         }
 
         dependencies {
-          providedCompile "javax.servlet:javax.servlet-api:${versions.servletapi}@jar"
+          // TODO: a bug in palantir prevents versionless dependency here.
+          providedCompile "javax.servlet:javax.servlet-api:3.1.0"
         }
       }
     }
@@ -160,29 +107,17 @@ subprojects {
 
 // Configure gradle projects
 
-project(':doc') {
-  // Gatsby has a non-configurable output folder, sigh.
-  // https://github.com/gatsbyjs/gatsby/issues/1878
-  buildDir = file("public")
-
-  afterEvaluate {
-    yarnBuild.doFirst {
-      logger.warn("Gatsby/ yarn hack: cleaning up .cache/public.")
-      delete project.files(".cache")
-      delete project.files("public")
-    }
-  }
-}
-
-configure(subprojects.findAll { it.path in [
-        ":dcs:contexts:frontend",
-        ":doc"] }) {
+configure(subprojects.findAll {
+  it.path in [
+      ":dcs:contexts:frontend",
+      ":doc"]
+}) {
   apply from: rootProject.file("gradle/yarn-project.gradle")
 
   project.ext.yarnEnv += [
-    'REACT_APP_VERSION': rootProject.version,
-    'REACT_APP_BUILD_DATE': buildDateTrimmed,
-    'REACT_APP_GIT_REV': gitRev
+      'REACT_APP_VERSION'   : rootProject.replaceTokens['product.version'],
+      'REACT_APP_BUILD_DATE': rootProject.replaceTokens['product.buildDate'],
+      'REACT_APP_GIT_REV'   : rootProject.replaceTokens['product.gitrev']
   ]
 }
 
@@ -243,12 +178,12 @@ configure(subprojects.findAll { it.path in publishedProjects }) {
         name = 'sonatype'
         url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
         credentials {
-            if (project.hasProperty('nexusUsername')) {
-              username project.nexusUsername
-            }
-            if (project.hasProperty('nexusPassword')) {
-              password project.nexusPassword
-            }
+          if (project.hasProperty('nexusUsername')) {
+            username project.nexusUsername
+          }
+          if (project.hasProperty('nexusPassword')) {
+            password project.nexusPassword
+          }
         }
       }
     }

@@ -1,0 +1,12 @@
+
+// Gatsby has a non-configurable output folder, sigh.
+// https://github.com/gatsbyjs/gatsby/issues/1878
+buildDir = file("public")
+ext {
+  srclayout = 'gatsby'
+}
+
+clean {
+  delete project.files(".cache")
+  delete project.files("public")
+}

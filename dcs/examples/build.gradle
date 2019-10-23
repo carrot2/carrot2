@@ -3,20 +3,13 @@ import org.apache.tools.ant.filters.*
 
 apply plugin: 'java'
 
-ext {
-  replaceTokens = [
-          *: versions.collectEntries { k, v -> ["versions." + k, v] },
-          'versions.carrot2': project.version
-  ]
-}
-
 dependencies {
   implementation project(':core')
   implementation project(':dcs:model')
 
-  implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
-  implementation "org.apache.httpcomponents:httpclient:${versions.httpclient}"
-  implementation "com.carrotsearch.console:launcher:${versions.console}"
+  implementation "com.fasterxml.jackson.core:jackson-databind"
+  implementation "org.apache.httpcomponents:httpclient"
+  implementation "com.carrotsearch.console:launcher"
 }
 
 configurations {
@@ -24,6 +17,19 @@ configurations {
 }
 
 task buildDistribution(type: Sync) {
+  def antPrj = new org.apache.tools.ant.Project()
+  afterEvaluate {
+    replaceTokens.each { k, v -> antPrj.setProperty(k.toString(), v.toString()) }
+  }
+
+  inputs.properties replaceTokensTrigger
+
+  doFirst {
+    antPrj.setProperty("version.jackson-databind", getVersion("com.fasterxml.jackson.core:jackson-databind"))
+    antPrj.setProperty("version.httpclient", getVersion("org.apache.httpcomponents:httpclient"))
+    antPrj.setProperty("version.launcher", getVersion("com.carrotsearch.console:launcher"))
+  }
+
   from(project.projectDir, {
     include 'src/**'
     exclude 'src/main/assembly/**'
@@ -32,7 +38,7 @@ task buildDistribution(type: Sync) {
   from(file("src/main/assembly"), {
     include '**/*'
     filteringCharset = 'UTF-8'
-    filter(ReplaceTokens, tokens: replaceTokens, beginToken: '${', endToken: '}')
+    filter(ExpandProperties, project: antPrj)
   })
 
   into "$buildDir/distribution"

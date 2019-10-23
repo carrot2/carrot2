@@ -14,10 +14,10 @@ repositories {
 }
 
 dependencies {
-  implementation "org.carrot2:carrot2-core:${versions.carrot2}"
-  testImplementation "org.carrot2.lang:carrot2-lang-polish:${versions.carrot2}"
-  testImplementation "org.carrot2.lang:carrot2-lang-lucene:${versions.carrot2}"
-  testImplementation "org.apache.lucene:lucene-analyzers-icu:${versions.lucene}"
-  testImplementation "junit:junit:${versions.junit}"
+  implementation "org.carrot2:carrot2-core:${product.version}"
+  testImplementation "org.carrot2.lang:carrot2-lang-polish:${product.version}"
+  testImplementation "org.carrot2.lang:carrot2-lang-lucene:${product.version}"
+  testImplementation "org.apache.lucene:lucene-analyzers-icu:${version.lucene-analyzers-icu}"
+  testImplementation "junit:junit:${version.junit}"
 }
 

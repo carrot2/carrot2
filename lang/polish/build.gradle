@@ -6,7 +6,7 @@ configurations {
 
 dependencies {
   implementation project(':core')
-  implementation "org.carrot2:morfologik-polish:${versions.morfologik}"
+  implementation "org.carrot2:morfologik-polish"
 
   langResources fileTree(dir: 'src/main/resources', includes: ['**/*.stopwords.utf8', '**/*.stoplabels.utf8'])
 }

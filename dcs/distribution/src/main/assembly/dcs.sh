@@ -52,5 +52,5 @@ for arg in "$@" ; do
 done
 
 # Launch DCS.
-eval $JAVA_CMD $DCS_OPTS -jar \"$SCRIPT_HOME/lib/@jarname@-@version@.jar\" "$all_args"
+eval $JAVA_CMD $DCS_OPTS -jar \"$SCRIPT_HOME/lib/dcs-launcher-${product.version}.jar\" "$all_args"
 exit $?

@@ -3,7 +3,22 @@ import java.time.*
 import java.time.temporal.*
 
 def now = ZonedDateTime.now().withFixedOffsetZone()
-ext.buildInstant = now.toInstant().toString()
-ext.buildDate = now.toString()
-ext.buildDateTrimmed = now.truncatedTo(ChronoUnit.HOURS)
+
+def buildDate = now.toString()
+def buildDateYear = now.getYear().toString()
+def buildDateTrimmed = now.truncatedTo(ChronoUnit.HOURS)
+
+rootProject.ext.replaceTokensTrigger = [
+    'product.name'     : rootProject.fullName,
+    'product.version'  : rootProject.version,
+    'product.gitrev'   : gitStatus.fullRev,
+    'product.buildDate': buildDateTrimmed,
+    'product.buildYear': buildDateYear,
+    'product.distType' : project.hasProperty("distType") ? distType : "",
+]
+
+ext.replaceTokens = [
+    *                     : replaceTokensTrigger,
+    "product.buildInstant": now.toInstant().toString(),
+]
 

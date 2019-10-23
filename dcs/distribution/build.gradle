@@ -1,8 +1,5 @@
 import org.apache.tools.ant.filters.*
 
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
-
 apply plugin: 'java'
 
 configurations {
@@ -20,14 +17,14 @@ configurations {
 dependencies {
   ctxService   project(path: ":dcs:contexts:service", configuration: 'war')
   ctxRoot      project(path: ":dcs:contexts:root", configuration: 'war')
-  ctxFrontend  project(path: ":dcs:contexts:frontend")
-  ctxDoc       project(path: ":doc")
+  ctxFrontend  project(path: ":dcs:contexts:frontend", configuration: 'archives')
+  ctxDoc       project(path: ":doc", configuration: 'archives')
 
   examples     project(path: ":dcs:examples", configuration: "distribution")
 
-  implementation "com.carrotsearch.console:launcher:${versions.console}"
-  implementation "org.eclipse.jetty:jetty-server:${versions.jetty}"
-  implementation "org.eclipse.jetty:jetty-webapp:${versions.jetty}"
+  implementation "com.carrotsearch.console:launcher"
+  implementation "org.eclipse.jetty:jetty-server"
+  implementation "org.eclipse.jetty:jetty-webapp"
 }
 
 ext {
@@ -37,12 +34,14 @@ ext {
 }
 
 jar {
-  manifest {
-    attributes("Main-Class": "com.carrotsearch.console.launcher.Launcher")
-    attributes("Class-Path": configurations.runtimeClasspath.collect { it.getName() }.join(' '))
-  }
-
   archiveBaseName = replaceTokens.jarname.toString()
+
+  doFirst {
+    manifest {
+      attributes("Main-Class": "com.carrotsearch.console.launcher.Launcher")
+      attributes("Class-Path": configurations.runtimeClasspath.collect { it.getName() }.join(' '))
+    }
+  }
 }
 
 task collectDependencies(type: Sync) {
@@ -53,28 +52,28 @@ task collectDependencies(type: Sync) {
 }
 
 task collectScripts(type: Sync) {
+  def antPrj = new org.apache.tools.ant.Project()
+  afterEvaluate {
+    replaceTokens.each { k, v -> antPrj.setProperty(k.toString(), v.toString()) }
+  }
+
+  inputs.properties replaceTokensTrigger
+
   from(files('src/main/assembly'), {
-    include "**/*.sh"
-    filteringCharset = 'UTF-8'
-    filter(ReplaceTokens, tokens: replaceTokens)
-    filter(FixCrLfFilter, eol: FixCrLfFilter.CrLf.LF)
-    fileMode 0755
-  })
-  from(files('src/main/assembly'), {
-    exclude "**/*.sh"
-    filteringCharset = 'UTF-8'
-    filter(ReplaceTokens, tokens: replaceTokens)
+    filesMatching(["dcs.sh"], {
+      filteringCharset = 'UTF-8'
+      filter(ExpandProperties, project: antPrj)
+      filter(FixCrLfFilter, eol: FixCrLfFilter.CrLf.newInstance("lf"))
+      fileMode 0755
+    })
+
+    filesMatching(["dcs.cmd"], {
+      filteringCharset = 'UTF-8'
+      filter(ExpandProperties, project: antPrj)
+    })
   })
 
   from legal
-
-  inputs.properties([
-    'version': replaceTokens.version,
-    'gitRev': gitRev,
-
-    // force refiltering every hour if nothing else changes.
-    'tstamp': LocalDateTime.now().truncatedTo(ChronoUnit.HOURS)
-  ])
 
   into "$outputDir"
   preserve {
@@ -86,7 +85,7 @@ task collectScripts(type: Sync) {
 
 task collectCtxService(type: Sync) {
   dependsOn configurations.ctxService
-  from zipTree(configurations.ctxService.asPath)
+  from { zipTree(configurations.ctxService.asPath) }
   into "$outputDir/web/service"
   preserve {
     include 'resources/'
@@ -95,7 +94,7 @@ task collectCtxService(type: Sync) {
 
 task collectCtxRoot(type: Sync) {
   dependsOn configurations.ctxRoot
-  from zipTree(configurations.ctxRoot.asPath)
+  from { zipTree(configurations.ctxRoot.asPath) }
   into "$outputDir/web/root"
 }
 

@@ -14,12 +14,12 @@ repositories {
 }
 
 dependencies {
-  implementation "org.carrot2:carrot2-core:${versions.carrot2}"
-  implementation "org.carrot2.dcs:carrot2-dcs-model:${versions.carrot2}"
+  implementation "org.carrot2:carrot2-core:${product.version}"
+  implementation "org.carrot2.dcs:carrot2-dcs-model:${product.version}"
 
-  implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
-  implementation "org.apache.httpcomponents:httpclient:${versions.httpclient}"
-  implementation "com.carrotsearch.console:launcher:${versions.console}"
+  implementation "com.fasterxml.jackson.core:jackson-databind:${version.jackson-databind}"
+  implementation "org.apache.httpcomponents:httpclient:${version.httpclient}"
+  implementation "com.carrotsearch.console:launcher:${version.launcher}"
 }
 
 jar {

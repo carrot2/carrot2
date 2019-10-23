@@ -7,7 +7,7 @@ configurations {
 dependencies {
   implementation project(':core')
   implementation project(':lang:lucene')
-  implementation "org.apache.lucene:lucene-analyzers-nori:${versions.lucene}"
+  implementation "org.apache.lucene:lucene-analyzers-nori"
 
   langResources fileTree(dir: 'src/main/resources', includes: ['**/*.stopwords.utf8', '**/*.stoplabels.utf8'])
 }

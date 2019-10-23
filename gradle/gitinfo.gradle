@@ -1,8 +1,3 @@
-
-//
-// git info
-//
-
 import org.eclipse.jgit.storage.file.*
 import org.eclipse.jgit.api.*;
 
@@ -20,17 +15,17 @@ buildscript {
 /** Return the current checkout's status. */
 def gitStatus(dir) {
   def status = [
-    abbrRev: "[unset]",
-    fullRev: "[unset]",
-    clean:   false,
-    branch:  "[unset]",
-    id:      "[unset]"
+      abbrRev: "[unset]",
+      fullRev: "[unset]",
+      clean  : false,
+      branch : "[unset]",
+      id     : "[unset]"
   ]
 
   try {
     def repo = new FileRepositoryBuilder()
-      .findGitDir(file(dir))
-      .build()
+        .findGitDir(file(dir))
+        .build()
     def git = new Git(repo);
     def head = repo.findRef("HEAD")
 
@@ -47,15 +42,15 @@ def gitStatus(dir) {
 
       logger.warn("Git status indicates dirty checkout (run with --info for verbose git status)")
       logger.info("Git status is: added={}, changed={}, conflicting={}, ignored={}, missing={}, modified={}, removed={}, untracked={}, untrackedFolders={}",
-        st.added, 
-        st.changed,
-        st.conflicting,
-        st.ignoredNotInIndex,
-        st.missing,
-        st.modified,
-        st.removed,
-        st.untracked,
-        st.untrackedFolders);
+          st.added,
+          st.changed,
+          st.conflicting,
+          st.ignoredNotInIndex,
+          st.missing,
+          st.modified,
+          st.removed,
+          st.untracked,
+          st.untrackedFolders);
     }
   } catch (Exception e) {
     throw e // Break the build if not under a repo.
