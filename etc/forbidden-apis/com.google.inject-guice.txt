@@ -1,0 +1,3 @@
+@defaultMessage Use PRODUCTION stage injectors
+com.google.inject.Guice#createInjector(com.google.inject.Module[])
+com.google.inject.Guice#createInjector(java.lang.Iterable)

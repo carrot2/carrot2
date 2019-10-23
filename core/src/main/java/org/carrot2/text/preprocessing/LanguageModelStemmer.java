@@ -15,6 +15,7 @@ import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.sorting.IndirectSort;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
@@ -215,7 +216,7 @@ final class LanguageModelStemmer {
     final Set<MutableCharArray> queryWords = new HashSet<>();
 
     if (query != null) {
-      final String[] split = query.toLowerCase().split("\\s");
+      final String[] split = query.toLowerCase(Locale.ROOT).split("\\s");
       for (int i = 0; i < split.length; i++) {
         final CharSequence stem = stemmer.stem(split[i]);
         if (stem != null) {

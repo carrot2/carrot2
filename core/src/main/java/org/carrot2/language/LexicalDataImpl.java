@@ -59,7 +59,8 @@ public final class LexicalDataImpl implements LexicalData {
       throws IOException {
     List<Pattern> stoplabels;
     try (InputStream is = loader.open(stoplabelsResource);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+        BufferedReader reader =
+            new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
       stoplabels = compile(readLines(reader));
     }
     return union(stoplabels);

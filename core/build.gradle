@@ -57,6 +57,7 @@ spotless {
 }
 
 javadoc {
+  exclude 'org/carrot2/math/mahout/**'
   exclude '**/nanojson/**'
   exclude '**/ExtendedWhitespaceTokenizerImpl*'
 }

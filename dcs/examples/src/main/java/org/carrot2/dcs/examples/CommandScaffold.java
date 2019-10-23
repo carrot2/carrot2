@@ -25,6 +25,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.carrot2.clustering.Cluster;
+import org.carrot2.util.SuppressForbidden;
 
 abstract class CommandScaffold extends Command<ExitCode> {
   public static final String ARG_DCS_URI = "--dcs";
@@ -80,6 +81,7 @@ abstract class CommandScaffold extends Command<ExitCode> {
     printClusters(clusters, "");
   }
 
+  @SuppressForbidden("Legitimate sysout to console.")
   private static <T> void printClusters(List<Cluster<T>> clusters, String indent) {
     for (Cluster<T> c : clusters) {
       System.out.println(indent + c);

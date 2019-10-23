@@ -24,8 +24,8 @@ apply from: file('gradle/buildinfo.gradle')
 apply from: file('gradle/java-defaults.gradle')
 apply from: file('gradle/spotless.gradle')
 
-// apply from: file("gradle/test-stats.gradle")
-// apply from: file("gradle/forbidden-apis.gradle")
+apply from: file("gradle/test-stats.gradle")
+apply from: file("gradle/forbidden-apis.gradle")
 
 ext {
   versions = [
@@ -82,28 +82,31 @@ subprojects {
       }
     }
 
-    javadoc {
-      exclude 'org/carrot2/math/mahout/**'
-    }
-
-    allprojects {
-      plugins.withType(WarPlugin) {
-        configurations {
-          war {}
-        }
-
-        artifacts {
-          war tasks.war
-        }
-
-        dependencies {
-          // TODO: a bug in palantir prevents versionless dependency here.
-          providedCompile "javax.servlet:javax.servlet-api:3.1.0"
-        }
-      }
+    tasks.withType(de.thetaphi.forbiddenapis.gradle.CheckForbiddenApis) {
+      suppressAnnotations += [
+        "org.carrot2.util.SuppressForbidden"
+      ]
     }
   }
 }
+
+allprojects {
+  plugins.withType(WarPlugin) {
+    configurations {
+      war {}
+    }
+
+    artifacts {
+      war tasks.war
+    }
+
+    dependencies {
+      // TODO: a bug in palantir prevents versionless dependency here.
+      providedCompile "javax.servlet:javax.servlet-api:3.1.0"
+    }
+  }
+}
+
 
 // Configure gradle projects
 
