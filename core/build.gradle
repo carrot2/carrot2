@@ -1,8 +1,9 @@
 
 apply plugin: 'java-library'
 
+apply from: rootProject.file("gradle/jflex.gradle")
+
 configurations {
-  jflex
   langResources
 }
 
@@ -10,45 +11,8 @@ dependencies {
   api "org.slf4j:slf4j-api"
   api "com.carrotsearch:hppc"
 
-  jflex "de.jflex:jflex"
-
   langResources fileTree(dir: 'src/main/resources', includes: ['**/*.stopwords.utf8', '**/*.stoplabels.utf8'])
 }
-
-sourceSets {
-  main {
-    java {
-      srcDirs = ["src/main/java", "src/main/java-jflex"]
-    }
-  }
-}
-
-task jflex {
-  def jflexSource = file('src/main/jflex').toPath()
-  def jflexTarget = file('src/main/java-jflex').toPath()
-
-  inputs.files(fileTree(dir: jflexSource, include: "**/*.jflex"))
-  outputs.dir(jflexTarget)
-
-  doLast {
-    inputs.files.forEach { path ->
-      def relative = jflexSource.relativize(path.toPath())
-
-      javaexec {
-        classpath {
-          configurations.jflex
-        }
-
-        main = "jflex.Main"
-        args "-nobak", "--noinputstreamctor"
-        args "-d", jflexTarget.resolve(relative.getParent())
-        args path
-      }
-    }
-  }
-}
-
-compileJava.dependsOn jflex
 
 spotless {
   java {

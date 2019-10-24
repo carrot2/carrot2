@@ -168,4 +168,16 @@ public class ExtendedWhitespaceTokenizerTest extends TokenizerTestBase {
 
     assertEqualTokens(test, tokens);
   }
+
+  @Test
+  public void uncommonPunctuation() {
+    String test = "foo·bar";
+    TokenImage[] tokens = {
+      new TokenImage("foo", Tokenizer.TT_TERM),
+      new TokenImage("·", Tokenizer.TT_PUNCTUATION | Tokenizer.TF_SEPARATOR_SENTENCE),
+      new TokenImage("bar", Tokenizer.TT_TERM),
+    };
+
+    assertEqualTokens(test, tokens);
+  }
 }

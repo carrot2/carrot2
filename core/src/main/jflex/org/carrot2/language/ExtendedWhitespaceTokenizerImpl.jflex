@@ -53,7 +53,7 @@ URL_PATH   = ([!*'();:@&=+$,/?%#_.~] | "-" | "[" | "]" | {LETTER} | {DIGIT})+
 
 {LETTER} "."                                                 { return Tokenizer.TT_TERM; }
 
-("." | "?" | "!" | ";" | [\u0964-\u0965] )+                  { return Tokenizer.TT_PUNCTUATION | Tokenizer.TF_SEPARATOR_SENTENCE; }
+("." | "?" | "!" | ";" | "·" | [\u0964-\u0965] )+            { return Tokenizer.TT_PUNCTUATION | Tokenizer.TF_SEPARATOR_SENTENCE; }
 
 {TERM} ( "-" {TERM})+                                        { return Tokenizer.TT_HYPHTERM; }
 
