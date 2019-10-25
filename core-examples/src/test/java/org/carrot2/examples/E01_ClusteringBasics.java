@@ -27,12 +27,18 @@ import org.junit.Test;
 public class E01_ClusteringBasics {
   @Test
   public void clusterDocumentStream() throws IOException {
-    // fragment-start{clustering-document-stream}
+    // fragment-start{setup-heavy-components}
     // Our documents are in English so we load appropriate language resources.
     // This call can be heavy and an instance of LanguageComponents should be
     // reused across different clustering calls.
     LanguageComponents languageComponents = LanguageComponents.load("English");
+    // fragment-end{setup-heavy-components}
 
+    // fragment-start{setup-lightweight-components}
+    LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
+    // fragment-end{setup-lightweight-components}
+
+    // fragment-start{clustering-document-stream}
     // Create a stream of "documents" for clustering.
     // Each such document provides text content fields to a visitor.
     Stream<Document> documentStream =
@@ -43,10 +49,10 @@ public class E01_ClusteringBasics {
                       fieldVisitor.accept("title", fields[1]);
                       fieldVisitor.accept("content", fields[2]);
                     });
+    // fragment-end{clustering-document-stream}
 
+    // fragment-start{clustering}
     // Perform clustering.
-    LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
-
     List<Cluster<Document>> clusters;
     clusters = algorithm.cluster(documentStream, languageComponents);
 
@@ -55,7 +61,7 @@ public class E01_ClusteringBasics {
       String label = String.join("; ", c.getLabels());
       System.out.println(label + ", documents: " + c.getDocuments().size());
     }
-    // fragment-end{clustering-document-stream}
+    // fragment-end{clustering}
   }
 
   @Test

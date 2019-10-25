@@ -1,0 +1,170 @@
+<article>
+  <h1>Getting started</h1>
+
+  <p>
+    This article will walk you through the basics of the Carrot<sup>2</sup> Java API.
+  </p>
+
+
+  <section id="dependencies">
+    <h2>Dependencies</h2>
+
+    <p>
+      Carrot<sup>2</sup> is a Java library (JAR) with artifacts published via
+      Maven Central repositories. The following JAR contains the core APIs,
+      language resources for English and the clustering algorithms:
+    </p>
+
+    <pre data-language="xml"><dependency>
+  <groupId>org.carrot2</groupId>
+  <artifactId>carrot2-core</artifactId>
+  <version>%PROJECT_VERSION%</version>
+</dependency></pre>
+
+    <p>
+      A corresponding Gradle dependency would look like this:
+    </p>
+
+    <pre data-language="groovy">implementation "org.carrot2:carrot2-core:%PROJECT_VERSION%"</pre>
+
+    <p>
+      Additional JARs may be required to cluster documents in languages other than English.
+      Please refer to <a href="non-english-content.html">this section</a> to see what's needed.
+    </p>
+
+    <p>
+      A binary Carrot<sup>2</sup> distribution, including all examples, is always available at
+      the project's <a href="https://github.com/carrot2/carrot2/releases">GitHub releases page</a>.
+    </p>
+  </section>
+
+
+  <section id="api-overview">
+    <h2>API workflow</h2>
+
+    <p>
+      Using Carrot<sup>2</sup> Java API consists of the following steps:
+    </p>
+
+    <ol>
+      <li>setting up heavy, thread-safe, reusable components (language dictionaries and auxiliary
+        resources),</li>
+      <li>setting up lightweight, per-thread components (algorithms),</li>
+      <li>preparing input documents and performing actual clustering.</li>
+    </ol>
+
+    <p class="warning">
+      Lightweight components can be created on-demand once the documents are ready so there is
+      some room for flexibility. Make sure to load and instantiate the heavy components once.
+    </p>
+  </section>
+
+
+  <section id="example-basics">
+    <h2>Clustering</h2>
+
+    <p>
+      The following example discusses the code from <code>E01_ClusteringBasics.java</code>
+      example. This shows just the key elements required to process a stream of documents
+      in English, without any parameter or language resource tuning.
+    </p>
+
+    <p>
+      First, let's load the default resources for the English language. The
+      loaded <code>LanguageComponents</code> instance is thread-safe and should be reused for
+      any subsequent calls to clustering algorithms.
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
+         data-fragment="setup-heavy-components"></pre>
+
+    <p>
+      Now it's time to create an instance of a clustering algorithm. Let's pick the Lingo
+      algorithm explicitly:
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
+         data-fragment="setup-lightweight-components"></pre>
+
+    <p>
+      Once we have the heavy and lightweight components initialized, we can assemble the input (a
+      stream of
+      <code>Document</code> instances) for clustering. Each document must implement a
+      method that presents the document's clusterable text fields to the algorithm. Each document
+      object implements a single-method visitor interface:
+    </p>
+
+    <pre data-embed="%CORE%/org/carrot2/clustering/Document.java"
+         data-fragment="visitor-method"></pre>
+
+    <p>
+      In this example we will feed field values from an array of search results contained in the
+      <code>ExamplesData</code> class:
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/ExamplesData.java"
+         data-fragment="search-results-array"></pre>
+
+    <p>
+      Converting these arrays into documents is easy enough with java streams (note we only map the
+      title
+      and the snippet, the URL is not really suitable for clustering so we omit it):
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
+         data-fragment="clustering-document-stream"></pre>
+
+    <p>
+      Everything is now ready to call the clustering algorithm and consume the result;
+      we print the top-level cluster labels and document counts to the console:
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
+         data-fragment="clustering"></pre>
+
+    <p>
+      When executed, this example should print something like this:
+    </p>
+
+    <pre data-language="none">Data Mining Software, documents: 13
+Knowledge Discovery, documents: 13
+Data Mining Process, documents: 12
+Data Mining Applications, documents: 11
+Data Mining Techniques, documents: 11</pre>
+  </section>
+
+  <section id="tweaking-attributes">
+    <h2>Tweaking parameters</h2>
+
+    <p>
+      Each clustering algorithm will have a different set of knobs to adjust its behavior.
+      All algorithms in Carrot<sup>2</sup> have public fields (documented in the generated JavaDoc
+      documentation) that allow direct changes of algorithm's settings. For example:
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E02_TweakingAttributes.java"
+         data-fragment="parameters"></pre>
+
+    <p>
+      Note that even simple attributes (like <code>wordDfThreshold</code> above) have to use
+      setter methods to modify their value. This is because arguments are validated early and
+      values out of range or otherwise incorrect will trigger exceptions at the exact moment they
+      are set in the code.
+    </p>
+
+    <p>
+      When an attribute is of a complex type (is an interface), the specific type needs
+      to be declared and configured in a separate variable as this code snippet shows:
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E02_TweakingAttributes.java"
+         data-fragment="complex-parameters"></pre>
+
+    <p>
+      Once an algorithm is configured it can be reused across many subsequent (sequential)
+      clustering calls. The <a href="multithreading.html">multithreading section</a> discusses
+      approaches to running algorithms in concurrent threads.
+    </p>
+  </section>
+
+</article>

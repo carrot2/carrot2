@@ -1,24 +1,29 @@
 {
   "chapters": [
     {
-      "title": "Getting started",
+      "title": "Overview",
       "articles": [
-        "getting-started",
-        "quick-start"
+        "hello-carrot2",
+        "algorithms"
       ]
     },
     {
-      "title": "Basic usage",
+      "title": "Java API",
+      "articles": [
+        "java-api-basics",
+        "tuning-resources"
+      ]
+    },
+    {
+      "title": "REST API",
       "articles": [
         "using-rest-api",
-        "using-java-api",
-        "customizing-stop-words"
+        "tuning-resources"
       ]
     },
     {
       "title": "Advanced topics",
       "articles": [
-        "choosing-algorithm",
         "tuning-clustering",
         "non-english-content",
         "solr-clustering-plugin",

@@ -18,6 +18,7 @@ import org.carrot2.clustering.Document;
  * A sample set of search results (URL, title, snippet) returned for the query <i>data mining</i>..
  */
 public final class ExamplesData {
+  // fragment-start{search-results-array}
   static final String[][] DOCUMENTS_DATA_MINING = {
     {
       "http://en.wikipedia.org/wiki/Data_mining",
@@ -26,6 +27,7 @@ public final class ExamplesData {
           + "of automatically "
           + "searching large stores of data for patterns."
     },
+    // fragment-end{search-results-array}
     {
       "http://www.ccsu.edu/datamining/resources.html",
       "CCSU - Data Mining",
