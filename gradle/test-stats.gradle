@@ -22,6 +22,14 @@ def allTests = []
 
 allprojects {
   tasks.withType(Test) { task ->
+    def tmpDir = file("${project.buildDir}/tmp/java-temp")
+
+    systemProperty("java.io.tmpdir", tmpDir)
+
+    doFirst {
+      tmpDir.mkdirs()
+    }
+
     afterTest { desc, result ->
       def duration = (result.getEndTime() - result.getStartTime())
 
