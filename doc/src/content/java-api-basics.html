@@ -1,5 +1,5 @@
 <article>
-  <h1>Getting started</h1>
+  <h1>Java API Basics</h1>
 
   <p>
     This article will walk you through the basics of the Carrot<sup>2</sup> Java API.
@@ -55,7 +55,8 @@
 
     <p class="warning">
       Lightweight components can be created on-demand once the documents are ready so there is
-      some room for flexibility. Make sure to load and instantiate the heavy components once.
+      some room for flexibility. <strong>Make sure to load and instantiate the heavy components
+      once</strong>.
     </p>
   </section>
 
@@ -90,8 +91,7 @@
       Once we have the heavy and lightweight components initialized, we can assemble the input (a
       stream of
       <code>Document</code> instances) for clustering. Each document must implement a
-      method that presents the document's clusterable text fields to the algorithm. Each document
-      object implements a single-method visitor interface:
+      method that presents its clusterable text fields to the algorithm.
     </p>
 
     <pre data-embed="%CORE%/org/carrot2/clustering/Document.java"
@@ -106,9 +106,10 @@
          data-fragment="search-results-array"></pre>
 
     <p>
-      Converting these arrays into documents is easy enough with java streams (note we only map the
-      title
-      and the snippet, the URL is not really suitable for clustering so we omit it):
+      Because the field visitor interface is a single method it can be implemented using a clusure.
+      We convert the above data array into document instances dynamically using java streams
+      (note we only map the title and the snippet, the URL is not really suitable for clustering
+      so we omit it).
     </p>
 
     <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
@@ -148,13 +149,13 @@ Data Mining Techniques, documents: 11</pre>
     <p>
       Note that even simple attributes (like <code>wordDfThreshold</code> above) have to use
       setter methods to modify their value. This is because arguments are validated early and
-      values out of range or otherwise incorrect will trigger exceptions at the exact moment they
+      values out of range (or otherwise incorrect) will trigger exceptions at the exact moment they
       are set in the code.
     </p>
 
     <p>
-      When an attribute is of a complex type (is an interface), the specific type needs
-      to be declared and configured in a separate variable as this code snippet shows:
+      When an attribute is of a complex type (is an interface), the concrete type variable can
+      be declared and configured prior to setting the final attribute:
     </p>
 
     <pre data-embed="%JAVA_EXAMPLES%/E02_TweakingAttributes.java"
@@ -167,4 +168,30 @@ Data Mining Techniques, documents: 11</pre>
     </p>
   </section>
 
+  <section id="enumerating-components">
+    <h2>Enumerating components dynamically</h2>
+
+    <p>
+      Carrot<sup>2</sup> components (algorithms, languages) are implemented as
+      service extension points. While they can be referenced directly with explicit class
+      names (like the <code>LingoClusteringAlgorithm</code> in examples above) we can also
+      enumerate and inspect their properties dynamically.
+    </p>
+    <p>
+      For example, the following code enumerates
+      all available algorithm providers, checks if the given algorithm supports the English language
+      and clusters (the same) stream of documents repeatedly.
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
+         data-fragment="algorithm-enumeration"></pre>
+
+    <p>
+      A similar service extension point exists for language component providers, this time
+      with a facade method simplifying enumeration of available languages even further:
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
+         data-fragment="language-enumeration"></pre>
+  </section>
 </article>

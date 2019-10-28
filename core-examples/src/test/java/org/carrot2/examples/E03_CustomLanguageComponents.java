@@ -24,18 +24,57 @@ import org.carrot2.language.*;
 import org.carrot2.language.extras.LuceneAnalyzerTokenizerAdapter;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.LabelFormatterImpl;
+import org.carrot2.util.ClassRelativeResourceLookup;
+import org.carrot2.util.ResourceLookup;
 import org.junit.Test;
 
-/** This example shows how to tweak clustering algorithm parameters, prior to clustering. */
+/** This example shows how to tweak language components prior to clustering. */
 public class E03_CustomLanguageComponents {
   @Test
   public void listAllAvailableLanguages() throws IOException {
     // Preprocessing components for several languages are provided in the Carrot2 distribution (and
     // in optional JAR libraries named carrot2-lang-*. These languages self-register with
     // LanguageComponents factory and can be enumerated, as shown here:
+
+    // fragment-start{language-enumeration}
     System.out.println(
-        "Language preprocessing components for the following languages are available:\n  "
+        "Language components for the following languages are available:\n  "
             + String.join(", ", LanguageComponents.languages()));
+    // fragment-end{language-enumeration}
+  }
+
+  @Test
+  public void listAllAvailableComponents() throws IOException {
+    // List all available languages and their provided components (interfaces).
+    // fragment-start{component-enumeration}
+    ServiceLoader<LanguageComponentsProvider> providers =
+        ServiceLoader.load(LanguageComponentsProvider.class);
+    for (LanguageComponentsProvider prov : providers) {
+      System.out.println("Provider class: " + prov.name());
+
+      for (String language : prov.languages()) {
+        System.out.println("  > " + language);
+        for (Class<?> componentClass : prov.load(language).keySet()) {
+          System.out.println("    Component: " + componentClass.getName());
+        }
+      }
+    }
+    // fragment-end{component-enumeration}
+  }
+
+  @Test
+  public void tweakDefaultEnglishResources() throws IOException {
+    // Sometimes the default resources are not sufficient or need to be tuned.
+    // fragment-start{custom-english-resources}
+    ResourceLookup resLookup = new ClassRelativeResourceLookup(E03_CustomLanguageComponents.class);
+    LanguageComponents custom = LanguageComponents.load("English", resLookup);
+    // fragment-end{custom-english-resources}
+
+    LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
+    algorithm.desiredClusterCount.set(10);
+    List<Cluster<Document>> clusters = algorithm.cluster(ExamplesData.documentStream(), custom);
+    System.out.println("Clusters:");
+    ExamplesCommon.printClusters(clusters);
   }
 
   @Test

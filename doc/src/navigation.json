@@ -11,7 +11,7 @@
       "title": "Java API",
       "articles": [
         "java-api-basics",
-        "tuning-resources"
+        "language-components"
       ]
     },
     {
@@ -25,9 +25,7 @@
       "title": "Advanced topics",
       "articles": [
         "tuning-clustering",
-        "non-english-content",
-        "solr-clustering-plugin",
-        "es-clustering-plugin"
+        "non-english-content"
       ]
     },
     {

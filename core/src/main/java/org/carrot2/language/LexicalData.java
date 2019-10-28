@@ -11,13 +11,12 @@
 package org.carrot2.language;
 
 /** Provides additional word and label filtering information for a given language. */
+// fragment-start{lexical-data}
 public interface LexicalData {
-  /**
-   * @return Return true if the provided term is common (meaningless). Such words are referred to as
-   *     "stop words" and are usually ignored in information retrieval tasks.
-   */
+  /** @return Return true if the provided term should be ignored in processing. */
   boolean ignoreWord(CharSequence word);
 
-  /** @return Return {@code true} if the label candidate should be ignored in processing. */
+  /** @return Return true if the label candidate should be ignored in processing. */
   boolean ignoreLabel(CharSequence labelCandidate);
 }
+// fragment-end{lexical-data}

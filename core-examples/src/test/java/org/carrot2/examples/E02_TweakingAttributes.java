@@ -49,6 +49,7 @@ public class E02_TweakingAttributes {
     LocalNonnegativeMatrixFactorizationFactory factorizationFactory =
         new LocalNonnegativeMatrixFactorizationFactory();
     factorizationFactory.factorizationQuality.set(FactorizationQuality.HIGH);
+
     algorithm.matrixReducer.factorizationFactory = factorizationFactory;
     // fragment-end{complex-parameters}
 
