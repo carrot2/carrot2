@@ -78,7 +78,7 @@ subprojects {
 
     if (!excludeTestsInfra.contains(project.path)) {
       dependencies {
-        testImplementation project(':test-infra')
+        testImplementation project(':infra:tests')
       }
     }
 

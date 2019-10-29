@@ -4,7 +4,7 @@ rootProject.name = 'carrot2'
 include 'core'
 include 'core-examples'
 
-include 'test-infra'
+include 'infra:tests'
 
 include 'lang:polish'
 include 'lang:lucene'
