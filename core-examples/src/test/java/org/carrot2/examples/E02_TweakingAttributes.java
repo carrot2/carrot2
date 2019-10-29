@@ -46,8 +46,7 @@ public class E02_TweakingAttributes {
     // interface, configuring it separately. Programming editors provide support for listing
     // all interface implementations, use it to inspect the possibilities.
     // fragment-start{complex-parameters}
-    LocalNonnegativeMatrixFactorizationFactory factorizationFactory =
-        new LocalNonnegativeMatrixFactorizationFactory();
+    var factorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
     factorizationFactory.factorizationQuality.set(FactorizationQuality.HIGH);
 
     algorithm.matrixReducer.factorizationFactory = factorizationFactory;

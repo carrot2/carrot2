@@ -59,8 +59,8 @@
     Let's take a look at how this is done first.
   </p>
 
-  <section>
-    <h2 id="tweaking-lexical-data-resources">Tweaking lexical data resources</h2>
+  <section id="tweaking-lexical-data-resources">
+    <h2>Tweaking lexical data resources</h2>
 
     <p>
       The <code>LexicalData</code> component is responsible
@@ -95,8 +95,10 @@ across
 
       <dt><i>lang</i>.stoplabels.utf8</dt>
       <dd>
-        A plain-text list of Java regular expression patterns to ignore. Each line contains exactly one expression
-        that, if it matches the input label, causes the label to be discarded and ignored during clustering. An example
+        A plain-text list of Java regular expression patterns to ignore. Each line contains exactly
+        one expression
+        that, if it matches the input label, causes the label to be discarded and ignored during
+        clustering. An example
         stop labels file could look like this:
         <pre>(?i)information (about|on).*
 (?i)(index|list) of.*
@@ -105,11 +107,13 @@ across
     </dl>
 
     <p>
-      <code>LanguageComponent</code> class has a variant of the
-      <code>load()</code> method that takes a custom resource lookup object
-      for loading external resources. We can load our modified resources using this facility without
-      touching any of the default components (it's a good idea to start rolling out custom resources
-      by copying the defaults from Carrot<sup>2</sup> JARs and modifying them).
+      The <code>LanguageComponent</code> class has a variant of the
+      <code>load()</code> method that takes a custom <code>ResourceLookup</code> object
+      for locating and loading external resources.
+      We can load our custom, modified resources using this facility without
+      touching any of the default components (it's a good idea to start tweaking custom resources
+      by first copying the defaults from Carrot<sup>2</sup> JARs and then modifying them in
+      the new location).
     </p>
 
     <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
@@ -119,5 +123,49 @@ across
       Once loaded, the <code>LanguageComponents</code> object is ready to be used for subsequent
       clustering calls.
     </p>
+  </section>
+
+  <section id="tweaking-components-directly">
+    <h2>Tweaking components directly</h2>
+
+    <p>
+      It may be (rarely) desirable to provide an entirely custom implementation of a given
+      preprocessing component. An instance of <code>LanguageComponents</code> class consists
+      of a set of components (interfaces) and suppliers providing implementations of these
+      interfaces. We can override any of these suppliers, creating a custom language preprocessing
+      pipeline.
+    </p>
+
+    <p>
+      As an example, let's modify the English pipeline with a custom word stemming component.
+      The supplier for this component always returns the same closure, converting the input to lower
+      case:
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
+         data-fragment="custom-stemmer"></pre>
+
+    <p>
+      We will also replace the default <code>LexicalData</code> implementation with simple custom
+      filtering based on code rules:
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
+           data-fragment="custom-lexical-data"></pre>
+
+    <p>
+      Note how the initialization of the <code>ignored</code> set is pulled out of the supplier.
+      The cost of setting up a heavy component (the supplier itself here) can be high but
+      once set up, suppliers should return instances of a given component quickly.
+    </p>
+
+    <p>
+      Once we have custom suppliers, overriding their default implementations
+      for English is trivial:
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
+         data-fragment="custom-overrides"></pre>
+
   </section>
 </article>

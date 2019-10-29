@@ -11,7 +11,8 @@
       "title": "Java API",
       "articles": [
         "java-api-basics",
-        "language-components"
+        "language-components",
+        "extension-points"
       ]
     },
     {

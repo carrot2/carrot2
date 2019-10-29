@@ -33,13 +33,11 @@ public class E04_Multithreading {
     LanguageComponents english = LanguageComponents.load("English");
 
     // Carrot2 components are *not* designed to be reused concurrently by multiple threads. A single
-    // algorithm or set of language components should only be used by one thread at a time.
+    // algorithm should only be used by one thread at a time.
     //
     // If multi-core concurrent clustering is needed, the application needs to guarantee the above
-    // property.
-    // The simplest way to achieve thread-safety is to create components on the fly and discard them
-    // after the
-    // clustering completes.
+    // property. The simplest way to achieve thread-safety is to create components on the fly and
+    // discard them after the clustering completes.
 
     Function<Stream<Document>, List<Cluster<Document>>> processor =
         (documentStream) -> {
@@ -58,9 +56,7 @@ public class E04_Multithreading {
 
     // Sometimes it may be more convenient to configure an algorithm instance and then create
     // a clone of it for each processor thread. This can be done with the default attribute
-    // visitor implementation fairly easily.
-    //
-    // Note that language components must still be provided on a per-thread basis.
+    // visitor that converts attributes to a map (and back).
 
     LingoClusteringAlgorithm preconfigured = new LingoClusteringAlgorithm();
     preconfigured.preprocessing.phraseDfThreshold.set(10);

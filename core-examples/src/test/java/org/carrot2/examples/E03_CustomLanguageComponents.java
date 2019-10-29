@@ -78,7 +78,7 @@ public class E03_CustomLanguageComponents {
   }
 
   @Test
-  public void tweakingEnglishStopwordsAndStemming() throws IOException {
+  public void overrideDefaultComponents() throws IOException {
     // There are language-specific components required for clustering and each algorithm may
     // require a different sub-set of these. Typically, algorithms will require
     // a tokenizer, a stemmer and a lexical resource provider.
@@ -87,48 +87,42 @@ public class E03_CustomLanguageComponents {
     // requirements. Here, we modify the stemmer and lexical data for the default English
     // component set, leaving any other components as they were originally defined for English.
 
-    LanguageComponents english = LanguageComponents.load("English");
-
-    // Pass-through of all suppliers to English defaults.
-    LinkedHashMap<Class<?>, Supplier<?>> componentSuppliers = new LinkedHashMap<>();
-    for (Class<?> clazz : english.components()) {
-      componentSuppliers.put(clazz, () -> english.get(clazz));
-    }
-
-    // Now override the suppliers of Stemmer and LexicalData interfaces. These suppliers should be
+    // We override the suppliers of Stemmer and LexicalData interfaces. These suppliers must be
     // thread-safe, but the instances of corresponding components will not be reused across threads.
 
-    // Override the Stemmer supplier.
-    componentSuppliers.put(
-        Stemmer.class,
-        (Supplier<Stemmer>) () -> (word) -> word.toString().toLowerCase(Locale.ROOT));
+    // fragment-start{custom-stemmer}
+    Supplier<Stemmer> stemmerSupplier;
+    stemmerSupplier = () -> (word) -> word.toString().toLowerCase(Locale.ROOT);
+    // fragment-end{custom-stemmer}
 
-    // Override the default lexical data.
-    LexicalData lexicalData =
-        new LexicalData() {
-          Set<String> ignored = new HashSet<>(Arrays.asList("from", "what"));
+    // fragment-start{custom-lexical-data}
+    final Set<String> ignored = new HashSet<>(Arrays.asList("from", "what"));
+    Supplier<LexicalData> lexicalDataSupplier =
+        () ->
+            new LexicalData() {
+              @Override
+              public boolean ignoreLabel(CharSequence candidate) {
+                // Ignore any label that has a substring 'data' in it.
+                return candidate.toString().toLowerCase(Locale.ROOT).contains("data");
+              }
 
-          @Override
-          public boolean ignoreLabel(CharSequence labelCandidate) {
-            // Ignore any label that has a substring 'data' in it; example.
-            return labelCandidate.toString().toLowerCase(Locale.ROOT).contains("data");
-          }
+              @Override
+              public boolean ignoreWord(CharSequence word) {
+                return word.length() <= 3 || ignored.contains(word.toString());
+              }
+            };
+    // fragment-end{custom-lexical-data}
 
-          @Override
-          public boolean ignoreWord(CharSequence word) {
-            return word.length() <= 3 || ignored.contains(word.toString());
-          }
-        };
-    componentSuppliers.put(LexicalData.class, () -> lexicalData);
-
-    // The custom set of language components can be reused for multiple clustering requests.
-    LanguageComponents customLanguage =
-        new LanguageComponents("English (customized)", componentSuppliers);
+    // fragment-start{custom-overrides}
+    LanguageComponents customized =
+        LanguageComponents.load("English")
+            .override(Stemmer.class, stemmerSupplier)
+            .override(LexicalData.class, lexicalDataSupplier);
+    // fragment-end{custom-overrides}
 
     LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
     algorithm.desiredClusterCount.set(10);
-    List<Cluster<Document>> clusters =
-        algorithm.cluster(ExamplesData.documentStream(), customLanguage);
+    List<Cluster<Document>> clusters = algorithm.cluster(ExamplesData.documentStream(), customized);
     System.out.println("Clusters:");
     ExamplesCommon.printClusters(clusters);
   }

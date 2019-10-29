@@ -48,7 +48,7 @@
 
     <ol>
       <li>setting up heavy, thread-safe, reusable components (language dictionaries and auxiliary
-        resources),</li>
+        resources combined in an instance of <code>LanguageComponents</code> class),</li>
       <li>setting up lightweight, per-thread components (algorithms),</li>
       <li>preparing input documents and performing actual clustering.</li>
     </ol>
@@ -91,14 +91,14 @@
       Once we have the heavy and lightweight components initialized, we can assemble the input (a
       stream of
       <code>Document</code> instances) for clustering. Each document must implement a
-      method that presents its clusterable text fields to the algorithm.
+      single method that presents its clusterable text fields to the algorithm:
     </p>
 
     <pre data-embed="%CORE%/org/carrot2/clustering/Document.java"
          data-fragment="visitor-method"></pre>
 
     <p>
-      In this example we will feed field values from an array of search results contained in the
+      In this example we will use hardcoded values from an array available in the
       <code>ExamplesData</code> class:
     </p>
 
@@ -108,23 +108,23 @@
     <p>
       Because the field visitor interface is a single method it can be implemented using a clusure.
       We convert the above data array into document instances dynamically using java streams
-      (note we only map the title and the snippet, the URL is not really suitable for clustering
-      so we omit it).
+      (note how we only expose the title and the snippet fields, the URL is omitted because
+      it is not really a clusterable text content).
     </p>
 
     <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
          data-fragment="clustering-document-stream"></pre>
 
     <p>
-      Everything is now ready to call the clustering algorithm and consume the result;
-      we print the top-level cluster labels and document counts to the console:
+      Everything is now ready to call the clustering algorithm and consume the result.
+      Here we just print the top-level cluster labels and document counts to the console:
     </p>
 
     <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
          data-fragment="clustering"></pre>
 
     <p>
-      When executed, this example should print something like this:
+      When executed, this example should result in this output:
     </p>
 
     <pre data-language="none">Data Mining Software, documents: 13
@@ -140,22 +140,25 @@ Data Mining Techniques, documents: 11</pre>
     <p>
       Each clustering algorithm will have a different set of knobs to adjust its behavior.
       All algorithms in Carrot<sup>2</sup> have public fields (documented in the generated JavaDoc
-      documentation) that allow direct changes of algorithm's settings. For example:
+      documentation) that allow direct changes of an algorithm's settings. For example:
     </p>
 
     <pre data-embed="%JAVA_EXAMPLES%/E02_TweakingAttributes.java"
          data-fragment="parameters"></pre>
 
     <p>
-      Note that even simple attributes (like <code>wordDfThreshold</code> above) have to use
+      Note that even primitive-type attributes (like <code>wordDfThreshold</code> above) have to use
       setter methods to modify their value. This is because arguments are validated early and
       values out of range (or otherwise incorrect) will trigger exceptions at the exact moment they
       are set in the code.
     </p>
 
     <p>
-      When an attribute is of a complex type (is an interface), the concrete type variable can
-      be declared and configured prior to setting the final attribute:
+      When an attribute's type is an interface, the concrete type variable can
+      be declared and configured prior to setting the final attribute. Local-variable
+      type inference (<code>var</code>) available from Java 10 on is useful to keep these
+      declaration compact and still have the compiler (and IDE) provide field suggestions upon
+      typing:
     </p>
 
     <pre data-embed="%JAVA_EXAMPLES%/E02_TweakingAttributes.java"
@@ -166,32 +169,5 @@ Data Mining Techniques, documents: 11</pre>
       clustering calls. The <a href="multithreading.html">multithreading section</a> discusses
       approaches to running algorithms in concurrent threads.
     </p>
-  </section>
-
-  <section id="enumerating-components">
-    <h2>Enumerating components dynamically</h2>
-
-    <p>
-      Carrot<sup>2</sup> components (algorithms, languages) are implemented as
-      service extension points. While they can be referenced directly with explicit class
-      names (like the <code>LingoClusteringAlgorithm</code> in examples above) we can also
-      enumerate and inspect their properties dynamically.
-    </p>
-    <p>
-      For example, the following code enumerates
-      all available algorithm providers, checks if the given algorithm supports the English language
-      and clusters (the same) stream of documents repeatedly.
-    </p>
-
-    <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
-         data-fragment="algorithm-enumeration"></pre>
-
-    <p>
-      A similar service extension point exists for language component providers, this time
-      with a facade method simplifying enumeration of available languages even further:
-    </p>
-
-    <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
-         data-fragment="language-enumeration"></pre>
   </section>
 </article>
