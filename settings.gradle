@@ -5,6 +5,7 @@ include 'core'
 include 'core-examples'
 
 include 'infra:tests'
+include 'infra:docattrs'
 
 include 'lang:polish'
 include 'lang:lucene'

@@ -10,31 +10,36 @@
  */
 package org.carrot2.attrs;
 
-import java.util.function.Consumer;
+import java.util.List;
 
 public class AttrInteger extends Attr<Integer> {
-  private AttrInteger(Integer value, Consumer<Integer> constraint, String label) {
+  private AttrInteger(
+      Integer value, List<? extends Constraint<? super Integer>> constraint, String label) {
     super(value, label, constraint);
   }
 
   public static class Builder extends BuilderScaffold<Integer> {
     public Builder min(int minInclusive) {
       addConstraint(
-          (v) -> {
-            if (v != null && v < minInclusive) {
-              throw new IllegalArgumentException("Value must be >= " + minInclusive + ": " + v);
-            }
-          });
+          Constraint.named(
+              "value >= " + minInclusive,
+              (v) -> {
+                if (v != null && v < minInclusive) {
+                  throw new IllegalArgumentException("Value must be >= " + minInclusive + ": " + v);
+                }
+              }));
       return this;
     }
 
     public Builder max(int maxInclusive) {
       addConstraint(
-          (v) -> {
-            if (v != null && v > maxInclusive) {
-              throw new IllegalArgumentException("Value must be <= " + maxInclusive + ": " + v);
-            }
-          });
+          Constraint.named(
+              "value <= " + maxInclusive,
+              (v) -> {
+                if (v != null && v > maxInclusive) {
+                  throw new IllegalArgumentException("Value must be <= " + maxInclusive + ": " + v);
+                }
+              }));
       return this;
     }
 

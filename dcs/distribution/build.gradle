@@ -28,13 +28,13 @@ dependencies {
 }
 
 ext {
-  replaceTokens.jarname = 'dcs-launcher'
+  jarname = 'dcs-launcher'
   outputDir = "$buildDir/dist"
   outputZip = "$buildDir/dist-zip"
 }
 
 jar {
-  archiveBaseName = replaceTokens.jarname.toString()
+  archiveBaseName = jarname.toString()
 
   doFirst {
     manifest {

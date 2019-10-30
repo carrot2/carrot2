@@ -10,11 +10,12 @@
  */
 package org.carrot2.attrs;
 
-import java.util.function.Consumer;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class AttrStringArray extends Attr<String[]> {
-  private AttrStringArray(String[] value, Consumer<String[]> constraint, String label) {
+  private AttrStringArray(
+      String[] value, List<? extends Constraint<? super String[]>> constraint, String label) {
     super(value, label, constraint);
   }
 

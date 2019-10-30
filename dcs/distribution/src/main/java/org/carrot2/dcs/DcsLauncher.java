@@ -11,6 +11,7 @@
 package org.carrot2.dcs;
 
 import com.carrotsearch.console.jcommander.Parameter;
+import com.carrotsearch.console.jcommander.Parameters;
 import com.carrotsearch.console.launcher.Command;
 import com.carrotsearch.console.launcher.ExitCode;
 import com.carrotsearch.console.launcher.ExitCodes;
@@ -32,6 +33,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+@Parameters(
+    commandNames = "launch-dcs",
+    commandDescription = "Launch the Document Clustering Server.")
 public class DcsLauncher extends Command<ExitCode> {
   public static final String DCS_HOME_SYSPROP = "dcs.home";
   public static final String ENV_SCRIPT_HOME = "SCRIPT_HOME";

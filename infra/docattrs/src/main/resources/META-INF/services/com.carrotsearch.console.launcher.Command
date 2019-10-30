@@ -1,0 +1,1 @@
+org.carrot2.infra.docattrs.WriteDescriptorsCommand

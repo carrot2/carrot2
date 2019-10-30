@@ -10,10 +10,11 @@
  */
 package org.carrot2.attrs;
 
-import java.util.function.Consumer;
+import java.util.List;
 
 public class AttrString extends Attr<String> {
-  private AttrString(String value, Consumer<String> constraint, String label) {
+  private AttrString(
+      String value, List<? extends Constraint<? super String>> constraint, String label) {
     super(value, label, constraint);
   }
 
