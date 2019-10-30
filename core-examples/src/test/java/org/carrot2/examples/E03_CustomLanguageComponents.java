@@ -108,7 +108,7 @@ public class E03_CustomLanguageComponents {
 
               @Override
               public boolean ignoreWord(CharSequence word) {
-                return word.length() <= 3 || ignored.contains(word.toString());
+                return word.length() < 4 || ignored.contains(word.toString());
               }
             };
     // fragment-end{custom-lexical-data}
