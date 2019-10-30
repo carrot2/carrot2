@@ -34,6 +34,7 @@ import org.carrot2.attrs.AliasMapper;
 import org.carrot2.attrs.ClassNameMapper;
 import org.carrot2.clustering.ClusteringAlgorithmProvider;
 import org.carrot2.internal.nanojson.JsonWriter;
+import org.carrot2.util.SuppressForbidden;
 
 @Parameters(
     commandNames = "write-descriptors",
@@ -122,6 +123,7 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
     return types;
   }
 
+  @SuppressForbidden("Legitimate sysout")
   private BiConsumer<Class<?>, String> getOutputConsumer() {
     if (output != null) {
       output = output.toAbsolutePath().normalize();
