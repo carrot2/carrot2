@@ -59,7 +59,9 @@ task yarnBuild(type: YarnTask) {
     inputs.file('package.json')
     inputs.file('yarn.lock')
 
-    outputs.dir(project.buildDir)
+    afterEvaluate {
+        outputs.dir(project.buildDir)
+    }
 
     args = ['build']
 }
