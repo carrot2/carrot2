@@ -23,26 +23,18 @@ import org.carrot2.attrs.AttrString;
 import org.carrot2.attrs.AttrStringArray;
 import org.carrot2.attrs.AttrVisitor;
 
-public class AttrTypeCollector implements AttrVisitor {
-
+class NestedTypeCollector implements AttrVisitor {
   private LinkedHashMap<Class<? extends AcceptingVisitor>, AcceptingVisitor> collectedTypes =
       new LinkedHashMap<>();
 
   @Override
   public <T extends AcceptingVisitor> void visit(String key, AttrObject<T> attr) {
-    visit(attr.get());
+    accept(attr.get());
   }
 
   @Override
   public <T extends AcceptingVisitor> void visit(String key, AttrObjectArray<T> attr) {
-    attr.get().forEach(this::visit);
-  }
-
-  public void visit(AcceptingVisitor value) {
-    if (!collectedTypes.containsKey(value.getClass())) {
-      collectedTypes.put(value.getClass(), value);
-      value.accept(this);
-    }
+    attr.get().forEach(this::accept);
   }
 
   public Collection<AcceptingVisitor> collectedTypes() {
@@ -77,5 +69,12 @@ public class AttrTypeCollector implements AttrVisitor {
   @Override
   public <T extends Enum<T>> void visit(String key, AttrEnum<T> attr) {
     // Ignore
+  }
+
+  void accept(AcceptingVisitor value) {
+    if (!collectedTypes.containsKey(value.getClass())) {
+      collectedTypes.put(value.getClass(), value);
+      value.accept(this);
+    }
   }
 }

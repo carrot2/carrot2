@@ -24,13 +24,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 import org.carrot2.attrs.AcceptingVisitor;
 import org.carrot2.attrs.AliasMapper;
+import org.carrot2.attrs.AliasMapperFactory;
 import org.carrot2.attrs.ClassNameMapper;
 import org.carrot2.clustering.ClusteringAlgorithmProvider;
 import org.carrot2.internal.nanojson.JsonWriter;
@@ -46,9 +47,14 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
   public boolean recursive;
 
   @Parameter(
-      names = {"--algorithms", "-a"},
-      description = "Generate descriptors for all available ClusteringAlgorithm implementations.")
+      names = {"--algorithms"},
+      description = "Collect types from all available ClusteringAlgorithm implementations.")
   public boolean algorithms;
+
+  @Parameter(
+      names = {"--aliases"},
+      description = "Collect types from all available class alias mappings.")
+  public boolean aliases;
 
   @Parameter(
       names = {"--directory", "-d"},
@@ -66,23 +72,18 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
     List<AcceptingVisitor> types = collectTypes();
 
     if (recursive) {
-      AttrTypeCollector typeCollector = new AttrTypeCollector();
-      types.forEach(typeCollector::visit);
+      NestedTypeCollector typeCollector = new NestedTypeCollector();
+      types.forEach(typeCollector::accept);
       types = new ArrayList<>(typeCollector.collectedTypes());
     }
 
+    List<Class<?>> typeClasses =
+        types.stream().map(AcceptingVisitor::getClass).collect(Collectors.toList());
+
     ClassNameMapper aliasMapper = AliasMapper.SPI_DEFAULTS;
+
     for (AcceptingVisitor v : types) {
-      LinkedHashMap<String, Object> classInfo = new LinkedHashMap<>();
-      classInfo.put("type", v.getClass().getName());
-      classInfo.put("type-alias", aliasMapper.toName(v));
-
-      Map<String, Object> attrInfos = new LinkedHashMap<>();
-      classInfo.put("attributes", attrInfos);
-
-      AttrInfoCollector visitor = new AttrInfoCollector(attrInfos);
-      v.accept(visitor);
-
+      Map<String, Object> classInfo = new AttrInfoCollector(aliasMapper, typeClasses).collect(v);
       String json = JsonWriter.indent("  ").string().object(classInfo).done();
       consumer.accept(v.getClass(), json);
     }
@@ -99,6 +100,21 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
       }
     }
 
+    if (aliases) {
+      for (AliasMapperFactory factory : ServiceLoader.load(AliasMapperFactory.class)) {
+        AliasMapper mapper = factory.mapper();
+        mapper
+            .aliases()
+            .forEach(
+                (key, alias) -> {
+                  Object value = mapper.fromName(key);
+                  if (value instanceof AcceptingVisitor) {
+                    types.add((AcceptingVisitor) value);
+                  }
+                });
+      }
+    }
+
     if (types.isEmpty()) {
       throw new ReportCommandException(
           "At least one type is required.", ExitCodes.ERROR_INVALID_ARGUMENTS);
@@ -106,21 +122,26 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
 
     for (String typeName : this.types) {
       try {
-        Class<?> clazz = Class.forName(typeName);
-        types.add(clazz.asSubclass(AcceptingVisitor.class).getDeclaredConstructor().newInstance());
+        types.add(getInstance(Class.forName(typeName).asSubclass(AcceptingVisitor.class)));
       } catch (ClassNotFoundException e) {
         throw new ReportCommandException(
             "Class not found: " + typeName, ExitCodes.ERROR_INVALID_ARGUMENTS);
-      } catch (InstantiationException
-          | InvocationTargetException
-          | NoSuchMethodException
-          | IllegalArgumentException
-          | IllegalAccessException e) {
-        throw new ReportCommandException(
-            "Class could not be instantiated: " + typeName, ExitCodes.ERROR_INVALID_ARGUMENTS, e);
       }
     }
     return types;
+  }
+
+  static <T> T getInstance(Class<T> clazz) {
+    try {
+      return clazz.getDeclaredConstructor().newInstance();
+    } catch (InstantiationException
+        | InvocationTargetException
+        | NoSuchMethodException
+        | IllegalArgumentException
+        | IllegalAccessException e) {
+      throw new ReportCommandException(
+          "Class could not be instantiated: " + clazz.getName(), ExitCodes.ERROR_INTERNAL, e);
+    }
   }
 
   @SuppressForbidden("Legitimate sysout")

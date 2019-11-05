@@ -27,6 +27,7 @@ task generateDescriptors(type: JavaExec) {
   main = 'org.carrot2.infra.docattrs.WriteDescriptorsCommand'
   args = [
     "--algorithms",
+    "--aliases",
     "--recursive",
     "--directory",
     descriptorsDir

@@ -5,6 +5,7 @@ apply from: rootProject.file("gradle/jflex.gradle")
 
 configurations {
   langResources
+  jsondoclet
 }
 
 dependencies {
@@ -12,6 +13,8 @@ dependencies {
   api "com.carrotsearch:hppc"
 
   langResources fileTree(dir: 'src/main/resources', includes: ['**/*.stopwords.utf8', '**/*.stoplabels.utf8'])
+
+  jsondoclet 'capital.scalable:spring-auto-restdocs-json-doclet-jdk9:2.0.5'
 }
 
 spotless {
@@ -24,4 +27,18 @@ javadoc {
   exclude 'org/carrot2/math/mahout/**'
   exclude '**/nanojson/**'
   exclude '**/ExtendedWhitespaceTokenizerImpl*'
+}
+
+task javadocJson(type: Javadoc, dependsOn: compileJava) {
+  options.encoding = 'UTF-8'
+  source = sourceSets.main.allJava
+  classpath = sourceSets.main.compileClasspath
+  destinationDir = file("${buildDir}/javadoc-json")
+
+  options.doclet = 'capital.scalable.restdocs.jsondoclet.ExtractDocumentationAsJsonDoclet'
+  options.memberLevel = JavadocMemberLevel.PACKAGE
+
+  doFirst {
+    options.docletpath = configurations.jsondoclet.toList()
+  }
 }

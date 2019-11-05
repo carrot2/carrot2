@@ -10,8 +10,14 @@
  */
 package org.carrot2.attrs;
 
-import java.util.*;
-import java.util.function.Predicate;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.ServiceLoader;
 import java.util.function.Supplier;
 
 public class AliasMapper implements ClassNameMapper {
@@ -23,22 +29,35 @@ public class AliasMapper implements ClassNameMapper {
 
   public static class Alias<T> {
     private final String name;
-    private final Predicate<Object> isInstanceOf;
+    private final Class<? extends T> exactClass;
     private final Supplier<T> supplier;
 
-    public Alias(String name, Predicate<Object> isInstanceOf, Supplier<T> supplier) {
+    public Alias(String name, Class<? extends T> clazz, Supplier<T> supplier) {
       this.name = name;
       this.supplier = supplier;
-      this.isInstanceOf = isInstanceOf;
+      this.exactClass = clazz;
+    }
+
+    boolean isInstanceOf(Object value) {
+      return exactClass.equals(value.getClass());
+    }
+
+    public Class<? extends T> ofClass() {
+      return exactClass;
     }
   }
 
   private final Map<String, Alias<?>> aliases = new LinkedHashMap<>();
 
+  public final Map<String, Alias<?>> aliases() {
+    return Collections.unmodifiableMap(aliases);
+  }
+
   public <T> AliasMapper alias(String alias, Class<? extends T> exactClass, Supplier<T> supplier) {
     Objects.requireNonNull(exactClass);
     Objects.requireNonNull(supplier);
-    alias(alias, new Alias<T>(alias, (ob) -> exactClass.equals(ob.getClass()), supplier));
+
+    alias(alias, new Alias<T>(alias, exactClass, supplier));
     return this;
   }
 
@@ -67,7 +86,7 @@ public class AliasMapper implements ClassNameMapper {
     Objects.requireNonNull(value);
     Optional<String> first =
         aliases.values().stream()
-            .filter(alias -> alias.isInstanceOf.test(value))
+            .filter(alias -> alias.isInstanceOf(value))
             .map(alias -> alias.name)
             .findFirst();
 
@@ -89,7 +108,7 @@ public class AliasMapper implements ClassNameMapper {
       String name = factory.name();
       factory
           .mapper()
-          .aliases
+          .aliases()
           .forEach(
               (key, alias) -> {
                 if (keyToFactoryName.containsKey(key)) {

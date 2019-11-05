@@ -1,0 +1,13 @@
+apply plugin: 'java-library'
+
+dependencies {
+  implementation "com.fasterxml.jackson.core:jackson-databind"
+}
+
+forbiddenApisMain {
+  bundledSignatures -= ['jdk-internal', 'jdk-non-portable', 'jdk-system-out']
+}
+
+forbiddenApisTest {
+  bundledSignatures -= ['jdk-internal', 'jdk-non-portable']
+}

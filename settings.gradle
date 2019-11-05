@@ -6,6 +6,7 @@ include 'core-examples'
 
 include 'infra:tests'
 include 'infra:docattrs'
+include 'infra:jsondoclet'
 
 include 'lang:polish'
 include 'lang:lucene'
