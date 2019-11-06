@@ -29,11 +29,11 @@ class PreprocessingContextBuilder {
     this(CachedLangComponents.loadCached("English"));
   }
 
-  public PreprocessingContext buildContext(BasicPreprocessingPipeline pipeline) {
+  public PreprocessingContext buildContext(ContextPreprocessor pipeline) {
     return pipeline.preprocess(documents.stream(), null, languageComponents);
   }
 
-  public PreprocessingContextAssert buildContextAssert(BasicPreprocessingPipeline pipeline) {
+  public PreprocessingContextAssert buildContextAssert(ContextPreprocessor pipeline) {
     return PreprocessingContextAssert.assertThat(buildContext(pipeline));
   }
 

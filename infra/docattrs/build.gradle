@@ -7,6 +7,7 @@ configurations {
 dependencies {
   implementation project(":core")
   implementation "com.carrotsearch.console:launcher"
+  implementation "com.fasterxml.jackson.core:jackson-databind"
 }
 
 ext {
@@ -26,9 +27,6 @@ task generateDescriptors(type: JavaExec) {
   classpath = sourceSets.main.runtimeClasspath
   main = 'org.carrot2.infra.docattrs.WriteDescriptorsCommand'
   args = [
-    "--algorithms",
-    "--aliases",
-    "--recursive",
     "--directory",
     descriptorsDir
   ]
