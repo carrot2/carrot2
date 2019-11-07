@@ -10,7 +10,6 @@
  */
 package org.carrot2.infra.docattrs;
 
-import com.carrotsearch.jsondoclet.model.FieldDocs;
 import com.carrotsearch.jsondoclet.model.JavaDocs;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
