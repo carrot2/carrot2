@@ -11,17 +11,20 @@
 package com.carrotsearch.jsondoclet;
 
 import com.carrotsearch.jsondoclet.OptionImpl.SingleArgumentOption;
-import com.sun.source.doctree.DocCommentTree;
-import com.sun.source.util.DocTrees;
+import com.carrotsearch.jsondoclet.model.ClassDocs;
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementVisitor;
-import javax.lang.model.util.Elements;
-import javax.lang.model.util.SimpleElementVisitor9;
 import javax.tools.Diagnostic.Kind;
 import jdk.javadoc.doclet.Doclet;
 import jdk.javadoc.doclet.DocletEnvironment;
@@ -64,47 +67,43 @@ public class JsonDoclet implements Doclet {
       return false;
     }
 
-    Elements elementUtils = environment.getElementUtils();
-    DocTrees docTrees = environment.getDocTrees();
+    Path outputDirectory = outputDirectoryOption.getValue().toAbsolutePath().normalize();
+    if (!Files.isDirectory(outputDirectory)) {
+      reporter.print(Kind.ERROR, "Output directory does not exist: " + outputDirectory);
+      return false;
+    }
 
-    for (Element element : environment.getIncludedElements()) {
-      System.out.println("-- " + element.getSimpleName());
-      ElementVisitor<Void, Void> visitor =
-          new SimpleElementVisitor9<>() {
-            int nesting = 0;
+    Context context = new Context();
+    context.reporter = reporter;
+    context.docTrees = environment.getDocTrees();
+    context.elements = environment.getElementUtils();
+    context.env = environment;
 
-            @Override
-            protected Void defaultAction(Element e, Void aVoid) {
-              if (isIncluded(e)) {
-                print(e);
-                nesting++;
-                e.getEnclosedElements().forEach(child -> child.accept(this, aVoid));
-                nesting--;
-              }
-              return null;
-            }
+    environment.getIncludedElements().stream()
+        .filter(element -> element.getKind().isClass())
+        .forEach(element -> element.accept(new ClassDocsVisitor(), context));
 
-            private void print(Element e) {
-              System.out.format(
-                  Locale.ROOT,
-                  "%" + (nesting + 1) + "s %s, %s\n",
-                  "",
-                  e.getSimpleName(),
-                  e.getKind());
+    DefaultPrettyPrinter pp = new DefaultPrettyPrinter();
+    pp.indentArraysWith(new DefaultIndenter("  ", DefaultIndenter.SYS_LF));
 
-              if (e.getKind().isField()) {
-                System.out.println("# " + e.asType().toString());
-              }
+    ObjectMapper om =
+        new ObjectMapper()
+            .configure(SerializationFeature.INDENT_OUTPUT, true)
+            .setDefaultPrettyPrinter(pp);
 
-              DocCommentTree docCommentTree = docTrees.getDocCommentTree(e);
-              if (docCommentTree != null) {}
-            }
-
-            private boolean isIncluded(Element e) {
-              return environment.isIncluded(e);
-            }
-          };
-      element.accept(visitor, null);
+    for (ClassDocs classDocs : context.classDocs.values()) {
+      Path output = outputDirectory.resolve(classDocs.type + ".json");
+      try (Writer w = Files.newBufferedWriter(output, StandardCharsets.UTF_8)) {
+        om.writeValue(w, classDocs);
+      } catch (IOException e) {
+        reporter.print(
+            Kind.ERROR,
+            "Could not extract or save documentation for type: "
+                + classDocs.type
+                + ", reason: "
+                + e);
+        return false;
+      }
     }
 
     return true;

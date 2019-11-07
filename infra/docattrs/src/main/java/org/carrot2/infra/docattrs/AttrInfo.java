@@ -10,6 +10,8 @@
  */
 package org.carrot2.infra.docattrs;
 
+import com.carrotsearch.jsondoclet.model.FieldDocs;
+import com.carrotsearch.jsondoclet.model.JavaDocs;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,7 +20,15 @@ import java.util.List;
 import java.util.Map;
 import org.carrot2.attrs.Attr;
 
-@JsonPropertyOrder({"description", "type", "value", "constraints", "path"})
+@JsonPropertyOrder({
+  "description",
+  "type",
+  "value",
+  "constraints",
+  "path",
+  "javadoc",
+  "implementations"
+})
 @JsonInclude(Include.NON_NULL)
 public class AttrInfo {
   transient Attr<?> attr;
@@ -31,4 +41,8 @@ public class AttrInfo {
   @JsonProperty public String path;
 
   @JsonProperty public Map<String, ClassInfo> implementations;
+
+  // Imported from the doclet-generated data model.
+
+  @JsonProperty public JavaDocs javadoc;
 }

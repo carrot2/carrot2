@@ -2,12 +2,16 @@ apply plugin: 'java'
 
 configurations {
   descriptors
+  jsonJavadocs
 }
 
 dependencies {
   implementation project(":core")
+  implementation project(":infra:jsondoclet-model")
   implementation "com.carrotsearch.console:launcher"
   implementation "com.fasterxml.jackson.core:jackson-databind"
+
+  jsonJavadocs project(path: ":core", configuration: "jsonJavadocs")
 }
 
 ext {
@@ -31,10 +35,16 @@ task generateDescriptors(type: JavaExec) {
     descriptorsDir
   ]
 
+  inputs.files configurations.jsonJavadocs
   inputs.files configurations.runtimeClasspath
   outputs.dir descriptorsDir
 
   doFirst {
+    args += [
+      "--javadoc",
+      configurations.jsonJavadocs.singleFile
+    ]
+
     project.delete(descriptorsDir)
     descriptorsDir.mkdirs()
   }
@@ -45,5 +55,3 @@ artifacts {
     builtBy generateDescriptors
   }
 }
-
-assemble.dependsOn generateDescriptors

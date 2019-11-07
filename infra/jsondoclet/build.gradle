@@ -1,7 +1,7 @@
 apply plugin: 'java-library'
 
 dependencies {
-  implementation "com.fasterxml.jackson.core:jackson-databind"
+  implementation project(":infra:jsondoclet-model")
 }
 
 forbiddenApisMain {

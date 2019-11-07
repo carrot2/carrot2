@@ -15,6 +15,7 @@ import com.carrotsearch.randomizedtesting.RandomizedTest;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -23,7 +24,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.tools.DocumentationTool;
 import javax.tools.DocumentationTool.DocumentationTask;
 import javax.tools.JavaFileObject;
@@ -31,12 +34,27 @@ import javax.tools.SimpleJavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
+import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
 import org.junit.Test;
 
-public class TestDoclet extends TestBase {
+public class TestJsonDoclet extends TestBase {
   @Test
-  public void testSample1() throws IOException {
+  public void testSample01() throws IOException {
+    Map<String, String> files = process("Sample01.java");
+    Assertions.assertThat(files).containsOnlyKeys("com.carrotsearch.jsondoclet.Sample01.json");
+    Assertions.assertThat(files.get("com.carrotsearch.jsondoclet.Sample01.json"))
+        .isEqualToIgnoringWhitespace(resourceString("Sample01.json"));
+  }
+
+  @Test
+  public void testSample02() throws IOException {
+    Map<String, String> files = process("Sample02.java");
+    Assertions.assertThat(files.get("com.carrotsearch.jsondoclet.Sample02.json"))
+        .isEqualToIgnoringWhitespace(resourceString("Sample02.json"));
+  }
+
+  private Map<String, String> process(String... resources) throws IOException {
     DocumentationTool javadoc = ToolProvider.getSystemDocumentationTool();
 
     Path output = RandomizedTest.newTempDir(LifecycleScope.TEST);
@@ -48,22 +66,33 @@ public class TestDoclet extends TestBase {
       fm.setLocation(StandardLocation.CLASS_OUTPUT, List.of(classes.toFile()));
       fm.setLocation(StandardLocation.CLASS_PATH, Collections.emptyList());
 
-      List<SimpleJavaFileObject> compilationUnits = javaFiles("Sample1.java", "Sample2.java");
+      List<SimpleJavaFileObject> compilationUnits = javaFiles(resources);
 
       try (StringWriter sw = new StringWriter();
           PrintWriter pw = new PrintWriter(sw)) {
-        Iterable<String> options = Arrays.asList("-d", docs.toAbsolutePath().toString());
-        Class<?> docletClass = JsonDoclet.class;
-        DocumentationTask t = javadoc.getTask(pw, fm, null, docletClass, options, compilationUnits);
 
-        boolean ok = t.call();
+        Iterable<String> options = Arrays.asList("-d", docs.toAbsolutePath().toString());
+
+        DocumentationTask t =
+            javadoc.getTask(pw, fm, null, JsonDoclet.class, options, compilationUnits);
 
         pw.flush();
-        String out = sw.toString().replaceAll("[\r\n]+", "\n");
-        System.out.println(out);
 
-        if (!ok) {
-          throw new RuntimeException("There have been processing errors.");
+        boolean ok = t.call();
+        System.out.println(sw.toString());
+        Assertions.assertThat(ok).isTrue();
+
+        try (Stream<Path> s = Files.list(docs)) {
+          return s.collect(
+              Collectors.toMap(
+                  e -> e.getFileName().toString(),
+                  e -> {
+                    try {
+                      return Files.readString(e, StandardCharsets.UTF_8);
+                    } catch (IOException ex) {
+                      throw new UncheckedIOException(ex);
+                    }
+                  }));
         }
       }
     }
@@ -75,7 +104,7 @@ public class TestDoclet extends TestBase {
         .collect(Collectors.toList());
   }
 
-  static class JavaSourceAsResource extends SimpleJavaFileObject {
+  private static class JavaSourceAsResource extends SimpleJavaFileObject {
     private final String content;
 
     JavaSourceAsResource(String fileName, String content) {

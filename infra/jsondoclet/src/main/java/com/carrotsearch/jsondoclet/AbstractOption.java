@@ -104,7 +104,9 @@ abstract class OptionImpl<T> implements Doclet.Option {
 
   @Override
   public final boolean process(String option, List<String> arguments) {
-    return process0(option, arguments.stream().map(argConvert).collect(Collectors.toList()));
+    return process0(
+        option,
+        arguments.stream().limit(getArgumentCount()).map(argConvert).collect(Collectors.toList()));
   }
 
   protected abstract boolean process0(String option, List<T> args);

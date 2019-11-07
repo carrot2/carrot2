@@ -8,21 +8,16 @@
  * in the root folder of the repository checkout or at:
  * https://www.carrot2.org/carrot2.LICENSE
  */
-package org.carrot2.infra.docattrs;
+package com.carrotsearch.jsondoclet.model;
 
-import com.carrotsearch.jsondoclet.model.JavaDocs;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@JsonPropertyOrder({"name", "type", "javadoc"})
-public class ClassInfo {
-  @JsonProperty public String name;
+public class ClassDocs {
   @JsonProperty public String type;
-  @JsonProperty public Map<String, AttrInfo> attributes = new LinkedHashMap<>();
-
-  // Imported from the doclet-generated data model.
 
   @JsonProperty public JavaDocs javadoc;
+
+  @JsonProperty public Map<String, FieldDocs> fields = new LinkedHashMap<>();
 }

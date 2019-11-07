@@ -13,13 +13,15 @@ allprojects {
   }
 
   tasks.withType(Javadoc) {
+    options.encoding = 'UTF-8'
+  }
+
+  tasks.matching { it.name == "javadoc" }.all {
     title = "${project.name} ${project.version} API Documentation"
 
     if (JavaVersion.current().isJava9Compatible()) {
       options.addBooleanOption('html5', true)
       options.addStringOption('Xdoclint:all,-missing', '-noindex')
     }
-
-    options.encoding = 'UTF-8'
   }
 }
