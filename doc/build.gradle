@@ -27,3 +27,4 @@ task collectDescriptors(type: Sync) {
 }
 
 yarnBuild.dependsOn collectDescriptors
+

@@ -59,9 +59,7 @@ task yarnBuild(type: YarnTask) {
     inputs.file('package.json')
     inputs.file('yarn.lock')
 
-    afterEvaluate {
-        outputs.dir(project.buildDir)
-    }
+    outputs.dir { project.buildDir }
 
     args = ['build']
 }
@@ -73,7 +71,7 @@ task fastBuild {
 }
 
 artifacts {
-    archives project.buildDir, {
+    archives provider { project.buildDir }, {
         if (project.hasProperty("fast")) {
             builtBy fastBuild
         } else {
