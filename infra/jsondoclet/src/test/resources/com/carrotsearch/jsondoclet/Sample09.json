@@ -1,0 +1,8 @@
+{
+  "type" : "com.carrotsearch.jsondoclet.Sample09",
+  "javadoc" : {
+    "text" : "Code: <code>block: 2 + 2 &gt; 3. @</code>.\n\n <p>Literal: block: 2 + 2 &gt; 3. @.",
+    "summary" : "Code: <code>block: 2 + 2 &gt; 3. @</code>."
+  },
+  "fields" : { }
+}

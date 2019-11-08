@@ -47,20 +47,18 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
 
   /**
    * Maximum word document frequency. The maximum document frequency allowed for words as a fraction
-   * of all documents. Words with document frequency larger than <code>maxWordDf</code> will be
-   * ignored. For example, when <code>maxWordDf</code> is <code>0.4</code>, words appearing in more
-   * than 40% of documents will be be ignored. A value of <code>1.0</code> means that all words will
-   * be taken into account, no matter in how many documents they appear.
+   * of all documents. Words with document frequency larger than {@link #maxWordDf} will be ignored.
+   * For example, when {@link #maxWordDf} is 0.4, words appearing in more than 40% of documents will
+   * be be ignored. A value of 1.0 means that all words will be taken into account, no matter in how
+   * many documents they appear.
    *
    * <p>This attribute may be useful when certain words appear in most of the input documents (e.g.
    * company name from header or footer) and such words dominate the cluster labels. In such case,
-   * setting <code>maxWordDf</code> to a value lower than <code>1.0</code>, e.g. <code>0.9</code>
-   * may improve the clusters.
+   * setting it to a value lower than 1.0 (e.g. 0.9) may improve the clusters.
    *
    * <p>Another useful application of this attribute is when there is a need to generate only very
-   * specific clusters, i.e. clusters containing small numbers of documents. This can be achieved by
-   * setting <code>maxWordDf</code> to extremely low values, e.g. <code>0.1</code> or <code>0.05
-   * </code>.
+   * specific clusters, that is clusters containing small numbers of documents. This can be achieved
+   * by setting {@link #maxWordDf} to extremely low values: 0.1 or 0.05.
    */
   public final AttrDouble maxWordDf =
       attributes.register(
@@ -84,7 +82,7 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
   }
 
   /**
-   * Builds a term document matrix from data provided in the <code>context</code>, stores the result
+   * Builds a term-document matrix from data provided in the <code>context</code>, stores the result
    * in there.
    */
   public void buildTermDocumentMatrix(VectorSpaceModelContext vsmContext) {

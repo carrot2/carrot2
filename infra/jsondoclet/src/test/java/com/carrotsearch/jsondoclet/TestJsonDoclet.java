@@ -82,6 +82,11 @@ public class TestJsonDoclet extends TestBase {
     checkSample("Sample08");
   }
 
+  @Test
+  public void testSample09_code() throws IOException {
+    checkSample("Sample09");
+  }
+
   private Map<String, String> checkSample(String name) throws IOException {
     Map<String, String> files = process(name + ".java");
     Assertions.assertThat(files.get("com.carrotsearch.jsondoclet." + name + ".json"))

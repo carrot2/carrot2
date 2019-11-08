@@ -88,11 +88,11 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
       attributes.register("queryHint", SharedInfrastructure.queryHintAttribute());
 
   /**
-   * Use dimensionality reduction. If <code>true</code>, k-means will be applied on the
+   * Use dimensionality reduction. If {@code true}, k-means will be applied on the
    * dimensionality-reduced term-document matrix with the number of dimensions being equal to twice
    * the number of requested clusters. If the number of dimensions is lower than the number of input
-   * documents, reduction will not be performed. If <code>false</code>, the k-means will be
-   * performed directly on the original term-document matrix.
+   * documents, reduction will not be performed. If {@code false}, the k-means will be performed
+   * directly on the original term-document matrix.
    */
   public final AttrBoolean useDimensionalityReduction =
       attributes.register(
@@ -123,7 +123,9 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
             .defaultValue(TermDocumentMatrixReducer::new));
   }
 
-  /** Preprocessing pipeline. */
+  /**
+   * A pipeline of components transforming input documents into a {@linkplain PreprocessingContext}.
+   */
   public BasicPreprocessingPipeline preprocessing;
 
   {
