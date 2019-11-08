@@ -12,6 +12,7 @@ package com.carrotsearch.jsondoclet;
 
 import com.carrotsearch.randomizedtesting.LifecycleScope;
 import com.carrotsearch.randomizedtesting.RandomizedTest;
+import com.carrotsearch.randomizedtesting.annotations.TestCaseOrdering;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -38,20 +39,54 @@ import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
 import org.junit.Test;
 
+@TestCaseOrdering(TestCaseOrdering.AlphabeticOrder.class)
 public class TestJsonDoclet extends TestBase {
   @Test
   public void testSample01() throws IOException {
-    Map<String, String> files = process("Sample01.java");
+    Map<String, String> files = checkSample("Sample01");
     Assertions.assertThat(files).containsOnlyKeys("com.carrotsearch.jsondoclet.Sample01.json");
-    Assertions.assertThat(files.get("com.carrotsearch.jsondoclet.Sample01.json"))
-        .isEqualToIgnoringWhitespace(resourceString("Sample01.json"));
   }
 
   @Test
   public void testSample02() throws IOException {
-    Map<String, String> files = process("Sample02.java");
-    Assertions.assertThat(files.get("com.carrotsearch.jsondoclet.Sample02.json"))
-        .isEqualToIgnoringWhitespace(resourceString("Sample02.json"));
+    checkSample("Sample02");
+  }
+
+  @Test
+  public void testSample03_classLink() throws IOException {
+    checkSample("Sample03");
+  }
+
+  @Test
+  public void testSample04_fieldLink() throws IOException {
+    checkSample("Sample04");
+  }
+
+  @Test
+  public void testSample05_interfaceLink() throws IOException {
+    checkSample("Sample05");
+  }
+
+  @Test
+  public void testSample06_method() throws IOException {
+    checkSample("Sample06");
+  }
+
+  @Test
+  public void testSample07_linkplain() throws IOException {
+    checkSample("Sample07");
+  }
+
+  @Test
+  public void testSample08_linklabel() throws IOException {
+    checkSample("Sample08");
+  }
+
+  private Map<String, String> checkSample(String name) throws IOException {
+    Map<String, String> files = process(name + ".java");
+    Assertions.assertThat(files.get("com.carrotsearch.jsondoclet." + name + ".json"))
+        .isEqualToIgnoringWhitespace(resourceString(name + ".json"));
+    return files;
   }
 
   private Map<String, String> process(String... resources) throws IOException {

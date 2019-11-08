@@ -11,7 +11,7 @@ dependencies {
   implementation "com.carrotsearch.console:launcher"
   implementation "com.fasterxml.jackson.core:jackson-databind"
 
-  jsonJavadocs project(path: ":core", configuration: "jsonJavadocs")
+  jsonJavadocs project(path: ":core", configuration: "jsonJavadoc")
 }
 
 ext {
@@ -32,7 +32,8 @@ task generateDescriptors(type: JavaExec) {
   main = 'org.carrot2.infra.docattrs.WriteDescriptorsCommand'
   args = [
     "--directory",
-    descriptorsDir
+    descriptorsDir,
+    "--verbose"
   ]
 
   inputs.files configurations.jsonJavadocs

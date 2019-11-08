@@ -15,9 +15,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.carrot2.attrs.AcceptingVisitor;
 
 @JsonPropertyOrder({"name", "type", "javadoc"})
 public class ClassInfo {
+  transient Class<? extends AcceptingVisitor> clazz;
+
   @JsonProperty public String name;
   @JsonProperty public String type;
   @JsonProperty public Map<String, AttrInfo> attributes = new LinkedHashMap<>();

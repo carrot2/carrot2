@@ -10,15 +10,29 @@
  */
 package org.carrot2.infra.docattrs;
 
+import java.util.HashMap;
 import org.carrot2.attrs.AcceptingVisitor;
 import org.carrot2.attrs.ClassNameMapper;
 
 public class ClassInfoCollector {
-  public static ClassInfo collect(AcceptingVisitor c, ClassNameMapper aliasMapper) {
-    final ClassInfo ci = new ClassInfo();
-    ci.name = aliasMapper.toName(c);
-    ci.type = c.getClass().getName();
-    c.accept(new AttrInfoCollector(ci.attributes, aliasMapper));
-    return ci;
+  private final ClassNameMapper aliasMapper;
+  private HashMap<Class<? extends AcceptingVisitor>, ClassInfo> collected = new HashMap<>();
+
+  public ClassInfoCollector(ClassNameMapper aliasMapper) {
+    this.aliasMapper = aliasMapper;
+  }
+
+  public ClassInfo collect(AcceptingVisitor c) {
+    return collected.computeIfAbsent(
+        c.getClass(),
+        (key) -> {
+          final ClassInfo ci = new ClassInfo();
+          ci.clazz = c.getClass();
+          ci.name = aliasMapper.toName(c);
+          ci.type = c.getClass().getName();
+
+          c.accept(new AttrInfoCollector(ci.attributes, aliasMapper));
+          return ci;
+        });
   }
 }

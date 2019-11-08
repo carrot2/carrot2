@@ -1,0 +1,8 @@
+{
+  "type" : "com.carrotsearch.jsondoclet.Sample08",
+  "javadoc" : {
+    "text" : "Labeled link: <code><!-- com.carrotsearch.jsondoclet.Sample08 -->foo bar</code>.",
+    "summary" : "Labeled link: <code><!-- com.carrotsearch.jsondoclet.Sample08 -->foo bar</code>."
+  },
+  "fields" : { }
+}

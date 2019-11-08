@@ -12,7 +12,6 @@ package com.carrotsearch.jsondoclet;
 
 import com.carrotsearch.jsondoclet.model.ClassDocs;
 import com.sun.source.util.DocTrees;
-import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 import javax.lang.model.element.Element;
@@ -26,7 +25,7 @@ public class Context {
   public Elements elements;
   public DocletEnvironment env;
 
-  public Map<Element, ClassDocs> classDocs = new HashMap<>();
+  public ReferenceConverter referenceConverter;
 
-  public ArrayDeque<Element> current = new ArrayDeque<>();
+  public Map<Element, ClassDocs> classDocs = new HashMap<>();
 }

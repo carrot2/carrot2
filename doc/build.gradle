@@ -13,7 +13,7 @@ dependencies {
 
 ext {
   srclayout = 'gatsby'
-  descriptorsDir = file("descriptors")
+  descriptorsDir = file("src/descriptors")
 }
 
 clean {

@@ -15,37 +15,42 @@ import com.sun.source.doctree.AttributeTree;
 import com.sun.source.doctree.DocCommentTree;
 import com.sun.source.doctree.DocTree;
 import com.sun.source.doctree.EndElementTree;
+import com.sun.source.doctree.LinkTree;
 import com.sun.source.doctree.StartElementTree;
 import com.sun.source.doctree.TextTree;
 import com.sun.source.util.DocTreePath;
-import com.sun.source.util.SimpleDocTreeVisitor;
+import com.sun.source.util.DocTreePathScanner;
 import com.sun.source.util.TreePath;
 import javax.lang.model.element.Element;
 import javax.tools.Diagnostic.Kind;
 
-public class JavaDocsVisitor extends SimpleDocTreeVisitor<JavaDocsVisitor, Context> {
+public class JavaDocsVisitor extends DocTreePathScanner<JavaDocsVisitor, Context> {
+  private final JavaDocs javadoc = new JavaDocs();
   private final StringBuilder sb = new StringBuilder();
 
   public static JavaDocs extractFrom(Element e, Context context) {
-    JavaDocs javadoc = new JavaDocs();
+    JavaDocsVisitor visitor = new JavaDocsVisitor();
+
     DocCommentTree docCommentTree = context.docTrees.getDocCommentTree(e);
     if (docCommentTree != null) {
-      context.current.push(e);
-
-      JavaDocsVisitor visitor = new JavaDocsVisitor();
-      docCommentTree.getFirstSentence().forEach(tree -> tree.accept(visitor, context));
-      javadoc.summary = visitor.getText();
-      javadoc.text = docCommentTree.accept(new JavaDocsVisitor(), context).getText();
-
-      context.current.pop();
+      TreePath treePath = context.docTrees.getPath(e);
+      DocTreePath docTreePath = new DocTreePath(treePath, docCommentTree);
+      visitor.scan(docTreePath, context);
     }
 
-    return javadoc;
+    return visitor.javadoc;
   }
 
   @Override
   public JavaDocsVisitor visitDocComment(DocCommentTree node, Context context) {
-    node.getFullBody().forEach(tree -> tree.accept(this, context));
+    sb.setLength(0);
+    scan(node.getFirstSentence(), context);
+    javadoc.summary = sb.toString();
+
+    sb.setLength(0);
+    scan(node.getFullBody(), context);
+    javadoc.text = sb.toString();
+
     return this;
   }
 
@@ -80,7 +85,7 @@ public class JavaDocsVisitor extends SimpleDocTreeVisitor<JavaDocsVisitor, Conte
   @Override
   public JavaDocsVisitor visitStartElement(StartElementTree node, Context context) {
     sb.append("<" + node.getName());
-    node.getAttributes().forEach(attr -> attr.accept(this, context));
+    super.visitStartElement(node, context);
     sb.append(node.isSelfClosing() ? "/>" : ">");
     return this;
   }
@@ -88,28 +93,49 @@ public class JavaDocsVisitor extends SimpleDocTreeVisitor<JavaDocsVisitor, Conte
   @Override
   public JavaDocsVisitor visitEndElement(EndElementTree node, Context context) {
     sb.append("</" + node.getName() + ">");
-    return this;
+    return super.visitEndElement(node, context);
   }
 
   @Override
   public JavaDocsVisitor visitText(TextTree node, Context context) {
     sb.append(node.getBody());
-    return this;
-  }
-
-  public String getText() {
-    return sb.toString();
+    return super.visitText(node, context);
   }
 
   @Override
-  protected JavaDocsVisitor defaultAction(DocTree node, Context context) {
-    Element current = context.current.peek();
-    TreePath path = context.docTrees.getPath(current);
-    DocCommentTree docCommentTree = context.docTrees.getDocCommentTree(current);
+  public JavaDocsVisitor visitLink(LinkTree node, Context context) {
+    DocTreePath referencePath = new DocTreePath(getCurrentPath(), node.getReference());
 
+    StringBuilder ref = new StringBuilder();
+    context.referenceConverter.convert(context, ref, referencePath);
+
+    switch (node.getKind()) {
+      case LINK_PLAIN:
+        sb.append(ref);
+        break;
+      case LINK:
+        sb.append("<code>");
+        if (!node.getLabel().isEmpty()) {
+          sb.append("<!-- " + ref + " -->");
+          super.visitLink(node, context);
+        } else {
+          sb.append(ref);
+        }
+        sb.append("</code>");
+        break;
+      default:
+        context.reporter.print(
+            Kind.WARNING,
+            getCurrentPath(),
+            "Unknown link type encountered (" + node.getKind() + "): " + node.toString());
+    }
+    return this;
+  }
+
+  protected JavaDocsVisitor defaultAction(DocTree node, Context context) {
     context.reporter.print(
         Kind.WARNING,
-        DocTreePath.getPath(path, docCommentTree, node),
+        getCurrentPath(),
         "Unknown JavaDoc node encountered (" + node.getKind() + "): " + node.toString());
     return this;
   }

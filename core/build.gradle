@@ -4,8 +4,8 @@ apply from: rootProject.file("gradle/jflex.gradle")
 
 configurations {
   langResources
-  jsondoclet
-  jsonJavadocs
+  jsonDoclet
+  jsonJavadoc
 }
 
 dependencies {
@@ -14,7 +14,7 @@ dependencies {
 
   langResources fileTree(dir: 'src/main/resources', includes: ['**/*.stopwords.utf8', '**/*.stoplabels.utf8'])
 
-  jsondoclet project(":infra:jsondoclet")
+  jsonDoclet project(":infra:jsondoclet")
 }
 
 spotless {
@@ -24,7 +24,7 @@ spotless {
 }
 
 ext {
-  javadocJsonDir = file("${buildDir}/javadoc-json")
+  jsonJavadocDir = file("${buildDir}/javadoc-json")
 }
 
 def javadocExcludes = [
@@ -37,9 +37,9 @@ javadoc {
   exclude javadocExcludes
 }
 
-task javadocJson(type: Javadoc, dependsOn: compileJava) {
+task jsonJavadoc(type: Javadoc, dependsOn: compileJava) {
   dependsOn compileJava
-  dependsOn configurations.jsondoclet
+  dependsOn configurations.jsonDoclet
 
   title = null
 
@@ -47,7 +47,7 @@ task javadocJson(type: Javadoc, dependsOn: compileJava) {
   source = sourceSets.main.allJava
   classpath = sourceSets.main.output + sourceSets.main.compileClasspath
 
-  destinationDir = javadocJsonDir
+  destinationDir = jsonJavadocDir
 
   options.doclet = 'com.carrotsearch.jsondoclet.JsonDoclet'
   options.memberLevel = JavadocMemberLevel.PUBLIC
@@ -55,12 +55,12 @@ task javadocJson(type: Javadoc, dependsOn: compileJava) {
   exclude javadocExcludes
 
   doFirst {
-    options.docletpath = configurations.jsondoclet.toList()
+    options.docletpath = configurations.jsonDoclet.toList()
   }
 }
 
 artifacts {
-  jsonJavadocs javadocJsonDir, {
-    builtBy javadocJson
+  jsonJavadoc jsonJavadocDir, {
+    builtBy jsonJavadoc
   }
 }

@@ -16,6 +16,7 @@ import com.carrotsearch.console.launcher.Command;
 import com.carrotsearch.console.launcher.ExitCode;
 import com.carrotsearch.console.launcher.ExitCodes;
 import com.carrotsearch.console.launcher.Launcher;
+import com.carrotsearch.console.launcher.Loggers;
 import com.carrotsearch.console.launcher.ReportCommandException;
 import com.carrotsearch.jsondoclet.model.ClassDocs;
 import com.carrotsearch.jsondoclet.model.FieldDocs;
@@ -28,10 +29,10 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -96,7 +97,8 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
     List<ClusteringAlgorithm> algorithms = collectAlgorithms();
 
     for (ClusteringAlgorithm c : algorithms) {
-      ClassInfo ci = ClassInfoCollector.collect(c, aliasMapper);
+      ClassInfoCollector collector = new ClassInfoCollector(aliasMapper);
+      ClassInfo ci = collector.collect(c);
       expandImplementations(ci, aliasedTypes);
       expandPaths(ci, "algorithm");
       if (javaDocs != null) {
@@ -110,7 +112,7 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
   }
 
   private void expandJavaDocs(Path javaDocs, ClassInfo classInfo) {
-    Function<String, ClassDocs> classDocs =
+    Function<String, ClassDocs> classDocLookup =
         new Function<>() {
           final HashMap<String, ClassDocs> cached = new HashMap<>();
 
@@ -123,9 +125,7 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
             ClassDocs classDocs;
             Path javadocJson = javaDocs.resolve(type + ".json").toAbsolutePath().normalize();
             if (!Files.isRegularFile(javadocJson)) {
-              throw new ReportCommandException(
-                  "JSON file with extracted JavaDocs does not exist at: " + javadocJson,
-                  ExitCodes.ERROR_UNKNOWN);
+              return null;
             }
 
             ObjectMapper om = new ObjectMapper();
@@ -139,22 +139,54 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
           }
         };
 
-    ClassDocs docs = classDocs.apply(classInfo.type);
-    classInfo.javadoc = docs.javadoc;
-    classInfo.attributes.forEach(
-        (attr, attrInfo) -> {
-          FieldDocs fieldDocs = docs.fields.get(attr);
-          if (fieldDocs == null) {
-            throw new ReportCommandException(
-                String.format(
-                    Locale.ROOT,
-                    "Attribute '{}' has no corresponding field in type: {}",
-                    attr,
-                    classInfo.type),
-                ExitCodes.ERROR_UNKNOWN);
-          }
-          attrInfo.javadoc = fieldDocs.javadoc;
-        });
+    ArrayDeque<ClassInfo> queue = new ArrayDeque<>();
+    queue.push(classInfo);
+
+    while (!queue.isEmpty()) {
+      ClassInfo ci = queue.pop();
+
+      ClassDocs docs = classDocLookup.apply(ci.type);
+      if (docs == null) {
+        throw new ReportCommandException(
+            "Javadocs JSON file does not exist for type: " + ci.type, ExitCodes.ERROR_UNKNOWN);
+      }
+
+      ci.javadoc = docs.javadoc;
+      ci.attributes.forEach(
+          (attr, attrInfo) -> {
+            // Scan for field in this or superclasses.
+            FieldDocs fieldDocs = scanForAttrField(attr, classDocLookup, ci);
+            if (fieldDocs == null) {
+              Loggers.CONSOLE.warn(
+                  // throw new ReportCommandException(
+                  String.format(
+                      Locale.ROOT,
+                      "Attribute '%s' has no corresponding field in type: %s",
+                      attr,
+                      ci.type),
+                  ExitCodes.ERROR_UNKNOWN);
+            } else {
+              attrInfo.javadoc = fieldDocs.javadoc;
+            }
+
+            if (attrInfo.implementations != null) {
+              queue.addAll(attrInfo.implementations.values());
+            }
+          });
+    }
+  }
+
+  private FieldDocs scanForAttrField(
+      String attrName, Function<String, ClassDocs> classDocLookup, ClassInfo ci) {
+    FieldDocs fieldDocs = null;
+    for (Class<?> clazz = ci.clazz; clazz != Object.class; clazz = clazz.getSuperclass()) {
+      ClassDocs classDocs = classDocLookup.apply(clazz.getName());
+      fieldDocs = classDocs.fields.get(attrName);
+      if (fieldDocs != null) {
+        break;
+      }
+    }
+    return fieldDocs;
   }
 
   private void expandPaths(ClassInfo ci, String path) {
@@ -187,7 +219,7 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
             .forEach(
                 e -> {
                   ClassInfo nested =
-                      ClassInfoCollector.collect((AcceptingVisitor) e.getValue(), aliasMapper);
+                      new ClassInfoCollector(aliasMapper).collect((AcceptingVisitor) e.getValue());
                   attr.implementations.put(e.getKey(), nested);
                 });
 
@@ -228,19 +260,6 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
     }
 
     return new ArrayList<>(algorithms.values());
-  }
-
-  static <T> T getInstance(Class<T> clazz) {
-    try {
-      return clazz.getDeclaredConstructor().newInstance();
-    } catch (InstantiationException
-        | InvocationTargetException
-        | NoSuchMethodException
-        | IllegalArgumentException
-        | IllegalAccessException e) {
-      throw new ReportCommandException(
-          "Class could not be instantiated: " + clazz.getName(), ExitCodes.ERROR_INTERNAL, e);
-    }
   }
 
   @SuppressForbidden("Legitimate sysout")

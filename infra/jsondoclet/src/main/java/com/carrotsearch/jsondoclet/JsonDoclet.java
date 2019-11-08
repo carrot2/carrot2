@@ -79,6 +79,8 @@ public class JsonDoclet implements Doclet {
     context.elements = environment.getElementUtils();
     context.env = environment;
 
+    context.referenceConverter = new PlainReferenceConverter();
+
     environment.getIncludedElements().stream()
         .filter(element -> element.getKind().isClass())
         .forEach(element -> element.accept(new ClassDocsVisitor(), context));
