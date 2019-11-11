@@ -9,7 +9,7 @@
     "clean": "gatsby clean",
     "develop": "gatsby develop",
     "start": "npm run develop",
-    "serve": "gatsby serve --prefix-paths"
+    "serve": "gatsby serve"
   },
   "dependencies": {
     "gatsby": "^2.15.35",
