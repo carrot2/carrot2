@@ -20,7 +20,7 @@
     "gatsby-plugin-offline": "^2.2.10",
     "gatsby-plugin-nprogress": "^2.1.10",
     "@carrotsearch/gatsby-plugin-apidocs": "^1.0.10",
-    "@carrotsearch/gatsby-transformer-html": "^1.0.13",
+    "@carrotsearch/gatsby-transformer-html": "^1.0.14",
     "@carrotsearch/gatsby-plugin-content-search": "^1.0.0",
     "@carrotsearch/gatsby-plugin-relativize": "^1.0.1",
 
