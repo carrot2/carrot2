@@ -18,7 +18,7 @@
     {
       "title": "REST API",
       "articles": [
-        "using-rest-api",
+        "rest-api-basics",
         "tuning-resources"
       ]
     },

@@ -9,7 +9,7 @@
   <p>
     <code>LanguageComponent</code> instances provide assistance and hints to improve the
     quality of clustering for a specific language. The resources associated with this task
-    typically require costly processing to load so <code>LanguageComponent</code> instances
+    typically require costly processing to load and parse so <code>LanguageComponent</code> instances
     should be created early and reused for all subsequent clustering calls.
   </p>
 
@@ -57,6 +57,12 @@
     to increase clustering quality
     (patent documents will have a different lexicon compared to an unrestricted e-mail corpus).
     Let's take a look at how this is done first.
+  </p>
+
+  <p class="warning">
+    Clustering algorithms may support a subset of languages (and language component instances assembled
+    manually). Each clustering algorithm has a method called <code>supports(LanguageComponents lc)</code>
+    which can be used to check whether the algorithm works with a given instance of language components.
   </p>
 
   <section id="tweaking-lexical-data-resources">

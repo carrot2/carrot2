@@ -1,0 +1,281 @@
+# Edit with https://editor.swagger.io/
+openapi: 3.0.0
+info:
+  title: Carrot2 REST API
+  version: '1.0'
+  description: Carrot2 Clustering API service descriptor (OpenAPI 3.0)
+  contact:
+    name: Carrot2
+    url: 'https://carrot2.org'
+  license:
+    name: Apache 2.0
+servers:
+  - url: 'http://localhost:{port}/service'
+    description: "Typical localhost deployment at a given port"
+    variables:
+      port:
+        description: "Deployment port (default 8080)"
+        default: "8080"
+  - url: '/service'
+    description: "Relative service link"
+paths:
+  /cluster:
+    post:
+      summary: "Cluster a set of documents."
+      description: >-
+        This method accepts a set of documents consisting of text fields, clusters
+        these documents and returns them back to the caller.
+      tags:
+        - "Document clustering endpoints"
+      requestBody:
+        description: >-
+          The input request, including algorithm specification, parameters
+          and documents (document fields) to be clustered. The body of the
+          request is parsed after the template (if any) is applied so each
+          request may modify just the parameters it needs.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClusterRequest'
+      responses:
+        '200':
+          description: >-
+            Returns clustered documents. The returned identifiers of documents
+            reflect their input order (0-based). The returned set of clusters
+            may be empty.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClusterResponse'
+              examples:
+                Typical response:
+                  value:
+                    clusters:
+                      - labels:
+                          - ABC
+                        documents:
+                          - 0
+                          - 2
+                          - 4
+                        clusters: []
+                        score: 120.2
+                      - labels:
+                          - Foo
+                          - Bar
+                        documents:
+                          - 1
+                          - 5
+                        clusters: []
+                        score: 20
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnhandledError'
+      parameters:
+        - $ref: '#/components/parameters/IndentParam'
+        - in: query
+          name: template
+          allowEmptyValue: false
+          description: >-
+            Optional name of one of the preconfigured parameter templates to use for clustering.
+            The template must be present (as returned by the list endpoint).
+          schema:
+            type: string
+
+      operationId: Cluster
+
+  /list:
+    get:
+      summary: 'Return available algorithms, languages and templates.'
+      description: >-
+        This method can be used to inspect the list of available algorithms, their
+        supported languages and preconfigured request templates available for the
+        clustering service.
+      tags:
+        - "Service configuration endpoints"
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  algorithms:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                  templates:
+                    type: array
+                    items:
+                      type: string
+                required:
+                  - algorithms
+                  - templates
+              examples:
+                Typical response:
+                  value:
+                    algorithms:
+                      Bisecting K-Means:
+                        - English
+                      Lingo:
+                        - English
+                      STC:
+                        - English
+                    templates:
+                      - frontend-default
+                      - lingo
+                      - stc
+                      - bkmeans
+          description: Success response.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnhandledError'
+      parameters:
+        - $ref: '#/components/parameters/IndentParam'
+      operationId: List
+
+components:
+  parameters:
+    IndentParam:
+      in: query
+      name: indent
+      allowEmptyValue: true
+      description: 'Make the returned JSON more human friendly (add indents).'
+      schema:
+        type: boolean
+  schemas:
+    ClusterRequest:
+      description: Request to the /cluster endpoint.
+      type: object
+      properties:
+        language:
+          description: >-
+            An identifier of the language to be used for clustering (as returned
+            from the /list endpoint).
+          type: string
+        algorithm:
+          description: >-
+            An identifier of the algorithm to be used for clustering (as
+            returned from the /list endpoint).
+          type: string
+        parameters:
+          description: >-
+            A map of algorithm parameters to override. The content of this map
+            will depend on the available tuning attributes.
+          type: object
+          additionalProperties: true
+          example:
+            param1: "..."
+            param2: "..."
+        documents:
+          description: >-
+            An array of documents to be clustered (each a collection of fields).
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+          example:
+            - field1: "doc. 1, some value"
+            - field1: "doc. 2, some value"
+            - field1: "doc. 3, some value"
+              field2: "doc. 3, different field's value"
+
+    ClusterResponse:
+      description: Response from the /cluster endpoint.
+      type: object
+      properties:
+        clusters:
+          description: A list of clusters (can be empty).
+          type: array
+          items:
+            $ref: '#/components/schemas/Cluster'
+    Document:
+      description: An input document for clustering.
+      type: object
+      additionalProperties:
+        type: string
+      example:
+        field1: "value 1"
+        field2: "value 2"
+        field3:
+          - multi value 1
+          - multi value 2
+    Cluster:
+      type: object
+      properties:
+        labels:
+          description: One or more string labels associated with this cluster.
+          type: array
+          minItems: 1
+          items:
+            type: string
+        documents:
+          description: >-
+            One or more documents associated with this cluster. Docunments are
+            referenced by their sequential number as they appeared on input.
+          type: array
+          items:
+            type: integer
+        score:
+          description: >-
+            Numeric score associated with this cluster.
+          type: number
+        clusters:
+          description: >-
+            An array of nested clusters (possibly empty).
+          type: array
+          items:
+            $ref: '#/components/schemas/Cluster'
+          example: []
+    ErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          description: "Problem type (enum)."
+          enum:
+            - BAD_REQUEST
+            - LICENSING
+            - UNHANDLED_ERROR
+        message:
+          type: string
+          description: "Problem description."
+        exception:
+          type: string
+          description: "Exception class."
+        stacktrace:
+          type: string
+          description: "Exception stack trace."
+      required:
+        - type
+        - message
+  responses:
+    BadRequest:
+      description: "A response to invalid or incomplete request"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            example:
+              value:
+                type: "BAD_REQUEST"
+                message: "Could not parse request body."
+                exception : "com.fasterxml.jackson.databind.exc.MismatchedInputException"
+                stacktrace : "..."
+    UnhandledError:
+      description: "An unhandled internal server error"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            example:
+              value:
+                type: "UNHANDLED_ERROR"
+                message: "Oops."
+                exception : "..."
+                stacktrace : "..."

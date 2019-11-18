@@ -1,0 +1,53 @@
+<article>
+  <h1>REST API Basics</h1>
+
+  <p>
+    This article will walk you through the methods offered by the Carrot<sup>2</sup> HTTP/REST
+    service.
+  </p>
+
+  <p>
+    Carrot<sup>2</sup> comes with a component that offers much of the functionality
+    of the Java API as a stateless HTTP/REST service. This service is offered as a web
+    application
+    context (appropriately called <code>service</code>) and is bundled together with a simple
+    search frontend demo application, some additional documentation, and a built-in <a
+      href="https://www.eclipse.org/jetty/">Jetty</a> HTTP server inside the Document Clustering
+    Server (DCS).
+  </p>
+
+  <p>
+    In the examples below we will refer to the DCS and the REST service interchangeably, although
+    the service application context could in theory be deployed on any other web application
+    container (such as <a href="https://tomcat.apache.org/">Apache Tomcat</a>).
+  </p>
+
+  <section id="installation">
+    <h2>Installation</h2>
+
+    <p>
+      The DCS is shipped with the Carrot<sup>2</sup> distribution under <code>dcs</code> folder.
+      It requires <code>java</code> to be installed on the host system and will bind to port
+      <code>8080</code> by default. An alternative port can be selected by passing
+      <code>--port</code>
+      option to the launch script:
+    </p>
+
+    <pre data-language="none">&gt; dcs --port 8081
+09:47:32: DCS context initialized [algorithms: [Bisecting K-Means, Lingo, STC], templates: [frontend-default, lingo, stc, bkmeans]]
+09:47:32: Service started on port 8081.
+</pre>
+
+    <p>
+      Once started, the service is ready to accept requests (typically at <a href="http://localhost:8080/service/">http://localhost:8080/service/</a>).
+    </p>
+  </section>
+
+  <section id="endpoints">
+    <h2>Service endpoints</h2>
+
+    <p>
+
+    </p>
+  </section>
+</article>

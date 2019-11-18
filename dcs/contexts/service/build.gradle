@@ -1,6 +1,7 @@
-
-apply plugin: 'java'
-apply plugin: 'war'
+plugins {
+  id 'java'
+  id 'war'
+}
 
 configurations {
   langResources
@@ -8,12 +9,13 @@ configurations {
 
 dependencies {
   implementation "com.fasterxml.jackson.core:jackson-databind"
-
   implementation(project(':dcs:model'))
 
-  [":core",
-   ":lang:polish",
-   ":lang:lucene"].each { prj ->
+  [
+    ":core",
+    ":lang:polish",
+    ":lang:lucene"
+  ].each { prj ->
     implementation(project(prj))
     langResources project(path: prj, configuration: 'langResources')
   }
@@ -34,3 +36,4 @@ war {
     into "resources"
   })
 }
+
