@@ -40,7 +40,7 @@
       // Begin Swagger UI call region
       const ui = SwaggerUIBundle({
         // A bug in swagger - we need to pass absolute URL.
-        url: new URL("../openapi.yaml", window.location).toString(),
+        url: new URL("../dcs.yaml", window.location).toString(),
         dom_id: '#swagger-ui',
         deepLinking: true,
         presets: [
