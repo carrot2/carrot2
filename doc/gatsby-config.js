@@ -38,7 +38,8 @@ module.exports = {
         variables: {
           "PROJECT_VERSION": process.env.REACT_APP_VERSION || "unset",
           "JAVA_EXAMPLES": `${__dirname}/../core-examples/src/test/java/org/carrot2/examples`,
-          "CORE": `${__dirname}/../core/src/main/java`,
+          "DCS_EXAMPLES": `${__dirname}/../dcs/examples/src/main/java/org/carrot2/dcs/examples`,
+          "CORE": `${__dirname}/../core/src/main/java`
         }
       }
     },

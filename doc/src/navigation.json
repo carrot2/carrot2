@@ -11,29 +11,30 @@
       "title": "Java API",
       "articles": [
         "java-api-basics",
-        "language-components",
-        "extension-points"
+        "java-language-components",
+        "java-extension-points"
       ]
     },
     {
       "title": "REST API",
       "articles": [
         "rest-api-basics",
-        "tuning-resources"
+        "dcs-templates",
+        "dcs-language-components",
+        "rest-api-reference"
       ]
     },
     {
       "title": "Advanced topics",
       "articles": [
         "tuning-clustering",
-        "non-english-content"
+        "tuning-performance"
       ]
     },
     {
       "title": "Reference",
       "articles": [
-        "rest-api-reference",
-        "algorithm-parameters-reference"
+        "rest-api-reference"
       ]
     }
   ]

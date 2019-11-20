@@ -1,0 +1,21 @@
+{
+  "algorithms" : {
+    "Bisecting K-Means" : [
+      "Arabic",
+      "English",
+      ...
+    ],
+    "Lingo" : [
+      ...
+    ],
+    "STC" : [
+      ...
+    ]
+  },
+  "templates" : [
+    "frontend-default",
+    "lingo",
+    "stc",
+    "bkmeans"
+  ]
+}

@@ -1,0 +1,69 @@
+<article>
+  <h1>Request Templates</h1>
+
+  <p>
+    This section introduces request templates and why they can be useful to detach algorithm
+    configuration from actual clustering requests.
+  </p>
+
+  <p>
+    As mentioned in the <a href="rest-api-basics.html#clustering">introduction</a>,
+    a clustering query is self-contained and must carry the three required elements:
+    algorithm name, language and documents to be clustered. In practice, the first two elements
+    will rarely change (once the algorithm for a particular task is chosen it will probably
+    remain constant for all clustering requests). In situations like this we can pull out
+    the constant part of the query into a <strong>template</strong> and use basic
+    composition with the body of a query to get the final request.
+  </p>
+
+  <p>
+    Another useful application of templates is to detach the algorithm and its
+    configuration from the logic that queries the clustering service or group
+    different algorithms and their tuning variants under much easier to remember
+    aliases.
+  </p>
+
+  <section id="new-template">
+    <h2>How to create a request template?</h2>
+
+    <p>
+      Let's explain it by walking through a simple example. For a request
+      body like the one shown below, we can pull out everything up to the documents section:
+    </p>
+
+    <pre data-embed="./examples/cluster-request.json"></pre>
+
+    <p>
+      Let's create a file called <code>04 foo.json</code> under DCS-relative path:
+      <code>web/service/templates/04 foo.json</code>. The name (identifier)
+      of the template is embedded in the file name: it is <code>foo</code>. The
+      number in front of the alphanumeric name is always stripped (but it is used
+      to sort the templates for display purposes).
+    </p>
+
+    <pre data-embed="./examples/template.json"></pre>
+
+    <p>
+      The <code>foo</code> template contains constant (but overrideable) elements
+      of our clustering query. Once the DCS is started we can see if the template
+      has been loaded by looking at the startup log message or by
+      running a GET query against the <code>/list</code> endpoint:
+    </p>
+
+    <pre data-embed="./examples/template-list-response.json"></pre>
+
+    <p>
+      Armed with the template <code>foo</code> we can now assemble a much simpler
+      clustering request containing just the documents to be clustered:
+    </p>
+
+    <pre data-embed="./examples/template-request.sh"></pre>
+
+    <p>
+      And post it for clustering (observe the <code>template</code> parameter pointing
+      to <code>foo</code> template):
+    </p>
+
+    <pre data-embed="./examples/template-request.json"></pre>
+  </section>
+</article>

@@ -1,0 +1,10 @@
+{
+  "language": "English",
+  "algorithm": "Lingo",
+  "parameters": {
+    "preprocessing": {
+      "phraseDfThreshold": 1,
+      "wordDfThreshold": 1
+    }
+  }
+}
