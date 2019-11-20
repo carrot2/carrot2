@@ -1,0 +1,8 @@
+{
+  "type" : "com.carrotsearch.jsondoclet.Sample05",
+  "javadoc" : {
+    "text" : "Interface link: <code>com.carrotsearch.jsondoclet.Sample05.IFace</code>.",
+    "summary" : "Interface link: <code>com.carrotsearch.jsondoclet.Sample05.IFace</code>."
+  },
+  "fields" : { }
+}

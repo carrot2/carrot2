@@ -2,11 +2,29 @@
 // Gatsby has a non-configurable output folder, sigh.
 // https://github.com/gatsbyjs/gatsby/issues/1878
 buildDir = file("public")
+
+configurations {
+  descriptors
+}
+
+dependencies {
+  descriptors project(path: ":infra:docattrs", configuration: "descriptors")
+}
+
 ext {
   srclayout = 'gatsby'
+  descriptorsDir = file("src/descriptors")
 }
 
 clean {
   delete project.files(".cache")
   delete project.files("public")
 }
+
+task collectDescriptors(type: Sync) {
+  from configurations.descriptors
+  into descriptorsDir
+}
+
+yarnBuild.dependsOn collectDescriptors
+

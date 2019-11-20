@@ -4,7 +4,10 @@ rootProject.name = 'carrot2'
 include 'core'
 include 'core-examples'
 
-include 'test-infra'
+include 'infra:tests'
+include 'infra:docattrs'
+include 'infra:jsondoclet-model'
+include 'infra:jsondoclet'
 
 include 'lang:polish'
 include 'lang:lucene'

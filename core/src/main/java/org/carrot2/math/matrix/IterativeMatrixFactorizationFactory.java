@@ -27,7 +27,7 @@ public abstract class IterativeMatrixFactorizationFactory extends AttrComposite
    */
   public final AttrEnum<FactorizationQuality> factorizationQuality =
       attributes.register(
-          "factorizationFactory",
+          "factorizationQuality",
           AttrEnum.builder(FactorizationQuality.class)
               .label("Factorization quality")
               .defaultValue(FactorizationQuality.HIGH));

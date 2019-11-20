@@ -1,0 +1,15 @@
+{
+  "clusters" : [
+    {
+      "labels" : [
+        "Bar"
+      ],
+      "documents" : [
+        0,
+        1
+      ],
+      "clusters" : [ ],
+      "score" : 0.09746237168594427
+    }
+  ]
+}

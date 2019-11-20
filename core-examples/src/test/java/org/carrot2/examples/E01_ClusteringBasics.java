@@ -13,13 +13,15 @@ package org.carrot2.examples;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ServiceLoader;
+import java.util.ServiceLoader.Provider;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
+import org.carrot2.clustering.ClusteringAlgorithmProvider;
 import org.carrot2.clustering.Document;
-import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
-import org.carrot2.clustering.stc.STCClusteringAlgorithm;
 import org.carrot2.language.LanguageComponents;
 import org.junit.Test;
 
@@ -27,12 +29,18 @@ import org.junit.Test;
 public class E01_ClusteringBasics {
   @Test
   public void clusterDocumentStream() throws IOException {
-    // fragment-start{clustering-document-stream}
+    // fragment-start{setup-heavy-components}
     // Our documents are in English so we load appropriate language resources.
     // This call can be heavy and an instance of LanguageComponents should be
     // reused across different clustering calls.
     LanguageComponents languageComponents = LanguageComponents.load("English");
+    // fragment-end{setup-heavy-components}
 
+    // fragment-start{setup-lightweight-components}
+    LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
+    // fragment-end{setup-lightweight-components}
+
+    // fragment-start{clustering-document-stream}
     // Create a stream of "documents" for clustering.
     // Each such document provides text content fields to a visitor.
     Stream<Document> documentStream =
@@ -43,10 +51,10 @@ public class E01_ClusteringBasics {
                       fieldVisitor.accept("title", fields[1]);
                       fieldVisitor.accept("content", fields[2]);
                     });
+    // fragment-end{clustering-document-stream}
 
+    // fragment-start{clustering}
     // Perform clustering.
-    LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
-
     List<Cluster<Document>> clusters;
     clusters = algorithm.cluster(documentStream, languageComponents);
 
@@ -55,7 +63,7 @@ public class E01_ClusteringBasics {
       String label = String.join("; ", c.getLabels());
       System.out.println(label + ", documents: " + c.getDocuments().size());
     }
-    // fragment-end{clustering-document-stream}
+    // fragment-end{clustering}
   }
 
   @Test
@@ -74,19 +82,27 @@ public class E01_ClusteringBasics {
 
   @Test
   public void clusterWithDifferentAlgorithms() throws IOException {
-    LanguageComponents languageComponents = LanguageComponents.load("English");
+    LanguageComponents english = LanguageComponents.load("English");
 
-    // Perform clustering with each of the available algorithms.
-    for (ClusteringAlgorithm algorithm :
-        Arrays.asList(
-            new LingoClusteringAlgorithm(),
-            new STCClusteringAlgorithm(),
-            new BisectingKMeansClusteringAlgorithm())) {
-      System.out.println();
-      System.out.println("Clustering implementation: " + algorithm.getClass().getSimpleName());
-      List<Cluster<Document>> clusters =
-          algorithm.cluster(ExamplesData.documentStream(), languageComponents);
-      ExamplesCommon.printClusters(clusters);
+    // Perform clustering with each algorithm available via service extension point.
+    // fragment-start{algorithm-enumeration}
+    List<ClusteringAlgorithmProvider> providers =
+        ServiceLoader.load(ClusteringAlgorithmProvider.class).stream()
+            .map(Provider::get)
+            .collect(Collectors.toList());
+
+    for (ClusteringAlgorithmProvider provider : providers) {
+      System.out.println("Clustering algorithm: " + provider.name() + "\n");
+      ClusteringAlgorithm algorithm = provider.get();
+      if (algorithm.supports(english)) {
+        List<Cluster<Document>> clusters =
+            algorithm.cluster(ExamplesData.documentStream(), english);
+        ExamplesCommon.printClusters(clusters);
+      } else {
+        String name = english.language();
+        System.out.println("  (Language not supported: " + name + ").");
+      }
     }
+    // fragment-end{algorithm-enumeration}
   }
 }

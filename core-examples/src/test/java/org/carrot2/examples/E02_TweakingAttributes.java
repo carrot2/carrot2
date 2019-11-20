@@ -21,7 +21,6 @@ import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.clustering.stc.STCClusteringAlgorithm;
 import org.carrot2.language.LanguageComponents;
-import org.carrot2.math.mahout.Arrays;
 import org.carrot2.math.matrix.FactorizationQuality;
 import org.carrot2.math.matrix.LocalNonnegativeMatrixFactorizationFactory;
 import org.junit.Test;
@@ -35,19 +34,23 @@ public class E02_TweakingAttributes {
     // Tweak Lingo's defaults. Note each attribute comes with JavaDoc documentation
     // and some are contrained to a specific range of values. Also, each algorithm
     // will typically have a different set of attributes to choose from.
+    // fragment-start{parameters}
     LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
     algorithm.desiredClusterCount.set(10);
     algorithm.preprocessing.wordDfThreshold.set(5);
     algorithm.preprocessing.phraseDfThreshold.set(5);
     algorithm.preprocessing.documentAssigner.minClusterSize.set(4);
+    // fragment-end{parameters}
 
     // For attributes that are interfaces, provide concrete implementations of that
     // interface, configuring it separately. Programming editors provide support for listing
     // all interface implementations, use it to inspect the possibilities.
-    LocalNonnegativeMatrixFactorizationFactory factorizationFactory =
-        new LocalNonnegativeMatrixFactorizationFactory();
+    // fragment-start{complex-parameters}
+    var factorizationFactory = new LocalNonnegativeMatrixFactorizationFactory();
     factorizationFactory.factorizationQuality.set(FactorizationQuality.HIGH);
+
     algorithm.matrixReducer.factorizationFactory = factorizationFactory;
+    // fragment-end{complex-parameters}
 
     List<Cluster<Document>> clusters =
         algorithm.cluster(ExamplesData.documentStream(), languageComponents);
@@ -74,95 +77,18 @@ public class E02_TweakingAttributes {
   }
 
   @Test
-  public void listAllAttributes() {
-    // All algorithms implement the visitor pattern so that their (and their default
-    // components') attributes can be listed and inspected. For example.
-    class Lister implements AttrVisitor {
-      private final String lead;
-
-      public Lister(String lead) {
-        this.lead = lead;
-      }
-
-      @Override
-      public void visit(String key, AttrBoolean attr) {
-        print(key, attr.get(), "bool", attr);
-      }
-
-      @Override
-      public void visit(String key, AttrInteger attr) {
-        print(key, attr.get(), "int", attr);
-      }
-
-      @Override
-      public void visit(String key, AttrDouble attr) {
-        print(key, attr.get(), "double", attr);
-      }
-
-      @Override
-      public <T extends Enum<T>> void visit(String key, AttrEnum<T> attr) {
-        print(key, attr.get(), "enum of: " + attr.enumClass().getSimpleName(), attr);
-      }
-
-      @Override
-      public void visit(String key, AttrString attr) {
-        print(key, attr.get(), "string", attr);
-      }
-
-      @Override
-      public void visit(String key, AttrStringArray attr) {
-        print(key, Arrays.toString(attr.get()), "array of strings", attr);
-      }
-
-      @Override
-      public <T extends AcceptingVisitor> void visit(String key, AttrObject<T> attr) {
-        AcceptingVisitor value = attr.get();
-        print(
-            key,
-            value == null ? "null" : value.getClass().getSimpleName(),
-            "<" + attr.getInterfaceClass().getSimpleName() + ">",
-            attr);
-        if (value != null) {
-          value.accept(new Lister(lead + key + "."));
-        }
-      }
-
-      @Override
-      public <T extends AcceptingVisitor> void visit(String key, AttrObjectArray<T> attr) {
-        List<T> value = attr.get();
-        print(
-            key,
-            value == null ? "null" : "list[" + value.size() + "]",
-            "array of <" + attr.getInterfaceClass().getSimpleName() + ">",
-            attr);
-        if (value != null) {
-          for (AcceptingVisitor v : value) {
-            v.accept(new Lister(lead + key + "[]."));
-          }
-        }
-      }
-
-      private void print(String key, Object value, String type, Attr<?> attr) {
-        System.out.println(
-            String.format(
-                Locale.ROOT,
-                "%s%s = %s (%s, %s)",
-                lead,
-                key,
-                value,
-                type,
-                attr.getDescription() == null ? "--" : attr.getDescription()));
-      }
-    }
-
+  public void listAllAttributesToJson() {
     Stream.of(
             new LingoClusteringAlgorithm(),
             new STCClusteringAlgorithm(),
             new BisectingKMeansClusteringAlgorithm())
         .forEachOrdered(
             algorithm -> {
-              System.out.println("\n# Attributes of " + algorithm.getClass().getSimpleName());
-              algorithm.accept(new Lister(""));
+              System.out.printf(
+                  Locale.ROOT,
+                  "\n# Attributes of %s\n%s",
+                  algorithm.getClass().getSimpleName(),
+                  Attrs.toJson(algorithm, AliasMapper.SPI_DEFAULTS));
             });
   }
 }

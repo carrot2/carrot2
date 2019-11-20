@@ -1,10 +1,14 @@
-
 apply plugin: 'java-library'
 
 apply from: rootProject.file("gradle/jflex.gradle")
 
 configurations {
   langResources
+
+  jsonDoclet
+  jsonJavadoc
+
+  coreJavadoc
 }
 
 dependencies {
@@ -12,6 +16,8 @@ dependencies {
   api "com.carrotsearch:hppc"
 
   langResources fileTree(dir: 'src/main/resources', includes: ['**/*.stopwords.utf8', '**/*.stoplabels.utf8'])
+
+  jsonDoclet project(":infra:jsondoclet")
 }
 
 spotless {
@@ -20,8 +26,57 @@ spotless {
   }
 }
 
+ext {
+  jsonJavadocDir = file("${buildDir}/javadoc-json")
+}
+
+def javadocExcludes = [
+  'org/carrot2/math/mahout/**',
+  '**/nanojson/**',
+  '**/ExtendedWhitespaceTokenizerImpl*'
+]
+
 javadoc {
-  exclude 'org/carrot2/math/mahout/**'
-  exclude '**/nanojson/**'
-  exclude '**/ExtendedWhitespaceTokenizerImpl*'
+  exclude javadocExcludes
+
+  title = "Carrot<sup>2</sup>, Public Java API v${version} (${project.group}:${project.name})"
+
+  (options as StandardJavadocDocletOptions).with {
+    overview = file("src/main/java/overview.html")
+    linksOffline('https://docs.oracle.com/en/java/javase/11/docs/api/',
+      rootProject.file('etc/javadoc/11').toString())
+    footer "(git: ${gitStatus.abbrRev})"
+  }
+}
+
+task jsonJavadoc(type: Javadoc, dependsOn: compileJava) {
+  dependsOn compileJava
+  dependsOn configurations.jsonDoclet
+
+  title = null
+
+  options.encoding = 'UTF-8'
+  source = sourceSets.main.allJava
+  classpath = sourceSets.main.output + sourceSets.main.compileClasspath
+
+  destinationDir = jsonJavadocDir
+
+  options.doclet = 'com.carrotsearch.jsondoclet.JsonDoclet'
+  options.memberLevel = JavadocMemberLevel.PUBLIC
+
+  exclude javadocExcludes
+
+  doFirst {
+    options.docletpath = configurations.jsonDoclet.toList()
+  }
+}
+
+artifacts {
+  jsonJavadoc jsonJavadocDir, {
+    builtBy jsonJavadoc
+  }
+
+  coreJavadoc javadoc.destinationDir, {
+    builtBy javadoc
+  }
 }

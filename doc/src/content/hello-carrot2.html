@@ -1,0 +1,87 @@
+<article>
+  <h1>Hello, Carrot<sup>2</sup>!</h1>
+
+  <p>
+    This article is an overview of Carrot<sup>2</sup> and the available resources.
+  </p>
+
+  <p>
+    Carrot<sup>2</sup> is a programming library for clustering text. It can automatically
+    discover groups of related documents and label them with short key terms or phrases.
+  </p>
+
+  <p>
+    For example, it can turn search result titles and snippets into groups
+    like these:
+  </p>
+
+  <figure class="round">
+    <img src="images/carrot2-intro-example-light.png"
+         alt="Search results (snippets) and clusters discovered from them.">
+    <figcaption>
+      <p>
+        Clustering of search results (titles and snippets, on the left) for query "salsa"
+        and corresponding cluster labels (right).
+      </p>
+    </figcaption>
+  </figure>
+
+  <p>
+    The process of taking raw text and discovering related documents is called
+    <a href="https://en.wikipedia.org/wiki/Cluster_analysis">cluster analysis</a> and
+    there are many ways to do it. Carrot<sup>2</sup> provides common infrastructure
+    for a few different algorithms so that your code can switch between them at will.
+  </p>
+
+  <p>
+    Out-of-the-box, Carrot<sup>2</sup> comes with:
+  </p>
+
+  <ul>
+    <li>a <a href="java-api-basics.html">Java programming interface</a> (API) and
+      <a href="algorithms.html">an implementation of several clustering algorithms</a>,</li>
+    <li>a HTTP/JSON (REST) service for mash-ups or integration with languages other than Java,</li>
+    <li>a simple search-engine-like demo application that clusters search results,</li>
+    <li>code snippets and examples for reuse in your code.</li>
+  </ul>
+
+  <p>
+    Additionally, several downstream projects provide integration between Carrot<sup>2</sup>
+    and popular document retrieval services:
+  </p>
+
+  <ul>
+    <li><a href="https://lucene.apache.org/solr/">Apache Solr</a> has
+      <a href="https://lucene.apache.org/solr/guide/8_2/result-clustering.html">built-in
+        support</a> for clustering search results via Carrot<sup>2</sup> algorithms,
+    </li>
+    <li><a href="https://github.com/carrot2/elasticsearch-carrot2">elasticsearch-carrot2</a>
+      plugin provides search results clustering for
+      <a href="https://github.com/elastic/elasticsearch">Elasticsearch</a>.</li>
+  </ul>
+
+  <section id="try-carrot2">
+    <h2>Try Carrot<sup>2</sup> now</h2>
+
+    <p>
+      The quickest way to try out Carrot<sup>2</sup> is to use the public
+      <a href="https://search.carrot2.org">live demo</a>. This demo lets you
+      play with clustering of search results aggregated from many popular
+      search engines (courtesy of <a href="https://www.comcepta.com/">Comcepta AG</a>)
+      or explore medical documents from the
+      <a href="https://www.ncbi.nlm.nih.gov/pubmed/">PubMed database</a>
+      of medical abstracts.
+    </p>
+
+    <figure id="carrot2-search-app" class="round">
+      <img src="images/carrot2-search-app-light.jpg"
+           alt="Carrot2 search results clustering application.">
+      <figcaption>
+        <p>
+          Screenshot of the live <a href="http://search.carrot2.org">Carrot<sup>2</sup>
+          demo application</a> clustering search results for query "JSON".
+        </p>
+      </figcaption>
+    </figure>
+  </section>
+</article>

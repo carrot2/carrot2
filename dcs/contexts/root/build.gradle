@@ -3,4 +3,15 @@ apply plugin: 'java'
 apply plugin: 'war'
 
 configurations {
+  coreJavadoc
+}
+
+dependencies {
+  coreJavadoc  project(path: ":core", configuration: "coreJavadoc")
+}
+
+war {
+  from(configurations.coreJavadoc, {
+    into 'javadoc'
+  })
 }

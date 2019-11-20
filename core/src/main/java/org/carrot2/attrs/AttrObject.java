@@ -10,6 +10,7 @@
  */
 package org.carrot2.attrs;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -24,7 +25,7 @@ public class AttrObject<T extends AcceptingVisitor> extends Attr<T> {
       Class<T> clazz,
       T defaultValue,
       String label,
-      Consumer<T> constraint,
+      List<? extends Constraint<? super T>> constraint,
       Supplier<? extends T> newInstance,
       Supplier<T> getter,
       Consumer<T> setter) {

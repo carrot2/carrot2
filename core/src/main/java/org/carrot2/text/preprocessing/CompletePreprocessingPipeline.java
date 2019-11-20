@@ -11,6 +11,7 @@
 package org.carrot2.text.preprocessing;
 
 import java.util.stream.Stream;
+import org.carrot2.attrs.AttrComposite;
 import org.carrot2.attrs.AttrInteger;
 import org.carrot2.attrs.AttrObject;
 import org.carrot2.clustering.Document;
@@ -30,7 +31,20 @@ import org.carrot2.language.LanguageComponents;
  *   <li>{@link DocumentAssigner}
  * </ol>
  */
-public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline {
+public class CompletePreprocessingPipeline extends AttrComposite implements ContextPreprocessor {
+  /**
+   * Word Document Frequency threshold. Words appearing in fewer than <code>dfThreshold</code>
+   * documents will be ignored.
+   */
+  public final AttrInteger wordDfThreshold =
+      attributes.register(
+          "wordDfThreshold",
+          AttrInteger.builder()
+              .min(1)
+              .max(100)
+              .label("Word document frequency threshold")
+              .defaultValue(1));
+
   /**
    * Phrase Document Frequency threshold. Phrases appearing in fewer than <code>dfThreshold</code>
    * documents will be ignored.
@@ -67,6 +81,18 @@ public class CompletePreprocessingPipeline extends BasicPreprocessingPipeline {
             .getset(() -> documentAssigner, (v) -> documentAssigner = v)
             .defaultValue(DocumentAssigner::new));
   }
+
+  /** Case normalizer used by the algorithm. */
+  protected final CaseNormalizer caseNormalizer = new CaseNormalizer();
+
+  /** Stemmer used by the algorithm. */
+  protected final LanguageModelStemmer stemming = new LanguageModelStemmer();
+
+  /** Stop list marker used by the algorithm, contains bindable attributes. */
+  protected final StopListMarker stopListMarker = new StopListMarker();
+
+  /** Tokenizer used by the algorithm. */
+  protected final InputTokenizer tokenizer = new InputTokenizer();
 
   public PreprocessingContext preprocess(
       Stream<? extends Document> documents, String query, LanguageComponents langModel) {

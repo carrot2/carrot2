@@ -1,0 +1,15 @@
+{
+  "language": "English",
+  "algorithm": "Lingo",
+  "parameters": {
+    "preprocessing": {
+      "phraseDfThreshold": 1,
+      "wordDfThreshold": 1
+    }
+  },
+  "documents": [
+    { "field": "foo bar" },
+    { "field": "bar" },
+    { "field": "baz" }
+  ]
+}

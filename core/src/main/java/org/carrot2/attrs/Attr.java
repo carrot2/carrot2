@@ -10,17 +10,19 @@
  */
 package org.carrot2.attrs;
 
-import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class Attr<T> implements AttrMetadata {
   private final String label;
-  private final Consumer<? super T> valueCheck;
+  private final List<? extends Constraint<? super T>> constraints;
 
   T value;
 
-  public Attr(T defaultValue, String label, Consumer<? super T> constraint) {
+  public Attr(T defaultValue, String label, List<? extends Constraint<? super T>> constraints) {
     this.label = label;
-    this.valueCheck = constraint;
+    this.constraints = constraints;
     this.value = defaultValue;
   }
 
@@ -33,24 +35,24 @@ public abstract class Attr<T> implements AttrMetadata {
   }
 
   public void set(T value) {
-    valueCheck.accept(value);
+    constraints.forEach(c -> c.accept(value));
     this.value = value;
   }
 
+  public List<Constraint<? super T>> getConstraints() {
+    return Collections.unmodifiableList(constraints);
+  }
+
   protected static class BuilderScaffold<T> {
-    protected Consumer<T> constraint;
+    protected List<Constraint<? super T>> constraints = new ArrayList<>();
     protected String label;
 
-    protected void addConstraint(Consumer<T> c) {
-      if (this.constraint == null) {
-        this.constraint = c;
-      } else {
-        this.constraint = this.constraint.andThen(c);
-      }
+    protected void addConstraint(Constraint<? super T> c) {
+      constraints.add(c);
     }
 
-    protected Consumer<T> getConstraint() {
-      return constraint == null ? (v) -> {} : constraint;
+    protected List<? extends Constraint<? super T>> getConstraint() {
+      return constraints;
     }
 
     public BuilderScaffold<T> label(String label) {

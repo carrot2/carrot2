@@ -1,0 +1,13 @@
+{
+  "type" : "com.carrotsearch.jsondoclet.Sample02",
+  "javadoc" : { },
+  "fields" : {
+    "fldDouble" : {
+      "type" : "java.lang.Double",
+      "javadoc" : {
+        "text" : "Field description.\n\n <p>Second paragraph of field description.",
+        "summary" : "Field description."
+      }
+    }
+  }
+}

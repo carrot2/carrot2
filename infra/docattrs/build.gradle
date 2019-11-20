@@ -1,0 +1,58 @@
+apply plugin: 'java'
+
+configurations {
+  descriptors
+  jsonJavadocs
+}
+
+dependencies {
+  implementation project(":core")
+  implementation project(":infra:jsondoclet-model")
+  implementation "com.carrotsearch.console:launcher"
+  implementation "com.fasterxml.jackson.core:jackson-databind"
+
+  jsonJavadocs project(path: ":core", configuration: "jsonJavadoc")
+}
+
+ext {
+  descriptorsDir = file("${buildDir}/descriptors")
+}
+
+jar {
+  doFirst {
+    manifest {
+      attributes("Main-Class": "com.carrotsearch.console.launcher.Launcher")
+      attributes("Class-Path": configurations.runtimeClasspath.collect { it.getName() }.join(' '))
+    }
+  }
+}
+
+task generateDescriptors(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  main = 'org.carrot2.infra.docattrs.WriteDescriptorsCommand'
+  args = [
+    "--directory",
+    descriptorsDir,
+    "--verbose"
+  ]
+
+  inputs.files configurations.jsonJavadocs
+  inputs.files configurations.runtimeClasspath
+  outputs.dir descriptorsDir
+
+  doFirst {
+    args += [
+      "--javadoc",
+      configurations.jsonJavadocs.singleFile
+    ]
+
+    project.delete(descriptorsDir)
+    descriptorsDir.mkdirs()
+  }
+}
+
+artifacts {
+  descriptors descriptorsDir, {
+    builtBy generateDescriptors
+  }
+}

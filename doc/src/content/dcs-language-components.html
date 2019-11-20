@@ -1,0 +1,29 @@
+<article>
+  <h1>Language Components</h1>
+
+  <p>
+    In this section we describe means to tune the language component resources in the
+    REST API (DCS).
+  </p>
+
+  <p>
+    The Java API <a href="java-language-components.html">language components section</a>
+    already introduced the role and importance of tuning language components properly. It also
+    introduced standard conventions for naming stop word resources and dictionaries (please
+    refer to <a href="java-language-components.html#tweaking-lexical-data-resources">this
+    section in the documentation</a> for more information).
+  </p>
+
+  <p>
+    In the REST API, all language resources are pulled out from Java JAR files and reside under:
+    <code>dcs/web/service/resources</code> path, relative to DCS distribution package.
+    To tune the stop words for the English language, for example, you'd modify the
+    <code>english.stopwords.utf8</code> file. To tweak corresponding label exclusion dictionaries,
+    you'd modify the <code>english.stoplabels.utf8</code> file.
+  </p>
+
+  <p class="warning">
+    Changes to language resource files are
+    not automatically detected (or reloaded): a server restart is required.
+  </p>
+</article>

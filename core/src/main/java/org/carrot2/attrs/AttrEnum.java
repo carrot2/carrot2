@@ -10,13 +10,15 @@
  */
 package org.carrot2.attrs;
 
+import java.util.EnumSet;
+import java.util.List;
 import java.util.Locale;
-import java.util.function.Consumer;
 
 public class AttrEnum<T extends Enum<T>> extends Attr<T> {
   private Class<T> clazz;
 
-  AttrEnum(Class<T> clazz, T value, Consumer<T> constraint, String label) {
+  AttrEnum(
+      Class<T> clazz, T value, List<? extends Constraint<? super T>> constraint, String label) {
     super(value, label, constraint);
 
     if (!clazz.isEnum()) {
@@ -35,6 +37,8 @@ public class AttrEnum<T extends Enum<T>> extends Attr<T> {
 
     public Builder(Class<T> clazz) {
       this.clazz = clazz;
+
+      addConstraint(Constraint.named("value in " + EnumSet.allOf(clazz), (v) -> {}));
     }
 
     public Builder<T> label(String label) {

@@ -25,7 +25,7 @@ public class AttrObjectArray<T extends AcceptingVisitor> extends Attr<List<T>> {
       Class<T> clazz,
       List<T> defaultValue,
       String label,
-      Consumer<List<T>> constraint,
+      List<? extends Constraint<? super List<T>>> constraint,
       Supplier<? extends T> newEntryInstance,
       Supplier<List<T>> getter,
       Consumer<List<T>> setter) {

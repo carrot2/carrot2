@@ -4,7 +4,7 @@ module.exports = {
     title: `Carrot2 docs`,
     description: `User and developer manual for the Carrot2 text clustering engine.`,
     lang: `en`,
-    indexAlias: `/getting-started/`
+    indexAlias: `/hello-carrot2/`
   },
   plugins: [
     {
@@ -36,8 +36,10 @@ module.exports = {
       resolve: `@carrotsearch/gatsby-transformer-html`,
       options: {
         variables: {
-          "CARROT2_VERSION": process.env.CARROT2_VERSION || "unset",
-          "JAVA_EXAMPLES": `${__dirname}/../core-examples/src/test/java/org/carrot2/examples`
+          "PROJECT_VERSION": process.env.REACT_APP_VERSION || "unset",
+          "JAVA_EXAMPLES": `${__dirname}/../core-examples/src/test/java/org/carrot2/examples`,
+          "DCS_EXAMPLES": `${__dirname}/../dcs/examples/src/main/java/org/carrot2/dcs/examples`,
+          "CORE": `${__dirname}/../core/src/main/java`
         }
       }
     },

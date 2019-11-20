@@ -10,11 +10,12 @@
  */
 package org.carrot2.attrs;
 
-import java.util.function.Consumer;
+import java.util.List;
 
 public class AttrBoolean extends Attr<Boolean> {
-  private AttrBoolean(Boolean value, Consumer<Boolean> constraint, String label) {
-    super(value, label, constraint);
+  private AttrBoolean(
+      Boolean value, List<? extends Constraint<? super Boolean>> constraints, String label) {
+    super(value, label, constraints);
   }
 
   public static class Builder extends Attr.BuilderScaffold<Boolean> {

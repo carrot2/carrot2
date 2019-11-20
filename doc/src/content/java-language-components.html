@@ -1,0 +1,177 @@
+<article>
+  <h1>Language Components</h1>
+
+  <p>
+    In this section we describe the role and potential customisation options for language-specific
+    heavyweight components.
+  </p>
+
+  <p>
+    <code>LanguageComponent</code> instances provide assistance and hints to improve the
+    quality of clustering for a specific language. The resources associated with this task
+    typically require costly processing to load and parse so <code>LanguageComponent</code> instances
+    should be created early and reused for all subsequent clustering calls.
+  </p>
+
+  <p>
+    A single <code>LanguageComponent</code> instance can provide a number of resources to aid
+    the algorithm in improving clustering quality:
+  </p>
+
+  <ul>
+    <li>lemmatisation (stemming) routines,</li>
+    <li>tokenisation (word decomposition) and decompounding routines,</li>
+    <li>part of speech dictionaries,</li>
+    <li>ignore lists (stop word lists).</li>
+  </ul>
+
+  <p>
+    The above list is not restricted or complete: each algorithm may require
+    a different set of components to function properly and each language will have a specific set
+    of components that makes sense for that particular language. All available languages
+    and their provided components (interfaces) can be enumerated via service point extension,
+    as shown below.
+  </p>
+
+  <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
+       data-fragment="component-enumeration"></pre>
+
+  <p>
+    The code above prints the following when executed, revealing interfaces of components
+    provided by the default provider for English (other languages omitted):
+  </p>
+
+  <pre data-language="none">Provider class: Carrot2 (English, Danish, Dutch, [...]
+  > English
+    Component: org.carrot2.language.Stemmer
+    Component: org.carrot2.language.Tokenizer
+    Component: org.carrot2.language.LexicalData
+    Component: org.carrot2.text.preprocessing.LabelFormatter
+  [...]</pre>
+
+  <p>
+    Each of the interfaces of a language component can be
+    overridden. However, for vast majority of applications
+    only minor tweaks to the defaults are really needed. For example, adding ignorable
+    terms and phrases specific to a given domain is a very helpful step
+    to increase clustering quality
+    (patent documents will have a different lexicon compared to an unrestricted e-mail corpus).
+    Let's take a look at how this is done first.
+  </p>
+
+  <p class="warning">
+    Clustering algorithms may support a subset of languages (and language component instances assembled
+    manually). Each clustering algorithm has a method called <code>supports(LanguageComponents lc)</code>
+    which can be used to check whether the algorithm works with a given instance of language components.
+  </p>
+
+  <section id="tweaking-lexical-data-resources">
+    <h2>Tweaking lexical data resources</h2>
+
+    <p>
+      The <code>LexicalData</code> component is responsible
+      for telling the algorithm whether a term or a candidate cluster
+      label can be ignored. Such ignorable elements typically include functional language
+      words like prepositions, conjunctions or domain-specific boilerplate language that
+      is not a good candidate for a cluster.
+    </p>
+
+    <pre data-embed="%CORE%/org/carrot2/language/LexicalData.java"
+         data-fragment="lexical-data"></pre>
+
+    <p>
+      The most common quality enhancement tuning lies in modifying the
+      resources provided for the <code>LexicalData</code> component's
+      default implementation (<code>LexicalDataImpl</code>). This class
+      attempts to load two files (where the <i>lang</i> prefix is replaced with the
+      name of the language the component is instantiated for):
+    </p>
+
+    <dl>
+      <dt><i>lang</i>.stopwords.utf8</dt>
+      <dd>
+        A plain-text list of words to ignore. Each line contains exactly one full word (token).
+        Something like the following:
+        <pre>a
+about
+above
+across
+...</pre>
+      </dd>
+
+      <dt><i>lang</i>.stoplabels.utf8</dt>
+      <dd>
+        A plain-text list of Java regular expression patterns to ignore. Each line contains exactly
+        one expression
+        that, if it matches the input label, causes the label to be discarded and ignored during
+        clustering. An example
+        stop labels file could look like this:
+        <pre>(?i)information (about|on).*
+(?i)(index|list) of.*
+...</pre>
+      </dd>
+    </dl>
+
+    <p>
+      The <code>LanguageComponent</code> class has a variant of the
+      <code>load()</code> method that takes a custom <code>ResourceLookup</code> object
+      for locating and loading external resources.
+      We can load our custom, modified resources using this facility without
+      touching any of the default components (it's a good idea to start tweaking custom resources
+      by first copying the defaults from Carrot<sup>2</sup> JARs and then modifying them in
+      the new location).
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
+         data-fragment="custom-english-resources"></pre>
+
+    <p>
+      Once loaded, the <code>LanguageComponents</code> object is ready to be used for subsequent
+      clustering calls.
+    </p>
+  </section>
+
+  <section id="tweaking-components-directly">
+    <h2>Tweaking components directly</h2>
+
+    <p>
+      It may be (rarely) desirable to provide an entirely custom implementation of a given
+      preprocessing component. An instance of <code>LanguageComponents</code> class consists
+      of a set of components (interfaces) and suppliers providing implementations of these
+      interfaces. We can override any of these suppliers, creating a custom language preprocessing
+      pipeline.
+    </p>
+
+    <p>
+      As an example, let's modify the English pipeline with a custom word stemming component.
+      The supplier for this component always returns the same closure, converting the input to lower
+      case:
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
+         data-fragment="custom-stemmer"></pre>
+
+    <p>
+      We will also replace the default <code>LexicalData</code> implementation with simple custom
+      filtering based on code rules:
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
+           data-fragment="custom-lexical-data"></pre>
+
+    <p>
+      Note how the initialization of the <code>ignored</code> set is pulled out of the supplier.
+      The cost of setting up a heavy component (the supplier itself here) can be high but
+      once set up, suppliers should return instances of a given component quickly.
+    </p>
+
+    <p>
+      Once we have custom suppliers, overriding their default implementations
+      for English is trivial:
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
+         data-fragment="custom-overrides"></pre>
+
+  </section>
+</article>

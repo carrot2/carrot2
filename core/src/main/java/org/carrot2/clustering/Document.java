@@ -18,5 +18,12 @@ import java.util.function.BiConsumer;
  * visitor returns.
  */
 public interface Document {
+  /**
+   * An implementation of this method must present <code>fieldConsumer</code> with each field's name
+   * and its corresponding value. The same field can be presented more than once if it has multiple
+   * values.
+   */
+  // fragment-start{visitor-method}
   void visitFields(BiConsumer<String, String> fieldConsumer);
+  // fragment-end{visitor-method}
 }

@@ -1,0 +1,5 @@
+apply plugin: 'java-library'
+
+dependencies {
+  api "com.fasterxml.jackson.core:jackson-databind"
+}

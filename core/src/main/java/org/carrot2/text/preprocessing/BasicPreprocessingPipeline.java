@@ -27,7 +27,7 @@ import org.carrot2.language.LanguageComponents;
  *   <li>{@link StopListMarker}
  * </ol>
  */
-public class BasicPreprocessingPipeline extends AttrComposite {
+public class BasicPreprocessingPipeline extends AttrComposite implements ContextPreprocessor {
   /**
    * Word Document Frequency threshold. Words appearing in fewer than <code>dfThreshold</code>
    * documents will be ignored.

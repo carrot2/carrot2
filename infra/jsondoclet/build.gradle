@@ -1,0 +1,14 @@
+apply plugin: 'java-library'
+
+dependencies {
+  implementation project(":infra:jsondoclet-model")
+  implementation "org.apache.commons:commons-text"
+}
+
+forbiddenApisMain {
+  bundledSignatures -= ['jdk-internal', 'jdk-non-portable', 'jdk-system-out']
+}
+
+forbiddenApisTest {
+  bundledSignatures -= ['jdk-internal', 'jdk-non-portable']
+}

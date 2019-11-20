@@ -1,0 +1,8 @@
+{
+  "type" : "com.carrotsearch.jsondoclet.Sample01",
+  "javadoc" : {
+    "text" : "First paragraph.\n\n <p>Second paragraph.\n\n <p>Third paragraph.\n\n <span class=\"important\">span with attribute</span>",
+    "summary" : "First paragraph."
+  },
+  "fields" : { }
+}

@@ -23,6 +23,7 @@ import org.assertj.core.api.Assertions;
 import org.carrot2.dcs.examples.E01_DcsConfiguration;
 import org.carrot2.dcs.examples.E02_DcsCluster;
 import org.carrot2.dcs.examples.E03_DcsClusterWithParams;
+import org.carrot2.dcs.examples.E04_DcsDataModels;
 import org.junit.Test;
 
 public class DcsExamplesTest extends AbstractDcsTest {
@@ -70,6 +71,19 @@ public class DcsExamplesTest extends AbstractDcsTest {
                 E03_DcsClusterWithParams.ARG_DCS_URI,
                 dcsService.toString(),
                 input.toAbsolutePath().toString());
+    Assertions.assertThat(exitCode).isEqualTo(ExitCodes.SUCCESS);
+  }
+
+  @Test
+  public void runE04() throws IOException {
+    URI dcsService = dcs().getAddress().resolve("/service/");
+
+    ExitCode exitCode =
+        new Launcher()
+            .runCommand(
+                new E04_DcsDataModels(),
+                E03_DcsClusterWithParams.ARG_DCS_URI,
+                dcsService.toString());
     Assertions.assertThat(exitCode).isEqualTo(ExitCodes.SUCCESS);
   }
 }

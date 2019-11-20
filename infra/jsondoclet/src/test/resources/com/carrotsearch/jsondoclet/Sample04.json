@@ -1,0 +1,20 @@
+{
+  "type" : "com.carrotsearch.jsondoclet.Sample04",
+  "javadoc" : {
+    "text" : "Field link (from class): <code>com.carrotsearch.jsondoclet.Sample04#field2</code>.",
+    "summary" : "Field link (from class): <code>com.carrotsearch.jsondoclet.Sample04#field2</code>."
+  },
+  "fields" : {
+    "field1" : {
+      "type" : "java.lang.Integer",
+      "javadoc" : {
+        "text" : "Field link: <code>com.carrotsearch.jsondoclet.Sample04#field2</code>.",
+        "summary" : "Field link: <code>com.carrotsearch.jsondoclet.Sample04#field2</code>."
+      }
+    },
+    "field2" : {
+      "type" : "java.lang.Integer",
+      "javadoc" : { }
+    }
+  }
+}

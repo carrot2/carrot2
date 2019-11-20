@@ -64,8 +64,8 @@ subprojects {
 
     project.archivesBaseName = "carrot2" + project.path.replace(':', '-')
 
-    sourceCompatibility = 9
-    targetCompatibility = 9
+    sourceCompatibility = 11
+    targetCompatibility = 11
 
     test {
       maxParallelForks = (int) Math.max(Runtime.runtime.availableProcessors() / 2.0, 4.0)
@@ -78,7 +78,7 @@ subprojects {
 
     if (!excludeTestsInfra.contains(project.path)) {
       dependencies {
-        testImplementation project(':test-infra')
+        testImplementation project(':infra:tests')
       }
     }
 

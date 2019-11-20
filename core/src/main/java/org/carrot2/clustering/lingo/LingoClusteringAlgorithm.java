@@ -36,9 +36,9 @@ import org.carrot2.text.vsm.TermDocumentMatrixReducer;
 import org.carrot2.text.vsm.VectorSpaceModelContext;
 
 /**
- * Lingo clustering algorithm. Implementation as described in: <i> "Stanisław Osiński, Dawid Weiss:
- * A Concept-Driven Algorithm for Clustering Search Results. IEEE Intelligent Systems, May/June, 3
- * (vol. 20), 2005, pp. 48—54."</i>.
+ * Lingo clustering algorithm. Implementation as described in: Stanisław Osiński, Dawid Weiss: A
+ * Concept-Driven Algorithm for Clustering Search Results. IEEE Intelligent Systems, May/June, 3
+ * (vol. 20), 2005, pp. 48—54.
  */
 public class LingoClusteringAlgorithm extends AttrComposite implements ClusteringAlgorithm {
   public static final String NAME = "Lingo";

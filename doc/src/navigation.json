@@ -1,35 +1,40 @@
 {
   "chapters": [
     {
-      "title": "Getting started",
+      "title": "Overview",
       "articles": [
-        "getting-started",
-        "quick-start"
+        "hello-carrot2",
+        "algorithms"
       ]
     },
     {
-      "title": "Basic usage",
+      "title": "Java API",
       "articles": [
-        "using-rest-api",
-        "using-java-api",
-        "customizing-stop-words"
+        "java-api-basics",
+        "java-language-components",
+        "java-extension-points"
+      ]
+    },
+    {
+      "title": "REST API",
+      "articles": [
+        "rest-api-basics",
+        "dcs-templates",
+        "dcs-language-components",
+        "rest-api-reference"
       ]
     },
     {
       "title": "Advanced topics",
       "articles": [
-        "choosing-algorithm",
         "tuning-clustering",
-        "non-english-content",
-        "solr-clustering-plugin",
-        "es-clustering-plugin"
+        "tuning-performance"
       ]
     },
     {
       "title": "Reference",
       "articles": [
-        "rest-api-reference",
-        "algorithm-parameters-reference"
+        "rest-api-reference"
       ]
     }
   ]
