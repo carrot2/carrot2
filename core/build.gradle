@@ -4,8 +4,11 @@ apply from: rootProject.file("gradle/jflex.gradle")
 
 configurations {
   langResources
+
   jsonDoclet
   jsonJavadoc
+
+  coreJavadoc
 }
 
 dependencies {
@@ -35,6 +38,15 @@ def javadocExcludes = [
 
 javadoc {
   exclude javadocExcludes
+
+  title = "Carrot<sup>2</sup>, Public Java API v${version} (${project.group}:${project.name})"
+
+  (options as StandardJavadocDocletOptions).with {
+    overview = file("src/main/java/overview.html")
+    linksOffline('https://docs.oracle.com/en/java/javase/11/docs/api/',
+      rootProject.file('etc/javadoc/11').toString())
+    footer "(git: ${gitStatus.abbrRev})"
+  }
 }
 
 task jsonJavadoc(type: Javadoc, dependsOn: compileJava) {
@@ -62,5 +74,9 @@ task jsonJavadoc(type: Javadoc, dependsOn: compileJava) {
 artifacts {
   jsonJavadoc jsonJavadocDir, {
     builtBy jsonJavadoc
+  }
+
+  coreJavadoc javadoc.destinationDir, {
+    builtBy javadoc
   }
 }
