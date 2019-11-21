@@ -1,0 +1,212 @@
+<article>
+  <h1>Tuning quality</h1>
+
+  <p>
+    This article discusses approaches to tuning Carrot<sup>2</sup> clustering
+    algorithms.
+  </p>
+
+  <section id="input-characteristics">
+    <h2>Desirable characteristics of input documents</h2>
+
+    <p>
+      The quality of clusters and their labels largely depends on the
+      quality of documents provided on the input. Although there is no
+      general rule for optimum document content, below are some tips worth
+      considering.
+    </p>
+
+    <ul>
+      <li>
+        <p>
+          <strong>Carrot<sup>2</sup> is designed for small to medium collections
+            of documents</strong>. Carrot<sup>2</sup> algorithms perform in-memory
+          clustering. For this reason, as a rule of thumb, Carrot<sup>2</sup>
+          should successfully deal with up to a thousand of documents, a few
+          paragraphs each. For algorithms designed to process millions of
+          documents, check out <a href="https://mahout.apache.org/">the Apache Mahout project</a>
+          or <a href="https://carrotsearch.com/lingo4g/">Carrot Search Lingo4G</a>.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          <strong>Provide a minimum of 100 documents</strong>. Carrot<sup>2</sup>
+          clustering algorithms will better with increasing amount of data. A hundred
+          documents on input is probably the minimum for any statistical significance
+          of features discovered by the algorithm. In general, an optimum number
+          of documents would probably fall between 100 and a few thousand documents
+          range. More than that may cause problems (Carrot<sup>2</sup> algorithms
+          are designed for speed and use in-memory data structures).
+        </p>
+      </li>
+
+      <li>
+        <p>
+          <strong>Provide query-context snippets instead of entire documents</strong>.
+          If the input
+          documents are a result of some search query, provide contextual
+          snippets related to that query (similar to what web search engines
+          return), instead of full document content. Not only will this speed up
+          processing, but should also guide the clustering algorithm to discover
+          query-related spectrum of topics.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          <strong>Minimize noise in the input documents</strong>. All kinds of noisy
+          fragments in the input like truncated sentences, random alphanumerical strings
+          or repeated boilerplate may decrease the quality of cluster labels.
+          If you are extracting query context for clustering, retrieving complete sentences
+          instead of truncated fragments should improve cluster labels even further.
+        </p>
+      </li>
+    </ul>
+  </section>
+
+  <section id="choosing-the-algorithm">
+    <h2>Choosing the clustering algorithm</h2>
+
+    <p>
+      Carrot<sup>2</sup> offers <a href="algorithms.html">several clustering algorithms</a>.
+      These algorithms differ in algorithmic approaches to solving the problem and vary in
+      performance characteristics and in how they find and then label document clusters.
+    </p>
+
+    <p>
+      It's quite difficult to give one clear recommendation as to which algorithm is
+      "the best": the decision is a problem of weighing multiple criteria (performance, cluster
+      label legibility). Compare the following three sets of cluster labels (acquired for the
+      same input using different algorithms):
+    </p>
+
+    <figure class="round">
+      <img src="images/output-compared-light.png"
+           alt="The same input clustered with different algorithms.">
+      <figcaption>
+        <p>
+          The same input ("data mining" search results) clustered with three different clustering
+          algorithms.
+        </p>
+      </figcaption>
+    </figure>
+
+    <p>
+      Many people (including us) have a subjective feeling that the Lingo-family of algorithms
+      (<a href="algorithms.html#lingo">Lingo</a> and
+      <a href="algorithms.html#lingo3g">Lingo3G</a>) delivers more intuitive and diverse clusters
+      compared to other algorithms.
+      Sometimes it is other characteristics (performance aspects, cluster structure) that should be
+      taken into account.
+    </p>
+
+    <p>
+      The following table summarizes key characteristics of each algorithm shipped in
+      Carrot<sup>2</sup>.
+    </p>
+
+    <figure class="round">
+      <table>
+        <caption>A comparison of key characteristics of Carrot<sup>2</sup> clustering algorithms.
+        </caption>
+        <thead>
+        <tr>
+          <th scope="col">Feature</th>
+          <th scope="col">Lingo</th>
+          <th scope="col">STC</th>
+          <th scope="col">k-means</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th scope="row">Cluster diversity</th>
+          <td><strong>High</strong>, many small (outlier) clusters highlighted</td>
+          <td><strong>Low</strong>, small (outlier) clusters rarely highlighted</td>
+          <td><strong>Low</strong>, small (outlier) clusters rarely highlighted</td>
+        </tr>
+        <tr>
+          <th scope="row">Cluster labels</th>
+          <td><strong>Longer</strong>, often more descriptive</td>
+          <td><strong>Shorter</strong>, but still appropriate</td>
+          <td><strong>One-word only</strong>, may not always describe all documents in the cluster
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Scalability</th>
+          <td>
+            <strong>Low</strong>. For more than about 1000 documents, Lingo clustering will take a
+            long time and large memory
+            <footnote></footnote>
+            .
+          </td>
+          <td><strong>High</strong></td>
+          <td><strong>Low</strong>, based on similar data structures as Lingo.</td>
+        </tr>
+        <tr>
+          <th scope="row">Overlapping clusters</th>
+          <td><strong>Yes</strong>. A document can belong to more than one cluster.</td>
+          <td><strong>Yes</strong>. A document can belong to more than one cluster.</td>
+          <td><strong>No</strong>. A document can belong to only one cluster.</td>
+        </tr>
+        </tbody>
+      </table>
+    </figure>
+
+    <p class="warning">
+      <a href="algorithms.html#lingo3g">Lingo3G</a>, the commercial algorithm that plugs into
+      Carrot<sup>2</sup> has a <a href="https://carrotsearch.com/lingo3g/comparison/">separate
+      page</a> where its features are compared against the open source algorithms.
+    </p>
+
+    <p>
+      While the table above can be useful to determine which algorithm to choose,
+      the ultimate judgment should based on an empirical evaluation with your specific document
+      collection.
+    </p>
+  </section>
+
+  <section id="tweaking-parameters">
+    <h2>Tweaking parameters</h2>
+
+    <p>
+      The default settings that come with each algorithm are good for an average case. Each
+      algorithm comes with a number of attributes which can be used to tune its output and
+      runtime characteristics.
+    </p>
+
+    <p>
+      <a href="java-api-basics.html#tweaking-attributes">This section</a>
+      shows how to adjust attribute settings in the Java API.
+      <a href="rest-api-basics.html#models">This section</a> shows how to adjust attributes
+      at the REST API level using request model classes.
+    </p>
+
+    <p>
+      In order to achieve good cluster labels and high clustering quality it is vital
+      to <strong>adjust the default language resources</strong> so that they exclude any common
+      terms, phrases and expressions specific to:
+    </p>
+
+    <ul>
+      <li>the selected language (the default resources should contain a reasonably number of these
+        already),
+      </li>
+      <li>the domain of documents being clustered.</li>
+    </ul>
+
+    <p>
+      For example, if clustering documents from the medical domain, certain expressions and terms
+      may be obvious and trivial to the domain. Forming clusters out of these wouldn't be of any
+      value to the users. By excluding such expressions the algorithms are guided to look for other,
+      perhaps more interesting alternative content.
+    </p>
+
+    <p>
+      <a href="java-language-components.html#tweaking-lexical-data-resources">This section</a>
+      shows how to adjust default resources in the Java API.
+      <a href="dcs-language-components.html">This section</a> shows how to adjust default
+      resources in the DCS.
+    </p>
+  </section>
+</article>

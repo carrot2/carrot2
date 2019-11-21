@@ -9,7 +9,8 @@
   <p>
     <code>LanguageComponent</code> instances provide assistance and hints to improve the
     quality of clustering for a specific language. The resources associated with this task
-    typically require costly processing to load and parse so <code>LanguageComponent</code> instances
+    typically require costly processing to load and parse so <code>LanguageComponent</code>
+    instances
     should be created early and reused for all subsequent clustering calls.
   </p>
 
@@ -60,9 +61,12 @@
   </p>
 
   <p class="warning">
-    Clustering algorithms may support a subset of languages (and language component instances assembled
-    manually). Each clustering algorithm has a method called <code>supports(LanguageComponents lc)</code>
-    which can be used to check whether the algorithm works with a given instance of language components.
+    Clustering algorithms may support a subset of languages (and language component instances
+    assembled
+    manually). Each clustering algorithm has a method called <code>supports(LanguageComponents
+    lc)</code>
+    which can be used to check whether the algorithm works with a given instance of language
+    components.
   </p>
 
   <section id="tweaking-lexical-data-resources">
@@ -102,10 +106,8 @@ across
       <dt><i>lang</i>.stoplabels.utf8</dt>
       <dd>
         A plain-text list of Java regular expression patterns to ignore. Each line contains exactly
-        one expression
-        that, if it matches the input label, causes the label to be discarded and ignored during
-        clustering. An example
-        stop labels file could look like this:
+        one expression that, if it matches the input label, causes the label to be discarded and
+        ignored during clustering. An example stop labels file could look like this:
         <pre>(?i)information (about|on).*
 (?i)(index|list) of.*
 ...</pre>
@@ -157,7 +159,7 @@ across
     </p>
 
     <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
-           data-fragment="custom-lexical-data"></pre>
+         data-fragment="custom-lexical-data"></pre>
 
     <p>
       Note how the initialization of the <code>ignored</code> set is pulled out of the supplier.

@@ -2,7 +2,75 @@
   <h1>Tuning performance</h1>
 
   <p>
-    copy over rough performance characteristics from Table 5.1
-    Characteristics of Lingo and STC clustering algorithms
+    This document presents some hints to improve clustering performance, especially for larger data
+    sets.
   </p>
+
+  <p>
+    Carrot<sup>2</sup> clustering algorithms have been designed to work really fast
+    but the tradeoff is that they store all the data structures in memory (and require the documents
+    to be passed via memory). The size of the virtual machine's heap will increase quickly
+    with longer overall size of input text. Also, the more documents you put on input and the longer
+    the documents are, the longer the clustering time will be.
+  </p>
+
+  <p>
+    Below are a few generic guidelines on improving performance should it become a problem.
+  </p>
+
+  <section id="reduce-input-size">
+    <h2>Reduce size of input</h2>
+
+    <p>
+      In many cases clustering short document excerpts may work just as well or
+      even better than full documents. Consider the possibility of replacing
+      full content with:
+    </p>
+
+    <ul>
+      <li>query-matching document fragments (such as search result snippets), if input documents
+        are a result of some type of user-entered query
+      </li>
+      <li>titles and abstracts of documents, if they are available,</li>
+      <li>just the leading few sentences or paragraphs of each document.</li>
+    </ul>
+  </section>
+
+  <section id="batch-and-merge">
+    <h2>Batch and merge smaller clustering runs</h2>
+
+    <p>
+      In many cases when the input collection of documents is too large to cluster as a whole,
+      dividing the input into smaller batches (or sampling smaller batches from the input), then
+      clustering separately and finally merging
+      based on cluster label text gives very reasonable results.
+    </p>
+
+    <p>
+      The above approach works because cluster labels recurring in smaller batches are very likely
+      to be significant for the entire collection. The downside is that
+      very small clusters containing just a few documents are likely to be lost during this process.
+    </p>
+  </section>
+
+  <section id="tune-algorithm">
+    <h2>Tune algorithm attributes</h2>
+
+    <p>
+      In many cases the default attribute settings for each algorithm may not be suitable for very
+      large inputs. Here are some attributes tweak suggestions you should consider
+      (experimentally adjusting their value to the size of your particular input).
+    </p>
+
+    <p></p>
+
+    <p>
+      <strong><code>wordDfThreshold</code></strong> 
+    </p>
+
+    <p>
+
+    </p>
+  </section>
+
 </article>
