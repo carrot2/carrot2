@@ -62,14 +62,44 @@
       (experimentally adjusting their value to the size of your particular input).
     </p>
 
-    <p></p>
+    <h3>STC, Bisecting k-Means</h3>
 
+    <p><strong><code>wordDfThreshold</code></strong></p>
     <p>
-      <strong><code>wordDfThreshold</code></strong> 
+      Increase the minimum document frequency (minimum number of occurrences) of terms and phrases
+      to a higher value. Something like 0.5% of the number of documents will typically work (so for
+      a document collection of 5000 documents set the attribute to 25).
     </p>
 
-    <p>
 
+    <h3>Lingo</h3>
+
+    <p><strong><code>wordDfThreshold</code>, <code>phraseDfThreshold</code></strong></p>
+    <p>
+      Increase the minimum document frequency (minimum number of occurrences) of terms and phrases
+      to a higher value. Something like 0.5% of the number of documents will typically work (so for
+      a document collection of 5000 documents set the attribute to 25).
+    </p>
+
+    <p><strong><code>factorizationQuality</code></strong></p>
+    <p>
+      For <code>algorithm.matrixReducer.factorizationFactory</code> implementations that support
+      this attribute
+      (and nearly all of them do), lower <code>factorizationQuality</code>. This will cause the
+      matrix factorization algorithm to perform fewer iterations and hence complete quicker.
+    </p>
+    <p>
+      Alternatively, you can set <code>algorithm.matrixReducer.factorizationFactory</code>
+      to an implementation of <code>PartialSingularValueDecompositionFactory</code>, which is
+      slightly faster than the other factorizations and does not have
+      any explicit <code>factorizationQuality</code> attribute.
+    </p>
+
+    <p><strong><code>maximumMatrixSize</code></strong></p>
+    <p>
+      Lower maximum matrix size in <code>matrixBuilder</code>. This will cause the matrix
+      factorization algorithm to complete quicker and use less memory. The tradeoff is that with
+      small matrix sizes, Lingo may not be able to discover smaller clusters.
     </p>
   </section>
 

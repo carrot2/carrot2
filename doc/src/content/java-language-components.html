@@ -176,4 +176,39 @@ across
          data-fragment="custom-overrides"></pre>
 
   </section>
+
+  <section id="other-languages">
+    <h2>Support for other languages</h2>
+
+    <p>
+      The core Carrot<sup>2</sup> JAR supports only a limited set of popular languages.
+      Additional modules add support for other languages and bring in extra resources required
+      for these languages to work properly.
+    </p>
+
+    <p>
+      All language extensions live under the <code>org.carrot2.lang</code> artifact
+      group namespace. Note that many of them come with sizeable
+      own dependencies (like <a href="https://lucene.apache.org/">Apache Lucene</a>
+      analyzers or dictionaries).
+    </p>
+
+    <ul>
+      <li><code>carrot2-lang-lucene-chinese</code>: Chinese (traditional
+        and simplified).
+      </li>
+      <li><code>carrot2-lang-lucene-japanese</code>: Japanese.</li>
+      <li><code>carrot2-lang-lucene-korean</code>: Korean.</li>
+      <li><code>carrot2-lang-lucene</code>: adds support for many other languages
+        supported by the <a href="https://lucene.apache.org/">Apache Lucene</a> project.
+      </li>
+      <li><code>carrot2-lang-polish</code>: Polish.</li>
+    </ul>
+
+    <p>
+      A language extension is automatically added to the list of supported language components if
+      it can be located and loaded by Java's standard <code>ServiceLoader</code>.
+    </p>
+
+  </section>
 </article>

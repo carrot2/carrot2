@@ -43,6 +43,9 @@ def publishedProjects = [
     ":core",
     ":dcs:model",
     ":lang:lucene",
+    ":lang:lucene-chinese",
+    ":lang:lucene-japanese",
+    ":lang:lucene-korean",
     ":lang:polish",
 ]
 
