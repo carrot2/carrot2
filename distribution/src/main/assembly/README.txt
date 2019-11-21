@@ -3,18 +3,19 @@ Carrot2
 -------
 
 This is a binary release of Carrot2 ${product.version}. It contains:
-  * Java API examples,
-  * a prebuilt HTTP/JSON REST service
-  * developer documentation,
-  * a demo "search-and-cluster" application.
+  * examples/   - Java API examples,
+  * artifacts/  - precompiled POMs and JARs (Maven-compatible repository).
+  * dcs/        - HTTP/JSON REST service, including developer documentation
+                  and a demo "search-and-cluster" application.
 
-Run the DCS server:
+Run the DCS (includes built-in HTTP server):
   cd dcs
   ./dcs
 
 then:
-  * Documentation is at: http://localhost:8080/doc
-  * REST service is at: http://localhost:8080/service
-  * demo application is at: http://localhost:8080/frontend
+  * Developer documentation:   http://localhost:8080/doc
+  * Java API JavaDoc:          http://localhost:8080/javadoc
+  * REST service:              http://localhost:8080/service
+  * demo "search" application: http://localhost:8080/frontend
 
 Build: ${product.version}, ${product.gitrev}, ${product.buildDate}

@@ -23,6 +23,7 @@ include 'dcs:examples'
 include 'dcs:contexts:service'
 include 'dcs:contexts:frontend'
 include 'dcs:contexts:root'
+include 'dcs:contexts:javadoc'
 
 include 'distribution'
 include 'doc'

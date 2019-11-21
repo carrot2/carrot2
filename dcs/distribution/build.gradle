@@ -7,6 +7,7 @@ configurations {
   ctxRoot
   ctxFrontend
   ctxDoc
+  ctxJavadoc
 
   examples
 
@@ -17,6 +18,7 @@ configurations {
 dependencies {
   ctxService   project(path: ":dcs:contexts:service", configuration: 'war')
   ctxRoot      project(path: ":dcs:contexts:root", configuration: 'war')
+  ctxJavadoc   project(path: ":dcs:contexts:javadoc", configuration: 'war')
   ctxFrontend  project(path: ":dcs:contexts:frontend", configuration: 'archives')
   ctxDoc       project(path: ":doc", configuration: 'archives')
 
@@ -98,6 +100,12 @@ task collectCtxRoot(type: Sync) {
   into "$outputDir/web/root"
 }
 
+task collectCtxJavadoc(type: Sync) {
+  dependsOn configurations.ctxJavadoc
+  from { zipTree(configurations.ctxJavadoc.asPath) }
+  into "$outputDir/web/javadoc"
+}
+
 task collectCtxFrontend(type: Sync) {
   from configurations.ctxFrontend
   into "$outputDir/web/frontend"
@@ -119,6 +127,7 @@ task distDir {
             collectCtxService,
             collectCtxRoot,
             collectCtxDoc,
+            collectCtxJavadoc,
             collectCtxFrontend,
             collectExamples
 
