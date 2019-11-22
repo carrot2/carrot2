@@ -4,8 +4,6 @@ jdk:
   - oraclejdk11
   - openjdk11
   - openjdk12
-  - openjdk13
-  - openjdk14
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -17,4 +15,4 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-  - ./gradlew check assemble --scan --stacktrace
+  - ./gradlew check assemble --scan --stacktrace -Dtests.slow=true
