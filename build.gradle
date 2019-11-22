@@ -11,11 +11,14 @@ plugins {
 
   // Task dependency inspector (gradle <task 1>...<task N> taskTree)
   // id "com.dorongold.task-tree" version "1.4"
+
+  id "com.gradle.build-scan" version "3.0"
 }
 
 rootProject.version = '4.0.0-SNAPSHOT'
 rootProject.ext.fullName = 'Carrot2'
 
+apply from: file('gradle/buildscan.gradle')
 apply from: file('gradle/common.gradle')
 apply from: file('gradle/idea.gradle')
 apply from: file('gradle/min-gradle-version.gradle')

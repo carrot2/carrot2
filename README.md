@@ -4,6 +4,9 @@ Carrot2
 Carrot2 is a text clustering engine. It can automatically organize small to medium
 collections of documents (like search results or abstracts) into thematic categories.
 
+[![Build Status](https://travis-ci.org/carrot2/carrot2.svg?branch=master)](https://travis-ci.org/carrot2/carrot2)
+
+
 Installation
 ------------
 
