@@ -19,31 +19,31 @@ and [Elasticsearch plugin](https://github.com/carrot2/elasticsearch-carrot2).
 Source code
 -----------
 
-Source code is at GitHub: https://github.com/carrot2/carrot2. 
+Source code is at [GitHub](https://github.com/carrot2/carrot2). 
 
 Documentation
 -------------
 
 * Project website is at:
-  https://project.carrot2.org
+  [project.carrot2.org](https://project.carrot2.org)
 
 * Developer documentation and examples are part of
   [binary releases](https://github.com/carrot2/carrot2/releases).
-  Once downloaded and unpacked:
+  Once downloaded and unpacked, start the DCS:
 
   ```shell script
   cd dcs
   ./dcs
-  open http://localhost:8080/doc/
   ```
+
+  and open [the documentation](http://localhost:8080/doc/) or
+  [JavaDoc API reference](http://localhost:8080/javadoc/).
 
 Contact and more information
 ----------------------------
 
-* Issues, pull-requests: 
+* Issues, pull-requests, communication:  
   https://github.com/carrot2/carrot2
-* Mailing list: 
-  carrot2-developers@lists.sourceforge.net
 
 License
 -------
