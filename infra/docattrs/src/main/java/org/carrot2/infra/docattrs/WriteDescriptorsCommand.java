@@ -100,7 +100,7 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
       ClassInfoCollector collector = new ClassInfoCollector(aliasMapper);
       ClassInfo ci = collector.collect(c);
       expandImplementations(ci, aliasedTypes);
-      expandPaths(ci, "algorithm");
+      expandPaths(ci, "algorithmInstance", "");
       if (javaDocs != null) {
         expandJavaDocs(javaDocs, ci);
       }
@@ -189,20 +189,21 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
     return fieldDocs;
   }
 
-  private void expandPaths(ClassInfo ci, String path) {
+  private void expandPaths(ClassInfo ci, String pathJava, String pathRest) {
     ci.attributes.forEach(
         (key, attr) -> {
-          attr.path = path + "." + key;
+          attr.pathJava = pathJava + "." + key;
+          attr.pathRest = pathRest.isEmpty() ? key : pathRest + "." + key;
           if (attr.implementations != null) {
             attr.implementations.forEach(
                 (alias, impl) -> {
-                  String newPath;
+                  String pathJavaWithCast;
                   if (!Objects.equals(impl.type, attr.type)) {
-                    newPath = String.format(Locale.ROOT, "((%s) %s)", impl.type, attr.path);
+                    pathJavaWithCast = String.format(Locale.ROOT, "((%s) %s)", impl.type, attr.pathJava);
                   } else {
-                    newPath = attr.path;
+                    pathJavaWithCast = attr.pathJava;
                   }
-                  expandPaths(impl, newPath);
+                  expandPaths(impl, pathJavaWithCast, attr.pathRest);
                 });
           }
         });

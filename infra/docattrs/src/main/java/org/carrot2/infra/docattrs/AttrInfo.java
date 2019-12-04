@@ -24,7 +24,8 @@ import org.carrot2.attrs.Attr;
   "type",
   "value",
   "constraints",
-  "path",
+  "pathJava",
+  "pathRest",
   "javadoc",
   "implementations"
 })
@@ -37,7 +38,8 @@ public class AttrInfo {
   @JsonProperty public Object value;
 
   @JsonProperty public List<String> constraints;
-  @JsonProperty public String path;
+  @JsonProperty public String pathJava;
+  @JsonProperty public String pathRest;
 
   @JsonProperty public Map<String, ClassInfo> implementations;
 
