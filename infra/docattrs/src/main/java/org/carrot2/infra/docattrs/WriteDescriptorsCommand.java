@@ -199,7 +199,8 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
                 (alias, impl) -> {
                   String pathJavaWithCast;
                   if (!Objects.equals(impl.type, attr.type)) {
-                    pathJavaWithCast = String.format(Locale.ROOT, "((%s) %s)", impl.type, attr.pathJava);
+                    pathJavaWithCast =
+                        String.format(Locale.ROOT, "((%s) %s)", impl.type, attr.pathJava);
                   } else {
                     pathJavaWithCast = attr.pathJava;
                   }
