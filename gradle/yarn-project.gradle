@@ -42,7 +42,10 @@ task yarnBuild(type: YarnTask) {
             }
         }
 
-        inputs.properties yarnEnv
+        inputs.properties (yarnEnv.findAll {
+            it.key != "REACT_APP_BUILD_DATE" &&
+            it.key != "REACT_APP_GIT_REV"
+        })
         environment = yarnEnv
     }
 
