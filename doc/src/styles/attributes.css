@@ -1,0 +1,29 @@
+.gatsby-highlight .attribute {
+  margin-left: 2ch;
+}
+.implementation:not(:last-child) {
+  margin: 0.5ch 0 0.5ch 1.5ch;
+  padding: 0.5ch 0;
+  border-left: 1px solid hsla(40, 40%, 80%, 0.7);
+  border-radius: 0.5ch;
+}
+.implementation > .attribute {
+  margin-left: 1.5ch;
+}
+
+span.token > a {
+  color: inherit;
+}
+
+.attribute.api > dl {
+  font-size: var(--small-font-size);
+}
+.attribute.api > dl > dd {
+  margin-bottom: 0;
+}
+.attribute.api > dl {
+  --dl-indent: 6em;
+}
+.attribute.api dd {
+  font-family: var(--monospace-font-family);
+}

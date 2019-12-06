@@ -34,7 +34,8 @@
     {
       "title": "Reference",
       "articles": [
-        "rest-api-reference"
+        "rest-api-reference",
+        "lingo-attributes-reference"
       ]
     }
   ]

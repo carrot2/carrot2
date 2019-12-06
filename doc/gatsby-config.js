@@ -1,3 +1,5 @@
+const attributeTransformer = require("./src/js/attributes").attributeTransformer;
+
 module.exports = {
   pathPrefix: '__RELATIVIZE_PREFIX__',
   siteMetadata: {
@@ -40,7 +42,10 @@ module.exports = {
           "JAVA_EXAMPLES": `${__dirname}/../core-examples/src/test/java/org/carrot2/examples`,
           "DCS_EXAMPLES": `${__dirname}/../dcs/examples/src/main/java/org/carrot2/dcs/examples`,
           "CORE": `${__dirname}/../core/src/main/java`
-        }
+        },
+        transformers: [
+          attributeTransformer
+        ]
       }
     },
     '@carrotsearch/gatsby-plugin-content-search',
