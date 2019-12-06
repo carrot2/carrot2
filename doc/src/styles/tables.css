@@ -1,29 +1,25 @@
-
-table {
+article table {
   font-size: smaller;
+  border-top: 2pt solid gray;
+  border-bottom: 2pt solid gray;
 }
 
-table > caption {
+article table > caption {
   padding-top: .5em;
   padding-bottom: .5em;
   caption-side: top;
 }
 
-table {
-  border-top: 2pt solid gray;
-  border-bottom: 2pt solid gray;
-}
-
-thead {
+article thead {
   border-bottom: 1pt solid gray;
 }
 
-td, th {
+article td, article th {
   padding: .5em;
   vertical-align: top;
   text-align: left;
 }
 
-thead th {
+article thead th {
   text-align: center;
 }
