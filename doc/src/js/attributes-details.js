@@ -78,7 +78,6 @@ const attributeDetailsHtml = (entry) => {
     <dd>${attribute.type}</dd>
     <dt>Default</dt>
     <dd>${attribute.value}</dd>
-    ${constraintsHtml}
     <dt>Path</dt>
     <dd>${entry.path}</dd>
     <dt>Java snippet</dt>
