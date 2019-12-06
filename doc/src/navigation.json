@@ -35,7 +35,9 @@
       "title": "Reference",
       "articles": [
         "rest-api-reference",
-        "lingo-attributes-reference"
+        "lingo-attributes",
+        "stc-attributes",
+        "kmeans-attributes"
       ]
     }
   ]
