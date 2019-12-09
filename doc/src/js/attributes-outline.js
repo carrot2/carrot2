@@ -7,8 +7,11 @@ const attributeValue = (attribute, descriptor) => {
   if (implementations) {
     const implementationKeys = Object.keys(implementations);
     const multipleImplementations = implementationKeys.length > 1;
+    const multipleImplementationsNote = multipleImplementations ?
+        `<div class='multiple implementations note'>// ${implementationKeys.length} configuration variants available, choose one</div>` : "";
     return {
       value:
+          multipleImplementationsNote +
           implementationKeys
               .map(i => {
                     if (multipleImplementations) {

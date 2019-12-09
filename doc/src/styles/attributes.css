@@ -10,6 +10,12 @@
 .implementation > .attribute {
   margin-left: 1.5ch;
 }
+.multiple.implementations.note {
+  font-family: var(--text-font-family);
+  font-size: var(--small-font-size);
+  color: hsla(40, 40%, 80%, 0.7);
+  margin: 0.5em 0 0.5em 0.7em;
+}
 
 span.token > a {
   color: inherit;
