@@ -13,6 +13,7 @@
 .multiple.implementations.note {
   font-family: var(--text-font-family);
   font-size: var(--small-font-size);
+  font-weight: 300;
   color: hsla(40, 40%, 80%, 0.7);
   margin: 0.5em 0 0.5em 0.7em;
 }
