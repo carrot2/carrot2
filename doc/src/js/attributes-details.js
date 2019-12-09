@@ -1,25 +1,18 @@
 const escapeForHtml = require('escape-html');
 
 const depthFirstAttributes = descriptor => {
-  const collect = (prefix, descriptor, target) => {
+  const collect = (descriptor, target) => {
     Object.keys(descriptor.attributes).forEach(k => {
       const attribute = descriptor.attributes[k];
-      const path = prefix + k;
-      const entry = {
-        key: k,
-        path: path,
-        attribute: attribute
-      };
-      target.push(entry);
+      target.push(attribute);
 
       if (attribute.attributes) {
-        collect(path + ".", attribute, target);
+        collect(attribute, target);
       }
       if (attribute.implementations) {
         const keys = Object.keys(attribute.implementations);
-        entry.implementations = keys.length;
         if (keys.length === 1) {
-          collect(path + ".", attribute.implementations[keys[0]], target);
+          collect(attribute.implementations[keys[0]], target);
         }
       }
     });
@@ -27,7 +20,7 @@ const depthFirstAttributes = descriptor => {
     return target;
   };
 
-  return collect("", descriptor, []);
+  return collect(descriptor, []);
 };
 
 const descriptionText = attribute => {
@@ -64,10 +57,10 @@ ${Object.keys(attribute.implementations)
     .join("")}
 </ul>`);
 
-const attributeDetailsHtml = (entry) => {
-  const attribute = entry.attribute;
-  const implementationsHtml = entry.implementations > 1
-      ? allImplementationDetailsHtml(attribute) : "";
+const attributeDetailsHtml = (attribute) => {
+  const name = attribute.pathRest.split(".").pop();
+  const implementationsHtml = attribute.implementations && Object.keys(
+      attribute.implementations).length > 1 ? allImplementationDetailsHtml(attribute) : "";
 
   // We need to double-escape the content due to HTML escaping mess in cheerio:
   // https://github.com/cheeriojs/cheerio/issues/1198. I'll clean this up once
@@ -76,8 +69,8 @@ const attributeDetailsHtml = (entry) => {
       `<dt>Constraints</dt><dd>${escapeForHtml(escapeForHtml(attribute.constraints.join(" and ")))}</dd>`
       : "";
 
-  return `<section id="${attribute.path}" class="api attribute">
-  <h3>${entry.key}</h3>
+  return `<section id="${attribute.pathJava}" class="api attribute">
+  <h3>${name}</h3>
   
   <dl class="compact narrow">
     <dt>Type</dt>
@@ -86,7 +79,7 @@ const attributeDetailsHtml = (entry) => {
     <dd>${attribute.value}</dd>
     <dd>${constraintsHtml}</dd>
     <dt>Path</dt>
-    <dd>${entry.path}</dd>
+    <dd>${attribute.pathRest}</dd>
     <dt>Java snippet</dt>
     <dd>${attribute.path}</dd>
   </dl>
