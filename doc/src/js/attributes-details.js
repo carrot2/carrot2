@@ -1,3 +1,5 @@
+const escapeForHtml = require('escape-html');
+
 const depthFirstAttributes = descriptor => {
   const collect = (prefix, descriptor, target) => {
     Object.keys(descriptor.attributes).forEach(k => {
@@ -66,8 +68,12 @@ const attributeDetailsHtml = (entry) => {
   const attribute = entry.attribute;
   const implementationsHtml = entry.implementations > 1
       ? allImplementationDetailsHtml(attribute) : "";
+
+  // We need to double-escape the content due to HTML escaping mess in cheerio:
+  // https://github.com/cheeriojs/cheerio/issues/1198. I'll clean this up once
+  // they make the fixed 1.0.0 release.
   const constraintsHtml = attribute.constraints ?
-      `<dt>Constraints</dt><dd>${attribute.constraints.join(" and ")}</dd>`
+      `<dt>Constraints</dt><dd>${escapeForHtml(escapeForHtml(attribute.constraints.join(" and ")))}</dd>`
       : "";
 
   return `<section id="${attribute.path}" class="api attribute">
@@ -78,6 +84,7 @@ const attributeDetailsHtml = (entry) => {
     <dd>${attribute.type}</dd>
     <dt>Default</dt>
     <dd>${attribute.value}</dd>
+    <dd>${constraintsHtml}</dd>
     <dt>Path</dt>
     <dd>${entry.path}</dd>
     <dt>Java snippet</dt>

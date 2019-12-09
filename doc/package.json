@@ -26,7 +26,8 @@
 
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
-    "react-helmet": "^5.2.1"
+    "react-helmet": "^5.2.1",
+    "escape-html": "^1.0.3"
   },
   "devDependencies": {
     "shelljs": "^0.8.3"
