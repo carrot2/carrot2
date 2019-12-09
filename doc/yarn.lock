@@ -795,10 +795,10 @@
     is-text-path "^2.0.0"
     p-map "^3.0.0"
 
-"@carrotsearch/gatsby-transformer-html@^1.0.16":
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/@carrotsearch/gatsby-transformer-html/-/gatsby-transformer-html-1.0.16.tgz#7111946f0c62a7cb5715df362d808a7cc5f704d7"
-  integrity sha512-ZMRzHTtaCcu2EZwxqqB8LbqukU7z+9+bnOXfxd1uwNiFHAmRr0w8W9b2FgQFLEQ2LXUtn2+SjiXclqzd6uM9PA==
+"@carrotsearch/gatsby-transformer-html@^1.0.17":
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/@carrotsearch/gatsby-transformer-html/-/gatsby-transformer-html-1.0.17.tgz#8df9b94315c6265c749b3feef260f002062ff041"
+  integrity sha512-upFs3zBJLKu1pU6TtCMz6K+N2yMSrM62e4dIbB1mjozBVhcV7DkRgCZ7fyc38ASbRPqkbNRF9Pxak5uaytCuxg==
   dependencies:
     cheerio "^1.0.0-rc.3"
     gatsby-plugin-sharp "^2.2.9"
@@ -4272,7 +4272,7 @@ es6-promisify@^6.0.0:
   resolved "https://registry.yarnpkg.com/es6-promisify/-/es6-promisify-6.0.2.tgz#525c23725b8510f5f1f2feb5a1fbad93a93e29b4"
   integrity sha512-eO6vFm0JvqGzjWIQA6QVKjxpmELfhWbDUWHm1rPfIbn55mhKPiAa5xpLmQWJrNa629ZIeQ8ZvMAi13kvrjK6Mg==
 
-escape-html@~1.0.3:
+escape-html@^1.0.3, escape-html@~1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/escape-html/-/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
   integrity sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=
