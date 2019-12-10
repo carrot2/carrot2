@@ -1,3 +1,9 @@
+@media (min-width: 1024px) {
+  :root {
+    --base-font-size: 16;
+  }
+}
+
 figure.round .preview,
 figure.round img {
   border-radius: calc(0.125 * var(--leading));
