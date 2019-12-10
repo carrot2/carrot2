@@ -15,10 +15,17 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.carrot2.internal.nanojson.JsonWriter;
 
+/**
+ * Static utility methods for converting between {@link AcceptingVisitor} and {@link Map}s.
+ *
+ * @see #extract(AcceptingVisitor)
+ * @see #populate(AcceptingVisitor, Map)
+ * @see #toMap(AcceptingVisitor)
+ * @see #fromMap(Class, Map, Function)
+ */
 public final class Attrs {
-  public static final String KEY_TYPE = "@type";
-
   private static final String KEY_WRAPPED = "@value";
+  static final String KEY_TYPE = "@type";
 
   private static class Wrapper implements AcceptingVisitor {
     AttrObject<AcceptingVisitor> value =
@@ -30,10 +37,25 @@ public final class Attrs {
     }
   }
 
+  /**
+   * Convert an instance to a map. The output map will contain the type of the instance and can be
+   * recreated with {@link #fromMap(Class, Map)}.
+   *
+   * <p>This method uses default class name mappings.
+   *
+   * @see #fromMap(Class, Map)
+   */
   public static Map<String, Object> toMap(AcceptingVisitor composite) {
     return toMap(composite, AliasMapper.SPI_DEFAULTS::toName);
   }
 
+  /**
+   * Convert an instance to a map. The output map will contain the type of the instance and can be
+   * recreated with {@link #fromMap(Class, Map)}.
+   *
+   * @param classToName Class to name mapping provider.
+   * @see #fromMap(Class, Map, Function)
+   */
   public static Map<String, Object> toMap(
       AcceptingVisitor composite, Function<Object, String> classToName) {
     LinkedHashMap<String, Object> map = new LinkedHashMap<>();
@@ -47,11 +69,24 @@ public final class Attrs {
     return sub;
   }
 
+  /**
+   * Convert a map to an instance of a class.
+   *
+   * <p>This method uses default class name mappings.
+   *
+   * @see #toMap(AcceptingVisitor)
+   */
   public static <E extends AcceptingVisitor> E fromMap(
       Class<? extends E> clazz, Map<String, Object> map) {
     return fromMap(clazz, map, AliasMapper.SPI_DEFAULTS::fromName);
   }
 
+  /**
+   * Convert a map to an instance of a class.
+   *
+   * @param nameToClass Name to new class instance supplier.
+   * @see #toMap(AcceptingVisitor)
+   */
   public static <E extends AcceptingVisitor> E fromMap(
       Class<? extends E> clazz, Map<String, Object> map, Function<String, Object> nameToClass) {
     Wrapper wrapper =
@@ -59,6 +94,44 @@ public final class Attrs {
     return safeCast(wrapper.value.get(), KEY_WRAPPED, clazz);
   }
 
+  /**
+   * Extracts just the attributes of an instance (no top-level type information is preserved).
+   *
+   * @param classToName Class to name mapping provider.
+   */
+  public static Map<String, Object> extract(
+      AcceptingVisitor instance, Function<Object, String> classToName) {
+    Map<String, Object> attrs = toMap(instance, classToName);
+    attrs.remove(KEY_TYPE);
+    return attrs;
+  }
+
+  /**
+   * Extracts just the attributes of an instance (no top-level type information is preserved).
+   *
+   * <p>This method uses default class name mappings.
+   */
+  public static Map<String, Object> extract(AcceptingVisitor instance) {
+    return extract(instance, AliasMapper.SPI_DEFAULTS::toName);
+  }
+
+  /**
+   * Populates a given instance with the values from the map.
+   *
+   * <p>This method uses default class name mappings.
+   *
+   * @see #extract(AcceptingVisitor)
+   */
+  public static <E extends AcceptingVisitor> E populate(E instance, Map<String, Object> map) {
+    return populate(instance, map, AliasMapper.SPI_DEFAULTS::toName);
+  }
+
+  /**
+   * Populates a given instance with the values from the map.
+   *
+   * @param nameToClass Name to new class instance supplier.
+   * @see #extract(AcceptingVisitor, Function)
+   */
   public static <E extends AcceptingVisitor> E populate(
       E instance, Map<String, Object> map, Function<String, Object> nameToClass) {
     FromMapVisitor visitor = new FromMapVisitor(map, nameToClass);
@@ -68,15 +141,23 @@ public final class Attrs {
     return instance;
   }
 
-  public static Map<String, Object> extract(
-      AcceptingVisitor instance, Function<Object, String> classToName) {
-    Map<String, Object> attrs = toMap(instance, classToName);
-    attrs.remove(KEY_TYPE);
-    return attrs;
+  /**
+   * Converts an instance (recursively) to JSON.
+   *
+   * <p>This method uses default class name mappings.
+   */
+  public static String toJson(AcceptingVisitor composite, ClassNameMapper classNameMapper) {
+    return toJson(composite, classNameMapper::toName);
   }
 
-  public static Map<String, Object> extract(AcceptingVisitor instance) {
-    return extract(instance, AliasMapper.SPI_DEFAULTS::toName);
+  /**
+   * Converts an instance (recursively) to JSON.
+   *
+   * @param classToName Class to name mapping provider.
+   */
+  public static String toJson(AcceptingVisitor composite, Function<Object, String> classToName) {
+    Map<String, Object> asMap = toMap(composite, classToName);
+    return JsonWriter.indent("  ").string().object(asMap).done();
   }
 
   private static class FromMapVisitor implements AttrVisitor {
@@ -401,14 +482,5 @@ public final class Attrs {
                 map.get(key)));
       }
     }
-  }
-
-  public static String toJson(AcceptingVisitor composite, ClassNameMapper classNameMapper) {
-    return toJson(composite, classNameMapper::toName);
-  }
-
-  public static String toJson(AcceptingVisitor composite, Function<Object, String> classToName) {
-    Map<String, Object> asMap = toMap(composite, classToName);
-    return JsonWriter.indent("  ").string().object(asMap).done();
   }
 }

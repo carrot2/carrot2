@@ -2,6 +2,75 @@
   <h1>Algorithms and Concurrency</h1>
 
   <p>
-    Discuss approaches to running concurrent algorithms (E04_Concurrency).
+    This article discusses approaches and pitfalls of running clustering algorithms
+    in concurrent environments.
   </p>
+
+  <section id="thread-safety">
+    <h2>Thread-safety</h2>
+
+    <p>
+      The following sentences explain the contracts required for concurrent use of
+      Carrot<sup>2</sup> Java API components:
+    </p>
+
+    <ul>
+      <li><strong>clustering algorithm instances are not thread-safe</strong> and cannot be used
+        by multiple threads in parallel,
+      </li>
+      <li><strong>language component instances are thread-safe</strong> and <strong>should</strong>
+        be used (and reused) by parallel threads.
+      </li>
+    </ul>
+
+    <p class="warning">
+      Note that, contrary to previous versions of Carrot<sup>2</sup>, there is no "managed" support
+      for caching, reusing or managing concurrency of clustering algorithm instances
+      (previously provided by the <code>Controller</code> instance). This is a deliberate decision:
+      algorithm instances are lightweight (to create and discard) and modern JVMs have much better
+      garbage collection mechanisms.
+    </p>
+
+    <p>
+      The following sections of this article show how various approaches to configuring
+      the algorithm once and then reusing it in subsequent (possibly concurrent) clustering
+      calls.
+    </p>
+  </section>
+
+  <section id="ephemeral">
+    <h2>Ephemeral instances</h2>
+
+    <p>
+      The simplest way to achieve thread-safety is to create the algorithm instance on the fly,
+      configure it appropriately and then discard it after the clustering completes. A simple pattern
+      here would be to create a function that transforms a stream of documents into a list
+      of clusters:
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E04_Concurrency.java"
+         data-fragment="ephemeral"></pre>
+
+    <p>
+      An important assumption here is that the <code>LanguageComponents</code> object
+      (<code>english</code> in the example above) has been
+      initialized beforehand (once) and is reused (see
+      <a href="java-language-components.html">here for more information</a>).
+    </p>
+  </section>
+
+
+  <section id="cloning">
+    <h2>Cloning preconfigured instances</h2>
+
+    <p>
+      Sometimes the configuration can become fairly complex. Clustering
+      algorithm instances can be converted into and recreate from a map so
+      we can extract all the details from the preconfigured instance and
+      then <em>deep-clone</em> it on demand, as this example shows:
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E04_Concurrency.java"
+         data-fragment="cloning"></pre>
+  </section>
 </article>

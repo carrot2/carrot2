@@ -18,6 +18,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.carrot2.attrs.Attrs;
 import org.carrot2.clustering.Cluster;
+import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.language.LanguageComponents;
@@ -39,15 +40,19 @@ public class E04_Concurrency {
     // property. The simplest way to achieve thread-safety is to create components on the fly and
     // discard them after the clustering completes.
 
+    // fragment-start{ephemeral}
     Function<Stream<Document>, List<Cluster<Document>>> processor =
         (documentStream) -> {
-          // Note that algorithm instances are created per-thread and then discarded.
+          // Algorithm instances are created per-call (per-thread)
           LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
+          // ...configured in place
           algorithm.preprocessing.phraseDfThreshold.set(10);
+          // and discarded once clustering call completes.
           return algorithm.cluster(documentStream, english);
         };
 
     runConcurrentClustering(processor);
+    // fragment-end{ephemeral}
   }
 
   @Test
@@ -58,21 +63,27 @@ public class E04_Concurrency {
     // a clone of it for each processor thread. This can be done with the default attribute
     // visitor that converts attributes to a map (and back).
 
+    // fragment-start{cloning}
+    // Apply any configuration tweaks once.
     LingoClusteringAlgorithm preconfigured = new LingoClusteringAlgorithm();
     preconfigured.preprocessing.phraseDfThreshold.set(10);
     preconfigured.desiredClusterCount.set(10);
     preconfigured.matrixReducer.factorizationFactory =
         new NonnegativeMatrixFactorizationKLFactory();
+
+    // Populate the map with algorithm and its attributes.
     Map<String, Object> attrs = Attrs.toMap(preconfigured);
 
+    // Reuse the previously populated map to create a new cloned instance.
     Function<Stream<Document>, List<Cluster<Document>>> processor =
         (documentStream) -> {
-          // Clone from preconfigured.
-          LingoClusteringAlgorithm cloned = Attrs.fromMap(LingoClusteringAlgorithm.class, attrs);
+          ClusteringAlgorithm cloned;
+          cloned = Attrs.fromMap(ClusteringAlgorithm.class, attrs);
           return cloned.cluster(documentStream, english);
         };
 
     runConcurrentClustering(processor);
+    // fragment-end{cloning}
   }
 
   private void runConcurrentClustering(
