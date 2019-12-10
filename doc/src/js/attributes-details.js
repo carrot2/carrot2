@@ -69,7 +69,7 @@ const attributeDetailsHtml = (attribute) => {
       `<dt>Constraints</dt><dd>${escapeForHtml(escapeForHtml(attribute.constraints.join(" and ")))}</dd>`
       : "";
 
-  return `<section id="${attribute.pathJava}" class="api attribute">
+  return `<section id="${attribute.id}" class="api attribute">
   <h3>${name}</h3>
   
   <dl class="compact narrow">

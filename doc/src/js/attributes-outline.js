@@ -35,7 +35,7 @@ function attributeProperty(attribute, descriptor) {
     return `"${attribute}"`;
   }
   const title = descriptor ? descriptor.javadoc.summary : "";
-  const href = descriptor.pathJava;
+  const href = descriptor.id;
   const link = descriptor ? `<a href="#${href}" title="${title}">${attribute}</a>` : attribute;
   return token("property", `"${link}"`);
 }
