@@ -24,8 +24,8 @@ import org.carrot2.language.LanguageComponents;
 import org.carrot2.math.matrix.NonnegativeMatrixFactorizationKLFactory;
 import org.junit.Test;
 
-/** This example shows clustering algorithms in multi-threading processing scenarios. */
-public class E04_Multithreading {
+/** This example shows clustering algorithms in concurrent processing scenarios. */
+public class E04_Concurrency {
   @Test
   public void ephemeral() throws Exception {
     // Loading language components can be heavy. Once loaded, the language components can be reused

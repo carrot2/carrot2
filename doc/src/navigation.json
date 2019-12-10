@@ -12,7 +12,8 @@
       "articles": [
         "java-api-basics",
         "java-language-components",
-        "java-extension-points"
+        "java-extension-points",
+        "java-concurrency"
       ]
     },
     {
