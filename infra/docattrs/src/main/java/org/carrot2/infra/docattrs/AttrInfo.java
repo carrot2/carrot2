@@ -20,6 +20,7 @@ import java.util.Map;
 import org.carrot2.attrs.Attr;
 
 @JsonPropertyOrder({
+  "id",
   "description",
   "type",
   "value",
@@ -33,11 +34,14 @@ import org.carrot2.attrs.Attr;
 public class AttrInfo {
   transient Attr<?> attr;
 
+  @JsonProperty public String id;
+
   @JsonProperty public String description;
   @JsonProperty public String type;
   @JsonProperty public Object value;
 
   @JsonProperty public List<String> constraints;
+
   @JsonProperty public String pathJava;
   @JsonProperty public String pathRest;
 

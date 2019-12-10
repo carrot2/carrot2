@@ -21,10 +21,10 @@ clean {
   delete project.files("public")
 }
 
-task collectDescriptors(type: Sync) {
+task descriptors(type: Sync) {
   from configurations.descriptors
   into descriptorsDir
 }
 
-yarnBuild.dependsOn collectDescriptors
+yarnBuild.dependsOn descriptors
 
