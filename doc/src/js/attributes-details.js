@@ -81,7 +81,7 @@ const attributeDetailsHtml = (attribute) => {
     <dt>Path</dt>
     <dd>${attribute.pathRest}</dd>
     <dt>Java snippet</dt>
-    <dd>${attribute.path}</dd>
+    <dd>${attribute.pathJava}</dd>
   </dl>
   
   <p>
