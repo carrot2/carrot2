@@ -1,0 +1,29 @@
+allprojects {
+  plugins.withType(JavaPlugin) {
+    tasks.withType(JavaCompile) {
+      options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+      options.encoding = "UTF-8"
+    }
+
+    tasks.withType(Jar) {
+      manifest {
+        attributes(
+            "Implementation-Title": project.name,
+            "Implementation-Version": "${project.version} (${replaceTokens['product.gitrev']}, ${replaceTokens['product.buildDate']})")
+      }
+    }
+
+    tasks.withType(Javadoc) {
+      options.encoding = 'UTF-8'
+    }
+
+    tasks.matching { it.name == "javadoc" }.all {
+      title = "${project.name} ${project.version} API Documentation"
+
+      if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+        options.addStringOption('Xdoclint:all,-missing', '-noindex')
+      }
+    }
+  }
+}

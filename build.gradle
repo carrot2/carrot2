@@ -18,17 +18,25 @@ plugins {
 rootProject.version = '4.0.0-SNAPSHOT'
 rootProject.ext.fullName = 'Carrot2'
 
-apply from: file('gradle/buildscan.gradle')
-apply from: file('gradle/common.gradle')
-apply from: file('gradle/idea.gradle')
+apply from: file('gradle/defaults.gradle')
+apply from: file('gradle/cleanall.gradle')
+
 apply from: file('gradle/min-gradle-version.gradle')
 apply from: file('gradle/gitinfo.gradle')
 apply from: file('gradle/buildinfo.gradle')
-apply from: file('gradle/java-defaults.gradle')
-apply from: file('gradle/spotless.gradle')
+apply from: file('gradle/defaults-java.gradle')
 
-apply from: file("gradle/test-stats.gradle")
-apply from: file("gradle/forbidden-apis.gradle")
+apply from: file('gradle/ide/idea.gradle')
+
+apply from: file('gradle/ci/buildscan.gradle')
+
+apply from: file("gradle/testing/defaults-tests.gradle")
+apply from: file("gradle/testing/fail-on-no-tests.gradle")
+apply from: file("gradle/testing/per-project-summary.gradle")
+apply from: file("gradle/testing/slowest-tests-at-end.gradle")
+
+apply from: file("gradle/validation/forbidden-apis.gradle")
+apply from: file("gradle/validation/spotless.gradle")
 
 ext {
   versions = [

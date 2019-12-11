@@ -1,0 +1,10 @@
+allprojects {
+  task cleanall {
+    description "Clean everything (including node_modules, etc.)"
+    group "build"
+  }
+
+  tasks.matching { it.name == "clean" }.all { task ->
+    cleanall.dependsOn clean
+  }
+}
