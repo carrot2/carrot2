@@ -26,6 +26,8 @@ ext {
 
   licenseHeader = file("etc/spotless/license-header.txt")
   legal = files('carrot2.LICENSE')
+
+  forbiddenApiRulesDir = file("etc/forbidden-apis")
 }
 
 apply from: file('gradle/defaults.gradle')
