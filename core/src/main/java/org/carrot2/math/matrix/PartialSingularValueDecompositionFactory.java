@@ -13,7 +13,7 @@ package org.carrot2.math.matrix;
 import org.carrot2.attrs.AttrComposite;
 import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 
-/** Factory for {@link PartialSingularValueDecomposition}s. */
+/** Performs matrix factorization using the Singular Value Decomposition algorithm. */
 public class PartialSingularValueDecompositionFactory extends AttrComposite
     implements MatrixFactorizationFactory {
   /** The desired number of base vectors */
