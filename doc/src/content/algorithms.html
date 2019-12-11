@@ -2,41 +2,39 @@
   <h1>Algorithms</h1>
 
   <p>
-    This section lists the algorithms available in Carrot<sup>2</sup>
+    Carrot<sup>2</sup> offers three clustering algorithms of varying characteristics:
+    Lingo, STC and bisecting k-means. There is also Lingo3G, a fast highly-tunable
+    commercial algorithm that seamlessly integrates with Carrot<sup>2</sup>.
   </p>
 
   <p>
     Each clustering algorithm tackles the problem of identifying groups of related
-    documents in a slightly different way and comes with different
-    performance characteristics (see <a href="tuning-performance.html">tuning
-    performance</a> for deeper insight into each algorithm's performance profile).
+    documents in a different way. Therefore, for the same input the algorithms will
+    produce different clusters and will have different performance characteristics.
   </p>
 
   <p>
-    Carrot<sup>2</sup> offers several clustering algorithms to choose from:
-    Lingo, STC and a generic bisecting k-means clustering. In addition to these open source
-    implementations, a commercial algorithm
-    <a href="https://carrotsearch.com/lingo3g/">Lingo3G</a> plugs seamlessly into
-    the same open source API. Switching between any of them is trivial.
-  </p>
-
-  <p>
-    The choice of an algorithm will affect the clustering output but no algorithm is "the best"
-    (refer to <a href="tuning-quality.html#choosing-the-algorithm">this section</a> for details).
-    Experiment with all of them, tweak parameters, finally select what fits your particular needs
-    and expectations. For example,
-    compare the following cluster labels acquired for the same query "data mining":
+    For example, compare the following cluster labels produced for the same input (<em>data
+    mining</em> search results) by our three clustering algorithms:
   </p>
 
   <figure class="round">
     <img src="images/output-compared-light.png" alt="The same input clustered with different algorithms.">
     <figcaption>
       <p>
-        The same input ("data mining" search results) clustered with three different clustering
-        algorithms.
+        The same input ("data mining" search results) clustered with three different
+        Carrot <sup>2</sup> clustering algorithms.
       </p>
     </figcaption>
   </figure>
+
+  <p>
+    There is no single "best" text clustering algorithm. The choice will depend on the
+    characteristics and size of the input texts as well as your particular needs and expectations.
+    While we provide some general <a href="tuning-quality.html#choosing-the-algorithm">algorithm
+    choice advice</a> and <a href="tuning-performance.html">performance tuning hints</a>, you will
+    ultimately need to experiment, tweak parameters, and select what fits your data and use case.
+  </p>
 
   <section id="lingo">
     <h2>Lingo algorithm</h2>
@@ -55,12 +53,11 @@
     <h2>STC algorithm</h2>
 
     <p>
-      The key data structure in the STC algorithm is the <strong>Suffix Tree</strong> or rather
-      a Generalized Suffix Tree (GST) built for all input documents. The algorithm
-      traverses the GST to identify words and phrases that occurred frequently in the input
-      documents and merges sub-groups of documents with high overlap. The algorithm
-      is very fast, even for large sets of documents, but suffers from lack
-      of cluster diversity.
+      The key data structure in the STC algorithm is the Generalized Suffix Tree (GST) built for all
+      input documents. The algorithm traverses the GST to identify words and phrases that occurred
+      frequently in the input documents and merges sub-groups of documents with high overlap. The
+      algorithm is very fast, even for large sets of documents, but suffers from the lack of cluster
+      diversity.
     </p>
   </section>
 
@@ -68,12 +65,11 @@
     <h2>Bisecting k-means</h2>
 
     <p>
-      Bisecting k-means is an implementation of a generic cluster-analysis technique (contrary to
-      Lingo and STC which are text-specific). The algorithm attempts to recursively split
+      Bisecting k-means is an implementation of a generic cluster analysis technique, contrary to
+      Lingo and STC which are text-specific. The algorithm attempts to recursively split
       the documents into smaller and smaller groups until the splits become unfeasible. The
-      disadvantage
-      of this algorithm is that the labels it creates are often subpar compared to STC or Lingo
-      (they consist of single terms rather than phrases).
+      disadvantage of this algorithm is that it creates single-term labels, which are often subpar
+      compared to phrase-based labels produced by STC or Lingo.
     </p>
   </section>
 
@@ -82,10 +78,9 @@
 
     <p>
       Lingo3G is a commercial successor to the Lingo algorithm. The algorithm
-      offers faster performance, lower memory consumption and many more tuning options
+      offers much higher performance, lower memory consumption and many more tuning options
       compared to Lingo. Please refer to <a href="https://carrotsearch.com/lingo3g/">Carrot Search
       Lingo3G</a> web site for details.
     </p>
   </section>
-
 </article>
