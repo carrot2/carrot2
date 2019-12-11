@@ -1,45 +1,66 @@
 
-def dynamicSignatures = { configuration ->
-  def deps = configuration.resolvedConfiguration.resolvedArtifacts
-      .collect { a -> a.moduleVersion.id }
-      .collect { id -> "${id.group}-${id.name}" }
-      .sort()
+allprojects { prj ->
+  plugins.withId("java", {
+    prj.apply plugin: 'de.thetaphi.forbiddenapis'
 
-  deps.each { dep ->
-    def signaturesFile = rootProject.file("etc/forbidden-apis/${dep}.txt")
-    if (signaturesFile.exists()) {
-      signaturesFiles += files(signaturesFile)
+    def dynamicSignatures = { configuration ->
+      def deps = configuration.resolvedConfiguration.resolvedArtifacts
+        .collect { a -> a.moduleVersion.id }
+        .collect { id -> "${id.group}-${id.name}" }
+        .sort()
+
+      deps.each { dep ->
+        def signaturesFile = rootProject.file("etc/forbidden-apis/${dep}.txt")
+        if (signaturesFile.exists()) {
+          signaturesFiles += files(signaturesFile)
+        }
+      }
     }
-  }
-}
 
-allprojects {
-  def matching = tasks.matching { it.name == "forbiddenApisMain" }
-  check.dependsOn matching
-  matching.all { task ->
-    bundledSignatures += [
+    forbiddenApisMain {
+      bundledSignatures += [
         'jdk-unsafe',
         'jdk-deprecated',
         'jdk-internal',
         'jdk-non-portable',
         'jdk-system-out',
-    ]
+      ]
 
-    doFirst dynamicSignatures.curry(configurations.compileClasspath)
-  }
-}
+      suppressAnnotations += [
+        "**.SuppressForbidden"
+      ]
 
-allprojects {
-  def matching = tasks.matching { it.name == "forbiddenApisTest" }
-  check.dependsOn matching
-  matching.all {
-    bundledSignatures += [
+      doFirst dynamicSignatures.curry(configurations.compileClasspath)
+    }
+
+    forbiddenApisTest {
+      bundledSignatures += [
         'jdk-unsafe',
         'jdk-deprecated',
         'jdk-internal',
         'jdk-non-portable',
-    ]
+      ]
 
-    doFirst dynamicSignatures.curry(configurations.testCompileClasspath)
-  }
+      suppressAnnotations += [
+        "**.SuppressForbidden"
+      ]
+
+      doFirst dynamicSignatures.curry(configurations.testCompileClasspath)
+    }
+
+    // Attach validation to check task.
+    check.dependsOn forbiddenApisMain
+    check.dependsOn forbiddenApisTest
+
+    // We rely on resolved configurations to compute the relevant set of rule
+    // files for forbiddenApis. Since we don't want to resolve these configurations until
+    // the task is executed, we can't really use them as task inputs properly. This is a
+    // chicken-and-egg problem.
+    //
+    // This is the simplest workaround possible: just point at all the rule files and indicate
+    // them as inputs. This way if a rule is modified, checks will be reapplied.
+    configure([forbiddenApisMain, forbiddenApisTest]) { task ->
+      task.inputs.dir(rootProject.file("etc/forbidden-apis"))
+    }
+  })
 }

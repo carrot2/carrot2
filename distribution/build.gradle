@@ -54,6 +54,7 @@ task syncDist(type: Sync) {
 }
 
 task syncDistShadow(type: Sync) {
+  dependsOn syncDist
   from distTarget
   into distShadow
 }

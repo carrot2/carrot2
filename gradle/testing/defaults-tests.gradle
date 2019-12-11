@@ -45,6 +45,13 @@ allprojects {
         }
       }
 
+      // Pass any tests.* property to the runner.
+      project.properties.each { k, v ->
+        if (k.startsWith("tests.")) {
+          systemProperty k.toString(), v.toString()
+        }
+      }
+
       doFirst {
         // Print some diagnostics about locations used.
         logger.info("Test folders for {}: cwd={}, tmp={}", project.path, testsWorkDir, testsTmpDir)

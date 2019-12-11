@@ -1,25 +1,24 @@
 
-allprojects {
-  afterEvaluate {
-    def tasks = tasks.findByName("spotlessCheck")
-    if (tasks) {
-      spotless {
-        java {
-          licenseHeaderFile licenseHeader
-          lineEndings 'UNIX'
-          endWithNewline()
-          googleJavaFormat('1.7')
-        }
+allprojects { prj ->
+  plugins.withType(JavaPlugin) {
+    prj.apply plugin: 'com.diffplug.gradle.spotless'
 
-        check.dependsOn(spotlessCheck)
+    spotless {
+      java {
+        licenseHeaderFile licenseHeader
+        lineEndings 'UNIX'
+        endWithNewline()
+        googleJavaFormat('1.7')
       }
 
-      task tidy() {
-        description "Applies formatters and cleanups to sources."
-        group "verification"
+      check.dependsOn(spotlessCheck)
+    }
 
-        dependsOn spotlessApply
-      }
+    task tidy() {
+      description "Applies formatters and cleanups to sources."
+      group "verification"
+
+      dependsOn spotlessApply
     }
   }
 }

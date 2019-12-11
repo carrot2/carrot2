@@ -5,6 +5,8 @@ allprojects {
     mavenCentral()
   }
 
+  group "org." + project.group
+
   ext {
     // Utility method to support passing overrides via -P or -D.
     propertyOrDefault = { propName, defValue ->
