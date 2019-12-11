@@ -50,12 +50,12 @@ const implementationDetailsHtml = implementation => (`<li>
 </li>`);
 
 const allImplementationDetailsHtml = attribute => (`<p>Available implementations:</p>
-<ul>
+<ol>
 ${Object.keys(attribute.implementations)
     .map(k => attribute.implementations[k])
     .map(implementationDetailsHtml)
     .join("")}
-</ul>`);
+</ol>`);
 
 const attributeDetailsHtml = (attribute) => {
   const name = attribute.pathRest.split(".").pop();

@@ -22,6 +22,14 @@ span.token > a {
   color: inherit;
 }
 
+.attribute.api {
+  border-top: none;
+}
+
+.attribute.api ~ .attribute.api {
+  border-top: 1px solid var(--hr-color);
+}
+
 .attribute.api > dl {
   font-size: var(--small-font-size);
 }
