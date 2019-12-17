@@ -1,6 +1,10 @@
 configure(rootProject) {
+  configurations {
+    mavenArtifacts
+  }
+
   ext {
-    mavenBuildRepo = "${rootProject.buildDir}/maven"
+    mavenBuildRepo = file("${buildDir}/maven")
 
     published = [
       ":core",
@@ -25,6 +29,12 @@ configure(rootProject) {
   task mavenSonatype() {
     group "Publishing"
     description "Publish Maven artifacts to Sonatype OSS Nexus"
+  }
+
+  artifacts {
+    mavenArtifacts mavenBuildRepo, {
+      builtBy tasks.mavenLocal
+    }
   }
 }
 

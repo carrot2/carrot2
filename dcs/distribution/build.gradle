@@ -139,12 +139,9 @@ task distZip(type: Zip) {
   destinationDirectory = file("$outputZip")
 
   from(distDir, {
-    exclude "**/*.sh"
-  })
-
-  from(distDir, {
-    include  "**/*.sh"
-    fileMode 0755
+    filesMatching("**/*.sh", {
+      fileMode 0755
+    })
   })
 
   into "${archivesBaseName}/"

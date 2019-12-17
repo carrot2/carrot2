@@ -15,11 +15,13 @@ ext {
 configurations {
   dcs
   examples
+  mavenArtifacts
 }
 
 dependencies {
   dcs project(path: ":dcs:distribution", configuration: "distDir" )
   examples project(path: ":core-examples", configuration: "distribution" )
+  mavenArtifacts project(path: ":", configuration: "mavenArtifacts")
 }
 
 task syncDist(type: Sync) {
@@ -30,7 +32,6 @@ task syncDist(type: Sync) {
 
   inputs.properties replaceTokensTrigger
 
-  dependsOn ":mavenLocal"
   from legal
 
   from(files('src/main/assembly'), {
@@ -46,7 +47,7 @@ task syncDist(type: Sync) {
     into "examples/"
   }
 
-  from(rootProject.mavenBuildRepo) {
+  from(configurations.mavenArtifacts) {
     into "artifacts/"
   }
 
@@ -72,6 +73,7 @@ task checkDcsExamples(type: GradleBuild) {
   dir = file("${distShadow}/dcs/examples")
   tasks = ["compileJava"]
 }
+check.dependsOn(checkExamples, checkDcsExamples)
 
 task zip(type: Zip) {
   dependsOn syncDist
@@ -80,11 +82,9 @@ task zip(type: Zip) {
   destinationDirectory = distZip
 
   from(distTarget, {
-    exclude "**/*.sh"
-  })
-  from(distTarget, {
-    include  "**/*.sh"
-    fileMode 0755
+    filesMatching("**/*.sh", {
+      fileMode 0755
+    })
   })
 
   into "carrot2-${project.version}/"
@@ -108,5 +108,3 @@ task bambooProps {
 
 assemble.dependsOn bambooProps
 assemble.dependsOn zip
-
-check.dependsOn(checkExamples, checkDcsExamples)
