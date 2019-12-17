@@ -30,9 +30,10 @@ ext {
   forbiddenApiRulesDir = file("etc/forbidden-apis")
 }
 
+apply from: file('gradle/validation/check-environment.gradle')
+
 apply from: file('gradle/defaults.gradle')
 apply from: file('gradle/cleanall.gradle')
-apply from: file('gradle/min-gradle-version.gradle')
 apply from: file('gradle/gitinfo.gradle')
 apply from: file('gradle/buildinfo.gradle')
 apply from: file('gradle/defaults-java.gradle')
