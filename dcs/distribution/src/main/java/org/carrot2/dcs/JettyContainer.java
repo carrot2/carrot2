@@ -17,7 +17,9 @@ import java.net.BindException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,6 +31,7 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ShutdownHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
+import org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -53,7 +56,7 @@ public class JettyContainer {
 
   public void start() throws Exception {
     server = createServer();
-    addContexts(server, webappContexts);
+    addContexts(server, connector, webappContexts);
     server.start();
   }
 
@@ -73,7 +76,8 @@ public class JettyContainer {
     return connector.getLocalPort();
   }
 
-  private void addContexts(Server server, Path contexts) throws IOException {
+  private void addContexts(Server server, ServerConnector connector, Path contexts)
+      throws IOException {
     List<Path> webapps;
     try (Stream<Path> list = Files.list(contexts)) {
       webapps =
@@ -81,7 +85,7 @@ public class JettyContainer {
               .collect(Collectors.toList());
     }
 
-    ArrayList<ContextHandler> ctxHandlers = new ArrayList<>();
+    ArrayList<WebAppContext> ctxHandlers = new ArrayList<>();
     for (Path context : webapps) {
       if (!Files.isRegularFile(context.resolve("WEB-INF").resolve("web.xml"))) {
         throw new RuntimeException(
@@ -104,6 +108,29 @@ public class JettyContainer {
       CONSOLE.debug("Deploying context '{}' at: {}.", ctxName, ctxPath);
       ctxHandlers.add(ctx);
     }
+
+    server.addLifeCycleListener(
+        new AbstractLifeCycleListener() {
+          @Override
+          public void lifeCycleStarted(LifeCycle event) {
+            CONSOLE.info(
+                "The following contexts are available:\n"
+                    + ctxHandlers.stream()
+                        .filter(AbstractLifeCycle::isStarted)
+                        .sorted(Comparator.comparing(ContextHandler::getContextPath))
+                        .map(ctx -> formatContext(ctx, connector))
+                        .collect(Collectors.joining("\n")));
+          }
+
+          private String formatContext(WebAppContext ctx, ServerConnector connector) {
+            return String.format(
+                Locale.ROOT,
+                "  http://localhost:%s%-10s %s",
+                connector.getLocalPort(),
+                ctx.getContextPath(),
+                ctx.getDisplayName());
+          }
+        });
 
     HandlerList handlers = new HandlerList();
     if (shutdownToken != null && !shutdownToken.trim().isEmpty()) {

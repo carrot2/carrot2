@@ -12,7 +12,10 @@ package org.carrot2.math.matrix;
 
 import org.carrot2.math.mahout.matrix.*;
 
-/** A factory for {@link NonnegativeMatrixFactorizationED}s. */
+/**
+ * Performs matrix factorization using the Non-negative Matrix Factorization algorithm with
+ * minimization of Euclidean Distance between A and UV' and multiplicative updating.
+ */
 public class NonnegativeMatrixFactorizationEDFactory extends IterativeMatrixFactorizationFactory {
   public MatrixFactorization factorize(DoubleMatrix2D A) {
     NonnegativeMatrixFactorizationED factorization = new NonnegativeMatrixFactorizationED(A);

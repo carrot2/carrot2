@@ -1,7 +1,13 @@
 
 apply plugin: 'java'
 
+configurations {
+    distribution
+}
+
 dependencies {
+    distribution project(path: ":dcs:distribution", configuration: "distDir")
+
     testImplementation project(":dcs:distribution")
     testImplementation project(":dcs:examples")
     testImplementation project(":dcs:model")
@@ -14,6 +20,10 @@ dependencies {
 }
 
 test {
-    dependsOn project(":dcs:distribution").distDir
+    dependsOn configurations.distribution
     maxParallelForks = 1
+
+    doFirst {
+        systemProperty "dist", "${configurations.distribution.singleFile}"
+    }
 }

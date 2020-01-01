@@ -1,3 +1,4 @@
+
 import org.apache.tools.ant.filters.*
 
 apply plugin: 'java-library'
@@ -30,11 +31,19 @@ task buildDistribution(type: Sync) {
   from(project.projectDir, {
     include 'src/**'
     exclude 'src/main/assembly/**'
+    includeEmptyDirs false
+    filteringCharset = 'UTF-8'
+    filter(LineContains, negate: true, contains: ['fragment-start{'])
+    filter(LineContains, negate: true, contains: ['fragment-end{'])
   })
 
   from(files("src/main/assembly"), {
     filteringCharset = 'UTF-8'
     filter(ExpandProperties, project: antPrj)
+  })
+
+  from(rootProject.projectDir, {
+    include "gradlew*", "gradle/wrapper/**"
   })
 
   into "$buildDir/distribution"

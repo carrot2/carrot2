@@ -12,7 +12,10 @@ package org.carrot2.math.matrix;
 
 import org.carrot2.math.mahout.matrix.*;
 
-/** {@link LocalNonnegativeMatrixFactorization} factory. */
+/**
+ * Performs matrix factorization using the Local Non-negative Matrix Factorization algorithm with
+ * minimization of the Kullback-Leibler divergence between A and UV' and multiplicative updating.
+ */
 public class LocalNonnegativeMatrixFactorizationFactory
     extends IterativeMatrixFactorizationFactory {
   public MatrixFactorization factorize(DoubleMatrix2D A) {

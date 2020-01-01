@@ -16,82 +16,54 @@ plugins {
 }
 
 rootProject.version = '4.0.0-SNAPSHOT'
-rootProject.ext.fullName = 'Carrot2'
-
-apply from: file('gradle/buildscan.gradle')
-apply from: file('gradle/common.gradle')
-apply from: file('gradle/idea.gradle')
-apply from: file('gradle/min-gradle-version.gradle')
-apply from: file('gradle/gitinfo.gradle')
-apply from: file('gradle/buildinfo.gradle')
-apply from: file('gradle/java-defaults.gradle')
-apply from: file('gradle/spotless.gradle')
-
-apply from: file("gradle/test-stats.gradle")
-apply from: file("gradle/forbidden-apis.gradle")
-
 ext {
+  fullName = "Carrot2"
+
   versions = [
-      node: '10.16.3',
-      yarn: '1.19.0',
+    node: '10.16.3',
+    yarn: '1.19.0',
   ]
 
   licenseHeader = file("etc/spotless/license-header.txt")
   legal = files('carrot2.LICENSE')
 
-  mavenBuildRepo = "${rootProject.buildDir}/maven"
+  forbiddenApiRulesDir = file("etc/forbidden-apis")
 }
 
-def publishedProjects = [
-    ":core",
-    ":dcs:model",
-    ":lang:lucene",
-    ":lang:lucene-chinese",
-    ":lang:lucene-japanese",
-    ":lang:lucene-korean",
-    ":lang:polish",
-]
+apply from: file('gradle/validation/check-environment.gradle')
 
-def excludeTestsInfra = [
-    ":core-examples"
-]
+apply from: file('gradle/defaults.gradle')
+apply from: file('gradle/cleanall.gradle')
+apply from: file('gradle/gitinfo.gradle')
+apply from: file('gradle/buildinfo.gradle')
+apply from: file('gradle/defaults-java.gradle')
 
-allprojects {
-  group "org." + project.group
-}
+apply from: file('gradle/node/defaults-node.gradle')
+
+apply from: file('gradle/ide/idea.gradle')
+
+apply from: file('gradle/ci/buildscan.gradle')
+
+apply from: file("gradle/testing/defaults-tests.gradle")
+apply from: file("gradle/testing/fail-on-no-tests.gradle")
+apply from: file("gradle/testing/per-project-summary.gradle")
+apply from: file("gradle/testing/slowest-tests-at-end.gradle")
+
+apply from: file("gradle/validation/forbidden-apis.gradle")
+apply from: file("gradle/validation/spotless.gradle")
+
+apply from: file('gradle/maven/defaults-maven.gradle')
 
 subprojects {
   if (project.file("src/main/java").exists() ||
       project.file("src/test/java").exists() ||
       project.file("src/main/webapp").exists()) {
     apply plugin: 'java-library'
-    apply plugin: 'com.diffplug.gradle.spotless'
-    apply plugin: 'de.thetaphi.forbiddenapis'
 
-    project.archivesBaseName = "carrot2" + project.path.replace(':', '-')
-
-    sourceCompatibility = 11
-    targetCompatibility = 11
-
-    test {
-      maxParallelForks = (int) Math.max(Runtime.runtime.availableProcessors() / 2.0, 4.0)
-
-      // Pass any tests.* property to the runner.
-      project.properties.each { k, v ->
-        systemProperty k.toString(), v.toString()
-      }
-    }
-
-    if (!excludeTestsInfra.contains(project.path)) {
+    if (![":core-examples"].contains(project.path)) {
       dependencies {
         testImplementation project(':infra:tests')
       }
-    }
-
-    tasks.withType(de.thetaphi.forbiddenapis.gradle.CheckForbiddenApis) {
-      suppressAnnotations += [
-        "org.carrot2.util.SuppressForbidden"
-      ]
     }
   }
 }
@@ -110,155 +82,5 @@ allprojects {
       // TODO: a bug in palantir prevents versionless dependency here.
       providedCompile "javax.servlet:javax.servlet-api:3.1.0"
     }
-  }
-}
-
-
-// Configure gradle projects
-
-configure(subprojects.findAll {
-  it.path in [
-      ":dcs:contexts:frontend",
-      ":doc"]
-}) {
-  apply from: rootProject.file("gradle/yarn-project.gradle")
-
-  project.ext.yarnEnv += [
-      'REACT_APP_VERSION'   : rootProject.replaceTokens['product.version'],
-      'REACT_APP_BUILD_DATE': rootProject.replaceTokens['product.buildDate'],
-      'REACT_APP_GIT_REV'   : rootProject.replaceTokens['product.gitrev']
-  ]
-}
-
-// Yarn install creates many problems when multiple instances try to run concurrently. Enforce
-// sequential ordering here.
-afterEvaluate {
-  rootProject.tasks.create("yarnOrdering")
-
-  def sequence = []
-
-  [":dcs:contexts:frontend:yarnInstall",
-   ":dcs:contexts:frontend:yarnBuild",
-   ":doc:yarnInstall",
-   ":doc:yarnBuild",
-   ":yarnOrdering"].each { path ->
-    def task = tasks.findByPath(path)
-    task.mustRunAfter(sequence)
-    sequence += task
-  }
-}
-
-task mavenLocalClean(type: Delete) {
-  delete mavenBuildRepo
-}
-
-task mavenLocal() {
-  group "Publishing"
-  description "Publish Maven artifacts locally to " + file(mavenBuildRepo)
-}
-
-task mavenSonatype() {
-  group "Publishing"
-  description "Publish Maven artifacts to Sonatype OSS Nexus"
-}
-
-
-configure(subprojects.findAll { it.path in publishedProjects }) {
-  apply plugin: 'maven-publish'
-  apply plugin: 'signing'
-
-  task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier = 'sources'
-    from sourceSets.main.allJava
-  }
-
-  task javadocJar(type: Jar, dependsOn: javadoc) {
-    archiveClassifier = 'javadoc'
-    from javadoc.destinationDir
-  }
-
-  publishing {
-    repositories {
-      maven {
-        name = 'build'
-        url = mavenBuildRepo
-      }
-      maven {
-        name = 'sonatype'
-        url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-        credentials {
-          if (project.hasProperty('nexusUsername')) {
-            username project.nexusUsername
-          }
-          if (project.hasProperty('nexusPassword')) {
-            password project.nexusPassword
-          }
-        }
-      }
-    }
-
-    def configurePom = {
-      name = "Carrot2 (${project.name})"
-      description = "Carrot2 Text Clustering Library"
-      url = 'https://project.carrot2.org'
-      inceptionYear = "2001"
-      licenses {
-        license {
-          name = 'BSD License'
-          url = 'https://www.carrot2.org/carrot2.LICENSE'
-        }
-      }
-      organization {
-        name = "Carrot Search s.c."
-        url = "https://www.carrotsearch.com"
-      }
-      developers {
-        developer {
-          id = 'stanislaw.osinski'
-          name = 'Stanisław Osiński'
-          email = 'stanislaw.osinski@carrotsearch.com'
-        }
-        developer {
-          id = 'dawid.weiss'
-          name = 'Dawid Weiss'
-          email = 'dawid.weiss@carrotsearch.com'
-        }
-      }
-      scm {
-        connection = 'scm:git:git@github.com:carrot2/carrot2.git'
-        developerConnection = 'scm:git:git@github.com:carrot2/carrot2.git'
-        url = 'https://github.com/carrot2/carrot2'
-      }
-    }
-
-    publications {
-      jars(MavenPublication) {
-        from components.java
-        group = project.group
-        artifactId = project.archivesBaseName
-
-        pom(configurePom)
-      }
-
-      maven(MavenPublication) {
-        from components.java
-        group = project.group
-        artifactId = project.archivesBaseName
-
-        artifact sourcesJar
-        artifact javadocJar
-
-        pom(configurePom)
-      }
-    }
-  }
-
-  publishJarsPublicationToBuildRepository.dependsOn mavenLocalClean
-  mavenLocal.dependsOn publishJarsPublicationToBuildRepository
-
-  mavenSonatype.dependsOn publishMavenPublicationToSonatypeRepository
-
-  signing {
-    sign publishing.publications.maven
   }
 }

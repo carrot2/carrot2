@@ -1,0 +1,24 @@
+
+allprojects { prj ->
+  plugins.withType(JavaPlugin) {
+    prj.apply plugin: 'com.diffplug.gradle.spotless'
+
+    spotless {
+      java {
+        licenseHeaderFile licenseHeader
+        lineEndings 'UNIX'
+        endWithNewline()
+        googleJavaFormat('1.7')
+      }
+
+      check.dependsOn(spotlessCheck)
+    }
+
+    task tidy() {
+      description "Applies formatters and cleanups to sources."
+      group "verification"
+
+      dependsOn spotlessApply
+    }
+  }
+}

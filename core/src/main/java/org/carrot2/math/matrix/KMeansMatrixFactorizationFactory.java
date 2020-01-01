@@ -12,7 +12,10 @@ package org.carrot2.math.matrix;
 
 import org.carrot2.math.mahout.matrix.*;
 
-/** {@link KMeansMatrixFactorization} factory. */
+/**
+ * Performs matrix factorization using the k-means clustering algorithm. This kind of factorization
+ * is sometimes referred to as Concept Decomposition Factorization.
+ */
 public class KMeansMatrixFactorizationFactory extends IterativeMatrixFactorizationFactory {
   public MatrixFactorization factorize(DoubleMatrix2D A) {
     KMeansMatrixFactorization factorization = new KMeansMatrixFactorization(A);

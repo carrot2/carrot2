@@ -1,0 +1,141 @@
+configure(rootProject) {
+  configurations {
+    mavenArtifacts
+  }
+
+  ext {
+    mavenBuildRepo = file("${buildDir}/maven")
+
+    published = [
+      ":core",
+      ":dcs:model",
+      ":lang:lucene",
+      ":lang:lucene-chinese",
+      ":lang:lucene-japanese",
+      ":lang:lucene-korean",
+      ":lang:polish",
+    ]
+  }
+
+  task mavenLocalClean(type: Delete) {
+    delete mavenBuildRepo
+  }
+
+  task mavenLocal() {
+    group "Publishing"
+    description "Publish Maven artifacts locally to " + file(mavenBuildRepo)
+  }
+
+  task mavenSonatype() {
+    group "Publishing"
+    description "Publish Maven artifacts to Sonatype OSS Nexus"
+  }
+
+  artifacts {
+    mavenArtifacts mavenBuildRepo, {
+      builtBy tasks.mavenLocal
+    }
+  }
+}
+
+configure(subprojects.findAll { it.path in published }) {
+  apply plugin: 'maven-publish'
+  apply plugin: 'signing'
+
+  plugins.withType(JavaPlugin) {
+    task sourcesJar(type: Jar, dependsOn: classes) {
+      archiveClassifier = 'sources'
+      from sourceSets.main.allJava
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+      archiveClassifier = 'javadoc'
+      from javadoc.destinationDir
+    }
+
+    publishing {
+      repositories {
+        maven {
+          name = 'build'
+          url = rootProject.mavenBuildRepo
+        }
+        maven {
+          name = 'sonatype'
+          url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+          credentials {
+            if (project.hasProperty('nexusUsername')) {
+              username project.nexusUsername
+            }
+            if (project.hasProperty('nexusPassword')) {
+              password project.nexusPassword
+            }
+          }
+        }
+      }
+
+      def configurePom = {
+        name = "Carrot2 (${project.name})"
+        description = "Carrot2 Text Clustering Library"
+        url = 'https://project.carrot2.org'
+        inceptionYear = "2001"
+        licenses {
+          license {
+            name = 'BSD License'
+            url = 'https://www.carrot2.org/carrot2.LICENSE'
+          }
+        }
+        organization {
+          name = "Carrot Search s.c."
+          url = "https://www.carrotsearch.com"
+        }
+        developers {
+          developer {
+            id = 'stanislaw.osinski'
+            name = 'Stanisław Osiński'
+            email = 'stanislaw.osinski@carrotsearch.com'
+          }
+          developer {
+            id = 'dawid.weiss'
+            name = 'Dawid Weiss'
+            email = 'dawid.weiss@carrotsearch.com'
+          }
+        }
+        scm {
+          connection = 'scm:git:git@github.com:carrot2/carrot2.git'
+          developerConnection = 'scm:git:git@github.com:carrot2/carrot2.git'
+          url = 'https://github.com/carrot2/carrot2'
+        }
+      }
+
+      publications {
+        jars(MavenPublication) {
+          from components.java
+          group = project.group
+          artifactId = project.archivesBaseName
+
+          pom(configurePom)
+        }
+
+        maven(MavenPublication) {
+          from components.java
+          group = project.group
+          artifactId = project.archivesBaseName
+
+          artifact sourcesJar
+          artifact javadocJar
+
+          pom(configurePom)
+        }
+      }
+    }
+
+    publishJarsPublicationToBuildRepository.dependsOn mavenLocalClean
+    mavenLocal.dependsOn publishJarsPublicationToBuildRepository
+
+    mavenSonatype.dependsOn publishMavenPublicationToSonatypeRepository
+
+    signing {
+      sign publishing.publications.maven
+    }
+  }
+}
