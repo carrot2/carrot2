@@ -27,10 +27,15 @@
 
     <pre data-language="groovy">implementation "org.carrot2:carrot2-core:%PROJECT_VERSION%"</pre>
 
-    <p class="warning">
-      Additional JARs may be required to cluster documents in languages other than English.
-      Please refer to <a href="java-language-components.html#other-languages">this section</a> to see what's needed.
-    </p>
+    <div class="warning">
+      <strong>Clustering non-English languages</strong>
+
+      <p>
+        Additional JARs may be required to cluster documents in languages other than English.
+        Please refer to the <a href="java-language-components.html#other-languages">Language components</a> to
+        see what's needed.
+      </p>
+    </div>
 
     <p>
       A binary Carrot<sup>2</sup> distribution, including all examples, is always available at
@@ -47,12 +52,25 @@
     </p>
 
     <ol>
-      <li>setting up heavy, thread-safe, reusable components (language dictionaries and auxiliary
-        resources combined in an instance of <code>LanguageComponents</code> class),</li>
-      <li>setting up lightweight, per-thread components (algorithms),</li>
-      <li>preparing input documents and performing actual clustering.</li>
+      <li>
+        <p>
+          setting up heavy, thread-safe, reusable components (language dictionaries and auxiliary
+          resources combined in an instance of the <code>LanguageComponents</code> class),
+        </p>
+      </li>
+      <li>
+        <p>
+          setting up lightweight, per-thread components (clustering algorithms),
+        </p>
+      </li>
+      <li>
+        <p>
+          preparing input documents and performing the actual clustering.
+        </p>
+      </li>
     </ol>
 
+    <!-- I don't get that -->
     <p class="warning">
       Lightweight components can be created on-demand once the documents are ready so there is
       some room for flexibility. <strong>Make sure to load and instantiate the heavy components
@@ -65,8 +83,8 @@
     <h2>Clustering</h2>
 
     <p>
-      The following example discusses the code from <code>E01_ClusteringBasics.java</code>
-      example. This shows just the key elements required to process a stream of documents
+      The following example discusses code from the <code>E01_ClusteringBasics.java</code>
+      example. It shows just the key elements required to process a stream of documents
       in English, without any parameter or language resource tuning.
     </p>
 
@@ -88,9 +106,8 @@
          data-fragment="setup-lightweight-components"></pre>
 
     <p>
-      Once we have the heavy and lightweight components initialized, we can assemble the input (a
-      stream of
-      <code>Document</code> instances) for clustering. Each document must implement a
+      Once we have the heavy and lightweight components initialized, we can assemble the input
+      for clustering: a stream of <code>Document</code> instances. Each document must implement a
       single method that presents its clusterable text fields to the algorithm:
     </p>
 
@@ -106,10 +123,10 @@
          data-fragment="search-results-array"></pre>
 
     <p>
-      Because the field visitor interface is a single method it can be implemented using a clusure.
-      We convert the above data array into document instances dynamically using java streams
-      (note how we only expose the title and the snippet fields, the URL is omitted because
-      it is not really a clusterable text content).
+      Because the field visitor interface is a single method, it can be implemented using a clusure.
+      We convert the above data array into document instances dynamically using Java streams.
+      Note how we only expose the title and the snippet fields, the URL is omitted because
+      it is not really clusterable text content.
     </p>
 
     <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
