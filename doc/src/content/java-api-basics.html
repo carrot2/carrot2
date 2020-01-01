@@ -71,11 +71,20 @@
     </ol>
 
     <!-- I don't get that -->
-    <p class="warning">
-      Lightweight components can be created on-demand once the documents are ready so there is
-      some room for flexibility. <strong>Make sure to load and instantiate the heavy components
-      once</strong>.
-    </p>
+    <div class="warning">
+      <strong>Heavy and lightweight components, use them correctly</strong>
+
+      <p>
+        Initialization of the heavy components may take significant time, so <strong>initialize them
+        once and then reuse for all clustering requests</strong>. Heavy components are thread-safe,
+        so you can safely share them when clustering in multiple threads.
+      </p>
+
+      <p>
+        Lightweight components are cheap to create so you can create a throw-away instance on-demand
+        for each clustering request.
+      </p>
+    </div>
   </section>
 
 
@@ -89,7 +98,7 @@
     </p>
 
     <p>
-      First, let's load the default resources for the English language. The
+      First, let's load the heavy components: the default resources for the English language. The
       loaded <code>LanguageComponents</code> instance is thread-safe and should be reused for
       any subsequent calls to clustering algorithms.
     </p>
@@ -98,8 +107,8 @@
          data-fragment="setup-heavy-components"></pre>
 
     <p>
-      Now it's time to create an instance of a clustering algorithm. Let's pick the Lingo
-      algorithm explicitly:
+      Now it's time to create the lightweight component: an instance of a clustering algorithm.
+      Let's pick the Lingo algorithm explicitly:
     </p>
 
     <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
