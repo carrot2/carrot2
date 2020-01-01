@@ -165,17 +165,17 @@ Data Mining Techniques, documents: 11</pre>
 
     <p>
       Each clustering algorithm will have a different set of knobs to adjust its behavior.
-      All algorithms in Carrot<sup>2</sup> have public fields (documented in the generated JavaDoc
-      documentation) that allow direct changes of an algorithm's settings. For example:
+      All algorithms in Carrot<sup>2</sup> have public fields, documented in the generated JavaDoc
+      documentation, that allow direct changes of an algorithm's settings. For example:
     </p>
 
     <pre data-embed="%JAVA_EXAMPLES%/E02_TweakingAttributes.java"
          data-fragment="parameters"></pre>
 
     <p>
-      Note that even primitive-type attributes (like <code>wordDfThreshold</code> above) have to use
+      Note that even primitive-type attributes like <code>wordDfThreshold</code> above have to use
       setter methods to modify their value. This is because arguments are validated early and
-      values out of range (or otherwise incorrect) will trigger exceptions at the exact moment they
+      out-of-range or otherwise incorrect values will trigger exceptions at the exact moment they
       are set in the code.
     </p>
 
@@ -191,7 +191,7 @@ Data Mining Techniques, documents: 11</pre>
          data-fragment="complex-parameters"></pre>
 
     <p>
-      Once an algorithm is configured it can be reused across many subsequent (sequential)
+      Once an algorithm is configured, it can be reused across many subsequent (sequential)
       clustering calls. The <a href="java-concurrency.html">concurrency section</a> discusses
       approaches to running algorithms in concurrent threads.
     </p>
