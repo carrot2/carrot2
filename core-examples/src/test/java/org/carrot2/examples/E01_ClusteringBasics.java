@@ -32,7 +32,7 @@ public class E01_ClusteringBasics {
     // fragment-start{setup-heavy-components}
     // Our documents are in English so we load appropriate language resources.
     // This call can be heavy and an instance of LanguageComponents should be
-    // reused across different clustering calls.
+    // created once and reused across different clustering calls.
     LanguageComponents languageComponents = LanguageComponents.load("English");
     // fragment-end{setup-heavy-components}
 
