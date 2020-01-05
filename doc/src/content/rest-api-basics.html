@@ -27,7 +27,7 @@
   <p>
     In the examples below we will refer to the DCS and the REST service interchangeably, although
     the service application context can be separated and deployed on any other web application
-    container (such as <a href="https://tomcat.apache.org/">Apache Tomcat</a>).
+    container, such as <a href="https://tomcat.apache.org/">Apache Tomcat</a>.
   </p>
 
   <section id="installation">
@@ -36,7 +36,7 @@
     <p>
       The DCS is shipped with the Carrot<sup>2</sup> distribution under the <code>dcs</code> folder.
       It requires <code>java</code> to be installed on the host system and will bind to port
-      <code>8080</code> by default. An alternative port can be selected by passing
+      <code>8080</code> by default. An alternative port can be selected by passing the
       <code>--port</code>
       option to the launch script, for example:
     </p>
@@ -47,8 +47,8 @@
 </pre>
 
     <p>
-      Once started, the service is ready to accept requests (by default
-      at <a href="http://localhost:8080/service/">http://localhost:8080/service/</a>).
+      Once started, the service is ready to accept requests, by default
+      at <a href="http://localhost:8080/service/">http://localhost:8080/service/</a>.
     </p>
   </section>
 
@@ -71,19 +71,19 @@
     </ul>
 
     <p>
-      Such a request file must be sent (using HTTP POST) to the <code>/cluster</code>
+      Such a request file must be sent using HTTP POST method to the <code>/cluster</code>
       service endpoint, which returns either a successful response containing clusters
       or an error response with some additional
       diagnostic information.
     </p>
 
     <p>
-      Note that the request contains elements that may require some apriori knowledge
-      (the clustering algorithm's identifier, the language). You can assume
-      that certain components (such as the <code>Lingo</code> algorithm or the <code>English</code>
-      language) just always exist in your DCS distribution. Alternatively, you can
-      enumerate the available components dynamically (we will cover
-      this in the <a href="#service-configuration">service configuration</a> section).
+      Note that the request contains elements that may require some <em>a priori</em> knowledge, such as
+      the clustering algorithm's identifier and the language. You can assume
+      that certain components, such as the <code>Lingo</code> algorithm or the <code>English</code>
+      language, always exist in your DCS distribution. Alternatively, you can
+      <a href="#service-configuration">enumerate the available components dynamically</a> using the
+      <code>/list</code> service endpoint.
     </p>
   </section>
 
@@ -97,8 +97,8 @@
 
     <p>
       Let's start by assembling the request JSON. We need to know the algorithm to be used
-      for clustering and the language in which our documents are written (so that an appropriate
-      preprocessing is applied to input text before clustering takes place).
+      for clustering and the language in which our documents are written, so that an appropriate
+      preprocessing is applied to input text before clustering.
       In this example we will use hardcoded values for the <code>Lingo</code> algorithm
       and the <code>English</code> language.
     </p>
@@ -121,15 +121,15 @@
     <p>
       You probably noticed that there is one element in the above request we have not discussed yet:
       the <code>parameters</code> block. This block is used to alter Lingo's default
-      settings because our document list is very tiny and we brute-force the algorithm to produce
-      at least one group (so that we can see what it looks like in the response).
+      settings. Our document list is very tiny and we force the algorithm to produce
+      at least one group, so that we can see what it looks like in the response.
     </p>
 
     <p>
-      Assuming the DCS is running int the background the clustering service's
+      Assuming the DCS is running in the background, the clustering service's
       default endpoint is at <code>http://localhost:8080/service/cluster</code>.
-      We are ready to send the above JSON for clustering using a command-line tool (here:
-      <code>curl</code>):
+      We are ready to send the above JSON for clustering using a command-line tool, such as
+      <code>curl</code>:
     </p>
 
     <pre data-embed="./examples/cluster-request.sh" data-language="none"></pre>
@@ -142,13 +142,13 @@
     <pre data-embed="./examples/cluster-response.json"></pre>
 
     <p>
-      The response is a (potentially recursive) hierarchy of document clusters, where each
+      The response is a potentially recursive hierarchy of document clusters, where each
       cluster has the following properties:
     </p>
 
     <dl>
       <dt>labels</dt>
-      <dd>Cluster description label (or multiple labels).</dd>
+      <dd>Cluster description label or labels.</dd>
       <dt>documents</dt>
       <dd>
         An array of references to documents contained in the cluster. Each reference is a 0-based
@@ -159,7 +159,7 @@
         clustering).
       </dd>
       <dt>score</dt>
-      <dd>The cluster's quality score. The score is not normalized in any way but is representing
+      <dd>The cluster's quality score. The score is not normalized in any way but represents
         relative quality of each cluster within this request.
       </dd>
     </dl>
@@ -175,8 +175,8 @@
 
     <p>
       While it is perfectly fine to assemble the request JSON by hand, the DCS distribution
-      comes with data model classes (in Java) that can be used to build request and parse responses.
-      The same example as shown in the previous section can be expressed in Java code by the
+      comes with data model Java classes that can be used to build request and parse responses.
+      The example shown in the previous section can be expressed in Java code by the
       following snippet:
     </p>
 
@@ -184,14 +184,14 @@
          data-fragment="build-request"></pre>
 
     <p>
-      The request can be then serialized into JSON using
+      The request can be then serialized into JSON using the
       <a href="https://github.com/FasterXML/jackson">Jackson</a> library. The DCS Java examples
       contain a few command-line applications that make extensive use of these model classes, please
       refer to them for details.
     </p>
 
     <p>
-      Alternatively, the OpenAPI descriptor (discussed in the <a href="#openapi">next section</a>)
+      Alternatively, the <a href="#openapi">OpenAPI descriptor</a>
       can be used to generate service binding code for Java and many other languages.
     </p>
   </section>
@@ -208,12 +208,9 @@
     </p>
 
     <p>
-      There is a numerous and constantly evolving set of tools to browse OpenAPI specification files.
-      They vary in design aesthetics and offered functionality (how they handle examples, whether
-      they offer a way to alter the examples interactively). The
-      DCS ships with three of them (but feel free to browse around if these don't meet your
-      needs):
+      The DCS ships with three OpenAPI specification browsers:
     </p>
+
     <ul>
       <li><a href="http://localhost:8080/service/openapi/swagger/index.html">Swagger</a> (recommended),</li>
       <li><a href="http://localhost:8080/service/openapi/rapidoc/index.html">RapiDoc</a>,</li>
@@ -237,19 +234,15 @@
     <p>
       The second service endpoint the DCS exposes is called <code>/list</code>. When invoked
       with a single HTTP GET (without any parameters), the service returns information
-      on the available algorithms and languages. An example (slightly abbreviated)
-      response from <code>/list</code> can look like shown below:
+      on the available algorithms and languages. An example response can
+      look like this:
     </p>
 
     <pre data-embed="./examples/list-response.json"></pre>
 
     <p>
       Note that each algorithm has an associated list of language codes it supports.
-    </p>
-
-    <p>
-      The <code>templates</code> block enumerates preconfigured request templates we
-      discuss in <a href="dcs-templates.html">a separate section</a>.
+      The <code>templates</code> block enumerates preconfigured <a href="dcs-templates.html">request templates </a>.
     </p>
   </section>
 </article>
