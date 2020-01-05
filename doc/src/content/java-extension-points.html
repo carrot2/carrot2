@@ -7,17 +7,17 @@
   </p>
 
   <p>
-    Many Carrot<sup>2</sup> components (algorithms, language components and
-    their building blocks) are implemented as
+    Many Carrot<sup>2</sup> components, including algorithms, language components and
+    their building blocks, are implemented as
     service extension points. While they can be referenced directly using explicit class
-    names (<code>new LingoClusteringAlgorithm()</code>) we can also
+    names (<code>new LingoClusteringAlgorithm()</code>), you can also
     enumerate and inspect their properties dynamically.
   </p>
 
   <p>
     The following code enumerates
     all available algorithm providers, checks if the given algorithm supports the English language
-    and clusters (the same) stream of documents repeatedly.
+    and clusters the same stream of documents repeatedly.
   </p>
 
   <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
