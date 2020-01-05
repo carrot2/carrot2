@@ -9,7 +9,7 @@
   <p>
     <code>LanguageComponent</code> instances provide assistance and hints to improve the
     quality of clustering for a specific language. The resources associated with this task
-    typically require costly processing to load and parse so <code>LanguageComponent</code>
+    typically require costly processing to load and parse, so <code>LanguageComponent</code>
     instances should be <strong>created early and reused for all subsequent clustering
     calls</strong>.
   </p>
@@ -52,22 +52,26 @@
 
   <p>
     Each of the interfaces of a language component can be
-    overridden. However, for vast majority of applications
+    overridden. However, for the vast majority of applications
     only minor tweaks to the defaults are really needed. For example, adding ignorable
     terms and phrases specific to a given domain is a very helpful step
     to increase clustering quality
-    (patent documents will have a different lexicon compared to an unrestricted e-mail corpus).
+    (patent documents will have a different lexicon compared to an unrestricted e-mail corpus, for example).
     Let's take a look at how this is done first.
   </p>
 
-  <p class="warning">
-    Clustering algorithms may support a subset of languages (and language component instances
-    assembled
-    manually). Each clustering algorithm has a method called <code>supports(LanguageComponents
-    lc)</code>
-    which can be used to check whether the algorithm works with a given instance of language
-    components.
-  </p>
+  <div class="warning">
+    <strong>Some algorithms may not support all languages</strong>
+
+    <p>
+      Clustering algorithms may support a subset of languages and language component instances
+      assembled
+      manually. Each clustering algorithm has a method called <code>supports(LanguageComponents
+      lc)</code>
+      which can be used to check whether the algorithm works with a given instance of language
+      components.
+    </p>
+  </div>
 
   <section id="tweaking-lexical-data-resources">
     <h2>Tweaking lexical data resources</h2>
@@ -75,7 +79,7 @@
     <p>
       The <code>LexicalData</code> component is responsible
       for telling the algorithm whether a term or a candidate cluster
-      label can be ignored. Such ignorable elements typically include functional language
+      label should be ignored. Such ignorable elements typically include function
       words like prepositions, conjunctions or domain-specific boilerplate language that
       is not a good candidate for a cluster.
     </p>
@@ -84,7 +88,7 @@
          data-fragment="lexical-data"></pre>
 
     <p>
-      The most common quality enhancement tuning lies in modifying the
+      The most common quality tuning step is modifying the
       resources provided for the <code>LexicalData</code> component's
       default implementation (<code>LexicalDataImpl</code>). This class
       attempts to load two files (where the <i>lang</i> prefix is replaced with the
@@ -119,9 +123,9 @@ across
       <code>load()</code> method that takes a custom <code>ResourceLookup</code> object
       for locating and loading external resources.
       We can load our custom, modified resources using this facility without
-      touching any of the default components (it's a good idea to start tweaking custom resources
+      touching any of the default components. It's a good idea to start tweaking custom resources
       by first copying the defaults from Carrot<sup>2</sup> JARs and then modifying them in
-      the new location).
+      the new location.
     </p>
 
     <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
@@ -137,7 +141,7 @@ across
     <h2>Tweaking components directly</h2>
 
     <p>
-      It may be (rarely) desirable to provide an entirely custom implementation of a given
+      It may be sometimes desirable to provide an entirely custom implementation of a given
       preprocessing component. An instance of <code>LanguageComponents</code> class consists
       of a set of components (interfaces) and suppliers providing implementations of these
       interfaces. We can override any of these suppliers, creating a custom language preprocessing
@@ -145,7 +149,7 @@ across
     </p>
 
     <p>
-      As an example, let's modify the English pipeline with a custom word stemming component.
+      As an example, let's modify the English pipeline to use a custom word stemming component.
       The supplier for this component always returns the same closure, converting the input to lower
       case:
     </p>
@@ -155,7 +159,7 @@ across
 
     <p>
       We will also replace the default <code>LexicalData</code> implementation with simple custom
-      filtering based on code rules:
+      filtering based on hardcoded rules:
     </p>
 
     <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
@@ -189,8 +193,8 @@ across
     <p>
       All language extensions live under the <code>org.carrot2.lang</code> artifact
       group namespace. Note that many of them come with sizeable
-      own dependencies (like <a href="https://lucene.apache.org/">Apache Lucene</a>
-      analyzers or dictionaries).
+      own dependencies like <a href="https://lucene.apache.org/">Apache Lucene</a>
+      analyzers or dictionaries.
     </p>
 
     <ul>
