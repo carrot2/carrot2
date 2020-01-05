@@ -19,21 +19,21 @@
         by multiple threads in parallel,
       </li>
       <li><strong>language component instances are thread-safe</strong> and <strong>should</strong>
-        be used (and reused) by parallel threads.
+        be used and reused by parallel threads.
       </li>
     </ul>
 
     <p class="warning">
-      Note that, contrary to previous versions of Carrot<sup>2</sup>, there is no "managed" support
+      Contrary to the 3.x line of Carrot<sup>2</sup>, the 4.x line has no "managed" support
       for caching, reusing or managing concurrency of clustering algorithm instances
       (previously provided by the <code>Controller</code> instance). This is a deliberate decision:
-      algorithm instances are lightweight (to create and discard) and modern JVMs have much better
+      algorithm instances are lightweight (cheap to create and discard) and modern JVMs have much better
       garbage collection mechanisms.
     </p>
 
     <p>
       The following sections of this article show how various approaches to configuring
-      the algorithm once and then reusing it in subsequent (possibly concurrent) clustering
+      the algorithm once and then reusing it in subsequent, possibly concurrent, clustering
       calls.
     </p>
   </section>
@@ -54,8 +54,9 @@
     <p>
       An important assumption here is that the <code>LanguageComponents</code> object
       (<code>english</code> in the example above) has been
-      initialized beforehand (once) and is reused (see
-      <a href="java-language-components.html">here for more information</a>).
+      initialized beforehand (once) and is reused. See the
+      <a href="java-language-components.html">Language components</a> page for more information
+      on initialization and customization of language resources.
     </p>
   </section>
 
@@ -65,7 +66,7 @@
 
     <p>
       Sometimes the configuration can become fairly complex. Clustering
-      algorithm instances can be converted into and recreate from a map so
+      algorithm instances can be converted into and recreated from a map, so
       we can extract all the details from the preconfigured instance and
       then <em>deep-clone</em> it on demand, as this example shows:
     </p>
