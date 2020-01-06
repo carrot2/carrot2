@@ -196,6 +196,24 @@
     </p>
   </section>
 
+  <section id="service-configuration">
+    <h2>Service configuration</h2>
+
+    <p>
+      The second service endpoint the DCS exposes is called <code>/list</code>. When invoked
+      with a single HTTP GET (without any parameters), the service returns information
+      on the available algorithms and languages. An example response can
+      look like this:
+    </p>
+
+    <pre data-embed="./examples/list-response.json"></pre>
+
+    <p>
+      Note that each algorithm has an associated list of language codes it supports.
+      The <code>templates</code> block enumerates preconfigured <a href="dcs-templates.html">request templates </a>.
+    </p>
+  </section>
+
   <section id="openapi">
     <h2>OpenAPI service descriptor</h2>
 
@@ -226,23 +244,5 @@
         </p>
       </figcaption>
     </figure>
-  </section>
-
-  <section id="service-configuration">
-    <h2>Service configuration</h2>
-
-    <p>
-      The second service endpoint the DCS exposes is called <code>/list</code>. When invoked
-      with a single HTTP GET (without any parameters), the service returns information
-      on the available algorithms and languages. An example response can
-      look like this:
-    </p>
-
-    <pre data-embed="./examples/list-response.json"></pre>
-
-    <p>
-      Note that each algorithm has an associated list of language codes it supports.
-      The <code>templates</code> block enumerates preconfigured <a href="dcs-templates.html">request templates </a>.
-    </p>
   </section>
 </article>
