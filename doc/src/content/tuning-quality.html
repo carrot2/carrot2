@@ -32,12 +32,11 @@
       <li>
         <p>
           <strong>Provide a minimum of 100 documents</strong>. Carrot<sup>2</sup>
-          clustering algorithms will better with increasing amount of data. A hundred
+          clustering algorithms work better with increasing amount of data. A hundred
           documents on input is probably the minimum for any statistical significance
           of features discovered by the algorithm. In general, an optimum number
-          of documents would probably fall between 100 and a few thousand documents
-          range. More than that may cause problems (Carrot<sup>2</sup> algorithms
-          are designed for speed and use in-memory data structures).
+          of documents would probably fall between 100 and a few thousands.
+          More than that may cause problems due to in-memory processing.
         </p>
       </li>
 
@@ -76,9 +75,9 @@
 
     <p>
       It's quite difficult to give one clear recommendation as to which algorithm is
-      "the best": the decision is a problem of weighing multiple criteria (performance, cluster
-      label legibility). Compare the following three sets of cluster labels (acquired for the
-      same input using different algorithms):
+      "the best": the decision is a problem of weighing multiple criteria such as performance or cluster
+      label legibility. Compare the following three sets of cluster labels acquired for the
+      same input using different algorithms:
     </p>
 
     <figure class="round">
@@ -97,7 +96,7 @@
       (<a href="algorithms.html#lingo">Lingo</a> and
       <a href="algorithms.html#lingo3g">Lingo3G</a>) delivers more intuitive and diverse clusters
       compared to other algorithms.
-      Sometimes it is other characteristics (performance aspects, cluster structure) that should be
+      Sometimes it is other characteristics, such as performance or cluster structure, that should be
       taken into account.
     </p>
 
@@ -161,7 +160,7 @@
 
     <p>
       While the table above can be useful to determine which algorithm to choose,
-      the ultimate judgment should based on an empirical evaluation with your specific document
+      the ultimate judgment should be based on an empirical evaluation with your specific document
       collection.
     </p>
   </section>
@@ -173,13 +172,9 @@
       The default settings that come with each algorithm are good for an average case. Each
       algorithm comes with a number of attributes which can be used to tune its output and
       runtime characteristics.
-    </p>
-
-    <p>
-      <a href="java-api-basics.html#tweaking-attributes">This section</a>
-      shows how to adjust attribute settings in the Java API.
-      <a href="rest-api-basics.html#models">This section</a> shows how to adjust attributes
-      at the REST API level using request model classes.
+      You can easily <a href="java-api-basics.html#tweaking-attributes">adjust attributes in Java API</a>.
+      An robust way to <a href="rest-api-basics.html#models">override attributes in REST API</a>
+      is to use request model classes.
     </p>
 
     <p>
@@ -189,7 +184,7 @@
     </p>
 
     <ul>
-      <li>the selected language (the default resources should contain a reasonably number of these
+      <li>the selected language (the default resources should contain a reasonable number of these
         already),
       </li>
       <li>the domain of documents being clustered.</li>
@@ -203,10 +198,10 @@
     </p>
 
     <p>
-      <a href="java-language-components.html#tweaking-lexical-data-resources">This section</a>
-      shows how to adjust default resources in the Java API.
-      <a href="dcs-language-components.html">This section</a> shows how to adjust default
-      resources in the DCS.
+      Lexical resources can be adjusted both in the
+      <a href="java-language-components.html#tweaking-lexical-data-resources">Java API</a>
+      and in the
+      <a href="dcs-language-components.html">REST API</a>.
     </p>
   </section>
 </article>
