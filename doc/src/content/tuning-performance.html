@@ -8,14 +8,14 @@
 
   <p>
     Carrot<sup>2</sup> clustering algorithms have been designed to work really fast
-    but the tradeoff is that they store all the data structures in memory (and require the documents
-    to be passed via memory). The size of the virtual machine's heap will increase quickly
+    but the trade-off is that they store all the data structures in memory.
+    The size of the Java virtual machine's heap will increase quickly
     with longer overall size of input text. Also, the more documents you put on input and the longer
-    the documents are, the longer the clustering time will be.
+    the documents are, the longer the clustering will take.
   </p>
 
   <p>
-    Below are a few generic guidelines on improving performance should it become a problem.
+    Below are a few generic guidelines on improving clustering performance.
   </p>
 
   <section id="reduce-input-size">
@@ -29,7 +29,7 @@
 
     <ul>
       <li>query-matching document fragments (such as search result snippets), if input documents
-        are a result of some type of user-entered query
+        are a result of some type of user-entered query,
       </li>
       <li>titles and abstracts of documents, if they are available,</li>
       <li>just the leading few sentences or paragraphs of each document.</li>
@@ -58,8 +58,8 @@
 
     <p>
       In many cases the default attribute settings for each algorithm may not be suitable for very
-      large inputs. Here are some attributes tweak suggestions you should consider
-      (experimentally adjusting their value to the size of your particular input).
+      large inputs. Below are some attributes tweak suggestions you should consider. You will
+      likely need to experiment a bit to adjust their values to match the size of your particular input.
     </p>
 
     <h3>STC, Bisecting k-Means</h3>
@@ -67,8 +67,8 @@
     <p><strong><code>wordDfThreshold</code></strong></p>
     <p>
       Increase the minimum document frequency (minimum number of occurrences) of terms and phrases
-      to a higher value. Something like 0.5% of the number of documents will typically work (so for
-      a document collection of 5000 documents set the attribute to 25).
+      to a higher value. Something like 0.5% of the number of documents will typically work. For example, for
+      a document collection of 5000 documents set the attribute to 25.
     </p>
 
 
@@ -77,15 +77,14 @@
     <p><strong><code>wordDfThreshold</code>, <code>phraseDfThreshold</code></strong></p>
     <p>
       Increase the minimum document frequency (minimum number of occurrences) of terms and phrases
-      to a higher value. Something like 0.5% of the number of documents will typically work (so for
-      a document collection of 5000 documents set the attribute to 25).
+      to a higher value. Something like 0.5% of the number of documents will typically work. For example, for
+      a document collection of 5000 documents set the attribute to 25.
     </p>
 
     <p><strong><code>factorizationQuality</code></strong></p>
     <p>
       For <code>algorithm.matrixReducer.factorizationFactory</code> implementations that support
-      this attribute
-      (and nearly all of them do), lower <code>factorizationQuality</code>. This will cause the
+      this attribute, lower <code>factorizationQuality</code>. This will cause the
       matrix factorization algorithm to perform fewer iterations and hence complete quicker.
     </p>
     <p>
