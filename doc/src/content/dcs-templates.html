@@ -10,15 +10,15 @@
     As mentioned in the <a href="rest-api-basics.html#clustering">introduction</a>,
     a clustering query is self-contained and must carry the three required elements:
     algorithm name, language and documents to be clustered. In practice, the first two elements
-    will rarely change (once the algorithm for a particular task is chosen it will probably
-    remain constant for all clustering requests). In situations like this we can pull out
+    will rarely change &ndash; once the algorithm for a particular task is chosen, it will probably
+    remain constant for all clustering requests. In situations like this we can pull out
     the constant part of the query into a <strong>template</strong> and use basic
     composition with the body of a query to get the final request.
   </p>
 
   <p>
     Another useful application of templates is to detach the algorithm and its
-    configuration from the logic that queries the clustering service or group
+    configuration from the logic that queries the clustering service or to group
     different algorithms and their tuning variants under much easier to remember
     aliases.
   </p>
@@ -57,13 +57,14 @@
       clustering request containing just the documents to be clustered:
     </p>
 
-    <pre data-embed="./examples/template-request.sh" data-language="shell"></pre>
+    <pre data-embed="./examples/template-request.json"></pre>
 
     <p>
-      And post it for clustering (observe the <code>template</code> parameter pointing
-      to <code>foo</code> template):
+      When posting the documents for clustering, use the
+      <code>template</code> request parameter to provide the the template name
+      (<code>foo</code> in our case):
     </p>
 
-    <pre data-embed="./examples/template-request.json"></pre>
+    <pre data-embed="./examples/template-request.sh" data-language="shell"></pre>
   </section>
 </article>
