@@ -32,8 +32,9 @@ ext {
 
 def javadocExcludes = [
   'org/carrot2/math/mahout/**',
-  '**/nanojson/**',
-  '**/ExtendedWhitespaceTokenizerImpl*'
+  'org/carrot2/language/snowball/**',
+  'org/carrot2/internal/**',
+  '**/ExtendedWhitespaceTokenizerImpl*',
 ]
 
 javadoc {
