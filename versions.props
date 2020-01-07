@@ -9,9 +9,9 @@ junit:junit=4.12
 org.apache.commons:commons-text:1.8
 org.apache.httpcomponents:httpclient=4.5.9
 org.apache.logging.log4j:*=2.12.1
-org.apache.lucene:*=8.2.0
+org.apache.lucene:*=8.4.0
 org.assertj:*=3.13.2
-org.carrot2:morfologik*=2.1.6
+org.carrot2:morfologik*=2.1.7
 org.eclipse.jetty:jetty*=9.4.20.v20190813
-org.mockito:mockito-core=2.25.0
+org.mockito:mockito-core=3.2.4
 org.slf4j:*=1.8.0-beta2
