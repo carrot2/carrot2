@@ -25,10 +25,9 @@ allprojects {
     tasks.matching { it.name == "javadoc" }.all {
       title = "${project.name} ${project.version} API Documentation"
 
-      if (JavaVersion.current().isJava9Compatible()) {
-        options.addBooleanOption('html5', true)
-        options.addStringOption('Xdoclint:all,-missing', '-noindex')
-      }
+      options.addBooleanOption('html5', true)
+      options.addBooleanOption('Xdoclint:all,-missing', true)
+      options.noIndex()
     }
   }
 }
