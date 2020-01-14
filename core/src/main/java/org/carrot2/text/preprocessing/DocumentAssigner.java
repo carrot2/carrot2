@@ -36,13 +36,12 @@ import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
  */
 public class DocumentAssigner extends AttrComposite {
   /**
-   * Only exact phrase assignments. When set to <code>true</code>, clusters will contain only
-   * the documents that contain the cluster's label in its original
-   * form, including the order of words. Enabling this option will cause fewer documents to be put in
-   * clusters, increasing the precision of assignment, but also increasing the "Other Topics"
-   * group. Disabling this option will cause more documents to be put in clusters, which will make
-   * the "Other Topics" cluster smaller, but also lower the precision of cluster-document
-   * assignments.
+   * Only exact phrase assignments. When set to <code>true</code>, clusters will contain only the
+   * documents that contain the cluster's label in its original form, including the order of words.
+   * Enabling this option will cause fewer documents to be put in clusters, increasing the precision
+   * of assignment, but also increasing the "Other Topics" group. Disabling this option will cause
+   * more documents to be put in clusters, which will make the "Other Topics" cluster smaller, but
+   * also lower the precision of cluster-document assignments.
    */
   public AttrBoolean exactPhraseAssignment =
       attributes.register(

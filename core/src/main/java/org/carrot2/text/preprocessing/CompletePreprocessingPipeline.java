@@ -46,8 +46,8 @@ public class CompletePreprocessingPipeline extends AttrComposite implements Cont
               .defaultValue(1));
 
   /**
-   * Phrase Document Frequency threshold. Phrases appearing in fewer than <code>phraseDfThreshold</code>
-   * documents will be ignored.
+   * Phrase Document Frequency threshold. Phrases appearing in fewer than <code>phraseDfThreshold
+   * </code> documents will be ignored.
    */
   public final AttrInteger phraseDfThreshold =
       attributes.register(

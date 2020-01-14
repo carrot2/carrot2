@@ -58,10 +58,10 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
           AttrDouble.builder().label("Size-score sorting ratio").min(0).max(1).defaultValue(0.));
 
   /**
-   * Desired cluster count. A factor used to calculate the number of clusters based on the
-   * number of documents on input. The larger the value, the more clusters will be created. The
-   * number of clusters created by the algorithm will be proportionally adjusted to the desired cluster
-   * count, but may be different.
+   * Desired cluster count. A factor used to calculate the number of clusters based on the number of
+   * documents on input. The larger the value, the more clusters will be created. The number of
+   * clusters created by the algorithm will be proportionally adjusted to the desired cluster count,
+   * but may be different.
    */
   public AttrInteger desiredClusterCount =
       attributes.register(
@@ -81,8 +81,8 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
   }
 
   /**
-   * Term-document matrix builder, contains attributes determining the size and contents
-   * of the matrix
+   * Term-document matrix builder, contains attributes determining the size and contents of the
+   * matrix
    */
   public TermDocumentMatrixBuilder matrixBuilder;
 
@@ -96,8 +96,8 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
   }
 
   /**
-   * Term-document matrix reducer, contains attributes determining the matrix decomposition
-   * method to be used during clustering.
+   * Term-document matrix reducer, contains attributes determining the matrix decomposition method
+   * to be used during clustering.
    */
   public TermDocumentMatrixReducer matrixReducer;
 
