@@ -1,9 +1,11 @@
+const isContainer = require("./attributes").isContainer;
+
 const implementationWrapper = content => {
   return `<div class="implementation">${content}</div>`;
 };
 
 const attributeValue = (attribute, descriptor) => {
-  let implementations = descriptor.implementations;
+  const implementations = descriptor.implementations;
   if (implementations) {
     const implementationKeys = Object.keys(implementations);
     const multipleImplementations = implementationKeys.length > 1;
@@ -36,7 +38,7 @@ function attributeProperty(attribute, descriptor) {
   }
   const title = descriptor ? descriptor.javadoc.summary : "";
   const href = descriptor.id;
-  const link = descriptor ? `<a href="#${href}" title="${title}">${attribute}</a>` : attribute;
+  const link = descriptor && !isContainer(descriptor) ? `<a href="#${href}" title="${title}">${attribute}</a>` : attribute;
   return token("property", `"${link}"`);
 }
 
