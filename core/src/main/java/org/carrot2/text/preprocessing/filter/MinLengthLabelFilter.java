@@ -15,10 +15,13 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
 
 /** Accepts labels whose length in characters is greater or equal to the provided value. */
 public class MinLengthLabelFilter extends SingleLabelFilterBase {
+  /**
+   * Minimum label length. Minimum label length, in words, inclusive.
+   */
   public AttrInteger minLength =
       attributes.register(
           "minLength",
-          AttrInteger.builder().label("Minimum label length (inclusive)").defaultValue(3));
+          AttrInteger.builder().label("Minimum label length").defaultValue(3));
 
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {

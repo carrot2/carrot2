@@ -91,7 +91,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
           "maxBaseClusters",
           AttrInteger.builder().label("Maximum number of base cluster").min(2).defaultValue(300));
 
-  /** Maximum final clusters. */
+  /** Maximum number of final clusters. */
   public AttrInteger maxClusters =
       attributes.register(
           "maxClusters",

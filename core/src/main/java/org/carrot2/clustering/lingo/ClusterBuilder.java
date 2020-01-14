@@ -64,7 +64,7 @@ public class ClusterBuilder extends AttrComposite {
 
   /**
    * Cluster merging threshold. The percentage overlap between two cluster's documents required for
-   * the clusters to be merged into one clusters. Low values will result in more aggressive merging,
+   * the clusters to be merged into one cluster. Low values will result in more aggressive merging,
    * which may lead to irrelevant documents in clusters. High values will result in fewer clusters
    * being merged, which may lead to very similar or duplicated clusters.
    */

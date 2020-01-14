@@ -27,15 +27,18 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
 
 /** Builds a term document matrix based on the provided {@link PreprocessingContext}. */
 public class TermDocumentMatrixBuilder extends AttrComposite {
-  /** Title word boost. Gives more weight to words that appeared in title fields. */
+  /**
+   * Title word boost. Gives more weight to words that appeared in title fields. The larger the
+   * value, the stronger boost the title words will receive.
+   */
   public final AttrDouble titleWordsBoost =
       attributes.register(
           "titleWordsBoost",
           AttrDouble.builder().label("Title word boost").min(0).max(10).defaultValue(2.));
 
   /**
-   * The maximum number of the term-document matrix elements. The larger the size, the more
-   * accurate, time- and memory-consuming clustering.
+   * Maximum term-document matrix size. Determines the maximum number of the term-document matrix
+   * elements. The larger the size, the more accurate, time- and memory-consuming clustering.
    */
   public final AttrInteger maximumMatrixSize =
       attributes.register(
