@@ -109,11 +109,13 @@ task collectCtxJavadoc(type: Sync) {
 task collectCtxFrontend(type: Sync) {
   from configurations.ctxFrontend
   into "$outputDir/web/frontend"
+  exclude "**/*.map"
 }
 
 task collectCtxDoc(type: Sync) {
   from configurations.ctxDoc
   into "$outputDir/web/doc"
+  exclude "**/*.map"
 }
 
 task collectExamples(type: Sync) {
