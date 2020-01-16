@@ -1,0 +1,72 @@
+Release steps
+-------------
+
+* Bump version number to a non-snapshot version (rootProject.version = "...")
+
+vi build.gradle
+
+commit changes.
+
+git commit -am "Bumping version."
+
+* Build and check the entire distribution.
+
+gradlew clean assemble check
+
+* Publish to sonatype staging repo. The max workers
+  limit is set there because otherwise Nexus creates multiple
+  repositories automatically for all parallel threads (sigh).
+
+gradlew publishSonatype --max-workers=1
+
+* Go to sonatype, verify and ack the release.
+
+https://oss.sonatype.org/index.html#stagingRepositories
+
+* Tag the release.
+
+git tag release/x.x.x -m "Release x.x.x"
+git push origin release/x.x.x
+
+* Update statically published documentation:
+
+git clone https://github.com/carrot2/carrot2.github.io build/carrot2.github.io
+cp -R distribution/build/dist/dcs/web/doc     build/carrot2.github.io/release/xxx/
+cp -R distribution/build/dist/dcs/web/javadoc build/carrot2.github.io/release/xxx/
+cd build/carrot2.github.io/release/xxx/
+git add -A .
+git commit -am "Documentation for version xxx"
+
+* Go to github, find the release tag and create a release for it.
+
+https://github.com/carrot2/carrot2/tags
+
+Attach release binaries from: 
+
+  distribution/build/distZip/*.zip
+
+* Redeploy public DCS demo frontend. Go to the build plan, locate build for 
+version xxx, create a new deployment and promote to production server.
+
+https://builds.carrotsearch.com/browse/C2-C2DCS
+
+* Bump version number strings to the subsequent version, commit.
+
+* Update JIRA. Close issues scheduled for the release being made, 
+release the version in JIRA, create a next version in JIRA
+
+* Update project website (repo). 
+
+Add a page named <filename>release-[version]-notes</filename> that
+lists new features, major bug fixes and improvements introduced in the
+new release.
+
+Add release date and link to the release's JIRA issues on the
+<filename>release-notes</filename> page. 
+
+* Circulate release news
+
+  - Wikipedia page. https://en.wikipedia.org/wiki/Carrot2
+
+* Consider upgrading &C2; in dependent projects
+
