@@ -21,19 +21,28 @@ configure(rootProject) {
     delete mavenBuildRepo
   }
 
-  task mavenLocal() {
+  task publishLocal() {
     group "Publishing"
     description "Publish Maven artifacts locally to " + file(mavenBuildRepo)
   }
 
-  task mavenSonatype() {
+  task isGitClean() {
+    doFirst {
+      if (!rootProject.gitStatus.clean) {
+        throw new GradleException("Seems like your git checkout isn't clean? Can't publish from this state.")
+      }
+    }
+  }
+
+  task publishSonatype() {
+    dependsOn isGitClean
     group "Publishing"
     description "Publish Maven artifacts to Sonatype OSS Nexus"
   }
 
   artifacts {
     mavenArtifacts mavenBuildRepo, {
-      builtBy tasks.mavenLocal
+      builtBy tasks.publishLocal
     }
   }
 }
@@ -130,9 +139,9 @@ configure(subprojects.findAll { it.path in published }) {
     }
 
     publishJarsPublicationToBuildRepository.dependsOn mavenLocalClean
-    mavenLocal.dependsOn publishJarsPublicationToBuildRepository
+    publishLocal.dependsOn publishJarsPublicationToBuildRepository
 
-    mavenSonatype.dependsOn publishMavenPublicationToSonatypeRepository
+    publishSonatype.dependsOn publishMavenPublicationToSonatypeRepository
 
     signing {
       sign publishing.publications.maven
