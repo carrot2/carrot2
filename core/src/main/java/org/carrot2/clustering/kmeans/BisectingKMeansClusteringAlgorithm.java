@@ -54,7 +54,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
       new HashSet<>(
           Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class, LabelFormatter.class));
 
-  public static final String NAME = "BisectingKMeans";
+  public static final String NAME = "Bisecting KMeans";
 
   /**
    * The number of clusters to create. The algorithm will create at most the specified number of

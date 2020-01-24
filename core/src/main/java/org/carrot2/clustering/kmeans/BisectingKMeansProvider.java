@@ -15,7 +15,7 @@ import org.carrot2.clustering.ClusteringAlgorithmProvider;
 public class BisectingKMeansProvider implements ClusteringAlgorithmProvider {
   @Override
   public String name() {
-    return "Bisecting K-Means";
+    return BisectingKMeansClusteringAlgorithm.NAME;
   }
 
   @Override

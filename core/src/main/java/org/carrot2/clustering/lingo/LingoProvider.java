@@ -15,7 +15,7 @@ import org.carrot2.clustering.ClusteringAlgorithmProvider;
 public class LingoProvider implements ClusteringAlgorithmProvider {
   @Override
   public String name() {
-    return "Lingo";
+    return LingoClusteringAlgorithm.NAME;
   }
 
   @Override

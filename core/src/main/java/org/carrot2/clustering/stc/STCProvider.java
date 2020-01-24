@@ -15,7 +15,7 @@ import org.carrot2.clustering.ClusteringAlgorithmProvider;
 public class STCProvider implements ClusteringAlgorithmProvider {
   @Override
   public String name() {
-    return "STC";
+    return STCClusteringAlgorithm.NAME;
   }
 
   @Override
