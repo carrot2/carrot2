@@ -24,7 +24,7 @@ public class AliasMapper implements ClassNameMapper {
   public static ClassNameMapper SPI_DEFAULTS;
 
   static {
-    SPI_DEFAULTS = loadFromSpi();
+    SPI_DEFAULTS = loadFromSpi(AliasMapper.class.getClassLoader());
   }
 
   public static class Alias<T> {
@@ -101,10 +101,10 @@ public class AliasMapper implements ClassNameMapper {
     return first.get();
   }
 
-  private static AliasMapper loadFromSpi() {
+  public static AliasMapper loadFromSpi(ClassLoader cl) {
     AliasMapper composite = new AliasMapper();
     HashMap<String, String> keyToFactoryName = new HashMap<>();
-    for (AliasMapperFactory factory : ServiceLoader.load(AliasMapperFactory.class)) {
+    for (AliasMapperFactory factory : ServiceLoader.load(AliasMapperFactory.class, cl)) {
       String name = factory.name();
       factory
           .mapper()
