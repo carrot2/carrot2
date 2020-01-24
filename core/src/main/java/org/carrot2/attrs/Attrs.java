@@ -123,7 +123,7 @@ public final class Attrs {
    * @see #extract(AcceptingVisitor)
    */
   public static <E extends AcceptingVisitor> E populate(E instance, Map<String, Object> map) {
-    return populate(instance, map, AliasMapper.SPI_DEFAULTS::toName);
+    return populate(instance, map, AliasMapper.SPI_DEFAULTS::fromName);
   }
 
   /**

@@ -39,6 +39,13 @@ public abstract class ClusteringAlgorithmTestBase<E extends ClusteringAlgorithm 
   }
 
   @Test
+  public void testExtractPopulate() {
+    E algorithm = algorithm();
+    Map<String, Object> extracted = Attrs.extract(algorithm);
+    Attrs.populate(algorithm, extracted);
+  }
+
+  @Test
   public void ensureAllDefaultAttrsHaveRegisteredAliases() {
     // Run serialization with Alias mapper defaults.
     Map<String, Object> asMap = Attrs.toMap(algorithm(), AliasMapper.SPI_DEFAULTS::toName);
