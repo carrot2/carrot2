@@ -20,6 +20,8 @@ import org.carrot2.util.ResourceLookup;
 
 /** A set of language-specific components. */
 public final class LanguageComponents {
+  private static ClassLoader defaultSpiClassloader = LanguageComponents.class.getClassLoader();
+
   private final String language;
   private final Map<Class<?>, Supplier<?>> suppliers;
 
@@ -56,12 +58,12 @@ public final class LanguageComponents {
   }
 
   public static Set<String> languages() {
-    return loadProvidersFromSpi().keySet();
+    return loadProvidersFromSpi(defaultSpiClassloader).keySet();
   }
 
   public static LanguageComponents load(String language) {
     try {
-      return load(language, (lang, provider) -> provider.load(lang));
+      return load(language, defaultSpiClassloader, (lang, provider) -> provider.load(lang));
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
@@ -70,12 +72,22 @@ public final class LanguageComponents {
   public static LanguageComponents load(String language, ResourceLookup resourceLookup)
       throws IOException {
     return load(
-        language, (lang, provider) -> provider.load(lang, Objects.requireNonNull(resourceLookup)));
+        language,
+        defaultSpiClassloader,
+        (lang, provider) -> provider.load(lang, Objects.requireNonNull(resourceLookup)));
   }
 
-  public static LanguageComponents load(String language, ComponentLoader loader)
+  public static LanguageComponents load(
+      String language, ClassLoader cl, ResourceLookup resourceLookup) throws IOException {
+    return load(
+        language,
+        cl,
+        (lang, provider) -> provider.load(lang, Objects.requireNonNull(resourceLookup)));
+  }
+
+  public static LanguageComponents load(String language, ClassLoader cl, ComponentLoader loader)
       throws IOException {
-    Map<String, List<LanguageComponentsProvider>> providers = loadProvidersFromSpi();
+    Map<String, List<LanguageComponentsProvider>> providers = loadProvidersFromSpi(cl);
 
     if (!providers.containsKey(language)) {
       throw new RuntimeException(
@@ -113,16 +125,15 @@ public final class LanguageComponents {
   private static Map<ClassLoader, Map<String, List<LanguageComponentsProvider>>> SPI_PROVIDERS =
       Collections.synchronizedMap(new WeakHashMap<>());
 
-  private static synchronized Map<String, List<LanguageComponentsProvider>> loadProvidersFromSpi() {
-    ClassLoader cl = Thread.currentThread().getContextClassLoader();
-
+  private static synchronized Map<String, List<LanguageComponentsProvider>> loadProvidersFromSpi(
+      ClassLoader cl) {
     return SPI_PROVIDERS.computeIfAbsent(
         cl,
         (key) -> {
           Map<String, List<LanguageComponentsProvider>> providers = new LinkedHashMap<>();
 
           for (LanguageComponentsProvider provider :
-              ServiceLoader.load(LanguageComponentsProvider.class)) {
+              ServiceLoader.load(LanguageComponentsProvider.class, cl)) {
             for (String language : provider.languages()) {
               providers.compute(
                   language,

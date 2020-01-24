@@ -51,6 +51,7 @@ class DcsContext {
   final Map<String, ClusterRequest> templates;
   final LinkedHashMap<String, ClusteringAlgorithmProvider> algorithmSuppliers;
   final LinkedHashMap<String, List<String>> algorithmLanguages;
+  final ClassLoader cl = this.getClass().getClassLoader();
 
   private DcsContext(ServletContext servletContext) throws ServletException {
     this.om = new ObjectMapper();
@@ -58,7 +59,7 @@ class DcsContext {
 
     this.algorithmSuppliers =
         StreamSupport.stream(
-                ServiceLoader.load(ClusteringAlgorithmProvider.class).spliterator(), false)
+                ServiceLoader.load(ClusteringAlgorithmProvider.class, cl).spliterator(), false)
             .sorted(Comparator.comparing(v -> v.name()))
             .collect(
                 Collectors.toMap(
@@ -98,7 +99,7 @@ class DcsContext {
     }
   }
 
-  private static LinkedHashMap<String, LanguageComponents> computeLanguageComponents(
+  private LinkedHashMap<String, LanguageComponents> computeLanguageComponents(
       ServletContext servletContext) throws ServletException {
     List<String> languageList =
         LanguageComponents.languages().stream().sorted().collect(Collectors.toList());
@@ -135,7 +136,7 @@ class DcsContext {
     LinkedHashMap<String, LanguageComponents> languages = new LinkedHashMap<>();
     for (String lang : languageList) {
       try {
-        languages.put(lang, LanguageComponents.load(lang, suppliersLoader));
+        languages.put(lang, LanguageComponents.load(lang, cl, suppliersLoader));
       } catch (IOException e) {
         throw new ServletException(
             String.format(
