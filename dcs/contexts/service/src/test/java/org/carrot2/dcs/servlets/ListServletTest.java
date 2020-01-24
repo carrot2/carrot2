@@ -18,6 +18,9 @@ import java.io.StringWriter;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
+import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
+import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
+import org.carrot2.clustering.stc.STCClusteringAlgorithm;
 import org.carrot2.dcs.model.ListResponse;
 import org.carrot2.language.LanguageComponents;
 import org.junit.Test;
@@ -45,7 +48,11 @@ public class ListServletTest extends AbstractServletTest {
     ListResponse response = om.readValue(content, ListResponse.class);
 
     Assertions.assertThat(response.algorithms.keySet())
-        .containsExactly("Bisecting K-Means", "Dummy", "Lingo", "STC");
+        .containsExactly(
+            BisectingKMeansClusteringAlgorithm.NAME,
+            "Dummy",
+            LingoClusteringAlgorithm.NAME,
+            STCClusteringAlgorithm.NAME);
 
     List<String> allLangs =
         LanguageComponents.languages().stream().sorted().collect(Collectors.toList());
