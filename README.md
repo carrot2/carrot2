@@ -39,8 +39,8 @@ Documentation
   ./dcs
   ```
 
-  and open [the documentation](http://localhost:8080/doc/) or
-  [JavaDoc API reference](http://localhost:8080/javadoc/).
+  and open the documentation at [localhost:8080/doc/](http://localhost:8080/doc/) or
+  JavaDoc API reference [localhost:8080/javadoc/](http://localhost:8080/javadoc/).
 
 Contact and more information
 ----------------------------
