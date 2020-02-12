@@ -12,7 +12,16 @@ package org.carrot2.language;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.ServiceLoader;
+import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -125,58 +134,29 @@ public final class LanguageComponents {
   private static Map<ClassLoader, Map<String, List<LanguageComponentsProvider>>> SPI_PROVIDERS =
       Collections.synchronizedMap(new WeakHashMap<>());
 
-  private static synchronized Map<String, List<LanguageComponentsProvider>> loadProvidersFromSpi(
-      ClassLoader cl) {
-    return SPI_PROVIDERS.computeIfAbsent(
-        cl,
-        (key) -> {
-          Map<String, List<LanguageComponentsProvider>> providers = new LinkedHashMap<>();
+  public static Map<String, List<LanguageComponentsProvider>> loadProvidersFrom(ClassLoader cl) {
+    Map<String, List<LanguageComponentsProvider>> providers = new LinkedHashMap<>();
 
-          for (LanguageComponentsProvider provider :
-              ServiceLoader.load(LanguageComponentsProvider.class, cl)) {
-            for (String language : provider.languages()) {
-              providers.compute(
-                  language,
-                  (k, v) -> {
-                    if (v == null) {
-                      v = new ArrayList<>();
-                    }
-                    v.add(provider);
-                    return v;
-                  });
-            }
-          }
-
-          try {
-            sanityCheck(providers);
-          } catch (IOException e) {
-            throw new RuntimeException(e);
-          }
-
-          return providers;
-        });
-  }
-
-  private static void sanityCheck(Map<String, List<LanguageComponentsProvider>> providers)
-      throws IOException {
-    for (Map.Entry<String, List<LanguageComponentsProvider>> e : providers.entrySet()) {
-      String language = e.getKey();
-      HashMap<Class<?>, LanguageComponentsProvider> components = new HashMap<>();
-      for (LanguageComponentsProvider provider : e.getValue()) {
-        for (Class<?> clazz : provider.load(language).keySet()) {
-          if (components.containsKey(clazz)) {
-            throw new RuntimeException(
-                String.format(
-                    Locale.ROOT,
-                    "Language '%s' has multiple providers implementing component class %s: %s and %s.",
-                    language,
-                    clazz.getName(),
-                    provider.getClass().getName(),
-                    components.get(clazz).getClass().getName()));
-          }
-          components.put(clazz, provider);
-        }
+    for (LanguageComponentsProvider provider :
+        ServiceLoader.load(LanguageComponentsProvider.class, cl)) {
+      for (String language : provider.languages()) {
+        providers.compute(
+            language,
+            (k, v) -> {
+              if (v == null) {
+                v = new ArrayList<>();
+              }
+              v.add(provider);
+              return v;
+            });
       }
     }
+
+    return providers;
+  }
+
+  private static synchronized Map<String, List<LanguageComponentsProvider>> loadProvidersFromSpi(
+      ClassLoader cl) {
+    return SPI_PROVIDERS.computeIfAbsent(cl, (key) -> loadProvidersFrom(cl));
   }
 }
