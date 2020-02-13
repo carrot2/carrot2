@@ -12,7 +12,6 @@ configurations {
 }
 
 dependencies {
-  api "org.slf4j:slf4j-api"
   api "com.carrotsearch:hppc"
 
   langResources fileTree(dir: 'src/main/resources', includes: ['**/*.stopwords.utf8', '**/*.stoplabels.utf8'])
