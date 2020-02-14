@@ -11,16 +11,31 @@
 package org.carrot2.language;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
-import org.carrot2.language.snowball.*;
-import org.carrot2.text.preprocessing.LabelFormatter;
-import org.carrot2.text.preprocessing.LabelFormatterImpl;
+import org.carrot2.language.snowball.DanishStemmer;
+import org.carrot2.language.snowball.DutchStemmer;
+import org.carrot2.language.snowball.EnglishStemmer;
+import org.carrot2.language.snowball.FinnishStemmer;
+import org.carrot2.language.snowball.FrenchStemmer;
+import org.carrot2.language.snowball.GermanStemmer;
+import org.carrot2.language.snowball.HungarianStemmer;
+import org.carrot2.language.snowball.ItalianStemmer;
+import org.carrot2.language.snowball.NorwegianStemmer;
+import org.carrot2.language.snowball.PortugueseStemmer;
+import org.carrot2.language.snowball.RomanianStemmer;
+import org.carrot2.language.snowball.RussianStemmer;
+import org.carrot2.language.snowball.SpanishStemmer;
+import org.carrot2.language.snowball.SwedishStemmer;
+import org.carrot2.language.snowball.TurkishStemmer;
 import org.carrot2.util.ClassRelativeResourceLookup;
 import org.carrot2.util.ResourceLookup;
 
-public class DefaultLanguageComponentsProvider implements LanguageComponentsProvider {
-  private static final Map<String, Supplier<Stemmer>> STEMMER_SUPPLIERS;
+public class DefaultStemmersProvider implements LanguageComponentsProvider {
+  static final Map<String, Supplier<Stemmer>> STEMMER_SUPPLIERS;
 
   static {
     Map<String, Supplier<Stemmer>> m = new LinkedHashMap<>();
@@ -50,19 +65,7 @@ public class DefaultLanguageComponentsProvider implements LanguageComponentsProv
   @Override
   public Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup)
       throws IOException {
-    LinkedHashMap<Class<?>, Supplier<?>> components = new LinkedHashMap<>();
-    components.put(Stemmer.class, STEMMER_SUPPLIERS.get(language));
-    components.put(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
-
-    String langPrefix = language.toLowerCase(Locale.ROOT);
-    LexicalData lexicalData =
-        new LexicalDataImpl(
-            resourceLookup, langPrefix + ".stopwords.utf8", langPrefix + ".stoplabels.utf8");
-    components.put(LexicalData.class, () -> lexicalData);
-
-    components.put(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
-
-    return components;
+    return Collections.singletonMap(Stemmer.class, STEMMER_SUPPLIERS.get(language));
   }
 
   @Override
@@ -72,6 +75,6 @@ public class DefaultLanguageComponentsProvider implements LanguageComponentsProv
 
   @Override
   public String name() {
-    return "Carrot2 (" + String.join(", ", STEMMER_SUPPLIERS.keySet()) + ")";
+    return "Carrot2 Stemmers (" + String.join(", ", STEMMER_SUPPLIERS.keySet()) + ")";
   }
 }

@@ -1,1 +1,4 @@
-org.carrot2.language.DefaultLanguageComponentsProvider
+org.carrot2.language.DefaultStemmersProvider
+org.carrot2.language.DefaultTokenizersProvider
+org.carrot2.language.DefaultLexicalDataProvider
+org.carrot2.language.DefaultLabelFormatterProvider
