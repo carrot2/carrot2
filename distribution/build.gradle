@@ -65,9 +65,11 @@ task checkExamples(type: Exec) {
 
   def args = []
   if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-    args += ['cmd', '/c']
+    args += ['cmd', '/c', 'gradlew']
+  } else {
+    args += ['./gradlew']
   }
-  args += ['gradlew', 'test']
+  args += ['test']
 
   workingDir file("${distShadow}/examples")
   commandLine args
