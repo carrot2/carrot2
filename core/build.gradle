@@ -68,6 +68,11 @@ task jsonJavadoc(type: Javadoc, dependsOn: compileJava) {
 
   doFirst {
     options.docletpath = configurations.jsonDoclet.toList()
+
+    // Workaround for gradle emitting '-notimestamp' even if a custom
+    // doclet is used (which breaks it because it's an option of the
+    // standard doclet).
+    (options as StandardJavadocDocletOptions).noTimestamp = false
   }
 }
 

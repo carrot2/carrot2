@@ -1,5 +1,5 @@
 import org.apache.tools.ant.filters.*
-
+import org.apache.tools.ant.taskdefs.condition.Os
 import java.nio.file.Files
 
 plugins {
@@ -60,15 +60,22 @@ task syncDistShadow(type: Sync) {
   into distShadow
 }
 
-task checkExamples(type: GradleBuild) {
+task checkExamples(type: Exec) {
   dependsOn assemble, syncDistShadow
 
-  dir = file("${distShadow}/examples")
-  tasks = ["test"]
+  def args = []
+  if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+    args += ['cmd', '/c']
+  }
+  args += ['gradlew', 'test']
+
+  workingDir file("${distShadow}/examples")
+  commandLine args
 }
 
 task checkDcsExamples(type: GradleBuild) {
   dependsOn assemble, syncDistShadow
+  mustRunAfter checkExamples
 
   dir = file("${distShadow}/dcs/examples")
   tasks = ["compileJava"]

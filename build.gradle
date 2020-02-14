@@ -1,8 +1,8 @@
 plugins {
   id 'base'
 
-  id 'com.moowork.node' version '1.3.1' apply false
-  id "com.palantir.consistent-versions" version '1.12.4'
+  id "com.github.node-gradle.node" version "2.2.1" apply false
+  id "com.palantir.consistent-versions" version '1.17.2'
 
   id 'com.diffplug.gradle.spotless' version "3.27.0" apply false
   id "com.github.ben-manes.versions" version "0.27.0"
@@ -11,8 +11,6 @@ plugins {
 
   // Task dependency inspector (gradle <task 1>...<task N> taskTree)
   // id "com.dorongold.task-tree" version "1.4"
-
-  id "com.gradle.build-scan" version "3.1.1"
 }
 
 rootProject.version = '4.0.0-beta3'
@@ -41,8 +39,6 @@ apply from: file('gradle/defaults-java.gradle')
 apply from: file('gradle/node/defaults-node.gradle')
 
 apply from: file('gradle/ide/idea.gradle')
-
-apply from: file('gradle/ci/buildscan.gradle')
 
 apply from: file("gradle/testing/defaults-tests.gradle")
 apply from: file("gradle/testing/fail-on-no-tests.gradle")

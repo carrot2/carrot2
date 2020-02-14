@@ -1,0 +1,2 @@
+versions.lock     text eol=lf
+*.gradle          text eol=lf
