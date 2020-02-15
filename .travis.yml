@@ -15,4 +15,4 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-  - ./gradlew check assemble --scan --stacktrace -Dtests.slow=true
+  - ./gradlew check assemble --stacktrace -Dtests.slow=true
