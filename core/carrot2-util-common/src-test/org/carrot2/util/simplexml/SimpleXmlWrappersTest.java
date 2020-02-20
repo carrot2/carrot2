@@ -215,7 +215,6 @@ public class SimpleXmlWrappersTest extends CarrotTestCase
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testMixedTypeList() throws Exception
     {
         check(Lists.newArrayList("test1", 10, true));

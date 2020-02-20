@@ -12,8 +12,6 @@
 
 package org.carrot2.source.xml;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
 
 import org.carrot2.core.Cluster;
@@ -26,11 +24,9 @@ import org.carrot2.util.attribute.AttributeUtils;
 import org.carrot2.util.resource.ContextClassLoaderLocator;
 import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceLookup;
-import org.carrot2.util.resource.URLResourceWithParams;
 import org.junit.Test;
 
 import org.carrot2.shaded.guava.common.base.Function;
-import org.carrot2.shaded.guava.common.base.Strings;
 import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Maps;
 
