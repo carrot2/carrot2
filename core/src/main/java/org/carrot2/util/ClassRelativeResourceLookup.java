@@ -12,6 +12,7 @@ package org.carrot2.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -24,8 +25,12 @@ public class ClassRelativeResourceLookup implements ResourceLookup {
 
   @Override
   public InputStream open(String resource) throws IOException {
-    InputStream is = clazz.getResourceAsStream(Objects.requireNonNull(resource));
-    if (is == null) {
+    checkExists(resource);
+    return clazz.getResourceAsStream(Objects.requireNonNull(resource));
+  }
+
+  private void checkExists(String resource) throws IOException {
+    if (!exists(resource)) {
       throw new IOException(
           String.format(
               Locale.ROOT,
@@ -33,7 +38,6 @@ public class ClassRelativeResourceLookup implements ResourceLookup {
               resource,
               clazz.getName()));
     }
-    return is;
   }
 
   @Override
@@ -43,6 +47,9 @@ public class ClassRelativeResourceLookup implements ResourceLookup {
 
   @Override
   public String pathOf(String resource) {
-    return clazz.getResource(resource).toExternalForm();
+    URL existingResource = clazz.getResource(resource);
+    return existingResource != null
+        ? existingResource.toExternalForm()
+        : String.format(Locale.ROOT, "resource::(%s)/%s", clazz.getName(), resource);
   }
 }
