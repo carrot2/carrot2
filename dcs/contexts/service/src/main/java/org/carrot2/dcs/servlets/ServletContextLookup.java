@@ -13,6 +13,8 @@ package org.carrot2.dcs.servlets;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Locale;
 import java.util.Objects;
 import javax.servlet.ServletContext;
 import org.carrot2.util.ResourceLookup;
@@ -58,7 +60,10 @@ class ServletContextLookup implements ResourceLookup {
   @Override
   public String pathOf(String resource) {
     try {
-      return ctx.getResource(resourcePath(resource)).toExternalForm();
+      URL existingResource = ctx.getResource(resourcePath(resource));
+      return existingResource != null
+          ? existingResource.toExternalForm()
+          : String.format(Locale.ROOT, "servlet-context::(%s)/%s", ctx.getContextPath(), resource);
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
