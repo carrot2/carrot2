@@ -46,7 +46,6 @@ task yarnBuild(type: YarnTask) {
             it.key != "REACT_APP_BUILD_DATE" &&
             it.key != "REACT_APP_GIT_REV"
         })
-        environment = yarnEnv
     }
 
     afterEvaluate {
@@ -63,6 +62,12 @@ task yarnBuild(type: YarnTask) {
     inputs.file('yarn.lock')
 
     outputs.dir { project.buildDir }
+
+    // Set the environment once the task runs, otherwise variables trigger task
+    // changed events and rebuilds.
+    doFirst {
+        environment = yarnEnv
+    }
 
     args = ['build']
 }
