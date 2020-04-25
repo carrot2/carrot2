@@ -10,7 +10,7 @@ IF DEFINED SHELL (
 )
 
 SETLOCAL
-TITLE DCS @version@
+TITLE DCS ${product.version}
 
 REM Determine installation home
 IF NOT "%SCRIPT_HOME%"=="" GOTO homeSet
