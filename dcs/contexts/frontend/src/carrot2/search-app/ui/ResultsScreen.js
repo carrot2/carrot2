@@ -58,7 +58,15 @@ export class ResultsScreen extends Component {
 
   getSource(props) { return decodeURIComponent((props || this.props).match.params.source); }
   getQuery(props) { return decodeURIComponent((props || this.props).match.params.query); }
-  getView(props) { return decodeURIComponent((props || this.props).match.params.view); }
+  getView(props) { 
+    var view = (props || this.props).match.params.view;
+    if (view) {
+      view = decodeURIComponent(view);
+    } else {
+      view = Object.keys(clusterViews)[0];
+    }
+    return view;
+  }
 
   onSourceChange(newSource) {
     this.pushNewUrl({
