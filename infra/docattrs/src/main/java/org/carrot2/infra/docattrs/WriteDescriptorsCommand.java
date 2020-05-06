@@ -181,9 +181,19 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
     FieldDocs fieldDocs = null;
     for (Class<?> clazz = ci.clazz; clazz != Object.class; clazz = clazz.getSuperclass()) {
       ClassDocs classDocs = classDocLookup.apply(clazz.getName());
-      fieldDocs = classDocs.fields.get(attrName);
-      if (fieldDocs != null) {
-        break;
+      if (classDocs != null) {
+        fieldDocs = classDocs.fields.get(attrName);
+        if (fieldDocs != null) {
+          break;
+        }
+      } else {
+        Loggers.CONSOLE.warn(
+            String.format(
+                Locale.ROOT,
+                "Can't find JSON documentation for type '%s' while looking up field: %s",
+                clazz.getName(),
+                attrName),
+            ExitCodes.ERROR_UNKNOWN);
       }
     }
     return fieldDocs;
@@ -252,7 +262,11 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
       for (String name : types) {
         if (!algorithms.containsKey(name)) {
           throw new ReportCommandException(
-              "Algorithm does not exist in the SPI list: " + name,
+              String.format(
+                  Locale.ROOT,
+                  "Algorithm does not exist in the SPI list: %s [SPI: %s]",
+                  name,
+                  String.join(", ", algorithms.keySet())),
               ExitCodes.ERROR_INVALID_ARGUMENTS);
         }
       }
@@ -306,6 +320,7 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
   }
 
   public static void main(String[] args) {
-    new Launcher().runCommand(new WriteDescriptorsCommand(), args);
+    ExitCode exitCode = new Launcher().runCommand(new WriteDescriptorsCommand(), args);
+    System.exit(exitCode.processReturnValue());
   }
 }
