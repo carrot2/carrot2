@@ -32,7 +32,7 @@ public class E02_TweakingAttributes {
     LanguageComponents languageComponents = LanguageComponents.load("English");
 
     // Tweak Lingo's defaults. Note each attribute comes with JavaDoc documentation
-    // and some are contrained to a specific range of values. Also, each algorithm
+    // and some are constrained to a specific range of values. Also, each algorithm
     // will typically have a different set of attributes to choose from.
     // fragment-start{parameters}
     LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
@@ -63,7 +63,7 @@ public class E02_TweakingAttributes {
     LanguageComponents languageComponents = LanguageComponents.load("English");
 
     // Tweak Lingo's defaults. Note each attribute comes with JavaDoc documentation
-    // and some are contrained to a specific range of values. Also, each algorithm
+    // and some are constrained to a specific range of values. Also, each algorithm
     // will typically have a different set of attributes to choose from.
     STCClusteringAlgorithm algorithm = new STCClusteringAlgorithm();
     algorithm.maxClusters.set(10);

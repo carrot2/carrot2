@@ -40,10 +40,12 @@ public class Cluster<T> {
     return this;
   }
 
+  // fragment-start{get-documents}
   /** Returns all documents that belong directly to this cluster. */
   public List<T> getDocuments() {
     return documents;
   }
+  // fragment-end{get-documents}
 
   /** Add a single document to this cluster. */
   public Cluster<T> addDocument(T document) {
@@ -51,10 +53,12 @@ public class Cluster<T> {
     return this;
   }
 
+  // fragment-start{get-clusters}
   /** Returns all child clusters belonging to this cluster. */
   public List<Cluster<T>> getClusters() {
     return clusters;
   }
+  // fragment-end{get-clusters}
 
   /** Adds a child cluster to this cluster. */
   public Cluster<T> addCluster(Cluster<T> cluster) {
