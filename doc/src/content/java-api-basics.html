@@ -69,24 +69,22 @@
         </p>
       </li>
     </ol>
-
-    <!-- I don't get that -->
-    <div class="warning">
-      <strong>Heavy and lightweight components, use them correctly</strong>
-
-      <p>
-        Initialization of the heavy components may take significant time, so <strong>initialize them
-        once and then reuse for all clustering requests</strong>. Heavy components are thread-safe,
-        so you can safely share them when clustering in multiple threads.
-      </p>
-
-      <p>
-        Lightweight components are cheap to create so you can create a throw-away instance on-demand
-        for each clustering request.
-      </p>
-    </div>
   </section>
 
+  <section id="component-types">
+    <h2>Heavy and lightweight components</h2>
+
+    <p>
+      Initialization of heavy components (<code>LanguageComponents</code>) may take significant time.
+      <strong>Create them once and then reuse for all subsequent clustering calls</strong>.
+      Heavy components are thread-safe and can be reused or shared between threads.
+    </p>
+
+    <p>
+      Lightweight components are cheap to instantiate so you can create a throw-away instance
+      on-demand for each clustering call.
+    </p>
+  </section>
 
   <section id="example-basics">
     <h2>Clustering</h2>
