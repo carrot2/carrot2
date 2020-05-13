@@ -29,10 +29,14 @@ public class ClassInfoCollector {
           final ClassInfo ci = new ClassInfo();
           ci.clazz = c.getClass();
           ci.name = aliasMapper.toName(c);
-          ci.type = c.getClass().getName();
+          ci.type = getQualifiedName(c.getClass());
 
           c.accept(new AttrInfoCollector(ci.attributes, aliasMapper));
           return ci;
         });
+  }
+
+  public static String getQualifiedName(Class<?> clazz) {
+    return clazz.getName().replace('$', '.');
   }
 }

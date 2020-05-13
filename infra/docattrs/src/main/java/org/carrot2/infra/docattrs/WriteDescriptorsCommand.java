@@ -180,7 +180,8 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
       String attrName, Function<String, ClassDocs> classDocLookup, ClassInfo ci) {
     FieldDocs fieldDocs = null;
     for (Class<?> clazz = ci.clazz; clazz != Object.class; clazz = clazz.getSuperclass()) {
-      ClassDocs classDocs = classDocLookup.apply(clazz.getName());
+      String className = ClassInfoCollector.getQualifiedName(clazz);
+      ClassDocs classDocs = classDocLookup.apply(className);
       if (classDocs != null) {
         fieldDocs = classDocs.fields.get(attrName);
         if (fieldDocs != null) {
@@ -191,7 +192,7 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
             String.format(
                 Locale.ROOT,
                 "Can't find JSON documentation for type '%s' while looking up field: %s",
-                clazz.getName(),
+                className,
                 attrName),
             ExitCodes.ERROR_UNKNOWN);
       }
