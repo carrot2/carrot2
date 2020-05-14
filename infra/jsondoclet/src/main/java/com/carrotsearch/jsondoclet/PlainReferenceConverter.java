@@ -48,6 +48,7 @@ public class PlainReferenceConverter implements ReferenceConverter {
           break;
         }
       case FIELD:
+      case ENUM_CONSTANT:
         {
           VariableElement fieldElement = (VariableElement) referencedElement;
           Name fieldName = fieldElement.getSimpleName();
