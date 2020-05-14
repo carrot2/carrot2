@@ -29,6 +29,7 @@ import org.carrot2.attrs.AttrStringArray;
 import org.carrot2.attrs.AttrVisitor;
 import org.carrot2.attrs.ClassNameMapper;
 import org.carrot2.attrs.Constraint;
+import org.carrot2.math.mahout.Arrays;
 
 class AttrInfoCollector implements AttrVisitor {
   private final ClassNameMapper aliasMapper;
@@ -98,6 +99,8 @@ class AttrInfoCollector implements AttrVisitor {
     Optional<Object> value = Optional.ofNullable(attr.get());
     if (attr instanceof AttrObject<?>) {
       value = value.map(aliasMapper::toName);
+    } else if (attr instanceof AttrStringArray) {
+      value = value.map(v -> Arrays.toString((String[]) v));
     } else {
       value = value.map(Objects::toString);
     }
