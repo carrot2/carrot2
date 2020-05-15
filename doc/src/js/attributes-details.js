@@ -33,12 +33,7 @@ const descriptionText = attribute => {
   if (javadoc.text) {
     const summary = javadoc.summary;
     const text = javadoc.text;
-
-    if (text.startsWith(summary) && text.length > summary.length) {
-      return text.substring(summary.length);
-    } else{
-      return text;
-    }
+    return text;
   } else {
     return attribute.description;
   }
