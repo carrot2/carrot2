@@ -1,3 +1,5 @@
+const escapeForHtml = require('escape-html');
+
 const isContainer = require("./attributes").isContainer;
 
 const implementationWrapper = content => {
@@ -36,8 +38,11 @@ function attributeProperty(attribute, descriptor) {
   if (!descriptor) {
     return `"${attribute}"`;
   }
-  const title = descriptor ? descriptor.javadoc.summary : "";
-  const href = descriptor.id;
+
+  // cheerio seems to decode entities when replacing nodes with new content, so encode twice.
+  // https://github.com/cheeriojs/cheerio/issues/1219
+  const title = descriptor ? escapeForHtml(escapeForHtml(descriptor.javadoc.summary)) : "";
+  const href = escapeForHtml(escapeForHtml(descriptor.id));
   const link = descriptor && !isContainer(descriptor) ? `<a href="#${href}" title="${title}">${attribute}</a>` : attribute;
   return token("property", `"${link}"`);
 }
