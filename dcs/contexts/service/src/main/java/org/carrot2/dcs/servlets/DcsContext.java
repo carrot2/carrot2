@@ -90,8 +90,7 @@ class DcsContext {
   private static boolean isAlgorithmAvailable(
       ClusteringAlgorithmProvider provider, Collection<LanguageComponents> languages) {
     ClusteringAlgorithm algorithm = provider.get();
-    Optional<LanguageComponents> first =
-        languages.stream().filter(algorithm::supports).findFirst();
+    Optional<LanguageComponents> first = languages.stream().filter(algorithm::supports).findFirst();
     if (first.isEmpty()) {
       console.warn(
           "Algorithm does not support any of the available languages: {}", provider.name());
