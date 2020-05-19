@@ -16,7 +16,7 @@ import org.carrot2.language.Tokenizer;
 import org.junit.Test;
 
 public class ThaiLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public ThaiLanguageComponentsTest() {
+  public ThaiLanguageComponentsTest() throws IOException {
     super(ThaiLanguageComponents.NAME, new String[] {"เนื่องจาก", "เดียวกัน"}, new String[][] {});
   }
 

@@ -10,8 +10,10 @@
  */
 package org.carrot2.language.extras;
 
+import java.io.IOException;
+
 public class IndonesianLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public IndonesianLanguageComponentsTest() {
+  public IndonesianLanguageComponentsTest() throws IOException {
     super(
         IndonesianLanguageComponents.NAME,
         new String[] {"melainkan", "belumlah"},

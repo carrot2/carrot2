@@ -16,7 +16,7 @@ import org.carrot2.language.Tokenizer;
 import org.junit.Test;
 
 public class HindiLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public HindiLanguageComponentsTest() {
+  public HindiLanguageComponentsTest() throws IOException {
     super(
         HindiLanguageComponents.NAME,
         new String[] {"जितना"},

@@ -16,7 +16,7 @@ import org.carrot2.language.Tokenizer;
 import org.junit.Test;
 
 public class KoreanLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public KoreanLanguageComponentsTest() {
+  public KoreanLanguageComponentsTest() throws IOException {
     super(KoreanLanguageComponents.NAME, new String[] {}, new String[][] {});
   }
 

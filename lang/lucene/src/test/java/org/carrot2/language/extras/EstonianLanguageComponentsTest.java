@@ -10,8 +10,10 @@
  */
 package org.carrot2.language.extras;
 
+import java.io.IOException;
+
 public class EstonianLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public EstonianLanguageComponentsTest() {
+  public EstonianLanguageComponentsTest() throws IOException {
     super(
         EstonianLanguageComponents.NAME,
         new String[] {"midagi", "kõik"},

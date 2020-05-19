@@ -25,14 +25,24 @@ public class DefaultTokenizersProvider implements LanguageComponentsProvider {
   }
 
   @Override
-  public Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup)
-      throws IOException {
-    return Collections.singletonMap(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
+  public ResourceLookup defaultResourceLookup() {
+    return new ClassRelativeResourceLookup(this.getClass());
   }
 
   @Override
-  public Map<Class<?>, Supplier<?>> load(String language) throws IOException {
-    return load(language, new ClassRelativeResourceLookup(this.getClass()));
+  public Set<Class<?>> componentTypes() {
+    return Collections.singleton(Tokenizer.class);
+  }
+
+  @Override
+  public Map<Class<?>, Supplier<?>> load(
+      String language, ResourceLookup resourceLookup, Set<Class<?>> componentTypes)
+      throws IOException {
+    if (!componentTypes().equals(componentTypes)) {
+      throw new IllegalArgumentException();
+    }
+
+    return Map.of(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
   }
 
   @Override

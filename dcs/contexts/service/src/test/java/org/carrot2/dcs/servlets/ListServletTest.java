@@ -15,8 +15,8 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
@@ -54,8 +54,7 @@ public class ListServletTest extends AbstractServletTest {
             LingoClusteringAlgorithm.NAME,
             STCClusteringAlgorithm.NAME);
 
-    List<String> allLangs =
-        LanguageComponents.languages().stream().sorted().collect(Collectors.toList());
+    List<String> allLangs = new ArrayList<>(LanguageComponents.loader().load().languages());
     response.algorithms.forEach(
         (algorithm, langs) -> {
           Assertions.assertThat(langs)

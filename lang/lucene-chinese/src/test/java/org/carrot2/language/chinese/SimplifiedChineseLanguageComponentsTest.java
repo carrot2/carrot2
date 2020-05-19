@@ -16,7 +16,7 @@ import org.carrot2.language.Tokenizer;
 import org.junit.Test;
 
 public class SimplifiedChineseLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public SimplifiedChineseLanguageComponentsTest() {
+  public SimplifiedChineseLanguageComponentsTest() throws IOException {
     super(SimplifiedChineseLanguageComponents.NAME, new String[] {"除此之外", "不特"}, new String[][] {});
   }
 

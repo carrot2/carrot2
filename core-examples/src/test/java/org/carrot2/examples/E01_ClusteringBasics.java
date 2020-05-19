@@ -33,7 +33,7 @@ public class E01_ClusteringBasics {
     // Our documents are in English so we load appropriate language resources.
     // This call can be heavy and an instance of LanguageComponents should be
     // created once and reused across different clustering calls.
-    LanguageComponents languageComponents = LanguageComponents.load("English");
+    LanguageComponents languageComponents = LanguageComponents.loader().load().language("English");
     // fragment-end{setup-heavy-components}
 
     // fragment-start{setup-lightweight-components}
@@ -68,7 +68,7 @@ public class E01_ClusteringBasics {
 
   @Test
   public void clusterWithQueryHint() throws IOException {
-    LanguageComponents languageComponents = LanguageComponents.load("English");
+    LanguageComponents languageComponents = LanguageComponents.loader().load().language("English");
 
     Stream<Document> documentStream = ExamplesData.documentStream();
 
@@ -82,7 +82,7 @@ public class E01_ClusteringBasics {
 
   @Test
   public void clusterWithDifferentAlgorithms() throws IOException {
-    LanguageComponents english = LanguageComponents.load("English");
+    LanguageComponents english = LanguageComponents.loader().load().language("English");
 
     // Perform clustering with each algorithm available via service extension point.
     // fragment-start{algorithm-enumeration}

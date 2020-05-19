@@ -248,8 +248,8 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   private PreprocessingContext context;
 
   @Override
-  public boolean supports(LanguageComponents languageComponents) {
-    return languageComponents.components().containsAll(REQUIRED_LANGUAGE_COMPONENTS);
+  public Set<Class<?>> requiredLanguageComponents() {
+    return REQUIRED_LANGUAGE_COMPONENTS;
   }
 
   /** Performs STC clustering of documents. */

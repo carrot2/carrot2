@@ -133,8 +133,8 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
       attributes.register("queryHint", SharedInfrastructure.queryHintAttribute());
 
   @Override
-  public boolean supports(LanguageComponents languageComponents) {
-    return languageComponents.components().containsAll(REQUIRED_LANGUAGE_COMPONENTS);
+  public Set<Class<?>> requiredLanguageComponents() {
+    return REQUIRED_LANGUAGE_COMPONENTS;
   }
 
   /** Performs Lingo clustering of documents. */

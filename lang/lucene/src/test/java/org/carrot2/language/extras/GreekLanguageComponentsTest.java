@@ -10,8 +10,10 @@
  */
 package org.carrot2.language.extras;
 
+import java.io.IOException;
+
 public class GreekLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public GreekLanguageComponentsTest() {
+  public GreekLanguageComponentsTest() throws IOException {
     super(
         GreekLanguageComponents.NAME,
         new String[] {"οὐδείσ", "τήν"},

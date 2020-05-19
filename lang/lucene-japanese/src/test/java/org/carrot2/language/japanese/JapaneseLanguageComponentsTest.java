@@ -16,7 +16,7 @@ import org.carrot2.language.Tokenizer;
 import org.junit.Test;
 
 public class JapaneseLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public JapaneseLanguageComponentsTest() {
+  public JapaneseLanguageComponentsTest() throws IOException {
     super(JapaneseLanguageComponents.NAME, new String[] {"に対する", "ものの"}, new String[][] {});
   }
 

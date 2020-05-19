@@ -11,7 +11,14 @@
 package org.carrot2.examples;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.function.Supplier;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.icu.segmentation.DefaultICUTokenizerConfig;
@@ -20,7 +27,11 @@ import org.apache.lucene.util.AttributeFactory;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
-import org.carrot2.language.*;
+import org.carrot2.language.LanguageComponents;
+import org.carrot2.language.LanguageComponentsProvider;
+import org.carrot2.language.LexicalData;
+import org.carrot2.language.Stemmer;
+import org.carrot2.language.Tokenizer;
 import org.carrot2.language.extras.LuceneAnalyzerTokenizerAdapter;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.LabelFormatterImpl;
@@ -39,7 +50,7 @@ public class E03_CustomLanguageComponents {
     // fragment-start{language-enumeration}
     System.out.println(
         "Language components for the following languages are available:\n  "
-            + String.join(", ", LanguageComponents.languages()));
+            + String.join(", ", LanguageComponents.loader().load().languages()));
     // fragment-end{language-enumeration}
   }
 
@@ -54,7 +65,7 @@ public class E03_CustomLanguageComponents {
 
       for (String language : prov.languages()) {
         System.out.println("  > " + language);
-        for (Class<?> componentClass : prov.load(language).keySet()) {
+        for (Class<?> componentClass : prov.componentTypes()) {
           System.out.println("    Component: " + componentClass.getName());
         }
       }
@@ -67,7 +78,15 @@ public class E03_CustomLanguageComponents {
     // Sometimes the default resources are not sufficient or need to be tuned.
     // fragment-start{custom-english-resources}
     ResourceLookup resLookup = new ClassRelativeResourceLookup(E03_CustomLanguageComponents.class);
-    LanguageComponents custom = LanguageComponents.load("English", resLookup);
+    LanguageComponents custom =
+        LanguageComponents.loader()
+            // Note we restrict languages to just English because resources for other languages
+            // are missing from the location of resource lookup and would have caused an exception.
+            .limitToLanguages("English")
+            // and we substitute resource lookup locations with our custom location.
+            .withResourceLookup(provider -> resLookup)
+            .load()
+            .language("English");
     // fragment-end{custom-english-resources}
 
     LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
@@ -115,7 +134,9 @@ public class E03_CustomLanguageComponents {
 
     // fragment-start{custom-overrides}
     LanguageComponents customized =
-        LanguageComponents.load("English")
+        LanguageComponents.loader()
+            .load()
+            .language("English")
             .override(Stemmer.class, stemmerSupplier)
             .override(LexicalData.class, lexicalDataSupplier);
     // fragment-end{custom-overrides}

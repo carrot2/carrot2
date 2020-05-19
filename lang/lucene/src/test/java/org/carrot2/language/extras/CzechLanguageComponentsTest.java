@@ -10,8 +10,10 @@
  */
 package org.carrot2.language.extras;
 
+import java.io.IOException;
+
 public class CzechLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public CzechLanguageComponentsTest() {
+  public CzechLanguageComponentsTest() throws IOException {
     super(
         CzechLanguageComponents.NAME,
         new String[] {"bohužel"},

@@ -13,6 +13,7 @@ package org.carrot2.language;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -63,14 +64,29 @@ public class DefaultStemmersProvider implements LanguageComponentsProvider {
   }
 
   @Override
-  public Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup)
-      throws IOException {
-    return Collections.singletonMap(Stemmer.class, STEMMER_SUPPLIERS.get(language));
+  public ResourceLookup defaultResourceLookup() {
+    return new ClassRelativeResourceLookup(this.getClass());
   }
 
   @Override
-  public Map<Class<?>, Supplier<?>> load(String language) throws IOException {
-    return load(language, new ClassRelativeResourceLookup(this.getClass()));
+  public Set<Class<?>> componentTypes() {
+    return Collections.singleton(Stemmer.class);
+  }
+
+  @Override
+  public Map<Class<?>, Supplier<?>> load(
+      String language, ResourceLookup resourceLookup, Set<Class<?>> componentTypes)
+      throws IOException {
+    if (!componentTypes().equals(componentTypes)) {
+      throw new IllegalArgumentException(
+          String.format(
+              Locale.ROOT,
+              "Invalid set of requested components (%s) with respect to supported components: %s",
+              componentTypes,
+              componentTypes()));
+    }
+
+    return Map.of(Stemmer.class, STEMMER_SUPPLIERS.get(language));
   }
 
   @Override

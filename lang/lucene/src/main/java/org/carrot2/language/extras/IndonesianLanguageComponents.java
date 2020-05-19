@@ -10,41 +10,32 @@
  */
 package org.carrot2.language.extras;
 
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.Supplier;
 import org.apache.lucene.analysis.id.IndonesianStemmer;
 import org.carrot2.language.ExtendedWhitespaceTokenizer;
-import org.carrot2.language.LanguageComponentsProviderImpl;
 import org.carrot2.language.LexicalData;
+import org.carrot2.language.SingleLanguageComponentsProviderImpl;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.language.extras.LuceneStemmerAdapter.StemmingFunction;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.LabelFormatterImpl;
-import org.carrot2.util.ResourceLookup;
 
 /** */
-public class IndonesianLanguageComponents extends LanguageComponentsProviderImpl {
+public class IndonesianLanguageComponents extends SingleLanguageComponentsProviderImpl {
   public static final String NAME = "Indonesian";
 
   public IndonesianLanguageComponents() {
     super("Carrot2 (extras)", NAME);
-  }
 
-  @Override
-  public Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup)
-      throws IOException {
-    LexicalData lexicalData = loadLexicalData(NAME, resourceLookup);
-
-    LinkedHashMap<Class<?>, Supplier<?>> components = new LinkedHashMap<>();
-    components.put(Stemmer.class, () -> new LuceneStemmerAdapter(new IndonesianStemming()));
-    components.put(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
-    components.put(LexicalData.class, () -> lexicalData);
-    components.put(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
-
-    return components;
+    registerResourceless(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
+    registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
+    register(
+        LexicalData.class,
+        (language, resourceLookup) -> {
+          LexicalData lexicalData = loadLexicalData(language, resourceLookup);
+          return () -> lexicalData;
+        });
+    registerResourceless(Stemmer.class, () -> new LuceneStemmerAdapter(new IndonesianStemming()));
   }
 
   private class IndonesianStemming implements StemmingFunction {

@@ -21,8 +21,11 @@ public interface LanguageComponentsProvider {
 
   Set<String> languages();
 
-  Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup)
-      throws IOException;
+  ResourceLookup defaultResourceLookup();
 
-  Map<Class<?>, Supplier<?>> load(String language) throws IOException;
+  Set<Class<?>> componentTypes();
+
+  Map<Class<?>, Supplier<?>> load(
+      String language, ResourceLookup resourceLookup, Set<Class<?>> componentTypes)
+      throws IOException;
 }

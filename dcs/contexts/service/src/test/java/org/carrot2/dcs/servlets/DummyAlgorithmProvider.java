@@ -11,7 +11,9 @@
 package org.carrot2.dcs.servlets;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,8 +31,8 @@ public class DummyAlgorithmProvider implements ClusteringAlgorithmProvider {
         attributes.register("groupSize", AttrInteger.builder().min(1).defaultValue(5));
 
     @Override
-    public boolean supports(LanguageComponents languageComponents) {
-      return true;
+    public Set<Class<?>> requiredLanguageComponents() {
+      return Collections.emptySet();
     }
 
     @Override

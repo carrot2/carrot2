@@ -10,18 +10,27 @@
  */
 package org.carrot2.clustering;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import org.carrot2.language.LanguageComponents;
+import org.carrot2.language.LoadedLanguages;
 
 public class CachedLangComponents {
-  private static ConcurrentHashMap<String, LanguageComponents> langCompCache =
-      new ConcurrentHashMap<>();
+  private static LoadedLanguages spiDefaults;
+
+  static {
+    try {
+      spiDefaults = LanguageComponents.loader().load();
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+  }
 
   public static LanguageComponents english() {
     return loadCached("English");
   }
 
   public static LanguageComponents loadCached(String language) {
-    return langCompCache.computeIfAbsent(language, LanguageComponents::load);
+    return spiDefaults.language(language);
   }
 }

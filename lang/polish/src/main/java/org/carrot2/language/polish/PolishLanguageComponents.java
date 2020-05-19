@@ -10,47 +10,32 @@
  */
 package org.carrot2.language.polish;
 
-import java.io.IOException;
-import java.util.*;
-import java.util.function.Supplier;
+import java.util.List;
 import morfologik.stemming.WordData;
 import morfologik.stemming.polish.PolishStemmer;
-import org.carrot2.language.*;
+import org.carrot2.language.ExtendedWhitespaceTokenizer;
+import org.carrot2.language.LexicalData;
+import org.carrot2.language.SingleLanguageComponentsProviderImpl;
+import org.carrot2.language.Stemmer;
+import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.LabelFormatterImpl;
-import org.carrot2.util.ClassRelativeResourceLookup;
-import org.carrot2.util.ResourceLookup;
 
 /** */
-public class PolishLanguageComponents implements LanguageComponentsProvider {
+public class PolishLanguageComponents extends SingleLanguageComponentsProviderImpl {
   public static final String NAME = "Polish";
 
-  @Override
-  public Set<String> languages() {
-    return Collections.singleton(NAME);
-  }
-
-  @Override
-  public Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup)
-      throws IOException {
-    LinkedHashMap<Class<?>, Supplier<?>> components = new LinkedHashMap<>();
-    components.put(Stemmer.class, this::createStemmer);
-    components.put(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
-
-    String langPrefix = language.toLowerCase(Locale.ROOT);
-    LexicalData lexicalData =
-        new LexicalDataImpl(
-            resourceLookup, langPrefix + ".stopwords.utf8", langPrefix + ".stoplabels.utf8");
-    components.put(LexicalData.class, () -> lexicalData);
-
-    components.put(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
-
-    return components;
-  }
-
-  @Override
-  public Map<Class<?>, Supplier<?>> load(String language) throws IOException {
-    return load(language, new ClassRelativeResourceLookup(this.getClass()));
+  public PolishLanguageComponents() {
+    super("Carrot2 (" + NAME + ")", NAME);
+    registerResourceless(Stemmer.class, this::createStemmer);
+    registerResourceless(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
+    registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
+    register(
+        LexicalData.class,
+        (language, resourceLookup) -> {
+          LexicalData lexicalData = loadLexicalData(NAME, resourceLookup);
+          return () -> lexicalData;
+        });
   }
 
   private Stemmer createStemmer() {
@@ -63,10 +48,5 @@ public class PolishLanguageComponents implements LanguageComponentsProvider {
         return stems.get(0).getStem().toString();
       }
     };
-  }
-
-  @Override
-  public String name() {
-    return "Carrot2 (" + NAME + ")";
   }
 }

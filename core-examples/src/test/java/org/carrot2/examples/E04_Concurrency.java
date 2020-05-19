@@ -31,7 +31,7 @@ public class E04_Concurrency {
   public void ephemeral() throws Exception {
     // Loading language components can be heavy. Once loaded, the language components can be reused
     // across concurrent threads so this is done prior to any clustering.
-    LanguageComponents english = LanguageComponents.load("English");
+    LanguageComponents english = LanguageComponents.loader().load().language("English");
 
     // Carrot2 components are *not* designed to be reused concurrently by multiple threads. A single
     // algorithm should only be used by one thread at a time.
@@ -57,7 +57,7 @@ public class E04_Concurrency {
 
   @Test
   public void cloningVisitor() throws Exception {
-    LanguageComponents english = LanguageComponents.load("English");
+    LanguageComponents english = LanguageComponents.loader().load().language("English");
 
     // Sometimes it may be more convenient to configure an algorithm instance and then create
     // a clone of it for each processor thread. This can be done with the default attribute

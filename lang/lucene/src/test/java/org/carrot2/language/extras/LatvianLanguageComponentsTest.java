@@ -10,8 +10,10 @@
  */
 package org.carrot2.language.extras;
 
+import java.io.IOException;
+
 public class LatvianLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public LatvianLanguageComponentsTest() {
+  public LatvianLanguageComponentsTest() throws IOException {
     super(
         LatvianLanguageComponents.NAME,
         new String[] {"apakšpus", "priekš"},

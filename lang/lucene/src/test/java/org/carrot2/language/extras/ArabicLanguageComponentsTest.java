@@ -10,8 +10,10 @@
  */
 package org.carrot2.language.extras;
 
+import java.io.IOException;
+
 public class ArabicLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public ArabicLanguageComponentsTest() {
+  public ArabicLanguageComponentsTest() throws IOException {
     super(
         ArabicLanguageComponents.NAME,
         new String[] {"باستثناء", "اكثر"},

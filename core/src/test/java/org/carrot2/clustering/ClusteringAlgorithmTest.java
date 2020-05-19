@@ -13,6 +13,7 @@ package org.carrot2.clustering;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -48,8 +49,8 @@ public class ClusteringAlgorithmTest extends TestBase {
     ClusteringAlgorithm ca =
         new ClusteringAlgorithm() {
           @Override
-          public boolean supports(LanguageComponents languageComponents) {
-            return true;
+          public Set<Class<?>> requiredLanguageComponents() {
+            return Collections.emptySet();
           }
 
           @Override

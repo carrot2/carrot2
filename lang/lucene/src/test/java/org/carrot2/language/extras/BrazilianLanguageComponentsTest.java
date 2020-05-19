@@ -10,8 +10,10 @@
  */
 package org.carrot2.language.extras;
 
+import java.io.IOException;
+
 public class BrazilianLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public BrazilianLanguageComponentsTest() {
+  public BrazilianLanguageComponentsTest() throws IOException {
     super(
         BrazilianLanguageComponents.NAME,
         new String[] {"diversas", "qualquer"},

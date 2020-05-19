@@ -14,7 +14,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Stream;
-import org.carrot2.attrs.*;
+import org.carrot2.attrs.AliasMapper;
+import org.carrot2.attrs.Attrs;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
@@ -29,7 +30,7 @@ import org.junit.Test;
 public class E02_TweakingAttributes {
   @Test
   public void tweakLingo() throws IOException {
-    LanguageComponents languageComponents = LanguageComponents.load("English");
+    LanguageComponents languageComponents = LanguageComponents.loader().load().language("English");
 
     // Tweak Lingo's defaults. Note each attribute comes with JavaDoc documentation
     // and some are constrained to a specific range of values. Also, each algorithm
@@ -60,7 +61,7 @@ public class E02_TweakingAttributes {
 
   @Test
   public void tweakStc() throws IOException {
-    LanguageComponents languageComponents = LanguageComponents.load("English");
+    LanguageComponents languageComponents = LanguageComponents.loader().load().language("English");
 
     // Tweak Lingo's defaults. Note each attribute comes with JavaDoc documentation
     // and some are constrained to a specific range of values. Also, each algorithm

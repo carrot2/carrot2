@@ -29,8 +29,9 @@ public abstract class AbstractLanguageComponentsTest {
   private final String[][] stemmingPairs;
   private final String[] stopWords;
 
-  AbstractLanguageComponentsTest(String language, String[] stopWords, String[][] stemmingPairs) {
-    this.components = LanguageComponents.load(language);
+  AbstractLanguageComponentsTest(String language, String[] stopWords, String[][] stemmingPairs)
+      throws IOException {
+    this.components = LanguageComponents.loader().load().language(language);
     this.stemmingPairs = stemmingPairs;
     this.stopWords = stopWords;
   }

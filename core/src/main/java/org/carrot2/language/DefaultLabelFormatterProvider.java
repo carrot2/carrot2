@@ -27,14 +27,24 @@ public class DefaultLabelFormatterProvider implements LanguageComponentsProvider
   }
 
   @Override
-  public Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup)
-      throws IOException {
-    return Collections.singletonMap(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
+  public ResourceLookup defaultResourceLookup() {
+    return new ClassRelativeResourceLookup(this.getClass());
   }
 
   @Override
-  public Map<Class<?>, Supplier<?>> load(String language) throws IOException {
-    return load(language, new ClassRelativeResourceLookup(this.getClass()));
+  public Set<Class<?>> componentTypes() {
+    return Collections.singleton(LabelFormatter.class);
+  }
+
+  @Override
+  public Map<Class<?>, Supplier<?>> load(
+      String language, ResourceLookup resourceLookup, Set<Class<?>> componentTypes)
+      throws IOException {
+    if (!componentTypes().equals(componentTypes)) {
+      throw new IllegalArgumentException();
+    }
+
+    return Map.of(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
   }
 
   @Override

@@ -26,19 +26,29 @@ public class DefaultLexicalDataProvider implements LanguageComponentsProvider {
   }
 
   @Override
-  public Map<Class<?>, Supplier<?>> load(String language, ResourceLookup resourceLookup)
+  public ResourceLookup defaultResourceLookup() {
+    return new ClassRelativeResourceLookup(this.getClass());
+  }
+
+  @Override
+  public Set<Class<?>> componentTypes() {
+    return Collections.singleton(LexicalData.class);
+  }
+
+  @Override
+  public Map<Class<?>, Supplier<?>> load(
+      String language, ResourceLookup resourceLookup, Set<Class<?>> componentTypes)
       throws IOException {
+    if (!componentTypes().equals(componentTypes)) {
+      throw new IllegalArgumentException();
+    }
+
     String langPrefix = language.toLowerCase(Locale.ROOT);
     LexicalData lexicalData =
         new LexicalDataImpl(
             resourceLookup, langPrefix + ".stopwords.utf8", langPrefix + ".stoplabels.utf8");
 
-    return Collections.singletonMap(LexicalData.class, () -> lexicalData);
-  }
-
-  @Override
-  public Map<Class<?>, Supplier<?>> load(String language) throws IOException {
-    return load(language, new ClassRelativeResourceLookup(this.getClass()));
+    return Map.of(LexicalData.class, () -> lexicalData);
   }
 
   @Override

@@ -10,7 +10,8 @@
  */
 package org.carrot2.language.polish;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import org.assertj.core.api.Assertions;
@@ -22,7 +23,7 @@ import org.junit.Test;
 
 public class PolishLanguageComponentsTest {
   protected LanguageComponents getComponents() throws IOException {
-    return LanguageComponents.load(PolishLanguageComponents.NAME);
+    return LanguageComponents.loader().load().language(PolishLanguageComponents.NAME);
   }
 
   protected String[][] getStemmingTestData() {

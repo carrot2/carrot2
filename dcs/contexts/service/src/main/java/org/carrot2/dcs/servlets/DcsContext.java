@@ -32,8 +32,10 @@ import javax.servlet.ServletException;
 import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.ClusteringAlgorithmProvider;
 import org.carrot2.dcs.model.ClusterRequest;
-import org.carrot2.language.ComponentLoader;
 import org.carrot2.language.LanguageComponents;
+import org.carrot2.language.LanguageComponentsLoader;
+import org.carrot2.language.LoadedLanguages;
+import org.carrot2.util.ChainedResourceLookup;
 import org.carrot2.util.ResourceLookup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +62,7 @@ class DcsContext {
     this.algorithmSuppliers =
         StreamSupport.stream(
                 ServiceLoader.load(ClusteringAlgorithmProvider.class, cl).spliterator(), false)
-            .sorted(Comparator.comparing(v -> v.name()))
+            .sorted(Comparator.comparing(ClusteringAlgorithmProvider::name))
             .collect(
                 Collectors.toMap(
                     e -> e.name(),
@@ -89,8 +91,8 @@ class DcsContext {
       ClusteringAlgorithmProvider provider, Collection<LanguageComponents> languages) {
     ClusteringAlgorithm algorithm = provider.get();
     Optional<LanguageComponents> first =
-        languages.stream().filter(lang -> algorithm.supports(lang)).findFirst();
-    if (!first.isPresent()) {
+        languages.stream().filter(algorithm::supports).findFirst();
+    if (first.isEmpty()) {
       console.warn(
           "Algorithm does not support any of the available languages: {}", provider.name());
       return false;
@@ -101,10 +103,7 @@ class DcsContext {
 
   private LinkedHashMap<String, LanguageComponents> computeLanguageComponents(
       ServletContext servletContext) throws ServletException {
-    List<String> languageList =
-        LanguageComponents.languages().stream().sorted().collect(Collectors.toList());
-
-    ComponentLoader suppliersLoader;
+    LanguageComponentsLoader loader = LanguageComponents.loader();
 
     String resourcePath = servletContext.getInitParameter(PARAM_RESOURCES);
     if (resourcePath != null && !resourcePath.trim().isEmpty()) {
@@ -117,32 +116,21 @@ class DcsContext {
           servletContext.getContextPath() + resourcePath);
 
       ResourceLookup contextLookup = new ServletContextLookup(servletContext, resourcePath);
-      suppliersLoader =
-          (language, provider) -> {
-            try {
-              return provider.load(language, contextLookup);
-            } catch (IOException e) {
-              console.debug(
-                  "Will use default resources for '{}' language components of provider '{}'",
-                  language,
-                  provider.name());
-              return provider.load(language);
-            }
-          };
-    } else {
-      suppliersLoader = (language, provider) -> provider.load(language);
+      loader.withResourceLookup(
+          (provider) ->
+              new ChainedResourceLookup(List.of(contextLookup, provider.defaultResourceLookup())));
+    }
+
+    LoadedLanguages loadedLanguages;
+    try {
+      loadedLanguages = loader.load();
+    } catch (IOException e) {
+      throw new ServletException("Could not load or initialize language resources.", e);
     }
 
     LinkedHashMap<String, LanguageComponents> languages = new LinkedHashMap<>();
-    for (String lang : languageList) {
-      try {
-        languages.put(lang, LanguageComponents.load(lang, cl, suppliersLoader));
-      } catch (IOException e) {
-        throw new ServletException(
-            String.format(
-                Locale.ROOT, "Could not load the required resource for language '%s'.", lang),
-            e);
-      }
+    for (String lang : loadedLanguages.languages()) {
+      languages.put(lang, loadedLanguages.language(lang));
     }
     return languages;
   }

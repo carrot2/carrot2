@@ -10,8 +10,10 @@
  */
 package org.carrot2.language.extras;
 
+import java.io.IOException;
+
 public class GalicianLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public GalicianLanguageComponentsTest() {
+  public GalicianLanguageComponentsTest() throws IOException {
     super(
         GalicianLanguageComponents.NAME,
         new String[] {"vosos", "miñas"},

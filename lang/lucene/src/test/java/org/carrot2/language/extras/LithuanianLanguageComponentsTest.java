@@ -10,8 +10,10 @@
  */
 package org.carrot2.language.extras;
 
+import java.io.IOException;
+
 public class LithuanianLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public LithuanianLanguageComponentsTest() {
+  public LithuanianLanguageComponentsTest() throws IOException {
     super(
         LithuanianLanguageComponents.NAME,
         new String[] {"jųdviejų", "jiedviem"},

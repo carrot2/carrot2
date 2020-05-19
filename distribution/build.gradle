@@ -69,6 +69,7 @@ task checkExamples(type: Exec) {
   } else {
     args += ['./gradlew']
   }
+  args += ['--no-daemon']
   args += ['test']
 
   workingDir file("${distShadow}/examples")

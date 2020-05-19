@@ -10,8 +10,10 @@
  */
 package org.carrot2.language.extras;
 
+import java.io.IOException;
+
 public class BulgarianLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public BulgarianLanguageComponentsTest() {
+  public BulgarianLanguageComponentsTest() throws IOException {
     super(
         BulgarianLanguageComponents.NAME,
         new String[] {"благодаря"},

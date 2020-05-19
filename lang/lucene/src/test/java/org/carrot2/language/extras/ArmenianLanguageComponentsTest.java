@@ -10,8 +10,10 @@
  */
 package org.carrot2.language.extras;
 
+import java.io.IOException;
+
 public class ArmenianLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public ArmenianLanguageComponentsTest() {
+  public ArmenianLanguageComponentsTest() throws IOException {
     super(
         ArmenianLanguageComponents.NAME,
         new String[] {"էինք", "հետ"},

@@ -119,9 +119,10 @@ across
     </dl>
 
     <p>
-      The <code>LanguageComponent</code> class has a variant of the
-      <code>load()</code> method that takes a custom <code>ResourceLookup</code> object
-      for locating and loading external resources.
+      The <code>LanguageComponentsLoader</code> class has methods to restrict
+      the number of loaded resources to only cover the needed languages (and/ or algorithms). There
+      is also a method for adding custom <code>ResourceLookup</code> implementation, responsible
+      for locating any external resources components may require.
       We can load our custom, modified resources using this facility without
       touching any of the default components. It's a good idea to start tweaking custom resources
       by first copying the defaults from Carrot<sup>2</sup> JARs and then modifying them in

@@ -10,8 +10,10 @@
  */
 package org.carrot2.language.extras;
 
+import java.io.IOException;
+
 public class CroatianLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public CroatianLanguageComponentsTest() {
+  public CroatianLanguageComponentsTest() throws IOException {
     super(
         CroatianLanguageComponents.NAME,
         new String[] {"hoćemo", "hoćete"},

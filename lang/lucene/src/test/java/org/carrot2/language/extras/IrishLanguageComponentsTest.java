@@ -10,8 +10,10 @@
  */
 package org.carrot2.language.extras;
 
+import java.io.IOException;
+
 public class IrishLanguageComponentsTest extends AbstractLanguageComponentsTest {
-  public IrishLanguageComponentsTest() {
+  public IrishLanguageComponentsTest() throws IOException {
     super(
         IrishLanguageComponents.NAME,
         new String[] {"ceathrar", "seachtar"},
