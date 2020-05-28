@@ -98,6 +98,10 @@ class RestEndpoint extends HttpServlet {
 
       ErrorResponseType type = errorResponse.type;
 
+      if (type == ErrorResponseType.LICENSING) {
+        CONSOLE.warn(errorResponse.message);
+      }
+
       if (CONSOLE.isDebugEnabled()) {
         CONSOLE.debug(
             "Request resulted in an error {}: {}", type, request.getRequestURI(), exception);
