@@ -328,7 +328,15 @@ public final class Attrs {
     @Override
     public void visit(String key, AttrStringArray attr) {
       if (map.containsKey(key)) {
-        attr.set(safeCast(map.remove(key), key, String[].class));
+        Object value = map.remove(key);
+        if (value instanceof List<?>) {
+          // Attempt to convert List<?> to String[].
+          attr.set(
+              ((List<?>) value)
+                  .stream().map(ob -> safeCast(ob, key, String.class)).toArray(String[]::new));
+        } else {
+          attr.set(safeCast(value, key, String[].class));
+        }
       }
     }
 
