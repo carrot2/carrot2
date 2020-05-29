@@ -51,7 +51,7 @@ export function pubmed(query, params) {
         return {
           id: id,
           title: xpath.getString(".//ArticleTitle", article),
-          snippet: paragraphs.join(" "),
+          snippet: paragraphs.map(p => p.text).join(" "),
           paragraphs: paragraphs,
           journal: xpath.getString(".//Journal/Title", article),
           year: xpath.getString(".//Journal//Year", article),
