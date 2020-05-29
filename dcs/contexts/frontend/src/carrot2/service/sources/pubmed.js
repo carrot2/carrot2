@@ -29,11 +29,11 @@ function XPathProcessor(xmlString) {
 export function pubmed(query, params) {
   const isProduction = process.env.NODE_ENV === "production";
   const serviceESearch = isProduction ? liveESearch : cachedESearch;
-  const serviceEFetchh = isProduction ? liveEFetch : cachedEFetch;
+  const serviceEFetch = isProduction ? liveEFetch : cachedEFetch;
 
   return serviceESearch(query, params)
     .then( eSearchResult => {
-      return serviceEFetchh(eSearchResult.esearchresult.idlist);
+      return serviceEFetch(eSearchResult.esearchresult.idlist, params);
     })
     .then(xml => {
       const xpath = new XPathProcessor(xml);
@@ -68,15 +68,21 @@ export function pubmed(query, params) {
     });
 }
 
+const withApiKey = (request, params) => {
+  if (params.apiKey && params.apiKey.length > 0) {
+    request.api_key = params.apiKey;
+  }
+  return request;
+};
+
 function liveESearch(query, params) {
   const url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?" + queryString.stringify(
-    {
+    withApiKey({
       db: "pubmed",
       term: query,
       retmax: params.maxResults,
-      retmode: "json",
-      partner: "Carrot2Json",
-    }
+      retmode: "json"
+    }, params)
   );
 
   return window.fetch(url)
@@ -98,13 +104,13 @@ function cachedESearch() {
   });
 }
 
-function liveEFetch(ids) {
+function liveEFetch(ids, params) {
   const url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?" + queryString.stringify(
-    {
+    withApiKey({
       db: "pubmed",
       id: ids.join(","),
       retmode: "xml"
-    }
+    }, params)
   );
 
   return window.fetch(url)

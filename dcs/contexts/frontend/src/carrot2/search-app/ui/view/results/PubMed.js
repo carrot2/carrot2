@@ -1,4 +1,4 @@
-import { FormGroup, NumericInput, Switch } from "@blueprintjs/core";
+import { FormGroup, InputGroup, NumericInput, Switch } from "@blueprintjs/core";
 
 import React from 'react';
 
@@ -19,12 +19,16 @@ const pubmedConfigStore = persistentStore("pubmedResultConfig",
 
 const pubmedSourceConfigStore = persistentStore("pubmedSourceResultConfig",
   {
-    maxResults: 100
+    maxResults: 100,
+    apiKey: ""
   }
 );
 
 export const pubmedSource = (query) => {
-  return pubmed(query, { maxResults: pubmedSourceConfigStore.maxResults });
+  return pubmed(query, {
+    maxResults: pubmedSourceConfigStore.maxResults,
+    apiKey: pubmedSourceConfigStore.apiKey
+  });
 };
 
 /**
@@ -117,6 +121,10 @@ export const PubMedSourceConfig = view((props) => {
         <NumericInput id="pubmed-max-results" min={50} max={300} value={store.maxResults}
                       onValueChange={v => { store.maxResults = v; props.onChange(); } }
                       majorStepSize={100} stepSize={50} minorStepSize={10} />
+      </FormGroup>
+      <FormGroup inline={true} label="API key" labelFor="pubmed-api-key">
+        <InputGroup id="pubmed-api-key" value={store.apiKey}
+                    onChange={e => { store.apiKey = e.target.value.trim(); props.onChange(); } } />
       </FormGroup>
     </div>
   );
