@@ -16,6 +16,13 @@
         <param-value>/templates</param-value>
     </context-param>
 
+    <!-- Algorithms filter. Comma-separated names of algorithms to include. If empty, all
+         algorithms available via the SPI will be loaded. -->
+    <context-param>
+        <param-name>algorithms</param-name>
+        <param-value><!-- Lingo, STC, ... --></param-value>
+    </context-param>
+
     <servlet>
         <servlet-name>ListServlet</servlet-name>
         <servlet-class>org.carrot2.dcs.servlets.ListServlet</servlet-class>

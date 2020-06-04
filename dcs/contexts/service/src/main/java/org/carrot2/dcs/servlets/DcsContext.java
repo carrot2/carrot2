@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -35,7 +37,6 @@ import org.carrot2.dcs.model.ClusterRequest;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.LanguageComponentsLoader;
 import org.carrot2.language.LoadedLanguages;
-import org.carrot2.util.ChainedResourceLookup;
 import org.carrot2.util.ResourceLookup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,7 @@ import org.slf4j.LoggerFactory;
 class DcsContext {
   public static final String PARAM_RESOURCES = "resources";
   public static final String PARAM_TEMPLATES = "templates";
+  public static final String PARAM_ALGORITHMS = "algorithms";
 
   private static String KEY = "_dcs_";
   private static Logger console = LoggerFactory.getLogger("console");
@@ -59,10 +61,27 @@ class DcsContext {
     this.om = new ObjectMapper();
     om.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
 
+    Predicate<String> algorithmsFilter;
+    String allowedList = servletContext.getInitParameter(PARAM_ALGORITHMS);
+    if (allowedList != null && !allowedList.isBlank()) {
+      Set<String> allowed = Set.of(allowedList.trim().split("[\\s,]+"));
+      algorithmsFilter =
+          (algorithm) -> {
+            boolean allow = allowed.contains(algorithm);
+            if (!allow) {
+              console.debug("Algorithm omitted (context filter): {}", algorithm);
+            }
+            return allow;
+          };
+    } else {
+      algorithmsFilter = (algorithm) -> true;
+    }
+
     this.algorithmSuppliers =
         StreamSupport.stream(
                 ServiceLoader.load(ClusteringAlgorithmProvider.class, cl).spliterator(), false)
             .sorted(Comparator.comparing(ClusteringAlgorithmProvider::name))
+            .filter(provider -> algorithmsFilter.test(provider.name()))
             .collect(
                 Collectors.toMap(
                     e -> e.name(),
@@ -72,8 +91,8 @@ class DcsContext {
                     },
                     LinkedHashMap::new));
 
-    this.templates = processTemplates(om, servletContext);
-    this.languages = computeLanguageComponents(servletContext);
+    this.templates = processTemplates(om, algorithmSuppliers, servletContext);
+    this.languages = computeLanguageComponents(algorithmSuppliers, servletContext);
 
     this.algorithmSuppliers
         .entrySet()
@@ -100,8 +119,10 @@ class DcsContext {
     }
   }
 
-  private LinkedHashMap<String, LanguageComponents> computeLanguageComponents(
-      ServletContext servletContext) throws ServletException {
+  private static LinkedHashMap<String, LanguageComponents> computeLanguageComponents(
+      LinkedHashMap<String, ClusteringAlgorithmProvider> algorithmSuppliers,
+      ServletContext servletContext)
+      throws ServletException {
     LanguageComponentsLoader loader = LanguageComponents.loader();
 
     String resourcePath = servletContext.getInitParameter(PARAM_RESOURCES);
@@ -115,10 +136,14 @@ class DcsContext {
           servletContext.getContextPath() + resourcePath);
 
       ResourceLookup contextLookup = new ServletContextLookup(servletContext, resourcePath);
-      loader.withResourceLookup(
-          (provider) ->
-              new ChainedResourceLookup(List.of(contextLookup, provider.defaultResourceLookup())));
+      loader.withResourceLookup((provider) -> contextLookup);
     }
+
+    // Only load the resources of algorithms we're interested in.
+    loader.limitToAlgorithms(
+        algorithmSuppliers.values().stream()
+            .map(Supplier::get)
+            .toArray(ClusteringAlgorithm[]::new));
 
     LoadedLanguages loadedLanguages;
     try {
@@ -165,18 +190,16 @@ class DcsContext {
     return context;
   }
 
-  private Map<String, ClusterRequest> processTemplates(
-      ObjectMapper om, ServletContext servletContext) throws ServletException {
+  private static Map<String, ClusterRequest> processTemplates(
+      ObjectMapper om,
+      LinkedHashMap<String, ClusteringAlgorithmProvider> algorithmSuppliers,
+      ServletContext servletContext)
+      throws ServletException {
     String templatePath = servletContext.getInitParameter(PARAM_TEMPLATES);
     if (templatePath == null || templatePath.isEmpty()) {
       console.warn("Template path init parameter is empty.");
       return Collections.emptyMap();
     }
-
-    Pattern NAME_PATTERN =
-        Pattern.compile(
-            "(/)?(?<ordering>[0-9]+)?+(?<separator>\\s*-?\\s*)?+(?<id>[^/]+)(.json)$",
-            Pattern.CASE_INSENSITIVE);
 
     Map<String, ClusterRequest> templates = new LinkedHashMap<>();
     Set<String> resourcePaths = servletContext.getResourcePaths(templatePath);
