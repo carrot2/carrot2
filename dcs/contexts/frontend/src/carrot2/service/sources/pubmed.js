@@ -105,15 +105,21 @@ function cachedESearch() {
 }
 
 function liveEFetch(ids, params) {
-  const url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?" + queryString.stringify(
-    withApiKey({
-      db: "pubmed",
-      id: ids.join(","),
-      retmode: "xml"
-    }, params)
+  let data = queryString.stringify(
+      withApiKey({
+        db: "pubmed",
+        retmode: "xml"
+      }, params)
   );
+  const url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?" + data;
 
-  return window.fetch(url)
+  return window.fetch(url, {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: "id=" + ids.join(",")
+    })
     .catch(e => {
       return { statusText: `Failed to connect to PubMed service at ${url.substring(0, 100) + "..."}: ${e.message}.`};
     })
