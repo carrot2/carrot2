@@ -120,7 +120,7 @@ export const PubMedSourceConfig = view((props) => {
       <FormGroup inline={true} label="Max results" labelFor="pubmed-max-results">
         <NumericInput id="pubmed-max-results" min={50} max={1000} value={store.maxResults}
                       onValueChange={v => { store.maxResults = v; props.onChange(); } }
-                      majorStepSize={100} stepSize={50} minorStepSize={10} />
+                      majorStepSize={100} stepSize={50} minorStepSize={10} clampValueOnBlur={true} />
       </FormGroup>
       <FormGroup inline={true} label="API key" labelFor="pubmed-api-key">
         <InputGroup id="pubmed-api-key" value={store.apiKey}
