@@ -58,7 +58,7 @@ export const ClusteringRequestSizeLimitExceededError = () => {
 
       <p>
         You sent too much data for our little demo
-        server to handle. Lower the number of documents and try again.
+        server to handle. Lower the number of search results and try again.
       </p>
 
       <p>
@@ -90,6 +90,23 @@ export const ClusteringExceptionMessage = ({ exception }) => {
   );
 };
 
+export const ClusteringErrorMessage = ({ message }) => {
+  return (
+      <div className="Error">
+        <h3>Clustering engine error</h3>
+
+        <p>
+          Results could not be clustered due to the following error:
+        </p>
+
+        <p>
+          <strong>{message}</strong>
+        </p>
+
+        <p>That's all we know.</p>
+      </div>
+  );
+};
 
 export const ClusteringEngineErrorMessage = view(props => {
   const error = props.store.error;
@@ -100,8 +117,13 @@ export const ClusteringEngineErrorMessage = view(props => {
   if (error && error.status === 413) {
     return <ClusteringRequestSizeLimitExceededError />;
   }
-  if (error && error.bodyParsed && error.bodyParsed.stacktrace) {
-    return <ClusteringExceptionMessage exception={error.bodyParsed} />
+  if (error && error.bodyParsed) {
+    if (error.bodyParsed.stacktrace) {
+      return <ClusteringExceptionMessage exception={error.bodyParsed}/>
+    }
+    if (error.bodyParsed.message) {
+      return <ClusteringErrorMessage message={error.bodyParsed.message}/>
+    }
   }
 
   return (

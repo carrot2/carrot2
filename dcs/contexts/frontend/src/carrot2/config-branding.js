@@ -31,8 +31,8 @@ const carrot2Branding = {
       <>
         <strong>Note:</strong> If you have IT and programming skills, you can install
         this application on your own hardware. This will remove limits on
-        the rate and size of clustering requests. Please see
-        <a href="http://project.carrot2.org" target="_blank" rel="noopener noreferrer">http://project.carrot2.org</a> for
+        the rate and size of clustering requests. Please see <a href="http://project.carrot2.org"
+        target="_blank" rel="noopener noreferrer">http://project.carrot2.org</a> for
         more details.
       </>
     );
