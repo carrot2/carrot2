@@ -10,6 +10,7 @@
  */
 package org.carrot2.infra.docattrs;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -100,7 +101,15 @@ class AttrInfoCollector implements AttrVisitor {
     if (attr instanceof AttrObject<?>) {
       value = value.map(aliasMapper::toName);
     } else if (attr instanceof AttrStringArray) {
-      value = value.map(v -> Arrays.toString((String[]) v));
+      // no change, just emit an array of strings.
+    } else if (attr instanceof AttrObjectArray<?>) {
+      if (value.isPresent()) {
+        if (!((List<?>) value.get()).isEmpty()) {
+          throw new RuntimeException(
+              "Don't know how to generate a descriptor for non-empty attribute: "
+                  + attr.getDescription());
+        }
+      }
     } else {
       value = value.map(Objects::toString);
     }
