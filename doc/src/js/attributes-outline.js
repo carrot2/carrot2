@@ -30,7 +30,7 @@ const attributeValue = (attribute, descriptor) => {
               .join("")
     };
   } else {
-    return descriptor.value || "null";
+    return descriptor.value;
   }
 };
 
@@ -71,15 +71,26 @@ const attributesAndTypeHtml = (attributes, type) => {
 const token = (type, content) => `<span class="token ${type}">${content}</span>`;
 const punctuation = char => token("punctuation", char);
 const value = v => {
-  const isNumber = Number.isFinite(parseFloat(v));
+  const isNumber = Number.isFinite(v);
   const isNull = v === "null" || v === null;
+  const isBoolean = typeof v === "boolean";
   const isNested = typeof v === "object" && v !== null && v.value !== undefined;
 
-  if (isNested) {
+  if (Array.isArray(v)) {
+    if (v.length !== 0) {
+      throw "Non-empty arrays not implemented."
+    }
+    return punctuation("[") + punctuation("]");
+  } else if (isNested) {
     return wrapInBrackets(v.value);
+  } else if (isNull) {
+    return token("keyword", "null");
+  } else if (isNumber) {
+    return token("number", v);
+  } else if (isBoolean) {
+    return token("keyword", v);
   } else {
-    return token(isNumber ? "number" : isNull ? "keyword" : "string",
-        isNumber ? v : isNull ? "null" : `"${v}"`);
+    return token("string", `"${v}"`);
   }
 };
 const wrapInBrackets = string => punctuation("{") + string + punctuation("}");

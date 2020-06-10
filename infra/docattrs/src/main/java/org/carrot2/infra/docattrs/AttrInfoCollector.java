@@ -10,7 +10,6 @@
  */
 package org.carrot2.infra.docattrs;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -30,7 +29,6 @@ import org.carrot2.attrs.AttrStringArray;
 import org.carrot2.attrs.AttrVisitor;
 import org.carrot2.attrs.ClassNameMapper;
 import org.carrot2.attrs.Constraint;
-import org.carrot2.math.mahout.Arrays;
 
 class AttrInfoCollector implements AttrVisitor {
   private final ClassNameMapper aliasMapper;
@@ -43,77 +41,64 @@ class AttrInfoCollector implements AttrVisitor {
 
   @Override
   public void visit(String key, AttrBoolean attr) {
-    attrInfo(key, attr, () -> "Boolean");
+    attrInfo(key, attr, () -> "Boolean", attr.get());
   }
 
   @Override
   public void visit(String key, AttrInteger attr) {
-    attrInfo(key, attr, () -> "Integer");
+    attrInfo(key, attr, () -> "Integer", attr.get());
   }
 
   @Override
   public void visit(String key, AttrDouble attr) {
-    attrInfo(key, attr, () -> "Double");
+    attrInfo(key, attr, () -> "Double", attr.get());
   }
 
   @Override
   public void visit(String key, AttrString attr) {
-    attrInfo(key, attr, () -> "String");
+    attrInfo(key, attr, () -> "String", attr.get());
   }
 
   @Override
   public <T extends Enum<T>> void visit(String key, AttrEnum<T> attr) {
-    attrInfo(key, attr, () -> attr.enumClass().getName());
+    attrInfo(key, attr, () -> attr.enumClass().getName(), Objects.toString(attr.get(), null));
   }
 
   @Override
   public void visit(String key, AttrStringArray attr) {
-    attrInfo(key, attr, () -> "String[]");
+    attrInfo(key, attr, () -> "String[]", attr.get());
   }
 
   @Override
   public <T extends AcceptingVisitor> void visit(String key, AttrObject<T> attr) {
-    attrInfo(key, attr, () -> attr.getInterfaceClass().getName());
+    attrInfo(
+        key,
+        attr,
+        () -> attr.getInterfaceClass().getName(),
+        Optional.ofNullable(attr.get()).map(aliasMapper::toName).orElse(null));
   }
 
   @Override
   public <T extends AcceptingVisitor> void visit(String key, AttrObjectArray<T> attr) {
-    attrInfo(key, attr, () -> attr.getInterfaceClass().getName() + "[]");
     if (attr.get() != null && !attr.get().isEmpty()) {
       throw new RuntimeException(
           "Don't know how to emit value for non-empty array attribute: " + key);
     }
+    attrInfo(key, attr, () -> attr.getInterfaceClass().getName() + "[]", attr.get());
   }
 
-  private <T> AttrInfo attrInfo(String key, Attr<T> attr, Supplier<String> type) {
+  private <T> AttrInfo attrInfo(String key, Attr<T> attr, Supplier<String> type, Object value) {
     AttrInfo info = new AttrInfo();
     info.attr = attr;
     info.description = attr.getDescription();
     info.type = type.get();
+    info.value = value;
 
     List<Constraint<? super T>> constraints = attr.getConstraints();
     if (!constraints.isEmpty()) {
       info.constraints =
           constraints.stream().map(Constraint::description).collect(Collectors.toList());
     }
-
-    Optional<Object> value = Optional.ofNullable(attr.get());
-    if (attr instanceof AttrObject<?>) {
-      value = value.map(aliasMapper::toName);
-    } else if (attr instanceof AttrStringArray) {
-      // no change, just emit an array of strings.
-    } else if (attr instanceof AttrObjectArray<?>) {
-      if (value.isPresent()) {
-        if (!((List<?>) value.get()).isEmpty()) {
-          throw new RuntimeException(
-              "Don't know how to generate a descriptor for non-empty attribute: "
-                  + attr.getDescription());
-        }
-      }
-    } else {
-      value = value.map(Objects::toString);
-    }
-    info.value = value.orElse(null);
 
     attrs.put(key, info);
     return info;

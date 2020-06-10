@@ -78,7 +78,7 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
 
   @Override
   public ExitCode run() {
-    BiConsumer<Class<? extends ClusteringAlgorithm>, ClassInfo> emitter = getOutputConsumer();
+    BiConsumer<Class<? extends AcceptingVisitor>, ClassInfo> emitter = getOutputConsumer();
 
     // Collect attribute-holding class universe.
     Map<String, Object> aliasedTypes = new TreeMap<>();
@@ -284,7 +284,7 @@ public class WriteDescriptorsCommand extends Command<ExitCode> {
   }
 
   @SuppressForbidden("Legitimate sysout")
-  private BiConsumer<Class<? extends ClusteringAlgorithm>, ClassInfo> getOutputConsumer() {
+  private BiConsumer<Class<? extends AcceptingVisitor>, ClassInfo> getOutputConsumer() {
     DefaultPrettyPrinter pp = new DefaultPrettyPrinter();
     pp.indentArraysWith(new DefaultIndenter("  ", DefaultIndenter.SYS_LF));
 

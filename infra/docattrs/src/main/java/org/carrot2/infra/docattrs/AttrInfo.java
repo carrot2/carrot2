@@ -38,7 +38,10 @@ public class AttrInfo {
 
   @JsonProperty public String description;
   @JsonProperty public String type;
-  @JsonProperty public Object value;
+
+  @JsonInclude(Include.ALWAYS)
+  @JsonProperty
+  public Object value;
 
   @JsonProperty public List<String> constraints;
 

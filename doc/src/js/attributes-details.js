@@ -28,6 +28,14 @@ const depthFirstAttributes = descriptor => {
   return collect(descriptor, []);
 };
 
+const attrValueToString = value => {
+  if (Array.isArray(value)) {
+    return "[]";
+  } else {
+    return value;
+  }
+};
+
 const descriptionText = attribute => {
   const javadoc = attribute.javadoc;
   if (javadoc.text) {
@@ -76,8 +84,8 @@ const attributeDetailsHtml = (attribute) => {
     <dt>Type</dt>
     <dd>${attribute.type}</dd>
     <dt>Default</dt>
-    <dd>${attribute.value}</dd>
-    <dd>${constraintsHtml}</dd>
+    <dd>${attrValueToString(attribute.value)}</dd>
+    ${constraintsHtml}
     <dt>Path</dt>
     <dd>${attribute.pathRest}</dd>
     <dt>Java snippet</dt>
