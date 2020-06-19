@@ -180,7 +180,7 @@ public class JettyContainer {
           private AtomicInteger tid = new AtomicInteger();
 
           @Override
-          protected Thread newThread(Runnable runnable) {
+          public Thread newThread(Runnable runnable) {
             return new Thread(
                 () -> {
                   Thread.currentThread().setName("T" + tid.incrementAndGet());
