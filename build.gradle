@@ -5,7 +5,7 @@ plugins {
   id "com.palantir.consistent-versions" version '1.17.2'
 
   id 'com.diffplug.gradle.spotless' version "3.27.0" apply false
-  id "com.github.ben-manes.versions" version "0.27.0"
+  id "com.github.ben-manes.versions" version "0.28.0"
 
   id 'de.thetaphi.forbiddenapis' version '2.7' apply false
 
