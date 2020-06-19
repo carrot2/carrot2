@@ -13,7 +13,7 @@ plugins {
   // id "com.dorongold.task-tree" version "1.4"
 }
 
-rootProject.version = '4.0.0-beta4'
+rootProject.version = '4.0.0-SNAPSHOT'
 ext {
   fullName = "Carrot2"
 
