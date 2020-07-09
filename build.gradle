@@ -8,9 +8,6 @@ plugins {
   id "com.github.ben-manes.versions" version "0.28.0"
 
   id 'de.thetaphi.forbiddenapis' version '2.7' apply false
-
-  // Task dependency inspector (gradle <task 1>...<task N> taskTree)
-  // id "com.dorongold.task-tree" version "1.4"
 }
 
 rootProject.version = '4.0.0-SNAPSHOT'
