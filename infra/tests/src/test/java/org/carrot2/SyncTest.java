@@ -17,6 +17,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.PosixFileAttributeView;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -84,7 +86,7 @@ public class SyncTest extends TestBase {
                         "%s [file, %,d bytes, last modified: %s, perms: %s]",
                         p.normalize().relativize(src).toString(),
                         Files.size(p),
-                        Files.getLastModifiedTime(p),
+                        Files.getLastModifiedTime(p).toInstant().truncatedTo(ChronoUnit.SECONDS),
                         perms);
                   }
                 } catch (IOException e) {
