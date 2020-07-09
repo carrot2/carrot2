@@ -1,13 +1,13 @@
 plugins {
   id 'base'
 
-  id "com.github.node-gradle.node" version "2.2.1" apply false
+  id "com.github.node-gradle.node" version "2.2.4" apply false
   id "com.palantir.consistent-versions" version '1.23.0'
 
-  id 'com.diffplug.gradle.spotless' version "3.27.0" apply false
+  id 'com.diffplug.gradle.spotless' version "4.5.1" apply false
   id "com.github.ben-manes.versions" version "0.28.0"
 
-  id 'de.thetaphi.forbiddenapis' version '2.7' apply false
+  id 'de.thetaphi.forbiddenapis' version '3.0.1' apply false
 }
 
 rootProject.version = '4.0.0-SNAPSHOT'
