@@ -109,7 +109,7 @@ public class SuffixTreeTest extends TestBase {
         edges++;
         return true;
       }
-    };
+    }
 
     final CountingVisitor v = new CountingVisitor();
     stree.visit(v);
@@ -140,7 +140,7 @@ public class SuffixTreeTest extends TestBase {
               states.remove(states.size() - 1);
               states.remove(states.size() - 1);
             }
-          };
+          }
 
           public boolean edge(int fromState, int toState, int startIndex, int endIndex) {
             states.add(startIndex);

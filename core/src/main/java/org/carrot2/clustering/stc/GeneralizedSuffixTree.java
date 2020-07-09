@@ -158,7 +158,8 @@ final class GeneralizedSuffixTree {
       while (bsets.size() <= level) bsets.add(new BitSet());
       return bsets.get(level);
     }
-  };
+  }
+  ;
 
   /* */
   private GeneralizedSuffixTree() {}

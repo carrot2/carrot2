@@ -599,12 +599,10 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
 
     Collections.sort(
         phrases,
-        new Comparator<PhraseCandidate>() {
-          public int compare(PhraseCandidate p1, PhraseCandidate p2) {
-            if (p1.coverage < p2.coverage) return 1;
-            if (p1.coverage > p2.coverage) return -1;
-            return 0;
-          };
+        (p1, p2) -> {
+          if (p1.coverage < p2.coverage) return 1;
+          if (p1.coverage > p2.coverage) return -1;
+          return 0;
         });
 
     int max = maxPhrasesPerLabel.get();
@@ -1086,7 +1084,8 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     for (int i = sourceOffset; i <= max; i++) {
       /* Look for first element. */
       if (source[i] != first) {
-        while (++i <= max && source[i] != first) /* do nothing */ ;
+        while (++i <= max && source[i] != first) /* do nothing */
+          ;
       }
 
       /* Found first element, now look at the rest of the pattern */
