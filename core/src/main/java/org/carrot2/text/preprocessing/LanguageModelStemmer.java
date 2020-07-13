@@ -107,10 +107,10 @@ final class LanguageModelStemmer {
     }
 
     // Lists to accommodate the results
-    final ArrayList<char[]> stemImages = new ArrayList<char[]>(allWordsCount);
+    final ArrayList<char[]> stemImages = new ArrayList<>(allWordsCount);
     final IntArrayList stemTf = new IntArrayList(allWordsCount);
     final IntArrayList stemMostFrequentWordIndexes = new IntArrayList(allWordsCount);
-    final ArrayList<int[]> stemTfByDocumentList = new ArrayList<int[]>(allWordsCount);
+    final ArrayList<int[]> stemTfByDocumentList = new ArrayList<>(allWordsCount);
     final ByteArrayList fieldIndexList = new ByteArrayList();
 
     // Counters

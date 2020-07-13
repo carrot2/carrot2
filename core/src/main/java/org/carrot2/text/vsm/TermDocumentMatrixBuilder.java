@@ -14,27 +14,43 @@ import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
+import java.util.Arrays;
+import java.util.function.IntToDoubleFunction;
 import org.carrot2.attrs.AttrComposite;
 import org.carrot2.attrs.AttrDouble;
 import org.carrot2.attrs.AttrInteger;
 import org.carrot2.attrs.AttrObject;
+import org.carrot2.attrs.AttrStringArray;
 import org.carrot2.language.TokenTypeUtils;
 import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 import org.carrot2.math.mahout.matrix.impl.DenseDoubleMatrix2D;
 import org.carrot2.math.mahout.matrix.impl.SparseDoubleMatrix2D;
 import org.carrot2.math.matrix.MatrixUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext;
+import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
 
 /** Builds a term document matrix based on the provided {@link PreprocessingContext}. */
 public class TermDocumentMatrixBuilder extends AttrComposite {
   /**
-   * Title word boost. Gives more weight to words that appeared in title fields. The larger the
-   * value, the stronger boost the title words will receive.
+   * Gives more weight to words that appeared in title fields. The larger the value, the stronger
+   * boost the title words will receive.
    */
-  public final AttrDouble titleWordsBoost =
+  public final AttrDouble boostedFieldWeight =
       attributes.register(
-          "titleWordsBoost",
-          AttrDouble.builder().label("Title word boost").min(0).max(10).defaultValue(2.));
+          "boostedFieldWeight",
+          AttrDouble.builder().label("Boosted fields weight").min(0).max(10).defaultValue(2.));
+
+  /**
+   * Specifies a list of field names that are boosted by {@link #boostedFieldWeight
+   * boostedFieldWeight} attribute. Content of fields provided in this attribute can be given more
+   * weight during clustering.
+   */
+  public AttrStringArray boostFields =
+      attributes.register(
+          "boostFields",
+          AttrStringArray.builder()
+              .label("Fields with boosted scores")
+              .defaultValue(new String[] {"title"}));
 
   /**
    * Maximum term-document matrix size. Determines the maximum number of the term-document matrix
@@ -102,14 +118,27 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
       return;
     }
 
-    // Determine the index of the title field
-    int titleFieldIndex = -1;
-    final String[] fieldsName = preprocessingContext.allFields.name;
-    for (int i = 0; i < fieldsName.length; i++) {
-      if ("title".equals(fieldsName[i])) {
-        titleFieldIndex = i;
-        break;
+    // Determine boosts for
+    IntToDoubleFunction fieldIndexToBoost;
+    if (boostFields.get().length == 0) {
+      fieldIndexToBoost = (fieldIndices -> 1d);
+    } else {
+      double[] boosts = new double[256];
+      Arrays.fill(boosts, 1d);
+      AllFields allFields = preprocessingContext.allFields;
+      for (String fieldName : boostFields.get()) {
+        int fieldIndex = allFields.fieldIndex(fieldName);
+        if (fieldIndex >= 0) {
+          int mask = 1 << fieldIndex;
+          for (int i = 0; i < boosts.length; i++) {
+            if ((i & mask) != 0) {
+              boosts[i] = boostedFieldWeight.get();
+            }
+          }
+        }
       }
+
+      fieldIndexToBoost = (fieldIndices -> boosts[fieldIndices]);
     }
 
     // Determine the stems we, ideally, should include in the matrix
@@ -121,10 +150,10 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
     final double[] stemsWeight = new double[stemsToInclude.length];
     for (int i = 0; i < stemsToInclude.length; i++) {
       final int stemIndex = stemsToInclude[i];
-      stemsWeight[i] =
+      double weight =
           termWeighting.calculateTermWeight(
-                  stemsTf[stemIndex], stemsTfByDocument[stemIndex].length / 2, documentCount)
-              * getWeightBoost(titleFieldIndex, stemsFieldIndices[stemIndex]);
+              stemsTf[stemIndex], stemsTfByDocument[stemIndex].length / 2, documentCount);
+      stemsWeight[i] = weight * fieldIndexToBoost.applyAsDouble(stemsFieldIndices[stemIndex]);
     }
     final int[] stemWeightOrder =
         IndirectSort.mergesort(
@@ -141,11 +170,12 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
       final int df = tfByDocument.length / 2;
       final byte fieldIndices = stemsFieldIndices[stemIndex];
 
+      double fieldWeight = fieldIndexToBoost.applyAsDouble(fieldIndices);
       for (int j = 0; j < df; j++) {
         double weight =
             termWeighting.calculateTermWeight(tfByDocument[j * 2 + 1], df, documentCount);
 
-        weight *= getWeightBoost(titleFieldIndex, fieldIndices);
+        weight *= fieldWeight;
         tdMatrix.set(i, tfByDocument[j * 2], weight);
       }
     }
@@ -185,15 +215,6 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
       MatrixUtils.normalizeColumnL2(phraseMatrix, null);
       context.termPhraseMatrix = phraseMatrix.viewDice();
     }
-  }
-
-  /** Calculates the boost we should apply to a stem, based on the field indices array. */
-  private double getWeightBoost(int titleFieldIndex, final byte fieldIndices) {
-    if ((fieldIndices & (1 << titleFieldIndex)) != 0) {
-      return titleWordsBoost.get();
-    }
-
-    return 1;
   }
 
   /**

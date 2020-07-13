@@ -235,6 +235,10 @@ public final class PreprocessingContext implements Closeable {
       sw.append("\n");
       return sw.toString();
     }
+
+    public int fieldIndex(String fieldName) {
+      return Arrays.asList(name).indexOf(fieldName);
+    }
   }
 
   /** Information about all fields processed for the input documents. */
@@ -300,7 +304,7 @@ public final class PreprocessingContext implements Closeable {
     public int[] stemIndex;
 
     /**
-     * A bit-packed indices of all fields in which this word appears at least once. Indexes
+     * A bit-packed index of all fields in which this word appears at least once. Indexes
      * (positions) of selected bits are pointers to the {@link AllFields} arrays. Fast conversion
      * between the bit-packed representation and <code>byte[]</code> with index values is done by
      * {@link #toFieldIndexes(byte)}
@@ -402,7 +406,7 @@ public final class PreprocessingContext implements Closeable {
     public int[][] tfByDocument;
 
     /**
-     * A bit-packed indices of all fields in which this word appears at least once. Indexes
+     * A bit-packed index of all fields in which this word appears at least once. Indexes
      * (positions) of selected bits are pointers to the {@link AllFields} arrays. Fast conversion
      * between the bit-packed representation and <code>byte[]</code> with index values is done by
      * {@link #toFieldIndexes(byte)}
