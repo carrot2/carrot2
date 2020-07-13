@@ -42,6 +42,7 @@ public class TermDocumentMatrixBuilderTestBase extends TestBase {
     matrixBuilder = new TermDocumentMatrixBuilder();
     matrixBuilder.termWeighting = new TfTermWeighting();
     matrixBuilder.maxWordDf.set(1.0);
+    matrixBuilder.boostFields.set("title");
   }
 
   protected PreprocessingContext buildTermDocumentMatrix(Stream<? extends Document> documents) {

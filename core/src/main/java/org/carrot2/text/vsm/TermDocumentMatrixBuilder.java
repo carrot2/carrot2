@@ -50,7 +50,7 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
           "boostFields",
           AttrStringArray.builder()
               .label("Fields with boosted scores")
-              .defaultValue(new String[] {"title"}));
+              .defaultValue(new String[] {}));
 
   /**
    * Maximum term-document matrix size. Determines the maximum number of the term-document matrix
