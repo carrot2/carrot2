@@ -73,7 +73,6 @@ public class ClusterServletTest extends AbstractServletTest {
   private void verifyInvalidRequest(
       int expectedStatus, String requestResource, String responseResource) throws Exception {
     String requestData = resourceString(requestResource);
-    log.debug("Request: " + requestData);
 
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
@@ -99,7 +98,6 @@ public class ClusterServletTest extends AbstractServletTest {
 
     // Verify against expected response.
     String content = sw.toString();
-    log.debug("Actual response: " + content);
 
     // Clear the stack trace since it's apt to change.
     ObjectMapper om = new ObjectMapper();
@@ -115,7 +113,6 @@ public class ClusterServletTest extends AbstractServletTest {
 
   private void verifyRequest(String requestResource, String responseResource) throws Exception {
     String requestData = resourceString(requestResource);
-    log.debug("Request: " + requestData);
 
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
@@ -129,7 +126,6 @@ public class ClusterServletTest extends AbstractServletTest {
 
     // Verify against expected response.
     String content = sw.toString();
-    log.debug("Actual response: " + content);
     Assertions.assertThat(content).isEqualToIgnoringNewLines(resourceString(responseResource));
 
     // And try parsing against the client model.

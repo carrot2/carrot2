@@ -60,6 +60,6 @@ public class TermDocumentMatrixBuilderTestBase extends TestBase {
   }
 
   protected static Stream<TestDocument> createDocumentsWithTitles(String... content) {
-    return Stream.of(content).map(v -> new TestDocument(v));
+    return Stream.of(content).map(TestDocument::new);
   }
 }

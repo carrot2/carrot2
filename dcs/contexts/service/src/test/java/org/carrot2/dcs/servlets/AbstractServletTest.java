@@ -24,12 +24,8 @@ import org.carrot2.TestBase;
 import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class AbstractServletTest extends TestBase {
-  protected final Logger log = LoggerFactory.getLogger(getClass());
-
   @Mock protected HttpServletRequest request;
 
   @Mock protected HttpServletResponse response;

@@ -26,7 +26,7 @@ dependencies {
   testImplementation "org.apache.logging.log4j:log4j-slf4j18-impl"
 }
 
-// Exclude slf4j from any dependency, it should be part of the container.
+// Exclude slf4j from any dependency, it should be provided as part of the container.
 configurations.implementation.dependencies.each { module ->
   module.exclude group: 'org.slf4j'
 }

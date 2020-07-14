@@ -26,8 +26,6 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @TimeoutSuite(millis = 180 * 1000) // No suite should run longer than 180 seconds.
 @ThreadLeakGroup(Group.MAIN)
@@ -65,9 +63,6 @@ public abstract class TestBase extends RandomizedTest {
   @Rule
   public final TestRule ruleChain =
       RuleChain.outerRule(new SystemPropertiesInvariantRule(IGNORED_INVARIANT_PROPERTIES));
-
-  /** Test logger. */
-  protected final Logger log = LoggerFactory.getLogger(getClass());
 
   protected static byte[] resourceBytes(Class<?> clazz, String resource) {
     try (InputStream is = clazz.getResourceAsStream(resource)) {
