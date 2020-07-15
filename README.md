@@ -33,8 +33,8 @@ Releases
 
 Quick access to releases and their documentation.
 
-| Version | Artifact                         | Documentation|
-| ---     |                                  | ---          |
+| Version | Artifact                         | Documentation |
+| ---     | ---                              | ---           |
 | 4.0.0   | [Binary bundle](releases/download/release-4.0.0/carrot2-4.0.0.zip) | [Docs](https://carrot2.github.io/release/4.0.0/doc/) |   
 
 
