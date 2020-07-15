@@ -58,15 +58,6 @@ https://builds.carrotsearch.com/browse/C2-C2DCS
 * Update JIRA. Close issues scheduled for the release being made, 
 release the version in JIRA, create a next version in JIRA
 
-* Update project website (repo). 
-
-Add a page named <filename>release-[version]-notes</filename> that
-lists new features, major bug fixes and improvements introduced in the
-new release.
-
-Add release date and link to the release's JIRA issues on the
-<filename>release-notes</filename> page. 
-
 * Circulate release news
 
   - Wikipedia page. https://en.wikipedia.org/wiki/Carrot2
