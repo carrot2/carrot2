@@ -28,15 +28,6 @@ Integration with document retrieval services is possible
 via [Apache Solr plugin](https://lucene.apache.org/solr/guide/result-clustering.html) 
 and [Elasticsearch plugin](https://github.com/carrot2/elasticsearch-carrot2).
 
-Releases
---------
-
-Quick access to releases and their documentation.
-
-| Version | Artifact                         | Documentation |
-| ---     | ---                              | ---           |
-| 4.0.0   | [Binary bundle](releases/download/release-4.0.0/carrot2-4.0.0.zip) | [Docs](https://carrot2.github.io/release/4.0.0/doc/) |   
-
 
 Documentation
 -------------
@@ -53,7 +44,7 @@ Documentation
   and open the documentation at [localhost:8080/doc/](http://localhost:8080/doc/) or
   JavaDoc API reference [localhost:8080/javadoc/](http://localhost:8080/javadoc/).
 
-* Some information is published on this project's 
+* Additional information is published on the project's 
   [wiki pages](https://github.com/carrot2/carrot2/wiki).
 
 
