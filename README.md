@@ -1,8 +1,15 @@
 Carrot2
 =======
 
-Carrot2 is a text clustering engine. It can automatically organize small to medium
-collections of documents (like search results or abstracts) into thematic categories.
+Carrot2 is a programming library for clustering text. It can automatically 
+discover groups of related documents and label them with short key terms 
+or phrases.
+
+Carrot2 can turn, for example, search result titles and snippets into 
+groups like these:
+
+![Search result titles and snippets and corresponding cluster labels (right).](doc/src/content/images/lingo3g-intro-example-light.png "")
+
 
 [![Build Status](https://travis-ci.org/carrot2/carrot2.svg?branch=master)](https://travis-ci.org/carrot2/carrot2)
 
@@ -27,9 +34,6 @@ Source code is at [GitHub](https://github.com/carrot2/carrot2).
 Documentation
 -------------
 
-* Project website is at:
-  [project.carrot2.org](https://project.carrot2.org)
-
 * Developer documentation and examples are part of
   [binary releases](https://github.com/carrot2/carrot2/releases).
   Once downloaded and unpacked, start the DCS:
@@ -41,6 +45,10 @@ Documentation
 
   and open the documentation at [localhost:8080/doc/](http://localhost:8080/doc/) or
   JavaDoc API reference [localhost:8080/javadoc/](http://localhost:8080/javadoc/).
+
+* Some information is published on this project's 
+  [wiki pages](https://github.com/carrot2/carrot2/wiki).
+
 
 Contact and more information
 ----------------------------
