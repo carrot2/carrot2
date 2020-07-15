@@ -8,7 +8,7 @@ or phrases.
 Carrot2 can turn, for example, search result titles and snippets into 
 groups like these:
 
-![Search result titles and snippets and corresponding cluster labels (right).](doc/src/content/images/lingo3g-intro-example-light.png "")
+![Search result titles and snippets and corresponding cluster labels (right).](doc/src/content/images/carrot2-intro-example-light.png "")
 
 
 [![Build Status](https://travis-ci.org/carrot2/carrot2.svg?branch=master)](https://travis-ci.org/carrot2/carrot2)
