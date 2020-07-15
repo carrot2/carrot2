@@ -17,19 +17,26 @@ groups like these:
 Installation
 ------------
 
-Carrot2 is a software component (see [Java API examples](core-examples)).
+Carrot2 is a software component and typically integrates with other software
+as a library dependency (see the API documentation available with each release).
 
-Binary releases ship with a HTTP/JSON REST API service called the DCS 
+[Binary releases are published on GitHub](https://github.com/carrot2/carrot2/releases) and they 
+ship with a HTTP/JSON REST API service called the DCS 
 (document clustering server) for integration with other languages.
 
 Integration with document retrieval services is possible
 via [Apache Solr plugin](https://lucene.apache.org/solr/guide/result-clustering.html) 
 and [Elasticsearch plugin](https://github.com/carrot2/elasticsearch-carrot2).
 
-Source code
------------
+Releases
+--------
 
-Source code is at [GitHub](https://github.com/carrot2/carrot2). 
+Quick access to releases and their documentation.
+
+| Version | Artifact                         | Documentation|
+| ---     |                                  | ---          |
+| 4.0.0   | [Binary bundle](releases/download/release-4.0.0/carrot2-4.0.0.zip) | [Docs](https://carrot2.github.io/release/4.0.0/doc/) |   
+
 
 Documentation
 -------------
@@ -48,6 +55,12 @@ Documentation
 
 * Some information is published on this project's 
   [wiki pages](https://github.com/carrot2/carrot2/wiki).
+
+
+Source code
+-----------
+
+Source code is at [GitHub](https://github.com/carrot2/carrot2). 
 
 
 Contact and more information
