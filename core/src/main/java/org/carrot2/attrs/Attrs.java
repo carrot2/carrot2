@@ -10,9 +10,17 @@
  */
 package org.carrot2.attrs;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.carrot2.internal.nanojson.JsonWriter;
 
 /**
@@ -329,7 +337,13 @@ public final class Attrs {
     public void visit(String key, AttrStringArray attr) {
       if (map.containsKey(key)) {
         Object value = map.remove(key);
-        if (value instanceof List<?>) {
+        if (value instanceof Object[]) {
+          // Attempt to convert Object[] to String[].
+          attr.set(
+              Stream.of((Object[]) value)
+                  .map(ob -> safeCast(ob, key, String.class))
+                  .toArray(String[]::new));
+        } else if (value instanceof List<?>) {
           // Attempt to convert List<?> to String[].
           attr.set(
               ((List<?>) value)

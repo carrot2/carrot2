@@ -74,10 +74,39 @@ public class AttrStringArrayTest extends TestBase {
                 .get())
         .isEqualTo(new String[] {"foo", "bar", null});
 
+    Assertions.assertThat(
+            Attrs.populate(
+                    new Clazz(),
+                    Map.of("value", new Object[] {"foo", "bar", null}),
+                    mapper::fromName)
+                .value
+                .get())
+        .isEqualTo(new String[] {"foo", "bar", null});
+
+    Assertions.assertThat(
+            Attrs.populate(
+                    new Clazz(),
+                    Map.of("value", new CharSequence[] {"foo", "bar", null}),
+                    mapper::fromName)
+                .value
+                .get())
+        .isEqualTo(new String[] {"foo", "bar", null});
+
     Assertions.assertThatCode(
             () -> {
               Attrs.populate(
                       new Clazz(), Map.of("value", List.of(new Object(), "bar")), mapper::fromName)
+                  .value
+                  .get();
+            })
+        .isInstanceOf(IllegalArgumentException.class);
+
+    Assertions.assertThatCode(
+            () -> {
+              Attrs.populate(
+                      new Clazz(),
+                      Map.of("value", new Object[] {"bar", new Object(), null}),
+                      mapper::fromName)
                   .value
                   .get();
             })
