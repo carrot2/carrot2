@@ -10,34 +10,12 @@ module.exports = {
   },
   plugins: [
     {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `content`,
-        path: `${__dirname}/src/content`,
-      },
-    },
-    {
-      resolve: `@carrotsearch/gatsby-plugin-apidocs`,
+      resolve: `@carrotsearch/gatsby-theme-apidocs`,
       options: {
         navigation: `${__dirname}/src/navigation.json`,
         logo:   `${__dirname}/src/logo.html`,
         footer: `${__dirname}/src/footer.html`,
-        basePath: "src/content"
-      }
-    },
-    {
-      resolve: `gatsby-plugin-nprogress`,
-      options: {
-        color: `#ffaa00`,
-        showSpinner: false
-      }
-    },
-    `gatsby-plugin-sharp`,
-    `gatsby-plugin-react-helmet`,
-    `gatsby-plugin-dark-mode`,
-    {
-      resolve: `@carrotsearch/gatsby-transformer-html`,
-      options: {
+        basePath: "src/content",
         variables: {
           "PROJECT_VERSION": process.env.REACT_APP_VERSION || "unset",
           "JAVA_EXAMPLES": `${__dirname}/../core-examples/src/test/java/org/carrot2/examples`,
@@ -48,10 +26,6 @@ module.exports = {
           attributeTransformer
         ]
       }
-    },
-    '@carrotsearch/gatsby-plugin-content-search',
-    '@carrotsearch/gatsby-plugin-relativize',
-    `gatsby-plugin-offline`,
-    `gatsby-plugin-catch-links`
+    }
   ]
 };
