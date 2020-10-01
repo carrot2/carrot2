@@ -19,9 +19,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -30,19 +32,16 @@ import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.util.ResourceLookup;
 
 public final class LanguageComponentsLoader {
-  private ClassLoader spiClassLoader;
   private Set<String> languageRestrictions;
   private Function<LanguageComponentsProvider, ResourceLookup> resourceLookupModifier;
   private ClusteringAlgorithm[] algorithmRestriction;
 
   public LoadedLanguages load() throws IOException {
-    if (spiClassLoader == null) {
-      spiClassLoader = defaultSpiClassloader();
-    }
+    return load(loadProvidersFromSpi(defaultSpiClassloader()));
+  }
 
-    Map<String, List<LanguageComponentsProvider>> languageProviders =
-        loadProvidersFromSpi(spiClassLoader);
-
+  public LoadedLanguages load(Map<String, List<LanguageComponentsProvider>> languageProviders)
+      throws IOException {
     sanityCheck(languageProviders);
 
     // Apply restrictions.
@@ -143,14 +142,30 @@ public final class LanguageComponentsLoader {
     return getClass().getClassLoader();
   }
 
-  private Map<String, List<LanguageComponentsProvider>> loadProvidersFromSpi(
-      ClassLoader spiClassLoader) {
+  public static Map<String, List<LanguageComponentsProvider>> loadProvidersFromSpi(
+      ClassLoader... classloaders) {
     Map<String, List<LanguageComponentsProvider>> providers = new TreeMap<>();
 
-    for (LanguageComponentsProvider provider :
-        ServiceLoader.load(LanguageComponentsProvider.class, spiClassLoader)) {
-      for (String language : provider.languages()) {
-        providers.computeIfAbsent(language, key -> new ArrayList<>()).add(provider);
+    BiPredicate<LanguageComponentsProvider, LanguageComponentsProvider> sameProvider =
+        (p1, p2) -> {
+          return Objects.equals(p1.name(), p2.name())
+              && Objects.equals(p1.getClass(), p2.getClass())
+              && Objects.equals(p1.componentTypes(), p2.componentTypes())
+              && Objects.equals(p1.languages(), p2.languages());
+        };
+
+    for (ClassLoader classLoader : classloaders) {
+      for (LanguageComponentsProvider candidate :
+          ServiceLoader.load(LanguageComponentsProvider.class, classLoader)) {
+        for (String language : candidate.languages()) {
+          List<LanguageComponentsProvider> existingProviders =
+              providers.computeIfAbsent(language, key -> new ArrayList<>());
+
+          if (existingProviders.stream()
+              .noneMatch(existing -> sameProvider.test(existing, candidate))) {
+            existingProviders.add(candidate);
+          }
+        }
       }
     }
 
