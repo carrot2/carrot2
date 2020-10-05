@@ -10,8 +10,7 @@ import { SearchAppInfoButton } from "./SearchAppInfoButton.js";
 import { StartScreen } from "./StartScreen";
 import { ThemeSwitch } from "./ThemeSwitch";
 
-function SearchApp() {
-  return (
+export const SearchApp = () => (
     <React.Fragment>
       <Router>
         <Switch>
@@ -30,7 +29,4 @@ function SearchApp() {
         </Router>
       </div>
     </React.Fragment>
-  );
-}
-
-export default SearchApp;
+);

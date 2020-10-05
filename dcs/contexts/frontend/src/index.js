@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import SearchApp from './carrot2/search-app/ui/SearchApp';
+import { SearchApp } from './carrot2/search-app/ui/SearchApp';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<SearchApp />, document.getElementById('root'));
