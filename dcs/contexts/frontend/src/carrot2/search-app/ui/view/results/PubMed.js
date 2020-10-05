@@ -2,7 +2,7 @@ import { FormGroup, InputGroup, NumericInput, Switch } from "@blueprintjs/core";
 
 import React from 'react';
 
-import { view } from "react-easy-state";
+import { view } from "@risingstack/react-easy-state";
 
 import { pubmed } from "../../../../service/sources/pubmed.js";
 import { persistentStore } from "../../../../util/persistent-store.js";

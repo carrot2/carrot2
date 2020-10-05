@@ -1,7 +1,7 @@
 import { IconNames } from "@blueprintjs/icons";
 import React from "react";
 
-import { view } from "react-easy-state";
+import { view } from "@risingstack/react-easy-state";
 import { PieChartHints } from "./search-app/ui/view/clusters/PieChartHints.js";
 import { TreemapHints } from "./search-app/ui/view/clusters/TreemapHints.js";
 import { VisualizationExport } from "./search-app/ui/view/clusters/VisualizationExport.js";

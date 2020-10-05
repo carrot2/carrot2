@@ -1,5 +1,4 @@
-import { store } from "react-easy-state";
-import { observe } from '@nx-js/observer-util';
+import { store, autoEffect } from "@risingstack/react-easy-state";
 
 import { clusterStore } from "./services";
 
@@ -90,7 +89,7 @@ export const documentVisibilityStore = store({
   }
 });
 
-observe(function () {
+autoEffect(function () {
   const newVisibleDocuments = new Set();
   addDocumentsFromClusters(clusterSelectionStore.selected, newVisibleDocuments);
   for (let doc of documentSelectionStore.selected) {
@@ -111,7 +110,7 @@ observe(function () {
 });
 
 let previousClusters = undefined;
-observe(function () {
+autoEffect(function () {
   if (clusterStore.clusters !== previousClusters) {
     clusterSelectionStore.clear();
     previousClusters = clusterStore.clusters;

@@ -1,5 +1,4 @@
-import { observe } from '@nx-js/observer-util';
-import { store } from 'react-easy-state';
+import { store, autoEffect } from "@risingstack/react-easy-state";
 import { algorithms } from "../../config-algorithms.js";
 import { sources } from "../../config-sources.js";
 import { fetchClusters } from "../../service/dcs";
@@ -115,12 +114,12 @@ function assignDocumentIds(result) {
 }
 
 // Invoke clustering once search results are available or algorithm changes.
-observe(function () {
+autoEffect(function () {
   clusterStore.load(searchResultStore.searchResult, algorithmStore.clusteringAlgorithm);
 });
 
 // When search result is loading, also show that clusters are loading.
-observe(function () {
+autoEffect(function () {
   if (searchResultStore.loading) {
     clusterStore.loading = true;
     clusterStore.clusters = EMPTY_ARRAY;

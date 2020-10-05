@@ -2,7 +2,7 @@ import "./ErrorMessage.css";
 
 import React from "react";
 
-import { view } from "react-easy-state";
+import { view } from "@risingstack/react-easy-state";
 import { ShowHide } from "./Optional.js";
 
 import { sources } from "../../config-sources.js";

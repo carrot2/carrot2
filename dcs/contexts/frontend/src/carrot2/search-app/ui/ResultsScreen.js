@@ -2,7 +2,7 @@ import './ResultsScreen.css';
 
 import React, { Component } from 'react';
 
-import { view } from 'react-easy-state';
+import { view } from "@risingstack/react-easy-state";
 import { clusterViews, resultListConfigStore, resultsViews } from "../../config-views.js";
 import { clusterStore, searchResultStore } from "../store/services";
 import { clusterSelectionStore, documentSelectionStore, documentVisibilityStore } from "../store/selection";
@@ -21,8 +21,6 @@ import { SearchForm } from "./SearchForm";
 import { ViewTabs } from "./Views.js";
 
 import { branding } from "../../config-branding.js";
-
-const ResultListView = view(ResultList);
 
 const Loading = view(props => (
   <ShowHide className="Loading" visible={props.store.loading}>
@@ -155,10 +153,10 @@ export class ResultsScreen extends Component {
           <SearchEngineErrorMessage source={this.getSource()} store={searchResultStore}
                                     runSearch={this.runSearch.bind(this)} />
           <div>
-            <ResultListView source={this.getSource()} store={searchResultStore}
-                            visibilityStore={documentVisibilityStore}
-                            clusterSelectionStore={clusterSelectionStore}
-                            commonConfigStore={resultListConfigStore} />
+            <ResultList source={this.getSource()} store={searchResultStore}
+                        visibilityStore={documentVisibilityStore}
+                        clusterSelectionStore={clusterSelectionStore}
+                        commonConfigStore={resultListConfigStore} />
           </div>
         </div>
       </main>

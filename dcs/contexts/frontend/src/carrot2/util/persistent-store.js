@@ -1,14 +1,13 @@
-import { store } from 'react-easy-state';
-import { observe } from '@nx-js/observer-util';
+import { store, autoEffect } from "@risingstack/react-easy-state";
 import storage from "store2";
 
 
-export function persistentStore(key, defaults, methods) {
+export const persistentStore = (key, defaults, methods) => {
   const backingStore = store(Object.assign(defaults, storage.get(key), methods));
 
-  observe(function () {
+  autoEffect(function () {
     storage.set(key, backingStore);
   });
 
   return backingStore;
-}
+};

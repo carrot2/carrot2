@@ -2,7 +2,7 @@ import { Button, FormGroup, HTMLSelect, InputGroup, Radio, RadioGroup, Switch } 
 
 import React from 'react';
 
-import { store, view } from "react-easy-state";
+import { store, view } from "@risingstack/react-easy-state";
 
 import { etools } from "../../../../service/sources/etools.js";
 import { persistentStore } from "../../../../util/persistent-store.js";

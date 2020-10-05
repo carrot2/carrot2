@@ -57,12 +57,6 @@ function buildOptions(theme, clusterSelectionStore, documentSelectionStore) {
 
 
 export const PieChart = props => {
-  // Without this dummy read, clusters don't get proxy wrappers, weird...
-  props.clusterStore.clusters.forEach(function touch(c) {
-    c.clusters && c.clusters.forEach(touch);
-  });
-  props.clusterStore.documents.forEach(ignored => {});
-
   const [ dataObject ] = useDataObject(props.clusterStore, props.visible, props.configStore.includeResults);
   const [ selection ] = useSelection(props.clusterSelectionStore,
     props.documentSelectionStore, dataObject);

@@ -1,6 +1,5 @@
-import { unobserve } from "@nx-js/observer-util";
+import { autoEffect, clearEffect } from "@risingstack/react-easy-state";
 import { useState, useEffect, useRef } from "react";
-import { observeBatched } from "../../../../util/batch-observe.js";
 
 const EMPTY_OBJECT = {};
 
@@ -91,9 +90,9 @@ export const useSelection = (clusterSelectionStore, documentSelectionStore, data
       }
     };
 
-    observeBatched(updateSelection);
+    autoEffect(updateSelection);
 
-    return () => { unobserve(updateSelection); };
+    return () => { clearEffect(updateSelection); };
   }, [ clusterSelectionStore, documentSelectionStore, dataObject ]);
 
   return [ selection, setSelection ];

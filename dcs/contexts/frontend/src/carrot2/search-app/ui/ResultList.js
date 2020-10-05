@@ -3,8 +3,7 @@ import './ResultList.css';
 import React, { useEffect, useRef } from 'react';
 import PropTypes from "prop-types";
 
-import { view } from "react-easy-state";
-import { observe, unobserve } from "@nx-js/observer-util";
+import { view, autoEffect, clearEffect } from "@risingstack/react-easy-state";
 import { ClusterSelectionSummary, ClusterInSummary } from "./ClusterSelectionSummary.js";
 import { Optional } from "./Optional.js";
 
@@ -41,7 +40,7 @@ const Result = view(props => {
 
 const ClusterSelectionSummaryView = view(ClusterSelectionSummary);
 
-export function ResultList(props) {
+export const ResultList = view(props => {
   const container = useRef(undefined);
 
   // Reset document list scroll on cluster selection changes.
@@ -56,9 +55,10 @@ export function ResultList(props) {
         container.current.scrollTop = 0;
       }
     };
-    observe(resetScroll);
-    return () => unobserve(resetScroll);
+    autoEffect(resetScroll);
+    return () => clearEffect(resetScroll);
   }, [ props.clusterSelectionStore.selected ]);
+
 
   const store = props.store;
   return (
@@ -79,7 +79,7 @@ export function ResultList(props) {
       </Optional>
     </div>
   );
-}
+});
 
 ResultList.propTypes = {
   store: PropTypes.object.isRequired,

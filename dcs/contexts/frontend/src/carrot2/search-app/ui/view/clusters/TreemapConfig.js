@@ -3,7 +3,7 @@ import "./TreemapConfig.css";
 import React from "react";
 import { RadioGroup, Radio, FormGroup, Switch } from "@blueprintjs/core/lib/esm/index.js";
 
-import { view } from "react-easy-state";
+import { view } from "@risingstack/react-easy-state";
 
 export const TreemapConfig = view((props) => {
   const store = props.store;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { store, view } from "react-easy-state";
+import { store, view } from "@risingstack/react-easy-state";
 
 import { Button, Drawer } from "@blueprintjs/core";
 import { ButtonLink } from "../../../carrotsearch/ui/ButtonLink.js";

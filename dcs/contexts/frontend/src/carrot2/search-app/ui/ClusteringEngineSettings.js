@@ -2,7 +2,7 @@ import "./ClusteringEngineSettings.css";
 
 import React from "react";
 
-import { view} from "react-easy-state";
+import { view} from "@risingstack/react-easy-state";
 
 import { Radio, RadioGroup, Tag } from "@blueprintjs/core";
 import { Optional } from "./Optional.js";

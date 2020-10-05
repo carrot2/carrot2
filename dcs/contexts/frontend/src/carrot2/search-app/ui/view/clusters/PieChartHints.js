@@ -2,7 +2,7 @@ import "./VisualizationHints.css";
 
 import React from "react";
 
-import { view } from "react-easy-state";
+import { view } from "@risingstack/react-easy-state";
 
 export const PieChartHints = view(() => {
   return (
