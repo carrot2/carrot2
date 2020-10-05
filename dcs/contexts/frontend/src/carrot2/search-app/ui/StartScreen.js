@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import { Redirect } from "react-router-dom";
+import React from 'react';
 
 import './StartScreen.css';
+
+import { Redirect } from "react-router-dom";
 import { sources } from "../../config-sources.js";
 import { clusterViews } from "../../config-views.js";
 import { SearchForm } from "./SearchForm";
@@ -9,36 +10,34 @@ import { branding } from "../../config-branding.js";
 
 import { routes } from "../routes";
 
-export class StartScreen extends Component {
-  runSearch(query) {
-    this.props.history.push(routes.search.buildUrl({
+export const StartScreen = ({ match, history }) => {
+  const runSearch = (query) => {
+    history.push(routes.search.buildUrl({
       query: query,
-      source: this.props.match.params.source,
+      source: match.params.source,
       view: Object.keys(clusterViews)[0] // start with the first view by default
     }));
   }
 
-  changeSource(newSource) {
-    this.props.history.push(routes._root.buildUrl({source: newSource}));
+  const changeSource = (newSource) => {
+    history.push(routes._root.buildUrl({ source: newSource }));
+  };
+
+  if (!sources[match.params.source]) {
+    return <Redirect to={routes._root.buildUrl({ source: "web" })} />
   }
 
-  render() {
-    if (!sources[this.props.match.params.source]) {
-      return <Redirect to={routes._root.buildUrl({source: "web"})} />
-    }
-
-    return (
+  return (
       <main className="StartScreen">
         {branding.createStartPageLogo()}
 
-        <SearchForm source={this.props.match.params.source}
-                    onSourceChange={this.changeSource.bind(this)}
-                    onSubmit={this.runSearch.bind(this)} />
+        <SearchForm source={match.params.source}
+                    onSourceChange={changeSource}
+                    onSubmit={runSearch} />
 
         <div className="slogan">
           {branding.createSlogan()}
         </div>
       </main>
-    );
-  }
-}
+  );
+};
