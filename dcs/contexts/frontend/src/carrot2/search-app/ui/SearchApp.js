@@ -1,7 +1,9 @@
 import React from 'react';
-import { HashRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 
 import './SearchApp.css';
+
+import { HashRouter as Router, Redirect, Route, Switch } from "react-router-dom";
+
 import { Backdrop } from "../../ui/Backdrop.js";
 
 import { routes } from "../routes";
