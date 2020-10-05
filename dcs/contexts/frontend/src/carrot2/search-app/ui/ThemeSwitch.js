@@ -15,24 +15,22 @@ export const themeStore = persistentStore("uiConfig",
     isDarkTheme: () => themeStore.theme === "dark"
   });
 
+export const ThemeSwitch = view(() => {
+  const updateTheme = () => {
+    const classList = document.body.classList;
+    if (themeStore.isDarkTheme()) {
+      classList.remove("light");
+      classList.add("bp3-dark", "dark");
+    } else {
+      classList.remove("bp3-dark", "dark");
+      classList.add("light");
+    }
+  };
 
-function updateTheme() {
-  const classList = document.body.classList;
-  if (themeStore.isDarkTheme()) {
-    classList.remove("light");
-    classList.add("bp3-dark", "dark");
-  } else {
-    classList.remove("bp3-dark", "dark");
-    classList.add("light");
-  }
-}
-updateTheme();
-
-function ThemeSwitchImpl () {
-  function flipTheme() {
+  const flipTheme = () => {
     themeStore.flipTheme();
     updateTheme();
-  }
+  };
 
   // Set theme on initial render.
   useEffect(function () {
@@ -43,6 +41,4 @@ function ThemeSwitchImpl () {
   return (
     <LightDarkSwitch dark={isDarkTheme} onChange={flipTheme} />
   );
-}
-
-export const ThemeSwitch = view(ThemeSwitchImpl);
+});
