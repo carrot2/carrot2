@@ -1,3 +1,8 @@
+Refactoring:
+
+* Use pointed Views component
+
+
 Later:
 * Limit the number of results displayed at once?
 * Check background color on Circles export when implemented.

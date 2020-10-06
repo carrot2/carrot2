@@ -1,11 +1,15 @@
-import './ResultsScreen.css';
+import React, { useEffect, useRef } from 'react';
 
-import React, { Component } from 'react';
+import './ResultsScreen.css';
 
 import { view } from "@risingstack/react-easy-state";
 import { clusterViews, resultListConfigStore, resultsViews } from "../../config-views.js";
 import { clusterStore, searchResultStore } from "../store/services";
-import { clusterSelectionStore, documentSelectionStore, documentVisibilityStore } from "../store/selection";
+import {
+  clusterSelectionStore,
+  documentSelectionStore,
+  documentVisibilityStore
+} from "../store/selection";
 import { ClusteringEngineErrorMessage, SearchEngineErrorMessage } from "./ErrorMessage.js";
 import { ShowHide } from "./Optional.js";
 import { themeStore } from "./ThemeSwitch.js";
@@ -23,95 +27,99 @@ import { ViewTabs } from "./Views.js";
 import { branding } from "../../config-branding.js";
 
 const Loading = view(props => (
-  <ShowHide className="Loading" visible={props.store.loading}>
-    Loading
-  </ShowHide>
+    <ShowHide className="Loading" visible={props.store.loading}>
+      Loading
+    </ShowHide>
 ));
 
-export class ResultsScreen extends Component {
-  runSearch() {
-    searchResultStore.load(this.getSource(), this.getQuery());
-    document.title = this.getQuery() + (this.getQuery().length > 0 ? " - " : "") + branding.pageTitle;
-  }
+const usePrevious = value => {
+  const ref = useRef();
 
-  componentDidMount() {
-    this.runSearch();
-    this.prevSource = this.getSource();
-  }
+  useEffect(() => {
+    ref.current = value;
+  }, [ value ]);
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.getQuery(prevProps) !== this.getQuery() || this.getSource(prevProps) !== this.getSource()) {
-      this.runSearch();
-    }
-    this.prevSource = this.getSource();
-  }
+  return ref.current;
+};
 
-  onQueryChange(newQuery) {
-    this.pushNewUrl({
+export const ResultsScreen = ({ match, history }) => {
+  const source = decodeURIComponent(match.params.source);
+  const query  = decodeURIComponent(match.params.query);
+
+  const prevSource = usePrevious(source);
+
+  const runSearch = () => {
+    searchResultStore.load(source, query);
+    document.title = query + (query.length > 0 ? " - " : "") + branding.pageTitle;
+  };
+
+  useEffect(() => {
+    runSearch();
+  }, [ source, query ]);
+
+  const onQueryChange = (newQuery) => {
+    pushNewUrl({
       query: newQuery,
-      source: this.getSource(),
-      view: this.getView()
+      source: source,
+      view: getView()
     });
   }
 
-  getSource(props) { return decodeURIComponent((props || this.props).match.params.source); }
-  getQuery(props) { return decodeURIComponent((props || this.props).match.params.query); }
-  getView(props) { 
-    var view = (props || this.props).match.params.view;
+  const getView = () => {
+    let view = match.params.view;
     if (view) {
       view = decodeURIComponent(view);
     } else {
       view = Object.keys(clusterViews)[0];
     }
     return view;
-  }
+  };
 
-  onSourceChange(newSource) {
-    this.pushNewUrl({
-      query: this.getQuery(),
+  const onSourceChange = (newSource) => {
+    pushNewUrl({
+      query: query,
       source: newSource,
-      view: this.getView()
+      view: getView()
     });
-  }
+  };
 
-  onViewChange(newView) {
-    this.pushNewUrl({
-      query: this.getQuery(),
-      source: this.getSource(),
+  const onViewChange = (newView) => {
+    pushNewUrl({
+      query: query,
+      source: source,
       view: newView
     });
-  }
+  };
 
-  pushNewUrl(params) {
+  const pushNewUrl = (params) => {
     const newPath = routes.search.buildUrl(params);
-    if (newPath === encodeURI(this.props.history.location.pathname)) {
-      this.runSearch();
+    if (newPath === encodeURI(history.location.pathname)) {
+      runSearch();
     } else {
-      this.props.history.push(newPath);
+      history.push(newPath);
     }
+  };
+
+  const goToStartScreen = () => {
+    history.push(routes._root.buildUrl({ source: source }));
+  };
+
+  // Set loading state when source changes, so that the to-be-replaced
+  // document list is not re-rendered with incompatible (new) source renderer
+  // before the new source returns the results.
+  if (prevSource !== source) {
+    searchResultStore.loading = true;
   }
 
-  goToStartScreen() {
-    this.props.history.push(routes._root.buildUrl({ source: this.getSource() }));
-  }
+  const panelProps = {
+    clusterStore,
+    clusterSelectionStore,
+    documentSelectionStore,
+    searchResultStore,
+    themeStore
+  };
 
-  render() {
-    // Set loading state when source changes, so that the to-be-replaced
-    // document list is not re-rendered with incompatible (new) source renderer
-    // before the new source returns the results.
-    if (this.prevSource !== this.getSource()) {
-      searchResultStore.loading = true;
-    }
-
-    const panelProps = {
-      clusterStore,
-      clusterSelectionStore,
-      documentSelectionStore,
-      searchResultStore,
-      themeStore
-    };
-
-    const contentPanels = Object.keys(clusterViews)
+  const contentPanels = Object.keys(clusterViews)
       .map(v => {
         return {
           id: v,
@@ -119,47 +127,48 @@ export class ResultsScreen extends Component {
             return p.id === visibleId;
           },
           createElement: (visible) => {
-            return clusterViews[v].createContentElement({ visible: visible, ...panelProps});
+            return clusterViews[v].createContentElement({ visible: visible, ...panelProps });
           }
         };
       });
 
-    return (
+  return (
       <main className="ResultsScreen">
-        <CarrotLogo className="logo" onClick={this.goToStartScreen.bind(this)} />
+        <CarrotLogo className="logo" onClick={goToStartScreen} />
 
         {/**
-           * The key prop is used to re-create the component on query changes,
-           * so that the internal state holding value is thrown away and
-           * replaced with the provided initialQuery prop.
-           */ }
-        <SearchForm initialQuery={this.getQuery()} key={this.getQuery()}
-                    source={this.getSource()}
-                    onSourceChange={this.onSourceChange.bind(this)}
-                    onSubmit={this.onQueryChange.bind(this)} />
+         * The key prop is used to re-create the component on query changes,
+         * so that the internal state holding value is thrown away and
+         * replaced with the provided initialQuery prop.
+         */}
+        <SearchForm initialQuery={query} key={query}
+                    source={source}
+                    onSourceChange={onSourceChange}
+                    onSubmit={onQueryChange} />
         <div className="clusters-tabs">
-          <ViewTabs activeView={this.getView()} views={clusterViews} onViewChange={this.onViewChange.bind(this)} />
+          <ViewTabs activeView={getView()} views={clusterViews}
+                    onViewChange={onViewChange} />
         </div>
         <div className="docs-tabs">
-          <ViewTabs views={resultsViews} activeView="list" onViewChange={() => {}} source={this.getSource()} />
+          <ViewTabs views={resultsViews} activeView="list" onViewChange={() => {
+          }} source={source} />
         </div>
         <div className="clusters">
           <Loading store={clusterStore} />
-          <ClusteringEngineErrorMessage store={clusterStore}/>
-          <Switcher panels={contentPanels} visible={this.getView()} />
+          <ClusteringEngineErrorMessage store={clusterStore} />
+          <Switcher panels={contentPanels} visible={getView()} />
         </div>
         <div className="docs">
           <Loading store={searchResultStore} />
-          <SearchEngineErrorMessage source={this.getSource()} store={searchResultStore}
-                                    runSearch={this.runSearch.bind(this)} />
+          <SearchEngineErrorMessage source={source} store={searchResultStore}
+                                    runSearch={runSearch} />
           <div>
-            <ResultList source={this.getSource()} store={searchResultStore}
+            <ResultList source={source} store={searchResultStore}
                         visibilityStore={documentVisibilityStore}
                         clusterSelectionStore={clusterSelectionStore}
                         commonConfigStore={resultListConfigStore} />
           </div>
         </div>
       </main>
-    );
-  }
-}
+  );
+};
