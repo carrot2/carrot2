@@ -101,6 +101,9 @@ export const ResultsScreen = ({ match, history }) => {
   // Set loading state when source changes, so that the to-be-replaced
   // document list is not re-rendered with incompatible (new) source renderer
   // before the new source returns the results.
+  // TODO: this triggers a warning in latest React.
+  // One solution is choosing the document renderer based on the type
+  // declared in the data rather than the current data source?
   if (prevSource !== source) {
     searchResultStore.loading = true;
   }
