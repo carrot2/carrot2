@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 
-import { FoamTree } from "../../../../../carrotsearch/foamtree/FoamTree.js";
+import { FoamTree } from "../../../../../../carrotsearch/foamtree/FoamTree.js";
 import { useDataObject, useSelection } from "./visualization-hooks.js";
 
 const darkThemeOptions = {

@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import './ResultsScreen.css';
 
 import { view } from "@risingstack/react-easy-state";
-import { clusterViews, resultListConfigStore, resultsViews } from "../../config-views.js";
+import { clusterViews, resultListConfigStore, resultsViews } from "../../../config-views.js";
 import { clusterStore, searchResultStore } from "../store/services";
 import {
   clusterSelectionStore,
@@ -12,7 +12,7 @@ import {
 } from "../store/selection";
 import { ClusteringEngineErrorMessage, SearchEngineErrorMessage } from "./ErrorMessage.js";
 import { ShowHide } from "./Optional.js";
-import { themeStore } from "./ThemeSwitch.js";
+import { themeStore } from "../../../ui/ThemeSwitch.js";
 
 import { routes } from "../routes";
 
@@ -22,7 +22,7 @@ import { SearchForm } from "./SearchForm";
 
 import { ViewTabs } from "./Views.js";
 
-import { branding } from "../../config-branding.js";
+import { branding } from "../../../config-branding.js";
 
 const Loading = view(props => (
     <ShowHide className="Loading" visible={props.store.loading}>

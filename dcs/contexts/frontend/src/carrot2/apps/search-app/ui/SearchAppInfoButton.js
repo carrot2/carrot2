@@ -3,7 +3,7 @@ import React from 'react';
 import { store, view } from "@risingstack/react-easy-state";
 
 import { Drawer } from "@blueprintjs/core";
-import { ButtonLink } from "../../../carrotsearch/ui/ButtonLink.js";
+import { ButtonLink } from "../../../../carrotsearch/ui/ButtonLink.js";
 import { SearchAppInfo } from "./SearchAppInfo.js";
 
 const aboutStore = store({open: false});

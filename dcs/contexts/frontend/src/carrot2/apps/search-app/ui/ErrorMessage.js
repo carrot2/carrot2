@@ -5,8 +5,8 @@ import React from "react";
 import { view } from "@risingstack/react-easy-state";
 import { ShowHide } from "./Optional.js";
 
-import { sources } from "../../config-sources.js";
-import { branding } from "../../config-branding.js";
+import { sources } from "../../../config-sources.js";
+import { branding } from "../../../config-branding.js";
 
 export const ErrorMessage = props => {
   return (

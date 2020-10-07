@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 
-import { Circles } from "../../../../../carrotsearch/circles/Circles.js";
+import { Circles } from "../../../../../../carrotsearch/circles/Circles.js";
 import { useDataObject, useSelection } from "./visualization-hooks.js";
 
 const darkThemeOptions = {

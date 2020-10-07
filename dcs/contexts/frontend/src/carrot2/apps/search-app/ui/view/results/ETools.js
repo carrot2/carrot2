@@ -1,15 +1,15 @@
-import { Button, FormGroup, HTMLSelect, InputGroup, Radio, RadioGroup, Switch } from "@blueprintjs/core";
-
 import React from 'react';
+import "./ETools.css";
+
+import { Button, FormGroup, HTMLSelect, InputGroup, Radio, RadioGroup, Switch } from "@blueprintjs/core";
 
 import { store, view } from "@risingstack/react-easy-state";
 
-import { etools } from "../../../../service/sources/etools.js";
-import { persistentStore } from "../../../../util/persistent-store.js";
+import { etools } from "../../../../../service/sources/etools.js";
+import { persistentStore } from "../../../../../util/persistent-store.js";
 import { Optional } from "../../Optional.js";
-import "./ETools.css";
 import { TitleAndRank, Url } from "./result-components.js";
-import { ButtonLink } from "../../../../../carrotsearch/ui/ButtonLink.js";
+import { ButtonLink } from "../../../../../../carrotsearch/ui/ButtonLink.js";
 
 const etoolsResultsConfigStore = persistentStore("etoolsResultConfig",
   {

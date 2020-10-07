@@ -1,17 +1,18 @@
-import { IconNames } from "@blueprintjs/icons";
 import React from "react";
 
+import { IconNames } from "@blueprintjs/icons";
+
 import { view } from "@risingstack/react-easy-state";
-import { PieChartHints } from "./search-app/ui/view/clusters/PieChartHints.js";
-import { TreemapHints } from "./search-app/ui/view/clusters/TreemapHints.js";
-import { VisualizationExport } from "./search-app/ui/view/clusters/VisualizationExport.js";
+import { PieChartHints } from "./apps/search-app/ui/view/clusters/PieChartHints.js";
+import { TreemapHints } from "./apps/search-app/ui/view/clusters/TreemapHints.js";
+import { VisualizationExport } from "./apps/search-app/ui/view/clusters/VisualizationExport.js";
 import { Lazy } from "./ui/Lazy.js";
 import { persistentStore } from "./util/persistent-store.js";
 
-import { ResultListConfig } from "./search-app/ui/ResultListConfig.js";
-import { ClusterList } from "./search-app/ui/view/clusters/ClusterList.js";
-import { PieChartConfig } from "./search-app/ui/view/clusters/PieChartConfig.js";
-import { TreemapConfig } from "./search-app/ui/view/clusters/TreemapConfig.js";
+import { ResultListConfig } from "./apps/search-app/ui/ResultListConfig.js";
+import { ClusterList } from "./apps/search-app/ui/view/clusters/ClusterList.js";
+import { PieChartConfig } from "./apps/search-app/ui/view/clusters/PieChartConfig.js";
+import { TreemapConfig } from "./apps/search-app/ui/view/clusters/TreemapConfig.js";
 
 import { sources } from "./config-sources.js";
 
@@ -39,7 +40,7 @@ const treemapLoader = () => {
   return import(
     /* webpackChunkName: "treemap" */
     /* webpackPrefetch: true */
-    "./search-app/ui/view/clusters/Treemap.js")
+    "./apps/search-app/ui/view/clusters/Treemap.js")
     .then(module => view(module.Treemap));
 };
 
@@ -47,7 +48,7 @@ const piechartLoader = () => {
   return import(
     /* webpackChunkName: "piechart" */
     /* webpackPrefetch: true */
-    "./search-app/ui/view/clusters/PieChart.js")
+    "./apps/search-app/ui/view/clusters/PieChart.js")
     .then(module => view(module.PieChart));
 };
 

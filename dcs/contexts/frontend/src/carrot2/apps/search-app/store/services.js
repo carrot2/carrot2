@@ -1,8 +1,8 @@
 import { store, autoEffect } from "@risingstack/react-easy-state";
-import { algorithms } from "../../config-algorithms.js";
-import { sources } from "../../config-sources.js";
-import { fetchClusters } from "../../service/dcs";
-import { persistentStore } from "../../util/persistent-store.js";
+import { algorithms } from "../../../config-algorithms.js";
+import { sources } from "../../../config-sources.js";
+import { fetchClusters } from "../../../service/dcs";
+import { persistentStore } from "../../../util/persistent-store.js";
 
 const EMPTY_ARRAY = [];
 

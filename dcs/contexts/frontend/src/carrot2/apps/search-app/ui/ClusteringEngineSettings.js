@@ -7,7 +7,7 @@ import { view} from "@risingstack/react-easy-state";
 import { Radio, RadioGroup, Tag } from "@blueprintjs/core";
 import { Optional } from "./Optional.js";
 
-import { algorithms } from "../../config-algorithms.js";
+import { algorithms } from "../../../config-algorithms.js";
 
 import { algorithmStore } from "../store/services.js";
 import { ShowAppInfoButton } from "./SearchAppInfoButton.js";

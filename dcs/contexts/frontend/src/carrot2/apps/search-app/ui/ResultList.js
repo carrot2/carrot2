@@ -7,7 +7,7 @@ import { view, autoEffect, clearEffect } from "@risingstack/react-easy-state";
 import { ClusterSelectionSummary, ClusterInSummary } from "./ClusterSelectionSummary.js";
 import { Optional } from "./Optional.js";
 
-import { sources } from "../../config-sources.js";
+import { sources } from "../../../config-sources.js";
 import { clusterSelectionStore } from "../store/selection.js";
 
 const ResultClusters = view(props => {

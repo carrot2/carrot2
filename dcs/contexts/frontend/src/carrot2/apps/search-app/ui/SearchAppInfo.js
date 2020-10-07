@@ -3,9 +3,9 @@ import { Icon } from "@blueprintjs/core";
 
 import React from "react";
 
-import { branding } from "../../config-branding.js";
-import { sources } from "../../config-sources.js";
-import { algorithms } from "../../config-algorithms.js";
+import { branding } from "../../../config-branding.js";
+import { sources } from "../../../config-sources.js";
+import { algorithms } from "../../../config-algorithms.js";
 
 export const SearchEnginesInfo = () => {
   return (

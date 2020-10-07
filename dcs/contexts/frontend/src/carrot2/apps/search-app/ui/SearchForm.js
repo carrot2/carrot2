@@ -4,7 +4,7 @@ import * as PropTypes from "prop-types";
 import './SearchForm.css';
 
 import { Button, Classes, ControlGroup, InputGroup, Popover, Position } from "@blueprintjs/core";
-import { algorithms } from "../../config-algorithms.js";
+import { algorithms } from "../../../config-algorithms.js";
 import { ClusteringEngineSettings } from "./ClusteringEngineSettings.js";
 
 import { SearchEngineSettings } from "./SearchEngineSettings.js";

@@ -3,10 +3,10 @@ import React from 'react';
 import './StartScreen.css';
 
 import { Redirect } from "react-router-dom";
-import { sources } from "../../config-sources.js";
-import { clusterViews } from "../../config-views.js";
+import { sources } from "../../../config-sources.js";
+import { clusterViews } from "../../../config-views.js";
 import { SearchForm } from "./SearchForm";
-import { branding } from "../../config-branding.js";
+import { branding } from "../../../config-branding.js";
 
 import { routes } from "../routes";
 

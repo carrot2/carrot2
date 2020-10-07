@@ -3,9 +3,9 @@ import carrot2IntroHtml from "./about-intro-carrot2.html";
 import carrot2DetailsHtml from "./about-details-carrot2.html";
 import { isCarrot2Distribution } from "./config.js";
 
-import { ReactComponent as CarrotLogo } from "./search-app/ui/assets/carrot-search-logo.svg";
-import { ReactComponent as Carrot2Text } from "./search-app/ui/assets/carrot2-text.svg";
-import { ReactComponent as CarrotSearchText } from './search-app/ui/assets/carrot-search-text.svg';
+import { ReactComponent as CarrotLogo } from "./apps/search-app/ui/assets/carrot-search-logo.svg";
+import { ReactComponent as Carrot2Text } from "./apps/search-app/ui/assets/carrot2-text.svg";
+import { ReactComponent as CarrotSearchText } from "./apps/search-app/ui/assets/carrot-search-text.svg";
 
 const carrot2 = isCarrot2Distribution();
 

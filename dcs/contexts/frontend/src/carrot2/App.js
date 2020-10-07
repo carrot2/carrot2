@@ -8,11 +8,11 @@ import { Popover, PopoverInteractionKind, PopoverPosition } from "@blueprintjs/c
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faFlask } from "@fortawesome/pro-regular-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { SearchApp } from "./search-app/ui/SearchApp.js";
-import { routes } from "./search-app/routes.js";
+import { SearchApp } from "./apps/search-app/ui/SearchApp.js";
+import { routes } from "./apps/search-app/routes.js";
 import { Backdrop } from "./ui/Backdrop.js";
-import { ThemeSwitch } from "./search-app/ui/ThemeSwitch.js";
-import { WorkbenchApp } from "./workbench/WorkbenchApp.js";
+import { ThemeSwitch } from "./ui/ThemeSwitch.js";
+import { WorkbenchApp } from "./apps/workbench/WorkbenchApp.js";
 import { CarrotLogo } from "../carrotsearch/logo/CarrotLogo.js";
 
 const AppLink = ({ to, title, children, icon }) => {

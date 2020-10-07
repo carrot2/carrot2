@@ -1,8 +1,8 @@
 import React from "react";
-import { GenericSearchEngineErrorMessage } from "./search-app/ui/ErrorMessage.js";
+import { GenericSearchEngineErrorMessage } from "./apps/search-app/ui/ErrorMessage.js";
 
-import { EToolsResult, EToolsResultConfig, EToolsSourceConfig, EToolsIpBannedError, etoolsSource } from "./search-app/ui/view/results/ETools.js";
-import { PubMedResult, PubMedResultConfig, PubMedSourceConfig, pubmedSource } from "./search-app/ui/view/results/PubMed.js";
+import { EToolsResult, EToolsResultConfig, EToolsSourceConfig, EToolsIpBannedError, etoolsSource } from "./apps/search-app/ui/view/results/ETools.js";
+import { PubMedResult, PubMedResultConfig, PubMedSourceConfig, pubmedSource } from "./apps/search-app/ui/view/results/PubMed.js";
 
 export const sources = {
   "web": {
