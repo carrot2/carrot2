@@ -11,24 +11,35 @@ nav {
   background-color: var(--background-color-nav);
   text-align: center;
   width: 5em;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: calc(1.5 * var(--leading));
+  padding-bottom: calc(1.0 * var(--leading));
 }
+
 nav .Logo {
   width: 2.5em;
-  margin: 1.5em 0;
+  margin-bottom: 1.5em;
 }
-nav a.AppLink {
-  display: block;
+nav a.NavLink {
   padding: calc(0.75 * var(--leading));
   color: var(--text-color-nav) !important;
 }
+nav a.NavLink:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
 nav a.AppLink.active {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+nav .NavExtras {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
 }
 nav .ThemeSwitch {
-  position: absolute;
-  bottom: 1em;
-  left: 0;
-  right: 0;
+  margin-top: var(--leading);
 }
 
 .NavPopover {

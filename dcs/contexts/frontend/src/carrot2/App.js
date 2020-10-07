@@ -7,6 +7,7 @@ import { Popover, PopoverInteractionKind, PopoverPosition } from "@blueprintjs/c
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faFlask } from "@fortawesome/pro-regular-svg-icons";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { SearchApp } from "./search-app/ui/SearchApp.js";
 import { routes } from "./search-app/routes.js";
 import { Backdrop } from "./ui/Backdrop.js";
@@ -16,7 +17,7 @@ import { CarrotLogo } from "../carrotsearch/logo/CarrotLogo.js";
 
 const AppLink = ({ to, title, children, icon }) => {
   return (
-      <NavLink className="AppLink" to={to} activeClassName="active">
+      <NavLink className="NavLink AppLink" to={to} activeClassName="active">
         <Popover popoverClassName="NavPopover" position={PopoverPosition.RIGHT} interactionKind={PopoverInteractionKind.HOVER}>
           <FontAwesomeIcon icon={icon} size="2x" />
           <div className="NavPopoverContent">
@@ -28,11 +29,15 @@ const AppLink = ({ to, title, children, icon }) => {
   );
 };
 
+const NavExternalLink = ({ href, icon }) => {
+  return <a className="NavLink" href={href} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={icon} size="2x" /></a>;
+};
+
 export const App = () => {
   return (
       <div className="App">
         <Router>
-          <nav style={{zIndex: 1}}>
+          <nav>
             <Link to="/"><CarrotLogo className="dark" /></Link>
 
             <AppLink to={routes.search.path} title="Web search clustering" icon={faSearch}>
@@ -51,8 +56,13 @@ export const App = () => {
                 <li>search results from Solr and Elasticsearch.</li>
               </ul>
             </AppLink>
-            <ThemeSwitch />
+
+            <div className="NavExtras">
+              <NavExternalLink icon={faGithub} href="https://github.com/carrot2/carrot2" />
+              <ThemeSwitch />
+            </div>
           </nav>
+
           <main>
             <Router>
               <Switch>
