@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 import './ResultsScreen.css';
 
@@ -15,8 +15,6 @@ import { ShowHide } from "./Optional.js";
 import { themeStore } from "./ThemeSwitch.js";
 
 import { routes } from "../routes";
-
-import { ReactComponent as CarrotLogo } from "../ui/assets/carrot-search-logo.svg";
 
 import { ResultList } from "./ResultList";
 import { Switcher } from "./Switcher.js";
@@ -48,14 +46,14 @@ export const ResultsScreen = ({ match, history }) => {
 
   const prevSource = usePrevious(source);
 
-  const runSearch = () => {
+  const runSearch = useCallback(() => {
     searchResultStore.load(source, query);
     document.title = query + (query.length > 0 ? " - " : "") + branding.pageTitle;
-  };
+  }, [source, query ]);
 
   useEffect(() => {
     runSearch();
-  }, [ source, query ]);
+  }, [ source, query, runSearch ]);
 
   const onQueryChange = (newQuery) => {
     pushNewUrl({
@@ -98,10 +96,6 @@ export const ResultsScreen = ({ match, history }) => {
     } else {
       history.push(newPath);
     }
-  };
-
-  const goToStartScreen = () => {
-    history.push(routes._root.buildUrl({ source: source }));
   };
 
   // Set loading state when source changes, so that the to-be-replaced
