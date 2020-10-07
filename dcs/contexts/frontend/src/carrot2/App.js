@@ -2,7 +2,7 @@ import React from 'react';
 
 import "./App.css";
 
-import { HashRouter as Router, NavLink, Redirect, Route, Switch } from "react-router-dom";
+import { HashRouter as Router, Link, NavLink, Redirect, Route, Switch } from "react-router-dom";
 import { Popover, PopoverInteractionKind, PopoverPosition } from "@blueprintjs/core";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,7 +16,7 @@ import { CarrotLogo } from "../carrotsearch/logo/CarrotLogo.js";
 
 const AppLink = ({ to, title, children, icon }) => {
   return (
-      <NavLink to={to} activeClassName="active">
+      <NavLink className="AppLink" to={to} activeClassName="active">
         <Popover popoverClassName="NavPopover" position={PopoverPosition.RIGHT} interactionKind={PopoverInteractionKind.HOVER}>
           <FontAwesomeIcon icon={icon} size="2x" />
           <div className="NavPopoverContent">
@@ -33,7 +33,7 @@ export const App = () => {
       <div className="App">
         <Router>
           <nav style={{zIndex: 1}}>
-            <CarrotLogo className="dark" />
+            <Link to="/"><CarrotLogo className="dark" /></Link>
 
             <AppLink to={routes.search.path} title="Web search clustering" icon={faSearch}>
               <p>

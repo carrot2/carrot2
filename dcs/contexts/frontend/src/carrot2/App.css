@@ -16,12 +16,12 @@ nav .Logo {
   width: 2.5em;
   margin: 1.5em 0;
 }
-nav a {
+nav a.AppLink {
   display: block;
   padding: calc(0.75 * var(--leading));
   color: var(--text-color-nav) !important;
 }
-nav a.active {
+nav a.AppLink.active {
   background-color: rgba(0, 0, 0, 0.5);
 }
 nav .ThemeSwitch {
