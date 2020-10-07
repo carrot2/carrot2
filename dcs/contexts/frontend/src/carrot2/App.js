@@ -32,8 +32,8 @@ export const App = () => {
   return (
       <div className="App">
         <Router>
-          <nav className="dark" style={{zIndex: 1}}>
-            <CarrotLogo />
+          <nav style={{zIndex: 1}}>
+            <CarrotLogo className="dark" />
 
             <NavLink to={routes.search.path} title="Web search clustering" icon={faSearch}>
               <p>

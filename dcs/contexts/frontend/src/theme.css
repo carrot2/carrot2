@@ -12,7 +12,7 @@
   --background-color-secondary: #f4f4f4;
   --background-color-intense: #ccc;
   --background-color-dimmed: hsla(0, 0%, 0%, 0.07);
-  --background-color-nav: hsla(207, 23%, 17%,1);
+  --background-color-nav: hsla(207, 23%, 5%, 0.9);
   --backdrop-color: rgba(255, 255, 255, 0.9);
   --text-color: black;
   --text-color-inverted: white;
@@ -51,7 +51,7 @@
   --background-color-secondary: var(--background-color-dimmed);
   --background-color-intense: hsl(207, 28%, 11%);
   --background-color-dimmed: hsl(207, 23%, 22%);
-  --background-color-nav: var(--background-color-intense);
+  --background-color-nav: hsla(207, 28%, 1%, 0.3);
   --backdrop-color: hsla(207, 23%, 17%, 0.9);
   --text-color: rgba(255, 255, 255, 1.0);
   --text-color-light: rgba(255, 255, 255, 0.75);
