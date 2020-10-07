@@ -9,6 +9,7 @@ import { persistentStore } from "../../../../util/persistent-store.js";
 import { Optional } from "../../Optional.js";
 import "./ETools.css";
 import { TitleAndRank, Url } from "./result-components.js";
+import { ButtonLink } from "../../../../../carrotsearch/ui/ButtonLink.js";
 
 const etoolsResultsConfigStore = persistentStore("etoolsResultConfig",
   {
@@ -123,8 +124,9 @@ const EToolsTokensButton = props => {
   const store = detailsVisibleStore;
 
   return (
-    <button onClick={(e) => { e.preventDefault(); store.detailsVisible = !store.detailsVisible; } }
-            className="link">{props.children}</button>
+    <ButtonLink onClick={(e) => { e.preventDefault(); store.detailsVisible = !store.detailsVisible; } }>
+      {props.children}
+    </ButtonLink>
   );
 };
 
