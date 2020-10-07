@@ -2,7 +2,7 @@ import React from 'react';
 
 import './SearchApp.css';
 
-import { HashRouter as Router, Redirect, Route, Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 
 
 import { routes } from "../routes";
@@ -16,7 +16,7 @@ export const SearchApp = () => (
       <div className="SearchApp">
         <Router>
           <Switch>
-            <Route exact path={routes.search.path} component={StartScreen} />
+            <Route exact path={routes.searchStart.path} component={StartScreen} />
             <Route path={routes.searchResults.path} component={ResultsScreen} />
           </Switch>
         </Router>

@@ -10,17 +10,19 @@ nav {
   position: relative;
   background-color: var(--background-color-nav);
   text-align: center;
-  padding: 0 1em;
   width: 5em;
 }
 nav .Logo {
-  margin-top: 1em;
-  margin-bottom: 3em;
+  width: 2.5em;
+  margin: 1.5em 0;
 }
 nav a {
   display: block;
-  margin-bottom: 2em;
+  padding: calc(0.75 * var(--leading));
   color: var(--text-color-nav) !important;
+}
+nav a.active {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 nav .ThemeSwitch {
   position: absolute;

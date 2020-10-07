@@ -20,11 +20,11 @@ export const StartScreen = ({ match, history }) => {
   }
 
   const changeSource = (newSource) => {
-    history.push(routes.search.buildUrl({ source: newSource }));
+    history.push(routes.searchStart.buildUrl({ source: newSource }));
   };
 
   if (!sources[match.params.source]) {
-    return <Redirect to={routes.search.buildUrl({ source: "web" })} />
+    return <Redirect to={routes.searchStart.buildUrl({ source: "web" })} />
   }
 
   return (

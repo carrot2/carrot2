@@ -15,7 +15,8 @@ class RouteSpec {
 }
 
 export const routes = {
-  search: new RouteSpec("/search/:source?"),
+  search: new RouteSpec("/search"),
+  searchStart: new RouteSpec("/search/:source?"),
   searchResults: new RouteSpec("/search/:source/:query/:view?"),
   workbench: new RouteSpec("/workbench"),
 };
