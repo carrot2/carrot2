@@ -23,7 +23,7 @@
   user-select: none;
 }
 .tgl + .tgl-btn:after, .tgl + .tgl-btn:before {
-  position: relative;
+  position: absolute;
   display: inline-block;
   content: "";
   width: 47%;
@@ -40,10 +40,9 @@
 }
 
 .tgl-ios + .tgl-btn {
-  background: #2e9fe6 url(../../flaticon/contrast.svg) no-repeat 82% center;
+  background: #2e9fe6 url(../../flaticon/contrast.svg) no-repeat 88% center;
   background-size: 37%;
   border-radius: 2em;
-  transition: all 0.4s ease;
 }
 .tgl-ios + .tgl-btn:after {
   border-radius: 2em;

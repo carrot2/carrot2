@@ -39,6 +39,6 @@ export const ThemeSwitch = view(() => {
 
   const isDarkTheme = themeStore.isDarkTheme();
   return (
-    <LightDarkSwitch dark={isDarkTheme} onChange={flipTheme} />
+    <LightDarkSwitch className="ThemeSwitch" dark={isDarkTheme} onChange={flipTheme} />
   );
 });

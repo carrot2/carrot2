@@ -1,0 +1,58 @@
+.App {
+  display: grid;
+  height: 100vh;
+
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto;
+  grid-template-areas: "nav main";
+}
+nav {
+  position: relative;
+  background-color: var(--background-color-nav);
+  text-align: center;
+  padding: 0 1em;
+  width: 5em;
+}
+nav .Logo {
+  margin-top: 1em;
+  margin-bottom: 3em;
+}
+nav a {
+  display: block;
+  margin-bottom: 2em;
+  color: var(--text-color-nav) !important;
+}
+nav .ThemeSwitch {
+  position: absolute;
+  bottom: 1em;
+  left: 0;
+  right: 0;
+}
+
+.NavPopover {
+  max-width: 22em;
+}
+.NavPopoverContent {
+  padding: var(--leading);
+  padding-bottom: calc(0.5 * var(--leading));
+}
+
+main {
+  position: relative;
+}
+
+.bp3-dialog-header > svg {
+  margin-right: 0.5em;
+}
+
+.ErrorDialog {
+  width: auto;
+}
+.ErrorDialog pre {
+  overflow-y: auto;
+  max-height: 40vh;
+  max-width: 60vw;
+}
+.ErrorDialog .CopyToClipboard {
+  width: 14.5em;
+}

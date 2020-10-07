@@ -12,7 +12,7 @@ import { routes } from "../routes";
 
 export const StartScreen = ({ match, history }) => {
   const runSearch = (query) => {
-    history.push(routes.search.buildUrl({
+    history.push(routes.searchResults.buildUrl({
       query: query,
       source: match.params.source,
       view: Object.keys(clusterViews)[0] // start with the first view by default
@@ -20,11 +20,11 @@ export const StartScreen = ({ match, history }) => {
   }
 
   const changeSource = (newSource) => {
-    history.push(routes._root.buildUrl({ source: newSource }));
+    history.push(routes.search.buildUrl({ source: newSource }));
   };
 
   if (!sources[match.params.source]) {
-    return <Redirect to={routes._root.buildUrl({ source: "web" })} />
+    return <Redirect to={routes.search.buildUrl({ source: "web" })} />
   }
 
   return (

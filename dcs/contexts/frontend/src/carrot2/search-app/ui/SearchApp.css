@@ -19,12 +19,6 @@
   opacity: 0;
 }
 
-.ThemeSwitch {
-  position: absolute;
-  top: var(--leading);
-  right: 5em;
-  z-index: 2;
-}
 .About {
   position: absolute;
   top: 1em;

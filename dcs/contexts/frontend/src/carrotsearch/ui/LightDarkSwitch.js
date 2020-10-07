@@ -5,7 +5,7 @@ import "./LightDarkSwitch.css";
 
 export function LightDarkSwitch(props) {
   return (
-    <span className="LightDarkSwitch">
+    <span className={`LightDarkSwitch ${props.className}`}>
       <input className="tgl tgl-ios" id="theme" type="checkbox" tabIndex="0"
              checked={props.dark} onChange={props.onChange} />
       <label className="tgl-btn" htmlFor="theme"

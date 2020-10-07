@@ -92,7 +92,7 @@ export const ResultsScreen = ({ match, history }) => {
   };
 
   const pushNewUrl = (params) => {
-    const newPath = routes.search.buildUrl(params);
+    const newPath = routes.searchResults.buildUrl(params);
     if (newPath === encodeURI(history.location.pathname)) {
       runSearch();
     } else {
@@ -134,8 +134,6 @@ export const ResultsScreen = ({ match, history }) => {
 
   return (
       <main className="ResultsScreen">
-        <CarrotLogo className="logo" onClick={goToStartScreen} />
-
         {/**
          * The key prop is used to re-create the component on query changes,
          * so that the internal state holding value is thrown away and
@@ -150,8 +148,7 @@ export const ResultsScreen = ({ match, history }) => {
                     onViewChange={onViewChange} />
         </div>
         <div className="docs-tabs">
-          <ViewTabs views={resultsViews} activeView="list" onViewChange={() => {
-          }} source={source} />
+          <ViewTabs views={resultsViews} activeView="list" onViewChange={() => {}} source={source} />
         </div>
         <div className="clusters">
           <Loading store={clusterStore} />
