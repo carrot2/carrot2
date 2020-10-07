@@ -6,7 +6,7 @@ import { HashRouter as Router, Link, NavLink, Redirect, Route, Switch } from "re
 import { Popover, PopoverInteractionKind, PopoverPosition } from "@blueprintjs/core";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faFlask } from "@fortawesome/pro-regular-svg-icons";
+import { faSearch, faFlask, faInfo } from "@fortawesome/pro-regular-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { SearchApp } from "./apps/search-app/ui/SearchApp.js";
 import { routes } from "./apps/search-app/routes.js";
@@ -14,6 +14,7 @@ import { Backdrop } from "./ui/Backdrop.js";
 import { ThemeSwitch } from "./ui/ThemeSwitch.js";
 import { WorkbenchApp } from "./apps/workbench/WorkbenchApp.js";
 import { CarrotLogo } from "../carrotsearch/logo/CarrotLogo.js";
+import { AboutApp } from "./apps/about/AboutApp.js";
 
 const AppLink = ({ to, title, children, icon }) => {
   return (
@@ -37,6 +38,11 @@ export const App = () => {
   return (
       <div className="App">
         <Router>
+          <Switch>
+            <Route exact path={routes.searchStart.path} component={Backdrop} />
+            <Route exact path={routes.about.path} component={Backdrop} />
+          </Switch>
+
           <nav>
             <Link to="/"><CarrotLogo className="dark" /></Link>
 
@@ -58,6 +64,7 @@ export const App = () => {
             </AppLink>
 
             <div className="NavExtras">
+              <AppLink to={routes.about.path} title="About this application" icon={faInfo} />
               <NavExternalLink icon={faGithub} href="https://github.com/carrot2/carrot2" />
               <ThemeSwitch />
             </div>
@@ -67,15 +74,12 @@ export const App = () => {
             <Router>
               <Switch>
                 <Redirect from='/' to={routes.searchStart.path} exact />
+                <Route path={routes.about.path} component={AboutApp} />
                 <Route path={routes.searchStart.path} component={SearchApp} />
                 <Route path={routes.workbench.path} component={WorkbenchApp} />
               </Switch>
             </Router>
           </main>
-
-          <Switch>
-            <Route exact path={routes.searchStart.path} component={Backdrop} />
-          </Switch>
         </Router>
       </div>
   );

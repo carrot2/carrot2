@@ -10,7 +10,7 @@ import { Optional } from "./Optional.js";
 import { algorithms } from "../../../config-algorithms.js";
 
 import { algorithmStore } from "../store/services.js";
-import { ShowAppInfoButton } from "./SearchAppInfoButton.js";
+import { Link } from "react-router-dom";
 
 export const ClusteringEngineSettings = view(() => {
   const store = algorithmStore;
@@ -43,7 +43,7 @@ export const ClusteringEngineSettings = view(() => {
           })
         }
       </RadioGroup>
-      <ShowAppInfoButton text="more information" />
+      <Link to="/about">more information</Link>
     </div>
   );
 });

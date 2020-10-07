@@ -7,12 +7,10 @@ import { HashRouter as Router, Route, Switch } from "react-router-dom";
 
 import { routes } from "../routes";
 import { ResultsScreen } from "./ResultsScreen";
-import { SearchAppInfoButton } from "./SearchAppInfoButton.js";
 import { StartScreen } from "./StartScreen";
 
 export const SearchApp = () => (
     <React.Fragment>
-      <SearchAppInfoButton />
       <div className="SearchApp">
         <Router>
           <Switch>

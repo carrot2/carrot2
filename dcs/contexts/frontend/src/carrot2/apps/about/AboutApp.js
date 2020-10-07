@@ -1,11 +1,11 @@
-import "./SearchAppInfo.css";
+import React from "react";
+import "./AboutApp.css";
+
 import { Icon } from "@blueprintjs/core";
 
-import React from "react";
-
-import { branding } from "../../../config-branding.js";
-import { sources } from "../../../config-sources.js";
-import { algorithms } from "../../../config-algorithms.js";
+import { branding } from "../../config-branding.js";
+import { sources } from "../../config-sources.js";
+import { algorithms } from "../../config-algorithms.js";
 
 export const SearchEnginesInfo = () => {
   return (
@@ -57,7 +57,7 @@ export const VersionInfo = () => {
   );
 };
 
-export const SearchAppInfo = () => {
+export const AboutApp = () => {
   return (
     <div className="SearchAppInfo">
       <h2>{branding.pageTitle}</h2>
