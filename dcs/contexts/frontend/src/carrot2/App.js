@@ -22,7 +22,7 @@ const AppLink = ({ to, title, children, icon }) => {
         <Popover popoverClassName="NavPopover" position={PopoverPosition.RIGHT} interactionKind={PopoverInteractionKind.HOVER}>
           <FontAwesomeIcon icon={icon} size="2x" />
           <div className="NavPopoverContent">
-            <p><strong>{title}</strong></p>
+            <h3>{title}</h3>
             {children}
           </div>
         </Popover>

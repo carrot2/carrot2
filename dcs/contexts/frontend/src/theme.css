@@ -1,5 +1,6 @@
 @import "~typeface-lato";
 @import "~typeface-cabin-condensed";
+@import "~typeface-raleway";
 
 :root {
   --leading: 1rem;
@@ -85,7 +86,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: Lato, sans-serif;
+  font-family: Raleway, sans-serif;
 }
 
 h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, h6:first-child {

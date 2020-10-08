@@ -31,7 +31,7 @@
 
 .VersionInfo {
   margin-top: 4em;
-  border-top: 1px solid var(--text-color-faint);
+  border-top: 1px solid var(--hr);
   font-weight: 300;
 }
 
