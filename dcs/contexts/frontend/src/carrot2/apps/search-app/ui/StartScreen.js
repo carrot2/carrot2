@@ -15,7 +15,7 @@ export const StartScreen = ({ match, history }) => {
     history.push(routes.searchResults.buildUrl({
       query: query,
       source: match.params.source,
-      view: Object.keys(clusterViews)[0] // start with the first view by default
+      view: Object.keys(clusterViews[0].views)[0] // start with the first view by default
     }));
   }
 
