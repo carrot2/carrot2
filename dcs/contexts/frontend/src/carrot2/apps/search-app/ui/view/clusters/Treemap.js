@@ -1,5 +1,9 @@
-import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+
+import { clusterStore } from "../../../store/services.js";
+import { clusterSelectionStore } from "../../../store/selection.js";
+import { documentSelectionStore } from "../../../store/selection.js";
+import { themeStore } from "../../../../../ui/ThemeSwitch.js";
 
 import { FoamTree } from "../../../../../../carrotsearch/foamtree/FoamTree.js";
 import { useDataObject, useSelection } from "./visualization-hooks.js";
@@ -107,31 +111,28 @@ function buildOptions(theme, layout, stacking, clusterSelectionStore, documentSe
   }
 }
 
-export const Treemap = props => {
+export const Treemap = ({ visible, configStore, implRef }) => {
   // Without this dummy read, clusters don't get proxy wrappers, weird...
-  props.clusterStore.clusters.forEach(function touch(c) {
+  clusterStore.clusters.forEach(function touch(c) {
     c.clusters && c.clusters.forEach(touch);
   });
-  props.clusterStore.documents.forEach(ignored => {});
+  clusterStore.documents.forEach(ignored => {});
 
-  const configStore = props.configStore;
-
-  const [ dataObject ] = useDataObject(props.clusterStore, props.visible, configStore.includeResults);
-  const [ selection ] = useSelection(props.clusterSelectionStore,
-    props.documentSelectionStore, dataObject);
+  const [ dataObject ] = useDataObject(clusterStore.clusters, clusterStore.documents, visible, configStore.includeResults);
+  const [ selection ] = useSelection(clusterSelectionStore,
+    documentSelectionStore, dataObject);
 
   const [ options, setOptions ] = useState({});
+  const theme = themeStore.theme;
   useEffect(() => {
-    setOptions(buildOptions(props.themeStore.theme, configStore.layout, configStore.stacking,
-      props.clusterSelectionStore, props.documentSelectionStore));
-  }, [ props.themeStore.theme, configStore.layout, configStore.stacking,
-    props.clusterSelectionStore, props.documentSelectionStore ]);
+    setOptions(buildOptions(theme, configStore.layout, configStore.stacking,
+      clusterSelectionStore, documentSelectionStore));
+  }, [ theme, configStore.layout, configStore.stacking ]);
 
   return (
-    <FoamTree implRef={props.implRef} options={options} dataObject={dataObject} selection={selection} />
+    <FoamTree implRef={implRef} options={options} dataObject={dataObject} selection={selection} />
   );
 };
 
 Treemap.propTypes = {
-  clusterStore: PropTypes.object.isRequired
 };

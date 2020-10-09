@@ -15,22 +15,28 @@ import { PieChartConfig } from "./apps/search-app/ui/view/clusters/PieChartConfi
 import { TreemapConfig } from "./apps/search-app/ui/view/clusters/TreemapConfig.js";
 
 import { sources } from "./config-sources.js";
+import { ResultList } from "./apps/search-app/ui/ResultList.js";
+import { searchResultStore } from "./apps/search-app/store/services.js";
+import {
+  clusterSelectionStore,
+  documentVisibilityStore
+} from "./apps/search-app/store/selection.js";
 
 const ClusterListView = view(ClusterList);
 const ResultListConfigView = view(ResultListConfig);
 
 const treemapConfigStore = persistentStore("treemapConfig",
-  {
-    layout: "relaxed",
-    stacking: "hierarchical",
-    includeResults: true
-  }
+    {
+      layout: "relaxed",
+      stacking: "hierarchical",
+      includeResults: true
+    }
 );
 
 const pieChartConfigStore = persistentStore("pieChartConfig",
-  {
-    includeResults: true
-  }
+    {
+      includeResults: true
+    }
 );
 
 const treemapImplRef = { current: undefined };
@@ -38,127 +44,145 @@ const piechartImplRef = { current: undefined };
 
 const treemapLoader = () => {
   return import(
-    /* webpackChunkName: "treemap" */
-    /* webpackPrefetch: true */
-    "./apps/search-app/ui/view/clusters/Treemap.js")
-    .then(module => view(module.Treemap));
+      /* webpackChunkName: "treemap" */
+      /* webpackPrefetch: true */
+      "./apps/search-app/ui/view/clusters/Treemap.js")
+      .then(module => view(module.Treemap));
 };
 
 const piechartLoader = () => {
   return import(
-    /* webpackChunkName: "piechart" */
-    /* webpackPrefetch: true */
-    "./apps/search-app/ui/view/clusters/PieChart.js")
-    .then(module => view(module.PieChart));
+      /* webpackChunkName: "piechart" */
+      /* webpackPrefetch: true */
+      "./apps/search-app/ui/view/clusters/PieChart.js")
+      .then(module => view(module.PieChart));
 };
 
 // TODO: convert to a series of some internal API calls?
-export const clusterViews = {
-  "folders": {
-    label: "Folders",
-    createContentElement: (props) => {
-      return <ClusterListView {...props} />
-    },
-    tools: []
-  },
+export const clusterViews = [
+  {
+    label: "Clusters",
+    views: {
+      "folders": {
+        label: "list",
+        createContentElement: (props) => {
+          return <ClusterListView {...props} />
+        },
+        tools: []
+      },
 
-  "treemap": {
-    label: "Treemap",
-    createContentElement: (props) => {
-      const treemapProps = {
-        ...props,
-        configStore: treemapConfigStore,
-        implRef: treemapImplRef
-      };
-      return <Lazy loader={treemapLoader} props={treemapProps} />;
-    },
-    tools: [
-      {
-        id: "interaction",
-        icon: IconNames.HELP,
-        createContentElement: (props) => {
-          return <TreemapHints />;
+      "treemap": {
+        label: "treemap",
+        createContentElement: (visible) => {
+          const treemapProps = {
+            visible: visible,
+            configStore: treemapConfigStore,
+            implRef: treemapImplRef
+          };
+          return <Lazy loader={treemapLoader} props={treemapProps} />;
         },
-        title: "Treemap interaction help"
+        tools: [
+          {
+            id: "interaction",
+            icon: IconNames.HELP,
+            createContentElement: (props) => {
+              return <TreemapHints />;
+            },
+            title: "Treemap interaction help"
+          },
+          {
+            id: "export-image",
+            createContentElement: (props) => {
+              return <VisualizationExport implRef={treemapImplRef} fileNameSuffix="treemap" />;
+            },
+            title: "Export treemap as JPEG"
+          },
+          {
+            id: "config",
+            icon: IconNames.COG,
+            createContentElement: (props) => {
+              return <TreemapConfig store={treemapConfigStore} />;
+            },
+            title: "Treemap settings"
+          }
+        ]
       },
-      {
-        id: "export-image",
-        createContentElement: (props) => {
-          return <VisualizationExport implRef={treemapImplRef} fileNameSuffix="treemap" />;
-        },
-        title: "Export treemap as JPEG"
-      },
-      {
-        id: "config",
-        icon: IconNames.COG,
-        createContentElement: (props) => {
-          return <TreemapConfig store={treemapConfigStore} />;
-        },
-        title: "Treemap settings"
-      }
-    ]
-  },
 
-  "pie-chart": {
-    label: "Pie-chart",
-    createContentElement: (props) => {
-      const piechartProps = {
-        ...props,
-        configStore: pieChartConfigStore,
-        implRef: piechartImplRef
-      };
-      return <Lazy loader={piechartLoader} props={piechartProps} />;
-    },
-    tools: [
-      {
-        id: "interaction",
-        icon: IconNames.HELP,
-        createContentElement: (props) => {
-          return <PieChartHints />;
-        }
-      },
-      {
-        id: "export-image",
-        createContentElement: (props) => {
-          return <VisualizationExport implRef={piechartImplRef} fileNameSuffix="pie-chart" />;
+      "pie-chart": {
+        label: "pie-chart",
+        createContentElement: (visible) => {
+          const piechartProps = {
+            visible: visible,
+            configStore: pieChartConfigStore,
+            implRef: piechartImplRef
+          };
+          return <Lazy loader={piechartLoader} props={piechartProps} />;
         },
-        title: "Export pie-chart as JPEG"
-      },
-      {
-        id: "config",
-        icon: IconNames.COG,
-        createContentElement: (props) => {
-          return <PieChartConfig store={pieChartConfigStore} />;
-        }
+        tools: [
+          {
+            id: "interaction",
+            icon: IconNames.HELP,
+            createContentElement: (props) => {
+              return <PieChartHints />;
+            }
+          },
+          {
+            id: "export-image",
+            createContentElement: (props) => {
+              return <VisualizationExport implRef={piechartImplRef} fileNameSuffix="pie-chart" />;
+            },
+            title: "Export pie-chart as JPEG"
+          },
+          {
+            id: "config",
+            icon: IconNames.COG,
+            createContentElement: (props) => {
+              return <PieChartConfig store={pieChartConfigStore} />;
+            }
+          }
+        ]
       }
-    ]
+    }
   }
-};
+];
 
 export const resultListConfigStore = persistentStore("resultListConfig",
-  {
-    showRank: true,
-    openInNewTab: true,
-    showClusters: true,
-    maxCharsPerResult: 400
-  }
+    {
+      showRank: true,
+      openInNewTab: true,
+      showClusters: true,
+      maxCharsPerResult: 400
+    }
 );
 
-export const resultsViews = {
-  "list": {
+export const resultsViews = [
+  {
     label: "Results",
-    tools: [
-      {
-        id: "config",
-        icon: IconNames.COG,
-        createContentElement: (props) => {
+    views: {
+      "list": {
+        label: "list",
+        createContentElement: props => {
           return (
-            <ResultListConfigView store={resultListConfigStore}>
-              {sources[props.source].createConfig()}
-            </ResultListConfigView>
+              <ResultList {...props} store={searchResultStore}
+                          visibilityStore={documentVisibilityStore}
+                          clusterSelectionStore={clusterSelectionStore}
+                          commonConfigStore={resultListConfigStore} />
           );
-        }
+        },
+        tools: [
+          {
+            id: "config",
+            icon: IconNames.COG,
+            createContentElement: (props) => {
+              return (
+                  <ResultListConfigView store={resultListConfigStore}>
+                    {sources[props.source].createConfig()}
+                  </ResultListConfigView>
+              );
+            }
+          }
+        ]
       }
-    ]
+    }
   }
-};
+];

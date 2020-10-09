@@ -3,24 +3,20 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import './ResultsScreen.css';
 
 import { view } from "@risingstack/react-easy-state";
-import { clusterViews, resultListConfigStore, resultsViews } from "../../../config-views.js";
+import { clusterViews, resultsViews } from "../../../config-views.js";
 import { clusterStore, searchResultStore } from "../store/services";
 import {
   clusterSelectionStore,
   documentSelectionStore,
-  documentVisibilityStore
 } from "../store/selection";
-import { ClusteringEngineErrorMessage, SearchEngineErrorMessage } from "./ErrorMessage.js";
 import { ShowHide } from "./Optional.js";
 import { themeStore } from "../../../ui/ThemeSwitch.js";
 
 import { routes } from "../routes";
 
-import { ResultList } from "./ResultList";
-import { Switcher } from "./Switcher.js";
 import { SearchForm } from "./SearchForm";
 
-import { ViewTabs } from "./Views.js";
+import { Views } from "../../../../carrotsearch/ui/Views.js";
 
 import { branding } from "../../../config-branding.js";
 
@@ -98,16 +94,6 @@ export const ResultsScreen = ({ match, history }) => {
     }
   };
 
-  // Set loading state when source changes, so that the to-be-replaced
-  // document list is not re-rendered with incompatible (new) source renderer
-  // before the new source returns the results.
-  // TODO: this triggers a warning in latest React.
-  // One solution is choosing the document renderer based on the type
-  // declared in the data rather than the current data source?
-  if (prevSource !== source) {
-    searchResultStore.loading = true;
-  }
-
   const panelProps = {
     clusterStore,
     clusterSelectionStore,
@@ -115,19 +101,6 @@ export const ResultsScreen = ({ match, history }) => {
     searchResultStore,
     themeStore
   };
-
-  const contentPanels = Object.keys(clusterViews)
-      .map(v => {
-        return {
-          id: v,
-          isVisible: (visibleId, p) => {
-            return p.id === visibleId;
-          },
-          createElement: (visible) => {
-            return clusterViews[v].createContentElement({ visible: visible, ...panelProps });
-          }
-        };
-      });
 
   return (
       <main className="ResultsScreen">
@@ -140,28 +113,11 @@ export const ResultsScreen = ({ match, history }) => {
                     source={source}
                     onSourceChange={onSourceChange}
                     onSubmit={onQueryChange} />
-        <div className="clusters-tabs">
-          <ViewTabs activeView={getView()} views={clusterViews}
-                    onViewChange={onViewChange} />
-        </div>
-        <div className="docs-tabs">
-          <ViewTabs views={resultsViews} activeView="list" onViewChange={() => {}} source={source} />
-        </div>
         <div className="clusters">
-          <Loading store={clusterStore} />
-          <ClusteringEngineErrorMessage store={clusterStore} />
-          <Switcher panels={contentPanels} visible={getView()} />
+          <Views activeView={getView()} views={clusterViews} onViewChange={onViewChange} {...panelProps} />
         </div>
         <div className="docs">
-          <Loading store={searchResultStore} />
-          <SearchEngineErrorMessage source={source} store={searchResultStore}
-                                    runSearch={runSearch} />
-          <div>
-            <ResultList source={source} store={searchResultStore}
-                        visibilityStore={documentVisibilityStore}
-                        clusterSelectionStore={clusterSelectionStore}
-                        commonConfigStore={resultListConfigStore} />
-          </div>
+          <Views views={resultsViews} activeView="list" onViewChange={() => {}} source={source} />
         </div>
       </main>
   );

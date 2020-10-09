@@ -16,7 +16,7 @@ const EMPTY_OBJECT = {};
  *   change. This is to avoid a flash of old content when the user switches
  *   between visualizations.
  */
-export const useDataObject = (clusterStore, visible, includeResults) => {
+export const useDataObject = (clusters, documents, visible, includeResults) => {
   const [ dataObject, setDataObject ] = useState(EMPTY_OBJECT);
   const [ dataObjectInternal, setDataObjectInternal ] = useState(EMPTY_OBJECT);
   const prevDataObjectInternal = useRef(dataObjectInternal);
@@ -25,8 +25,6 @@ export const useDataObject = (clusterStore, visible, includeResults) => {
   // If we referenced clusterStore inside the effect function,
   // the effect might run with an array that is different from
   // the one passed in the inputs parameters.
-  const clusters = clusterStore.clusters;
-  const documents = clusterStore.documents;
 
   // Builds an internal dataObject when clusters or documents change.
   useEffect(() => {

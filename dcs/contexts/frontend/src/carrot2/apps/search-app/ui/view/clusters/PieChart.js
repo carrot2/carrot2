@@ -1,6 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 
+import { clusterStore } from "../../../store/services.js";
+import { clusterSelectionStore } from "../../../store/selection.js";
+import { documentSelectionStore } from "../../../store/selection.js";
+import { themeStore } from "../../../../../ui/ThemeSwitch.js";
+
 import { Circles } from "../../../../../../carrotsearch/circles/Circles.js";
 import { useDataObject, useSelection } from "./visualization-hooks.js";
 
@@ -56,22 +61,22 @@ function buildOptions(theme, clusterSelectionStore, documentSelectionStore) {
 }
 
 
-export const PieChart = props => {
-  const [ dataObject ] = useDataObject(props.clusterStore, props.visible, props.configStore.includeResults);
-  const [ selection ] = useSelection(props.clusterSelectionStore,
-    props.documentSelectionStore, dataObject);
+export const PieChart = ({ visible, configStore, implRef }) => {
+  const [ dataObject ] = useDataObject(clusterStore.clusters, clusterStore.documents, visible, configStore.includeResults);
+  const [ selection ] = useSelection(clusterSelectionStore,
+    documentSelectionStore, dataObject);
 
   const [ options, setOptions ] = useState({});
+  const theme = themeStore.theme;
   useEffect(() => {
-    setOptions(buildOptions(props.themeStore.theme, props.clusterSelectionStore, props.documentSelectionStore));
-  }, [ props.themeStore.theme, props.clusterSelectionStore, props.documentSelectionStore ]);
+    setOptions(buildOptions(theme, clusterSelectionStore, documentSelectionStore));
+  }, [ theme ]);
 
   return (
-    <Circles implRef={props.implRef} options={options} dataObject={dataObject} selection={selection} />
+    <Circles implRef={implRef} options={options} dataObject={dataObject} selection={selection} />
   );
 };
 
 PieChart.propTypes = {
-  clusterStore: PropTypes.object.isRequired,
   configStore: PropTypes.object.isRequired
 };

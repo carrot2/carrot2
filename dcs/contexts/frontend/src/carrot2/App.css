@@ -8,7 +8,7 @@
 }
 nav {
   position: relative;
-  background-color: var(--background-color-nav);
+  background-color: var(--nav-background-color);
   text-align: center;
   width: 5em;
   display: flex;

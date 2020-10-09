@@ -82,14 +82,15 @@ export const searchResultStore = store({
   },
   error: undefined,
   load: async function (source, query) {
-    const src = sources[source] || sources.etools;
+    const sourceId = source || Object.keys(sources)[0];
+    const src = sources[sourceId];
 
     // TODO: cancel currently running request
     searchResultStore.loading = true;
     searchResultStore.error = undefined;
     searchResultStore.source = source;
     try {
-      searchResultStore.searchResult = assignDocumentIds(await src.source(query));
+      searchResultStore.searchResult = assignDocumentIds(await src.source(query), sourceId);
     } catch (e) {
       searchResultStore.error = e;
       searchResultStore.searchResult = {
@@ -102,9 +103,10 @@ export const searchResultStore = store({
   }
 });
 
-function assignDocumentIds(result) {
+function assignDocumentIds(result, sourceId) {
   return {
     ...result,
+    "source": sourceId,
     "documents": (result.documents || []).map((doc, index) => ({
       ...doc,
       "id": index,

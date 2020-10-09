@@ -1,88 +1,60 @@
 .ResultsScreen {
+  background-color: var(--background-color-secondary);
   height: 100vh;
   display: grid;
   grid-template-columns: auto 1fr 0.75fr;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto 1fr;
   grid-template-areas:
     "logo          search        search"
-    "clusters-tabs clusters-tabs docs-tabs"
     "clusters      clusters      docs";
 
   --selection-border-width: 2px;
 }
 
-.ResultsScreen .logo,
-.ResultsScreen .SearchForm,
-.ResultsScreen .clusters,
-.ResultsScreen .docs,
-.ResultsScreen .docs-tabs,
-.ResultsScreen .clusters-tabs {
-  padding: 0.5em;
+.ResultsScreen,
+.ViewsTabs {
+  background-color: var(--background-color-secondary);
 }
 
-.ResultsScreen .docs {
-  padding-left: 0;
-}
-.ResultsScreen .docs-tabs {
-  padding-left: 0.75em;
+.ResultsScreen .docs .ViewsTabs,
+.ResultsScreen .docs .ViewsContent {
+  padding-right: var(--leading);
 }
 
-.ResultsScreen .SearchForm,
-.ResultsScreen .logo {
-  padding-top: 1em;
-  padding-bottom: 1rem;
+.ResultsScreen .clusters .ViewsTabs,
+.ResultsScreen .clusters .ViewsContent {
+  padding-right: calc(0.5 * var(--leading));
+}
+.ResultsScreen .docs .ViewsContent,
+.ResultsScreen .clusters .ViewsContent {
+  padding-bottom: calc(var(--leading));
 }
 
-.ResultsScreen .logo {
-  padding-right: 0;
-  cursor: pointer;
+.ResultsScreen .clusters .ViewsContent {
+  padding-left: var(--leading);
 }
 
-.ResultsScreen .SearchForm {
-  padding-left: 1rem;
+.ResultsScreen .clusters .ViewsTabs {
+  padding-left: calc(1.125 * var(--leading));
 }
-
-.ResultsScreen .logo,
-.ResultsScreen .clusters-tabs {
-  padding-left: 1em;
-}
-
-.ResultsScreen .SearchForm {
-  padding-right: 1em;
-}
-.ResultsScreen .docs {
-  padding-right: 1em;
-  overflow-x: hidden;
-}
-
-.ResultsScreen .logo {
-  grid-area: logo;
-  width: 5.75rem;
+.ResultsScreen .docs .ViewsTabs {
+  padding-left: calc(0.625 * var(--leading));
 }
 
 .ResultsScreen .SearchForm {
   grid-area: search;
+  padding: var(--leading);
 }
 
+.ResultsScreen .docs {
+  grid-area: docs;
+  overflow-x: hidden;
+}
 
 .ResultsScreen .clusters {
   grid-area: clusters;
   overflow-x: hidden;
-  padding-left: 0.125em;
   position: relative;
-}
-.ResultsScreen .docs {
-  grid-area: docs;
-}
-
-.ResultsScreen .clusters > div:not(.Error):not(.Loading),
-.ResultsScreen .docs > div:not(.Error):not(.Loading) {
-  height: 100%;
-  padding-top: 0.25em;
-  text-align: left;
-}
-.ResultsScreen .clusters > div:not(.Error):not(.Loading) {
-  margin-left: 0.5em;
 }
 
 .ResultsScreen .docs .Loading,
@@ -99,37 +71,6 @@
   text-align: left;
 }
 
-.ResultsScreen .docs .Error {
-  position: absolute;
-  width: 32em;
-  left: 0;
-  right: 0;
-  margin: 4rem auto 0;
-}
-
-.ResultsScreen .clusters .Error {
-  position: absolute;
-  width: 32em;
-  left: 0;
-  right: 0;
-  margin: 4rem auto 0;
-}
-
-.ResultsScreen .clusters-tabs {
-  grid-area: clusters-tabs;
-  padding-bottom: 0;
-}
-
-.ResultsScreen .docs-tabs {
-  grid-area: docs-tabs;
-  padding-bottom: 0;
-}
-
-.ResultsScreen .views .bp3-tab-indicator {
-  height: 1px;
-  bottom: -1px;
-}
-
 .ResultsScreen .bp3-control-group .bp3-icon {
   margin-top: auto;
   margin-bottom: auto;
@@ -137,12 +78,7 @@
 
 .ResultsScreen .clusters,
 .ResultsScreen .docs {
-  background-color: var(--background-color-main);
-}
-
-.ResultsScreen .clusters-tabs,
-.ResultsScreen .docs-tabs {
-  border-bottom: 1px solid var(--background-color-intense);
+  background-color: var(--background-color);
 }
 
 ::-webkit-scrollbar {

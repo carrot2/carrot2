@@ -70,7 +70,7 @@ export const ResultList = view(props => {
                                        searchResultStore={store} />
           {
             store.searchResult.documents.map((document, index) =>
-              <Result source={props.source} document={document} rank={index + 1} key={document.id}
+              <Result source={store.searchResult.source} document={document} rank={index + 1} key={document.id}
                       visibilityStore={props.visibilityStore}
                       commonConfigStore={props.commonConfigStore} />)
           }

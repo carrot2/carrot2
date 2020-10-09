@@ -9,12 +9,8 @@
 
 .light, body {
   --background-color: #fff;
-  --background-color-primary: #fdfdfd;
   --background-color-secondary: #f4f4f4;
-  --background-color-intense: #ccc;
-  --background-color-dimmed: hsla(0, 0%, 0%, 0.07);
-  --background-color-nav: hsla(207, 23%, 5%, 0.9);
-  --backdrop-color: rgba(255, 255, 255, 0.9);
+  --nav-background-color: hsla(207, 23%, 5%, 0.9);
   --text-color: black;
   --text-color-inverted: white;
   --text-color-light: rgba(0, 0, 0, 0.8);
@@ -32,14 +28,14 @@
   --label-tag-background-color: hsla(45, 100%, 50%, 0.05);
   --label-tag-border-color: hsla(45, 100%, 50%, 0.2);
   --hr: hsla(0, 0%, 0%, 0.15);
-  --kbd-outer-border-color: var(--background-color-intense);
+  --kbd-outer-border-color: #ccc;
   --kbd-inner-border-color: var(--background-color);
-  --kbd-background-color: var(--background-color-dimmed);
+  --kbd-background-color: hsla(0, 0%, 0%, 0.07);
   --logo-color: #1D3557;
   --logo-color-inverted: #fff;
   --block-highlight-background-color: hsla(45, 83%, 69%, 0.05);
   --block-highlight-border-color: hsla(45, 93%, 50%, 0.3);
-  --tab-background-color: hsl(0, 0%, 97%);
+  --tab-background-color: hsl(208, 50%, 95%);
   --tab-border-color: hsl(0, 0%, 91%);
   --tab-accent-color: hsl(208, 82%, 45%);
 }
@@ -47,12 +43,9 @@
 .dark {
   -webkit-font-smoothing: antialiased;
 
-  --background-color: var(--background-color-main-dark);
-  --background-color-primary: hsl(207, 25%, 18%);
-  --background-color-secondary: var(--background-color-dimmed);
-  --background-color-intense: hsl(207, 28%, 11%);
-  --background-color-dimmed: hsl(207, 23%, 22%);
-  --background-color-nav: hsla(207, 28%, 1%, 0.3);
+  --background-color: hsl(210, 18%, 15%);
+  --background-color-secondary: hsl(214, 18%, 18%);
+  --nav-background-color: hsla(207, 28%, 1%, 0.3);
   --backdrop-color: hsla(207, 23%, 17%, 0.9);
   --text-color: rgba(255, 255, 255, 1.0);
   --text-color-light: rgba(255, 255, 255, 0.75);
@@ -69,13 +62,13 @@
   --cluster-icon-color: #ffb366;
   --label-icon-color: var(--cluster-icon-color);
   --hr: hsla(0, 0%, 100%, 0.15);
-  --kbd-outer-border-color: var(--background-color-intense);
+  --kbd-outer-border-color: hsl(207, 28%, 11%);;
   --kbd-inner-border-color: hsl(207, 23%, 27%);
-  --kbd-background-color: var(--background-color-dimmed);
+  --kbd-background-color: hsl(207, 23%, 22%);;
   --logo-color: #fff;
   --logo-color-inverted: #1D3557;
   --tab-background-color: hsl(207, 23%, 22%);
-  --tab-border-color: hsla(0, 0%, 100%, 0.10);
+  --tab-border-color: hsl(207, 28%, 12%);
   --tab-accent-color: hsl(208, 82%, 55%);
 }
 

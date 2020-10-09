@@ -1,0 +1,59 @@
+.Views {
+  display: grid;
+  height: 100%;
+
+  grid-template-columns: auto;
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-areas:
+      "tabs"
+      "content";
+}
+
+.ViewsTabs {
+  grid-area: tabs;
+}
+
+.ViewsContent {
+  grid-area: content;
+  overflow: auto;
+  margin-top: var(--leading);
+}
+
+.ViewsContent > div {
+  height: 100%;
+}
+
+.Views button {
+  min-height: 26px;
+  min-width: 26px;
+}
+
+.ViewsTabs > .PointedTabs .bp3-tab-list {
+  border-bottom: none;
+}
+
+.ViewsTabs {
+  border-bottom: 1px solid var(--tab-border-color);
+}
+
+.view-tool-content .bp3-input {
+  max-width: 4.5em;
+}
+
+.view-tool-content h4 {
+  border-bottom: 1px solid var(--hr);
+  padding-bottom: var(--leading);
+  margin-bottom: var(--leading);
+}
+
+.view-tool-content .bp3-control:last-child {
+  margin-bottom: 0;
+}
+
+.view-tool-content.bp3-popover-content-sizing .bp3-popover-content {
+  max-width: none;
+}
+
+.view-tool-trigger svg {
+  width: 14px;
+}

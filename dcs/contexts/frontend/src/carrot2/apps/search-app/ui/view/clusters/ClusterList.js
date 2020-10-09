@@ -1,11 +1,13 @@
 import './ClusterList.css';
 
 import React from 'react';
-import PropTypes from "prop-types";
 
 import { Icon } from "@blueprintjs/core/lib/esm/index.js";
 import { view } from "@risingstack/react-easy-state";
 import classNames from "classnames";
+
+import { clusterStore } from "../../../store/services.js";
+import { clusterSelectionStore } from "../../../store/selection.js";
 
 function TopCluster(props) {
   const cluster = props.cluster;
@@ -59,9 +61,9 @@ function SubCluster(props) {
 
 const SubClusterView = view(SubCluster);
 
-export function ClusterList(props) {
-  const store = props.clusterStore;
-  const flatClusters = store.clusters.reduce((flat, c) => {
+export const ClusterList = () => {
+  const clusters = clusterStore.clusters;
+  const flatClusters = clusters.reduce((flat, c) => {
     return flat && (!c.clusters || c.clusters.length === 0);
   }, true);
 
@@ -69,15 +71,10 @@ export function ClusterList(props) {
     <div className={"ClusterList" + (flatClusters ? " flat" : "")}>
       <div>
         {
-          store.clusters.map(cluster =>
-            <TopClusterView cluster={cluster} key={cluster.id} clusterSelectionStore={props.clusterSelectionStore} />)
+          clusters.map(cluster =>
+            <TopClusterView cluster={cluster} key={cluster.id} clusterSelectionStore={clusterSelectionStore} />)
         }
       </div>
     </div>
   );
-}
-
-ClusterList.propTypes = {
-  clusterStore: PropTypes.object.isRequired,
-  clusterSelectionStore: PropTypes.object.isRequired
 };
