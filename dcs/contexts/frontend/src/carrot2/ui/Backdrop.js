@@ -1,12 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { generateBackground } from "../util/background-generator.js";
+import { generateBackground, generatePalette } from "../util/background-generator.js";
+
+const colors = generatePalette();
+const color = colors[6];
+const hue = /hsl\((\d+),.*/.exec(color)[1];
+document.documentElement.style.setProperty("--backdrop-color-hue", hue);
 
 export const Backdrop = () => {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    generateBackground(ref.current);
+    generateBackground(ref.current, colors);
     setVisible(true);
   }, [ ref, setVisible ]);
 

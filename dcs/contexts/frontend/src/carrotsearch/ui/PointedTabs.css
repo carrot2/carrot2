@@ -4,7 +4,7 @@
 }
 
 .dark .PointedTabs {
-  --pointed-tabs-pointer-border-width: calc(var(--pointed-tabs-border-width) * 1.5);
+  --pointed-tabs-pointer-border-width: calc(var(--pointed-tabs-border-width));
 }
 
 .PointedTabs > .bp3-tab-list {

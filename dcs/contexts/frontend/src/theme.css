@@ -5,6 +5,7 @@
 :root {
   --leading: 1rem;
   --background-color-main-dark: hsl(207, 23%, 17%);
+  --backdrop-color-hue: 0;
 }
 
 .light, body {
@@ -46,7 +47,6 @@
   --background-color: hsl(210, 18%, 15%);
   --background-color-secondary: hsl(214, 18%, 18%);
   --nav-background-color: hsla(207, 28%, 1%, 0.3);
-  --backdrop-color: hsla(207, 23%, 17%, 0.9);
   --text-color: rgba(255, 255, 255, 1.0);
   --text-color-light: rgba(255, 255, 255, 0.75);
   --text-color-lighter: rgba(255, 255, 255, 0.55);
@@ -73,9 +73,12 @@
 }
 
 body {
-  font-family: Lato, sans-serif;
   background-color: var(--background-color);
   color: var(--text-color);
+}
+
+body, input, button, select {
+  font-family: Lato, sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
