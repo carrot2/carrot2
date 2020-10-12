@@ -1,15 +1,13 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import './ResultsScreen.css';
 
-import { view } from "@risingstack/react-easy-state";
 import { clusterViews, resultsViews } from "../../../config-views.js";
 import { clusterStore, searchResultStore } from "../store/services";
 import {
   clusterSelectionStore,
   documentSelectionStore,
 } from "../store/selection";
-import { ShowHide } from "./Optional.js";
 import { themeStore } from "../../../ui/ThemeSwitch.js";
 
 import { routes } from "../routes";
@@ -20,27 +18,9 @@ import { Views } from "../../../../carrotsearch/ui/Views.js";
 
 import { branding } from "../../../config-branding.js";
 
-const Loading = view(props => (
-    <ShowHide className="Loading" visible={props.store.loading}>
-      Loading
-    </ShowHide>
-));
-
-const usePrevious = value => {
-  const ref = useRef();
-
-  useEffect(() => {
-    ref.current = value;
-  }, [ value ]);
-
-  return ref.current;
-};
-
 export const ResultsScreen = ({ match, history }) => {
   const source = decodeURIComponent(match.params.source);
   const query  = decodeURIComponent(match.params.query);
-
-  const prevSource = usePrevious(source);
 
   const runSearch = useCallback(() => {
     searchResultStore.load(source, query);
