@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect } from 'react';
 
 import './ResultsScreen.css';
+import "three-dots/dist/three-dots.css";
+
+import classnames from "classnames";
+import { view } from "@risingstack/react-easy-state";
 
 import { clusterViews, resultsViews } from "../../../config-views.js";
 import { clusterStore, searchResultStore } from "../store/services";
@@ -17,6 +21,14 @@ import { SearchForm } from "./SearchForm";
 import { Views } from "../../../../carrotsearch/ui/Views.js";
 
 import { branding } from "../../../config-branding.js";
+
+export const Loading = view(({ store }) => {
+  return (
+      <div className={classnames("Loading", { "visible" : store.loading })}>
+        <div className="dot-bricks" />
+      </div>
+  );
+});
 
 export const ResultsScreen = ({ match, history }) => {
   const source = decodeURIComponent(match.params.source);
@@ -94,10 +106,14 @@ export const ResultsScreen = ({ match, history }) => {
                     onSourceChange={onSourceChange}
                     onSubmit={onQueryChange} />
         <div className="clusters">
-          <Views activeView={getView()} views={clusterViews} onViewChange={onViewChange} {...panelProps} />
+          <Views activeView={getView()} views={clusterViews} onViewChange={onViewChange} {...panelProps}>
+            <Loading store={clusterStore} />
+          </Views>
         </div>
         <div className="docs">
-          <Views views={resultsViews} activeView="list" onViewChange={() => {}} source={source} />
+          <Views views={resultsViews} activeView="list" onViewChange={() => {}} source={source}>
+            <Loading store={searchResultStore} />
+          </Views>
         </div>
       </main>
   );

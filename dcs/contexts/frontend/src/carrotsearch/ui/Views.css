@@ -14,6 +14,7 @@
 }
 
 .ViewsContent {
+  position: relative;
   grid-area: content;
   overflow: auto;
   margin-top: var(--leading);

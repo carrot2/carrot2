@@ -51,7 +51,7 @@ export const ResultList = view(props => {
       // A dummy always-true condition to prevent removal of this code.
       // We need to read some property of the selected cluster set to
       // get notifications of changes.
-      if (selected.size >= 0) {
+      if (selected.size >= 0 && container.current) {
         container.current.scrollTop = 0;
       }
     };

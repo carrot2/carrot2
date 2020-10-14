@@ -52,7 +52,7 @@ Switch.propTypes = {
   createElement: PropTypes.func.isRequired
 }
 
-export const Views = ({ views, className, activeView, onViewChange, ...props }) => {
+export const Views = ({ views, className, activeView, onViewChange, children, ...props }) => {
   // Flatten views from all groups into a single object.
   const allViews = views.reduce((map, group) => {
     Object.assign(map, group.views);
@@ -96,6 +96,7 @@ export const Views = ({ views, className, activeView, onViewChange, ...props }) 
           }
         </ControlGroup>
         <div className="ViewsContent">
+          {children}
           {
             viewKeys.map(v => {
               return <Switch key={v} visible={v === activeView}
