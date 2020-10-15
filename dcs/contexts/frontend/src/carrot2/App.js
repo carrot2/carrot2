@@ -1,15 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import "./App.css";
 
 import classnames from "classnames";
+import { view } from "@risingstack/react-easy-state";
 
-import { HashRouter as Router, Link, NavLink, Redirect, Route, Switch, matchPath } from "react-router-dom";
-import { Popover, PopoverInteractionKind, PopoverPosition } from "@blueprintjs/core";
-
+import {
+  HashRouter as Router,
+  Link,
+  matchPath,
+  NavLink,
+  Redirect,
+  Route,
+  Switch
+} from "react-router-dom";
+import { Button, Popover, PopoverInteractionKind, PopoverPosition } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFlask, faInfo, faSearch } from "@fortawesome/pro-regular-svg-icons";
+import { faFlask, faFrown, faInfo, faSearch } from "@fortawesome/pro-regular-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+
+import { errors } from "./store/errors.js";
+
 import { SearchApp } from "./apps/search-app/ui/SearchApp.js";
 import { routes } from "./apps/search-app/routes.js";
 import { Backdrop } from "./ui/Backdrop.js";
@@ -41,7 +52,7 @@ const NavExternalLink = ({ href, icon }) => {
 export const AppInternal = ({ location }) => {
   const m = matchPath(location.pathname, { path: routes.searchStart.path, exact: true });
   return (
-      <div className={classnames("App", { "WithBackdrop": m !== null } )}>
+      <div className={classnames("App", { "WithBackdrop": m !== null })}>
         <Switch>
           <Route exact path={routes.searchStart.path} component={Backdrop} />
           <Route exact path={routes.about.path} component={Backdrop} />
@@ -83,10 +94,49 @@ export const AppInternal = ({ location }) => {
               <Route path={routes.workbench.path} component={WorkbenchApp} />
             </Switch>
           </Router>
+          <AppError />
         </main>
       </div>
   );
 };
+
+export const AppErrorContent = ({ children }) => {
+  if (!children) {
+    return null;
+  }
+
+  return (
+      <div>
+        <FontAwesomeIcon icon={faFrown} size="2x" />
+        {children}
+
+        <div className="AppErrorButtons">
+          <Button outlined={false} onClick={() => errors.dismiss()}>Dismiss</Button>
+        </div>
+      </div>
+  );
+};
+
+export const AppError = view(() => {
+  const errorElement = errors.current;
+
+  useEffect(() => {
+    const listener = e => {
+      if (errors.current && e.keyCode === 27) {
+        errors.dismiss();
+      }
+    };
+    window.addEventListener("keyup", listener);
+
+    return () => { window.removeEventListener("keyup", listener)};
+  }, []);
+
+  return (
+      <div className={classnames("AppError", { visible: errorElement !== null })}>
+        <AppErrorContent>{errorElement}</AppErrorContent>
+      </div>
+  );
+});
 
 export const App = () => {
   return (

@@ -61,6 +61,9 @@ export const ResultList = view(props => {
 
 
   const store = props.store;
+  if (store.searchResult === null) {
+    return null;
+  }
   return (
     <div className="ResultList" ref={container}>
       <Optional visible={!store.loading} content={() => (

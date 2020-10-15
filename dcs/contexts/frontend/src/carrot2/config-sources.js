@@ -12,12 +12,11 @@ export const sources = {
     createResult: (props) => {
       return <EToolsResult {...props} />;
     },
-    createError: (props) => {
-      const error = props.store.error;
+    createError: (error) => {
       if (error && error.status === 403) {
-        return <EToolsIpBannedError {...props} />;
+        return <EToolsIpBannedError />;
       }
-      return <GenericSearchEngineErrorMessage {...props} />
+      return <GenericSearchEngineErrorMessage />
     },
     createConfig: () => {
       return <EToolsResultConfig />;

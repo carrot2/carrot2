@@ -72,7 +72,7 @@
 }
 .ResultsScreen .Loading > div {
   margin: 10em auto 0 auto;
-  filter: hue-rotate(-20deg);
+  filter: hue-rotate(-40deg);
 }
 
 .ResultsScreen .docs .Error,

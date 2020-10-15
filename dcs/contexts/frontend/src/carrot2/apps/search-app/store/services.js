@@ -4,6 +4,9 @@ import { sources } from "../../../config-sources.js";
 import { fetchClusters } from "../../../service/dcs";
 import { persistentStore } from "../../../util/persistent-store.js";
 
+import { errors } from "../../../store/errors.js";
+import { createClusteringErrorElement } from "../ui/ErrorMessage.js";
+
 const EMPTY_ARRAY = [];
 
 export const algorithmStore = persistentStore("clusteringAlgorithm",{
@@ -17,7 +20,6 @@ export const clusterStore = store({
   loading: false,
   clusters: EMPTY_ARRAY,
   documents: EMPTY_ARRAY,
-  error: undefined,
   load: async function (searchResult, algorithm) {
     const documents = searchResult.documents;
     const query = searchResult.query;
@@ -40,7 +42,7 @@ export const clusterStore = store({
         try {
           e.bodyParsed = await e.json();
         } catch (ignored) { }
-        clusterStore.error = e;
+        errors.addError(createClusteringErrorElement(e));
       }
       clusterStore.loading = false;
     }
@@ -75,24 +77,25 @@ export const clusterStore = store({
 export const searchResultStore = store({
   loading: false,
   source: undefined,
+  error: false,
   searchResult: {
     query: "",
     matches: 0,
     documents: EMPTY_ARRAY
   },
-  error: undefined,
   load: async function (source, query) {
     const sourceId = source || Object.keys(sources)[0];
     const src = sources[sourceId];
 
     // TODO: cancel currently running request
     searchResultStore.loading = true;
-    searchResultStore.error = undefined;
+    searchResultStore.error = false;
     searchResultStore.source = source;
     try {
       searchResultStore.searchResult = assignDocumentIds(await src.source(query), sourceId);
     } catch (e) {
-      searchResultStore.error = e;
+      errors.addError(src.createError(e));
+      searchResultStore.error = true;
       searchResultStore.searchResult = {
         query: query,
         matches: 0,

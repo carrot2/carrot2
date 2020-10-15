@@ -57,14 +57,46 @@ main {
   margin-right: 0.5em;
 }
 
-.ErrorDialog {
-  width: auto;
+.AppError {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--overlay-background-color);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-.ErrorDialog pre {
+.AppError.visible {
+  opacity: 1;
+  pointer-events: unset;
+}
+.AppError pre {
   overflow-y: auto;
   max-height: 40vh;
+}
+.AppError .Error h2 {
+  margin-bottom: 1.5em;
+}
+.AppError > div {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 30em;
+  margin: auto;
   max-width: 60vw;
 }
-.ErrorDialog .CopyToClipboard {
-  width: 14.5em;
+.AppError svg {
+  position: absolute;
+  left: -1.5em;
+  top: -0.15em;
+}
+.AppError .AppErrorButtons {
+  margin-top: 2em;
 }

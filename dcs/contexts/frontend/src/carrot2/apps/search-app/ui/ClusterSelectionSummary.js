@@ -24,37 +24,30 @@ export const ClusterInSummary = props => {
  */
 export function ClusterSelectionSummary (props) {
   const searchResultStore = props.searchResultStore;
-  if (searchResultStore.loading || searchResultStore.error) {
+  if (searchResultStore.loading) {
     return null;
   }
 
   const clusterSelection = props.clusterSelectionStore.selected;
   const selectedDocs = props.documentVisibilityStore.visibleDocumentIds;
-  if (selectedDocs.size === 0) {
-    return (
-      <div className="ClusterSelectionSummary">
-        All retrieved results ({searchResultStore.searchResult.documents.length})
-      </div>
-    );
+  let content;
+  if (searchResultStore.error) {
+    content = <>Search results could not be retrieved due to an error.</>;
+  } else if (selectedDocs.size === 0) {
+    content = <>All retrieved results ({searchResultStore.searchResult.documents.length})</>;
   } else if (clusterSelection.size === 1) {
     const it = clusterSelection.values();
     const cluster = it.next().value;
-    return (
-      <div className="ClusterSelectionSummary">
-        {cluster.size} results in <ClusterInSummary cluster={cluster} />
-      </div>
-    )
+    content = <>{cluster.size} results in <ClusterInSummary cluster={cluster} /></>;
   } else if (clusterSelection.size > 1) {
-    return (
-      <div className="ClusterSelectionSummary">
-        {pluralize(selectedDocs.size, "result")} in {clusterSelection.size} clusters
-      </div>
-    );
+    content = <>{pluralize(selectedDocs.size, "result")} in {clusterSelection.size} clusters</>;
+  } else {
+    content = <>{pluralize(selectedDocs.size, "result")}</>;
   }
 
   return (
     <div className="ClusterSelectionSummary">
-      {pluralize(selectedDocs.size, "result")}
+      {content}
     </div>
   );
 }

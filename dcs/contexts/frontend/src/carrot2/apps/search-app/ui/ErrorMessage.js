@@ -2,40 +2,39 @@ import "./ErrorMessage.css";
 
 import React from "react";
 
-import { view } from "@risingstack/react-easy-state";
-import { ShowHide } from "./Optional.js";
-
-import { sources } from "../../../config-sources.js";
 import { branding } from "../../../config-branding.js";
 
 export const ErrorMessage = props => {
   return (
-    <ShowHide visible={props.error !== undefined} className="Error">
+    <div className="Error">
       {props.children}
-      <pre>{props.error && props.error.statusText.replace(/([&/?])/g, "$1\u200b")}</pre>
-      <p>That's all we know.</p>
-    </ShowHide>
+      <p>That's all we know, sorry.</p>
+    </div>
   );
 };
 
-export const SearchEngineErrorMessage = view(props => {
-  const source = sources[props.source];
-  return source.createError(props);
-});
-
-export const GenericSearchEngineErrorMessage = view(props => {
+export const GenericErrorMessage = ({ error, children }) => {
   return (
-    <ErrorMessage error={props.store.error}>
-      <h3>Search engine error</h3>
-      <p>Search could not be performed due to the following error:</p>
+    <ErrorMessage error={error}>
+      {children}
+      <pre>{error && error.statusText.replace(/([&/?])/g, "$1\u200b")}</pre>
     </ErrorMessage>
   );
-});
+};
+
+export const GenericSearchEngineErrorMessage = ({ error }) => {
+  return (
+    <GenericErrorMessage error={error}>
+      <h2>Search engine error</h2>
+      <p>Search could not be performed due to the following error:</p>
+    </GenericErrorMessage>
+  );
+};
 
 export const ClusteringServerRateLimitExceededError = () => {
   return (
     <div className="Error">
-      <h3>Too many clustering requests :-(</h3>
+      <h2>Too many clustering requests</h2>
 
       <p>
         You are making too many clustering requests for our little demo
@@ -54,7 +53,7 @@ export const ClusteringServerRateLimitExceededError = () => {
 export const ClusteringRequestSizeLimitExceededError = () => {
   return (
     <div className="Error">
-      <h3>Too much data to cluster :-(</h3>
+      <h2>Too much data to cluster</h2>
 
       <p>
         You sent too much data for our little demo
@@ -71,19 +70,17 @@ export const ClusteringRequestSizeLimitExceededError = () => {
 };
 
 export const ClusteringExceptionMessage = ({ exception }) => {
-  const lines = exception.stacktrace.split(/\n/);
-
   return (
     <div className="Error">
-      <h3>Clustering engine error</h3>
+      <h2>Clustering engine error</h2>
 
       <p>
         Results could not be clustered due to the following error:
       </p>
 
-      <p>
-        <strong>{lines[0]}</strong>
-      </p>
+      <pre>
+        {exception.stacktrace}
+      </pre>
 
       <p>That's all we know.</p>
     </div>
@@ -92,24 +89,21 @@ export const ClusteringExceptionMessage = ({ exception }) => {
 
 export const ClusteringErrorMessage = ({ message }) => {
   return (
-      <div className="Error">
-        <h3>Clustering engine error</h3>
+      <ErrorMessage>
+        <h2>Clustering engine error</h2>
 
         <p>
           Results could not be clustered due to the following error:
         </p>
 
-        <p>
-          <strong>{message}</strong>
-        </p>
-
-        <p>That's all we know.</p>
-      </div>
+        <pre>
+          {message}
+        </pre>
+      </ErrorMessage>
   );
 };
 
-export const ClusteringEngineErrorMessage = view(props => {
-  const error = props.store.error;
+export const createClusteringErrorElement = error => {
   if (error && error.status === 429) {
     return <ClusteringServerRateLimitExceededError />;
   }
@@ -127,9 +121,9 @@ export const ClusteringEngineErrorMessage = view(props => {
   }
 
   return (
-    <ErrorMessage error={props.store.error}>
-      <h3>Clustering engine error</h3>
+    <GenericErrorMessage error={error}>
+      <h2>Clustering engine error</h2>
       <p>Results could not be clustered due to the following error:</p>
-    </ErrorMessage>
+    </GenericErrorMessage>
   );
-});
+};

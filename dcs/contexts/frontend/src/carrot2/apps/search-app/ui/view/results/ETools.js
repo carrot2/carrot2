@@ -199,7 +199,7 @@ export const EToolsSourceConfig = view((props) => {
   );
 });
 
-export const EToolsIpBannedError = view((props) => {
+export const EToolsIpBannedError = view(() => {
   return (
     <div className="Error">
       <h3>Search limit exceeded</h3>
@@ -221,7 +221,7 @@ export const EToolsIpBannedError = view((props) => {
       </p>
 
       <EToolsTokensFormContainer>
-        <Button onClick={props.runSearch} intent="primary">Apply and re-run search</Button>
+        <Button onClick={() => document.location.reload()} intent="primary">Apply and re-run search</Button>
       </EToolsTokensFormContainer>
     </div>
   );

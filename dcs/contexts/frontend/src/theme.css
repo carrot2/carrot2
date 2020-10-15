@@ -39,6 +39,7 @@
   --tab-background-color: hsl(208, 50%, 95%);
   --tab-border-color: hsl(0, 0%, 91%);
   --tab-accent-color: hsl(208, 82%, 45%);
+  --overlay-background-color: hsla(0, 0%, 100%, 0.7);
 }
 
 .dark {
@@ -70,6 +71,7 @@
   --tab-background-color: hsl(207, 23%, 22%);
   --tab-border-color: hsl(207, 28%, 12%);
   --tab-accent-color: hsl(208, 82%, 55%);
+  --overlay-background-color: hsla(0, 0%, 0%, 0.7);
 }
 
 body {
