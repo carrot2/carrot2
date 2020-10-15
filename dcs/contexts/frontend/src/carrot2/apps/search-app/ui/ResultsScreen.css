@@ -134,10 +134,6 @@
     --selection-border-width: 2px;
   }
 
-  .ResultsScreen .logo {
-    display: none;
-  }
-
   .ResultsScreen .SearchForm {
     max-width: 100vw;
   }

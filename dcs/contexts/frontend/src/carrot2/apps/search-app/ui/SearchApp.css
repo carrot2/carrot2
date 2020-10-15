@@ -11,30 +11,10 @@
   filter: brightness(1.5) contrast(0.5);
   opacity: 0.5;
 }
-.bp3-dark .Backdrop {
+.dark .Backdrop {
   filter: brightness(0.3);
   opacity: 1.0;
 }
 .Backdrop.hidden {
   opacity: 0;
-}
-
-.About {
-  position: absolute;
-  top: 1em;
-  right: var(--leading);
-  z-index: 2;
-}
-.About .bp3-icon {
-  position: relative;
-  top: -0.1em;
-}
-
-.bp3-dark .logo,
-.bp3-dark .text {
-  filter: invert(1.0) grayscale(100%) contrast(1000%);
-}
-
-.carrot2.text {
-  position: relative;
 }

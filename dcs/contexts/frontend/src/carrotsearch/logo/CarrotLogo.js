@@ -6,7 +6,7 @@ import classnames from "classnames";
 
 export const CarrotLogo = ({ className = "" }) => {
   return (
-      <svg className={classnames("Logo", className)} version="1.1" viewBox="0 0 116.93 113.72"
+      <svg className={classnames("CarrotLogo Logo", className)} version="1.1" viewBox="0 0 116.93 113.72"
            xmlns="http://www.w3.org/2000/svg">
         <g transform="translate(0.511764 .041011)" fillOpacity=".8" strokeOpacity="0.15" strokeWidth="0.5">
           <path

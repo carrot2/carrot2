@@ -7,15 +7,16 @@
   padding-top: 20vh;
 }
 
-.StartScreen .logo {
+.StartScreen .CarrotLogo {
   width: 10em;
   transform: translateX(8%);
 }
-.StartScreen .carrot2.text {
+.StartScreen .Carrot2Text {
   position: relative;
   left: 0.25em;
 }
-.StartScreen .text {
+.StartScreen .CarrotSearchText,
+.StartScreen .Carrot2Text {
   width: 8em;
   margin-top: 1em;
   margin-bottom: 2em;

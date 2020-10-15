@@ -3,9 +3,9 @@ import carrot2IntroHtml from "./about-intro-carrot2.html";
 import carrot2DetailsHtml from "./about-details-carrot2.html";
 import { isCarrot2Distribution } from "./config.js";
 
-import { ReactComponent as CarrotLogo } from "./apps/search-app/ui/assets/carrot-search-logo.svg";
-import { ReactComponent as Carrot2Text } from "./apps/search-app/ui/assets/carrot2-text.svg";
-import { ReactComponent as CarrotSearchText } from "./apps/search-app/ui/assets/carrot-search-text.svg";
+import { CarrotLogo } from "../carrotsearch/logo/CarrotLogo.js";
+import { Carrot2Text } from "../carrotsearch/logo/Carrot2Text.js";
+import { CarrotSearchText } from "../carrotsearch/logo/CarrotSearchText.js";
 
 const carrot2 = isCarrot2Distribution();
 
@@ -20,8 +20,8 @@ const carrot2Branding = {
   ),
   createStartPageLogo: () => (
     <>
-      <CarrotLogo className="logo" />
-      <Carrot2Text className="carrot2 text" title="Carrot2" />
+      <CarrotLogo />
+      <Carrot2Text title="Carrot2" />
     </>
   ),
   createAboutIntro: () => <div dangerouslySetInnerHTML={{ __html: carrot2IntroHtml }} />,
@@ -50,8 +50,8 @@ const lingo3gBranding = {
   ),
   createStartPageLogo: () => (
     <>
-      <CarrotLogo className="logo" />
-      <CarrotSearchText className="text" title="Carrot Search" />
+      <CarrotLogo />
+      <CarrotSearchText title="Carrot Search" />
     </>
   ),
   createAboutIntro: () => <div dangerouslySetInnerHTML={{ __html: carrot2IntroHtml }} />,
