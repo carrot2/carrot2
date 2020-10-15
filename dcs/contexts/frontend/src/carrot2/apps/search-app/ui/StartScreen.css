@@ -23,6 +23,7 @@
 }
 
 .StartScreen > .slogan {
+  text-align: center;
   margin-top: 2em;
   max-width: 32em;
 }
