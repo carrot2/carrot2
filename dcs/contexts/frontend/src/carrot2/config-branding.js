@@ -1,6 +1,6 @@
 import React from 'react';
-import carrot2IntroHtml from "./about-intro-carrot2.html";
-import carrot2DetailsHtml from "./about-details-carrot2.html";
+import carrot2IntroHtml from "./apps/about/about-intro-carrot2.html";
+import carrot2DetailsHtml from "./apps/about/about-details-carrot2.html";
 import { isCarrot2Distribution } from "./config.js";
 
 import { CarrotLogo } from "../carrotsearch/logo/CarrotLogo.js";

@@ -1,0 +1,15 @@
+.WorkbenchStartScreen {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.WorkbenchStartScreen .Views {
+  max-width: 32em;
+  height: unset;
+}
+
+.WorkbenchStartScreen .ViewsContent {
+  padding: 3px;
+}

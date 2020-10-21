@@ -8,7 +8,7 @@ import { clusterViews } from "../../../config-views.js";
 import { SearchForm } from "./SearchForm";
 import { branding } from "../../../config-branding.js";
 
-import { routes } from "../routes";
+import { routes } from "../../../routes.js";
 
 export const StartScreen = ({ match, history }) => {
   const runSearch = (query) => {

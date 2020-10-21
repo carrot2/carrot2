@@ -1,32 +1,38 @@
 import { isCarrot2Distribution } from "./config.js";
 
+import { lingo } from "./service/algorithms/lingo.js";
+
 const lingo3gAlgorithm = {
   "Lingo3G": {
     label: "Lingo3G",
     description: "Meaningful, well-described hierarchical clusters. Very fast, many tuning options.",
     descriptionHtml: "produces meaningful, well-described hierarchical clusters. Very fast, scalable, many tuning options (not exposed in this demo). Commercially available from <a href='https://carrotsearch.com' target='_blank'>Carrot Search</a>.",
-    tag: "commercial"
+    tag: "commercial",
+    getSettings: () => {
+      return [];
+    }
   }
 };
 
 const opensourceAlgorithms = {
-  "Lingo": {
-    label: "Lingo",
-    description: "Well-described flat clusters.",
-    descriptionHtml: "creates well-described flat clusters. Does not scale beyond a few thousand search results. Available as part of the open source <a href='http://project.carrot2.org' target='_blank'>Carrot<sup>2</sup> framework</a>.",
-    tag: "open source"
-  },
+  "Lingo": lingo,
   "STC": {
     label: "STC",
     description: "Flat clusters, fast algorithm.",
     descriptionHtml: "the classic search results clustering algorithm. Produces flat cluster with adequate description, very fast. Available as part of the open source <a href='http://project.carrot2.org' target='_blank'>Carrot<sup>2</sup> framework</a>",
-    tag: "open source"
+    tag: "open source",
+    getSettings: () => {
+      return [];
+    }
   },
   "Bisecting K-Means": {
     label: "k-means",
     description: "Base line algorithm, bag-of-words labels.",
     descriptionHtml: "base line clustering algorithm, produces bag-of-words style cluster descriptions. Available as part of the open source <a href='http://project.carrot2.org' target='_blank'>Carrot<sup>2</sup> framework</a>",
-    tag: "open source"
+    tag: "open source",
+    getSettings: () => {
+      return [];
+    }
   }
 };
 

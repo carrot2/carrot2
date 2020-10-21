@@ -1,8 +1,19 @@
 import React from "react";
 import { GenericSearchEngineErrorMessage } from "./apps/search-app/ui/ErrorMessage.js";
 
-import { EToolsResult, EToolsResultConfig, EToolsSourceConfig, EToolsIpBannedError, etoolsSource } from "./apps/search-app/ui/view/results/ETools.js";
-import { PubMedResult, PubMedResultConfig, PubMedSourceConfig, pubmedSource } from "./apps/search-app/ui/view/results/PubMed.js";
+import {
+  EToolsIpBannedError,
+  EToolsResult,
+  EToolsResultConfig, etoolsSettings,
+  etoolsSource,
+  EToolsSourceConfig
+} from "./apps/search-app/ui/view/results/ETools.js";
+import {
+  PubMedResult,
+  PubMedResultConfig,
+  pubmedSource,
+  PubMedSourceConfig
+} from "./apps/search-app/ui/view/results/PubMed.js";
 
 export const sources = {
   "web": {
@@ -23,7 +34,8 @@ export const sources = {
     },
     createSourceConfig: (props) => {
       return <EToolsSourceConfig {...props} />;
-    }
+    },
+    getSettings: () => etoolsSettings
   },
   "pubmed": {
     label: "PubMed",
@@ -40,6 +52,40 @@ export const sources = {
     },
     createSourceConfig: (props) => {
       return <PubMedSourceConfig {...props} />;
+    },
+    getSettings: () => {
+      return [
+        {
+          id: "pubmed",
+          type: "group",
+          label: "PubMed",
+          settings: [
+            {
+              id: "pubmed:query",
+              type: "string",
+              label: "Query",
+              description: `
+<p>
+  The search query to pass to PuMed. 
+</p>
+          `
+            },
+            {
+              id: "pubmed:maxResults",
+              type: "number",
+              label: "Max results",
+              min: 0,
+              max: 500,
+              step: 10,
+              description: `
+<p>
+  The number of search results to fetch.
+</p>
+`
+            }
+          ]
+        }
+      ];
     }
   }
 };

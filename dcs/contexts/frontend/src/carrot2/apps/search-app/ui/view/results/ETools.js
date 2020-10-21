@@ -29,6 +29,37 @@ const etoolsSourceConfigStore = persistentStore("etoolsSourceConfig",
   }
 );
 
+export const etoolsSettings = [
+  {
+    id: "web",
+    type: "group",
+    label: "Web",
+    settings: [
+      {
+        id: "web:query",
+        type: "string",
+        label: "Query",
+        description: `
+<p>
+  The search query to pass to eTools. Use the common web search engine syntax: double quotes
+  for phrase search, <code>-</code> to exclude words or phrases etc.
+</p>`
+      },
+      {
+        id: "web:safeSearch",
+        get: () => etoolsSourceConfigStore.safeSearch,
+        set: (prop, val) => etoolsSourceConfigStore.safeSearch = val,
+        type: "boolean",
+        label: "Safe search",
+        description: `
+<p>
+  Controls filtering of offensive search results.
+</p>`
+      }
+    ]
+  }
+];
+
 export const etoolsSource = (query) => {
   const store = etoolsSourceConfigStore;
   return etools(query, {

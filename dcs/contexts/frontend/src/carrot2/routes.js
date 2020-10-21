@@ -20,4 +20,6 @@ export const routes = {
   searchStart: new RouteSpec("/search/:source?"),
   searchResults: new RouteSpec("/search/:source/:query/:view?"),
   workbench: new RouteSpec("/workbench"),
+  workbenchStart: new RouteSpec("/workbench"),
+  workbenchResults: new RouteSpec("/workbench/results")
 };

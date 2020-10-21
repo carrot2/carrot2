@@ -1,0 +1,51 @@
+.WorkbenchResults {
+  display: grid;
+  height: 100vh;
+
+  grid-template-columns: auto 8fr;
+  grid-template-rows: auto;
+  grid-template-areas: "params results";
+}
+
+.WorkbenchSide {
+  width: 24em;
+  padding: var(--leading);
+  overflow-y: auto;
+}
+
+.WorkbenchSideHeader {
+  display: flex;
+}
+
+.WorkbenchSideHeader .ClusterButton {
+  align-self: center;
+}
+
+.WorkbenchLogo {
+  font-family: Raleway, sans-serif;
+  font-size: 1.5rem;
+  line-height: 1.0;
+  margin-right: auto;
+  margin-left: -0.25em;
+  margin-top: 0.25em;
+}
+.WorkbenchLogo > span {
+  position: relative;
+}
+.WorkbenchLogo .initial {
+  font-size: 2.4rem;
+  position: relative;
+  left: 0.35rem;
+  font-weight: 300;
+}
+.WorkbenchLogo > span > span:not(.initial) {
+  font-weight: normal;
+  font-size: 0.8rem;
+  position: absolute;
+  left: 3rem;
+  top: -0.55rem;
+}
+
+.WorkbenchSide .Settings {
+  margin-top: 4em;
+}

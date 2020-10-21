@@ -123,6 +123,7 @@ kbd {
 
 ::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.03);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {

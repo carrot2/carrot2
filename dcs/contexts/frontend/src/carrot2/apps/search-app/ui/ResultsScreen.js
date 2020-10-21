@@ -14,7 +14,7 @@ import {
 } from "../store/selection";
 import { themeStore } from "../../../ui/ThemeSwitch.js";
 
-import { routes } from "../routes";
+import { routes } from "../../../routes.js";
 
 import { SearchForm } from "./SearchForm";
 

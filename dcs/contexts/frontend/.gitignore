@@ -20,3 +20,4 @@ yarn-debug.log*
 /.idea/
 
 .gradle/
+/src/carrot2/service/algorithms/descriptors/

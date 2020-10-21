@@ -1,0 +1,27 @@
+.Section {
+  margin-bottom: 3em;
+}
+
+.SectionDivider {
+  font-size: 1em;
+  text-transform: uppercase;
+  text-align: center;
+
+  display: table;
+  white-space: nowrap;
+  height: auto;
+  line-height: 1;
+  color: var(--text-color-light);
+}
+.SectionDivider span {
+  padding: 0 1em;
+}
+.SectionDivider:before,
+.SectionDivider:after {
+  content: '';
+  display: table-cell;
+  position: relative;
+  top: -6px;
+  width: 50%;
+  border-bottom: 1px solid var(--border-color);
+}

@@ -1,0 +1,22 @@
+.Setting {
+  margin-bottom: 2em;
+}
+.Setting label.bp3-label {
+  margin-bottom: 0.5em;
+  font-weight: bold;
+}
+.Setting .LabelWithHelp svg {
+  color: var(--link-icon-color);
+  margin-left: 0.25em;
+  display: inline;
+  cursor: pointer;
+}
+.Setting label.bp3-label .bp3-popover-wrapper,
+.Setting label.bp3-label .bp3-popover-target {
+  display: inline;
+}
+
+.SettingDescription {
+  max-width: 26rem;
+  padding: var(--leading);
+}
