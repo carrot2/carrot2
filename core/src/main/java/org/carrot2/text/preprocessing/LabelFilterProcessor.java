@@ -150,7 +150,7 @@ public class LabelFilterProcessor extends AttrComposite {
             completeLabelFilter)
         .forEachOrdered(
             (LabelFilter filter) -> {
-              if (filter != null) {
+              if (filter != null && filter.enable.get()) {
                 filter.filter(context, acceptedStems, acceptedPhrases);
               }
             });

@@ -10,7 +10,7 @@ plugins {
   id 'de.thetaphi.forbiddenapis' version '3.0.1' apply false
 }
 
-rootProject.version = '4.0.4-SNAPSHOT'
+rootProject.version = '4.0.5-SNAPSHOT'
 ext {
   fullName = "Carrot2"
 
