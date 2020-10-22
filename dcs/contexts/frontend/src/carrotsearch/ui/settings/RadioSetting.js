@@ -1,13 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { FormGroup, Radio, RadioGroup } from "@blueprintjs/core";
 import { view } from "@risingstack/react-easy-state";
 
-export const RadioSetting = view(({ label, options, selected, onChange }) => {
+export const RadioSetting = view(({ setting, get, set }) => {
+  const { label, options } = setting;
+
   return (
       <FormGroup label={label} inline={true}>
-        <RadioGroup onChange={e => onChange(e.target.value)}
-                    selectedValue={selected}>
+        <RadioGroup onChange={e => set(setting, e.target.value)}
+                    selectedValue={get(setting)}>
           {
             options.map(o => <Radio label={o.label || o.value} value={o.value} key={o.value}/>)
           }
@@ -15,10 +16,3 @@ export const RadioSetting = view(({ label, options, selected, onChange }) => {
       </FormGroup>
   );
 });
-
-RadioSetting.propTypes = {
-  label: PropTypes.string.isRequired,
-  options: PropTypes.array.isRequired,
-  selected: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired
-};

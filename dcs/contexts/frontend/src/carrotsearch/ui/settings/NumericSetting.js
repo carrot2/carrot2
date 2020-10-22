@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
 import "./NumericSetting.css";
 
@@ -17,8 +16,10 @@ const clampWhenInteger = (v, integer) => integer ? Math.max(1, v) : v;
  * This component applies a number of heuristics to make the experience smooth,
  * including automatic value step computation.
  */
-export const NumericSetting = view(
-    ({ label, description, value, onChange, min, max, integer, step }) => {
+export const NumericSetting = view(({ setting, get, set }) => {
+      const { label, description, min, max, integer } = setting;
+      const value = get(setting);
+
       const range = max - min;
 
       // Compute the value step to be a multiple of 1, 2 or 5.
@@ -57,7 +58,7 @@ export const NumericSetting = view(
         // produce values of 2, 5, 10, 15, ... rather than 2, 7, 12, 17.
         const toSet = integer ? Math.max(min, vRounded - (vRounded % step)) : vRounded;
         setStringValue(formatInputValue(toSet));
-        onChange(toSet);
+        set(setting, toSet);
       };
 
       const onSpinnerValueChange = v => onNumberValueChange(v, inputStep);
@@ -79,9 +80,3 @@ export const NumericSetting = view(
           </Setting>
       );
     });
-
-NumericSetting.propTypes = {
-  label: PropTypes.string.isRequired,
-  value: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired
-};
