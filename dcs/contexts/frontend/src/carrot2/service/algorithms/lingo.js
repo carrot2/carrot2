@@ -1,5 +1,5 @@
 import descriptor from "./descriptors/org.carrot2.clustering.lingo.LingoClusteringAlgorithm.json";
-
+import { persistentStore } from "../../util/persistent-store.js";
 
 const isContainer = descriptor => {
   const implementations = descriptor.implementations;
@@ -48,7 +48,7 @@ const parseNumberConstraintValue = constraint => {
   return parseFloat(split[2]);
 };
 
-const settingConfigFromIntegerDescriptor = descriptor => {
+const settingConfigFromNumberDescriptor = descriptor => {
   const c1 = parseNumberConstraintValue(descriptor.constraints[0]);
   const c2 = parseNumberConstraintValue(descriptor.constraints[1]);
   const min = Math.min(c1, c2);
@@ -77,8 +77,12 @@ const settingFrom = (id, overrides) => {
   switch (descriptor.type) {
     case "Double":
     case "Float":
+      Object.assign(setting, settingConfigFromNumberDescriptor(descriptor));
+      break;
+
     case "Integer":
-      Object.assign(setting, settingConfigFromIntegerDescriptor(descriptor));
+      Object.assign(setting, settingConfigFromNumberDescriptor(descriptor));
+      setting.integer = true;
       break;
 
     case "Boolean":
@@ -93,6 +97,29 @@ const settingFrom = (id, overrides) => {
 };
 
 
+const clusterSettings = [
+  settingFrom("desiredClusterCount"),
+  settingFrom("clusterBuilder.clusterMergingThreshold"),
+  settingFrom("scoreWeight", { label: "Size-score sorting ratio" }),
+  settingFrom("preprocessing.documentAssigner.exactPhraseAssignment")
+];
+const labelSettings = [
+  settingFrom("clusterBuilder.phraseLabelBoost"),
+  settingFrom("clusterBuilder.phraseLengthPenaltyStart"),
+  settingFrom("clusterBuilder.phraseLengthPenaltyStop")
+];
+
+const defaults = [ clusterSettings, labelSettings ].flat().reduce((defs, setting) => {
+  defs[setting.id] = descriptorsById.get(setting.id).value;
+  return defs;
+}, {});
+
+const parameterStore = persistentStore("parameters:algorithm:lingo", defaults);
+const storeGetter = setting => {
+  return parameterStore[setting.id];
+};
+const storeSetter = (setting, val) => parameterStore[setting.id] = val;
+
 export const lingo = {
   label: "Lingo",
   description: "Well-described flat clusters.",
@@ -104,23 +131,19 @@ export const lingo = {
         id: "lingo:clusters",
         type: "group",
         label: "Clusters",
-        settings: [
-          settingFrom("desiredClusterCount"),
-          settingFrom("clusterBuilder.clusterMergingThreshold"),
-          settingFrom("scoreWeight", { label: "Size-score sorting ratio" }),
-          settingFrom("preprocessing.documentAssigner.exactPhraseAssignment")
-        ]
+        settings: clusterSettings,
+        get: storeGetter,
+        set: storeSetter
       },
       {
         id: "lingo:labels",
         type: "group",
         label: "Cluster labels",
-        settings: [
-          settingFrom("clusterBuilder.phraseLabelBoost"),
-          settingFrom("clusterBuilder.phraseLengthPenaltyStart"),
-          settingFrom("clusterBuilder.phraseLengthPenaltyStop")
-        ]
+        settings: labelSettings,
+        get: storeGetter,
+        set: storeSetter
       }
     ];
   }
 };
+
