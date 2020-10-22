@@ -10,6 +10,7 @@
  */
 package org.carrot2.text.preprocessing.filter;
 
+import org.carrot2.attrs.AttrBoolean;
 import org.carrot2.attrs.AttrDouble;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
@@ -26,6 +27,12 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
  * document</a>, page 31 for a definition of a complete phrase.
  */
 public class CompleteLabelFilter extends LabelFilter {
+  /** Enables or disables the truncated label filter. */
+  public AttrBoolean enabled =
+      attributes.register(
+          "enabled",
+          AttrBoolean.builder().label("Truncated label filter enabled").defaultValue(true));
+
   /**
    * Truncated label threshold. Determines the strength of the truncated label filter. The lowest
    * value means strongest truncated labels elimination, which may lead to overlong cluster labels
@@ -50,5 +57,10 @@ public class CompleteLabelFilter extends LabelFilter {
     leftCompleteLabelFilter.filter(context, acceptedStems, acceptedPhrases, labelOverrideThreshold);
     rightCompleteLabelFilter.filter(
         context, acceptedStems, acceptedPhrases, labelOverrideThreshold);
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return enabled.get();
   }
 }
