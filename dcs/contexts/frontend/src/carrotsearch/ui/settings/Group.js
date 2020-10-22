@@ -1,16 +1,18 @@
 import React from 'react';
-
 import PropTypes from 'prop-types';
+
+import { view } from "@risingstack/react-easy-state";
+
 import { RadioSetting } from "./RadioSetting.js";
 import { BooleanSetting } from "./BooleanSetting.js";
 import { StringSetting } from "./StringSetting.js";
 import { NumericSetting } from "./NumericSetting.js";
 import { Section } from "../Section.js";
 
-export const Group = (({ setting, get, set, filter = () => true, className }) => (
+export const Group = view(({ setting, get, set, className }) => (
     <Section className={className} label={setting.label}>
       {
-        setting.settings.filter(filter).map(s => {
+        setting.settings.filter(s => !s.visible || s.visible()).map(s => {
           return <section key={s.id} id={s.id}>
             {getFactory(s)(s, s.get || setting.get || get, s.set || setting.set || set)}
           </section>

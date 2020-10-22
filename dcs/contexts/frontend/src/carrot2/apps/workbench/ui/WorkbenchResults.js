@@ -43,31 +43,25 @@ const settings = {
     return Object.keys(t.components).map(k => {
       const settings = t.components[k].getSettings();
       settings.forEach(s => {
-        s.component = k;
-        s.componentType = t.type;
+        s.visible = s => {
+          switch (t.type) {
+            case "source":
+              return k === workbenchSourceAlgorithmStore.source;
+
+            case "algorithm":
+              return k === workbenchSourceAlgorithmStore.algorithm;
+
+            default:
+              return false;
+          }
+        };
       });
       return settings;
     })
   }).flat(2)
 };
 
-const WorkbenchSide = view(() => {
-  const source = workbenchSourceAlgorithmStore.source;
-  const algorithm = workbenchSourceAlgorithmStore.algorithm;
-
-  const filter = useCallback((setting) => {
-    if (setting.type !== "group") {
-      return true;
-    }
-    if (setting.componentType === "source") {
-      return setting.component === source;
-    }
-    if (setting.componentType === "algorithm") {
-      return setting.component === algorithm;
-    }
-    return false;
-  }, [ source, algorithm ]);
-
+const WorkbenchSide = (() => {
   return (
       <div className="WorkbenchSide">
         <div className="WorkbenchSideHeader">
@@ -78,7 +72,7 @@ const WorkbenchSide = view(() => {
 
         <WorkbenchSourceAlgorithm />
 
-        <Settings settings={settings} get={storeGet} set={storeSet} filter={filter} />
+        <Settings settings={settings} get={storeGet} set={storeSet} />
       </div>
   );
 });

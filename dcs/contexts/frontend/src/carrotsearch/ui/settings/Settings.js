@@ -60,8 +60,8 @@ export const Setting = ({ className, inline = false, label, description, childre
   )
 };
 
-export const Settings = ({ settings, get, set, filter }) => (
-    <Group className="Settings" setting={settings} set={set} get={get} filter={filter} />
+export const Settings = ({ settings, get, set }) => (
+    <Group className="Settings" setting={settings} set={set} get={get} />
 );
 
 Settings.propTypes = {
