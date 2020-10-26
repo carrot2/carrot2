@@ -1,8 +1,6 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import "./WorkbenchResults.css";
-
-import { view } from "@risingstack/react-easy-state";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlask } from "@fortawesome/pro-regular-svg-icons";

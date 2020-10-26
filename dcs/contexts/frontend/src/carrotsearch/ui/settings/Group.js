@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 
 import { view } from "@risingstack/react-easy-state";
 
+import { Section } from "../Section.js";
 import { RadioSetting } from "./RadioSetting.js";
 import { BooleanSetting } from "./BooleanSetting.js";
 import { StringSetting } from "./StringSetting.js";
 import { NumericSetting } from "./NumericSetting.js";
-import { Section } from "../Section.js";
+import { SelectSetting } from "./SelectSetting.js";
 
 export const Group = view(({ setting, get, set, className }) => (
     <Section className={className} label={setting.label}>
@@ -37,6 +38,9 @@ const factories = {
   "enum": (s, get, set) => {
     if (s.ui === "radio") {
       return <RadioSetting setting={s} get={get} set={set} />;
+    }
+    if (s.ui === "select") {
+      return <SelectSetting setting={s} get={get} set={set} />;
     }
   },
   "number": (s, get, set) => {
