@@ -102,7 +102,7 @@ export const settingFromDescriptor = (map, id, override) => {
   const descriptor = getDescriptor(map, id);
   const setting = {
     id: id,
-    label: descriptor.javadoc.summary,
+    label: descriptor.description,
     description: descriptor.javadoc.text
   };
 
