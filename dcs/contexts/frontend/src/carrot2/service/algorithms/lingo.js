@@ -1,6 +1,7 @@
 import descriptor from "./descriptors/org.carrot2.clustering.lingo.LingoClusteringAlgorithm.json";
 import { persistentStore } from "../../util/persistent-store.js";
 import {
+  collectDefaults,
   getDescriptorsById,
   settingFromDescriptor,
   settingFromDescriptorRecursive
@@ -10,7 +11,8 @@ const descriptorsById = getDescriptorsById(descriptor);
 console.log(descriptorsById);
 
 const settingFrom = (id, overrides) => settingFromDescriptor(descriptorsById, id, overrides);
-const settingFromRecursive = (id, overrides) => settingFromDescriptorRecursive(descriptorsById, id, overrides);
+const settingFromRecursive = (id, overrides) => settingFromDescriptorRecursive(descriptorsById, id,
+    overrides);
 
 const clusterSettings = [
   settingFrom("desiredClusterCount"),
@@ -28,20 +30,15 @@ const languageModelSettings = [
   settingFromRecursive("matrixReducer.factorizationFactory", () => s => parameterStore[s.id])
 ];
 
-const defaults = [
-  clusterSettings,
-  labelSettings,
-  languageModelSettings
-].flat().reduce(function collect(defs, setting) {
-  if (setting.type === "group") {
-    setting.settings.reduce(collect, defs);
-  } else {
-    defs[setting.id] = descriptorsById.get(setting.id).value;
-  }
-  return defs;
-}, {});
+const parameterStore = persistentStore(
+    "parameters:algorithm:lingo",
+    collectDefaults(descriptorsById, [
+      clusterSettings,
+      labelSettings,
+      languageModelSettings
+    ])
+);
 
-const parameterStore = persistentStore("parameters:algorithm:lingo", defaults);
 export const lingo = {
   label: "Lingo",
   description: "Well-described flat clusters.",

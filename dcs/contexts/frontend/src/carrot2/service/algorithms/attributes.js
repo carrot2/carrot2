@@ -168,4 +168,13 @@ export const settingFromDescriptorRecursive = (map, id, getterProvider, override
   }
 };
 
+export const collectDefaults = (map, settings) => settings.flat().reduce(function collect(defs, setting) {
+  if (setting.type === "group") {
+    setting.settings.reduce(collect, defs);
+  } else {
+    defs[setting.id] = map.get(setting.id).value;
+  }
+  return defs;
+}, {});
+
 
