@@ -33,7 +33,7 @@ const AppLink = ({ to, title, children, icon }) => {
   return (
       <NavLink className="NavLink AppLink" to={to} activeClassName="active">
         <Popover popoverClassName="NavPopover" position={PopoverPosition.RIGHT}
-                 interactionKind={PopoverInteractionKind.HOVER}>
+                 interactionKind={PopoverInteractionKind.HOVER} hoverOpenDelay={650}>
           <FontAwesomeIcon icon={icon} size="2x" />
           <div className="NavPopoverContent">
             <h3>{title}</h3>

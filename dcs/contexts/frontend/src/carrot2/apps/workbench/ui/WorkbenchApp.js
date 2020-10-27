@@ -5,7 +5,6 @@ import "./WorkbenchApp.css";
 import { routes } from "../../../routes.js";
 
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
-import { WorkbenchStart } from "./WorkbenchStart.js";
 import { WorkbenchResults } from "./WorkbenchResults.js";
 
 export const WorkbenchApp = () => {
@@ -14,8 +13,7 @@ export const WorkbenchApp = () => {
         <div className="WorkbenchApp">
           <Router>
             <Switch>
-              <Route exact path={routes.workbenchStart.path} component={WorkbenchStart} />
-              <Route path={routes.workbenchResults.path} component={WorkbenchResults} />
+              <Route path={routes.workbench.path} component={WorkbenchResults} />
             </Switch>
           </Router>
         </div>
