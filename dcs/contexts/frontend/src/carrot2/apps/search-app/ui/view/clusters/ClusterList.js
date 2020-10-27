@@ -6,8 +6,8 @@ import { Icon } from "@blueprintjs/core/lib/esm/index.js";
 import { view } from "@risingstack/react-easy-state";
 import classNames from "classnames";
 
-import { clusterStore } from "../../../store/services.js";
-import { clusterSelectionStore } from "../../../store/selection.js";
+import { clusterStore } from "../../../../../store/services.js";
+import { clusterSelectionStore } from "../../../../../store/selection.js";
 
 function TopCluster(props) {
   const cluster = props.cluster;

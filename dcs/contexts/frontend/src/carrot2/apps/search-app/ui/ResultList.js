@@ -8,7 +8,7 @@ import { ClusterSelectionSummary, ClusterInSummary } from "./ClusterSelectionSum
 import { Optional } from "./Optional.js";
 
 import { sources } from "../../../config-sources.js";
-import { clusterSelectionStore } from "../store/selection.js";
+import { clusterSelectionStore } from "../../../store/selection.js";
 
 const ResultClusters = view(props => {
   const selectionStore = clusterSelectionStore;

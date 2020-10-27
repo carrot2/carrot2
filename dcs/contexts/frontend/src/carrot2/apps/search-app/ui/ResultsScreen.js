@@ -7,11 +7,11 @@ import classnames from "classnames";
 import { view } from "@risingstack/react-easy-state";
 
 import { clusterViews, resultsViews } from "../../../config-views.js";
-import { clusterStore, searchResultStore } from "../store/services";
+import { clusterStore, searchResultStore } from "../../../store/services.js";
 import {
   clusterSelectionStore,
   documentSelectionStore,
-} from "../store/selection";
+} from "../../../store/selection.js";
 import { themeStore } from "../../../ui/ThemeSwitch.js";
 
 import { routes } from "../../../routes.js";

@@ -1,6 +1,6 @@
 import { store, autoEffect } from "@risingstack/react-easy-state";
 
-import { clusterStore } from "./services";
+import { clusterStore } from "./services.js";
 
 const itemSelectionStore = () => {
   const itemSelectionStore = store({

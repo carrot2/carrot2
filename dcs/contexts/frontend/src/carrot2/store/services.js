@@ -1,11 +1,11 @@
 import { store, autoEffect } from "@risingstack/react-easy-state";
-import { algorithms } from "../../../config-algorithms.js";
-import { sources } from "../../../config-sources.js";
-import { fetchClusters } from "../../../service/dcs";
-import { persistentStore } from "../../../util/persistent-store.js";
+import { algorithms } from "../config-algorithms.js";
+import { sources } from "../config-sources.js";
+import { fetchClusters } from "../service/dcs.js";
+import { persistentStore } from "../util/persistent-store.js";
 
-import { errors } from "../../../store/errors.js";
-import { createClusteringErrorElement } from "../ui/ErrorMessage.js";
+import { errors } from "./errors.js";
+import { createClusteringErrorElement } from "../apps/search-app/ui/ErrorMessage.js";
 
 const EMPTY_ARRAY = [];
 

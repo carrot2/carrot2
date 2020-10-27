@@ -16,11 +16,11 @@ import { TreemapConfig } from "./apps/search-app/ui/view/clusters/TreemapConfig.
 
 import { sources } from "./config-sources.js";
 import { ResultList } from "./apps/search-app/ui/ResultList.js";
-import { searchResultStore } from "./apps/search-app/store/services.js";
+import { searchResultStore } from "./store/services.js";
 import {
   clusterSelectionStore,
   documentVisibilityStore
-} from "./apps/search-app/store/selection.js";
+} from "./store/selection.js";
 
 const ClusterListView = view(ClusterList);
 const ResultListConfigView = view(ResultListConfig);

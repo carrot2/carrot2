@@ -9,7 +9,7 @@ import { Optional } from "./Optional.js";
 
 import { algorithms } from "../../../config-algorithms.js";
 
-import { algorithmStore } from "../store/services.js";
+import { algorithmStore } from "../../../store/services.js";
 import { Link } from "react-router-dom";
 
 export const ClusteringEngineSettings = view(() => {

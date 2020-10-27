@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-import { clusterStore } from "../../../store/services.js";
-import { clusterSelectionStore } from "../../../store/selection.js";
-import { documentSelectionStore } from "../../../store/selection.js";
+import { clusterStore } from "../../../../../store/services.js";
+import { clusterSelectionStore } from "../../../../../store/selection.js";
+import { documentSelectionStore } from "../../../../../store/selection.js";
 import { themeStore } from "../../../../../ui/ThemeSwitch.js";
 
 import { FoamTree } from "../../../../../../carrotsearch/foamtree/FoamTree.js";
