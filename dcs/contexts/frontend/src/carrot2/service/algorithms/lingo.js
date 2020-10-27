@@ -8,7 +8,6 @@ import {
 } from "./attributes.js";
 
 const descriptorsById = getDescriptorsById(descriptor);
-console.log(descriptorsById);
 
 const settingFrom = (id, overrides) => settingFromDescriptor(descriptorsById, id, overrides);
 const settingFromRecursive = (id, overrides) =>

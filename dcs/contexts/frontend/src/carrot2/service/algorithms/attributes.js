@@ -1,16 +1,6 @@
 import descriptor from "./descriptors/org.carrot2.clustering.lingo.LingoClusteringAlgorithm.json";
 import { firstField } from "../../../carrotsearch/lang/objects.js";
 
-const isContainer = descriptor => {
-  const implementations = descriptor.implementations;
-  if (implementations) {
-    const implementationKeys = Object.keys(implementations);
-    return implementationKeys.length === 1 && descriptor.type
-        === implementations[implementationKeys[0]].type;
-  }
-  return false;
-};
-
 const depthFirstAttributes = descriptor => {
   const collect = (descriptor, target) => {
     Object.keys(descriptor.attributes).forEach(k => {
