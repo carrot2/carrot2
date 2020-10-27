@@ -21,6 +21,10 @@
   position: relative;
 }
 
+.SearchForm button svg {
+  color: var(--text-color-lighter);
+}
+
 .light .SearchForm {
   --tab-background-color: hsl(0, 0%, 99%);
   --tab-border-color: rgba(0, 0, 0, 0.08);

@@ -1,8 +1,11 @@
-import './ClusterSelectionSummary.css';
-import { Icon } from "@blueprintjs/core";
+import React from 'react';
 import PropTypes from "prop-types";
 
-import React from 'react';
+import './ClusterSelectionSummary.css';
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFolder, faLightbulb } from "@fortawesome/pro-regular-svg-icons";
+
 import { pluralize } from "../../../util/humanize.js";
 
 export const ClusterInSummary = props => {
@@ -13,7 +16,7 @@ export const ClusterInSummary = props => {
 
   return (
     <span className="ClusterInSummary" onClick={(e) => { e.preventDefault(); props.onClick && props.onClick() }}>
-      <Icon icon={hasSubclusters ? "lightbulb" : "folder-close"} className="icon" iconSize="1em" intent="warning" />{" "}
+      <FontAwesomeIcon icon={hasSubclusters ? faLightbulb : faFolder } className="icon" />{" "}
       <span className="labels">{labels}</span>
     </span>
   );

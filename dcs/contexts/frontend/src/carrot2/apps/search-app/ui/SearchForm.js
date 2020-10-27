@@ -3,6 +3,9 @@ import * as PropTypes from "prop-types";
 
 import './SearchForm.css';
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch, faWrench } from "@fortawesome/free-solid-svg-icons";
+
 import { Button, Classes, ControlGroup, InputGroup, Popover, Position } from "@blueprintjs/core";
 import { algorithms } from "../../../config-algorithms.js";
 import { ClusteringEngineSettings } from "./ClusteringEngineSettings.js";
@@ -53,7 +56,7 @@ export const SearchForm = ({ initialQuery, source, onSourceChange, onSubmit }) =
   const clusteringEngineSettings = Object.keys(algorithms).length < 2 ? null : (
     <Popover position={Position.RIGHT_TOP} className={Classes.FIXED}
              popoverClassName="bp3-popover-content-sizing SearchAppSettingsContainer">
-      <Button icon="wrench" minimal={true} title="Clustering algorithm" />
+      <Button icon={<FontAwesomeIcon icon={faWrench} />} minimal={true} title="Clustering algorithm" />
       <ClusteringEngineSettings/>
     </Popover>
   );
@@ -66,7 +69,7 @@ export const SearchForm = ({ initialQuery, source, onSourceChange, onSubmit }) =
         <ControlGroup fill={true}>
           <InputGroup inputRef={inputRef} rightElement={searchEngineSettings}
                       defaultValue={initialQuery} onChange={e => setQuery(e.target.value)} />
-          <Button className={Classes.FIXED} icon="search" type="submit" text="Search" />
+          <Button className={Classes.FIXED} icon={<FontAwesomeIcon icon={faSearch} />} type="submit" text="Search" />
           { clusteringEngineSettings }
         </ControlGroup>
       </form>

@@ -2,6 +2,8 @@ import './ClusterList.css';
 
 import React from 'react';
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLightbulb } from "@fortawesome/pro-regular-svg-icons";
 import { Icon } from "@blueprintjs/core/lib/esm/index.js";
 import { view } from "@risingstack/react-easy-state";
 import classNames from "classnames";
@@ -24,18 +26,19 @@ function TopCluster(props) {
   });
 
   return (
-    <div className={className} onClick={() => clusterSelectionStore.toggleSelection(cluster)}>
-      <Icon className="icon" icon="lightbulb" />
-      <span className="labels">{labels}</span>{" "}
-      <span className="meta">{meta}</span>
+      <div className={className} onClick={() => clusterSelectionStore.toggleSelection(cluster)}>
+        <FontAwesomeIcon className="icon" icon={faLightbulb} />
+        <span className="labels">{labels}</span>{" "}
+        <span className="meta">{meta}</span>
 
-      <div className="subclusters">
-        {
-          subclusters.map((subcluster) =>
-            <SubClusterView key={subcluster.id} cluster={subcluster} clusterSelectionStore={clusterSelectionStore} />)
-        }
+        <div className="subclusters">
+          {
+            subclusters.map((subcluster) =>
+                <SubClusterView key={subcluster.id} cluster={subcluster}
+                                clusterSelectionStore={clusterSelectionStore} />)
+          }
+        </div>
       </div>
-    </div>
   );
 }
 

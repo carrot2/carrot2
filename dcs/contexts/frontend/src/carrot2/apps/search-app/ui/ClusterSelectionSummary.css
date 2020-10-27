@@ -5,16 +5,15 @@
 }
 
 .ClusterSelectionSummary .icon {
-  padding-left: 0.25em !important;
+  margin-left: 0.25em !important;
 }
 
 .ClusterInSummary .icon {
-  padding-left: 0.25em;
-  vertical-align: -5%;
+  margin-left: 0.25em;
   color: var(--cluster-icon-color);
 }
 .ClusterInSummary:first-child .icon {
-  padding-left: 0;
+  margin-left: 0;
 }
 
 .ClusterInSummary .bp3-icon-folder-close {
