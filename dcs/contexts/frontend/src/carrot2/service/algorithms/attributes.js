@@ -170,7 +170,10 @@ export const settingFromFilterDescriptor = (map, id, getterProvider) => {
   const rootDescriptor = getDescriptor(map, id);
   const enabledSetting = settingFromDescriptor(map, id + ".enabled");
 
-  const attributes = firstField(rootDescriptor.implementations).attributes;
+  const implementation = firstField(rootDescriptor.implementations);
+  enabledSetting.description = implementation.javadoc.text;
+
+  const attributes = implementation.attributes;
   const settings =
       Object.keys(attributes).filter(att => att !== "enabled").map(a => {
         return settingFromDescriptor(map, attributes[a].id);
