@@ -1,15 +1,37 @@
 .Setting {
-  margin-bottom: 2em;
+  margin-bottom: 3em;
+}
+.SectionDivider + div > section:first-of-type {
+  margin-top: 2.5em;
+}
+.SectionDivider + div > section:last-of-type {
+  margin-bottom: 4em;
+}
+.SectionDivider + div > p:first-of-type {
+  color: var(--text-color-light);
 }
 .Setting label.bp3-label {
   margin-bottom: 0.5em;
   font-weight: bold;
 }
-.Setting .LabelWithHelp svg {
+.Setting .LabelWithHelp {
+  display: inline;
+}
+.Setting .HelpIcon {
   color: var(--link-icon-color);
   margin-left: 0.25em;
+  margin-bottom: 0.0625em;
+  height: 0.85em;
   display: inline;
   cursor: pointer;
+  opacity: 0.7;
+}
+.dark .Setting .HelpIcon {
+  opacity: 0.5;
+}
+.Setting .HelpIcon:focus,
+.Setting .HelpIcon:hover {
+  opacity: 1;
 }
 .Setting label.bp3-label .bp3-popover-wrapper,
 .Setting label.bp3-label .bp3-popover-target {
@@ -19,4 +41,7 @@
 .SettingDescription {
   max-width: 22rem;
   padding: var(--leading);
+}
+.SettingDescription code {
+  overflow-wrap: anywhere;
 }

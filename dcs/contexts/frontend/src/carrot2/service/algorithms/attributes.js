@@ -1,4 +1,5 @@
 import descriptor from "./descriptors/org.carrot2.clustering.lingo.LingoClusteringAlgorithm.json";
+import { firstField } from "../../../carrotsearch/lang/objects.js";
 
 const isContainer = descriptor => {
   const implementations = descriptor.implementations;
@@ -15,9 +16,7 @@ const depthFirstAttributes = descriptor => {
     Object.keys(descriptor.attributes).forEach(k => {
       const attribute = descriptor.attributes[k];
 
-      if (!isContainer(attribute)) {
-        target.push(attribute);
-      }
+      target.push(attribute);
 
       if (attribute.attributes) {
         collect(attribute, target);
@@ -41,23 +40,32 @@ export const getDescriptorsById = descriptors => {
   }, new Map());
 }
 
-const parseNumberConstraintValue = constraint => {
-  const split = constraint.split(/\s+/);
-  return parseFloat(split[2]);
+const parseNumberConstraint = constraints => {
+  return (constraints || []).reduce((result, constraint) => {
+    const split = constraint.split(/\s+/);
+    const bound = parseFloat(split[2]);
+    switch (split[1].charAt(0)) {
+      case ">":
+        result.min = bound;
+        break;
+      case "<":
+        result.max = bound;
+        break;
+
+      default:
+        throw new Error("Unknown constraint: " + constraint);
+    }
+
+    return result;
+  }, {});
 };
 
-const settingConfigFromNumberDescriptor = descriptor => {
-  const c1 = parseNumberConstraintValue(descriptor.constraints[0]);
-  const c2 = parseNumberConstraintValue(descriptor.constraints[1]);
-  const min = Math.min(c1, c2);
-  const max = Math.max(c1, c2);
-
+const settingConfigFromNumberDescriptor = (descriptor) => {
+  const constraints = parseNumberConstraint(descriptor.constraints);
   return {
     type: "number",
-    min: min,
-    max: max,
-    step: (max - min) / 10
-  }
+    ...constraints
+  };
 };
 
 const settingConfigFromInterfaceDescriptor = descriptor => {
@@ -69,14 +77,14 @@ const settingConfigFromInterfaceDescriptor = descriptor => {
       return {
         value: impl,
         label: impl,
-        description: implementations[impl].javadoc.summary
+        description: implementations[impl].javadoc.text
       };
     })
   }
 };
 
 const settingConfigFromEnumDescriptor = descriptor => {
-  const values = descriptor.constraints[0].split(/[\[\]]/)[1].split(/,\s*/);
+  const values = descriptor.constraints[0].split(/[[\]]/)[1].split(/,\s*/);
   return {
     type: "enum",
     ui: "select",
@@ -114,16 +122,20 @@ export const settingFromDescriptor = (map, id, override) => {
     switch (descriptor.type) {
       case "Double":
       case "Float":
-        Object.assign(setting, settingConfigFromNumberDescriptor(descriptor));
+        Object.assign(setting, settingConfigFromNumberDescriptor(descriptor, override));
         break;
 
       case "Integer":
-        Object.assign(setting, settingConfigFromNumberDescriptor(descriptor));
+        Object.assign(setting, settingConfigFromNumberDescriptor(descriptor, override));
         setting.integer = true;
         break;
 
       case "Boolean":
         setting.type = "boolean";
+        break;
+
+      case "String[]":
+        setting.type = "string-array";
         break;
 
       default:
@@ -140,41 +152,62 @@ export const settingFromDescriptorRecursive = (map, id, getterProvider, override
 
   const implementations = descriptor.implementations;
   if (implementations) {
-    return {
-      type: "group",
-      id: descriptor.id + ":children",
-      settings: [
-        rootSetting,
-        ...Object.keys(implementations)
-            .filter(k => {
-              const implAttributes = implementations[k].attributes;
-              return Object.keys(implAttributes).length > 0;
-            })
-            .map(k => {
-              const implAttributes = implementations[k].attributes;
-              return {
-                type: "group",
-                id: descriptor.id + ":" + k,
-                visible: () => { return getterProvider()(rootSetting) === k },
-                settings: Object.keys(implAttributes).map(ak => {
-                  return settingFromDescriptorRecursive(map, implAttributes[ak].id, override);
-                })
-              };
-            })
-      ]
-    };
+    return [
+      rootSetting,
+      ...Object.keys(implementations)
+          .filter(k => {
+            const implAttributes = implementations[k].attributes;
+            return Object.keys(implAttributes).length > 0;
+          })
+          .map(k => {
+            const implAttributes = implementations[k].attributes;
+            return {
+              type: "group",
+              id: descriptor.id + ":" + k,
+              visible: () => getterProvider()(rootSetting) === k,
+              settings: Object.keys(implAttributes).map(ak => {
+                return settingFromDescriptorRecursive(map, implAttributes[ak].id, override);
+              }).flat()
+            };
+          })
+    ];
   } else {
-    return rootSetting;
+    return [ rootSetting ];
   }
 };
 
-export const collectDefaults = (map, settings) => settings.flat().reduce(function collect(defs, setting) {
-  if (setting.type === "group") {
-    setting.settings.reduce(collect, defs);
+export const settingFromFilterDescriptor = (map, id, getterProvider) => {
+  const rootDescriptor = getDescriptor(map, id);
+  const enabledSetting = settingFromDescriptor(map, id + ".enabled");
+
+  const attributes = firstField(rootDescriptor.implementations).attributes;
+  const settings =
+      Object.keys(attributes).filter(att => att !== "enabled").map(a => {
+        return settingFromDescriptor(map, attributes[a].id);
+      });
+  if (settings.length > 0) {
+    return [
+      enabledSetting,
+      {
+        type: "group",
+        id: rootDescriptor.id + ":children",
+        visible: () => getterProvider()(enabledSetting),
+        settings: settings
+      }
+    ]
   } else {
-    defs[setting.id] = map.get(setting.id).value;
+    return [ enabledSetting ];
   }
-  return defs;
-}, {});
+};
+
+export const collectDefaults = (map, settings) => settings.flat().reduce(
+    function collect(defs, setting) {
+      if (setting.type === "group") {
+        setting.settings.reduce(collect, defs);
+      } else {
+        defs[setting.id] = map.get(setting.id).value;
+      }
+      return defs;
+    }, {});
 
 

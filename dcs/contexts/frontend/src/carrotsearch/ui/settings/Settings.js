@@ -11,7 +11,7 @@ import { FormGroup, Popover, PopoverPosition } from "@blueprintjs/core";
 
 export { addFactory } from "./Group.js";
 
-const LabelWithHelp = ({ label, description }) => {
+export const LabelWithHelp = ({ label, description }) => {
   if (description) {
     return (
         <div className="LabelWithHelp">
@@ -24,7 +24,7 @@ const LabelWithHelp = ({ label, description }) => {
   }
 };
 
-const DescriptionPopover = ({ description }) => {
+export const DescriptionPopover = ({ description }) => {
   const [ open, setOpen ] = useState(false);
   useEffect(() => {
     const listener = e => {
@@ -42,7 +42,7 @@ const DescriptionPopover = ({ description }) => {
                position={PopoverPosition.TOP} canEscapeKeyClose={true}
                isOpen={open}
                onInteraction={setOpen}>
-        <FontAwesomeIcon icon={faQuestionCircle} />
+        <FontAwesomeIcon className="HelpIcon" icon={faQuestionCircle} />
       </Popover>
   );
 };

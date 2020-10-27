@@ -4,7 +4,9 @@
 .NumericSetting .bp3-numeric-input > .bp3-button-group {
   height: 30px;
 }
-
+.NumericSetting .NumericSettingControls {
+  margin-bottom: 0;
+}
 .NumericSetting .NumericSettingControls > .bp3-form-content {
   display: flex;
   width: 100%;
@@ -15,7 +17,12 @@
   margin-left: 2.75em;
   margin-right: 0.5em;
 }
-
+.NumericSetting .NumericSettingControls .bp3-slider-label {
+  opacity: 0.6;
+}
+.NumericSetting .bp3-slider-handle .bp3-slider-label {
+  opacity: 1.0;
+}
 .NumericSetting .bp3-slider-handle:not(.bp3-active) .bp3-slider-label {
   display: none;
 }
