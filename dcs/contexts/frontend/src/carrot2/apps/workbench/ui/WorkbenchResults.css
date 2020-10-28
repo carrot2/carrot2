@@ -12,8 +12,26 @@
   height: 100vh;
 
   grid-template-columns: auto 24em;
-  grid-template-rows: auto;
-  grid-template-areas: "clusters docs";
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+      "stats stats"
+      "clusters docs";
+
+  padding-top: var(--leading);
+  --selection-border-width: 2px;
+}
+
+.WorkbenchMain .stats {
+  grid-area: stats;
+  overflow-x: hidden;
+  padding-left: var(--leading);
+  padding-bottom: var(--leading);
+  margin-top: -0.375em;
+}
+
+.WorkbenchMain .ViewsTabs,
+.WorkbenchMain .stats {
+  background-color: var(--background-color-tertiary);
 }
 
 .WorkbenchMain .docs {

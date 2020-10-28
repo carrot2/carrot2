@@ -36,6 +36,7 @@ export const clusterStore = store({
       try {
         clusterStore.clusters = await fetchClusters(query, documents, algorithm, parameters);
         clusterStore.documents = addClusterReferences(documents, clusterStore.clusters);
+        console.log(clusterStore.clusters);
       } catch (e) {
         clusterStore.clusters = EMPTY_ARRAY;
         clusterStore.documents = EMPTY_ARRAY;
@@ -71,6 +72,19 @@ export const clusterStore = store({
       }
       return documents;
     }
+  },
+  getClusteredDocsRatio: () => {
+    const docSet = clusterStore.clusters.reduce(function collect(set, cluster) {
+      if (cluster.unclustered) {
+        return set;
+      }
+      cluster.documents.forEach(d => set.add(d));
+      cluster.clusters.reduce(collect, set);
+      return set;
+    }, new Set());
+
+    const docCount = clusterStore.documents.length;
+    return docCount > 0 ? docSet.size / docCount : 0;
   }
 });
 

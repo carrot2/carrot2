@@ -11,6 +11,7 @@
 .light, body {
   --background-color: #fff;
   --background-color-secondary: #f4f4f4;
+  --background-color-tertiary: #fbfbfb;
   --nav-background-color: hsla(207, 23%, 5%, 0.9);
   --text-color: black;
   --text-color-inverted: white;
@@ -46,7 +47,8 @@
   -webkit-font-smoothing: antialiased;
 
   --background-color: hsl(210, 18%, 15%);
-  --background-color-secondary: hsl(214, 18%, 18%);
+  --background-color-secondary: hsl(210, 18%, 18%);
+  --background-color-tertiary: hsl(210, 18%, 16.5%);
   --nav-background-color: hsla(207, 28%, 1%, 0.3);
   --text-color: rgba(255, 255, 255, 1.0);
   --text-color-light: rgba(255, 255, 255, 0.75);
