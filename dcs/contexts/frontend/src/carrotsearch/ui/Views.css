@@ -27,6 +27,7 @@
 .Views button {
   min-height: 26px;
   min-width: 26px;
+  color: var(--text-color-lighter) !important;
 }
 
 .ViewsTabs > .PointedTabs .bp3-tab-list {

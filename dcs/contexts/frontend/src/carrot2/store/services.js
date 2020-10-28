@@ -36,7 +36,6 @@ export const clusterStore = store({
       try {
         clusterStore.clusters = await fetchClusters(query, documents, algorithm, parameters);
         clusterStore.documents = addClusterReferences(documents, clusterStore.clusters);
-        console.log(clusterStore.clusters);
       } catch (e) {
         clusterStore.clusters = EMPTY_ARRAY;
         clusterStore.documents = EMPTY_ARRAY;

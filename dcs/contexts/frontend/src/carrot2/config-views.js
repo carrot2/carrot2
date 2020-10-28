@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IconNames } from "@blueprintjs/icons";
+import { faCog, faQuestionCircle, faSave } from "@fortawesome/pro-regular-svg-icons";
 
 import { view } from "@risingstack/react-easy-state";
 import { PieChartHints } from "./apps/search-app/ui/view/clusters/PieChartHints.js";
@@ -84,7 +84,7 @@ export const clusterViews = [
         tools: [
           {
             id: "interaction",
-            icon: IconNames.HELP,
+            icon: faQuestionCircle,
             createContentElement: (props) => {
               return <TreemapHints />;
             },
@@ -92,6 +92,7 @@ export const clusterViews = [
           },
           {
             id: "export-image",
+            icon: faSave,
             createContentElement: (props) => {
               return <VisualizationExport implRef={treemapImplRef} fileNameSuffix="treemap" />;
             },
@@ -99,7 +100,7 @@ export const clusterViews = [
           },
           {
             id: "config",
-            icon: IconNames.COG,
+            icon: faCog,
             createContentElement: (props) => {
               return <TreemapConfig store={treemapConfigStore} />;
             },
@@ -121,13 +122,14 @@ export const clusterViews = [
         tools: [
           {
             id: "interaction",
-            icon: IconNames.HELP,
+            icon: faQuestionCircle,
             createContentElement: (props) => {
               return <PieChartHints />;
             }
           },
           {
             id: "export-image",
+            icon: faSave,
             createContentElement: (props) => {
               return <VisualizationExport implRef={piechartImplRef} fileNameSuffix="pie-chart" />;
             },
@@ -135,7 +137,7 @@ export const clusterViews = [
           },
           {
             id: "config",
-            icon: IconNames.COG,
+            icon: faCog,
             createContentElement: (props) => {
               return <PieChartConfig store={pieChartConfigStore} />;
             }
@@ -172,7 +174,7 @@ export const resultsViews = [
         tools: [
           {
             id: "config",
-            icon: IconNames.COG,
+            icon: faCog,
             createContentElement: (props) => {
               return (
                   <ResultListConfigView store={resultListConfigStore}>

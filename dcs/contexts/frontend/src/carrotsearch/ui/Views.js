@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 import classNames from "classnames";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Classes, ControlGroup, Popover, Position, Tab } from "@blueprintjs/core";
 import { PointedTabs } from "./PointedTabs.js";
 
@@ -19,7 +21,7 @@ export const Tool = ({ tool, visible, props }) => {
                  autoFocus={true} popoverClassName="bp3-popover-content-sizing view-tool-content"
                  disabled={!visible}>
           <ShowHide visible={visible} className="view-tool-trigger">
-            <Button icon={tool.icon} minimal={true} title={tool.title} />
+            <Button icon={<FontAwesomeIcon icon={tool.icon}/>} minimal={true} title={tool.title} />
           </ShowHide>
           {tool.createContentElement(props)}
         </Popover>
