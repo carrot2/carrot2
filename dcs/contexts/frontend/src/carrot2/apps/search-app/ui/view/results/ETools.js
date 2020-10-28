@@ -11,6 +11,8 @@ import { Optional } from "../../Optional.js";
 import { TitleAndRank, Url } from "./result-components.js";
 import { ButtonLink } from "../../../../../../carrotsearch/ui/ButtonLink.js";
 
+import { queryStore } from "../../../../workbench/store/query-store.js";
+
 const etoolsResultsConfigStore = persistentStore("etoolsResultConfig",
   {
     showSiteIcons: false,
@@ -37,6 +39,8 @@ export const etoolsSettings = [
     settings: [
       {
         id: "web:query",
+        get: () => queryStore.query,
+        set: (prop, val) => queryStore.query = val,
         type: "string",
         label: "Query",
         description: `

@@ -65,8 +65,6 @@ export const Settings = ({ settings, get, set }) => (
 );
 
 Settings.propTypes = {
-  settings: PropTypes.object.isRequired,
-  get: PropTypes.func.isRequired,
-  set: PropTypes.func.isRequired
+  settings: PropTypes.object.isRequired
 };
 

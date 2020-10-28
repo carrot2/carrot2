@@ -1,34 +1,16 @@
 import React, { useCallback, useEffect } from 'react';
 
 import './ResultsScreen.css';
-import "three-dots/dist/three-dots.css";
-
-import classnames from "classnames";
-import { view } from "@risingstack/react-easy-state";
 
 import { clusterViews, resultsViews } from "../../../config-views.js";
 import { clusterStore, searchResultStore } from "../../../store/services.js";
-import {
-  clusterSelectionStore,
-  documentSelectionStore,
-} from "../../../store/selection.js";
-import { themeStore } from "../../../ui/ThemeSwitch.js";
 
 import { routes } from "../../../routes.js";
 
 import { SearchForm } from "./SearchForm";
-
 import { Views } from "../../../../carrotsearch/ui/Views.js";
-
 import { branding } from "../../../config-branding.js";
-
-export const Loading = view(({ store }) => {
-  return (
-      <div className={classnames("Loading", { "visible" : store.loading })}>
-        <div className="dot-bricks" />
-      </div>
-  );
-});
+import { Loading } from "../../../../carrotsearch/ui/Loading.js";
 
 export const ResultsScreen = ({ match, history }) => {
   const source = decodeURIComponent(match.params.source);
@@ -86,14 +68,6 @@ export const ResultsScreen = ({ match, history }) => {
     }
   };
 
-  const panelProps = {
-    clusterStore,
-    clusterSelectionStore,
-    documentSelectionStore,
-    searchResultStore,
-    themeStore
-  };
-
   return (
       <main className="ResultsScreen">
         {/**
@@ -106,7 +80,7 @@ export const ResultsScreen = ({ match, history }) => {
                     onSourceChange={onSourceChange}
                     onSubmit={onQueryChange} />
         <div className="clusters">
-          <Views activeView={getView()} views={clusterViews} onViewChange={onViewChange} {...panelProps}>
+          <Views activeView={getView()} views={clusterViews} onViewChange={onViewChange} >
             <Loading store={clusterStore} />
           </Views>
         </div>

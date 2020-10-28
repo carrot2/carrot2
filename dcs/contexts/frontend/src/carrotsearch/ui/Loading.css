@@ -1,0 +1,17 @@
+.Loading {
+  position: absolute;
+  z-index: 1;
+  background-color: var(--background-color);
+  width: 100%;
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+}
+.Loading.visible {
+  opacity: 1;
+  pointer-events: unset;
+}
+.Loading > div {
+  margin: 10em auto 0 auto;
+  filter: hue-rotate(-40deg);
+}

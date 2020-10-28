@@ -57,24 +57,6 @@
   position: relative;
 }
 
-.ResultsScreen .Loading {
-  position: absolute;
-  z-index: 1;
-  background-color: var(--background-color);
-  width: 100%;
-  opacity: 0;
-  transition: opacity 0.5s;
-  pointer-events: none;
-}
-.ResultsScreen .Loading.visible {
-  opacity: 1;
-  pointer-events: unset;
-}
-.ResultsScreen .Loading > div {
-  margin: 10em auto 0 auto;
-  filter: hue-rotate(-40deg);
-}
-
 .ResultsScreen .docs .Error,
 .ResultsScreen .clusters .Error {
   text-align: left;

@@ -25,7 +25,7 @@ export const Group = view(({ setting, get, set, className }) => {
     </Section>;
   } else {
     return <section>{settings}</section>;
-  };
+  }
 });
 
 const factories = {
@@ -72,7 +72,5 @@ const getFactory = s => {
 export const addFactory = (type, factory) => factories[type] = factory
 
 Group.propTypes = {
-  setting: PropTypes.object.isRequired,
-  get: PropTypes.func.isRequired,
-  set: PropTypes.func.isRequired
+  setting: PropTypes.object.isRequired
 };
