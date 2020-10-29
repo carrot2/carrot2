@@ -11,7 +11,7 @@ import { clusterStore, searchResultStore } from "../../../store/services.js";
 import { Loading } from "../../../../carrotsearch/ui/Loading.js";
 import { persistentStore } from "../../../util/persistent-store.js";
 
-import { workbenchSourceAlgorithmStore } from "./WorkbenchSourceAlgorithm.js";
+import { workbenchSourceStore } from "./WorkbenchSourceAlgorithm.js";
 import { Stats } from "../../../../carrotsearch/ui/Stats.js";
 
 const uiStore = persistentStore("workbench:ui", {
@@ -58,7 +58,7 @@ const WorkbenchMain = view(() => {
           <Views views={resultsViews} activeView="list"
                  onViewChange={() => {
                  }}
-                 source={workbenchSourceAlgorithmStore.source}>
+                 source={workbenchSourceStore.source}>
             <Loading store={searchResultStore} />
           </Views>
         </div>

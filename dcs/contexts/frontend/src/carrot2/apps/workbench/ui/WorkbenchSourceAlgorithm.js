@@ -6,20 +6,21 @@ import { FormGroup, HTMLSelect } from "@blueprintjs/core";
 
 import { persistentStore } from "../../../util/persistent-store.js";
 
+import { algorithmStore } from "../../../store/services.js";
+
 import { sources } from "../../../config-sources.js";
 import { algorithms } from "../../../config-algorithms.js";
 
-export const workbenchSourceAlgorithmStore = persistentStore("workbench:sourceAlgorithm", {
-  source: Object.keys(sources)[0],
-  algorithm: Object.keys(algorithms)[0]
+export const workbenchSourceStore = persistentStore("workbench:source", {
+  source: Object.keys(sources)[0]
 });
 
-const ComponentSelect = view(({ label, id, components, storeKey }) => {
+const ComponentSelect = view(({ label, id, components, get, set }) => {
   const htmlId = `workbench-${id}`;
   return (
       <FormGroup label={label} labelFor={htmlId} inline={true} >
-        <HTMLSelect value={workbenchSourceAlgorithmStore[storeKey]}
-                    onChange={e => { workbenchSourceAlgorithmStore[storeKey] = e.target.value; }}
+        <HTMLSelect value={get()}
+                    onChange={e => { set(e.target.value); }}
                     id={htmlId} fill={true}>
           {
             Object.keys(components).map(k => {
@@ -35,8 +36,12 @@ const ComponentSelect = view(({ label, id, components, storeKey }) => {
 export const WorkbenchSourceAlgorithm = () => {
   return (
       <div className="WorkbenchSourceAlgorithm">
-        <ComponentSelect label="Data source" id="source" components={sources} storeKey="source" />
-        <ComponentSelect label="Clustering algorithm" id="algorithm" components={algorithms} storeKey="algorithm" />
+        <ComponentSelect label="Data source" id="source" components={sources}
+                         get={() => workbenchSourceStore.source}
+                         set={val => workbenchSourceStore.source = val} />
+        <ComponentSelect label="Clustering algorithm" id="algorithm" components={algorithms}
+                         get={() => algorithmStore.clusteringAlgorithm}
+                         set={val => algorithmStore.clusteringAlgorithm = val} />
       </div>
   );
 };

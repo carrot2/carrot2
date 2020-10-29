@@ -6,11 +6,13 @@ import { sources } from "../../../config-sources.js";
 import { algorithms } from "../../../config-algorithms.js";
 import { searchResultStore } from "../../../store/services.js";
 import { queryStore } from "../store/query-store.js";
+import { algorithmStore } from "../../../store/services.js";
 
 import {
   WorkbenchSourceAlgorithm,
-  workbenchSourceAlgorithmStore
+  workbenchSourceStore
 } from "./WorkbenchSourceAlgorithm.js";
+
 import { Button } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlask } from "@fortawesome/pro-regular-svg-icons";
@@ -36,10 +38,10 @@ const settings = {
         s.visible = s => {
           switch (t.type) {
             case "source":
-              return k === workbenchSourceAlgorithmStore.source;
+              return k === workbenchSourceStore.source;
 
             case "algorithm":
-              return k === workbenchSourceAlgorithmStore.algorithm;
+              return k === algorithmStore.clusteringAlgorithm;
 
             default:
               return false;
@@ -52,7 +54,7 @@ const settings = {
 };
 
 const runSearch = () => {
-  searchResultStore.load(workbenchSourceAlgorithmStore.source, queryStore.query);
+  searchResultStore.load(workbenchSourceStore.source, queryStore.query);
 };
 
 export const WorkbenchSide = (() => {

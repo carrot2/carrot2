@@ -6,6 +6,7 @@ import { persistentStore } from "../util/persistent-store.js";
 
 import { errors } from "./errors.js";
 import { createClusteringErrorElement } from "../apps/search-app/ui/ErrorMessage.js";
+import { collectParameters } from "../service/algorithms/attributes.js";
 
 const EMPTY_ARRAY = [];
 
@@ -131,13 +132,20 @@ function assignDocumentIds(result, sourceId) {
   };
 }
 
+let currentParams;
+autoEffect(() => {
+  const algorithm = algorithms[algorithmStore.clusteringAlgorithm];
+  const settings = algorithm.getSettings();
+  currentParams = collectParameters(settings, settings[0].get);
+});
+
 // Invoke clustering once search results are available or algorithm changes.
-autoEffect(function () {
-  clusterStore.load(searchResultStore.searchResult, algorithmStore.clusteringAlgorithm);
+autoEffect(() => {
+  clusterStore.load(searchResultStore.searchResult, algorithmStore.clusteringAlgorithm, currentParams);
 });
 
 // When search result is loading, also show that clusters are loading.
-autoEffect(function () {
+autoEffect(() => {
   if (searchResultStore.loading) {
     clusterStore.loading = true;
     clusterStore.clusters = EMPTY_ARRAY;

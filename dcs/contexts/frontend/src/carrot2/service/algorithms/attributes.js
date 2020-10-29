@@ -1,5 +1,6 @@
 import descriptor from "./descriptors/org.carrot2.clustering.lingo.LingoClusteringAlgorithm.json";
 import { firstField } from "../../../carrotsearch/lang/objects.js";
+import _set from "lodash.set";
 
 const depthFirstAttributes = descriptor => {
   const collect = (descriptor, target) => {
@@ -101,7 +102,8 @@ export const settingFromDescriptor = (map, id, override) => {
   const setting = {
     id: id,
     label: descriptor.description,
-    description: descriptor.javadoc.text
+    description: descriptor.javadoc.text,
+    pathRest: descriptor.pathRest
   };
 
   if (descriptor.implementations) {
@@ -139,8 +141,11 @@ export const settingFromDescriptor = (map, id, override) => {
 export const settingFromDescriptorRecursive = (map, id, getterProvider, override = () => null) => {
   const descriptor = getDescriptor(map, id);
   const rootSetting = settingFromDescriptor(map, id, override(descriptor));
-
   const implementations = descriptor.implementations;
+  if (implementations) {
+    rootSetting.pathRest += ".@type";
+  }
+
   if (implementations) {
     return [
       rootSetting,
@@ -201,6 +206,21 @@ export const collectDefaults = (map, settings) => settings.flat().reduce(
         defs[setting.id] = map.get(setting.id).value;
       }
       return defs;
-    }, {});
+    }, {}
+);
 
+export const collectParameters = (settings, getter) => settings.reduce(
+    function collect(params, setting) {
+      if (setting.visible && !setting.visible()) {
+        return params;
+      }
+      if (setting.type === "group") {
+        setting.settings.reduce(collect, params);
+      } else {
+        _set(params, setting.pathRest, getter(setting));
+      }
+
+      return params;
+    }, {}
+);
 

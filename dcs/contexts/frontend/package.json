@@ -19,6 +19,7 @@
     "typeface-cabin-condensed": "0.0.72",
     "typeface-lato": "0.0.75",
     "typeface-raleway": "1.1.13",
+    "lodash.set": "4.3.2",
     "@fortawesome/fontawesome-pro": "5.15.0",
     "@fortawesome/fontawesome-svg-core": "1.2.32",
     "@fortawesome/pro-duotone-svg-icons": "5.15.0",
