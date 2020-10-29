@@ -42,6 +42,9 @@
   max-width: 22rem;
   padding: var(--leading);
 }
+.SettingDescription > p:last-of-type {
+  margin-bottom: 0;
+}
 .SettingDescription code {
   overflow-wrap: anywhere;
 }

@@ -64,6 +64,13 @@ export const Settings = ({ settings, get, set }) => (
     <Group className="Settings" setting={settings} set={set} get={get} />
 );
 
+export const storeAccessors = (store, property) => {
+  return {
+    get: () => store[property],
+    set: (s, val) => store[property] = val
+  };
+};
+
 Settings.propTypes = {
   settings: PropTypes.object.isRequired
 };

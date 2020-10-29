@@ -7,12 +7,12 @@ import { view } from "@risingstack/react-easy-state";
 import { LabelWithHelp, Setting } from "./Settings.js";
 
 export const RadioSetting = view(({ setting, get, set }) => {
-  const { label, description, options } = setting;
+  const { label, description, options, inline } = setting;
 
   return (
       <Setting className="RadioSetting" label={label} description={description}>
         <RadioGroup onChange={e => set(setting, e.target.value)}
-                    selectedValue={get(setting)}>
+                    selectedValue={get(setting)} inline={inline}>
           {
             options.map(o => (
                 <Radio value={o.value} key={o.value}>

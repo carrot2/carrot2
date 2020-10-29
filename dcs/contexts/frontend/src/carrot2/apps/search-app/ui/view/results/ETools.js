@@ -12,6 +12,7 @@ import { TitleAndRank, Url } from "./result-components.js";
 import { ButtonLink } from "../../../../../../carrotsearch/ui/ButtonLink.js";
 
 import { queryStore } from "../../../../workbench/store/query-store.js";
+import { storeAccessors } from "../../../../../../carrotsearch/ui/settings/Settings.js";
 
 const etoolsResultsConfigStore = persistentStore("etoolsResultConfig",
   {
@@ -31,6 +32,32 @@ const etoolsSourceConfigStore = persistentStore("etoolsSourceConfig",
   }
 );
 
+const etoolsDataSourcesOptions = [
+  { label: "All", value: "all" },
+  { label: "Fastest", value: "fastest" }
+];
+
+const etoolsCountryOptions = [
+  { value: "web", label: "All" },
+  { value: "AT", label: "Austria" },
+  { value: "FR", label: "France" },
+  { value: "DE", label: "Germany" },
+  { value: "GB", label: "Great Britain" },
+  { value: "IT", label: "Italy" },
+  { value: "LI", label: "Lichtenstein" },
+  { value: "ES", label: "Spain" },
+  { value: "CH", label: "Switzerland" }
+];
+
+const etoolsLanguageOptions = [
+  { value: "all", label: "All" },
+  { value: "en", label: "English" },
+  { value: "fr", label: "French" },
+  { value: "de", label: "German" },
+  { value: "it", label: "Italian" },
+  { value: "es", label: "Spanish" }
+];
+
 export const etoolsSettings = [
   {
     id: "web",
@@ -39,8 +66,7 @@ export const etoolsSettings = [
     settings: [
       {
         id: "web:query",
-        get: () => queryStore.query,
-        set: (prop, val) => queryStore.query = val,
+        ...storeAccessors(queryStore, "query"),
         type: "string",
         label: "Query",
         description: `
@@ -50,14 +76,70 @@ export const etoolsSettings = [
 </p>`
       },
       {
+        id: "web:language",
+        ...storeAccessors(etoolsSourceConfigStore, "language"),
+        type: "enum",
+        ui: "select",
+        label: "Language",
+        options: etoolsLanguageOptions,
+        description: `
+<p>
+  Restricts the search results to a specific language.
+</p>`
+      },
+      {
+        id: "web:country",
+        ...storeAccessors(etoolsSourceConfigStore, "country"),
+        type: "enum",
+        ui: "select",
+        label: "Country",
+        options: etoolsCountryOptions,
+        description: `
+<p>
+  Restricts the search results to websites from a specific country.
+</p>`
+      },
+      {
         id: "web:safeSearch",
-        get: () => etoolsSourceConfigStore.safeSearch,
-        set: (prop, val) => etoolsSourceConfigStore.safeSearch = val,
+        ...storeAccessors(etoolsSourceConfigStore, "safeSearch"),
         type: "boolean",
         label: "Safe search",
         description: `
 <p>
   Controls filtering of offensive search results.
+</p>`
+      },
+      {
+        id: "web:dataSources",
+        ...storeAccessors(etoolsSourceConfigStore, "dataSources"),
+        type: "enum",
+        ui: "radio",
+        inline: true,
+        label: "Data sources",
+        options: etoolsDataSourcesOptions,
+        description: `
+<p>
+  Determines the set of search engines from which to aggregate the results.
+</p>`
+      },
+      {
+        id: "web:partner",
+        ...storeAccessors(etoolsSourceConfigStore, "partner"),
+        type: "string",
+        label: "Partner",
+        description: `
+<p>
+  If you have a custom service agreement with eTools, provide your partner ID here.  
+</p>`
+      },
+      {
+        id: "web:customerId",
+        ...storeAccessors(etoolsSourceConfigStore, "customerId"),
+        type: "string",
+        label: "Customer ID",
+        description: `
+<p>
+  Customer ID, optional. If you have a custom service agreement with eTools, provide your customer ID here.  
 </p>`
       }
     ]
@@ -189,34 +271,26 @@ export const EToolsSourceConfig = view((props) => {
       <FormGroup label="Language" labelFor="etools-language" inline={true}>
         <HTMLSelect onChange={e => { store.language = e.currentTarget.value; props.onChange(); }}
                     id="etools-language" value={store.language}>
-          <option value="all">All</option>
-          <option value="en">English</option>
-          <option value="fr">French</option>
-          <option value="de">German</option>
-          <option value="it">Italian</option>
-          <option value="es">Spanish</option>
+          {
+            etoolsLanguageOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)
+          }
         </HTMLSelect>
       </FormGroup>
       <FormGroup label="Country" labelFor="etools-country" inline={true}>
         <HTMLSelect onChange={e => { store.country = e.currentTarget.value; props.onChange(); }}
                     id="etools-country" value={store.country}>
-          <option value="web">All</option>
-          <option value="AT">Austria</option>
-          <option value="FR">France</option>
-          <option value="DE">Germany</option>
-          <option value="GB">Great Britain</option>
-          <option value="IT">Italy</option>
-          <option value="LI">Lichtenstein</option>
-          <option value="ES">Spain</option>
-          <option value="CH">Switzerland</option>
+          {
+            etoolsCountryOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)
+          }
         </HTMLSelect>
       </FormGroup>
       <FormGroup inline={true} label="Sources" labelFor="etools-sources">
         <RadioGroup onChange={e => { store.dataSources = e.currentTarget.value; props.onChange(); }}
                     selectedValue={store.dataSources}
                     id="etools-sources" inline={true}>
-          <Radio label="All" value="all" />
-          <Radio label="Fastest" value="fastest" />
+          {
+            etoolsDataSourcesOptions.map(o => <Radio key={o.value} {...o} />)
+          }
         </RadioGroup>
       </FormGroup>
       <FormGroup inline={true} label=" ">
