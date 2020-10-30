@@ -24,7 +24,7 @@ export const Group = view(({ setting, get, set, className }) => {
       {settings}
     </Section>;
   } else {
-    return <section>{settings}</section>;
+    return <section className={className}>{settings}</section>;
   }
 });
 

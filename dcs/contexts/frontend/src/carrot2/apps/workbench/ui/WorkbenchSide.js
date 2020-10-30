@@ -88,16 +88,18 @@ const runSearch = () => {
 export const WorkbenchSide = (() => {
   return (
       <div className="WorkbenchSide">
-        <div className="WorkbenchSideHeader">
-          <WorkbenchLogo />
-          <Button className="ClusterButton" intent="primary" large={true}
-                  icon={<FontAwesomeIcon icon={faFlask} />}
-                  onClick={runSearch}>
-            Cluster
-          </Button>
-        </div>
+        <div className="WorkbenchSideFixed">
+          <div className="WorkbenchSideHeader">
+            <WorkbenchLogo />
+            <Button className="ClusterButton" intent="primary" large={true}
+                    icon={<FontAwesomeIcon icon={faFlask} />}
+                    onClick={runSearch}>
+              Cluster
+            </Button>
+          </div>
 
-        <WorkbenchSourceAlgorithm />
+          <WorkbenchSourceAlgorithm />
+        </div>
 
         <Settings settings={settings} />
       </div>
