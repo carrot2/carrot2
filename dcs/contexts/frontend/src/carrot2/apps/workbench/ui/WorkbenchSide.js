@@ -2,9 +2,11 @@ import React from "react";
 
 import "./WorkbenchSide.css";
 
+import { autoEffect, batch } from "@risingstack/react-easy-state";
+
 import { sources } from "../../../config-sources.js";
 import { algorithms } from "../../../config-algorithms.js";
-import { searchResultStore } from "../../../store/services.js";
+import { clusterStore, searchResultStore } from "../../../store/services.js";
 import { queryStore } from "../store/query-store.js";
 import { algorithmStore } from "../../../store/services.js";
 
@@ -53,8 +55,34 @@ const settings = {
   }).flat(2)
 };
 
+let sourceParametersDirty = false;
+autoEffect(() => {
+  batch(() => {
+    Object.keys(sources).forEach(s => {
+      const source = sources[s];
+
+      // A dummy read just to have this auto effect run on every parameter change.
+      source.getSettings().reduce(function collect(acc, sett) {
+        if (sett.type === "group") {
+          sett.settings.reduce(collect);
+        } else {
+          sett.get(sett);
+        }
+        return acc;
+      }, [ queryStore.query, workbenchSourceStore.source] ); // also react to query and source changes
+
+    });
+    sourceParametersDirty = true;
+  });
+});
+
 const runSearch = () => {
-  searchResultStore.load(workbenchSourceStore.source, queryStore.query);
+  if (sourceParametersDirty) {
+    sourceParametersDirty = false;
+    searchResultStore.load(workbenchSourceStore.source, queryStore.query);
+  } else {
+    clusterStore.reload();
+  }
 };
 
 export const WorkbenchSide = (() => {

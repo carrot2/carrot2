@@ -17,11 +17,21 @@ if (!algorithms[algorithmStore.clusteringAlgorithm]) {
   algorithmStore.clusteringAlgorithm = Object.keys(algorithms)[0];
 }
 
+// Build a map of current algorithm parameters on every parameter or algorithm change.
+// We cannot do this in the clusterStore.load method because the method is reactive
+// and would re-run immediately on any parameter change.
+let currentParams;
+autoEffect(() => {
+  const algorithm = algorithms[algorithmStore.clusteringAlgorithm];
+  const settings = algorithm.getSettings();
+  currentParams = collectParameters(settings, settings[0].get);
+});
+
 export const clusterStore = store({
   loading: false,
   clusters: EMPTY_ARRAY,
   documents: EMPTY_ARRAY,
-  load: async function (searchResult, algorithm, parameters = {}) {
+  load: async function (searchResult, algorithm) {
     const documents = searchResult.documents;
     const query = searchResult.query;
 
@@ -35,7 +45,7 @@ export const clusterStore = store({
       clusterStore.clusters = EMPTY_ARRAY;
       clusterStore.error = undefined;
       try {
-        clusterStore.clusters = await fetchClusters(query, documents, algorithm, parameters);
+        clusterStore.clusters = await fetchClusters(query, documents, algorithm, currentParams);
         clusterStore.documents = addClusterReferences(documents, clusterStore.clusters);
       } catch (e) {
         clusterStore.clusters = EMPTY_ARRAY;
@@ -72,6 +82,9 @@ export const clusterStore = store({
       }
       return documents;
     }
+  },
+  reload: () => {
+    clusterStore.load(searchResultStore.searchResult, algorithmStore.clusteringAlgorithm);
   },
   getClusteredDocsRatio: () => {
     const docSet = clusterStore.clusters.reduce(function collect(set, cluster) {
@@ -132,16 +145,9 @@ function assignDocumentIds(result, sourceId) {
   };
 }
 
-let currentParams;
-autoEffect(() => {
-  const algorithm = algorithms[algorithmStore.clusteringAlgorithm];
-  const settings = algorithm.getSettings();
-  currentParams = collectParameters(settings, settings[0].get);
-});
-
 // Invoke clustering once search results are available or algorithm changes.
 autoEffect(() => {
-  clusterStore.load(searchResultStore.searchResult, algorithmStore.clusteringAlgorithm, currentParams);
+  clusterStore.reload();
 });
 
 // When search result is loading, also show that clusters are loading.

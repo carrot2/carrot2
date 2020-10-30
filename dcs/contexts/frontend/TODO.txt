@@ -17,11 +17,17 @@ Workbench workflow:
 * Solr/ES: initial configuration of the service on the welcome screen (quick ping if the service works), initial query
 * Public search engines: provide initial query box on the welcome screen
 
-Workbench features:
+Firs release:
 
-* tuning of stopwords
-* tuning of labels (label set comparison)
+* Parameter section folding
+* Revert settings to defaults
+* Auto run clustering on setting change
 * export of parameters JSON for pasting into code
+* tuning of stopwords (Lingo3G)
+
+Later:
+
+* tuning of labels (label set comparison)
 
 
 Refactoring:
