@@ -152,7 +152,6 @@ function assignDocumentIds(result, sourceId) {
 
 // Invoke clustering once search results are available or algorithm changes.
 autoEffect(() => {
-  console.log("reload");
   clusterStore.reload();
 });
 
