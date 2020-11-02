@@ -16,9 +16,9 @@ export const SectionDivider = ({ label }) => {
   );
 };
 
-export const Section = ({ label, children, className }) => {
+export const Section = ({ label, children, className, style }) => {
   return (
-      <section className={classnames("Section", className)}>
+      <section className={classnames("Section", className)} style={style}>
         <SectionDivider label={label} />
         <div>
           {children}

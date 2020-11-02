@@ -11,20 +11,29 @@ import { NumericSetting, NumericSettingSimple } from "./NumericSetting.js";
 import { SelectSetting } from "./SelectSetting.js";
 import { StringArraySetting } from "./StringArraySetting.js";
 
+const visible = visible => visible ? null : { display: "none" };
+
 export const Group = view(({ setting, get, set, className }) => {
   const { label, description } = setting;
-  const settings = setting.settings.filter(s => !s.visible || s.visible()).map(s => {
-    return <section key={s.id} id={s.id}>
+
+  // We handle visibility of settings and groups by hiding the corresponding elements
+  // rather than by removing/adding them to the DOM. The former is much faster.
+  let groupVisible = false;
+  const settings = setting.settings.map(s => {
+    const settingVisible = !s.visible || s.visible();
+    groupVisible |= settingVisible;
+    return <section key={s.id} id={s.id} style={visible(settingVisible)}>
       {getFactory(s)(s, s.get || setting.get || get, s.set || setting.set || set)}
     </section>
   });
+
   if (label) {
-    return <Section className={className} label={label}>
+    return <Section className={className} label={label} style={visible(groupVisible)}>
       <p>{description}</p>
       {settings}
     </Section>;
   } else {
-    return <section className={className}>{settings}</section>;
+    return <section className={className} style={visible(groupVisible)}>{settings}</section>;
   }
 });
 
