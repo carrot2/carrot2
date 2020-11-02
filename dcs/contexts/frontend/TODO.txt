@@ -17,8 +17,10 @@ Workbench workflow:
 * Solr/ES: initial configuration of the service on the welcome screen (quick ping if the service works), initial query
 * Public search engines: provide initial query box on the welcome screen
 
-Firs release:
+First release:
 
+* clustering language selection
+* Pass query hint to algorithms
 * Parameter section folding
 * Revert settings to defaults
 * Auto run clustering on setting change

@@ -1,6 +1,8 @@
 import { isCarrot2Distribution } from "./config.js";
 
 import { lingo } from "./service/algorithms/lingo.js";
+import { stc } from "./service/algorithms/stc.js";
+import { kmeans } from "./service/algorithms/kmeans.js";
 
 const lingo3gAlgorithm = {
   "Lingo3G": {
@@ -16,24 +18,8 @@ const lingo3gAlgorithm = {
 
 const opensourceAlgorithms = {
   "Lingo": lingo,
-  "STC": {
-    label: "STC",
-    description: "Flat clusters, fast algorithm.",
-    descriptionHtml: "the classic search results clustering algorithm. Produces flat cluster with adequate description, very fast. Available as part of the open source <a href='http://project.carrot2.org' target='_blank'>Carrot<sup>2</sup> framework</a>",
-    tag: "open source",
-    getSettings: () => {
-      return [];
-    }
-  },
-  "Bisecting K-Means": {
-    label: "k-means",
-    description: "Base line algorithm, bag-of-words labels.",
-    descriptionHtml: "base line clustering algorithm, produces bag-of-words style cluster descriptions. Available as part of the open source <a href='http://project.carrot2.org' target='_blank'>Carrot<sup>2</sup> framework</a>",
-    tag: "open source",
-    getSettings: () => {
-      return [];
-    }
-  }
+  "STC": stc,
+  "Bisecting K-Means": kmeans
 };
 
 export const algorithms = isCarrot2Distribution() ? opensourceAlgorithms : lingo3gAlgorithm;

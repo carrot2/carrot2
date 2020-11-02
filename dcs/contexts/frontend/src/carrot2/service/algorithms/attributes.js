@@ -1,4 +1,3 @@
-import descriptor from "./descriptors/org.carrot2.clustering.lingo.LingoClusteringAlgorithm.json";
 import { firstField } from "../../../carrotsearch/lang/objects.js";
 import _set from "lodash.set";
 
@@ -25,7 +24,7 @@ const depthFirstAttributes = descriptor => {
 };
 
 export const getDescriptorsById = descriptors => {
-  return depthFirstAttributes(descriptor).reduce((map, a) => {
+  return depthFirstAttributes(descriptors).reduce((map, a) => {
     map.set(a.id, a);
     return map;
   }, new Map());

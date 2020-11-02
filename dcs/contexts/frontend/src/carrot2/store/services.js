@@ -27,6 +27,11 @@ autoEffect(() => {
   currentParams = collectParameters(settings, settings[0].get);
 });
 
+let currentAlgorithm;
+autoEffect(() => {
+  currentAlgorithm = algorithmStore.clusteringAlgorithm;
+});
+
 export const clusterStore = store({
   loading: false,
   clusters: EMPTY_ARRAY,
@@ -84,7 +89,7 @@ export const clusterStore = store({
     }
   },
   reload: () => {
-    clusterStore.load(searchResultStore.searchResult, algorithmStore.clusteringAlgorithm);
+    clusterStore.load(searchResultStore.searchResult, currentAlgorithm);
   },
   getClusteredDocsRatio: () => {
     const docSet = clusterStore.clusters.reduce(function collect(set, cluster) {
@@ -147,6 +152,7 @@ function assignDocumentIds(result, sourceId) {
 
 // Invoke clustering once search results are available or algorithm changes.
 autoEffect(() => {
+  console.log("reload");
   clusterStore.reload();
 });
 
