@@ -17,13 +17,13 @@
       "stats stats"
       "clusters docs";
 
-  padding-top: var(--leading);
   --selection-border-width: 2px;
 }
 
 .WorkbenchMain .stats {
   grid-area: stats;
   overflow-x: hidden;
+  padding-top: var(--leading);
   padding-left: var(--leading);
   padding-bottom: var(--leading);
   margin-top: -0.375em;
