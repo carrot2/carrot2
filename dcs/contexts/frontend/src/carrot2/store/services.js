@@ -50,7 +50,8 @@ export const clusterStore = store({
       clusterStore.clusters = EMPTY_ARRAY;
       clusterStore.error = undefined;
       try {
-        clusterStore.clusters = await fetchClusters(query, documents, algorithm, currentParams);
+        const fieldsToCluster = sources[searchResult.source].getFieldsToCluster();
+        clusterStore.clusters = await fetchClusters(query, documents, fieldsToCluster, algorithm, currentParams);
         clusterStore.documents = addClusterReferences(documents, clusterStore.clusters);
       } catch (e) {
         clusterStore.clusters = EMPTY_ARRAY;
@@ -108,7 +109,6 @@ export const clusterStore = store({
 
 export const searchResultStore = store({
   loading: false,
-  source: undefined,
   error: false,
   searchResult: {
     query: "",
@@ -122,7 +122,6 @@ export const searchResultStore = store({
     // TODO: cancel currently running request
     searchResultStore.loading = true;
     searchResultStore.error = false;
-    searchResultStore.source = source;
     try {
       searchResultStore.searchResult = assignDocumentIds(await src.source(query), sourceId);
     } catch (e) {

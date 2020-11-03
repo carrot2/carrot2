@@ -17,7 +17,7 @@ export const GenericErrorMessage = ({ error, children }) => {
   return (
     <ErrorMessage error={error}>
       {children}
-      <pre>{error && error.statusText.replace(/([&/?])/g, "$1\u200b")}</pre>
+      <pre>{error?.statusText?.replace(/([&/?])/g, "$1\u200b")}</pre>
     </ErrorMessage>
   );
 };

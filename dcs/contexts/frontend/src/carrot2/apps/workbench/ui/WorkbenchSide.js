@@ -64,9 +64,18 @@ autoEffect(() => {
       // A dummy read just to have this auto effect run on every parameter change.
       source.getSettings().reduce(function collect(acc, sett) {
         if (sett.type === "group") {
-          sett.settings.reduce(collect);
+          sett.settings.reduce(collect, []);
         } else {
-          sett.get(sett);
+          if (sett.get) {
+            const val = sett.get(sett);
+
+            // Read from iterable types too, so that we pick up changes to the
+            // contents of the collection and not just an update of the collection reference.
+            if (typeof val?.forEach === "function") {
+              let cnt = 0;
+              val.forEach(v => cnt++);
+            }
+          }
         }
         return acc;
       }, [ queryStore.query, workbenchSourceStore.source] ); // also react to query and source changes

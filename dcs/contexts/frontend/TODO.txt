@@ -19,6 +19,9 @@ Workbench workflow:
 
 First release:
 
+* file input:
+  * accept only allowed file types
+  * format documentation and examples?
 * clustering language selection
 * Pass query hint to algorithms
 * Parameter section folding

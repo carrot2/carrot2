@@ -14,6 +14,7 @@ import {
   pubmedSource,
   PubMedSourceConfig
 } from "./apps/search-app/ui/view/results/PubMed.js";
+import { localFileSourceDescriptor } from "./ui/sources/LocalFile.js";
 
 export const sources = {
   "web": {
@@ -35,7 +36,8 @@ export const sources = {
     createSourceConfig: (props) => {
       return <EToolsSourceConfig {...props} />;
     },
-    getSettings: () => etoolsSettings
+    getSettings: () => etoolsSettings,
+    getFieldsToCluster: () => [ "title", "snippet" ]
   },
 
   "pubmed": {
@@ -54,6 +56,14 @@ export const sources = {
     createSourceConfig: (props) => {
       return <PubMedSourceConfig {...props} />;
     },
-    getSettings: () =>  pubmedSettings
-  }
+    getSettings: () =>  pubmedSettings,
+    getFieldsToCluster: () => [ "title", "snippet" ]
+  },
+
+  "file": localFileSourceDescriptor
+};
+
+export const searchAppSources = {
+  "web": sources.web,
+  "pubmed": sources.pubmed
 };

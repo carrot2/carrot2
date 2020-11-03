@@ -10,6 +10,7 @@ import { StringSetting } from "./StringSetting.js";
 import { NumericSetting, NumericSettingSimple } from "./NumericSetting.js";
 import { SelectSetting } from "./SelectSetting.js";
 import { StringArraySetting } from "./StringArraySetting.js";
+import { FileSetting } from "./FileSetting.js";
 
 const visible = visible => visible ? null : { display: "none" };
 
@@ -48,6 +49,10 @@ const factories = {
 
   "string": (s, get, set) => {
     return <StringSetting setting={s} get={get} set={set} />
+  },
+
+  "file": (s, get, set) => {
+    return <FileSetting setting={s} get={get} set={set} />
   },
 
   "string-array": (s, get, set) => {
