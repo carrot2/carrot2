@@ -71,7 +71,7 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
     private void refreshFields(Object directory)
     {
         BiMap<Object, String> valueToName = HashBiMap.create();
-        ArrayList<Object> valueOrder = Lists.newArrayList();
+        ArrayList<Object> valueOrder = new ArrayList<>();
 
         if (directory != null && directory instanceof Directory)
         {
@@ -81,7 +81,7 @@ public final class LuceneFieldSelectorEditor extends MappedValueComboEditor
                 final IndexReader ir = DirectoryReader.open(dir);
                 try
                 {
-                    List<String> all = Lists.newArrayList();
+                    List<String> all = new ArrayList<>();
                     for (FieldInfo fi : MultiFields.getMergedFieldInfos(ir))
                     {
                         all.add(fi.name);

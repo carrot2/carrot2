@@ -20,8 +20,6 @@ import org.carrot2.util.simplexml.SimpleXmlWrapperValue;
 import org.carrot2.util.simplexml.SimpleXmlWrappers;
 import org.simpleframework.xml.*;
 
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * Models attributes of a document source
  */
@@ -36,7 +34,7 @@ public class AttributeMetadataModel
 
     public AttributeMetadataModel(WebappConfig config)
     {
-        attributes = Maps.newHashMap();
+        attributes = new HashMap<>();
         for (Map.Entry<String, Map<String, Object>> entry : 
             config.sourceInitializationAttributes.entrySet())
         {
@@ -44,7 +42,7 @@ public class AttributeMetadataModel
                 .asHashMap(SimpleXmlWrappers.wrap(entry.getValue()))));
         }
 
-        descriptors = Maps.newHashMap();
+        descriptors = new HashMap<>();
         for (Map.Entry<String, List<AttributeDescriptor>> entry : 
             config.sourceAttributeMetadata.entrySet())
         {

@@ -19,9 +19,6 @@ import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
 import org.carrot2.util.attribute.constraint.NotBlank;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * Clusters documents into a flat structure based on the values of some field of the
  * documents. By default the {@link Document#SOURCES} field is used.
@@ -72,7 +69,7 @@ public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implemen
     @Override
     public void process() throws ProcessingException
     {
-        final Map<Object, Cluster> clusterMap = Maps.newHashMap();
+        final Map<Object, Cluster> clusterMap = new HashMap<>();
         for (Document document : documents)
         {
             final Object field = document.getField(fieldName);
@@ -89,7 +86,7 @@ public class ByFieldClusteringAlgorithm extends ProcessingComponentBase implemen
             }
         }
         
-        clusters = Lists.newArrayList(clusterMap.values());
+        clusters = new ArrayList<>(clusterMap.values());
         Collections.sort(clusters, Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR);
         Cluster.appendOtherTopics(documents, clusters);
     }

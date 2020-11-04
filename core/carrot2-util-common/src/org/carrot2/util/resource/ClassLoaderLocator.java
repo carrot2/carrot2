@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Objects;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-
 /**
  * Scan for resources relative to a given class loader (possibly in all of this
  * loader's locations).
@@ -49,7 +47,7 @@ public final class ClassLoaderLocator implements IResourceLocator
      */
     static IResource [] getAll(ClassLoader loader, String resource)
     {
-        final ArrayList<IResource> result = Lists.newArrayList();
+        final ArrayList<IResource> result = new ArrayList<>();
 
         try
         {

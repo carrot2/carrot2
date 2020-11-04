@@ -12,6 +12,7 @@
 
 package org.carrot2.clustering.lingo;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,8 +27,6 @@ import org.carrot2.util.attribute.AttributeUtils;
 import org.junit.Test;
 
 import org.carrot2.shaded.guava.common.collect.ImmutableList;
-import org.carrot2.shaded.guava.common.collect.Lists;
-
 import static org.junit.Assert.*;
 
 /**
@@ -73,7 +72,7 @@ public class LingoClusteringAlgorithmTest extends
     @Test
     public void testNoLabelCandidates()
     {
-        final List<Document> documents = Lists.newArrayList();
+        final List<Document> documents = new ArrayList<>();
         documents.add(new Document("test"));
         documents.add(new Document("test"));
         documents.add(new Document("test"));

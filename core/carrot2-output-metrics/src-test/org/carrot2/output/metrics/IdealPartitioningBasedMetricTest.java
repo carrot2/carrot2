@@ -19,7 +19,6 @@ import org.carrot2.core.Document;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Sets;
 
 /**
@@ -30,8 +29,8 @@ public class IdealPartitioningBasedMetricTest extends CarrotTestCase
     @Test
     public void testNoPartitionInformation()
     {
-        final List<Document> documents = Lists.newArrayList();
-        final List<Cluster> clusters = Lists.newArrayList();
+        final List<Document> documents = new ArrayList<>();
+        final List<Cluster> clusters = new ArrayList<>();
 
         final ContaminationMetric metric = new ContaminationMetric();
         metric.documents = documents;
@@ -71,7 +70,7 @@ public class IdealPartitioningBasedMetricTest extends CarrotTestCase
         {
             set.addAll(cluster.getAllDocuments());
         }
-        return Lists.newArrayList(set);
+        return new ArrayList<>(set);
     }
 
     protected Document documentWithPartitions(final String... partitions)

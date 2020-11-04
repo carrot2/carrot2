@@ -38,8 +38,6 @@ import org.carrot2.source.lucene.SimpleFieldMapper;
 import org.carrot2.util.annotations.ThreadSafe;
 import org.carrot2.util.attribute.IObjectFactory;
 
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * This example shows how to apply custom processing to documents returned by the
  * {@link LuceneDocumentSource}.
@@ -143,7 +141,7 @@ public class ClusteringDataFromLuceneWithCustomFields
          * Perform processing.
          */
         final String query = "mining";
-        final Map<String, Object> processingAttributes = Maps.newHashMap();
+        final Map<String, Object> processingAttributes = new HashMap<>();
         CommonAttributesDescriptor.attributeBuilder(processingAttributes)
             .query(query);
 

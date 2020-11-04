@@ -23,7 +23,6 @@ import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.matrix.factorization.IterationNumberGuesser.FactorizationQuality;
 import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipelineDescriptor;
 
-import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.source.microsoft.v7.Bing7DocumentSource;
 
 /**
@@ -63,7 +62,7 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
          * will be optimized for speed of clustering, while the other will optimize the
          * quality of clusters.
          */
-        final Map<String, Object> fastAttributes = Maps.newHashMap();
+        final Map<String, Object> fastAttributes = new HashMap<>();
         LingoClusteringAlgorithmDescriptor.attributeBuilder(fastAttributes)
             .desiredClusterCountBase(20)
             .matrixReducer()
@@ -73,7 +72,7 @@ public class MoreConfigurationsOfOneAlgorithmInCachingController
                 .caseNormalizer()
                     .dfThreshold(2);
 
-        final Map<String, Object> accurateAttributes = Maps.newHashMap();
+        final Map<String, Object> accurateAttributes = new HashMap<>();
         LingoClusteringAlgorithmDescriptor.attributeBuilder(accurateAttributes)
             .desiredClusterCountBase(40)
             .matrixReducer()

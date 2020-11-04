@@ -30,8 +30,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.*;
 import org.eclipse.ui.part.*;
 
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * {@link SearchEditor}-tied view for running benchmarks.
  */
@@ -191,7 +189,7 @@ public final class BenchmarkView extends PageBookViewBase
 
         try
         {
-            final HashMap<String, Object> attrs = Maps.newHashMap(); 
+            final HashMap<String, Object> attrs = new HashMap<>(); 
             AttributeBinder.get(restoreState.settings, attrs, Input.class);
             this.attributeGroups.setAttributes(attrs);
             this.attributeGroups.setExpanded(restoreState.sectionsExpansionState);
@@ -221,7 +219,7 @@ public final class BenchmarkView extends PageBookViewBase
             {
                 try
                 {
-                    final HashMap<String, Object> attrs = Maps.newHashMap();
+                    final HashMap<String, Object> attrs = new HashMap<>();
                     attrs.put(event.key, event.value);
                     AttributeBinder.set(benchmarkSettings, attrs, Input.class);
                 }
@@ -254,7 +252,7 @@ public final class BenchmarkView extends PageBookViewBase
         final BenchmarkSettings cloned = new BenchmarkSettings();
         try
         {
-            HashMap<String, Object> attrs = Maps.newHashMap();
+            HashMap<String, Object> attrs = new HashMap<>();
             AttributeBinder.get(benchmarkSettings, attrs, Input.class);
             AttributeBinder.set(cloned, attrs, Input.class);
         }

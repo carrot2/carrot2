@@ -16,6 +16,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isA;
 import static org.fest.assertions.MapAssert.entry;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -207,7 +208,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
             }
         });
 
-        List<Callable<String>> callables = Lists.newArrayList();
+        List<Callable<String>> callables = new ArrayList<>();
         for (final String string : data)
         {
             callables.add(new Callable<String>()
@@ -446,7 +447,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
             new ProcessingComponentConfiguration(ComponentWithInitParameter.class,
                 "component", ImmutableMap.<String, Object> of()));
 
-        final Map<String, Object> attributes = Maps.newHashMap();
+        final Map<String, Object> attributes = new HashMap<>();
 
         final ProcessingResult resultByClass = controller.process(attributes,
             ComponentWithInitParameter.class);
@@ -467,7 +468,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
     {
         controller = prepareController();
 
-        final Map<String, Object> attributes = Maps.newHashMap();
+        final Map<String, Object> attributes = new HashMap<>();
 
         controller.process(attributes, ComponentWithOutputAttribute.class,
             ComponentWithRequiredProcessingAttribute.class);
@@ -486,7 +487,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
             new ProcessingComponentConfiguration(ComponentWithInitParameter.class,
                 "component2", ImmutableMap.of("init", (Object) "v2")));
 
-        final Map<String, Object> attributes = Maps.newHashMap();
+        final Map<String, Object> attributes = new HashMap<>();
 
         assertThat(controller.process(attributes, "component1").getAttributes())
             .includes(entry("result", "v1v1"));
@@ -508,7 +509,7 @@ public abstract class ControllerTestsCommon extends ControllerTestsBase
             new ProcessingComponentConfiguration(ComponentWithProcessingParameter.class,
                 "component2", ImmutableMap.of("processing", (Object) "v2")));
 
-        final Map<String, Object> attributes = Maps.newHashMap();
+        final Map<String, Object> attributes = new HashMap<>();
 
         assertThat(controller.process(attributes, "component1").getAttributes())
             .includes(entry("result", "v1v1"));

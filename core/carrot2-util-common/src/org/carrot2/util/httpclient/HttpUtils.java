@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.zip.GZIPInputStream;
 
@@ -42,8 +43,6 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.carrot2.util.StreamUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Various utilities for working with HTTP data streams.
@@ -130,16 +129,16 @@ public class HttpUtils
         try
         {
             if (params == null) 
-                params = Lists.newArrayList();
+                params = new ArrayList<>();
             else
-                params = Lists.newArrayList(params);
+                params = new ArrayList<>(params);
 
             URI uri = new URI(url);
             params.addAll(URLEncodedUtils.parse(uri, "UTF-8"));
 
             uri = URIUtils.createURI(uri.getScheme(), uri.getHost(), uri.getPort(),
                 uri.getPath(),
-                URLEncodedUtils.format(Lists.newArrayList(params), "UTF-8"), null);
+                URLEncodedUtils.format(new ArrayList<>(params), "UTF-8"), null);
             request.setURI(uri);
 
             request.setHeader(HttpHeaders.URL_ENCODED);

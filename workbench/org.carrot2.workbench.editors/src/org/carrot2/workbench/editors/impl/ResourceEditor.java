@@ -16,11 +16,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.util.attribute.constraint.ResourceNameFilter;
 import org.carrot2.util.attribute.constraint.ResourceNameFilters;
 import org.carrot2.util.resource.FileResource;
@@ -197,8 +197,8 @@ public class ResourceEditor extends AttributeEditorAdapter
     {
         final FileDialog dialog = new FileDialog(this.resourceInfo.getShell());
         
-        java.util.List<String> patterns = Lists.newArrayList();
-        java.util.List<String> names = Lists.newArrayList();
+        java.util.List<String> patterns = new ArrayList<>();
+        java.util.List<String> names = new ArrayList<>();
         if (filters != null)
         {
             for (ResourceNameFilter f : filters)

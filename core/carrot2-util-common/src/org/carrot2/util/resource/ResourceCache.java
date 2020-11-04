@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import org.carrot2.shaded.guava.common.base.Function;
 import org.carrot2.shaded.guava.common.collect.MapMaker;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * A static cache of immutable, reusable resources associated with a given
@@ -41,7 +40,7 @@ public final class ResourceCache<V>
     /**
      * Internal map for storing resources associated with a given {@link ResourceLookup}.
      */
-    private final HashMap<ResourceLookup, V> cache = Maps.newHashMap();
+    private final HashMap<ResourceLookup, V> cache = new HashMap<>();
 
     /**
      * Value maker.

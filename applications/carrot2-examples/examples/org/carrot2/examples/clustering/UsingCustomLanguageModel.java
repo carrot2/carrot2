@@ -12,6 +12,8 @@
 
 package org.carrot2.examples.clustering;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,8 +39,6 @@ import org.carrot2.text.preprocessing.pipeline.BasicPreprocessingPipelineDescrip
 import org.carrot2.text.util.MutableCharArray;
 
 import org.carrot2.shaded.guava.common.collect.ImmutableSet;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * This example shows how to perform clustering using a custom language model, including
@@ -55,7 +55,7 @@ public class UsingCustomLanguageModel
         // initialization-time attributes. It is preferred to passing them as
         // processing-time attributes because the instances created at initialization
         // time will be reused for all further requests.
-        Map<String, Object> attrs = Maps.newHashMap();
+        Map<String, Object> attrs = new HashMap<>();
         BasicPreprocessingPipelineDescriptor.attributeBuilder(attrs)
             .stemmerFactory(CustomStemmerFactory.class)
             .tokenizerFactory(CustomTokenizerFactory.class)
@@ -74,10 +74,10 @@ public class UsingCustomLanguageModel
     private static void clusterAndDisplayClusters(final Controller controller,
         final Class<? extends IClusteringAlgorithm> clusteringAlgorithm)
     {
-        final Map<String, Object> processingAttributes = Maps.newHashMap();
+        final Map<String, Object> processingAttributes = new HashMap<>();
 
         CommonAttributesDescriptor.attributeBuilder(processingAttributes)
-            .documents(Lists.newArrayList(SampleDocumentData.DOCUMENTS_DATA_MINING))
+            .documents(new ArrayList<>(SampleDocumentData.DOCUMENTS_DATA_MINING))
             .query("data mining");
 
         final ProcessingResult result = controller.process(processingAttributes,

@@ -122,9 +122,9 @@ public class PrecisionRecallMetric extends IdealPartitioningBasedMetric
         final SetMultimap<Object, Document> documentsByPartition = getDocumentsByPartition(documents);
         final Set<Object> partitions = getPartitions(documents);
 
-        precisionByPartition = Maps.newHashMap();
-        recallByPartition = Maps.newHashMap();
-        fMeasureByPartition = Maps.newHashMap();
+        precisionByPartition = new HashMap<>();
+        recallByPartition = new HashMap<>();
+        fMeasureByPartition = new HashMap<>();
 
         double recallSum = 0;
         double precisionSum = 0;

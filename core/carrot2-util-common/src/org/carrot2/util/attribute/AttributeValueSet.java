@@ -12,6 +12,7 @@
 
 package org.carrot2.util.attribute;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -19,8 +20,6 @@ import org.carrot2.util.simplexml.*;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Commit;
 import org.simpleframework.xml.core.Persist;
-
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Maintains a named set of attribute values. Allows one {@link AttributeValueSet} (A) to
@@ -110,7 +109,7 @@ public class AttributeValueSet
         this.description = description;
 
         this.baseAttributeValueSet = base;
-        this.overridenAttributeValues = Maps.newHashMap();
+        this.overridenAttributeValues = new HashMap<>();
     }
 
     /**
@@ -154,7 +153,7 @@ public class AttributeValueSet
      */
     public Map<String, Object> getAttributeValues()
     {
-        final Map<String, Object> result = Maps.newHashMap();
+        final Map<String, Object> result = new HashMap<>();
         if (baseAttributeValueSet != null)
         {
             result.putAll(baseAttributeValueSet.getAttributeValues());
@@ -221,7 +220,7 @@ public class AttributeValueSet
     {
         if (overridenAttributeValuesForSerialization == null)
         {
-            overridenAttributeValues = Maps.newHashMap();
+            overridenAttributeValues = new HashMap<>();
         }
         else
         {

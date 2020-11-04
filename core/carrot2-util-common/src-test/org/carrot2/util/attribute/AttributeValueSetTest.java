@@ -14,12 +14,11 @@ package org.carrot2.util.attribute;
 
 import static org.fest.assertions.MapAssert.entry;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
-
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 import static org.junit.Assert.*;
 
@@ -63,7 +62,7 @@ public class AttributeValueSetTest extends CarrotTestCase
         base1.setAttributeValue("overriden1Key", "override1Me");
 
         final AttributeValueSet base2 = new AttributeValueSet(null, null, base1);
-        final Map<String, Object> base2Values = Maps.newHashMap();
+        final Map<String, Object> base2Values = new HashMap<>();
         base2Values.put("base2Key", "base2Value");
         base2Values.put("overriden2Key", "overrideMe");
         base2.setAttributeValues(base2Values);

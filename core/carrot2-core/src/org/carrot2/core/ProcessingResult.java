@@ -26,7 +26,6 @@ import org.simpleframework.xml.core.*;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.carrot2.shaded.guava.common.collect.*;
 
 /**
  * Encapsulates the results of processing. Provides access to the values of attributes
@@ -37,7 +36,7 @@ import org.carrot2.shaded.guava.common.collect.*;
 public final class ProcessingResult
 {
     /** Attributes collected after processing */
-    private Map<String, Object> attributes = Maps.newHashMap();
+    private Map<String, Object> attributes = new HashMap<>();
 
     /** Read-only view of attributes exposed in {@link #getAttributes()} */
     private Map<String, Object> attributesView;
@@ -187,7 +186,7 @@ public final class ProcessingResult
 
             if (getDocuments() != null)
             {
-                documents = Lists.newArrayList(getDocuments());
+                documents = new ArrayList<>(getDocuments());
             }
             else
             {
@@ -196,7 +195,7 @@ public final class ProcessingResult
 
             if (getClusters() != null)
             {
-                clusters = Lists.newArrayList(getClusters());
+                clusters = new ArrayList<>(getClusters());
             }
             else
             {
@@ -235,7 +234,7 @@ public final class ProcessingResult
         // Convert document ids to the actual references
         if (clusters != null && documents != null)
         {
-            final Map<String, Document> documentsById = Maps.newHashMap();
+            final Map<String, Document> documentsById = new HashMap<>();
             for (Document document : documents)
             {
                 documentsById.put(document.getStringId(), document);
@@ -494,7 +493,7 @@ public final class ProcessingResult
     private Map<String, Object> prepareAttributesForSerialization(boolean saveDocuments,
         boolean saveClusters, boolean saveOtherAttributes)
     {
-        final Map<String, Object> tempAttributes = Maps.newHashMap();
+        final Map<String, Object> tempAttributes = new HashMap<>();
 
         if (saveOtherAttributes)
         {

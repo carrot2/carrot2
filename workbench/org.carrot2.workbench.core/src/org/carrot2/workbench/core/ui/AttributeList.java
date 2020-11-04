@@ -35,9 +35,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * An SWT composite displaying an alphabetically ordered list of {@link IAttributeEditor}s.
  */
@@ -64,7 +61,7 @@ public final class AttributeList extends Composite implements IAttributeEventPro
      * A map between attribute keys and {@link IAttributeEditor}s visible in this
      * component.
      */
-    private Map<String, IAttributeEditor> editors = Maps.newHashMap();
+    private Map<String, IAttributeEditor> editors = new HashMap<>();
 
     /**
      * Optional component class attribute descriptors come from.
@@ -181,7 +178,7 @@ public final class AttributeList extends Composite implements IAttributeEventPro
          * Sort alphabetically by label.
          */
         final Locale locale = Locale.getDefault();
-        final Map<String, String> labels = Maps.newHashMap();
+        final Map<String, String> labels = new HashMap<>();
         for (Map.Entry<String, AttributeDescriptor> entry : attributeDescriptors
             .entrySet())
         {
@@ -189,7 +186,7 @@ public final class AttributeList extends Composite implements IAttributeEventPro
         }
 
         final Collator collator = Collator.getInstance(locale);
-        final List<String> sortedKeys = Lists.newArrayList(labels.keySet());
+        final List<String> sortedKeys = new ArrayList<>(labels.keySet());
         Collections.sort(sortedKeys, new Comparator<String>()
         {
             public int compare(String a, String b)
@@ -201,8 +198,8 @@ public final class AttributeList extends Composite implements IAttributeEventPro
         /*
          * Create editors and inquire about their layout needs.
          */
-        editors = Maps.newHashMap();
-        final Map<String, AttributeEditorInfo> editorInfos = Maps.newHashMap();
+        editors = new HashMap<>();
+        final Map<String, AttributeEditorInfo> editorInfos = new HashMap<>();
 
         int maxColumns = 1;
         for (String key : sortedKeys)

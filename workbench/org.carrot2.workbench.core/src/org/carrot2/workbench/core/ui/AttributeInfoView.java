@@ -35,8 +35,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.*;
 import org.eclipse.ui.part.ViewPart;
 
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * A view displaying short help based on the {@link AttributeDescriptor}.
  */
@@ -135,7 +133,7 @@ public class AttributeInfoView extends ViewPart
         /*
          * Extract public fields to a map for Velocity.
          */
-        final HashMap<String, Object> fields = Maps.newHashMap();
+        final HashMap<String, Object> fields = new HashMap<>();
         copyFields(fields, "", descriptor);
         context.put("fields", fields);
         

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -62,7 +63,6 @@ import com.carrotsearch.hppc.IntStack;
 import org.carrot2.shaded.guava.common.base.Predicate;
 import org.carrot2.shaded.guava.common.collect.Collections2;
 import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Suffix Tree Clustering (STC) algorithm. Pretty much as described in: <i>Oren Zamir,
@@ -488,7 +488,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
          * Collect all phrases that will form base clusters, 
          * initially filtered to fulfill the minimum acceptance criteria.
          */
-        final List<ClusterCandidate> candidates = Lists.newArrayList();
+        final List<ClusterCandidate> candidates = new ArrayList<>();
 
         // Walk the internal nodes of the suffix tree.
         new GeneralizedSuffixTree.Visitor(sb, minBaseClusterSize) {
@@ -587,7 +587,7 @@ public final class STCClusteringAlgorithm extends ProcessingComponentBase implem
     private void mergeStemEquivalentBaseClusters(SequenceBuilder sb, final List<ClusterCandidate> candidates)
     {
         // Look for candidates to merge.
-        Map<IntArrayList, ClusterCandidate> merged = Maps.newHashMap();
+        Map<IntArrayList, ClusterCandidate> merged = new HashMap<>();
         int j = 0;
         for (int max = candidates.size(), i = 0; i < max; i++)
         {

@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.lang3.StringUtils;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.ProcessingResult;
-import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.workbench.core.WorkbenchCorePlugin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
 import org.carrot2.workbench.core.helpers.Utils;
@@ -306,7 +305,7 @@ public abstract class AbstractBrowserVisualizationViewPage extends Page
                 logger.debug("Selection, editor->visualization: " + ss);
 
                 final IAdapterManager mgr = Platform.getAdapterManager();
-                final ArrayList<Cluster> selectedGroups = Lists.newArrayList();
+                final ArrayList<Cluster> selectedGroups = new ArrayList<>();
 
                 final Object [] selected = ss.toArray();
                 for (Object ob : selected)

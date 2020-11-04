@@ -28,8 +28,6 @@ import org.junit.Test;
 
 import org.carrot2.shaded.guava.common.base.Function;
 import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 import static org.junit.Assert.*;
 
 /**
@@ -123,7 +121,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
         IResource xml = resourceLocator.getFirst("/xml/custom-parameters-required.xml");
         IResource xslt = resourceLocator.getFirst("/xsl/custom-xslt.xsl");
 
-        Map<String, String> xsltParameters = Maps.newHashMap();
+        Map<String, String> xsltParameters = new HashMap<>();
         xsltParameters.put("id-field", "number");
         xsltParameters.put("title-field", "heading");
         xsltParameters.put("snippet-field", "snippet");
@@ -148,7 +146,7 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
             xml);
         final int documentCount = runQuery();
         assertEquals(2, documentCount);
-        assertEquals(Lists.newArrayList(0, 1), Lists.transform(getDocuments(),
+        assertEquals(new ArrayList<>(Arrays.asList(0, 1)), Lists.transform(getDocuments(),
             DOCUMENT_TO_INT_ID));
     }
 
@@ -210,9 +208,9 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
 
             final int documentCount = runQuery(controller);
             assertEquals(2, documentCount);
-            assertEquals(Lists.newArrayList("Title 0", "Title 1"), Lists.transform(
+            assertEquals(new ArrayList<>(Arrays.asList("Title 0", "Title 1")), Lists.transform(
                 getDocuments(), DOCUMENT_TO_TITLE));
-            assertEquals(Lists.newArrayList("Snippet 0", "Snippet 1"), Lists.transform(
+            assertEquals(new ArrayList<>(Arrays.asList("Snippet 0", "Snippet 1")), Lists.transform(
                 getDocuments(), DOCUMENT_TO_SUMMARY));
         }
 
@@ -227,9 +225,9 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
 
             final int documentCount = runQuery(controller);
             assertEquals(2, documentCount);
-            assertEquals(Lists.newArrayList("Snippet 0", "Snippet 1"), Lists.transform(
+            assertEquals(new ArrayList<>(Arrays.asList("Snippet 0", "Snippet 1")), Lists.transform(
                 getDocuments(), DOCUMENT_TO_TITLE));
-            assertEquals(Lists.newArrayList("Title 0", "Title 1"), Lists.transform(
+            assertEquals(new ArrayList<>(Arrays.asList("Title 0", "Title 1")), Lists.transform(
                 getDocuments(), DOCUMENT_TO_SUMMARY));
         }
     }
@@ -253,9 +251,9 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
 
             final int documentCount = runQuery(controller);
             assertEquals(2, documentCount);
-            assertEquals(Lists.newArrayList("Snippet 0", "Snippet 1"), Lists.transform(
+            assertEquals(new ArrayList<>(Arrays.asList("Snippet 0", "Snippet 1")), Lists.transform(
                 getDocuments(), DOCUMENT_TO_TITLE));
-            assertEquals(Lists.newArrayList("Title 0", "Title 1"), Lists.transform(
+            assertEquals(new ArrayList<>(Arrays.asList("Title 0", "Title 1")), Lists.transform(
                 getDocuments(), DOCUMENT_TO_SUMMARY));
         }
 
@@ -269,9 +267,9 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
 
             final int documentCount = runQuery(controller);
             assertEquals(2, documentCount);
-            assertEquals(Lists.newArrayList("Title 0", "Title 1"), Lists.transform(
+            assertEquals(new ArrayList<>(Arrays.asList("Title 0", "Title 1")), Lists.transform(
                 getDocuments(), DOCUMENT_TO_TITLE));
-            assertEquals(Lists.newArrayList("Snippet 0", "Snippet 1"), Lists.transform(
+            assertEquals(new ArrayList<>(Arrays.asList("Snippet 0", "Snippet 1")), Lists.transform(
                 getDocuments(), DOCUMENT_TO_SUMMARY));
         }
     }
@@ -280,17 +278,13 @@ public class XmlDocumentSourceTest extends DocumentSourceTestBase<XmlDocumentSou
     {
         assertEquals(2, documentCount);
         assertEquals("xslt test", resultAttributes.get(AttributeNames.QUERY));
-        assertEquals(Lists.newArrayList(498967, 831478), Lists.transform(getDocuments(),
+        assertEquals(new ArrayList<>(Arrays.asList(498967, 831478)), Lists.transform(getDocuments(),
             DOCUMENT_TO_INT_ID));
-        assertEquals(Lists.newArrayList("IBM's MARS Block Cipher.",
-            "IBM WebSphere Studio Device Developer"), Lists.transform(getDocuments(),
+        assertEquals(new ArrayList<>(Arrays.asList("IBM's MARS Block Cipher.", "IBM WebSphere Studio Device Developer")), Lists.transform(getDocuments(),
             DOCUMENT_TO_TITLE));
-        assertEquals(Lists.newArrayList(
-            "The company's AES proposal using 128 bit blocks.",
-            "An integrated development environment."), Lists.transform(getDocuments(),
+        assertEquals(new ArrayList<>(Arrays.asList("The company's AES proposal using 128 bit blocks.", "An integrated development environment.")), Lists.transform(getDocuments(),
             DOCUMENT_TO_SUMMARY));
-        assertEquals(Lists.newArrayList("http://www.research.ibm.com/security/mars.html",
-            "http://www-3.ibm.com/software/wireless/wsdd/"), Lists.transform(
+        assertEquals(new ArrayList<>(Arrays.asList("http://www.research.ibm.com/security/mars.html", "http://www-3.ibm.com/software/wireless/wsdd/")), Lists.transform(
             getDocuments(), DOCUMENT_TO_CONTENT_URL));
     }
 }

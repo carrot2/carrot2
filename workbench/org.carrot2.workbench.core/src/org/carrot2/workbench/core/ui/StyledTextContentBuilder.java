@@ -12,13 +12,12 @@
 
 package org.carrot2.workbench.core.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
-
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * A simple class for building content and style ranges for {@link StyledText}.
@@ -28,7 +27,7 @@ final class StyledTextContentBuilder
     public final static int BOLD = SWT.BOLD;
 
     private final StringBuilder buffer = new StringBuilder();
-    private final List<StyleRange> ranges = Lists.newArrayList();
+    private final List<StyleRange> ranges = new ArrayList<>();
 
     public String getText()
     {

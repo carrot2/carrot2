@@ -12,6 +12,7 @@
 
 package org.carrot2.clustering.kmeans;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -239,7 +240,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
         preprocessingContext.allLabels.firstPhraseIndex = -1;
 
         // Further processing only if there are words to process
-        clusters = Lists.newArrayList();
+        clusters = new ArrayList<>();
         if (preprocessingContext.hasLabels())
         {
             // Term-document matrix building and reduction
@@ -275,7 +276,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
             {
                 columns.add(c);
             }
-            final List<IntArrayList> rawClusters = Lists.newArrayList();
+            final List<IntArrayList> rawClusters = new ArrayList<>();
             rawClusters.addAll(split(partitionCount, tdMatrix, columns, maxIterations));
             Collections.sort(rawClusters, BY_SIZE_DESCENDING);
             
@@ -404,7 +405,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
         }
 
         // Prepare results holders
-        List<IntArrayList> result = Lists.newArrayList();
+        List<IntArrayList> result = new ArrayList<>();
         List<IntArrayList> previousResult = null;
         for (int i = 0; i < partitions; i++)
         {
@@ -440,7 +441,7 @@ public class BisectingKMeansClusteringAlgorithm extends ProcessingComponentBase 
             }
 
             previousResult = result;
-            result = Lists.newArrayList();
+            result = new ArrayList<>();
             for (int i = 0; i < partitions; i++)
             {
                 result.add(new IntArrayList(selected.columns()));

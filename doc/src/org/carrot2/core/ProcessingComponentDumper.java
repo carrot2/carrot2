@@ -21,7 +21,6 @@ import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.shaded.guava.common.collect.Sets;
 
@@ -51,7 +50,7 @@ public class ProcessingComponentDumper
                     resourceLookup.getFirst(suitePath), resourceLookup);
 
             final List<DocumentSourceDescriptor> sourceDescriptors = suite.getSources();
-            this.sources = Lists.newArrayList();
+            this.sources = new ArrayList<>();
             for (ProcessingComponentDescriptor descriptor : sourceDescriptors)
             {
                 sources.add(new ProcessingComponentDoc(descriptor));
@@ -59,7 +58,7 @@ public class ProcessingComponentDumper
 
             final List<ProcessingComponentDescriptor> algorithmDescriptors = suite
                 .getAlgorithms();
-            this.algorithms = Lists.newArrayList();
+            this.algorithms = new ArrayList<>();
             for (ProcessingComponentDescriptor descriptor : algorithmDescriptors)
             {
                 algorithms.add(new ProcessingComponentDoc(descriptor));
@@ -111,7 +110,7 @@ public class ProcessingComponentDumper
                 }
             }
 
-            this.groups = Lists.newArrayList(groupSet);
+            this.groups = new ArrayList<>(groupSet);
             Collections.sort(this.groups);
         }
     }

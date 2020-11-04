@@ -22,8 +22,6 @@ import org.junit.*;
 import com.carrotsearch.junitbenchmarks.AbstractBenchmark;
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.h2.*;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * This class measures the overhead added by the {@link Controller} in various
@@ -49,8 +47,8 @@ public class ControllerOverheadBenchmark extends AbstractBenchmark
         .createCachingPooling(IProcessingComponent.class);
 
     // Test callables
-    static final List<Map<String, Object>> processingAttributeMaps = Lists.newArrayList();
-    static final Map<String, List<Callable<String>>> callables = Maps.newHashMap();
+    static final List<Map<String, Object>> processingAttributeMaps = new ArrayList<>();
+    static final Map<String, List<Callable<String>>> callables = new HashMap<>();
 
     // Executor
     static final ExecutorService executorService = Executors.newFixedThreadPool(20);
@@ -62,7 +60,7 @@ public class ControllerOverheadBenchmark extends AbstractBenchmark
         final Random random = new Random(0);
         for (int i = 0; i < 100; i++)
         {
-            final Map<String, Object> attributes = Maps.newHashMap();
+            final Map<String, Object> attributes = new HashMap<>();
             attributes.put("int1", random.nextInt(100));
             attributes.put("int2", random.nextInt(100));
             attributes.put("double1", random.nextDouble());
@@ -85,7 +83,7 @@ public class ControllerOverheadBenchmark extends AbstractBenchmark
 
     private static List<Callable<String>> createCallables(Controller controller)
     {
-        final List<Callable<String>> callables = Lists.newArrayList();
+        final List<Callable<String>> callables = new ArrayList<>();
         for (int r = 0; r < internalRounds; r++)
         {
             for (Map<String, Object> attributes : processingAttributeMaps)

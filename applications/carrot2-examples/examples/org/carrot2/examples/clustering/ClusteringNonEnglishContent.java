@@ -12,6 +12,8 @@
 
 package org.carrot2.examples.clustering;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,8 +27,6 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.source.microsoft.v7.Bing7DocumentSource;
 import org.carrot2.source.microsoft.v7.Bing7DocumentSourceDescriptor;
 import org.carrot2.source.microsoft.v7.MarketOption;
@@ -87,14 +87,14 @@ public class ClusteringNonEnglishContent
          * In the first call, we'll cluster a document list, setting the language for each
          * document separately.
          */
-        final List<Document> documents = Lists.newArrayList();
+        final List<Document> documents = new ArrayList<>();
         for (Document document : SampleDocumentData.DOCUMENTS_DATA_MINING)
         {
             documents.add(new Document(document.getTitle(), document.getSummary(),
                 document.getContentUrl(), LanguageCode.ENGLISH));
         }
 
-        final Map<String, Object> attributes = Maps.newHashMap();
+        final Map<String, Object> attributes = new HashMap<>();
         CommonAttributesDescriptor.attributeBuilder(attributes)
             .documents(documents);
         final ProcessingResult englishResult = controller.process(

@@ -19,11 +19,10 @@ import org.carrot2.core.Cluster;
 
 import com.carrotsearch.hppc.BitSet;
 import org.carrot2.shaded.guava.common.base.Objects;
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 public class ClusterLabelPaths
 {
-    private final List<List<String>> paths = Lists.newArrayList(); 
+    private final List<List<String>> paths = new ArrayList<>(); 
 
     /**
      * Build label paths from a processing result and a list of clusters.
@@ -48,7 +47,7 @@ public class ClusterLabelPaths
             path.add(c.getLabel());
             if (selected.get(c.getId()))
             {
-                paths.add(Lists.newArrayList(path));
+                paths.add(new ArrayList<>(path));
             }
             descend(c.getSubclusters(), path, selected, paths);
             path.remove(path.size() - 1);
@@ -60,7 +59,7 @@ public class ClusterLabelPaths
      */
     public List<Cluster> filterMatching(List<Cluster> topClusters)
     {
-        List<Cluster> result = Lists.newArrayList();
+        List<Cluster> result = new ArrayList<>();
         for (List<String> path : paths) 
         {
             follow(0, path, topClusters, result);

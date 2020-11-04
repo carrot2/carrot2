@@ -12,6 +12,9 @@
 
 package org.carrot2.webapp.filter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.core.Controller;
@@ -21,9 +24,6 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Test cases for {@link QueryWordHighlighter}.
@@ -133,7 +133,7 @@ public class QueryWordHighlighterTest extends CarrotTestCase
 
     @Before
     public void setup() {
-        attrs = Maps.newHashMap();
+        attrs = new HashMap<>();
     }
     
     private void check(String query, String snippetToHighlight, String expectedSnippet)
@@ -146,7 +146,7 @@ public class QueryWordHighlighterTest extends CarrotTestCase
         {
             controller.init(attrs);
             ProcessingResult result = controller.process(
-                Lists.newArrayList(document),
+                new ArrayList<>(Arrays.asList(document)),
                 query, 
                 QueryWordHighlighter.class);
             

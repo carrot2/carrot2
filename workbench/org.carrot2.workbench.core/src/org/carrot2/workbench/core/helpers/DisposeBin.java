@@ -29,8 +29,6 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-
 /**
  * A collection of disposable resources (of multiple types that do not share a common
  * interface). The dispose bin can also register various kinds of listeners and unregister
@@ -122,7 +120,7 @@ public final class DisposeBin
     /*
      * 
      */
-    private final ArrayList<ListenerPair> listeners = Lists.newArrayList();
+    private final ArrayList<ListenerPair> listeners = new ArrayList<>();
 
     /*
      * 

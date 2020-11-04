@@ -172,7 +172,7 @@ public class ByUrlClusteringAlgorithm extends ProcessingComponentBase implements
 
         if (documentsInClusters.isEmpty())
         {
-            return Lists.newArrayList();
+            return new ArrayList<>();
         }
 
         // Sort clusters

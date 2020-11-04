@@ -18,6 +18,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -30,7 +32,6 @@ import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
 import org.carrot2.core.ProcessingResult;
 import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.workbench.core.helpers.DisposeBin;
 import org.carrot2.workbench.core.helpers.PostponableJob;
 import org.carrot2.workbench.core.ui.PropertyChangeListenerAdapter;
@@ -92,12 +93,12 @@ final class AdunaClusterMapViewPage extends Page
     /**
      * A map of the most recently shown {@link Cluster}s.
      */
-    private Map<Integer, DefaultClassification> clusterMap = Maps.newHashMap();
+    private Map<Integer, DefaultClassification> clusterMap = new HashMap<>();
 
     /**
      * A map of the most recently shown {@link Document}s.
      */
-    private Map<String, DefaultObject> documentMap = Maps.newHashMap();
+    private Map<String, DefaultObject> documentMap = new HashMap<>();
 
     /**
      * UI job for applying selection to the cluster map component.
@@ -160,7 +161,7 @@ final class AdunaClusterMapViewPage extends Page
         {
             final IAdapterManager mgr = Platform.getAdapterManager();
 
-            final java.util.List<Classification> selected = Lists.newArrayList();
+            final java.util.List<Classification> selected = new ArrayList<>();
             for (Object o : s.toList())
             {
                 if (o != null && o instanceof Classification)
@@ -218,7 +219,7 @@ final class AdunaClusterMapViewPage extends Page
             }
             else
             {
-                final java.util.List<Classification> clusters = Lists.newArrayList();
+                final java.util.List<Classification> clusters = new ArrayList<>();
                 final java.util.List<Classification> left = Lists.newLinkedList();
 
                 left.add(root);
@@ -249,8 +250,8 @@ final class AdunaClusterMapViewPage extends Page
             if (result != null)
             {
                 root = new DefaultClassification("All clusters");
-                clusterMap = Maps.newHashMap();
-                documentMap = Maps.newHashMap();
+                clusterMap = new HashMap<>();
+                documentMap = new HashMap<>();
                 toClassification(root, result.getClusters());
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {

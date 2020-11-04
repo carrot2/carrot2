@@ -14,6 +14,7 @@ package org.carrot2.examples.research;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
@@ -29,7 +30,6 @@ import org.carrot2.source.ambient.AmbientDocumentSourceDescriptor;
 import org.carrot2.text.util.TabularOutput;
 
 import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Runs a clustering quality benchmark based on the data set embedded in
@@ -59,7 +59,7 @@ public class ClusteringQualityBenchmark
         {
             for (Class<? extends IProcessingComponent> algorithm : algorithms)
             {
-                final Map<String, Object> attributes = Maps.newHashMap();
+                final Map<String, Object> attributes = new HashMap<>();
                 AmbientDocumentSourceDescriptor.attributeBuilder(attributes).topic(topic);
 
                 ProcessingResult result = controller.process(

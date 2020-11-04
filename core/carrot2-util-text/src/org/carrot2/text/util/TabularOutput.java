@@ -18,9 +18,6 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * Tabular output data dump with automatically adjusted column widths and some other
  * utilities.
@@ -31,16 +28,16 @@ public final class TabularOutput
     private String columnSeparator = " ";
     
     /** Declared columns (in order). */
-    final List<ColumnSpec> columns = Lists.newArrayList();
+    final List<ColumnSpec> columns = new ArrayList<>();
 
     /** */
-    final HashMap<String,ColumnSpec> columnsByName = Maps.newHashMap();
+    final HashMap<String,ColumnSpec> columnsByName = new HashMap<>();
 
     /** Currently buffered row. */
-    final List<Object> currentRow = Lists.newArrayList();
+    final List<Object> currentRow = new ArrayList<>();
 
     /** Currently buffered rows. */
-    final List<List<Object>> data = Lists.newArrayList();
+    final List<List<Object>> data = new ArrayList<>();
 
     /**
      * A writer to write the output to.
@@ -320,7 +317,7 @@ public final class TabularOutput
     
     public TabularOutput nextRow()
     {
-        data.add(Lists.newArrayList(currentRow));
+        data.add(new ArrayList<>(currentRow));
         currentRow.clear();
         if (++rowCount >= flushCount) {
             rowCount = 0;

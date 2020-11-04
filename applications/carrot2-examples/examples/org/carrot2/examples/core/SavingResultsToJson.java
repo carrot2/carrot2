@@ -14,6 +14,7 @@ package org.carrot2.examples.core;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
@@ -24,8 +25,6 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.examples.clustering.ClusteringDataFromDocumentSources;
-
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * This example shows how to save clustering results as JSON.
@@ -40,7 +39,7 @@ public class SavingResultsToJson
     {
         // Let's fetch some results from MSN first
         final Controller controller = ControllerFactory.createPooling();
-        final Map<String, Object> attributes = Maps.newHashMap();
+        final Map<String, Object> attributes = new HashMap<>();
         CommonAttributesDescriptor.attributeBuilder(attributes)
             .documents(new ArrayList<Document>(SampleDocumentData.DOCUMENTS_DATA_MINING))
             .query("data mining");

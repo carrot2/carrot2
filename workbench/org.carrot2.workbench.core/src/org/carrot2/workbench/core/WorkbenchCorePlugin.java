@@ -33,7 +33,6 @@ import org.carrot2.core.IDocumentSource;
 import org.carrot2.core.ProcessingComponentDescriptor;
 import org.carrot2.core.ProcessingComponentSuite;
 import org.carrot2.shaded.guava.common.base.Objects;
-import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.text.linguistic.DefaultLexicalDataFactoryDescriptor;
 import org.carrot2.util.attribute.BindableDescriptor;
@@ -88,7 +87,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
      * Cached {@link BindableDescriptor}s of all available components in
      * {@link #componentSuite}.
      */
-    private HashMap<String, BindableDescriptor> bindableDescriptors = Maps.newHashMap();
+    private HashMap<String, BindableDescriptor> bindableDescriptors = new HashMap<>();
 
     /**
      * Cached component bindableDescriptors of all available components in
@@ -100,12 +99,12 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
     /**
      * Cached image descriptors of components.
      */
-    private HashMap<String, ImageDescriptor> componentImages = Maps.newHashMap();
+    private HashMap<String, ImageDescriptor> componentImages = new HashMap<>();
 
     /**
      * List of failed components.
      */
-    private List<ProcessingComponentDescriptor> failed = Lists.newArrayList();
+    private List<ProcessingComponentDescriptor> failed = new ArrayList<>();
 
     /**
      * Workspace locator.
@@ -129,14 +128,14 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         // Scan the list of suite extension points.
         scanSuites();
 
-        ArrayList<IResourceLocator> locators = Lists.newArrayList();
+        ArrayList<IResourceLocator> locators = new ArrayList<>();
         if (workspaceLocator != null)
         {
             locators.add(workspaceLocator);
         }
         locators.add(Location.CONTEXT_CLASS_LOADER.locator);
 
-        Map<String, Object> initAttributes = Maps.newHashMap();
+        Map<String, Object> initAttributes = new HashMap<>();
         initAttributes.put(
             DefaultLexicalDataFactoryDescriptor.Keys.RESOURCE_LOOKUP,
             new ResourceLookup(locators));
@@ -283,7 +282,7 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
      */
     private void scanSuites()
     {
-        final List<ProcessingComponentSuite> suites = Lists.newArrayList();
+        final List<ProcessingComponentSuite> suites = new ArrayList<>();
 
         final IExtension [] extensions = Platform.getExtensionRegistry()
             .getExtensionPoint(COMPONENT_SUITE_EXTENSION_ID).getExtensions();
@@ -391,8 +390,8 @@ public class WorkbenchCorePlugin extends AbstractUIPlugin
         }
 
         // Merge all available suites
-        final ArrayList<DocumentSourceDescriptor> sources = Lists.newArrayList();
-        final ArrayList<ProcessingComponentDescriptor> algorithms = Lists.newArrayList();
+        final ArrayList<DocumentSourceDescriptor> sources = new ArrayList<>();
+        final ArrayList<ProcessingComponentDescriptor> algorithms = new ArrayList<>();
 
         for (ProcessingComponentSuite s : suites)
         {

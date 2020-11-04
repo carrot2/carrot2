@@ -12,6 +12,7 @@
 
 package org.carrot2.webapp.filter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -152,7 +153,7 @@ public class QueryWordHighlighter extends ProcessingComponentBase
             .split("\\s+");
 
         Pattern queryPattern = null;
-        List<String> patterns = Lists.newArrayList();
+        List<String> patterns = new ArrayList<>();
         for (String queryTerm : queryTerms)
         {
             if (Strings.isNullOrEmpty(queryTerm))

@@ -73,17 +73,17 @@ class FubTestCollection
         throws ProcessingException
     {
         // Filter the results
-        final List<Document> documents = Lists.newArrayList(Collections2.filter(
-            documentsByTopicId.get(topicId), new Predicate<Document>()
-            {
-                public boolean apply(Document document)
-                {
-                    // For now there is only one topic per document in Ambient
-                    final String documentTopic = getTopic(document);
-                    return subtopicSizes.get(documentTopic) >= minTopicSize
-                        && (includeDocumentsWithoutTopic || !documentTopic.endsWith(".0"));
-                }
-            }));
+        final List<Document> documents = new ArrayList<>(Collections2.filter(
+		documentsByTopicId.get(topicId), new Predicate<Document>()
+		{
+		    public boolean apply(Document document)
+		    {
+		        // For now there is only one topic per document in Ambient
+		        final String documentTopic = getTopic(document);
+		        return subtopicSizes.get(documentTopic) >= minTopicSize
+		            && (includeDocumentsWithoutTopic || !documentTopic.endsWith(".0"));
+		    }
+		}));
 
         if (documents.size() >= requestedResults)
         {
@@ -126,7 +126,7 @@ class FubTestCollection
      */
     private static Map<String, String> loadSubtopicLabels(IResource subtopicLabelsResource)
     {
-        final Map<String, String> labels = Maps.newHashMap();
+        final Map<String, String> labels = new HashMap<>();
         BufferedReader reader = null;
 
         try
@@ -164,7 +164,7 @@ class FubTestCollection
      */
     private static Map<String, Integer> prepareSubtopicSizes(int [][] resultSubtopicIds)
     {
-        final Map<String, Integer> map = Maps.newHashMap();
+        final Map<String, Integer> map = new HashMap<>();
 
         for (int topic = 1; topic < resultSubtopicIds.length; topic++)
         {
@@ -184,7 +184,7 @@ class FubTestCollection
     private static Map<Integer, List<Document>> loadDocuments(IResource resultsResource,
         int [][] resultSubtopicIds)
     {
-        final Map<Integer, List<Document>> documents = Maps.newHashMap();
+        final Map<Integer, List<Document>> documents = new HashMap<>();
         BufferedReader reader = null;
         try
         {
@@ -220,7 +220,7 @@ class FubTestCollection
                 List<Document> topicList = documents.get(topicId);
                 if (topicList == null)
                 {
-                    topicList = Lists.newArrayList();
+                    topicList = new ArrayList<>();
                     documents.put(topicId, topicList);
                 }
                 topicList.add(document);
@@ -235,7 +235,7 @@ class FubTestCollection
             CloseableUtils.close(reader);
         }
 
-        final List<Document> allDocuments = Lists.newArrayList();
+        final List<Document> allDocuments = new ArrayList<>();
         for (List<Document> docList : documents.values()) {
             allDocuments.addAll(docList);
         }
@@ -254,7 +254,7 @@ class FubTestCollection
      */
     private int [][] loadSubtopicMapping(IResource resultsMappingResource)
     {
-        final Map<Integer, Map<Integer, Integer>> topics = Maps.newHashMap();
+        final Map<Integer, Map<Integer, Integer>> topics = new HashMap<>();
 
         BufferedReader reader = null;
         try
@@ -275,7 +275,7 @@ class FubTestCollection
                 Map<Integer, Integer> topicMap = topics.get(topicId);
                 if (topicMap == null)
                 {
-                    topicMap = Maps.newHashMap();
+                    topicMap = new HashMap<>();
                     topics.put(topicId, topicMap);
                 }
 

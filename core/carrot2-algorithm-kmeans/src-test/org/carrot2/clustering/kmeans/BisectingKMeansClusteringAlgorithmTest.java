@@ -12,6 +12,7 @@
 
 package org.carrot2.clustering.kmeans;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -25,7 +26,6 @@ import org.carrot2.text.clustering.MultilingualClustering.LanguageAggregationStr
 import org.carrot2.text.clustering.MultilingualClusteringDescriptor;
 import org.junit.Test;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Sets;
 
 import static org.junit.Assert.*;
@@ -42,7 +42,7 @@ public class BisectingKMeansClusteringAlgorithmTest extends
     @Test
     public void smokeTest()
     {
-        final List<Document> documents = Lists.newArrayList();
+        final List<Document> documents = new ArrayList<>();
         documents.add(new Document("WordA . WordA"));
         documents.add(new Document("WordB . WordB"));
         documents.add(new Document("WordC . WordC"));

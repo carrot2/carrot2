@@ -12,11 +12,10 @@
 
 package org.carrot2.source.pubmed;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.xml.sax.SAXException;
-
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * A SAX content handler that collects PubMed IDs.
@@ -52,7 +51,7 @@ class PubMedIdSearchHandler extends PathTrackingHandler
     public void startDocument() throws SAXException
     {
         matchCount = -1;
-        pubMedPrimaryIds = Lists.newArrayList();
+        pubMedPrimaryIds = new ArrayList<>();
     }
     
     public List<String> getPubMedPrimaryIds()

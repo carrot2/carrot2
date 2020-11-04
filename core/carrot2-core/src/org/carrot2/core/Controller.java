@@ -14,6 +14,7 @@ package org.carrot2.core;
 
 import java.io.Closeable;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -186,7 +187,7 @@ public final class Controller implements Closeable
     public ProcessingResult process(String query, Integer results,
         Class<?>... processingComponentClasses) throws ProcessingException
     {
-        final Map<String, Object> attributes = Maps.newHashMap();
+        final Map<String, Object> attributes = new HashMap<>();
         attributes.put(AttributeNames.QUERY, query);
         if (results != null)
         {
@@ -215,7 +216,7 @@ public final class Controller implements Closeable
     public ProcessingResult process(List<Document> documents, String queryHint,
         Class<?>... processingComponentClasses) throws ProcessingException
     {
-        final Map<String, Object> attributes = Maps.newHashMap();
+        final Map<String, Object> attributes = new HashMap<>();
         attributes.put(AttributeNames.DOCUMENTS, documents);
         if (StringUtils.isNotBlank(queryHint))
         {
@@ -310,7 +311,7 @@ public final class Controller implements Closeable
         try
         {
             // Prepare final maps of all init- and processing-time input attributes
-            final Map<String, Object> inputAttributes = Maps.newHashMap();
+            final Map<String, Object> inputAttributes = new HashMap<>();
             for (int i = 0; i < processingComponentClassesOrIds.length; i++)
             {
                 configurations[i] = resolveComponent(processingComponentClassesOrIds[i]);

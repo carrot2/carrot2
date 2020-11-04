@@ -27,7 +27,6 @@ import org.carrot2.util.attribute.Bindable;
 import com.carrotsearch.hppc.ByteArrayList;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.sorting.IndirectSort;
-import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Sets;
 
 /**
@@ -135,7 +134,7 @@ public final class LanguageModelStemmer
         int stemIndex = 0;
 
         // A list of document-term-frequency pairs, by document, for all words with identical stems.
-        final ArrayList<int[]> stemTfsByDocument = Lists.newArrayList();
+        final ArrayList<int[]> stemTfsByDocument = new ArrayList<>();
         
         stemTfsByDocument.add(wordTfByDocumentArray[stemImagesOrder[0]]);
         byte fieldIndices = 0;

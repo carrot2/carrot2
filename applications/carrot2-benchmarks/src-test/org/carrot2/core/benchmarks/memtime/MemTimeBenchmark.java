@@ -48,8 +48,6 @@ import org.simpleframework.xml.core.Persister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * Compute approximate memory and time characteristic for a given algorithm and input.
  */
@@ -223,7 +221,7 @@ public class MemTimeBenchmark
                 memPeak();
 
                 final long start = now();
-                final HashMap<String, Object> attributes = Maps.newHashMap();
+                final HashMap<String, Object> attributes = new HashMap<>();
                 final List<Document> inputList = documents.subList(0, Math.min(docs,
                     documents.size()));
                 attributes.put(AttributeNames.DOCUMENTS, inputList);

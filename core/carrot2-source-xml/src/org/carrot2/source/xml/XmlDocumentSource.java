@@ -14,6 +14,8 @@ package org.carrot2.source.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -34,8 +36,6 @@ import org.carrot2.core.attribute.Init;
 import org.carrot2.core.attribute.Internal;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.shaded.guava.common.collect.ImmutableMap;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.util.attribute.Attribute;
 import org.carrot2.util.attribute.AttributeLevel;
 import org.carrot2.util.attribute.Bindable;
@@ -305,7 +305,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
 
             if (documents == null)
             {
-                documents = Lists.newArrayList();
+                documents = new ArrayList<>();
             }
 
             // Truncate to the requested number of documents if needed
@@ -357,7 +357,7 @@ public class XmlDocumentSource extends ProcessingComponentBase implements IDocum
 
             // If we got a specialized implementation of the Resource interface,
             // perform substitution of known attributes
-            final Map<String, Object> attributes = Maps.newHashMap();
+            final Map<String, Object> attributes = new HashMap<>();
 
             attributes.put("query", (query != null ? query : ""));
             attributes.put("results", (results != -1 ? results : ""));

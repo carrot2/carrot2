@@ -12,6 +12,8 @@
 
 package org.carrot2.text.preprocessing;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,9 +28,6 @@ import org.carrot2.text.linguistic.ITokenizerFactory;
 import org.carrot2.text.linguistic.LanguageModel;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Before;
-
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Base class for {@link PreprocessingContext} tasks tests.
@@ -47,7 +46,7 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
     @Before
     public void setUpPreprocessingInfrastructure()
     {
-        documents = Lists.newArrayList();
+        documents = new ArrayList<>();
         createPreprocessingContext(null);
     }
 
@@ -155,7 +154,7 @@ public class PreprocessingComponentTestBase extends CarrotTestCase
         temporaryCaseNormalizer.normalize(temporaryContext);
 
         final char [][] images = temporaryContext.allWords.image;
-        wordIndices = Maps.newHashMap();
+        wordIndices = new HashMap<>();
         for (int i = 0; i < images.length; i++)
         {
             wordIndices.put(new String(images[i]), i);

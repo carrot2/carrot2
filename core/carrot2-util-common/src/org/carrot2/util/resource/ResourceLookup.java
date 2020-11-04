@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.util.annotations.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,7 +106,7 @@ public final class ResourceLookup
         final StringBuilder logEntry = new StringBuilder();
         logEntry.append("getAll(").append("):\n\t").append(resource);
 
-        final ArrayList<IResource> result = Lists.newArrayList();
+        final ArrayList<IResource> result = new ArrayList<>();
         for (final IResourceLocator locator : locators)
         {
             final IResource [] hits = locator.getAll(resource);

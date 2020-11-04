@@ -199,7 +199,7 @@ public class SimpleXmlWrappersTest extends CarrotTestCase
     @Test
     public void testArrayList() throws Exception
     {
-        check(Lists.newArrayList("test1", "test2"));
+        check(new ArrayList<>(Arrays.asList("test1", "test2")));
     }
 
     @Test
@@ -211,35 +211,33 @@ public class SimpleXmlWrappersTest extends CarrotTestCase
     @Test
     public void testSubList() throws Exception
     {
-        check(Lists.newArrayList("test1", "test2", "test3").subList(0, 2));
+        check(org.carrot2.util.GuavaReplace.newArrayList("test1", "test2", "test3").subList(0, 2));
     }
 
     @Test
     public void testMixedTypeList() throws Exception
     {
-        check(Lists.newArrayList("test1", 10, true));
+        check(org.carrot2.util.GuavaReplace.newArrayList("test1", 10, true));
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testNestedList() throws Exception
     {
-        check(Lists
-            .newArrayList(Lists.newArrayList("e1", "e2"), Lists.newArrayList(1, 2)));
+        check(org.carrot2.util.GuavaReplace.newArrayList(new ArrayList<>(Arrays.asList("e1", "e2")), new ArrayList<>(Arrays.asList(1, 2))));
     }
 
     @Test
     public void testHashMap() throws Exception
     {
-        final Map<String, Object> map = Maps.newHashMap();
+        final Map<String, Object> map = new HashMap<>();
         check(populateTestMap(map));
     }
 
     @Test
     public void testHashMapWithList() throws Exception
     {
-        final Map<String, Object> map = Maps.newHashMap();
-        map.put("list", Lists.newArrayList("test1", "test2", "test3"));
+        final Map<String, Object> map = new HashMap<>();
+        map.put("list", org.carrot2.util.GuavaReplace.newArrayList("test1", "test2", "test3"));
         check(map);
     }
 
@@ -442,7 +440,7 @@ public class SimpleXmlWrappersTest extends CarrotTestCase
 
     public void checkMap(String key, Object value) throws Exception
     {
-        final Map<String, Object> original = Maps.newHashMap();
+        final Map<String, Object> original = new HashMap<>();
         original.put(key, value);
         final StringWriter writer = new StringWriter();
         new Persister().write(new MapContainer(original), writer);
@@ -454,7 +452,7 @@ public class SimpleXmlWrappersTest extends CarrotTestCase
 
     public void checkList(Object value) throws Exception
     {
-        final List<Object> original = Lists.newArrayList();
+        final List<Object> original = new ArrayList<>();
         original.add(value);
         final StringWriter writer = new StringWriter();
         new Persister().write(new ListContainer(original), writer);

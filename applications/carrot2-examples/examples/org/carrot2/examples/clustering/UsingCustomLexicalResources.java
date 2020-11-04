@@ -14,6 +14,8 @@ package org.carrot2.examples.clustering;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
@@ -26,8 +28,6 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.CommonAttributesDescriptor;
 import org.carrot2.examples.ConsoleFormatter;
 import org.carrot2.examples.SampleDocumentData;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.text.linguistic.DefaultLexicalDataFactoryDescriptor;
 import org.carrot2.text.linguistic.LexicalDataLoaderDescriptor;
 import org.carrot2.util.resource.DirLocator;
@@ -50,7 +50,7 @@ public class UsingCustomLexicalResources
         Path resourcesDir = Paths.get("resources");
         ResourceLookup resourceLookup = new ResourceLookup(new DirLocator(resourcesDir));
 
-        Map<String, Object> attrs = Maps.newHashMap();
+        Map<String, Object> attrs = new HashMap<>();
 
         // Note that we tell the linguistic component to merge all lexical resources,
         // this is the default setting and it usually helps with multi-lingual content.
@@ -72,10 +72,10 @@ public class UsingCustomLexicalResources
     private static void clusterAndDisplayClusters(final Controller controller,
         final Class<? extends IClusteringAlgorithm> clusteringAlgorithm)
     {
-        final Map<String, Object> processingAttributes = Maps.newHashMap();
+        final Map<String, Object> processingAttributes = new HashMap<>();
 
         CommonAttributesDescriptor.attributeBuilder(processingAttributes)
-            .documents(Lists.newArrayList(SampleDocumentData.DOCUMENTS_DATA_MINING))
+            .documents(new ArrayList<>(SampleDocumentData.DOCUMENTS_DATA_MINING))
             .query("data mining");
 
         final ProcessingResult result = controller.process(processingAttributes, 

@@ -21,7 +21,6 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 import com.carrotsearch.hppc.IntStack;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * A simple SAX tracking handler that stores the current element's path.
@@ -42,7 +41,7 @@ class PathTrackingHandler implements ContentHandler
     /** Path segments for recursion. */
     private final IntStack pathSegments = new IntStack();
 
-    private final HashMap<String, Trigger> triggers = Maps.newHashMap();
+    private final HashMap<String, Trigger> triggers = new HashMap<>();
 
     protected PathTrackingHandler addTrigger(String simplePath, Trigger p) {
         if (triggers.containsKey(simplePath)) {

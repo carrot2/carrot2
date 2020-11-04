@@ -12,12 +12,11 @@
 
 package org.carrot2.util.resource;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Test;
-
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 import static org.junit.Assert.*;
 
@@ -30,7 +29,7 @@ public class URLResourceWithParamsTest extends CarrotTestCase
     public void testNoAttributesToSubstitute()
     {
         final String url = "http://test.com/main?query=${query}&results=${results}";
-        final Map<String, Object> attributes = Maps.newHashMap();
+        final Map<String, Object> attributes = new HashMap<>();
         final String processedUrl = URLResourceWithParams.substituteAttributes(url, attributes);
 
         assertEquals(url, processedUrl);
@@ -40,7 +39,7 @@ public class URLResourceWithParamsTest extends CarrotTestCase
     public void testTwoAttributesToSubstitute()
     {
         final String url = "http://test.com/main?query=${query}&results=${results}";
-        final Map<String, Object> attributes = Maps.newHashMap();
+        final Map<String, Object> attributes = new HashMap<>();
         attributes.put("query", "test");
         attributes.put("results", "");
 

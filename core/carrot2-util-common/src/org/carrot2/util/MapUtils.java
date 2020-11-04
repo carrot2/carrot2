@@ -15,9 +15,6 @@ package org.carrot2.util;
 import java.util.*;
 import java.util.Map.Entry;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * Utilities for working with {@link Map}s.
  */
@@ -49,7 +46,7 @@ public class MapUtils
     @SuppressWarnings({"rawtypes"})
     public static Map<String, Object> unpack(final Map map)
     {
-        final Map<String, Object> result = Maps.newHashMap();
+        final Map<String, Object> result = new HashMap<>();
         for (Object entry : map.entrySet())
         {
             final Map.Entry mapEntry = (Entry) entry;
@@ -62,7 +59,7 @@ public class MapUtils
             }
             else
             {
-                result.put(parameterName, Lists.newArrayList(parameterValues));
+                result.put(parameterName, org.carrot2.util.GuavaReplace.newArrayList(parameterValues));
             }
         }
         return result;

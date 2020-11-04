@@ -23,7 +23,6 @@ import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.widgets.Display;
 
 import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Search editor serves as a {@link ISelectionProvider}, providing the selection
@@ -34,7 +33,7 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
     /**
      * An array of selection listeners.
      */
-    private final ArrayList<ISelectionChangedListener> listeners = Lists.newArrayList();
+    private final ArrayList<ISelectionChangedListener> listeners = new ArrayList<>();
     
     /**
      * Selected clusters by their ID.
@@ -44,13 +43,13 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
     /**
      * Mapping from clusters identifiers to cluster instances.
      */
-    private final Map<Integer, Cluster> clustersById = Maps.newHashMap();
+    private final Map<Integer, Cluster> clustersById = new HashMap<>();
 
     /**
      * Mapping from cluster identifiers to {@link TreePath} with
      * {@link Cluster} objects for the tree model.
      */
-    private final Map<Integer, TreePath> clusterTreePathsById = Maps.newHashMap();
+    private final Map<Integer, TreePath> clusterTreePathsById = new HashMap<>();
 
     /**
      * Last processing result to which this selection applies.
@@ -102,7 +101,7 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
 
         public List<Cluster> toList()
         {
-            return Lists.newArrayList(selected);
+            return new ArrayList<>(selected);
         }
 
         public boolean isEmpty()
@@ -307,7 +306,7 @@ public final class SearchEditorSelectionProvider implements ISelectionProvider
         final SelectionChangedEvent event = 
             new SelectionChangedEvent(this, getSelection());
 
-        ArrayList<ISelectionChangedListener> notifyList = Lists.newArrayList(listeners);
+        ArrayList<ISelectionChangedListener> notifyList = new ArrayList<>(listeners);
         notifyList.removeAll(Arrays.asList(skipListeners));
 
         for (ISelectionChangedListener listener : notifyList)

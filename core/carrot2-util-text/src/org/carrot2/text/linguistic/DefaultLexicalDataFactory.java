@@ -50,8 +50,6 @@ import org.slf4j.LoggerFactory;
 
 import com.carrotsearch.hppc.ObjectHashSet;
 import org.carrot2.shaded.guava.common.base.Function;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.shaded.guava.common.collect.Sets;
 
 /**
@@ -151,9 +149,9 @@ public class DefaultLexicalDataFactory implements ILexicalDataFactory
     {
         // Load lexical resources.
         ObjectHashSet<MutableCharArray> mergedStopwords = new ObjectHashSet<>();
-        ArrayList<Pattern> mergedStoplabels = Lists.newArrayList();
+        ArrayList<Pattern> mergedStoplabels = new ArrayList<>();
 
-        HashMap<LanguageCode, ILexicalData> resourceMap = Maps.newHashMap();
+        HashMap<LanguageCode, ILexicalData> resourceMap = new HashMap<>();
         for (LanguageCode languageCode : LanguageCode.values())
         {
             final String isoCode = languageCode.getIsoCode();

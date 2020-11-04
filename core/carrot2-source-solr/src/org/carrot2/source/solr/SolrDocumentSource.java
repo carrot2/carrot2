@@ -13,6 +13,7 @@
 package org.carrot2.source.solr;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +46,6 @@ import org.carrot2.shaded.guava.common.base.Predicate;
 import org.carrot2.shaded.guava.common.base.Strings;
 import org.carrot2.shaded.guava.common.collect.Iterables;
 import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.shaded.guava.common.collect.Sets;
 
 /**
@@ -255,7 +255,7 @@ public class SolrDocumentSource extends RemoteXmlSimpleSearchEngineBase
     @Override
     protected Map<String, String> getXsltParameters()
     {
-        final Map<String, String> parameters = Maps.newHashMap();
+        final Map<String, String> parameters = new HashMap<>();
 
         parameters.put("solr.title-field", solrTitleFieldName);
         parameters.put("solr.summary-field", solrSummaryFieldName);

@@ -15,8 +15,10 @@ package org.carrot2.core.test;
 import static org.carrot2.core.test.SampleDocumentData.DOCUMENTS_DATA_MINING;
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.assertThatClusters;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -46,8 +48,6 @@ import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
 import org.carrot2.shaded.guava.common.base.Strings;
 import org.carrot2.shaded.guava.common.collect.ArrayListMultimap;
 import org.carrot2.shaded.guava.common.collect.ImmutableMap;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.shaded.guava.common.collect.Multimap;
 import org.carrot2.shaded.guava.common.collect.Sets;
 
@@ -92,7 +92,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
     @Test
     public void testEmptyDocuments()
     {
-        final List<Document> documents = Lists.newArrayList();
+        final List<Document> documents = new ArrayList<>();
         final int documentCount = randomIntBetween(1, 100);
         for (int i = 0; i < documentCount; i++)
         {
@@ -152,7 +152,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
         final Controller controller = getCachingController(initAttributes);
 
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
-        List<Callable<ProcessingResult>> callables = Lists.newArrayList();
+        List<Callable<ProcessingResult>> callables = new ArrayList<>();
         for (int i = 0; i < numberOfThreads * queriesPerThread; i++)
         {
             final int dataSetIndex = i;
@@ -160,7 +160,7 @@ public abstract class ClusteringAlgorithmTestBase<T extends IClusteringAlgorithm
             {
                 public ProcessingResult call() throws Exception
                 {
-                    Map<String, Object> localAttributes = Maps.newHashMap();
+                    Map<String, Object> localAttributes = new HashMap<>();
                     localAttributes.put(AttributeNames.DOCUMENTS, SampleDocumentData.ALL
                         .get(dataSetIndex % SampleDocumentData.ALL.size()));
                     localAttributes.put("dataSetIndex", dataSetIndex);

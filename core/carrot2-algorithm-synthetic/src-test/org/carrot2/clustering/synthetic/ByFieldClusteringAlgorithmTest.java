@@ -14,6 +14,8 @@ package org.carrot2.clustering.synthetic;
 
 import static org.carrot2.core.test.assertions.Carrot2CoreAssertions.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.carrot2.core.Cluster;
@@ -46,7 +48,7 @@ public class ByFieldClusteringAlgorithmTest extends
         final Document d21 = documentWithField("2");
         final Document d22 = documentWithField("2");
         final Document dn = documentWithField(null);
-        final List<Document> documents = Lists.newArrayList(d11, d12, d21, d22, dn);
+        final List<Document> documents = org.carrot2.util.GuavaReplace.newArrayList(d11, d12, d21, d22, dn);
 
         check(documents, Lists.<Cluster> newArrayList(new Cluster("1", d11, d12),
             new Cluster("2", d21, d22)), dn);
@@ -55,12 +57,12 @@ public class ByFieldClusteringAlgorithmTest extends
     @Test
     public void testCollectionField()
     {
-        final Document d11 = documentWithField(Lists.newArrayList("11", "12"));
-        final Document d12 = documentWithField(Lists.newArrayList("11"));
-        final Document d21 = documentWithField(Lists.newArrayList("21", "22"));
-        final Document d22 = documentWithField(Lists.newArrayList("23"));
+        final Document d11 = documentWithField(new ArrayList<>(Arrays.asList("11", "12")));
+        final Document d12 = documentWithField(new ArrayList<>(Arrays.asList("11")));
+        final Document d21 = documentWithField(new ArrayList<>(Arrays.asList("21", "22")));
+        final Document d22 = documentWithField(new ArrayList<>(Arrays.asList("23")));
         final Document dn = documentWithField(null);
-        final List<Document> documents = Lists.newArrayList(d11, d12, d21, d22, dn);
+        final List<Document> documents = org.carrot2.util.GuavaReplace.newArrayList(d11, d12, d21, d22, dn);
 
         check(documents, Lists.<Cluster> newArrayList(new Cluster("11", d11, d12),
             new Cluster("12", d11), new Cluster("21", d21), new Cluster("22", d21),

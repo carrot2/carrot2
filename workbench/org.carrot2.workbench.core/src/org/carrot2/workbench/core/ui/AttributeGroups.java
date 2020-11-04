@@ -140,12 +140,12 @@ public final class AttributeGroups extends Composite implements IAttributeEventP
     /**
      * {@link Section} objects for attribute groups, if any.
      */
-    private Map<String, Section> attributeGroupSections = Maps.newHashMap();
+    private Map<String, Section> attributeGroupSections = new HashMap<>();
 
     /**
      * Expansion state for sections (regardless if they are shown or not).
      */
-    private Map<String, Boolean> attributeGroupExpansionState = Maps.newHashMap();
+    private Map<String, Boolean> attributeGroupExpansionState = new HashMap<>();
 
     /**
      * A predicate that filters out all descriptors without an editor.

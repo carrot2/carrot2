@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -182,7 +183,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
                         .putAll(componentIdToConfiguration.get(parameter).attributes);
                 }
 
-                final Map<String, Object> initOutputAttrs = Maps.newHashMap();
+                final Map<String, Object> initOutputAttrs = new HashMap<>();
 
                 checkNonPrimitiveInstances(component, initAttrs,
                     new AllAnnotationsPresentPredicate(Input.class, Init.class));
@@ -368,7 +369,7 @@ public class PoolingProcessingComponentManager implements IProcessingComponentMa
         public void activate(IProcessingComponent processingComponent, String parameter)
         {
             // Remember values of @Input @Processing attributes
-            final Map<String, Object> originalValues = Maps.newHashMap();
+            final Map<String, Object> originalValues = new HashMap<>();
             try
             {
                 AttributeBinder.get(processingComponent, originalValues, Input.class,

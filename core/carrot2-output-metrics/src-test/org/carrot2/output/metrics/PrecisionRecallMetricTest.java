@@ -17,8 +17,6 @@ import org.carrot2.util.MathUtils;
 import org.fest.assertions.Delta;
 import org.junit.Test;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-
 /**
  * Test cases for {@link IClusteringMetric}.
  */
@@ -97,7 +95,7 @@ public class PrecisionRecallMetricTest extends IdealPartitioningBasedMetricTest
     {
         final PrecisionRecallMetric metric = new PrecisionRecallMetric();
         metric.documents = getAllDocuments(clusters);
-        metric.clusters = Lists.newArrayList(clusters);
+        metric.clusters = org.carrot2.util.GuavaReplace.newArrayList(clusters);
         metric.calculate();
         assertEquals(expectedAveragePrecision, metric.weightedAveragePrecision, 0.001,
             "precision");

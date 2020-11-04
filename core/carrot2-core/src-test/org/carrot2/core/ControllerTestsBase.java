@@ -16,6 +16,7 @@ import static org.easymock.EasyMock.createStrictControl;
 import static org.easymock.EasyMock.isA;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -38,7 +39,6 @@ import org.junit.Assert;
 import org.junit.Before;
 
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * Base class for {@link Controller} tests.
@@ -100,13 +100,13 @@ public abstract class ControllerTestsBase extends CarrotTestCase
         component2Mock = mocksControl.createMock(IProcessingComponent.class);
         component3Mock = mocksControl.createMock(IProcessingComponent.class);
 
-        initAttributes = Maps.newHashMap();
+        initAttributes = new HashMap<>();
         initAttributes.put("delegate1", component1Mock);
         initAttributes.put("delegate2", component2Mock);
         initAttributes.put("delegate3", component3Mock);
         initAttributes.put("instanceAttribute", "i");
 
-        processingAttributes = Maps.newHashMap();
+        processingAttributes = new HashMap<>();
     }
 
     @After

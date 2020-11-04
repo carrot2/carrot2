@@ -12,6 +12,7 @@
 
 package org.carrot2.text.preprocessing;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,7 +30,6 @@ import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.procedures.IntIntProcedure;
 
 import org.carrot2.shaded.guava.common.base.MoreObjects;
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Fest-style assertions on the content of {@link PreprocessingContext}.
@@ -111,7 +111,7 @@ class PreprocessingContextAssert
         Assertions.assertThat(context.allWords.image)
             .describedAs("the context's allWords is not properly initialized.").isNotNull();
 
-        List<String> result = Lists.newArrayList();
+        List<String> result = new ArrayList<>();
         for (int i = context.allWords.image.length; --i >= 0;)
         {
             result.add(new String(context.allWords.image[i]));
@@ -128,7 +128,7 @@ class PreprocessingContextAssert
         Assertions.assertThat(context.allPhrases.wordIndices)
             .describedAs("the context's allPhrases is not properly initialized.").isNotNull();
 
-        List<String> result = Lists.newArrayList();
+        List<String> result = new ArrayList<>();
         for (int i = context.allPhrases.wordIndices.length; --i >= 0;)
         {
             result.add(context.allPhrases.getPhrase(i).toString());
@@ -471,7 +471,7 @@ nextPhrase:
 
     public List<TokenEntry> tokens()
     {
-        List<TokenEntry> result = Lists.newArrayList();
+        List<TokenEntry> result = new ArrayList<>();
         for (int i = 0; i < context.allTokens.image.length; i++)
             result.add(new TokenEntry(i));
         return result;

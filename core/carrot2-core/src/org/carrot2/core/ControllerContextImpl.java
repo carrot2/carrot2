@@ -15,9 +15,6 @@ package org.carrot2.core;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * Package-private implementation of {@link IControllerContext}.
  */
@@ -26,12 +23,12 @@ final class ControllerContextImpl implements IControllerContext
     /**
      * Listeners on this context.
      */
-    private final ArrayList<IControllerContextListener> listeners = Lists.newArrayList();
+    private final ArrayList<IControllerContextListener> listeners = new ArrayList<>();
 
     /**
      * Attributes of this context.
      */
-    private final HashMap<String, Object> attributes = Maps.newHashMap();
+    private final HashMap<String, Object> attributes = new HashMap<>();
 
     /**
      * {@inheritDoc}

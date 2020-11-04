@@ -18,7 +18,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.carrot2.mahout.math.matrix.*;
 import org.carrot2.matrix.factorization.seeding.KMeansSeedingStrategyFactory;
 import org.carrot2.matrix.factorization.seeding.RandomSeedingStrategyFactory;
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * This class helps to guesstimate the number of iterations for iterative factorization
@@ -53,7 +52,7 @@ public class IterationNumberGuesser
 
     static
     {
-        allKnownCoefficients = Maps.newHashMap();
+        allKnownCoefficients = new HashMap<>();
 
         /** NMF-ED, Random seeding, level 1 */
         allKnownCoefficients.put(Arrays.asList(new Object []

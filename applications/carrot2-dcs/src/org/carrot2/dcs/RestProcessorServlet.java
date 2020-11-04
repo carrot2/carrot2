@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +59,6 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.dcs.DcsRequestModel.OutputFormat;
 import org.carrot2.shaded.guava.common.collect.ImmutableMap;
 import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.AttributeBinder;
@@ -232,7 +232,7 @@ public final class RestProcessorServlet extends HttpServlet
         // Load component suite. Use classpath too (for JUnit tests).
         try
         {
-            List<IResourceLocator> resourceLocators = Lists.newArrayList();
+            List<IResourceLocator> resourceLocators = new ArrayList<>();
             resourceLocators.add(new PrefixDecoratorLocator(new ServletContextLocator(
                 getServletContext()), "/WEB-INF/suites/"));
 
@@ -279,7 +279,7 @@ public final class RestProcessorServlet extends HttpServlet
         controller = ControllerFactory.createCachingPooling(
             cachedComponentClasses.toArray(new Class [cachedComponentClasses.size()]));
 
-        List<IResourceLocator> locators = Lists.newArrayList();
+        List<IResourceLocator> locators = new ArrayList<>();
         locators.add(new PrefixDecoratorLocator(new ServletContextLocator(
             getServletContext()), "/WEB-INF/resources/"));
 
@@ -409,7 +409,7 @@ public final class RestProcessorServlet extends HttpServlet
         }
 
         // Everything else is identical for POST and GET.
-        final Map<String, Object> parameters = Maps.newHashMap();
+        final Map<String, Object> parameters = new HashMap<>();
         @SuppressWarnings("unchecked")
         final Enumeration<String> parameterNames = (Enumeration<String>) request.getParameterNames();
         while (parameterNames.hasMoreElements()) {
@@ -429,7 +429,7 @@ public final class RestProcessorServlet extends HttpServlet
     private void handleMultiPart(HttpServletRequest request, HttpServletResponse response)
         throws IOException
     {
-        final Map<String, Object> parameters = Maps.newHashMap();
+        final Map<String, Object> parameters = new HashMap<>();
         ProcessingResult input = null;
 
         final ServletFileUpload upload = new ServletFileUpload(new MemoryFileItemFactory());
@@ -519,7 +519,7 @@ public final class RestProcessorServlet extends HttpServlet
 
         // Build the attributes used for processing. Use the ones defined in the input
         // XML, if any, and override with the ones provided in POST parameters.
-        final Map<String, Object> processingAttributes = Maps.newHashMap();
+        final Map<String, Object> processingAttributes = new HashMap<>();
 
         // Attributes from the XML stream
         if (input != null)

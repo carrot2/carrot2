@@ -13,6 +13,7 @@
 package org.carrot2.workbench.editors.impl;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +59,7 @@ public final class ImplementingClassesEditor extends MappedValueComboEditor
         valueRequired = (descriptor.getAnnotation(Required.class) != null);
 
         final BiMap<Object, String> valueToName = HashBiMap.create();
-        final List<Object> valueOrder = Lists.newArrayList();
+        final List<Object> valueOrder = new ArrayList<>();
         for (Class<?> clazz : constraint.classes())
         {
             valueOrder.add(clazz);

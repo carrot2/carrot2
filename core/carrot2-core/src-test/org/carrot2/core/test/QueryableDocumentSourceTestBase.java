@@ -12,6 +12,8 @@
 
 package org.carrot2.core.test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -118,7 +120,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
     @SuppressWarnings("unchecked")
     public void testInCachingController() throws InterruptedException, ExecutionException
     {
-        final Map<String, Object> attributes = Maps.newHashMap();
+        final Map<String, Object> attributes = new HashMap<>();
         attributes.put(AttributeNames.QUERY, getSmallQueryText());
         attributes.put(AttributeNames.RESULTS, getSmallQuerySize());
 
@@ -129,7 +131,7 @@ public abstract class QueryableDocumentSourceTestBase<T extends IDocumentSource>
         final ExecutorService executorService = Executors.newFixedThreadPool(count);
 
         try {
-            List<Callable<ProcessingResult>> callables = Lists.newArrayList();
+            List<Callable<ProcessingResult>> callables = new ArrayList<>();
             for (int i = 0; i < count; i++)
             {
                 callables.add(new Callable<ProcessingResult>()

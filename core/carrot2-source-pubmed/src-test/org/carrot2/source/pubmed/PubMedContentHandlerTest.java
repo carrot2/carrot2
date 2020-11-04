@@ -13,6 +13,7 @@
 package org.carrot2.source.pubmed;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.carrot2.core.Document;
@@ -22,7 +23,6 @@ import org.junit.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.io.Resources;
 
 public class PubMedContentHandlerTest extends CarrotTestCase
@@ -38,7 +38,7 @@ public class PubMedContentHandlerTest extends CarrotTestCase
         reader.parse(new InputSource(new ByteArrayInputStream(bytes)));
 
         SearchEngineResponse response = searchHandler.getResponse();
-        List<String> pmids = Lists.newArrayList();
+        List<String> pmids = new ArrayList<>();
         for (Document doc : response.results)
         {
             if ("24009777".equals(doc.getStringId())) {

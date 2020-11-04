@@ -18,8 +18,6 @@ import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-
 /**
  * Test cases for {@link SubstringComparator}.
  */
@@ -42,7 +40,7 @@ public class SubstringComparatorTest extends CarrotTestCase
 
         final int substrLength = 3;
         final int maxFrom = tokensWordIndex.length - substrLength;
-        List<Substring> substrings = Lists.newArrayList();
+        List<Substring> substrings = new ArrayList<>();
         for (int i = 0; i < iterations(500, 2000); i++)
             substrings.add(new Substring(i, 
                 i % maxFrom, (i + substrLength) % maxFrom, 1));

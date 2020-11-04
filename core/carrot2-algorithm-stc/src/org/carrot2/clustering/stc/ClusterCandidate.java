@@ -46,7 +46,7 @@ final class ClusterCandidate
     /* For cluster merging. */
     ClusterCandidate()
     {
-        this.phrases = Lists.newArrayList();
+        this.phrases = new ArrayList<>();
         this.documents = new BitSet();
     }
 

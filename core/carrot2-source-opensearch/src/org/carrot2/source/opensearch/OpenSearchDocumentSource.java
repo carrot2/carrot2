@@ -12,6 +12,7 @@
 
 package org.carrot2.source.opensearch;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -36,7 +37,6 @@ import org.carrot2.util.attribute.constraint.IntRange;
 import org.carrot2.util.resource.URLResourceWithParams;
 import org.slf4j.Logger;
 
-import org.carrot2.shaded.guava.common.collect.Maps;
 import com.sun.syndication.fetcher.FeedFetcher;
 import com.sun.syndication.fetcher.impl.HttpURLFeedFetcher;
 
@@ -227,7 +227,7 @@ public class OpenSearchDocumentSource extends MultipageSearchEngine
             public SearchEngineResponse search() throws Exception
             {
                 // Replace variables in the URL
-                final Map<String, Object> values = Maps.newHashMap();
+                final Map<String, Object> values = new HashMap<>();
                 values.put(SEARCH_TERMS_VARIABLE_NAME, query);
                 values.put(START_INDEX_VARIABLE_NAME, bucket.start + 1);
                 values.put(START_PAGE_VARIABLE_NAME, bucket.start + 1);

@@ -146,11 +146,11 @@ public class MultilingualClustering
     
     public List<Cluster> process(List<Document> documents, IMonolingualClusteringAlgorithm algorithm)
     {
-        languageCounts = Maps.newHashMap();
+        languageCounts = new HashMap<>();
         
         if (documents.isEmpty())
         {
-            return Lists.newArrayList();
+            return new ArrayList<>();
         }
         
         if (LanguageAggregationStrategy.CLUSTER_IN_MAJORITY_LANGUAGE.equals(languageAggregationStrategy)) 
@@ -161,7 +161,7 @@ public class MultilingualClustering
         // Clusters documents in each language separately,
         // creates a map of top-level Cluster instances named after the language code.
         final Map<LanguageCode, Cluster> clustersByLanguage = clusterByLanguage(documents, algorithm);
-        final List<Cluster> clusters = Lists.newArrayList(clustersByLanguage.values());
+        final List<Cluster> clusters = new ArrayList<>(clustersByLanguage.values());
 
         // For FLATTEN_ALL we combine all clusters
         if (clustersByLanguage.size() == 1 ||
@@ -169,7 +169,7 @@ public class MultilingualClustering
         {
             // For FLATTEN_ALL, we simply mix up all clusters, moving all unclustered
             // documents under one common Other Topics cluster.
-            final List<Cluster> flattenedClusters = Lists.newArrayList();
+            final List<Cluster> flattenedClusters = new ArrayList<>();
             for (Cluster cluster : clusters)
             {
                 final List<Cluster> subclusters = cluster.getSubclusters();
@@ -225,7 +225,7 @@ public class MultilingualClustering
                 if (majorLanguageCluster != null)
                 {
                     iterator.remove();
-                    final List<Cluster> flattenedClusters = Lists.newArrayList();
+                    final List<Cluster> flattenedClusters = new ArrayList<>();
                     flattenedClusters.addAll(majorLanguageCluster.getSubclusters());
 
                     final Cluster otherLanguages = new Cluster("Other Languages");
@@ -267,7 +267,7 @@ public class MultilingualClustering
         // For each language, perform clustering. Please note that implementations of 
         // IMonolingualClusteringAlgorithm.cluster() are not guaranteed to be thread-safe
         // and hence the method must NOT be called concurrently.
-        final Map<LanguageCode, Cluster> clusters = Maps.newHashMap();
+        final Map<LanguageCode, Cluster> clusters = new HashMap<>();
         for (String language : documentsByLanguage.keySet())
         {
             final ImmutableList<Document> languageDocuments = documentsByLanguage.get(language);

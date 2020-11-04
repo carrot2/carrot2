@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Google Guava (Carrot2 Repackaged)
 Bundle-SymbolicName: org.carrot2.shaded.guava
-Bundle-Version: 29.0
-Bundle-ClassPath: carrot2-guava-29.0-jre.jar
+Bundle-Version: 30.0
+Bundle-ClassPath: carrot2-guava-30.0-jre.jar
 Bundle-Vendor: Carrot2.org (Google Inc.)
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.carrot2.shaded.guava.common.annotations,

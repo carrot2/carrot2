@@ -110,16 +110,16 @@ public final class EditorFactory
     private static List<TypeEditorWrapper> sortTypeEditors(
         List<TypeEditorWrapper> editors, final AttributeDescriptor attribute)
     {
-        final List<String> annotationNames = Lists.newArrayList();
+        final List<String> annotationNames = new ArrayList<>();
         for (Annotation ann : attribute.constraints)
         {
             annotationNames.add(ann.annotationType().getName());
         }
 
-        final HashMap<TypeEditorWrapper, Integer> matchingConstraints = Maps.newHashMap();
+        final HashMap<TypeEditorWrapper, Integer> matchingConstraints = new HashMap<>();
         for (TypeEditorWrapper t : editors)
         {
-            List<String> matches = Lists.newArrayList(annotationNames);
+            List<String> matches = new ArrayList<>(annotationNames);
             matches.retainAll(t.constraints);
             matchingConstraints.put(t, matches.size());
         }
@@ -163,7 +163,7 @@ public final class EditorFactory
     private static List<TypeEditorWrapper> getCompatibleTypeEditors(
         final AttributeDescriptor attribute)
     {
-        final List<String> annotationNames = Lists.newArrayList();
+        final List<String> annotationNames = new ArrayList<>();
         for (Annotation ann : attribute.constraints)
         {
             annotationNames.add(ann.annotationType().getName());

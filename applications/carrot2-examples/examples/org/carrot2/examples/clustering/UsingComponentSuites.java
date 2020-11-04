@@ -13,6 +13,7 @@
 package org.carrot2.examples.clustering;
 
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,6 @@ import org.carrot2.util.resource.IResource;
 import org.carrot2.util.resource.ResourceLookup;
 
 import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.source.microsoft.v7.Bing7DocumentSourceDescriptor;
 
 /**
@@ -48,7 +48,7 @@ public class UsingComponentSuites
         final Controller controller = ControllerFactory.createCachingPooling(IDocumentSource.class);
 
         // Initialization-time attributes that will apply to all components.
-        final Map<String, Object> initAttributes = Maps.newHashMap();
+        final Map<String, Object> initAttributes = new HashMap<>();
 
         // Prepare resource lookup facade. We will use the suites directory 
         // and class path resources.
@@ -99,7 +99,7 @@ public class UsingComponentSuites
                     + ", clustering with " + algorithms.get(a).getLabel());
 
                 // As usual, we pass attributes for processing
-                final Map<String, Object> attributes = Maps.newHashMap();
+                final Map<String, Object> attributes = new HashMap<>();
                 CommonAttributesDescriptor.attributeBuilder(attributes)
                     .query("data mining");
 

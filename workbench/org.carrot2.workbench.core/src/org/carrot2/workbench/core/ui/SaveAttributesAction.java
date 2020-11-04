@@ -268,7 +268,7 @@ abstract class SaveAttributesAction extends Action
         BindableDescriptor desc = WorkbenchCorePlugin.getDefault()
             .getComponentDescriptor(componentId);
 
-        final HashMap<String, Object> defaults = Maps.newHashMap();
+        final HashMap<String, Object> defaults = new HashMap<>();
         for (Map.Entry<String, AttributeDescriptor> e : desc.flatten().only(Input.class).attributeDescriptors
             .entrySet())
         {

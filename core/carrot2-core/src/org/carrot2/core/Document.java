@@ -36,7 +36,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.carrot2.shaded.guava.common.base.Function;
-import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.shaded.guava.common.collect.Ordering;
 import org.carrot2.shaded.guava.common.collect.Sets;
@@ -117,7 +116,7 @@ public final class Document implements Cloneable
     public static final String PARTITIONS = "partitions";
 
     /** Fields of this document */
-    private final Map<String, Object> fields = Maps.newHashMap();
+    private final Map<String, Object> fields = new HashMap<>();
 
     /** Read-only collection of fields exposed in {@link #getField(String)}. */
     private final Map<String, Object> fieldsView = Collections.unmodifiableMap(fields);
@@ -622,7 +621,7 @@ public final class Document implements Cloneable
         {
             if (serializationListeners == null)
             {
-                serializationListeners = Lists.newArrayList();
+                serializationListeners = new ArrayList<>();
             }
             serializationListeners.add(listener);
         }

@@ -20,8 +20,6 @@ import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.core.attribute.Processing;
 import org.carrot2.util.attribute.*;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-
 /**
  * Computes cluster contamination. If a cluster groups documents found in the same
  * {@link Document#PARTITIONS}, its contamination is 0. If a cluster groups an equally
@@ -122,7 +120,7 @@ public class ContaminationMetric extends IdealPartitioningBasedMetric
         final Map<Object, Integer> documentCountByPartition = getDocumentCountByPartition(cluster
             .getAllDocuments());
 
-        final ArrayList<Integer> counts = Lists.newArrayList();
+        final ArrayList<Integer> counts = new ArrayList<>();
         counts.addAll(documentCountByPartition.values());
 
         return calculateH(counts);
@@ -130,7 +128,7 @@ public class ContaminationMetric extends IdealPartitioningBasedMetric
 
     static int calculateWorstCaseH(int clusterSize, int partitionCount)
     {
-        final ArrayList<Integer> counts = Lists.newArrayList();
+        final ArrayList<Integer> counts = new ArrayList<>();
 
         for (int partition = 0; partition < partitionCount; partition++)
         {

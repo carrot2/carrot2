@@ -20,12 +20,11 @@ import org.junit.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.io.Resources;
 
 public class PubMedIdSearchHandlerTest extends CarrotTestCase
 {
-    static ArrayList<String> PMID_SET = Lists.newArrayList(
+    static ArrayList<String> PMID_SET = org.carrot2.util.GuavaReplace.newArrayList(
         "24470789",
         "24469991",
         "24468157",

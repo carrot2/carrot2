@@ -12,6 +12,7 @@
 
 package org.carrot2.workbench.core.ui;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
@@ -152,7 +152,7 @@ public final class ClusterTree
     /** Return a list of expanded clusters in the current tree. */
     private List<Cluster> getExpandedClusters()
     {
-        List<Cluster> expanded = Lists.newArrayList(); 
+        List<Cluster> expanded = new ArrayList<>(); 
         for (Object o : this.treeViewer.getExpandedElements())
         {
             expanded.add((Cluster) o);

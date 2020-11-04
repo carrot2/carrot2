@@ -18,7 +18,6 @@ import org.carrot2.core.Document;
 import org.carrot2.core.LanguageCode;
 
 import org.carrot2.shaded.guava.common.collect.ImmutableList;
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * A set of sample documents returned for the query <i>data mining</i>. This set is
@@ -3247,7 +3246,7 @@ public final class SampleDocumentData
     {
         ALL = ImmutableList.of(
             DOCUMENTS_DATA_MINING, DOCUMENTS_DAWID, DOCUMENTS_SALSA_MULTILINGUAL);
-        List<Document> flattened = Lists.newArrayList();
+        List<Document> flattened = new ArrayList<>();
         for (List<Document> sub : ALL) {
             flattened.addAll(sub);
         }

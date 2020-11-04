@@ -42,7 +42,6 @@ import org.carrot2.util.attribute.Level;
 import com.carrotsearch.hppc.ByteArrayList;
 import com.carrotsearch.hppc.IntArrayList;
 import com.carrotsearch.hppc.ShortArrayList;
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * Performs tokenization of documents.
@@ -113,7 +112,7 @@ public final class Tokenizer
         }
 
         // Prepare arrays
-        images = Lists.newArrayList();
+        images = new ArrayList<>();
         tokenTypes = new ShortArrayList();
         documentIndices = new IntArrayList();
         fieldIndices = new ByteArrayList();

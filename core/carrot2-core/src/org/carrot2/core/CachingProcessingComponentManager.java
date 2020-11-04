@@ -158,7 +158,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
     {
         // Return some custom statistics
         final CacheStats cacheStats = cache.stats();
-        final Map<String, Object> stats = Maps.newHashMap();
+        final Map<String, Object> stats = new HashMap<>();
         if (delegate instanceof IControllerStatisticsProvider) 
         {
             stats.putAll(((IControllerStatisticsProvider) delegate).getStatistics());
@@ -307,7 +307,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
             final Map<String, AttributeDescriptor> inputDescriptors,
             Map<String, Object> attributes)
         {
-            final Map<String, Object> attributesForDrescriptors = Maps.newHashMap();
+            final Map<String, Object> attributesForDrescriptors = new HashMap<>();
             for (AttributeDescriptor descriptor : inputDescriptors.values())
             {
                 if (attributes.containsKey(descriptor.key))
@@ -424,7 +424,7 @@ public class CachingProcessingComponentManager implements IProcessingComponentMa
             IProcessingComponent component = null;
             try
             {
-                final Map<String, Object> attributes = Maps.newHashMap();
+                final Map<String, Object> attributes = new HashMap<>();
                 component = delegate.prepare(componentClass, componentId, 
                     key.inputAttributes, attributes);
 

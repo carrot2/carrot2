@@ -20,6 +20,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,6 @@ import org.carrot2.core.ProcessingResult;
 import org.carrot2.core.attribute.AttributeNames;
 import org.carrot2.shaded.guava.common.collect.ImmutableMap;
 import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.source.xml.XmlDocumentSource;
 import org.carrot2.text.linguistic.DefaultLexicalDataFactory;
 import org.carrot2.util.CloseableUtils;
@@ -292,7 +292,7 @@ public class BatchApp
         {
             filesClusteredTotal++;
 
-            final Map<String, Object> attributes = Maps.newHashMap();
+            final Map<String, Object> attributes = new HashMap<>();
             attributes.put("XmlDocumentSource.xml", new FileResource(fileOrDirectory));
             final ProcessingResult result = controller.process(attributes,
                 XmlDocumentSource.class.getName(), algorithm);

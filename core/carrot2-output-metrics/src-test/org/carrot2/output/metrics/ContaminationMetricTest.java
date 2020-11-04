@@ -15,8 +15,6 @@ package org.carrot2.output.metrics;
 import org.carrot2.core.Cluster;
 import org.junit.Test;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-
 /**
  * Test cases for {@link IClusteringMetric}.
  */
@@ -111,7 +109,7 @@ public class ContaminationMetricTest extends IdealPartitioningBasedMetricTest
     {
         final ContaminationMetric metric = new ContaminationMetric();
         metric.documents = getAllDocuments(clusters);
-        metric.clusters = Lists.newArrayList(clusters);
+        metric.clusters = org.carrot2.util.GuavaReplace.newArrayList(clusters);
         metric.calculate();
         for (int i = 0; i < clusters.length; i++)
         {

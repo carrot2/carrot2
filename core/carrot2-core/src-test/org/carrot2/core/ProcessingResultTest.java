@@ -39,9 +39,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 import static org.junit.Assert.*;
 
 /**
@@ -247,7 +244,7 @@ public class ProcessingResultTest extends CarrotTestCase
         clusterB.addDocuments(documents.get(1), documents.get(2));
 
         assertThatClusters(clusters).isEquivalentTo(
-            Lists.newArrayList(clusterA, clusterB));
+            org.carrot2.util.GuavaReplace.newArrayList(clusterA, clusterB));
         Assertions.assertThat(deserialized.getAttributes().get(AttributeNames.QUERY))
             .isEqualTo(query);
     }
@@ -327,7 +324,7 @@ public class ProcessingResultTest extends CarrotTestCase
     public void testNoFalseJunkGroupAttribute() throws Exception
     {
         Cluster a, b, c;
-        final HashMap<String, Object> attrs = Maps.newHashMap();
+        final HashMap<String, Object> attrs = new HashMap<>();
         attrs.put(AttributeNames.CLUSTERS, Arrays.asList(
             a = new Cluster("a"),
             b = new Cluster("b"),
@@ -356,7 +353,11 @@ public class ProcessingResultTest extends CarrotTestCase
     {
         final JsonNode clusters = root.get("clusters");
         Assertions.assertThat(clusters).isNotNull();
-        final ArrayList<JsonNode> clusterNodes = Lists.newArrayList(clusters.elements());
+        final ArrayList<JsonNode> clusterNodes = new ArrayList<>();
+        for (JsonNode n : clusters)
+        {
+        	clusterNodes.add(n);
+        }
         Assertions.assertThat(clusterNodes).hasSize(result.getClusters().size());
     }
 
@@ -364,7 +365,11 @@ public class ProcessingResultTest extends CarrotTestCase
     {
         final JsonNode documents = root.get("documents");
         Assertions.assertThat(documents).isNotNull();
-        final ArrayList<JsonNode> documentNodes = Lists.newArrayList(documents.elements());
+        final ArrayList<JsonNode> documentNodes = new ArrayList<>();
+        for (JsonNode n : documents)
+        {
+        	documentNodes.add(n);
+        }
         Assertions.assertThat(documentNodes).hasSize(result.getDocuments().size());
     }
 
@@ -452,22 +457,22 @@ public class ProcessingResultTest extends CarrotTestCase
 
     private ProcessingResult prepareProcessingResult()
     {
-        final List<Document> documents = Lists.newArrayList(new Document("Test title 1",
+        final List<Document> documents = org.carrot2.util.GuavaReplace.newArrayList(new Document("Test title 1",
             "Test snippet 1", "http://test1.com"), new Document("Test title 2",
             "Test snippet 2", "http://test2.com/test"), new Document("Test title 3",
             "Test snippet 3. Some more words and <b>html</b>", "http://test2.com"),
             new Document("Other", "Other", "Other"));
-        final Map<String, Object> attributes = Maps.newHashMap();
+        final Map<String, Object> attributes = new HashMap<>();
         attributes.put(AttributeNames.DOCUMENTS, documents);
 
         final Document document = documents.get(0);
-        document.setSources(Lists.newArrayList("s1", "s2"));
+        document.setSources(org.carrot2.util.GuavaReplace.newArrayList("s1", "s2"));
         document.setField("testString", "test");
         document.setField("testInteger", 10);
         document.setField("testDouble", 10.3);
         document.setField("testBoolean", true);
         document.setLanguage(LanguageCode.POLISH);
-        document.setSources(Lists.newArrayList("s1", "s2"));
+        document.setSources(org.carrot2.util.GuavaReplace.newArrayList("s1", "s2"));
         Document.assignDocumentIds(documents);
 
         final Cluster clusterA = new Cluster();
@@ -493,7 +498,7 @@ public class ProcessingResultTest extends CarrotTestCase
         clusterO.addPhrases(Cluster.OTHER_TOPICS_LABEL);
         clusterO.addDocuments(documents.get(3));
 
-        final List<Cluster> clusters = Lists.newArrayList(clusterA, clusterB, clusterO);
+        final List<Cluster> clusters = org.carrot2.util.GuavaReplace.newArrayList(clusterA, clusterB, clusterO);
         attributes.put(AttributeNames.CLUSTERS, clusters);
 
         attributes.put(AttributeNames.QUERY, "query");

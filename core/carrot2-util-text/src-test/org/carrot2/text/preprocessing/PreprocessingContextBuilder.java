@@ -13,6 +13,7 @@
 package org.carrot2.text.preprocessing;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.core.Document;
@@ -23,19 +24,16 @@ import org.carrot2.text.linguistic.IStemmerFactory;
 import org.carrot2.text.preprocessing.pipeline.*;
 import org.carrot2.util.attribute.*;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * Preprocessing context builder for tests.
  */
 class PreprocessingContextBuilder
 {
     private String query;
-    private ArrayList<Document> documents = Lists.newArrayList();
+    private ArrayList<Document> documents = new ArrayList<>();
     private LanguageCode language = LanguageCode.ENGLISH;
 
-    private Map<String, Object> attributes = Maps.newHashMap();
+    private Map<String, Object> attributes = new HashMap<>();
     private IPreprocessingPipeline pipeline = new CompletePreprocessingPipeline();
 
     public final static class FieldValue

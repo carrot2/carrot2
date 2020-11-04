@@ -50,7 +50,6 @@ import org.eclipse.ui.part.ViewPart;
 
 import org.carrot2.shaded.guava.common.base.Predicate;
 import org.carrot2.shaded.guava.common.base.Predicates;
-import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
@@ -111,7 +110,7 @@ public class SearchInputView extends ViewPart
      * A map of {@link BindableDescriptor} for each document source ID and
      * algorithm ID from {@link WorkbenchCorePlugin#getComponentSuite()}.
      */
-    private Map<String, BindableDescriptor> descriptors = Maps.newHashMap();
+    private Map<String, BindableDescriptor> descriptors = new HashMap<>();
 
     /**
      * All {@link DocumentSourceDescriptor}s related to {@link IDocumentSource}s in
@@ -565,7 +564,7 @@ public class SearchInputView extends ViewPart
         sourceViewer = createComboViewer(innerComposite, "Source", suite.getSources());
         sourceViewer.addSelectionChangedListener(sourceSelectionListener);
 
-        sources = Maps.newHashMap();
+        sources = new HashMap<>();
         for (DocumentSourceDescriptor e : suite.getSources())
         {
             try
@@ -583,7 +582,7 @@ public class SearchInputView extends ViewPart
         algorithmViewer = createComboViewer(innerComposite, "Algorithm", suite
             .getAlgorithms());
 
-        algorithms = Maps.newHashMap();
+        algorithms = new HashMap<>();
         for (ProcessingComponentDescriptor e : suite.getAlgorithms())
         {
             algorithms.put(e.getId(), e);
@@ -757,7 +756,7 @@ public class SearchInputView extends ViewPart
         final Collection<AttributeDescriptor> desc = descriptors.get(sourceId).flatten().attributeDescriptors
             .values();
 
-        final ArrayList<AttributeDescriptor> remaining = Lists.newArrayList();
+        final ArrayList<AttributeDescriptor> remaining = new ArrayList<>();
         for (AttributeDescriptor d : desc)
         {
             final Object value = attributes.getAttributeValue(d.key);

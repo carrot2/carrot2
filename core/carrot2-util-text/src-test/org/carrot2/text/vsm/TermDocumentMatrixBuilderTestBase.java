@@ -12,6 +12,7 @@
 
 package org.carrot2.text.vsm;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.core.attribute.Init;
@@ -25,8 +26,6 @@ import org.carrot2.text.preprocessing.pipeline.CompletePreprocessingPipelineDesc
 import org.carrot2.util.attribute.AttributeBinder;
 import org.carrot2.util.attribute.Input;
 import org.junit.Before;
-
-import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
  * A base class for tests requiring that the main term-document document matrix is built.
@@ -48,7 +47,7 @@ public class TermDocumentMatrixBuilderTestBase extends PreprocessingComponentTes
         preprocessingPipeline = new CompletePreprocessingPipeline();
         preprocessingPipeline.labelFilterProcessor.minLengthLabelFilter.enabled = false;
         
-        Map<String,Object> attrs = Maps.newHashMap();
+        Map<String,Object> attrs = new HashMap<>();
 
         CompletePreprocessingPipelineDescriptor.attributeBuilder(attrs)
             .lexicalDataFactory(createLexicalDataFactory())

@@ -76,7 +76,7 @@ public class WebappConfig
     public ArrayList<ResultsViewModel> views;
 
     @ElementList(entry = "cache", required = false)
-    public ArrayList<ResultsCacheModel> caches = Lists.newArrayList();
+    public ArrayList<ResultsCacheModel> caches = new ArrayList<>();
     
     @Attribute(name = "skins-folder")
     public String skinsFolder;
@@ -157,7 +157,7 @@ public class WebappConfig
             }
 
             // Load component suite.
-            List<IResourceLocator> resourceLocators = Lists.newArrayList();
+            List<IResourceLocator> resourceLocators = new ArrayList<>();
             resourceLocators.add(new PrefixDecoratorLocator(
                 new ServletContextLocator(context), "/WEB-INF/suites/"));
 
@@ -297,7 +297,7 @@ public class WebappConfig
         ProcessingComponentSuite components)
     {
         final List<DocumentSourceDescriptor> sources = components.getSources();
-        final Map<String, Map<String, Object>> initAttributes = Maps.newHashMap();
+        final Map<String, Map<String, Object>> initAttributes = new HashMap<>();
 
         for (DocumentSourceDescriptor documentSourceDescriptor : sources)
         {

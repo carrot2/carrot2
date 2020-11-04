@@ -18,9 +18,6 @@ import org.carrot2.core.*;
 import org.carrot2.core.attribute.*;
 import org.carrot2.util.attribute.*;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
-
 /**
  * An example clustering algorithm component that groups documents
  * by the first letter of their title.
@@ -63,7 +60,7 @@ public class ByFirstTitleLetterClusteringAlgorithm
     @Override
     public void process() throws ProcessingException
     {
-        final Map<Integer, Cluster> codepointToCluster = Maps.newHashMap();
+        final Map<Integer, Cluster> codepointToCluster = new HashMap<>();
         for (Document document : documents)
         {
             final String title = document.getTitle();
@@ -94,7 +91,7 @@ public class ByFirstTitleLetterClusteringAlgorithm
             codepointToCluster.get(codepoint).addDocuments(document);
         }
 
-        clusters = Lists.newArrayList(codepointToCluster.values());
+        clusters = new ArrayList<>(codepointToCluster.values());
         Collections.sort(clusters, Cluster.BY_REVERSED_SIZE_AND_LABEL_COMPARATOR);
         Cluster.appendOtherTopics(documents, clusters);        
     }

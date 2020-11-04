@@ -32,7 +32,6 @@ import org.simpleframework.xml.strategy.TreeStrategy;
 
 import org.carrot2.shaded.guava.common.collect.Iterables;
 import org.carrot2.shaded.guava.common.collect.Iterators;
-import org.carrot2.shaded.guava.common.collect.Lists;
 
 /**
  * A set of {@link IProcessingComponent}s used in Carrot2 applications.
@@ -61,7 +60,7 @@ public class ProcessingComponentSuite
     {
         this.algorithms = algorithms;
         this.sources = sources;
-        this.otherComponents = Lists.newArrayList();
+        this.otherComponents = new ArrayList<>();
     }
 
     /**
@@ -96,7 +95,12 @@ public class ProcessingComponentSuite
      */
     public List<ProcessingComponentDescriptor> getComponents()
     {
-        return Lists.newArrayList(Iterables.concat(sources, algorithms, otherComponents));
+    	List<ProcessingComponentDescriptor> list = new ArrayList<>(); 
+    	for (ProcessingComponentDescriptor v : Iterables.concat(sources, algorithms, otherComponents))
+    	{
+    		list.add(v);
+    	}
+        return list;
     }
 
     /**
@@ -114,7 +118,7 @@ public class ProcessingComponentSuite
         final ResourceLookup resourceLookup = PersisterHelpers.getResourceLookup(session);
 
         // Load included suites. Currently, we don't check for cycles.
-        final List<ProcessingComponentSuite> suites = Lists.newArrayList();
+        final List<ProcessingComponentSuite> suites = new ArrayList<>();
 
         for (ProcessingComponentSuiteInclude include : includes)
         {
@@ -187,7 +191,7 @@ public class ProcessingComponentSuite
      */
     public List<ProcessingComponentDescriptor> removeUnavailableComponents()
     {
-        ArrayList<ProcessingComponentDescriptor> failed = Lists.newArrayList();
+        ArrayList<ProcessingComponentDescriptor> failed = new ArrayList<>();
         ProcessingComponentDescriptor p;
         for (Iterator<? extends ProcessingComponentDescriptor> i = Iterators.concat(
             sources.iterator(), algorithms.iterator()); i.hasNext();)

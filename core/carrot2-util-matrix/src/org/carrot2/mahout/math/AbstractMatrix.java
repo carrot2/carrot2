@@ -12,6 +12,7 @@
 
 package org.carrot2.mahout.math;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -111,7 +112,7 @@ public abstract class AbstractMatrix implements Matrix {
   @Override
   public void set(String rowLabel, int row, double[] rowData) {
     if (rowLabelBindings == null) {
-      rowLabelBindings = Maps.newHashMap();
+      rowLabelBindings = new HashMap<>();
     }
     rowLabelBindings.put(rowLabel, row);
     set(row, rowData);
@@ -133,11 +134,11 @@ public abstract class AbstractMatrix implements Matrix {
   @Override
   public void set(String rowLabel, String columnLabel, int row, int column, double value) {
     if (rowLabelBindings == null) {
-      rowLabelBindings = Maps.newHashMap();
+      rowLabelBindings = new HashMap<>();
     }
     rowLabelBindings.put(rowLabel, row);
     if (columnLabelBindings == null) {
-      columnLabelBindings = Maps.newHashMap();
+      columnLabelBindings = new HashMap<>();
     }
     columnLabelBindings.put(columnLabel, column);
 

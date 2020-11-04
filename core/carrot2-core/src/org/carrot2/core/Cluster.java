@@ -272,7 +272,7 @@ public final class Cluster
      */
     public List<Document> getAllDocuments(Comparator<Document> comparator)
     {
-        final List<Document> sortedDocuments = Lists.newArrayList(getAllDocuments());
+        final List<Document> sortedDocuments = new ArrayList<>(getAllDocuments());
         Collections.sort(sortedDocuments, comparator);
         return sortedDocuments;
     }

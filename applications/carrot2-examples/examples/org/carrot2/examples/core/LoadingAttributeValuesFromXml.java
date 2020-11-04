@@ -13,6 +13,8 @@
 package org.carrot2.examples.core;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
@@ -25,7 +27,6 @@ import org.carrot2.examples.SampleDocumentData;
 import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.attribute.AttributeValueSets;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
 import org.carrot2.shaded.guava.common.collect.Maps;
 
 /**
@@ -62,9 +63,9 @@ public class LoadingAttributeValuesFromXml
             controller.init(fasterClusteringAttributes);
 
             // Perform clustering using the attribute set provided at initialization time
-            Map<String, Object> requestAttributes = Maps.newHashMap(); 
+            Map<String, Object> requestAttributes = new HashMap<>(); 
             CommonAttributesDescriptor.attributeBuilder(requestAttributes)
-                .documents(Lists.newArrayList(SampleDocumentData.DOCUMENTS_DATA_MINING))
+                .documents(new ArrayList<>(SampleDocumentData.DOCUMENTS_DATA_MINING))
                 .query("data mining");
             ProcessingResult results = controller.process(requestAttributes, LingoClusteringAlgorithm.class);
             ConsoleFormatter.displayClusters(results.getClusters());
@@ -73,7 +74,7 @@ public class LoadingAttributeValuesFromXml
             // one that is the default in the XML file.
             requestAttributes =
                 CommonAttributesDescriptor.attributeBuilder(Maps.newHashMap(defaultAttributes))
-                    .documents(Lists.newArrayList(SampleDocumentData.DOCUMENTS_DATA_MINING))
+                    .documents(new ArrayList<>(SampleDocumentData.DOCUMENTS_DATA_MINING))
                     .query("data mining").map;
 
             results = controller.process(requestAttributes, LingoClusteringAlgorithm.class);

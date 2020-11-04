@@ -26,8 +26,6 @@ import org.carrot2.util.CloseableUtils;
 import org.carrot2.util.tests.CarrotTestCase;
 import org.junit.*;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-
 /**
  * 
  */
@@ -38,7 +36,7 @@ public class HttpClientFactoryTest extends CarrotTestCase
 
     private static ServerSocket serverSocket;
 
-    private static ArrayList<Socket> sockets = Lists.newArrayList();
+    private static ArrayList<Socket> sockets = new ArrayList<>();
 
     @BeforeClass
     public static void setup() throws Exception

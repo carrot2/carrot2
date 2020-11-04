@@ -16,8 +16,6 @@ import org.carrot2.core.Cluster;
 import org.fest.assertions.Delta;
 import org.junit.Test;
 
-import org.carrot2.shaded.guava.common.collect.Lists;
-
 /**
  * Test cases for {@link IClusteringMetric}.
  */
@@ -89,7 +87,7 @@ public class NormalizedMutualInformationMetricTest extends IdealPartitioningBase
     {
         final NormalizedMutualInformationMetric metric = new NormalizedMutualInformationMetric();
         metric.documents = getAllDocuments(clusters);
-        metric.clusters = Lists.newArrayList(clusters);
+        metric.clusters = org.carrot2.util.GuavaReplace.newArrayList(clusters);
         metric.calculate();
         assertEquals(expectedNormalizedMutualInformation, metric.normalizedMutualInformation, 0.001,
             "normalizedMutualInformation");

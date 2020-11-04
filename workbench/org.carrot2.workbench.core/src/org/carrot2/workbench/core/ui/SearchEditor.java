@@ -698,7 +698,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
         if (memento == null)
         {
             memento = new SearchEditorMemento();
-            memento.sectionsExpansionState = Maps.newHashMap();            
+            memento.sectionsExpansionState = new HashMap<>();            
         }
 
         final IPreferenceStore prefStore = 
@@ -762,7 +762,7 @@ public final class SearchEditor extends EditorPart implements IPersistableEditor
      */
     Map<PanelName, PanelState> getPanelState()
     {
-        final HashMap<PanelName, PanelState> m = Maps.newHashMap();
+        final HashMap<PanelName, PanelState> m = new HashMap<>();
         for (Map.Entry<PanelName, PanelReference> e : panels.entrySet())
         {
             m.put(e.getKey(), e.getValue().state);

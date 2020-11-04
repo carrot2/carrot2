@@ -16,8 +16,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -70,7 +72,6 @@ import org.slf4j.Logger;
 
 import org.carrot2.shaded.guava.common.collect.ImmutableMap;
 import org.carrot2.shaded.guava.common.collect.Lists;
-import org.carrot2.shaded.guava.common.collect.Maps;
 import org.carrot2.shaded.guava.common.collect.Sets;
 
 /**
@@ -147,7 +148,7 @@ public class QueryProcessorServlet extends HttpServlet
         /*
          * Initialize the controller.
          */
-        List<IResourceLocator> locators = Lists.newArrayList();
+        List<IResourceLocator> locators = new ArrayList<>();
         locators.add(new PrefixDecoratorLocator(
             new ServletContextLocator(getServletContext()), "/WEB-INF/resources/"));
 
@@ -539,7 +540,7 @@ public class QueryProcessorServlet extends HttpServlet
 
     private Map<String, String> extractCookies(HttpServletRequest request)
     {
-        final Map<String, String> result = Maps.newHashMap();
+        final Map<String, String> result = new HashMap<>();
         final Cookie [] cookies = request.getCookies();
         if (cookies != null)
         {
@@ -566,8 +567,8 @@ public class QueryProcessorServlet extends HttpServlet
         
         public UnknownToDefaultTransformer(WebappConfig config, boolean useMaxCarrot2Results)
         {
-            knownValues = Maps.newHashMap();
-            defaultValues = Maps.newHashMap();
+            knownValues = new HashMap<>();
+            defaultValues = new HashMap<>();
             
             this.maxCarrot2Results = config.maxCarrot2Results;
             this.useMaxCarrot2Results = useMaxCarrot2Results;

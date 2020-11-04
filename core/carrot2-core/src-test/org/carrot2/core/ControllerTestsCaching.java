@@ -117,7 +117,7 @@ public abstract class ControllerTestsCaching extends ControllerTestsBase
     {
         final Controller c = prepareController();
 
-        final HashMap<String, Object> attrs = Maps.newHashMap();
+        final HashMap<String, Object> attrs = new HashMap<>();
         attrs.put(AttributeNames.DOCUMENTS, Arrays.asList(new Document("title", "summary")));
 
         ConcurrentComponent1.latch1 = new CountDownLatch(1);
