@@ -1,14 +1,16 @@
 .WorkbenchSide {
   width: 24em;
   overflow-y: auto;
-  background-color: var(--background-color-secondary);
   position: relative;
+  background-color: var(--background-color-side);
+
+  --background-color-side: var(--background-color-secondary);
 }
 
 .WorkbenchSideFixed {
   position: sticky;
   top: 0;
-  background-color: var(--background-color-secondary);
+  background-color: var(--background-color-side);
   z-index: 1;
   padding: var(--leading);
 }

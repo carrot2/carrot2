@@ -2,6 +2,17 @@
   min-height: 6em;
 }
 
+.FieldChoiceSetting .bp3-form-content {
+  position: relative;
+}
+
+.FieldChoiceSetting .Loading {
+  background-color: var(--background-color-side);
+}
+.FieldChoiceSetting .Loading > div {
+  margin-top: 2em;
+}
+
 .LogEntry-error {
   color: var(--text-color-red);
 }

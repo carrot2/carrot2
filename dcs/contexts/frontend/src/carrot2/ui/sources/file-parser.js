@@ -45,6 +45,7 @@ const collectFieldMajorityTypes = (json, fields) => {
     let maxCount = 0, majorityType = null;
     typeCounts.get(f).forEach((count, type) => {
       if (maxCount < count) {
+        maxCount = count;
         majorityType = type;
       }
     });
@@ -164,6 +165,65 @@ const collectFieldInformation = json => {
   return fields;
 };
 
+const prepareResult = object => {
+  const fields = collectFieldInformation(object);
+
+  const allFields = fields.map(f => f.field);
+  const naturalTextFields = fields.filter(f => f.naturalTextScore >= 1).map(f => f.field);
+  return {
+    fieldsAvailable: allFields,
+    fieldsAvailableForClustering: naturalTextFields,
+    fieldsToCluster: naturalTextFields,
+    query: "",
+    documents: object
+  };
+};
+
+const parseSheet = async (file, logger) =>{
+  const XLSX = await import("xlsx");
+  const buffer = await file.arrayBuffer();
+  const workbook = XLSX.read(buffer, { type: "array" });
+  const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+  const NO_DATA_MESSAGE = "The spreadsheet contains no data.";
+
+  const rangeRaw = worksheet["!ref"];
+  if (!rangeRaw) {
+    logger.info(NO_DATA_MESSAGE);
+    return EMPTY;
+  }
+
+  // Check if there is any data. The first row is a heading.
+  const range = XLSX.utils.decode_range(rangeRaw);
+  if (range.e.r <= 0) {
+    logger.info(NO_DATA_MESSAGE);
+    return EMPTY;
+  }
+
+  const get = (r, c) => worksheet[XLSX.utils.encode_cell({ c: c, r: r })];
+  const getV = (r, c) => {
+    const e = get(r, c);
+    return e && e.v;
+  };
+
+  const fields = [];
+  for (let c = 0; c <= range.e.c; c++) {
+    fields.push(getV(0, c));
+  }
+
+  const documents = [];
+  for (let r = 1; r < range.e.r; r++) {
+    const doc = {};
+    for (let c = 0; c <= range.e.c; c++) {
+      doc[fields[c]] = getV(r, c);
+    }
+    documents.push(doc);
+  }
+
+  return prepareResult(documents);
+};
+
+
 const parsers = {
   "text/xml": async (file, logger) => {
     const xml = await file.text();
@@ -185,19 +245,12 @@ const parsers = {
 
   "application/json": async (file, logger) => {
     const json = await file.text();
-    const object = JSON.parse(json);
-    const fields = collectFieldInformation(object);
+    return prepareResult(JSON.parse(json));
+  },
 
-    const allFields = fields.map(f => f.field);
-    const naturalTextFields = fields.filter(f => f.naturalTextScore >= 1).map(f => f.field);
-    return {
-      fieldsAvailable: allFields,
-      fieldsAvailableForClustering: naturalTextFields,
-      fieldsToCluster: naturalTextFields,
-      query: "",
-      documents: object
-    };
-  }
+  "application/vnd.oasis.opendocument.spreadsheet": parseSheet,
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": parseSheet,
+  "application/vnd.ms-excel": parseSheet
 };
 
 export const parseFile = async (file, logger) => {
