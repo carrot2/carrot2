@@ -14,7 +14,6 @@ import com.carrotsearch.hppc.cursors.IntCursor;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -33,10 +32,13 @@ import org.carrot2.dcs.model.ClusterRequest;
 import org.carrot2.dcs.model.ClusterResponse;
 import org.carrot2.dcs.model.ClusterServletParameters;
 import org.carrot2.dcs.model.ErrorResponseType;
+import org.carrot2.dcs.model.ServiceInfo;
 import org.carrot2.language.LanguageComponents;
 
 @SuppressWarnings("serial")
 public class ClusterServlet extends RestEndpoint {
+  public static final String PARAM_SERVICE_INFO = "serviceInfo";
+
   private DcsContext dcsContext;
   private ClusterRequest templateDefault = new ClusterRequest();
 
@@ -51,9 +53,10 @@ public class ClusterServlet extends RestEndpoint {
 
     @Override
     public void visitFields(BiConsumer<String, String> fieldConsumer) {
-      Map<String, String> fields = this.source.getFields();
-      fields.forEach(fieldConsumer);
-      fields.clear();
+      // Visit all fields of the document and clear
+      // the reference early, we only need the ordinal.
+      this.source.visitFields(fieldConsumer);
+      this.source = null;
     }
   }
 
@@ -71,6 +74,9 @@ public class ClusterServlet extends RestEndpoint {
     // processed on the fly?
 
     try {
+      ServiceInfo serviceInfo = new ServiceInfo();
+
+      Stopwatch swRequest = new Stopwatch();
       ClusterRequest template = parseTemplate(request);
       ClusterRequest clusteringRequest = parseRequest(request);
 
@@ -80,9 +86,18 @@ public class ClusterServlet extends RestEndpoint {
       LanguageComponents language = getLanguage(template, clusteringRequest);
 
       // Run the clustering.
+      Stopwatch swClustering = new Stopwatch();
       List<Cluster<DocumentRef>> clusters = runClustering(clusteringRequest, algorithm, language);
+      serviceInfo.clusteringTimeMillis = swClustering.elapsedMillis();
 
-      writeJsonResponse(response, shouldIndent(request), new ClusterResponse(adapt(clusters)));
+      ClusterResponse clusterResponse = new ClusterResponse(adapt(clusters));
+      serviceInfo.requestHandlingTimeMillis = swRequest.elapsedMillis();
+
+      if (isEnabled(request, PARAM_SERVICE_INFO)) {
+        clusterResponse.serviceInfo = serviceInfo;
+      }
+
+      writeJsonResponse(response, shouldIndent(request), clusterResponse);
     } catch (Exception e) {
       handleException(request, response, e);
     }

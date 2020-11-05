@@ -1,4 +1,3 @@
-
 {
   "name": "gatsby-starter-apidocs",
   "private": true,
@@ -12,8 +11,8 @@
     "serve": "gatsby serve"
   },
   "dependencies": {
-    "gatsby": "2.24.67",
     "@carrotsearch/gatsby-theme-apidocs": "1.0.0",
+    "gatsby": "2.24.67",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   }

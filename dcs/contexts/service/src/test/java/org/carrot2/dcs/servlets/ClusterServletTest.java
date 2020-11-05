@@ -34,6 +34,11 @@ public class ClusterServletTest extends AbstractServletTest {
   }
 
   @Test
+  public void testFieldsWithMultivalues() throws Exception {
+    verifyRequest("multivalues.request.json", "multivalues.response.json");
+  }
+
+  @Test
   public void testTemplateRequest() throws Exception {
     setupMockTemplates("template1.json", "template2.json");
 

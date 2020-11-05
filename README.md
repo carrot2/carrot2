@@ -32,6 +32,9 @@ and [Elasticsearch plugin](https://github.com/carrot2/elasticsearch-carrot2).
 Documentation
 -------------
 
+* The documentation for the latest release is always at 
+  [https://carrot2.github.io/release/latest](https://carrot2.github.io/release/latest).
+
 * Developer documentation and examples are part of
   [binary releases](https://github.com/carrot2/carrot2/releases).
   Once downloaded and unpacked, start the DCS:
