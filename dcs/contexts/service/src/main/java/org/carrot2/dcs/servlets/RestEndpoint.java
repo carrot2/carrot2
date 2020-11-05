@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,13 +37,13 @@ import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 class RestEndpoint extends HttpServlet {
-  private static Logger CONSOLE = LoggerFactory.getLogger("console");
-
   public static final String PARAM_INDENT = "indent";
 
   private static final String CONTENT_TYPE_JSON_UTF8 = "application/json; charset=UTF-8";
-  private static final Set<String> YES = new HashSet<>(Arrays.asList("yes", "true", ""));
+  private static final Set<String> BOOLEAN_YES_VALUES =
+      new HashSet<>(Arrays.asList("yes", "true", "on", "", "enabled"));
 
+  private static Logger CONSOLE = LoggerFactory.getLogger("console");
   private ObjectMapper om;
 
   private ArrayList<ErrorResponseHandler> errorResponseHandlers;
@@ -127,7 +129,11 @@ class RestEndpoint extends HttpServlet {
   }
 
   protected boolean shouldIndent(HttpServletRequest request) {
-    String parameter = request.getParameter(PARAM_INDENT);
-    return YES.contains(parameter);
+    return isEnabled(request, PARAM_INDENT);
+  }
+
+  protected boolean isEnabled(HttpServletRequest request, String paramName) {
+    String parameter = Objects.requireNonNullElse(request.getParameter(paramName), "false");
+    return BOOLEAN_YES_VALUES.contains(parameter.toLowerCase(Locale.ROOT));
   }
 }

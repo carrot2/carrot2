@@ -32,10 +32,13 @@ import org.carrot2.dcs.model.ClusterRequest;
 import org.carrot2.dcs.model.ClusterResponse;
 import org.carrot2.dcs.model.ClusterServletParameters;
 import org.carrot2.dcs.model.ErrorResponseType;
+import org.carrot2.dcs.model.ServiceInfo;
 import org.carrot2.language.LanguageComponents;
 
 @SuppressWarnings("serial")
 public class ClusterServlet extends RestEndpoint {
+  public static final String PARAM_SERVICE_INFO = "serviceInfo";
+
   private DcsContext dcsContext;
   private ClusterRequest templateDefault = new ClusterRequest();
 
@@ -71,6 +74,9 @@ public class ClusterServlet extends RestEndpoint {
     // processed on the fly?
 
     try {
+      ServiceInfo serviceInfo = new ServiceInfo();
+
+      Stopwatch swRequest = new Stopwatch();
       ClusterRequest template = parseTemplate(request);
       ClusterRequest clusteringRequest = parseRequest(request);
 
@@ -80,9 +86,18 @@ public class ClusterServlet extends RestEndpoint {
       LanguageComponents language = getLanguage(template, clusteringRequest);
 
       // Run the clustering.
+      Stopwatch swClustering = new Stopwatch();
       List<Cluster<DocumentRef>> clusters = runClustering(clusteringRequest, algorithm, language);
+      serviceInfo.clusteringTimeMillis = swClustering.elapsedMillis();
 
-      writeJsonResponse(response, shouldIndent(request), new ClusterResponse(adapt(clusters)));
+      ClusterResponse clusterResponse = new ClusterResponse(adapt(clusters));
+      serviceInfo.requestHandlingTimeMillis = swRequest.elapsedMillis();
+
+      if (isEnabled(request, PARAM_SERVICE_INFO)) {
+        clusterResponse.serviceInfo = serviceInfo;
+      }
+
+      writeJsonResponse(response, shouldIndent(request), clusterResponse);
     } catch (Exception e) {
       handleException(request, response, e);
     }
