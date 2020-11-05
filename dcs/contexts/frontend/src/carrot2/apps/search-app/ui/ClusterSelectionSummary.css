@@ -9,7 +9,6 @@
 }
 
 .ClusterInSummary .icon {
-  margin-left: 0.25em;
   color: var(--cluster-icon-color);
 }
 .ClusterInSummary:first-child .icon {
@@ -22,4 +21,5 @@
 
 .ClusterInSummary {
   padding-right: 0.5em;
+  white-space: nowrap;
 }
