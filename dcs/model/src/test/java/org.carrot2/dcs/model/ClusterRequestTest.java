@@ -12,6 +12,7 @@ package org.carrot2.dcs.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,6 +41,10 @@ public class ClusterRequestTest extends TestBase {
 
     doc = new ClusterRequest.Document();
     doc.setField("title", "foo");
+    req.documents.add(doc);
+
+    doc = new ClusterRequest.Document();
+    doc.setField("title", Arrays.asList("ala", "ma", "kota"));
     req.documents.add(doc);
 
     ObjectMapper om = new ObjectMapper();

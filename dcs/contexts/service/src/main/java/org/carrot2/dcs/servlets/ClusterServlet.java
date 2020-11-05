@@ -14,7 +14,6 @@ import com.carrotsearch.hppc.cursors.IntCursor;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -51,9 +50,10 @@ public class ClusterServlet extends RestEndpoint {
 
     @Override
     public void visitFields(BiConsumer<String, String> fieldConsumer) {
-      Map<String, String> fields = this.source.getFields();
-      fields.forEach(fieldConsumer);
-      fields.clear();
+      // Visit all fields of the document and clear
+      // the reference early, we only need the ordinal.
+      this.source.visitFields(fieldConsumer);
+      this.source = null;
     }
   }
 

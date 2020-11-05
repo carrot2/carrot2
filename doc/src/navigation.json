@@ -39,6 +39,12 @@
         "stc-attributes",
         "kmeans-attributes"
       ]
+    },
+    {
+      "title": "Version history",
+      "articles": [
+        "v4.0.x"
+      ]
     }
   ]
 }
