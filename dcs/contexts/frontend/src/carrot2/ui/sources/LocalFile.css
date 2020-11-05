@@ -1,3 +1,7 @@
 .FieldChoiceSetting {
   min-height: 6em;
 }
+
+.LogEntry-error {
+  color: var(--text-color-red);
+}

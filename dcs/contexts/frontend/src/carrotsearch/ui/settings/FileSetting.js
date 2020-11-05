@@ -3,6 +3,7 @@ import React, { useCallback } from 'react';
 import "./FileSetting.css";
 
 import filesize from "filesize";
+import classnames from "classnames";
 
 import { view, store } from "@risingstack/react-easy-state";
 import { Setting } from "./Settings.js";
@@ -19,7 +20,7 @@ export const FileSetting = view(({ setting, get, set }) => {
       currentFile.file = file;
       set(setting, file);
     }
-  }, [ set, setting ]);
+  }, [ set, setting, currentFile ]);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: false
@@ -28,8 +29,8 @@ export const FileSetting = view(({ setting, get, set }) => {
   const fileInfo = currentFile.file ?
       <div className="FileSettingFileInfo">
         <span>{currentFile.file.name}</span>
-        <span>{currentFile.file.type}</span>
         <span>{filesize(currentFile.file.size)}</span>
+        <span>{currentFile.file.type}</span>
       </div>
       :
       null;
@@ -38,7 +39,7 @@ export const FileSetting = view(({ setting, get, set }) => {
       <Setting className="FileSetting" label={label} description={description}>
         <div {...getRootProps()}>
           <input {...getInputProps()} />
-          <div className="FileSettingDropZone">
+          <div className={classnames("FileSettingDropZone", { "FileSettingDropZoneActive": isDragActive })}>
             {fileInfo}
             <div>
               <Button small={true}>Browse</Button> or drag 'n' drop your file here.

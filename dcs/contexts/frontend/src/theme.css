@@ -56,7 +56,7 @@
   --text-color-lightest: rgba(255, 255, 255, 0.30);
   --text-color-secondary: hsla(208, 30%, 70%, 1.0);
   --text-color-nav: rgba(255, 255, 255, 0.75);
-  --text-color-red: hsla(0, 80%, 55%, 1.0);
+  --text-color-red: hsla(0, 70%, 50%, 1.0);
   --text-color-green: hsla(120, 80%, 40%, 1.0);
   --text-color-inverted: black;
   --link-color: hsl(203, 85%, 61%);

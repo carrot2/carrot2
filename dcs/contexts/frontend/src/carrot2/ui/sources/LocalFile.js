@@ -2,7 +2,10 @@ import React from 'react';
 
 import "./LocalFile.css";
 
-import { store, view } from "@risingstack/react-easy-state";
+import { store, view, autoEffect } from "@risingstack/react-easy-state";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamationTriangle, faInfoSquare } from "@fortawesome/pro-regular-svg-icons";
 
 import { GenericSearchEngineErrorMessage } from "../../apps/search-app/ui/ErrorMessage.js";
 import { addFactory, Setting } from "../../../carrotsearch/ui/settings/Settings.js";
@@ -27,8 +30,18 @@ const LocalFileResultConfig = () => {
   );
 };
 
+const ArrayLogger = function() {
+  const entries = [];
+
+  this.log = message => entries.push({ level: "info", message: message });
+  this.warn = message => entries.push({ level: "warning", message: message });
+  this.error = message => entries.push({ level: "error", message: message });
+  this.getEntries = () => entries.slice(0);
+};
+
 const fileContentsStore = store({
   loading: false,
+  log: [],
   query: "",
   documents: [],
   fieldsAvailable: [],
@@ -36,13 +49,15 @@ const fileContentsStore = store({
   fieldsToCluster: [],
   load: async file => {
     fileContentsStore.loading = true;
+    const logger = new ArrayLogger();
     try {
-      const parsed = await parseFile(file, console);
+      const parsed = await parseFile(file, logger);
       fileContentsStore.fieldsAvailableForClustering = parsed.fieldsAvailableForClustering;
       fileContentsStore.fieldsToCluster = new Set(parsed.fieldsToCluster);
       fileContentsStore.documents = parsed.documents;
       fileContentsStore.query = parsed.query;
     } finally {
+      fileContentsStore.log = logger.getEntries();
       fileContentsStore.loading = false;
     }
   }
@@ -65,6 +80,20 @@ const FieldList = view(() => {
   );
 });
 
+const LEVEL_ICONS = {
+  "error": faExclamationTriangle,
+  "warning": faExclamationTriangle,
+  "info": faInfoSquare
+}
+export const LogEntry = ({ entry }) => {
+  const { level, message } = entry;
+  return (
+      <div>
+        <FontAwesomeIcon icon={LEVEL_ICONS[level]} className={`LogEntry-${level}`} /> {message}
+      </div>
+  );
+};
+
 const FieldChoiceSetting = view(({ setting, get, set }) => {
   const { label, description } = setting;
 
@@ -76,6 +105,9 @@ const FieldChoiceSetting = view(({ setting, get, set }) => {
   return (
       <Setting className="FieldChoiceSetting" label={label} description={description}>
         {children}
+        {
+          fileContentsStore.log.map((e, i) => <LogEntry entry={e} key={i} />)
+        }
       </Setting>
   );
 });
@@ -119,6 +151,14 @@ const localFileSource = () => {
   };
 };
 
+// Create a local copy of fields to cluster. The cluster store calls the getFieldsToCluster() method
+// before clustering and if the method returned a value from the fileContentsStore reactive store,
+// clustering would be triggered right after the selection of fields changed, which we want to avoid.
+let currentFieldsToCluster;
+autoEffect(() => {
+  currentFieldsToCluster = Array.from(fileContentsStore.fieldsToCluster);
+});
+
 export const localFileSourceDescriptor = {
   label: "Local file",
   descriptionHtml: "content read from a local file",
@@ -136,6 +176,6 @@ export const localFileSourceDescriptor = {
     throw new Error("Not available in search app.");
   },
   getSettings: () => settings,
-  getFieldsToCluster: () => [ "title", "snippet" ]
+  getFieldsToCluster: () => currentFieldsToCluster
 };
 

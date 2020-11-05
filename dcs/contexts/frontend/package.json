@@ -23,6 +23,7 @@
     "typeface-raleway": "1.1.13",
     "lodash.set": "4.3.2",
     "filesize": "6.1.0",
+    "fast-stats": "0.0.5",
     "@fortawesome/fontawesome-pro": "5.15.0",
     "@fortawesome/fontawesome-svg-core": "1.2.32",
     "@fortawesome/pro-duotone-svg-icons": "5.15.0",

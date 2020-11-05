@@ -40,7 +40,7 @@ export const clusterStore = store({
     const documents = searchResult.documents;
     const query = searchResult.query;
 
-    if (query.length === 0 || documents.length === 0) {
+    if (documents.length === 0) {
       clusterStore.clusters = EMPTY_ARRAY;
       clusterStore.documents = EMPTY_ARRAY;
       clusterStore.loading = false;
