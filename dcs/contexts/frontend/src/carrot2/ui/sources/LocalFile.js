@@ -156,7 +156,7 @@ const settings = [
     id: "file",
     type: "group",
     label: "Local file",
-    description: "Loads documents from a local file. Carrot2 XML, JSON, JSON records, CSV and Excel formats are supported.",
+    description: "Loads documents from a local file. Carrot2 XML, JSON, CSV and Excel formats are supported.",
     settings: [
       {
         id: "file:file",
