@@ -2,7 +2,9 @@ import React from 'react';
 
 import "./LocalFile.css";
 
-import { store, view, autoEffect } from "@risingstack/react-easy-state";
+import { autoEffect, store, view } from "@risingstack/react-easy-state";
+import storage from "store2";
+import LRU from "lru-cache";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationTriangle, faInfoSquare } from "@fortawesome/pro-regular-svg-icons";
@@ -52,8 +54,25 @@ const fileContentsStore = store({
     const logger = new ArrayLogger();
     try {
       const parsed = await parseFile(file, logger);
+      fileContentsStore.fieldsAvailable = parsed.fieldsAvailable;
       fileContentsStore.fieldsAvailableForClustering = parsed.fieldsAvailableForClustering;
-      fileContentsStore.fieldsToCluster = new Set(parsed.fieldsToCluster);
+
+      // We remember the fields the user selected for clustering on a per-schema (set of all fields)
+      // basis, so that the user doesn't have to re-select the right fields every time they upload
+      // a similar data set.
+      const cachedToCluster = lastConfigs.get(lastConfigsKey(parsed.fieldsAvailable));
+      let newToCluster;
+      if (cachedToCluster && cachedToCluster.length > 0) {
+        const cached = new Set(cachedToCluster);
+
+        // Intersection of parsed and cached set of fields, in case this specific instance
+        // had data that caused some field to be unsuitable for clustering.
+        newToCluster = new Set([...parsed.fieldsToCluster].filter(f => cached.has(f)))
+      } else {
+        newToCluster = new Set(parsed.fieldsToCluster);
+      }
+
+      fileContentsStore.fieldsToCluster = newToCluster;
       fileContentsStore.documents = parsed.documents;
       fileContentsStore.query = parsed.query;
     } finally {
@@ -62,6 +81,23 @@ const fileContentsStore = store({
     }
   }
 });
+
+
+const LAST_CONFIGS_KEY = "workbench:source:localFile:lastConfigs";
+const lastConfigs = new LRU({ max: 1024 });
+lastConfigs.load(storage.get(LAST_CONFIGS_KEY) || []);
+
+const lastConfigsKey = fieldsAvailable => fieldsAvailable.join("--");
+
+autoEffect(() => {
+  const fieldsAvailable = fileContentsStore.fieldsAvailable;
+  if (fieldsAvailable && fieldsAvailable.length > 0) {
+    lastConfigs.set(lastConfigsKey(fieldsAvailable), Array.from(fileContentsStore.fieldsToCluster));
+    const dmp = lastConfigs.dump();
+    storage.set(LAST_CONFIGS_KEY, dmp); // TODO: throttle this?
+  }
+});
+
 
 const FieldList = view(() => {
   const store = fileContentsStore;
