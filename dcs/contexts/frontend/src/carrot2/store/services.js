@@ -36,6 +36,7 @@ export const clusterStore = store({
   loading: false,
   clusters: EMPTY_ARRAY,
   documents: EMPTY_ARRAY,
+  serviceInfo: null,
   load: async function (searchResult, algorithm) {
     const documents = searchResult.documents;
     const query = searchResult.query;
@@ -51,7 +52,9 @@ export const clusterStore = store({
       clusterStore.error = undefined;
       try {
         const fieldsToCluster = sources[searchResult.source].getFieldsToCluster();
-        clusterStore.clusters = await fetchClusters(query, documents, fieldsToCluster, algorithm, currentParams);
+        const response = await fetchClusters(query, documents, fieldsToCluster, algorithm, currentParams);
+        clusterStore.clusters = response.clusters;
+        clusterStore.serviceInfo = response.serviceInfo;
         clusterStore.documents = addClusterReferences(documents, clusterStore.clusters);
       } catch (e) {
         clusterStore.clusters = EMPTY_ARRAY;

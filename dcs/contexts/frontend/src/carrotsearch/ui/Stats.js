@@ -15,7 +15,7 @@ export const Stats = ({ stats }) => {
   return (
       <div className="Stats">
         {
-          stats.map(s => <Stat key={s.id} {...s} />)
+          stats.filter(s => !!s.value).map(s => <Stat key={s.id} {...s} />)
         }
       </div>
   );

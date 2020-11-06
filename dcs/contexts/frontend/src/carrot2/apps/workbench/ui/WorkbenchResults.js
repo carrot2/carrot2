@@ -13,6 +13,7 @@ import { persistentStore } from "../../../util/persistent-store.js";
 
 import { workbenchSourceStore } from "./WorkbenchSourceAlgorithm.js";
 import { Stats } from "../../../../carrotsearch/ui/Stats.js";
+import { humanizeDuration } from "../../../../carrotsearch/lang/humanize.js";
 
 const uiStore = persistentStore("workbench:ui", {
   clusterView: "folders"
@@ -34,6 +35,11 @@ const ResultStats = view(() => {
       id: "clustered-docs",
       value: (100.0 * clusterStore.getClusteredDocsRatio()).toFixed(1) + "%",
       label: "clustered docs"
+    },
+    {
+      id: "processing-time",
+      value: humanizeDuration(clusterStore.serviceInfo?.clusteringTimeMillis),
+      label: "clustering time"
     }
   ];
 

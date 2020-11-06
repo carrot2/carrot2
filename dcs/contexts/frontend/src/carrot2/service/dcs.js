@@ -10,7 +10,7 @@ export function fetchClusters(query, documents, fields, algorithm, parameters = 
       return fields.reduce((obj, key) => {
         return {
           ...obj,
-          [key]: doc[key]
+          [key]: doc[key] + ""
         };
       }, {});
     })
@@ -30,7 +30,9 @@ export function fetchClusters(query, documents, fields, algorithm, parameters = 
     }
     return response.json();
   }).then(function (json) {
-    return addOtherTopicsCluster(documents, enrichClusters(json.clusters, ""));
+    enrichClusters(json.clusters, "")
+    addOtherTopicsCluster(documents, json.clusters);
+    return json;
   });
 
   // Assign unique IDs to clusters and compute additional information about
@@ -51,8 +53,6 @@ export function fetchClusters(query, documents, fields, algorithm, parameters = 
       cluster.id = prefix + (id++);
       cluster.size = cluster.uniqueDocuments.length;
     }
-
-    return clusters;
   }
 
   function addOtherTopicsCluster(documents, topClusters) {
@@ -72,7 +72,5 @@ export function fetchClusters(query, documents, fields, algorithm, parameters = 
         unclustered: true
       });
     }
-
-    return topClusters;
   }
 }
