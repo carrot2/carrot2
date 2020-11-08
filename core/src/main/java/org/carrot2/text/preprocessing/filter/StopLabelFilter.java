@@ -20,8 +20,7 @@ public class StopLabelFilter extends SingleLabelFilterBase {
   /** Enables or disables the stop label filter. */
   public AttrBoolean enabled =
       attributes.register(
-          "enabled",
-          AttrBoolean.builder().label("Stop label filter enabled").defaultValue(true));
+          "enabled", AttrBoolean.builder().label("Stop label filter enabled").defaultValue(true));
 
   private LabelFormatter labelFormatter;
   private LexicalData lexicalData;

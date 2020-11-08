@@ -19,8 +19,7 @@ public class QueryLabelFilter extends SingleLabelFilterBase {
   /** Enables or disables the query label filter. */
   public AttrBoolean enabled =
       attributes.register(
-          "enabled",
-          AttrBoolean.builder().label("Query label filter enabled").defaultValue(true));
+          "enabled", AttrBoolean.builder().label("Query label filter enabled").defaultValue(true));
 
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {
