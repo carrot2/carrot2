@@ -3,8 +3,8 @@ import './ResultList.css';
 import React, { useEffect, useRef } from 'react';
 import PropTypes from "prop-types";
 
-import { view, autoEffect, clearEffect } from "@risingstack/react-easy-state";
-import { ClusterSelectionSummary, ClusterInSummary } from "./ClusterSelectionSummary.js";
+import { autoEffect, clearEffect, store, view } from "@risingstack/react-easy-state";
+import { ClusterInSummary, ClusterSelectionSummary } from "./ClusterSelectionSummary.js";
 import { Optional } from "./Optional.js";
 
 import { sources } from "../../../config-sources.js";
@@ -13,14 +13,15 @@ import { clusterSelectionStore } from "../../../store/selection.js";
 const ResultClusters = view(props => {
   const selectionStore = clusterSelectionStore;
   return (
-    <div className="ResultClusters">
+      <div className="ResultClusters">
       <span>
       {
         (props.result.clusters || []).map(c =>
-          <ClusterInSummary cluster={c} key={c.id} onClick={() => selectionStore.toggleSelection(c)} />)
+            <ClusterInSummary cluster={c} key={c.id}
+                              onClick={() => selectionStore.toggleSelection(c)} />)
       }
       </span>
-    </div>
+      </div>
   );
 });
 
@@ -30,11 +31,13 @@ const Result = view(props => {
   const source = sources[props.source];
 
   return (
-    <a href={document.url} target={config.openInNewTab ? "_blank" : "_self"} rel="noopener noreferrer"
-       style={{display: props.visibilityStore.isVisible(document) ? "block" : "none"}}>
-      {source.createResult(props)}
-      <Optional visible={config.showClusters} content={ () => <ResultClusters result={document} /> } />
-    </a>
+      <a href={document.url} target={config.openInNewTab ? "_blank" : "_self"}
+         rel="noopener noreferrer"
+         style={{ display: props.visibilityStore.isVisible(document) ? "block" : "none" }}>
+        {source.createResult(props)}
+        <Optional visible={config.showClusters}
+                  content={() => <ResultClusters result={document} />} />
+      </a>
   );
 });
 
@@ -42,6 +45,8 @@ const ClusterSelectionSummaryView = view(ClusterSelectionSummary);
 
 export const ResultList = view(props => {
   const container = useRef(undefined);
+
+  const pagingStore = store({ start: 0 });
 
   // Reset document list scroll on cluster selection changes.
   useEffect(() => {
@@ -59,28 +64,34 @@ export const ResultList = view(props => {
     return () => clearEffect(resetScroll);
   }, [ props.clusterSelectionStore.selected ]);
 
-
-  const store = props.store;
-  if (store.searchResult === null) {
+  const resultsStore = props.store;
+  if (resultsStore.searchResult === null) {
     return null;
   }
   return (
-    <div className="ResultList" ref={container}>
-      <Optional visible={!store.loading} content={() => (
-        <div>
-          <ClusterSelectionSummaryView clusterSelectionStore={props.clusterSelectionStore}
-                                       documentVisibilityStore={props.visibilityStore}
-                                       searchResultStore={store} />
-          {
-            store.searchResult.documents.map((document, index) =>
-              <Result source={store.searchResult.source} document={document} rank={index + 1} key={document.id}
-                      visibilityStore={props.visibilityStore}
-                      commonConfigStore={props.commonConfigStore} />)
-          }
-        </div>
-      )}>
-      </Optional>
-    </div>
+      <div className="ResultList" ref={container}>
+        <Optional visible={!resultsStore.loading} content={() => {
+          const maxResults = props.commonConfigStore.maxResultsPerPage;
+          const start = pagingStore.start;
+          return (
+              <div>
+                <ClusterSelectionSummaryView clusterSelectionStore={props.clusterSelectionStore}
+                                             documentVisibilityStore={props.visibilityStore}
+                                             searchResultStore={resultsStore} />
+                {
+                  resultsStore.searchResult.documents
+                      .slice(start, start + maxResults)
+                      .map((document, index) =>
+                          <Result source={resultsStore.searchResult.source} document={document}
+                                  rank={index + 1} key={document.id}
+                                  visibilityStore={props.visibilityStore}
+                                  commonConfigStore={props.commonConfigStore} />)
+                }
+              </div>
+          );
+        }}>
+        </Optional>
+      </div>
   );
 });
 
