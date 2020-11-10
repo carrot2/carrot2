@@ -171,6 +171,7 @@ const prepareResult = object => {
   const allFields = fields.map(f => f.field);
   const naturalTextFields = fields.filter(f => f.naturalTextScore >= 1).map(f => f.field);
   return {
+    fieldStats: fields,
     fieldsAvailable: allFields,
     fieldsAvailableForClustering: naturalTextFields,
     fieldsToCluster: naturalTextFields,

@@ -15,20 +15,14 @@ import { parseFile } from "./file-parser.js";
 import { Checkbox } from "@blueprintjs/core";
 import { Loading } from "../../../carrotsearch/ui/Loading.js";
 
+import { CustomSchemaResultConfig, customSchemaResultConfig } from "./CustomSchemaResultConfig.js";
+
 const LocalFileResult = ({ document }) => {
   return (
       <>
         <strong>{document.title}</strong>
         <div>{document.snippet}</div>
       </>
-  );
-};
-
-const LocalFileResultConfig = () => {
-  return (
-      <div>
-        Result config
-      </div>
   );
 };
 
@@ -75,6 +69,8 @@ const fileContentsStore = store({
       fileContentsStore.fieldsToCluster = newToCluster;
       fileContentsStore.documents = parsed.documents;
       fileContentsStore.query = parsed.query;
+
+      customSchemaResultConfig.load(parsed.fieldStats);
     } finally {
       fileContentsStore.log = logger.getEntries();
       fileContentsStore.loading = false;
@@ -89,6 +85,7 @@ lastConfigs.load(storage.get(LAST_CONFIGS_KEY) || []);
 
 const lastConfigsKey = fieldsAvailable => fieldsAvailable.join("--");
 
+// Save per-schema configs
 autoEffect(() => {
   const fieldsAvailable = fileContentsStore.fieldsAvailable;
   if (fieldsAvailable && fieldsAvailable.length > 0) {
@@ -97,7 +94,6 @@ autoEffect(() => {
     storage.set(LAST_CONFIGS_KEY, dmp); // TODO: throttle this?
   }
 });
-
 
 const FieldList = view(() => {
   const store = fileContentsStore;
@@ -206,7 +202,7 @@ export const localFileSourceDescriptor = {
     return <GenericSearchEngineErrorMessage />
   },
   createConfig: () => {
-    return <LocalFileResultConfig />;
+    return <CustomSchemaResultConfig />;
   },
   createSourceConfig: (props) => {
     throw new Error("Not available in search app.");
