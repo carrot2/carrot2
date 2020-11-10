@@ -62,13 +62,10 @@ export const clusterSelectionStore = itemSelectionStore();
 export const documentSelectionStore = itemSelectionStore();
 
 export const documentVisibilityStore = store({
+  allDocumentsVisible: true,
   visibleDocumentIds: new Set(),
   isVisible: function (document) {
-    // TODO: Checking size is suboptimal here
-    // It causes re-rendering of the the document list on every selection change
-    // instead of updating only the affected documents. Leaving as it its for now.
-    return documentVisibilityStore.visibleDocumentIds.size === 0 ?
-      true : documentVisibilityStore.visibleDocumentIds.has(document.id);
+    return documentVisibilityStore.visibleDocumentIds.has(document.id);
   },
   replaceVisible: function (newVisibleDocumentIdsSet) {
     const visibleDocumentIds = documentVisibilityStore.visibleDocumentIds;
@@ -86,6 +83,9 @@ export const documentVisibilityStore = store({
     for (const newDocId of newVisibleDocumentIdsSet) {
       visibleDocumentIds.add(newDocId);
     }
+
+    //
+    documentVisibilityStore.allDocumentsVisible = visibleDocumentIds.size === 0;
   }
 });
 

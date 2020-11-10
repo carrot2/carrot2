@@ -97,3 +97,9 @@
 .ResultList .ResultClusters:hover .ClusterInSummary:hover .bp3-icon {
   color: var(--cluster-icon-color);
 }
+
+.ResultList .ResultListPaging {
+  display: flex;
+  justify-content: space-between;
+  line-height: 26px; /** to match button height */
+}

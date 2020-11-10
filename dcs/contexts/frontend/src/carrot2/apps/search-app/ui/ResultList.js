@@ -1,14 +1,15 @@
 import './ResultList.css';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import PropTypes from "prop-types";
 
 import { autoEffect, clearEffect, store, view } from "@risingstack/react-easy-state";
 import { ClusterInSummary, ClusterSelectionSummary } from "./ClusterSelectionSummary.js";
 import { Optional } from "./Optional.js";
+import { clusterSelectionStore } from "../../../store/selection.js";
 
 import { sources } from "../../../config-sources.js";
-import { clusterSelectionStore } from "../../../store/selection.js";
+import { ButtonLink } from "../../../../carrotsearch/ui/ButtonLink.js";
 
 const ResultClusters = view(props => {
   const selectionStore = clusterSelectionStore;
@@ -25,72 +26,191 @@ const ResultClusters = view(props => {
   );
 });
 
-const Result = view(props => {
-  const document = props.document;
-  const config = props.commonConfigStore;
-  const source = sources[props.source];
+/**
+ * A simple functional component for displaying a single document.
+ */
+const SimpleResult = view(props => {
+  const { document, commonConfigStore, visible = true } = props;
+
+  const config = commonConfigStore;
 
   return (
       <a href={document.url} target={config.openInNewTab ? "_blank" : "_self"}
-         rel="noopener noreferrer"
-         style={{ display: props.visibilityStore.isVisible(document) ? "block" : "none" }}>
-        {source.createResult(props)}
+         rel="noopener noreferrer" style={{ display: visible ? "block" : "none" }}>
+        {sources[props.source].createResult(props)}
         <Optional visible={config.showClusters}
                   content={() => <ResultClusters result={document} />} />
       </a>
   );
 });
 
+/**
+ * A reactive component for displaying a single document. The document visibility is determined
+ * by reading the provided visibilityStore. See the ResultList component comment for the reason
+ * why we need the reactive wrapper around the result component.
+ */
+const ReactiveResult = view(props => {
+  const document = props.document;
+  const visibilityStore = props.visibilityStore;
+  const visible = visibilityStore.allDocumentsVisible || visibilityStore.isVisible(document);
+
+  return <SimpleResult {...props} visible={visible} />;
+});
+
 const ClusterSelectionSummaryView = view(ClusterSelectionSummary);
 
-export const ResultList = view(props => {
-  const container = useRef(undefined);
+const MAX_RESULTS_FOR_REACTIVE_DISPLAY = 200;
 
-  const pagingStore = store({ start: 0 });
+const ResultListPaging = ({ enabled, start, end, total, next, prev, nextEnabled, prevEnabled }) => {
+  if (!enabled) {
+    return null;
+  }
+  return (
+      <div className="ResultListPaging">
+        <ButtonLink enabled={prevEnabled} onClick={prev}>&lt; Previous</ButtonLink>
+        <span>{start + 1} &mdash; {end} of {total}</span>
+        <ButtonLink enabled={nextEnabled} onClick={next}>Next &gt;</ButtonLink>
+      </div>
+  );
+};
 
-  // Reset document list scroll on cluster selection changes.
+/**
+ * Listens to cluster selection changes and calls the supplied callback on every change.
+ */
+const useSelectionChange = (onSelectionChange) => {
   useEffect(() => {
-    const resetScroll = () => {
-      const selected = props.clusterSelectionStore.selected;
+    const listener = () => {
+      const selected = clusterSelectionStore.selected;
 
       // A dummy always-true condition to prevent removal of this code.
       // We need to read some property of the selected cluster set to
       // get notifications of changes.
-      if (selected.size >= 0 && container.current) {
-        container.current.scrollTop = 0;
+      if (selected.size >= 0) {
+        onSelectionChange();
       }
     };
-    autoEffect(resetScroll);
-    return () => clearEffect(resetScroll);
-  }, [ props.clusterSelectionStore.selected ]);
+    autoEffect(listener);
+    return () => clearEffect(listener);
+  }, [ onSelectionChange ]);
+};
 
+/**
+ * Manages a simple list paging user interface.
+ */
+const usePaging = ({ enabled, maxPerPage, results, onChange }) => {
+  const pagingStore = store({ start: 0 });
+
+  const reset = useCallback(() => {
+    pagingStore.start = 0;
+  }, [ pagingStore ]);
+
+  const start = pagingStore.start;
+  const end = start + maxPerPage;
+  return {
+    end: end,
+    start: start,
+    total: results.length,
+    results: results.slice(start, end),
+    next: () => {
+      pagingStore.start = end;
+      onChange();
+    },
+    prev: () => {
+      pagingStore.start = start - maxPerPage;
+      onChange()
+    },
+    nextEnabled: end < results.length,
+    prevEnabled: start > 0,
+    enabled: enabled && results.length > maxPerPage,
+    reset: reset
+  };
+};
+
+/**
+ * Captures a reference to an element and exposes a method for resetting its scrollbar.
+ */
+const useScrollReset = () => {
+  const container = useRef(undefined);
+  const scrollReset = useCallback(() => {
+    if (container.current) {
+      container.current.scrollTop = 0;
+    }
+  }, []);
+  return { container, scrollReset };
+};
+
+export const ResultList = view(props => {
   const resultsStore = props.store;
-  if (resultsStore.searchResult === null) {
-    return null;
+  const allResults = resultsStore.searchResult.documents;
+
+  // For performance reasons we have two variants of the document list display:
+  // one for small lists (<=200 results) and another one for larger lists.
+  // For small lists, we render all results right away and then use CSS to show only
+  // the results contained in the selected cluster. This allows for fast switching between
+  // clusters because we don't create/destroy DOM elements on every selection change.
+  // The above approach is not feasible for thousands of documents because creating so many
+  // DOM elements would kill the browser. In this case, we apply result list paging and
+  // have to update the DOM on every cluster selection change. With a reasonable page size this
+  // shouldn't be prohibitive performance-wise, but is of course much slower than the small-list
+  // approach.
+  let visibleResults, Result;
+  const pagingEnabled = allResults.length > MAX_RESULTS_FOR_REACTIVE_DISPLAY;
+  if (pagingEnabled) {
+    // Set up components for paged display of results. We'll re-render the list
+    // on every cluster selection change.
+
+    // Simple non-reactive document component is fine here.
+    Result = SimpleResult;
+
+    // The filtered list of documents to display.
+    if (props.visibilityStore.allDocumentsVisible) {
+      visibleResults = allResults;
+    } else {
+      visibleResults = allResults.filter(r => props.visibilityStore.isVisible(r));
+    }
+  } else {
+    // In the small-list case where we hide documents through CSS, we need a reactive
+    // document component that will check its visibility flag and update the its visibility
+    // accordingly. With this approach we'll render the minimum required number of documents
+    // and will not render documents whose visibility state doesn't change.
+    Result = ReactiveResult;
+
+    // In this case we pass all results for rendering, rendered documents will be hidden as required.
+    visibleResults = allResults;
   }
+
+  const { container, scrollReset } = useScrollReset();
+
+  const { results, reset, ...paging } = usePaging({
+    enabled: pagingEnabled,
+    maxPerPage: props.commonConfigStore.maxResultsPerPage,
+    results: visibleResults,
+    onChange: scrollReset
+  });
+
+  // Reset scroll and paging on cluster selection changes.
+  const r = useCallback(() => {
+    scrollReset();
+    reset();
+  }, [ reset, scrollReset ]);
+  useSelectionChange(r);
+
   return (
       <div className="ResultList" ref={container}>
-        <Optional visible={!resultsStore.loading} content={() => {
-          const maxResults = props.commonConfigStore.maxResultsPerPage;
-          const start = pagingStore.start;
-          return (
-              <div>
-                <ClusterSelectionSummaryView clusterSelectionStore={props.clusterSelectionStore}
-                                             documentVisibilityStore={props.visibilityStore}
-                                             searchResultStore={resultsStore} />
-                {
-                  resultsStore.searchResult.documents
-                      .slice(start, start + maxResults)
-                      .map((document, index) =>
-                          <Result source={resultsStore.searchResult.source} document={document}
-                                  rank={index + 1} key={document.id}
-                                  visibilityStore={props.visibilityStore}
-                                  commonConfigStore={props.commonConfigStore} />)
-                }
-              </div>
-          );
-        }}>
-        </Optional>
+        <div>
+          <ClusterSelectionSummaryView clusterSelectionStore={props.clusterSelectionStore}
+                                       documentVisibilityStore={props.visibilityStore}
+                                       searchResultStore={resultsStore} />
+          {
+            results.map((document, index) =>
+                <Result key={index} document={document}
+                        source={resultsStore.searchResult.source}
+                        rank={index + 1}
+                        visibilityStore={props.visibilityStore}
+                        commonConfigStore={props.commonConfigStore} />)
+          }
+          <ResultListPaging {...paging} />
+        </div>
       </div>
   );
 });

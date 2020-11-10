@@ -27,9 +27,6 @@ export const ClusterInSummary = props => {
  */
 export function ClusterSelectionSummary (props) {
   const searchResultStore = props.searchResultStore;
-  if (searchResultStore.loading) {
-    return null;
-  }
 
   const clusterSelection = props.clusterSelectionStore.selected;
   const selectedDocs = props.documentVisibilityStore.visibleDocumentIds;

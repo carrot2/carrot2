@@ -18,3 +18,9 @@ button.link .bp3-icon {
   position: relative;
   top: -0.1em;
 }
+button.link[disabled] {
+  opacity: 0.35;
+}
+button.link[disabled]:hover {
+  text-decoration: none;
+}
