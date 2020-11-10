@@ -1,12 +1,16 @@
 import React from 'react';
-import PropTypes from "prop-types";
 
 import './ClusterSelectionSummary.css';
+
+import { view } from "@risingstack/react-easy-state";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolder, faLightbulb } from "@fortawesome/pro-regular-svg-icons";
 
 import { pluralize } from "../../../util/humanize.js";
+
+import { searchResultStore } from "../../../store/services.js";
+import { documentVisibilityStore, clusterSelectionStore } from "../../../store/selection.js";
 
 export const ClusterInSummary = props => {
   const cluster = props.cluster;
@@ -25,11 +29,9 @@ export const ClusterInSummary = props => {
 /**
  * @return {null}
  */
-export function ClusterSelectionSummary (props) {
-  const searchResultStore = props.searchResultStore;
-
-  const clusterSelection = props.clusterSelectionStore.selected;
-  const selectedDocs = props.documentVisibilityStore.visibleDocumentIds;
+export const ClusterSelectionSummary = view(() => {
+  const clusterSelection = clusterSelectionStore.selected;
+  const selectedDocs = documentVisibilityStore.visibleDocumentIds;
   let content;
   if (searchResultStore.error) {
     content = <>Search results could not be retrieved due to an error.</>;
@@ -50,10 +52,4 @@ export function ClusterSelectionSummary (props) {
       {content}
     </div>
   );
-}
-
-ClusterSelectionSummary.propTypes = {
-  searchResultStore: PropTypes.object.isRequired,
-  clusterSelectionStore: PropTypes.object.isRequired,
-  documentVisibilityStore: PropTypes.object.isRequired
-};
+});

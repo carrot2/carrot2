@@ -57,10 +57,6 @@ const ReactiveResult = view(props => {
   return <SimpleResult {...props} visible={visible} />;
 });
 
-const ClusterSelectionSummaryView = view(ClusterSelectionSummary);
-
-const MAX_RESULTS_FOR_REACTIVE_DISPLAY = 200;
-
 const ResultListPaging = ({ enabled, start, end, total, next, prev, nextEnabled, prevEnabled }) => {
   if (!enabled) {
     return null;
@@ -139,6 +135,8 @@ const useScrollReset = () => {
   return { container, scrollReset };
 };
 
+const MAX_RESULTS_FOR_REACTIVE_DISPLAY = 200;
+
 export const ResultList = view(props => {
   const resultsStore = props.store;
   const allResults = resultsStore.searchResult.documents;
@@ -198,9 +196,7 @@ export const ResultList = view(props => {
   return (
       <div className="ResultList" ref={container}>
         <div>
-          <ClusterSelectionSummaryView clusterSelectionStore={props.clusterSelectionStore}
-                                       documentVisibilityStore={props.visibilityStore}
-                                       searchResultStore={resultsStore} />
+          <ClusterSelectionSummary />
           {
             results.map((document, index) =>
                 <Result key={index} document={document}
