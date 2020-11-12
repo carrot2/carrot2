@@ -20,4 +20,6 @@ yarn-debug.log*
 /.idea/
 
 .gradle/
-/src/carrot2/service/algorithms/descriptors/
+
+# Ignore open source descriptors, they're generated.
+src/carrot2/service/descriptors/org.carrot2*
