@@ -22,4 +22,4 @@ yarn-debug.log*
 .gradle/
 
 # Ignore open source descriptors, they're generated.
-src/carrot2/service/descriptors/org.carrot2*
+src/carrot2/service/algorithms/descriptors/org.carrot2*

@@ -7,7 +7,7 @@ dependencies {
 }
 
 ext {
-  descriptorsDir = file("src/carrot2/service/descriptors")
+  descriptorsDir = file("src/carrot2/service/algorithms/descriptors")
 }
 
 task descriptors(type: Sync) {
