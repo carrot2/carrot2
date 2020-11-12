@@ -184,10 +184,10 @@ export const CustomSchemaResult = view(({ document, rank, configStore }) => {
           {
             allProperties.map(p => {
               return (
-                  <>
+                  <React.Fragment key={p.field}>
                     <dt>{p.field}</dt><dd>{p.text}</dd>
                     {" "}
-                  </>
+                  </React.Fragment>
               )
             })
           }
