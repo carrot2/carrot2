@@ -55,13 +55,32 @@ const collectFieldMajorityTypes = (json, fields) => {
   }, new Map());
 };
 
+const countSpaces = str => {
+  if (!str.charAt) {
+    return 0;
+  }
+  let spaces = 0;
+  for (let i = 0; i < str.length; i++) {
+    if (str.charAt(i) === ' ') {
+      spaces++;
+    }
+  }
+  return spaces;
+};
+
 /**
  * Collects some statistics about the field values. The statistics may be useful in guessing
  * which fields to cluster and which fields to show in the document view.
  */
-const collectStringFieldValueStats = (json, fields) => {
+const collectFieldValueStats = (json, fields) => {
   const stats = fields.reduce((map, f) => {
-    map.set(f, { length: new Stats(), count: new Stats(), empty: 0, distinct: 0 });
+    map.set(f, {
+      length: new Stats(),
+      count: new Stats(),
+      empty: 0,
+      distinct: 0,
+      spaces: new Stats()
+    });
     return map;
   }, new Map());
 
@@ -70,7 +89,7 @@ const collectStringFieldValueStats = (json, fields) => {
     json.forEach(entry => {
       const val = entry[f];
       const s = stats.get(f);
-      if (!val) {
+      if (val === null || val === undefined) {
         s.empty++;
         return;
       }
@@ -79,12 +98,14 @@ const collectStringFieldValueStats = (json, fields) => {
       if (Array.isArray(val)) {
         s.count.push(val.length);
         val.forEach(v => {
-          s.length.push(v.length);
+          s.length.push(v.length || (v + "").length);
+          s.spaces.push(countSpaces(v));
           values.add(v);
         });
       } else {
         s.count.push(1);
-        s.length.push(val.length);
+        s.length.push(val.length || (val + "").length);
+        s.spaces.push(countSpaces(val));
         values.add(val);
       }
     });
@@ -103,6 +124,10 @@ const collectStringFieldValueStats = (json, fields) => {
       count: {
         avg: s.count.amean(),
         dev: s.count.σ()
+      },
+      spaces: {
+        avg: s.spaces.amean(),
+        dev: s.spaces.σ()
       }
     });
     return map;
@@ -115,16 +140,23 @@ const collectStringFieldValueStats = (json, fields) => {
  */
 const collectFileTypeScores = (fields, docCount) => {
   fields.forEach(f => {
+    let idScore = Math.pow(2, 16 / f.length.avg);
+    let tagScore = (f.count.avg - 1) * f.distinct / (docCount * (f.spaces.avg + 1));
+    let propScore = Math.pow(2, 16 / f.distinct) / (f.spaces.avg + 1);
+    let titleScore = f.length.avg >= 4 ? 1.0 : 0;
+    let naturalTextScore = f.spaces.avg;
+
     if (f.type !== "String") {
-      f.titleScore = 0;
-      f.naturalTextScore = 0;
-      return;
+      titleScore = 0;
+      naturalTextScore = 0;
     }
 
-    let titleScore = 1.0;
-    let naturalTextScore = 1.0;
-
     if (/title/i.test(f.field)) {
+      titleScore *= 2.0;
+      naturalTextScore *= 2.0;
+    }
+
+    if (/content|body|abstract|comment|question|answer|post|message/i.test(f.field)) {
       titleScore *= 2.0;
       naturalTextScore *= 2.0;
     }
@@ -132,6 +164,9 @@ const collectFileTypeScores = (fields, docCount) => {
     if (f.distinct === docCount) {
       titleScore *= 2.0;
       naturalTextScore *= 2.0;
+      idScore *= 2;
+    } else {
+      idScore = 0;
     }
 
     if (f.length.avg > 10 && f.length.avg < 140) {
@@ -144,14 +179,16 @@ const collectFileTypeScores = (fields, docCount) => {
 
     f.titleScore = titleScore;
     f.naturalTextScore = naturalTextScore;
+    f.idScore = idScore;
+    f.tagScore = tagScore;
+    f.propScore = propScore;
   });
 };
 
 const collectFieldInformation = json => {
   const allFieldNames = collectFieldNames(json);
   const types = collectFieldMajorityTypes(json, allFieldNames);
-  const stats = collectStringFieldValueStats(json,
-      allFieldNames.filter(f => types.get(f) === "String"));
+  const stats = collectFieldValueStats(json, allFieldNames);
 
   // Combine all the information
   const fields = allFieldNames.map(f => {

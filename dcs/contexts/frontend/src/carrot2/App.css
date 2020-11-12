@@ -116,3 +116,8 @@ nav .ThemeSwitch {
 main {
   position: relative;
 }
+
+/** BlueprintJS tweaks */
+.bp3-popover-content {
+  padding: 1em;
+}

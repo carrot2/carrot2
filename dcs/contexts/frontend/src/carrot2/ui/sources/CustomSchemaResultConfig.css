@@ -1,0 +1,23 @@
+.CustomSchemeResultConfig {
+  display: flex;
+}
+.CustomSchemeResultConfig .ResultPreview,
+.CustomSchemeResultConfig .FieldRoles {
+  max-height: 24em;
+  overflow-y: auto;
+}
+.CustomSchemeResultConfig .ResultPreview {
+  min-width: 24em;
+}
+
+.CustomSchemeResultConfig .bp3-form-group {
+  padding-right: 0.5em;
+  margin-bottom: 0.25em;
+}
+
+.CustomSchemeResultConfig .bp3-label {
+  flex-grow: 1;
+  max-width: 11em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

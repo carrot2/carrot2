@@ -18,8 +18,8 @@ export const Tool = ({ tool, visible, props }) => {
   if (tool.icon) {
     return (
         <Popover className={Classes.FIXED} position={Position.BOTTOM_RIGHT}
-                 autoFocus={true} popoverClassName="bp3-popover-content-sizing view-tool-content"
-                 disabled={!visible}>
+                 autoFocus={true} popoverClassName="view-tool-content"
+                 disabled={!visible} boundary="viewport">
           <ShowHide visible={visible} className="view-tool-trigger">
             <Button icon={<FontAwesomeIcon icon={tool.icon}/>} minimal={true} title={tool.title} />
           </ShowHide>

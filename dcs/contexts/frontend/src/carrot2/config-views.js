@@ -177,9 +177,18 @@ export const resultsViews = [
             id: "config",
             icon: faCog,
             createContentElement: (props) => {
+              let children, side;
+              let createConfig = sources[props.source].createConfig;
+              if (typeof createConfig === "function") {
+                side = null;
+                children = createConfig();
+              } else {
+                side = createConfig.side();
+                children = createConfig.children();
+              }
               return (
-                  <ResultListConfigView store={resultListConfigStore}>
-                    {sources[props.source].createConfig()}
+                  <ResultListConfigView store={resultListConfigStore} side={side}>
+                    {children}
                   </ResultListConfigView>
               );
             }

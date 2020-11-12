@@ -15,7 +15,13 @@ import { parseFile } from "./file-parser.js";
 import { Checkbox } from "@blueprintjs/core";
 import { Loading } from "../../../carrotsearch/ui/Loading.js";
 
-import { CustomSchemaResultConfig, customSchemaResultConfig } from "./CustomSchemaResultConfig.js";
+import {
+  CustomSchemaResultConfig,
+  createResultConfigStore,
+  ResultPreview
+} from "./CustomSchemaResultConfig.js";
+
+const resultConfigStore = createResultConfigStore("localFile");
 
 const LocalFileResult = ({ document }) => {
   return (
@@ -26,7 +32,7 @@ const LocalFileResult = ({ document }) => {
   );
 };
 
-const ArrayLogger = function() {
+const ArrayLogger = function () {
   const entries = [];
 
   this.log = message => entries.push({ level: "info", message: message });
@@ -61,7 +67,7 @@ const fileContentsStore = store({
 
         // Intersection of parsed and cached set of fields, in case this specific instance
         // had data that caused some field to be unsuitable for clustering.
-        newToCluster = new Set([...parsed.fieldsToCluster].filter(f => cached.has(f)))
+        newToCluster = new Set([ ...parsed.fieldsToCluster ].filter(f => cached.has(f)))
       } else {
         newToCluster = new Set(parsed.fieldsToCluster);
       }
@@ -70,14 +76,13 @@ const fileContentsStore = store({
       fileContentsStore.documents = parsed.documents;
       fileContentsStore.query = parsed.query;
 
-      customSchemaResultConfig.load(parsed.fieldStats);
+      resultConfigStore.load(parsed.fieldStats);
     } finally {
       fileContentsStore.log = logger.getEntries();
       fileContentsStore.loading = false;
     }
   }
 });
-
 
 const LAST_CONFIGS_KEY = "workbench:source:localFile:lastConfigs";
 const lastConfigs = new LRU({ max: 1024 });
@@ -201,8 +206,12 @@ export const localFileSourceDescriptor = {
   createError: (error) => {
     return <GenericSearchEngineErrorMessage />
   },
-  createConfig: () => {
-    return <CustomSchemaResultConfig />;
+  createConfig: {
+    side: () =>
+        <ResultPreview previewDocumentProvider={() => fileContentsStore.documents[0]}
+                       configStore={resultConfigStore} />,
+    children: () =>
+        <CustomSchemaResultConfig configStore={resultConfigStore} />
   },
   createSourceConfig: (props) => {
     throw new Error("Not available in search app.");
