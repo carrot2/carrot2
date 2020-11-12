@@ -88,7 +88,7 @@ autoEffect(() => {
 const runSearch = () => {
   if (sourceParametersDirty) {
     sourceParametersDirty = false;
-    searchResultStore.load(workbenchSourceStore.source, queryStore.query);
+    searchResultStore.load(sources[workbenchSourceStore.source], queryStore.query);
   } else {
     clusterStore.reload();
   }

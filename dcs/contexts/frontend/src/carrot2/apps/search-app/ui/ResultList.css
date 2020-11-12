@@ -13,7 +13,7 @@
   padding: 0.25em 0.25em 0.25em 0.5em;
 }
 
-.ResultList > div > a {
+a.Result {
   color: var(--text-color);
   margin-bottom: 1em;
   overflow: hidden;
@@ -23,16 +23,18 @@
   text-decoration: none;
   padding: 0.25em 0.25em 0.25em 0.5em;
 }
-.ResultList > div > a:hover {
+a.Result:hover {
   color: inherit;
   background-color: rgba(59, 131, 192, 0.05);
   box-shadow: 0 0 0 2px rgba(59, 131, 192, 0.3);
 }
 
-.ResultList > div > a > strong > span,
-.ResultList > div > a > div > p > span,
-.ResultList > div > a > .keywords > span,
-.ResultList > div > a > .sources > span {
+.Result > strong > span,
+.Result > div > p > span,
+.Result > .tags > span,
+.Result > .properties > dt,
+.Result > .keywords > span,
+.Result > .sources > span {
   font-size: 70%;
   font-weight: normal;
   background-color: rgba(59, 131, 192, 0.05);
@@ -43,9 +45,11 @@
   border-radius: 0.125rem;
   color: var(--text-color-secondary);
 }
-.ResultList > div > a > .keywords > span,
-.ResultList > div > a > div > p > span,
-.ResultList > div > a > .sources > span {
+.Result > div > p > span,
+.Result > .keywords > span,
+.Result > .tags > span,
+.Result > .properties > dt,
+.Result > .sources > span {
   background-color: hsla(258, 10%, 38%, 0.03);
   box-shadow: 0 0 0 1px hsla(208, 10%, 49%, 0.2);
   font-weight: 300;
@@ -53,34 +57,44 @@
   color: var(--text-color-secondary);
 }
 
-.ResultList > div > a > div > p {
+.Result .properties dt,
+.Result .properties dd {
+  display: inline;
+  margin-left: 0;
+}
+.Result .properties dd {
+  margin-right: 1em;
+}
+
+.Result > div > p {
   margin-top: 0.5em;
   margin-bottom: 0
 }
 
-.ResultList > div > a > div {
+.Result > dl,
+.Result > div {
   color: var(--text-color-light);
-  margin: 0.25em 0;
+  margin: 0.5em 0;
 }
 
-.ResultList > div > a > span.url {
+.Result > span.url {
   display: block;
   height: 1.5em;
   white-space: nowrap;
   font-weight: 300;
   color: inherit;
 }
-.ResultList > div > a > span.url.with-site-icon {
+.Result > span.url.with-site-icon {
   background-size: auto 75%;
   background-position: 0 0.0625em;
   background-repeat: no-repeat;
   padding-left: 1.5em;
 }
-.ResultList > div > a > span.url:hover {
+.Result > span.url:hover {
   color: inherit;
 }
 
-.ResultList > div > a > span.url > span {
+.Result > span.url > span {
   opacity: 0.7;
 }
 

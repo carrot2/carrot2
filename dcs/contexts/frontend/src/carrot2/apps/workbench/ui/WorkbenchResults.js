@@ -8,6 +8,7 @@ import { WorkbenchSide } from "./WorkbenchSide.js";
 import { Views } from "../../../../carrotsearch/ui/Views.js";
 import { clusterViews, resultsViews } from "../../../config-views.js";
 import { clusterStore, searchResultStore } from "../../../store/services.js";
+import { sources } from "../../../config-sources.js";
 import { Loading } from "../../../../carrotsearch/ui/Loading.js";
 import { persistentStore } from "../../../util/persistent-store.js";
 
@@ -62,9 +63,8 @@ const WorkbenchMain = view(() => {
         </div>
         <div className="docs">
           <Views views={resultsViews} activeView="list"
-                 onViewChange={() => {
-                 }}
-                 source={workbenchSourceStore.source}>
+                 onViewChange={() => {}}
+                 source={sources[workbenchSourceStore.source]}>
             <Loading store={searchResultStore} />
           </Views>
         </div>

@@ -1,6 +1,6 @@
+import React, { useCallback, useEffect, useRef } from 'react';
 import './ResultList.css';
 
-import React, { useCallback, useEffect, useRef } from 'react';
 import PropTypes from "prop-types";
 
 import { autoEffect, clearEffect, store, view } from "@risingstack/react-easy-state";
@@ -8,8 +8,8 @@ import { ClusterInSummary, ClusterSelectionSummary } from "./ClusterSelectionSum
 import { Optional } from "./Optional.js";
 import { clusterSelectionStore } from "../../../store/selection.js";
 
-import { sources } from "../../../config-sources.js";
 import { ButtonLink } from "../../../../carrotsearch/ui/ButtonLink.js";
+import { resultListConfigStore } from "./ResultListConfig.js";
 
 const ResultClusters = view(props => {
   const selectionStore = clusterSelectionStore;
@@ -26,21 +26,31 @@ const ResultClusters = view(props => {
   );
 });
 
+export const ResultWrapper = view(props => {
+  const { document, children, visible = true } = props;
+
+  const config = resultListConfigStore;
+
+  return (
+      <a className="Result" href={document.url} target={config.openInNewTab ? "_blank" : "_self"}
+         rel="noopener noreferrer" style={{ display: visible ? "block" : "none" }}>
+        {children}
+        <Optional visible={config.showClusters}
+                  content={() => <ResultClusters result={document} />} />
+      </a>
+  );
+});
+
 /**
  * A simple functional component for displaying a single document.
  */
 const SimpleResult = view(props => {
-  const { document, commonConfigStore, visible = true } = props;
-
-  const config = commonConfigStore;
+  const { document, source, visible = true } = props;
 
   return (
-      <a href={document.url} target={config.openInNewTab ? "_blank" : "_self"}
-         rel="noopener noreferrer" style={{ display: visible ? "block" : "none" }}>
-        {sources[props.source].createResult(props)}
-        <Optional visible={config.showClusters}
-                  content={() => <ResultClusters result={document} />} />
-      </a>
+      <ResultWrapper document={document} visible={visible}>
+        {source.createResult(props)}
+      </ResultWrapper>
   );
 });
 
@@ -181,7 +191,7 @@ export const ResultList = view(props => {
 
   const { results, reset, ...paging } = usePaging({
     enabled: pagingEnabled,
-    maxPerPage: props.commonConfigStore.maxResultsPerPage,
+    maxPerPage: resultListConfigStore.maxResultsPerPage,
     results: visibleResults,
     onChange: scrollReset
   });
@@ -202,8 +212,7 @@ export const ResultList = view(props => {
                 <Result key={index} document={document}
                         source={resultsStore.searchResult.source}
                         rank={index + 1}
-                        visibilityStore={props.visibilityStore}
-                        commonConfigStore={props.commonConfigStore} />)
+                        visibilityStore={props.visibilityStore} />)
           }
           <ResultListPaging {...paging} />
         </div>
@@ -213,6 +222,5 @@ export const ResultList = view(props => {
 
 ResultList.propTypes = {
   store: PropTypes.object.isRequired,
-  commonConfigStore: PropTypes.object.isRequired,
   visibilityStore: PropTypes.object.isRequired
 };

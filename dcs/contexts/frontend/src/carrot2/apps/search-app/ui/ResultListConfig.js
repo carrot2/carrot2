@@ -1,12 +1,26 @@
 import React from "react";
-import { Switch, NumericInput, FormGroup } from "@blueprintjs/core";
 
-export const ResultListConfig = (props) => {
-  const store = props.store;
+import { view } from "@risingstack/react-easy-state";
+
+import { Switch, NumericInput, FormGroup } from "@blueprintjs/core";
+import { persistentStore } from "../../../util/persistent-store.js";
+
+export const resultListConfigStore = persistentStore("resultListConfig",
+    {
+      showRank: true,
+      openInNewTab: true,
+      showClusters: true,
+      maxCharsPerResult: 400,
+      maxResultsPerPage: 50
+    }
+);
+
+export const ResultListConfig = view(({ children }) => {
+  const store = resultListConfigStore;
   return (
     <>
       <h4>Result list appearance</h4>
-      {props.children}
+      {children}
       <hr />
       <Switch label="Show search rank" checked={store.showRank}
               onChange={e => store.showRank = e.target.checked } />
@@ -21,4 +35,4 @@ export const ResultListConfig = (props) => {
       </FormGroup>
     </>
   )
-};
+});

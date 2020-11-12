@@ -105,6 +105,7 @@ a:hover {
 hr {
   border: 1px solid var(--hr);
   border-top: none;
+  margin: 1em 0;
 }
 
 kbd {

@@ -14,6 +14,8 @@ import { ButtonLink } from "../../../../../../carrotsearch/ui/ButtonLink.js";
 import { queryStore } from "../../../../workbench/store/query-store.js";
 import { storeAccessors } from "../../../../../../carrotsearch/ui/settings/Settings.js";
 
+import { resultListConfigStore } from "../../ResultListConfig.js";
+
 const etoolsResultsConfigStore = persistentStore("etoolsResultConfig",
   {
     showSiteIcons: false,
@@ -165,7 +167,7 @@ export const EToolsResult = view((props) => {
   const docHostname = new URL(document.url.startsWith("//") ?
     appProtocol + document.url : document.url).hostname;
   const config = etoolsResultsConfigStore;
-  const commonConfig = props.commonConfigStore;
+  const commonConfig = resultListConfigStore;
 
   let urlWithIcon = null;
   if (config.showSiteIcons) {

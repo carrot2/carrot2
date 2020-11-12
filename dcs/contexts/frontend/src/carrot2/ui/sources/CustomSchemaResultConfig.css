@@ -7,7 +7,8 @@
   overflow-y: auto;
 }
 .CustomSchemeResultConfig .ResultPreview {
-  min-width: 24em;
+  width: 24em;
+  padding: 0.25em;
 }
 
 .CustomSchemeResultConfig .bp3-form-group {

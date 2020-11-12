@@ -1,6 +1,5 @@
 import { store, autoEffect } from "@risingstack/react-easy-state";
 import { algorithms } from "../config-algorithms.js";
-import { sources } from "../config-sources.js";
 import { fetchClusters } from "../service/dcs.js";
 import { persistentStore } from "../util/persistent-store.js";
 
@@ -51,7 +50,7 @@ export const clusterStore = store({
       clusterStore.clusters = EMPTY_ARRAY;
       clusterStore.error = undefined;
       try {
-        const fieldsToCluster = sources[searchResult.source].getFieldsToCluster();
+        const fieldsToCluster = searchResult.source.getFieldsToCluster();
         const response = await fetchClusters(query, documents, fieldsToCluster, algorithm, currentParams);
         clusterStore.clusters = response.clusters;
         clusterStore.serviceInfo = response.serviceInfo;
@@ -119,14 +118,13 @@ export const searchResultStore = store({
     documents: EMPTY_ARRAY
   },
   load: async function (source, query) {
-    const sourceId = source || Object.keys(sources)[0];
-    const src = sources[sourceId];
+    const src = source;
 
     // TODO: cancel currently running request
     searchResultStore.loading = true;
     searchResultStore.error = false;
     try {
-      searchResultStore.searchResult = assignDocumentIds(await src.source(query), sourceId);
+      searchResultStore.searchResult = assignDocumentIds(await src.source(query), src);
     } catch (e) {
       errors.addError(src.createError(e));
       searchResultStore.error = true;
@@ -140,10 +138,10 @@ export const searchResultStore = store({
   }
 });
 
-function assignDocumentIds(result, sourceId) {
+function assignDocumentIds(result, source) {
   return {
     ...result,
-    "source": sourceId,
+    "source": source,
     "documents": (result.documents || []).map((doc, index) => ({
       ...doc,
       "id": index,

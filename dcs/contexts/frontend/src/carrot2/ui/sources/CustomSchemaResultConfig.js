@@ -2,10 +2,16 @@ import React from 'react';
 
 import "./CustomSchemaResultConfig.css";
 
-import { FormGroup, HTMLSelect, Popover, PopoverPosition } from "@blueprintjs/core";
+import { FormGroup, HTMLSelect } from "@blueprintjs/core";
 import { view } from "@risingstack/react-easy-state";
 
 import { persistentStore } from "../../util/persistent-store.js";
+import { TitleAndRank } from "../../apps/search-app/ui/view/results/result-components.js";
+
+import { resultListConfigStore } from "../../apps/search-app/ui/ResultListConfig.js";
+
+import { ResultWrapper } from "../../apps/search-app/ui/ResultList.js";
+import { mapUpToMaxLength, wrapIfNotArray } from "../../../carrotsearch/lang/arrays.js";
 
 export const createResultConfigStore = (key) => {
   const store = persistentStore(
@@ -19,8 +25,9 @@ export const createResultConfigStore = (key) => {
             return;
           }
 
+          // TODO: don't display if all docs have the same value (distinct = 1)
+
           const map = fieldStats.reduce((map, field) => {
-            console.log(field.field, field.propScore, field.tagScore);
             if (field.tagScore > 1 && field.tagScore > field.propScore) {
               map[field.field] = "tag";
             } else if (field.propScore > 1 && field.propScore > field.tagScore) {
@@ -49,7 +56,7 @@ export const createResultConfigStore = (key) => {
 };
 
 const FIELD_ROLES = [
-  "not shown", "title", "subtitle", "body", "tag", "property", "id"
+  "not shown", "title", "body", "tag", "property", "id"
 ];
 const FieldRole = view(({ field, configStore }) => {
   return (
@@ -76,31 +83,115 @@ const FieldRoles = ({ configStore }) => {
   );
 };
 
-export const ResultPreview = () => {
+export const ResultPreview = view(({ configStore, previewResultProvider }) => {
+  const result = previewResultProvider();
+  const preview = result ?
+      <ResultWrapper document={result}>
+        <CustomSchemaResult result={result} rank={1} configStore={configStore} />
+      </ResultWrapper>
+      : <span>Not available</span>;
+
   return (
-      <div className="ResultPreview">
+      <div>
         <p>Preview:</p>
+        <div className="ResultPreview">
+          {preview}
+        </div>
       </div>
   )
-};
+});
 
-export const CustomSchemaResultConfig = view(({ configStore }) => {
+export const CustomSchemaResultConfig = view(({ configStore, previewResultProvider }) => {
   return (
       <div className="CustomSchemeResultConfig">
         <div>
           <p>Choose the fields to show:</p>
           <FieldRoles configStore={configStore} />
         </div>
-        <ResultPreview />
+        <ResultPreview configStore={configStore} previewResultProvider={previewResultProvider} />
       </div>
   );
 });
 
-export const CustomSchemaResult = ({ document, configStore }) => {
+export const CustomSchemaResult = view(({ document, rank, configStore }) => {
+  const rolesMap = configStore.fieldRoles;
+  const roles = Object.keys(rolesMap).reduce((groups, field) => {
+    const role = rolesMap[field];
+    if (role !== "not shown") {
+      groups[role].push(field);
+    }
+    return groups;
+  }, { "title": [], "body": [], "tag": [], "property": [], "id": [] });
+
+  const bodyParagraphs = roles["body"].reduce((arr, field) => {
+    const value = document[field];
+    if (value) {
+      const val = wrapIfNotArray(value);
+      val.forEach((v, index) => {
+        if (index === 0) {
+          arr.push({ text: v, field: field });
+        } else {
+          arr.push({ text: v });
+        }
+      });
+    }
+    return arr;
+  }, []);
+
+  const allProperties = roles["property"].reduce((arr, field) => {
+    const val = wrapIfNotArray(document[field]);
+    arr.push({ field: field, text: val.join(", ") })
+    return arr;
+  }, []);
 
   return (
       <>
+        {
+          roles["title"].map((field, index) => {
+            return <TitleAndRank key={field} title={document[field]} rank={rank}
+                                 showRank={index === 0 && resultListConfigStore.showRank} />
+          })
+        }
 
+        <div>
+          {
+            mapUpToMaxLength(
+                bodyParagraphs,
+                resultListConfigStore.maxCharsPerResult,
+                (text, obj, index) => {
+                  const label = obj.field ? <span>{obj.field}</span> : null;
+                  return <p key={index}>{label}{text}</p>;
+                },
+                obj => obj.text)
+          }
+        </div>
+
+        {
+          roles["tag"].map(field => {
+            const tags = wrapIfNotArray(document[field]);
+            return (
+                <div className="tags" key={field}>
+                  <span>{field}</span>
+                  {
+                    tags.join(", ")
+                  }
+                </div>
+            );
+          })
+        }
+
+        <dl className="properties">
+          {
+            allProperties.map(p => {
+              return (
+                  <>
+                    <dt>{p.field}</dt><dd>{p.text}</dd>
+                    {" "}
+                  </>
+              )
+            })
+          }
+        </dl>
       </>
   );
-};
+});

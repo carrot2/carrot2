@@ -14,7 +14,6 @@ import { ClusterList } from "./apps/search-app/ui/view/clusters/ClusterList.js";
 import { PieChartConfig } from "./apps/search-app/ui/view/clusters/PieChartConfig.js";
 import { TreemapConfig } from "./apps/search-app/ui/view/clusters/TreemapConfig.js";
 
-import { sources } from "./config-sources.js";
 import { ResultList } from "./apps/search-app/ui/ResultList.js";
 import { searchResultStore } from "./store/services.js";
 import {
@@ -23,7 +22,6 @@ import {
 } from "./store/selection.js";
 
 const ClusterListView = view(ClusterList);
-const ResultListConfigView = view(ResultListConfig);
 
 const treemapConfigStore = persistentStore("treemapConfig",
     {
@@ -148,16 +146,6 @@ export const clusterViews = [
   }
 ];
 
-export const resultListConfigStore = persistentStore("resultListConfig",
-    {
-      showRank: true,
-      openInNewTab: true,
-      showClusters: true,
-      maxCharsPerResult: 400,
-      maxResultsPerPage: 50
-    }
-);
-
 export const resultsViews = [
   {
     label: "Results",
@@ -168,8 +156,7 @@ export const resultsViews = [
           return (
               <ResultList {...props} store={searchResultStore}
                           visibilityStore={documentVisibilityStore}
-                          clusterSelectionStore={clusterSelectionStore}
-                          commonConfigStore={resultListConfigStore} />
+                          clusterSelectionStore={clusterSelectionStore} />
           );
         },
         tools: [
@@ -177,19 +164,10 @@ export const resultsViews = [
             id: "config",
             icon: faCog,
             createContentElement: (props) => {
-              let children, side;
-              let createConfig = sources[props.source].createConfig;
-              if (typeof createConfig === "function") {
-                side = null;
-                children = createConfig();
-              } else {
-                side = createConfig.side();
-                children = createConfig.children();
-              }
               return (
-                  <ResultListConfigView store={resultListConfigStore} side={side}>
-                    {children}
-                  </ResultListConfigView>
+                  <ResultListConfig>
+                    {props.source.createConfig()}
+                  </ResultListConfig>
               );
             }
           }

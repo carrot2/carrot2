@@ -16,21 +16,12 @@ import { Checkbox } from "@blueprintjs/core";
 import { Loading } from "../../../carrotsearch/ui/Loading.js";
 
 import {
-  CustomSchemaResultConfig,
   createResultConfigStore,
-  ResultPreview
+  CustomSchemaResult,
+  CustomSchemaResultConfig
 } from "./CustomSchemaResultConfig.js";
 
 const resultConfigStore = createResultConfigStore("localFile");
-
-const LocalFileResult = ({ document }) => {
-  return (
-      <>
-        <strong>{document.title}</strong>
-        <div>{document.snippet}</div>
-      </>
-  );
-};
 
 const ArrayLogger = function () {
   const entries = [];
@@ -201,18 +192,15 @@ export const localFileSourceDescriptor = {
   descriptionHtml: "content read from a local file",
   source: localFileSource,
   createResult: (props) => {
-    return <LocalFileResult {...props} />;
+    return <CustomSchemaResult {...props} configStore={resultConfigStore} />;
   },
   createError: (error) => {
     return <GenericSearchEngineErrorMessage />
   },
-  createConfig: {
-    side: () =>
-        <ResultPreview previewDocumentProvider={() => fileContentsStore.documents[0]}
-                       configStore={resultConfigStore} />,
-    children: () =>
-        <CustomSchemaResultConfig configStore={resultConfigStore} />
-  },
+  createConfig: () => (
+      <CustomSchemaResultConfig configStore={resultConfigStore}
+                                previewResultProvider={() => fileContentsStore.documents[0]} />
+  ),
   createSourceConfig: (props) => {
     throw new Error("Not available in search app.");
   },

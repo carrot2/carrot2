@@ -11,6 +11,8 @@ import { Optional } from "../../Optional.js";
 import { TitleAndRank, Url } from "./result-components.js";
 import { queryStore } from "../../../../workbench/store/query-store.js";
 
+import { resultListConfigStore } from "../../ResultListConfig.js";
+
 const pubmedConfigStore = persistentStore("pubmedResultConfig",
     {
       showJournal: true,
@@ -74,7 +76,7 @@ export const pubmedSettings = [
  */
 export const PubMedResult = view((props) => {
   const result = props.document;
-  const commonConfig = props.commonConfigStore;
+  const commonConfig = resultListConfigStore;
   const config = pubmedConfigStore;
 
   let rank = null;

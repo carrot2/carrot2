@@ -11,13 +11,14 @@ import { SearchForm } from "./SearchForm";
 import { Views } from "../../../../carrotsearch/ui/Views.js";
 import { branding } from "../../../config-branding.js";
 import { Loading } from "../../../../carrotsearch/ui/Loading.js";
+import { sources } from "../../../config-sources.js";
 
 export const ResultsScreen = ({ match, history }) => {
   const source = decodeURIComponent(match.params.source);
   const query  = decodeURIComponent(match.params.query);
 
   const runSearch = useCallback(() => {
-    searchResultStore.load(source, query);
+    searchResultStore.load(sources[source], query);
     document.title = query + (query.length > 0 ? " - " : "") + branding.pageTitle;
   }, [source, query ]);
 
@@ -85,7 +86,7 @@ export const ResultsScreen = ({ match, history }) => {
           </Views>
         </div>
         <div className="docs">
-          <Views views={resultsViews} activeView="list" onViewChange={() => {}} source={source}>
+          <Views views={resultsViews} activeView="list" onViewChange={() => {}} source={sources[source]}>
             <Loading store={searchResultStore} />
           </Views>
         </div>
