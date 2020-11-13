@@ -13,6 +13,14 @@
   margin-top: 2em;
 }
 
-.LogEntry-error {
+.LogEntry {
+  color: var(--text-color-lightest);
+}
+
+.LogEntry-error svg {
   color: var(--text-color-red);
+}
+
+.LogEntry svg {
+  margin-right: 0.5em;
 }

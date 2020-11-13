@@ -121,8 +121,8 @@ const LEVEL_ICONS = {
 export const LogEntry = ({ entry }) => {
   const { level, message } = entry;
   return (
-      <div>
-        <FontAwesomeIcon icon={LEVEL_ICONS[level]} className={`LogEntry-${level}`} /> {message}
+      <div className={`LogEntry LogEntry-${level}`}>
+        <FontAwesomeIcon icon={LEVEL_ICONS[level]} /> {message}
       </div>
   );
 };

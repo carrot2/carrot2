@@ -3,6 +3,7 @@ import xmlParser from "fast-xml-parser";
 import { Stats } from "fast-stats";
 
 import { forEachOwnProp, incrementInMap } from "../../../carrotsearch/lang/objects.js";
+import { pluralize } from "../../util/humanize.js";
 
 const EMPTY = {
   fieldsAvailable: [],
@@ -202,18 +203,21 @@ const collectFieldInformation = json => {
   return fields;
 };
 
-const prepareResult = object => {
-  const fields = collectFieldInformation(object);
+const prepareResult = (documents, logger) => {
+  const fields = collectFieldInformation(documents);
 
   const allFields = fields.map(f => f.field);
   const naturalTextFields = fields.filter(f => f.naturalTextScore >= 1).map(f => f.field);
+
+  logger.log(`${pluralize(documents.length, "document", true)} loaded.`)
+
   return {
     fieldStats: fields,
     fieldsAvailable: allFields,
     fieldsAvailableForClustering: naturalTextFields,
     fieldsToCluster: naturalTextFields,
     query: "",
-    documents: object
+    documents: documents
   };
 };
 
@@ -258,7 +262,7 @@ const parseSheet = async (file, logger) =>{
     documents.push(doc);
   }
 
-  return prepareResult(documents);
+  return prepareResult(documents, logger);
 };
 
 
@@ -271,19 +275,15 @@ const parsers = {
       logger.error("XML must be in Carrot2 format.");
       return EMPTY;
     } else {
-      return {
-        fieldsAvailable: [ "title", "snippet", "url" ],
-        fieldsAvailableForClustering: [ "title", "snippet" ],
-        fieldsToCluster: [ "title", "snippet" ],
-        query: xmlJson.searchresult.query,
-        documents: xmlJson.searchresult.document
-      };
+      const result = prepareResult(xmlJson.searchresult.document, logger);
+      result.query = xmlJson.searchresult.query;
+      return result;
     }
   },
 
   "application/json": async (file, logger) => {
     const json = await file.text();
-    return prepareResult(JSON.parse(json));
+    return prepareResult(JSON.parse(json), logger);
   },
 
   "application/vnd.oasis.opendocument.spreadsheet": parseSheet,
