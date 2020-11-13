@@ -25,12 +25,10 @@ export const createResultConfigStore = (key) => {
             return;
           }
 
-          // TODO: don't display if all docs have the same value (distinct = 1)
-
           const map = fieldStats.reduce((map, field) => {
             if (field.tagScore > 1 && field.tagScore > field.propScore) {
               map[field.field] = "tag";
-            } else if (field.propScore > 1 && field.propScore > field.tagScore) {
+            } else if (field.propScore > 1 && field.propScore > field.tagScore && field.distinct > 1) {
               map[field.field] = "property";
             } else if (field.naturalTextScore > 2) {
               map[field.field] = "body";
