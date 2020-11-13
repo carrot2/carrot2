@@ -7,13 +7,13 @@ import {
   EToolsResultConfig, etoolsSettings,
   etoolsSource,
   EToolsSourceConfig
-} from "./apps/search-app/ui/view/results/ETools.js";
+} from "./ui/sources/ETools.js";
 import {
   PubMedResult,
   PubMedResultConfig, pubmedSettings,
   pubmedSource,
   PubMedSourceConfig
-} from "./apps/search-app/ui/view/results/PubMed.js";
+} from "./ui/sources/PubMed.js";
 import { localFileSourceDescriptor } from "./ui/sources/LocalFile.js";
 
 export const sources = {

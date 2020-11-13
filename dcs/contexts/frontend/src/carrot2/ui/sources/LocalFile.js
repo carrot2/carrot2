@@ -18,7 +18,7 @@ import {
   CustomSchemaResult,
   CustomSchemaResultConfig
 } from "./CustomSchemaResult.js";
-import { persistentLruStore } from "../../util/persistent-store.js";
+import { persistentLruStore } from "../../../carrotsearch/store/persistent-store.js";
 import { Setting } from "../../../carrotsearch/ui/settings/Setting.js";
 
 const resultConfigStore = createResultConfigStore("localFile");

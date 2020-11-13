@@ -1,5 +1,5 @@
 import React from "react";
-import { Optional } from "../../Optional.js";
+import { Optional } from "../../apps/search-app/ui/Optional.js";
 
 export const TitleAndRank = (props) => {
   return (

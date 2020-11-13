@@ -10,7 +10,7 @@ import { clusterViews, resultsViews } from "../../../config-views.js";
 import { clusterStore, searchResultStore } from "../../../store/services.js";
 import { sources } from "../../../config-sources.js";
 import { Loading } from "../../../../carrotsearch/ui/Loading.js";
-import { persistentStore } from "../../../util/persistent-store.js";
+import { persistentStore } from "../../../../carrotsearch/store/persistent-store.js";
 
 import { workbenchSourceStore } from "./WorkbenchSourceAlgorithm.js";
 import { Stats } from "../../../../carrotsearch/ui/Stats.js";

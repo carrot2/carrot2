@@ -5,12 +5,12 @@ import "./CustomSchemaResult.css";
 import { FormGroup, HTMLSelect } from "@blueprintjs/core";
 import { store, view } from "@risingstack/react-easy-state";
 
-import { persistentLruStore } from "../../util/persistent-store.js";
-import { TitleAndRank } from "../../apps/search-app/ui/view/results/result-components.js";
+import { persistentLruStore } from "../../../carrotsearch/store/persistent-store.js";
+import { TitleAndRank } from "../results/Result.js";
 
-import { resultListConfigStore } from "../../apps/search-app/ui/ResultListConfig.js";
+import { resultListConfigStore } from "../results/ResultListConfig.js";
 
-import { ResultWrapper } from "../../apps/search-app/ui/ResultList.js";
+import { ResultWrapper } from "../results/ResultList.js";
 import { mapUpToMaxLength, wrapIfNotArray } from "../../../carrotsearch/lang/arrays.js";
 import { displayNoneIf } from "../../apps/search-app/ui/Optional.js";
 

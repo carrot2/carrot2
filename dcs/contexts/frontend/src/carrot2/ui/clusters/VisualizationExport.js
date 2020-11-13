@@ -3,7 +3,7 @@ import { Button } from "@blueprintjs/core";
 import { saveAs } from "file-saver";
 import React from "react";
 
-import { searchResultStore } from "../../../../../store/services.js";
+import { searchResultStore } from "../../store/services.js";
 
 function buildFileName(fileNameSuffix, extension) {
   const queryCleaned = searchResultStore.searchResult.query

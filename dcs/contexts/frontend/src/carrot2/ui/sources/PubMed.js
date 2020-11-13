@@ -5,13 +5,13 @@ import { FormGroup, InputGroup, NumericInput, Switch } from "@blueprintjs/core";
 
 import { view } from "@risingstack/react-easy-state";
 
-import { pubmed } from "../../../../../service/sources/pubmed.js";
-import { persistentStore } from "../../../../../util/persistent-store.js";
-import { Optional } from "../../Optional.js";
-import { TitleAndRank, Url } from "./result-components.js";
-import { queryStore } from "../../../../workbench/store/query-store.js";
+import { pubmed } from "../../service/sources/pubmed.js";
+import { persistentStore } from "../../../carrotsearch/store/persistent-store.js";
+import { Optional } from "../../apps/search-app/ui/Optional.js";
+import { TitleAndRank, Url } from "../results/Result.js";
+import { queryStore } from "../../apps/workbench/store/query-store.js";
 
-import { resultListConfigStore } from "../../ResultListConfig.js";
+import { resultListConfigStore } from "../results/ResultListConfig.js";
 
 const pubmedConfigStore = persistentStore("pubmedResultConfig",
     {

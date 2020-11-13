@@ -1,5 +1,5 @@
 import descriptor from "./descriptors/org.carrot2.clustering.stc.STCClusteringAlgorithm.json";
-import { persistentStore } from "../../util/persistent-store.js";
+import { persistentStore } from "../../../carrotsearch/store/persistent-store.js";
 import { collectDefaults, getDescriptorsById, settingFromDescriptor } from "./attributes.js";
 
 const descriptorsById = getDescriptorsById(descriptor);

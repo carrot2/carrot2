@@ -3,18 +3,18 @@ import React from "react";
 import { faCog, faQuestionCircle, faSave } from "@fortawesome/pro-regular-svg-icons";
 
 import { view } from "@risingstack/react-easy-state";
-import { PieChartHints } from "./apps/search-app/ui/view/clusters/PieChartHints.js";
-import { TreemapHints } from "./apps/search-app/ui/view/clusters/TreemapHints.js";
-import { VisualizationExport } from "./apps/search-app/ui/view/clusters/VisualizationExport.js";
-import { Lazy } from "./ui/Lazy.js";
-import { persistentStore } from "./util/persistent-store.js";
+import { PieChartHints } from "./ui/clusters/PieChartHints.js";
+import { TreemapHints } from "./ui/clusters/TreemapHints.js";
+import { VisualizationExport } from "./ui/clusters/VisualizationExport.js";
+import { Lazy } from "../carrotsearch/ui/Lazy.js";
+import { persistentStore } from "../carrotsearch/store/persistent-store.js";
 
-import { ResultListConfig } from "./apps/search-app/ui/ResultListConfig.js";
-import { ClusterList } from "./apps/search-app/ui/view/clusters/ClusterList.js";
-import { PieChartConfig } from "./apps/search-app/ui/view/clusters/PieChartConfig.js";
-import { TreemapConfig } from "./apps/search-app/ui/view/clusters/TreemapConfig.js";
+import { ResultListConfig } from "./ui/results/ResultListConfig.js";
+import { ClusterList } from "./ui/clusters/ClusterList.js";
+import { PieChartConfig } from "./ui/clusters/PieChartConfig.js";
+import { TreemapConfig } from "./ui/clusters/TreemapConfig.js";
 
-import { ResultList } from "./apps/search-app/ui/ResultList.js";
+import { ResultList } from "./ui/results/ResultList.js";
 import { searchResultStore } from "./store/services.js";
 import {
   clusterSelectionStore,
@@ -44,7 +44,7 @@ const treemapLoader = () => {
   return import(
       /* webpackChunkName: "treemap" */
       /* webpackPrefetch: true */
-      "./apps/search-app/ui/view/clusters/Treemap.js")
+      "./ui/clusters/Treemap.js")
       .then(module => view(module.Treemap));
 };
 
@@ -52,7 +52,7 @@ const piechartLoader = () => {
   return import(
       /* webpackChunkName: "piechart" */
       /* webpackPrefetch: true */
-      "./apps/search-app/ui/view/clusters/PieChart.js")
+      "./ui/clusters/PieChart.js")
       .then(module => view(module.PieChart));
 };
 

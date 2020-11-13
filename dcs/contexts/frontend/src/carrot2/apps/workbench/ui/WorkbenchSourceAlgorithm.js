@@ -4,7 +4,7 @@ import "./WorkbenchSourceAlgorithm.css";
 import { view } from "@risingstack/react-easy-state";
 import { FormGroup, HTMLSelect } from "@blueprintjs/core";
 
-import { persistentStore } from "../../../util/persistent-store.js";
+import { persistentStore } from "../../../../carrotsearch/store/persistent-store.js";
 
 import { algorithmStore } from "../../../store/services.js";
 

@@ -5,16 +5,16 @@ import { Button, FormGroup, HTMLSelect, InputGroup, Radio, RadioGroup, Switch } 
 
 import { store, view } from "@risingstack/react-easy-state";
 
-import { etools } from "../../../../../service/sources/etools.js";
-import { persistentStore } from "../../../../../util/persistent-store.js";
-import { Optional } from "../../Optional.js";
-import { TitleAndRank, Url } from "./result-components.js";
-import { ButtonLink } from "../../../../../../carrotsearch/ui/ButtonLink.js";
+import { etools } from "../../service/sources/etools.js";
+import { persistentStore } from "../../../carrotsearch/store/persistent-store.js";
+import { Optional } from "../../apps/search-app/ui/Optional.js";
+import { TitleAndRank, Url } from "../results/Result.js";
+import { ButtonLink } from "../../../carrotsearch/ui/ButtonLink.js";
 
-import { queryStore } from "../../../../workbench/store/query-store.js";
+import { queryStore } from "../../apps/workbench/store/query-store.js";
 
-import { resultListConfigStore } from "../../ResultListConfig.js";
-import { storeAccessors } from "../../../../../../carrotsearch/ui/settings/Setting.js";
+import { resultListConfigStore } from "../results/ResultListConfig.js";
+import { storeAccessors } from "../../../carrotsearch/ui/settings/Setting.js";
 
 const etoolsResultsConfigStore = persistentStore("etoolsResultConfig",
   {

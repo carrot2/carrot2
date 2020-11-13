@@ -5,10 +5,10 @@ import PropTypes from "prop-types";
 
 import { autoEffect, clearEffect, store, view } from "@risingstack/react-easy-state";
 import { ClusterInSummary, ClusterSelectionSummary } from "./ClusterSelectionSummary.js";
-import { Optional } from "./Optional.js";
-import { clusterSelectionStore } from "../../../store/selection.js";
+import { Optional } from "../../apps/search-app/ui/Optional.js";
+import { clusterSelectionStore } from "../../store/selection.js";
 
-import { ButtonLink } from "../../../../carrotsearch/ui/ButtonLink.js";
+import { ButtonLink } from "../../../carrotsearch/ui/ButtonLink.js";
 import { resultListConfigStore } from "./ResultListConfig.js";
 
 const ResultClusters = view(props => {

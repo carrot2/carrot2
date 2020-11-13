@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { generateBackground, generatePalette } from "../util/background-generator.js";
+import { generateBackground, generatePalette } from "./background-generator.js";
 
 const colors = generatePalette();
 const color = colors[6];
