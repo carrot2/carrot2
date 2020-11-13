@@ -17,7 +17,7 @@ import {
   createResultConfigStore,
   CustomSchemaResult,
   CustomSchemaResultConfig
-} from "./CustomSchemaResultConfig.js";
+} from "./CustomSchemaResult.js";
 import { persistentLruStore } from "../../util/persistent-store.js";
 
 const resultConfigStore = createResultConfigStore("localFile");
@@ -208,8 +208,8 @@ export const localFileSourceDescriptor = {
     return <GenericSearchEngineErrorMessage />
   },
   createConfig: () => (
-      <CustomSchemaResultConfig configStore={resultConfigStore}
-                                previewResultProvider={() => fileContentsStore.documents[0]} />
+      <CustomSchemaResult configStore={resultConfigStore}
+                          previewResultProvider={() => fileContentsStore.documents[0]} />
   ),
   createSourceConfig: (props) => {
     throw new Error("Not available in search app.");

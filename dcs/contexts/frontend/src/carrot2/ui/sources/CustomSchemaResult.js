@@ -1,6 +1,6 @@
 import React from 'react';
 
-import "./CustomSchemaResultConfig.css";
+import "./CustomSchemaResult.css";
 
 import { FormGroup, HTMLSelect } from "@blueprintjs/core";
 import { store, view } from "@risingstack/react-easy-state";
