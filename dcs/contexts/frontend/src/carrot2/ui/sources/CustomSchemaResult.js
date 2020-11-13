@@ -69,7 +69,7 @@ const FIELD_ROLES = [
 ];
 const FieldRole = view(({ field, configStore }) => {
   return (
-      <FormGroup label={field} inline={true}>
+      <FormGroup label={<><span>{field}</span><small>show as</small></>} inline={true}>
         <HTMLSelect value={configStore.fieldRoles[field]}
                     onChange={e => configStore.fieldRoles[field] = e.currentTarget.value}>
           {
@@ -176,7 +176,7 @@ export const CustomSchemaResult = view(({ document, rank, configStore }) => {
         </div>
 
         {
-          roles["tag"].map(field => {
+          [...roles["id"], ...roles["tag"]].map(field => {
             const tags = wrapIfNotArray(document[field]);
             return (
                 <div className="tags" key={field}>
