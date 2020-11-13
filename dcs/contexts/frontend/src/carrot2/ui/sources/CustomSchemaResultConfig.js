@@ -87,7 +87,7 @@ export const ResultPreview = view(({ configStore, previewResultProvider }) => {
   const result = previewResultProvider();
   const preview = result ?
       <ResultWrapper document={result}>
-        <CustomSchemaResult result={result} rank={1} configStore={configStore} />
+        <CustomSchemaResult document={result} rank={1} configStore={configStore} />
       </ResultWrapper>
       : <span>Not available</span>;
 
