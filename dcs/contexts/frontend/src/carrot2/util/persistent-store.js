@@ -19,8 +19,11 @@ export const persistentLruStore = (storeKey, itemKey, itemValue, maxItems = 1024
   autoEffect(() => {
     const value = itemValue();
     if (value) {
-      items.set(itemKey(value), value);
-      storage.set(storeKey, items.dump());
+      const computedKey = itemKey(value);
+      if (computedKey) {
+        items.set(computedKey, value);
+        storage.set(storeKey, items.dump());
+      }
     }
   });
   return items;

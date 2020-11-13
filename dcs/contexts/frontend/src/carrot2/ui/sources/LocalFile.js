@@ -3,8 +3,6 @@ import React from 'react';
 import "./LocalFile.css";
 
 import { autoEffect, store, view } from "@risingstack/react-easy-state";
-import storage from "store2";
-import LRU from "lru-cache";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationTriangle, faInfoSquare } from "@fortawesome/pro-regular-svg-icons";
@@ -20,6 +18,7 @@ import {
   CustomSchemaResult,
   CustomSchemaResultConfig
 } from "./CustomSchemaResultConfig.js";
+import { persistentLruStore } from "../../util/persistent-store.js";
 
 const resultConfigStore = createResultConfigStore("localFile");
 
@@ -51,7 +50,7 @@ const fileContentsStore = store({
       // We remember the fields the user selected for clustering on a per-schema (set of all fields)
       // basis, so that the user doesn't have to re-select the right fields every time they upload
       // a similar data set.
-      const cachedToCluster = lastConfigs.get(lastConfigsKey(parsed.fieldsAvailable));
+      const cachedToCluster = fieldsToClusterConfigs.get(fieldsToClusterConfigsKey(parsed.fieldsAvailable));
       let newToCluster;
       if (cachedToCluster && cachedToCluster.length > 0) {
         const cached = new Set(cachedToCluster);
@@ -75,21 +74,16 @@ const fileContentsStore = store({
   }
 });
 
-const LAST_CONFIGS_KEY = "workbench:source:localFile:lastConfigs";
-const lastConfigs = new LRU({ max: 1024 });
-lastConfigs.load(storage.get(LAST_CONFIGS_KEY) || []);
-
-const lastConfigsKey = fieldsAvailable => fieldsAvailable.join("--");
-
-// Save per-schema configs
-autoEffect(() => {
-  const fieldsAvailable = fileContentsStore.fieldsAvailable;
-  if (fieldsAvailable && fieldsAvailable.length > 0) {
-    lastConfigs.set(lastConfigsKey(fieldsAvailable), Array.from(fileContentsStore.fieldsToCluster));
-    const dmp = lastConfigs.dump();
-    storage.set(LAST_CONFIGS_KEY, dmp); // TODO: throttle this?
-  }
-});
+// Store the last selected set of fields to cluster for each schema
+const fieldsToClusterConfigsKey = item => item.join("--");
+const fieldsToClusterConfigs = persistentLruStore(
+    "workbench:source:localFile:lastConfigs",
+    () => fileContentsStore.fieldsAvailable.length > 0 ?
+        fieldsToClusterConfigsKey(fileContentsStore.fieldsAvailable) : null,
+    () => {
+      return Array.from(fileContentsStore.fieldsToCluster);
+    }
+);
 
 const FieldList = view(() => {
   const store = fileContentsStore;
