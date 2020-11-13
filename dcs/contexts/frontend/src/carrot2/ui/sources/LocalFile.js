@@ -208,8 +208,8 @@ export const localFileSourceDescriptor = {
     return <GenericSearchEngineErrorMessage />
   },
   createConfig: () => (
-      <CustomSchemaResult configStore={resultConfigStore}
-                          previewResultProvider={() => fileContentsStore.documents[0]} />
+      <CustomSchemaResultConfig configStore={resultConfigStore}
+                                previewResultProvider={() => fileContentsStore.documents[0]} />
   ),
   createSourceConfig: (props) => {
     throw new Error("Not available in search app.");

@@ -29,6 +29,9 @@ a.Result:hover {
   box-shadow: 0 0 0 2px rgba(59, 131, 192, 0.3);
 }
 
+.Result > strong {
+  display: block;
+}
 .Result > strong > span,
 .Result > div > p > span,
 .Result > .tags > span,

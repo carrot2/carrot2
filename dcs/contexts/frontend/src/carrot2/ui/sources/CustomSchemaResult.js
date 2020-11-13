@@ -157,7 +157,7 @@ export const CustomSchemaResult = view(({ document, rank, configStore }) => {
       <>
         {
           roles["title"].map((field, index) => {
-            return <TitleAndRank key={field} title={document[field]} rank={rank}
+            return <TitleAndRank key={field} title={wrapIfNotArray(document[field]).join(", ")} rank={rank}
                                  showRank={index === 0 && resultListConfigStore.showRank} />
           })
         }
