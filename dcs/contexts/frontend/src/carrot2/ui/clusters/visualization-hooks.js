@@ -42,7 +42,7 @@ export const useDataObject = (clusters, documents, visible, includeResults) => {
               id: (groupId++).toString(),
               document: document,
               label: document && document.title,
-              rank: document && document.rank
+              rank: document && document.__rank
             }
           }).concat((c.clusters || []).map(clusters))
         }

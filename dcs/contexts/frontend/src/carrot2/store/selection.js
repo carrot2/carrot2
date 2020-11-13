@@ -65,7 +65,7 @@ export const documentVisibilityStore = store({
   allDocumentsVisible: true,
   visibleDocumentIds: new Set(),
   isVisible: function (document) {
-    return documentVisibilityStore.visibleDocumentIds.has(document.id);
+    return documentVisibilityStore.visibleDocumentIds.has(document.__id);
   },
   replaceVisible: function (newVisibleDocumentIdsSet) {
     const visibleDocumentIds = documentVisibilityStore.visibleDocumentIds;

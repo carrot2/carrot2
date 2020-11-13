@@ -144,8 +144,8 @@ function assignDocumentIds(result, source) {
     "source": source,
     "documents": (result.documents || []).map((doc, index) => ({
       ...doc,
-      "id": index,
-      "rank": 1.0 - index / result.documents.length
+      "__id": index,
+      "__rank": 1.0 - index / result.documents.length
     }))
   };
 }
