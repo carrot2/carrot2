@@ -113,7 +113,7 @@ export const CustomSchemaResultConfig = view(({ configStore, previewResultProvid
   );
 });
 
-export const CustomSchemaResult = view(({ result, rank, configStore }) => {
+export const CustomSchemaResult = view(({ document, rank, configStore }) => {
   const rolesMap = configStore.fieldRoles;
   const roles = Object.keys(rolesMap).reduce((groups, field) => {
     const role = rolesMap[field];
@@ -124,7 +124,7 @@ export const CustomSchemaResult = view(({ result, rank, configStore }) => {
   }, { "title": [], "body": [], "tag": [], "property": [], "id": [] });
 
   const bodyParagraphs = roles["body"].reduce((arr, field) => {
-    const value = result[field];
+    const value = document[field];
     if (value) {
       const val = wrapIfNotArray(value);
       val.forEach((v, index) => {
@@ -139,7 +139,7 @@ export const CustomSchemaResult = view(({ result, rank, configStore }) => {
   }, []);
 
   const allProperties = roles["property"].reduce((arr, field) => {
-    const val = wrapIfNotArray(result[field]);
+    const val = wrapIfNotArray(document[field]);
     arr.push({ field: field, text: val.join(", ") })
     return arr;
   }, []);
@@ -148,7 +148,7 @@ export const CustomSchemaResult = view(({ result, rank, configStore }) => {
       <>
         {
           roles["title"].map((field, index) => {
-            return <TitleAndRank key={field} title={result[field]} rank={rank}
+            return <TitleAndRank key={field} title={document[field]} rank={rank}
                                  showRank={index === 0 && resultListConfigStore.showRank} />
           })
         }
@@ -168,7 +168,7 @@ export const CustomSchemaResult = view(({ result, rank, configStore }) => {
 
         {
           roles["tag"].map(field => {
-            const tags = wrapIfNotArray(result[field]);
+            const tags = wrapIfNotArray(document[field]);
             return (
                 <div className="tags" key={field}>
                   <span>{field}</span>
