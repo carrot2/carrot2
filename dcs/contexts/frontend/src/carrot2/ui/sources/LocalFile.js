@@ -100,7 +100,7 @@ const FieldList = view(() => {
   const store = fileInfoStore;
   const toCluster = store.fieldsToCluster;
   return (
-      <div>
+      <div className="FieldList">
         {
           store.fieldsAvailableForClustering.map(f => {
             return <Checkbox label={f} key={f} checked={toCluster.has(f)}
