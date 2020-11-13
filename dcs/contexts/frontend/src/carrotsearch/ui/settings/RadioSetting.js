@@ -4,7 +4,7 @@ import "./RadioSetting.css";
 
 import { Radio, RadioGroup } from "@blueprintjs/core";
 import { view } from "@risingstack/react-easy-state";
-import { LabelWithHelp, Setting } from "./Settings.js";
+import { LabelWithHelp, Setting } from "./Setting.js";
 
 export const RadioSetting = view(({ setting, get, set }) => {
   const { label, description, options, inline } = setting;

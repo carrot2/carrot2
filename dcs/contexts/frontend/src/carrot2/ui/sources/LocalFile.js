@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationTriangle, faInfoSquare } from "@fortawesome/pro-regular-svg-icons";
 
 import { GenericSearchEngineErrorMessage } from "../../apps/search-app/ui/ErrorMessage.js";
-import { addFactory, Setting } from "../../../carrotsearch/ui/settings/Settings.js";
+import { addFactory} from "../../../carrotsearch/ui/settings/Settings.js";
 import { parseFile } from "./file-parser.js";
 import { Checkbox } from "@blueprintjs/core";
 import { Loading } from "../../../carrotsearch/ui/Loading.js";
@@ -19,6 +19,7 @@ import {
   CustomSchemaResultConfig
 } from "./CustomSchemaResult.js";
 import { persistentLruStore } from "../../util/persistent-store.js";
+import { Setting } from "../../../carrotsearch/ui/settings/Setting.js";
 
 const resultConfigStore = createResultConfigStore("localFile");
 

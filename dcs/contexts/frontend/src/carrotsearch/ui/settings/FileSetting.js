@@ -6,9 +6,9 @@ import filesize from "filesize";
 import classnames from "classnames";
 
 import { view, store } from "@risingstack/react-easy-state";
-import { Setting } from "./Settings.js";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@blueprintjs/core";
+import { Setting } from "./Setting.js";
 
 export const FileSetting = view(({ setting, get, set }) => {
   const { label, description } = setting;

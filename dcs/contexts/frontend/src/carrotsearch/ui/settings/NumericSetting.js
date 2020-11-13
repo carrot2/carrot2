@@ -5,9 +5,9 @@ import "./NumericSetting.css";
 import { view } from "@risingstack/react-easy-state";
 
 import { FormGroup, NumericInput, Slider } from "@blueprintjs/core";
-import { Setting } from "./Settings.js";
 
 import { ceil125, decimalPlaces } from "../../lang/math.js";
+import { Setting } from "./Setting.js";
 
 const clampWhenInteger = (v, integer) => integer ? Math.max(1, v) : v;
 

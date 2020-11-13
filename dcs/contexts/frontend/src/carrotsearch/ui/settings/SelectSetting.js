@@ -1,7 +1,7 @@
 import React from 'react';
 import { HTMLSelect } from "@blueprintjs/core";
 import { view } from "@risingstack/react-easy-state";
-import { Setting } from "./Settings.js";
+import { Setting } from "./Setting.js";
 
 export const SelectSetting = view(({ setting, get, set }) => {
   const { label, options, description } = setting;

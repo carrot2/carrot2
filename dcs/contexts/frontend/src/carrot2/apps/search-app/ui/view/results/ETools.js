@@ -12,9 +12,9 @@ import { TitleAndRank, Url } from "./result-components.js";
 import { ButtonLink } from "../../../../../../carrotsearch/ui/ButtonLink.js";
 
 import { queryStore } from "../../../../workbench/store/query-store.js";
-import { storeAccessors } from "../../../../../../carrotsearch/ui/settings/Settings.js";
 
 import { resultListConfigStore } from "../../ResultListConfig.js";
+import { storeAccessors } from "../../../../../../carrotsearch/ui/settings/Setting.js";
 
 const etoolsResultsConfigStore = persistentStore("etoolsResultConfig",
   {

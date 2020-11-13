@@ -3,7 +3,7 @@ import "./BooleanSetting.css";
 
 import { Checkbox, FormGroup } from "@blueprintjs/core";
 import { view } from "@risingstack/react-easy-state";
-import { DescriptionPopover } from "./Settings.js";
+import { DescriptionPopover } from "./Setting.js";
 
 export const BooleanSetting = view(({ setting, get, set }) => {
   const { description } = setting;

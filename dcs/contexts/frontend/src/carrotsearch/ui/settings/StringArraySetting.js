@@ -3,7 +3,7 @@ import React from 'react';
 import { view } from "@risingstack/react-easy-state";
 
 import { TagInput } from "@blueprintjs/core";
-import { Setting } from "./Settings.js";
+import { Setting } from "./Setting.js";
 
 export const StringArraySetting = view(({ setting, get, set }) => {
   const { label, description } = setting;
