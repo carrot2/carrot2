@@ -3,9 +3,9 @@ import React from 'react';
 import "./CustomSchemaResultConfig.css";
 
 import { FormGroup, HTMLSelect } from "@blueprintjs/core";
-import { view } from "@risingstack/react-easy-state";
+import { store, view } from "@risingstack/react-easy-state";
 
-import { persistentStore } from "../../util/persistent-store.js";
+import { persistentLruStore } from "../../util/persistent-store.js";
 import { TitleAndRank } from "../../apps/search-app/ui/view/results/result-components.js";
 
 import { resultListConfigStore } from "../../apps/search-app/ui/ResultListConfig.js";
@@ -14,43 +14,52 @@ import { ResultWrapper } from "../../apps/search-app/ui/ResultList.js";
 import { mapUpToMaxLength, wrapIfNotArray } from "../../../carrotsearch/lang/arrays.js";
 
 export const createResultConfigStore = (key) => {
-  const store = persistentStore(
-      `workbench:source:${key}:resultConfig`,
-      {
-        fieldRoles: {}
-      },
-      {
-        load: fieldStats => {
-          if (fieldStats.length === 0) {
-            return;
-          }
+  const keyFromFields = fields => fields.join("--");
 
-          const map = fieldStats.reduce((map, field) => {
-            if (field.tagScore > 1 && field.tagScore > field.propScore) {
-              map[field.field] = "tag";
-            } else if (field.propScore > 1 && field.propScore > field.tagScore && field.distinct > 1) {
-              map[field.field] = "property";
-            } else if (field.naturalTextScore > 2) {
-              map[field.field] = "body";
-            } else {
-              map[field.field] = "not shown";
-            }
-            return map;
-          }, {});
+  const fieldStore = store({
+    fieldRoles: {},
+    load: fieldStats => {
+      if (fieldStats.length === 0) {
+        return;
+      }
 
-          const byIdScore = fieldStats.sort((a, b) => b.idScore - a.idScore);
-          if (byIdScore[0].idScore >= 2) {
-            map[byIdScore[0].field] = "id";
+      let map = resultConfigs.get(keyFromFields(fieldStats.map(f => f.field)));
+      if (!map) {
+        map = fieldStats.reduce((map, field) => {
+          if (field.tagScore > 1 && field.tagScore > field.propScore) {
+            map[field.field] = "tag";
+          } else if (field.propScore > 1 && field.propScore > field.tagScore && field.distinct
+              > 1) {
+            map[field.field] = "property";
+          } else if (field.naturalTextScore > 2) {
+            map[field.field] = "body";
+          } else {
+            map[field.field] = "not shown";
           }
-          const byTitle = fieldStats.sort((a, b) => b.titleScore - a.titleScore);
-          if (byTitle[0].titleScore >= 2) {
-            map[byTitle[0].field] = "title";
-          }
+          return map;
+        }, {});
 
-          store.fieldRoles = map;
+        const byIdScore = fieldStats.sort((a, b) => b.idScore - a.idScore);
+        if (byIdScore[0].idScore >= 2) {
+          map[byIdScore[0].field] = "id";
         }
-      });
-  return store;
+        const byTitle = fieldStats.sort((a, b) => b.titleScore - a.titleScore);
+        if (byTitle[0].titleScore >= 2) {
+          map[byTitle[0].field] = "title";
+        }
+      }
+
+      fieldStore.fieldRoles = map;
+    }
+  });
+
+  const resultConfigs = persistentLruStore(
+      `workbench:source:${key}:resultConfigs`,
+      item => keyFromFields(Object.keys(item)),
+      () => fieldStore.fieldRoles
+  );
+
+  return fieldStore;
 };
 
 const FIELD_ROLES = [
@@ -183,7 +192,8 @@ export const CustomSchemaResult = view(({ document, rank, configStore }) => {
             allProperties.map(p => {
               return (
                   <React.Fragment key={p.field}>
-                    <dt>{p.field}</dt><dd>{p.text}</dd>
+                    <dt>{p.field}</dt>
+                    <dd>{p.text}</dd>
                     {" "}
                   </React.Fragment>
               )
