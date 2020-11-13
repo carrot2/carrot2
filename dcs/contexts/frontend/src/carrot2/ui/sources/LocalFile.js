@@ -31,21 +31,29 @@ const ArrayLogger = function () {
   this.getEntries = () => entries.slice(0);
 };
 
-const fileContentsStore = store({
+// A non-reactive store for the contents of the last loaded file. This is not reactive, so that
+// the results display component does not update right after a new file is selected, but when
+// documents are requested from the source for clustering.
+const fileContentsStore = {
+  query: "",
+  documents: [],
+  fieldStats: [],
+  fieldsAvailable: []
+};
+
+// A reactive store backing the local file loading user interface.
+const fileInfoStore = store({
   loading: false,
   log: [],
   query: "",
-  documents: [],
-  fieldsAvailable: [],
   fieldsAvailableForClustering: [],
   fieldsToCluster: [],
   load: async file => {
-    fileContentsStore.loading = true;
+    fileInfoStore.loading = true;
     const logger = new ArrayLogger();
     try {
       const parsed = await parseFile(file, logger);
-      fileContentsStore.fieldsAvailable = parsed.fieldsAvailable;
-      fileContentsStore.fieldsAvailableForClustering = parsed.fieldsAvailableForClustering;
+      fileInfoStore.fieldsAvailableForClustering = parsed.fieldsAvailableForClustering;
 
       // We remember the fields the user selected for clustering on a per-schema (set of all fields)
       // basis, so that the user doesn't have to re-select the right fields every time they upload
@@ -62,14 +70,15 @@ const fileContentsStore = store({
         newToCluster = new Set(parsed.fieldsToCluster);
       }
 
-      fileContentsStore.fieldsToCluster = newToCluster;
-      fileContentsStore.documents = parsed.documents;
-      fileContentsStore.query = parsed.query;
+      fileInfoStore.fieldsToCluster = newToCluster;
+      fileInfoStore.query = parsed.query;
 
-      resultConfigStore.load(parsed.fieldStats);
+      fileContentsStore.documents = parsed.documents;
+      fileContentsStore.fieldStats = parsed.fieldStats;
+      fileContentsStore.fieldsAvailable = parsed.fieldsAvailable;
     } finally {
-      fileContentsStore.log = logger.getEntries();
-      fileContentsStore.loading = false;
+      fileInfoStore.log = logger.getEntries();
+      fileInfoStore.loading = false;
     }
   }
 });
@@ -78,15 +87,17 @@ const fileContentsStore = store({
 const fieldsToClusterConfigsKey = item => item.join("--");
 const fieldsToClusterConfigs = persistentLruStore(
     "workbench:source:localFile:lastConfigs",
-    () => fileContentsStore.fieldsAvailable.length > 0 ?
-        fieldsToClusterConfigsKey(fileContentsStore.fieldsAvailable) : null,
     () => {
-      return Array.from(fileContentsStore.fieldsToCluster);
+      const fieldsAvailable = fileContentsStore.fieldsAvailable;
+      return fieldsAvailable.length > 0 ? fieldsToClusterConfigsKey(fieldsAvailable) : null;
+    },
+    () => {
+      return Array.from(fileInfoStore.fieldsToCluster);
     }
 );
 
 const FieldList = view(() => {
-  const store = fileContentsStore;
+  const store = fileInfoStore;
   const toCluster = store.fieldsToCluster;
   return (
       <div>
@@ -119,8 +130,8 @@ export const LogEntry = ({ entry }) => {
 const FieldChoiceSetting = view(({ setting, get, set }) => {
   const { label, description } = setting;
 
-  const children = fileContentsStore.loading ?
-      <Loading store={fileContentsStore} />
+  const children = fileInfoStore.loading ?
+      <Loading store={fileInfoStore} />
       :
       <FieldList />;
 
@@ -128,7 +139,7 @@ const FieldChoiceSetting = view(({ setting, get, set }) => {
       <Setting className="FieldChoiceSetting" label={label} description={description}>
         {children}
         {
-          fileContentsStore.log.map((e, i) => <LogEntry entry={e} key={i} />)
+          fileInfoStore.log.map((e, i) => <LogEntry entry={e} key={i} />)
         }
       </Setting>
   );
@@ -150,14 +161,14 @@ const settings = [
         label: "File",
         get: () => null,
         set: (sett, file) => {
-          fileContentsStore.load(file);
+          fileInfoStore.load(file);
         }
       },
       {
         id: "file:fieldChoice",
         type: "field-choice",
         label: "Fields to cluster",
-        get: () => fileContentsStore.fieldsToCluster,
+        get: () => fileInfoStore.fieldsToCluster,
         set: () => {
         }
       }
@@ -166,19 +177,24 @@ const settings = [
 ];
 
 const localFileSource = () => {
+  // Load the field display configuration only when the documents are requested
+  // for clustering. If we did that right after the file was loaded, we'd swap
+  // the configuration for the set of documents being currently displayed
+  // (possibly with a different schema).
+  resultConfigStore.load(fileContentsStore.fieldStats);
   return {
-    query: fileContentsStore.query,
+    query: fileInfoStore.query,
     matches: fileContentsStore.documents.length,
     documents: fileContentsStore.documents
   };
 };
 
 // Create a local copy of fields to cluster. The cluster store calls the getFieldsToCluster() method
-// before clustering and if the method returned a value from the fileContentsStore reactive store,
+// before clustering and if the method returned a value from the fileInfoStore reactive store,
 // clustering would be triggered right after the selection of fields changed, which we want to avoid.
 let currentFieldsToCluster;
 autoEffect(() => {
-  currentFieldsToCluster = Array.from(fileContentsStore.fieldsToCluster);
+  currentFieldsToCluster = Array.from(fileInfoStore.fieldsToCluster);
 });
 
 export const localFileSourceDescriptor = {
@@ -188,7 +204,7 @@ export const localFileSourceDescriptor = {
   createResult: (props) => {
     return <CustomSchemaResult {...props} configStore={resultConfigStore} />;
   },
-  createError: (error) => {
+  createError: () => {
     return <GenericSearchEngineErrorMessage />
   },
   createConfig: () => (

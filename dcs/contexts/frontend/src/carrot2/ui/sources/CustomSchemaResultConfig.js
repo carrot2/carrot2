@@ -12,12 +12,14 @@ import { resultListConfigStore } from "../../apps/search-app/ui/ResultListConfig
 
 import { ResultWrapper } from "../../apps/search-app/ui/ResultList.js";
 import { mapUpToMaxLength, wrapIfNotArray } from "../../../carrotsearch/lang/arrays.js";
+import { displayNoneIf } from "../../apps/search-app/ui/Optional.js";
 
 export const createResultConfigStore = (key) => {
   const keyFromFields = fields => fields.join("--");
 
   const fieldStore = store({
     fieldRoles: {},
+    isEmpty: () => Object.keys(fieldStore.fieldRoles).length === 0,
     load: fieldStats => {
       if (fieldStats.length === 0) {
         return;
@@ -110,7 +112,7 @@ export const ResultPreview = view(({ configStore, previewResultProvider }) => {
 
 export const CustomSchemaResultConfig = view(({ configStore, previewResultProvider }) => {
   return (
-      <div className="CustomSchemeResultConfig">
+      <div className="CustomSchemeResultConfig" style={displayNoneIf(configStore.isEmpty())}>
         <div>
           <p>Choose the fields to show:</p>
           <FieldRoles configStore={configStore} />

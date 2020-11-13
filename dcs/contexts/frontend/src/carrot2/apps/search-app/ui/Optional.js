@@ -9,3 +9,11 @@ export const ShowHide = props => {
     <div style={props.visible ? {} : {display: "none"}} className={props.className}>{props.children}</div>
   )
 };
+
+export const displayNoneIf = (condition, extra) => {
+  const style = {};
+  if (condition) {
+    style.display = "none";
+  }
+  return Object.assign(style, extra);
+};
