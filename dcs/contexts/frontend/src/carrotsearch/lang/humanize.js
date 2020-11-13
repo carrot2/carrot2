@@ -30,3 +30,11 @@ export const humanizeDuration = function (milliseconds) {
   const seconds = Math.round((milliseconds - minutes * 60 * 1000) / 1000);
   return minutes + "m" + (seconds > 0 ? " " + seconds + "s" : "");
 };
+
+export function pluralize(count, what, includeCount = true) {
+  return (includeCount ? count + " " : " ") + what + (count !== 1 ? "s" : "");
+}
+
+export function finishingPeriod(string) {
+  return string + (string.endsWith(".") ? "" : ".");
+}

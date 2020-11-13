@@ -1,5 +1,5 @@
 import queryString from "query-string";
-import { finishingPeriod } from "../../util/humanize.js";
+import { finishingPeriod } from "../../../carrotsearch/lang/humanize.js";
 
 // TODO: add support for aborting running requests a'la fetch API.
 export function etools(query, params) {

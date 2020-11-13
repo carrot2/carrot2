@@ -3,7 +3,7 @@ import xmlParser from "fast-xml-parser";
 import { Stats } from "fast-stats";
 
 import { forEachOwnProp, incrementInMap } from "../../../carrotsearch/lang/objects.js";
-import { pluralize } from "../../util/humanize.js";
+import { pluralize } from "../../../carrotsearch/lang/humanize.js";
 
 const EMPTY = {
   fieldsAvailable: [],
