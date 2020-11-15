@@ -2,7 +2,7 @@ import React from "react";
 
 import "./WorkbenchSide.css";
 
-import { autoEffect, batch } from "@risingstack/react-easy-state";
+import { autoEffect, batch, view } from "@risingstack/react-easy-state";
 
 import { sources } from "../../../config-sources.js";
 import { algorithms } from "../../../config-algorithms.js";
@@ -78,7 +78,7 @@ autoEffect(() => {
           }
         }
         return acc;
-      }, [ queryStore.query, workbenchSourceStore.source] ); // also react to query and source changes
+      }, [ queryStore.query, workbenchSourceStore.source ]); // also react to query and source changes
 
     });
     sourceParametersDirty = true;
@@ -94,17 +94,24 @@ const runSearch = () => {
   }
 };
 
+const ClusterButton = view(() => {
+  return (
+      <Button className="ClusterButton" intent="primary" large={true}
+              icon={<FontAwesomeIcon icon={faFlask} />}
+              onClick={runSearch}
+              loading={searchResultStore.loading || clusterStore.loading}>
+        Cluster
+      </Button>
+  );
+});
+
 export const WorkbenchSide = (() => {
   return (
       <div className="WorkbenchSide">
         <div className="WorkbenchSideFixed">
           <div className="WorkbenchSideHeader">
             <WorkbenchLogo />
-            <Button className="ClusterButton" intent="primary" large={true}
-                    icon={<FontAwesomeIcon icon={faFlask} />}
-                    onClick={runSearch}>
-              Cluster
-            </Button>
+            <ClusterButton />
           </div>
 
           <WorkbenchSourceAlgorithm />
