@@ -2,7 +2,7 @@ import React from "react";
 
 import "./WorkbenchSide.css";
 
-import { autoEffect, batch, view } from "@risingstack/react-easy-state";
+import { autoEffect, batch, view, store } from "@risingstack/react-easy-state";
 
 import { sources } from "../../../config-sources.js";
 import { algorithms } from "../../../config-algorithms.js";
@@ -55,43 +55,67 @@ const settings = {
   }).flat(2)
 };
 
-let sourceParametersDirty = false;
-autoEffect(() => {
-  batch(() => {
-    Object.keys(sources).forEach(s => {
-      const source = sources[s];
+const parametersStateStore = store({
+  sourceDirty: false,
+  algorithmDirty: false
+});
 
-      // A dummy read just to have this auto effect run on every parameter change.
-      source.getSettings().reduce(function collect(acc, sett) {
-        if (sett.type === "group") {
-          sett.settings.reduce(collect, []);
-        } else {
-          if (sett.get) {
-            const val = sett.get(sett);
+function collectSettings(components) {
+  Object.keys(components).forEach(s => {
+    const component = components[s];
 
-            // Read from iterable types too, so that we pick up changes to the
-            // contents of the collection and not just an update of the collection reference.
-            if (typeof val?.forEach === "function") {
-              let cnt = 0;
-              val.forEach(v => cnt++);
-            }
+    // A dummy read just to have this auto effect run on every parameter change.
+    let getter;
+    component.getSettings().reduce(function collect(acc, sett) {
+      if (sett.type === "group") {
+        if (!getter) {
+          getter = sett.get;
+        }
+        sett.settings.reduce(collect, []);
+      } else {
+        if (sett.get || getter) {
+          const val = (sett.get || getter)(sett);
+
+          // Read from iterable types too, so that we pick up changes to the
+          // contents of the collection and not just an update of the collection reference.
+          if (typeof val?.forEach === "function") {
+            let cnt = 0;
+            val.forEach(v => cnt++);
           }
         }
-        return acc;
-      }, [ queryStore.query, workbenchSourceStore.source ]); // also react to query and source changes
+      }
+      return acc;
+    }, []);
+  });
+}
 
-    });
-    sourceParametersDirty = true;
+autoEffect(() => {
+  batch(() => {
+    collectSettings(sources);
+
+    // A dummy read to make this effect run also on source change
+    const dummy = !!workbenchSourceStore.source;
+    parametersStateStore.sourceDirty = dummy || true;
+  });
+});
+autoEffect(() => {
+  batch(() => {
+    collectSettings(algorithms);
+
+    // A dummy read to make this effect run also on source change
+    const dummy = !!algorithmStore.clusteringAlgorithm;
+    parametersStateStore.algorithmDirty = dummy || true;
   });
 });
 
 const runSearch = () => {
-  if (sourceParametersDirty) {
-    sourceParametersDirty = false;
+  if (parametersStateStore.sourceDirty) {
     searchResultStore.load(sources[workbenchSourceStore.source], queryStore.query);
   } else {
     clusterStore.reload();
   }
+  parametersStateStore.algorithmDirty = false;
+  parametersStateStore.sourceDirty = false;
 };
 
 const ClusterButton = view(() => {
@@ -99,6 +123,7 @@ const ClusterButton = view(() => {
       <Button className="ClusterButton" intent="primary" large={true}
               icon={<FontAwesomeIcon icon={faFlask} />}
               onClick={runSearch}
+              outlined={!(parametersStateStore.sourceDirty || parametersStateStore.algorithmDirty)}
               loading={searchResultStore.loading || clusterStore.loading}>
         Cluster
       </Button>
