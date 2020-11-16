@@ -9,6 +9,13 @@ export const persistentStore = (key, defaults, methods) => {
     storage.set(key, backingStore);
   });
 
+  backingStore.resetToDefaults = () => {
+    // Assume a flat object for now
+    Object.keys(defaults).forEach(prop => {
+      backingStore[prop] = defaults[prop];
+    });
+  };
+
   return backingStore;
 };
 
