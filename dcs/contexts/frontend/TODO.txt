@@ -31,6 +31,7 @@ First release:
 * tuning of stopwords (Lingo3G)
 * maxCharsPerResult -> remember per-source?
 * Custom document renderer: display of URL-typed fields
+* Hide data source and algorithm combo boxes to make space for settings
 
 Later:
 

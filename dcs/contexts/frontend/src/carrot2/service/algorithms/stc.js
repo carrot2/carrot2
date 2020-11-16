@@ -78,5 +78,6 @@ export const stc = {
   description: "Flat clusters, fast algorithm.",
   descriptionHtml: "the classic search results clustering algorithm. Produces flat cluster with adequate description, very fast. Available as part of the open source <a href='http://project.carrot2.org' target='_blank'>Carrot<sup>2</sup> framework</a>",
   tag: "open source",
-  getSettings: () => settings
+  getSettings: () => settings,
+  resetToDefaults: parameterStore.resetToDefaults
 };

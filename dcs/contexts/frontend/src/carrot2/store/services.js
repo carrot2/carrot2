@@ -10,7 +10,8 @@ import { collectParameters } from "../service/algorithms/attributes.js";
 const EMPTY_ARRAY = [];
 
 export const algorithmStore = persistentStore("clusteringAlgorithm",{
-  clusteringAlgorithm: undefined
+  clusteringAlgorithm: undefined,
+  getAlgorithmInstance: () => algorithms[algorithmStore.clusteringAlgorithm]
 });
 if (!algorithms[algorithmStore.clusteringAlgorithm]) {
   algorithmStore.clusteringAlgorithm = Object.keys(algorithms)[0];
@@ -21,7 +22,7 @@ if (!algorithms[algorithmStore.clusteringAlgorithm]) {
 // and would re-run immediately on any parameter change.
 let currentParams;
 autoEffect(() => {
-  const algorithm = algorithms[algorithmStore.clusteringAlgorithm];
+  const algorithm = algorithmStore.getAlgorithmInstance();
   const settings = algorithm.getSettings();
   currentParams = collectParameters(settings, settings[0].get);
 });

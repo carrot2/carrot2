@@ -1,4 +1,5 @@
-import descriptor from "./descriptors/org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm.json";
+import descriptor
+  from "./descriptors/org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm.json";
 import { persistentStore } from "../../../carrotsearch/store/persistent-store.js";
 import {
   collectDefaults,
@@ -78,12 +79,10 @@ const settings = [
 ];
 
 export const kmeans = {
-      label: "k-means",
-      description: "Base line algorithm, bag-of-words labels.",
-      descriptionHtml: "base line clustering algorithm, produces bag-of-words style cluster descriptions. Available as part of the open source <a href='http://project.carrot2.org' target='_blank'>Carrot<sup>2</sup> framework</a>",
-      tag: "open source",
-      getSettings: () => {
-        return settings;
-      }
-    }
-;
+  label: "k-means",
+  description: "Base line algorithm, bag-of-words labels.",
+  descriptionHtml: "base line clustering algorithm, produces bag-of-words style cluster descriptions. Available as part of the open source <a href='http://project.carrot2.org' target='_blank'>Carrot<sup>2</sup> framework</a>",
+  tag: "open source",
+  getSettings: () => settings,
+  resetToDefaults: parameterStore.resetToDefaults
+};

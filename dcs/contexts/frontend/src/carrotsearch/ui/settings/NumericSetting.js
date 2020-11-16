@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import "./NumericSetting.css";
 
@@ -26,6 +26,9 @@ const useNumberSettingHeuristics = (setting, set, inputStep, initialValue) => {
   // We cannot convert immediately to a number because it wouldn't be possible
   // to enter a decimal point or a minus sign.
   const [ stringValue, setStringValue ] = useState(formatInputValue(initialValue));
+  useEffect(() => {
+    setStringValue(initialValue);
+  }, [ initialValue ]);
 
   // Triggers the change for the parent component to react on.
   const onNumberValueChange = (v, step) => {

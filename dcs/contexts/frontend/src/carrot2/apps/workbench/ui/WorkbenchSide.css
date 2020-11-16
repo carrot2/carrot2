@@ -51,3 +51,6 @@
 .WorkbenchSide .Settings {
   padding: var(--leading);
 }
+.WorkbenchSide .SettingsTools {
+  margin-top: var(--leading);
+}

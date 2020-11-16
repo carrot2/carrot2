@@ -2,23 +2,20 @@ import React from "react";
 
 import "./WorkbenchSide.css";
 
-import { autoEffect, batch, view, store } from "@risingstack/react-easy-state";
+import { autoEffect, batch, store, view } from "@risingstack/react-easy-state";
 
 import { sources } from "../../../config-sources.js";
 import { algorithms } from "../../../config-algorithms.js";
-import { clusterStore, searchResultStore } from "../../../store/services.js";
+import { algorithmStore, clusterStore, searchResultStore } from "../../../store/services.js";
 import { queryStore } from "../store/query-store.js";
-import { algorithmStore } from "../../../store/services.js";
 
-import {
-  WorkbenchSourceAlgorithm,
-  workbenchSourceStore
-} from "./WorkbenchSourceAlgorithm.js";
+import { WorkbenchSourceAlgorithm, workbenchSourceStore } from "./WorkbenchSourceAlgorithm.js";
 
 import { Button } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlask } from "@fortawesome/pro-regular-svg-icons";
 import { Settings } from "../../../../carrotsearch/ui/settings/Settings.js";
+import { SettingsTools } from "./SettingsTools.js";
 
 const WorkbenchLogo = () => {
   return (
@@ -141,6 +138,7 @@ export const WorkbenchSide = (() => {
           </div>
 
           <WorkbenchSourceAlgorithm />
+          <SettingsTools />
         </div>
 
         <Settings settings={settings} />

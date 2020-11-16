@@ -94,6 +94,6 @@ export const lingo = {
   descriptionHtml: "creates well-described flat clusters. Does not scale beyond a few thousand search results. Available as part of the open source <a href='http://project.carrot2.org' target='_blank'>Carrot<sup>2</sup> framework</a>.",
   tag: "open source",
   getSettings: () => settings,
-  resetToDefaults: parameterStore.resetToDefaults()
+  resetToDefaults: parameterStore.resetToDefaults
 };
 
