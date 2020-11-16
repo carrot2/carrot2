@@ -120,10 +120,11 @@ const runSearch = () => {
 
 const ClusterButton = view(() => {
   return (
-      <Button className="ClusterButton" intent="primary" large={true}
+      <Button className="ClusterButton"
+              intent={parametersStateStore.sourceDirty || parametersStateStore.algorithmDirty ? "primary" : "none"}
+              large={true}
               icon={<FontAwesomeIcon icon={faFlask} />}
               onClick={runSearch}
-              outlined={!(parametersStateStore.sourceDirty || parametersStateStore.algorithmDirty)}
               loading={searchResultStore.loading || clusterStore.loading}>
         Cluster
       </Button>
