@@ -108,7 +108,7 @@ export const NumericSetting = view(({ setting, get, set }) => {
       useNumberSettingHeuristics(setting, set, inputStep, value);
 
   // Parse string into a float when the focus leaves the input box.
-  const commitStringValue = () => onSliderValueChange(parseFloat(stringValue), 1);
+  const commitStringValue = () => onNumberValueChange(parseFloat(stringValue), 1);
 
   const onSpinnerValueChange = v => onNumberValueChange(v, inputStep);
   const onSliderValueChange = v => onNumberValueChange(v, sliderStep);
