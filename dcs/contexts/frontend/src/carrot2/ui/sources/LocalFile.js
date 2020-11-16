@@ -46,7 +46,7 @@ const fileContentsStore = {
 const fileInfoStore = store({
   loading: false,
   log: [],
-  query: "",
+  fileLoaded: false,
   fieldsAvailableForClustering: [],
   fieldsToCluster: [],
   load: async file => {
@@ -72,11 +72,12 @@ const fileInfoStore = store({
       }
 
       fileInfoStore.fieldsToCluster = newToCluster;
-      fileInfoStore.query = parsed.query;
+      fileInfoStore.fileLoaded = true;
 
       fileContentsStore.documents = parsed.documents;
       fileContentsStore.fieldStats = parsed.fieldStats;
       fileContentsStore.fieldsAvailable = parsed.fieldsAvailable;
+
     } finally {
       fileInfoStore.log = logger.getEntries();
       fileInfoStore.loading = false;
@@ -99,11 +100,16 @@ const fieldsToClusterConfigs = persistentLruStore(
 
 const FieldList = view(() => {
   const store = fileInfoStore;
+  const availableForClustering = store.fieldsAvailableForClustering;
   const toCluster = store.fieldsToCluster;
+  const noContentMessage = availableForClustering.length === 0 ?
+    <small>No natural text content detected</small> : null;
+
   return (
       <div className="FieldList">
+        {noContentMessage}
         {
-          store.fieldsAvailableForClustering.map(f => {
+          availableForClustering.map(f => {
             return <Checkbox label={f} key={f} checked={toCluster.has(f)}
                              onChange={e => {
                                e.target.checked ? toCluster.add(f) : toCluster.delete(f);
@@ -169,6 +175,7 @@ const settings = [
         id: "file:fieldChoice",
         type: "field-choice",
         label: "Fields to cluster",
+        visible: () => fileInfoStore.fileLoaded,
         get: () => fileInfoStore.fieldsToCluster,
         set: () => {
         }

@@ -17,6 +17,11 @@
   margin-bottom: 1em;
 }
 
+.FieldChoiceSetting .FieldList small {
+  font-size: 100%;
+  color: var(--text-color-lighter);
+}
+
 .LogEntry {
   margin-left: 0.125em;
   color: var(--text-color-lightest);
