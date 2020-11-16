@@ -25,7 +25,6 @@ First release:
 * clustering language selection
 * Pass query hint to algorithms
 * Parameter section folding
-* Revert settings to defaults
 * Auto run clustering on setting change
 * export of parameters JSON for pasting into code
 * tuning of stopwords (Lingo3G)
