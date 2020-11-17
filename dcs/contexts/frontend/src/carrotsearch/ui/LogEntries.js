@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./Loading.css";
+import "./LogEntries.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationTriangle, faInfoSquare } from "@fortawesome/pro-regular-svg-icons";

@@ -6,7 +6,7 @@ import { autoEffect, store, view } from "@risingstack/react-easy-state";
 
 import { GenericSearchEngineErrorMessage } from "../../apps/search-app/ui/ErrorMessage.js";
 import { addFactory } from "../../../carrotsearch/ui/settings/Settings.js";
-import { parseFile } from "./file-parser.js";
+import { extractSchema} from "./schema-extractor.js";
 import { Loading } from "../../../carrotsearch/ui/Loading.js";
 
 import {
@@ -18,6 +18,7 @@ import { persistentLruStore } from "../../../carrotsearch/store/persistent-store
 import { Setting } from "../../../carrotsearch/ui/settings/Setting.js";
 import { FieldList } from "./CustomSchemaSource.js";
 import { ArrayLogger, LogEntries } from "../../../carrotsearch/ui/LogEntries.js";
+import { parseFile } from "./file-parser.js";
 
 const resultConfigStore = createResultConfigStore("localFile");
 
@@ -42,7 +43,9 @@ const schemaInfoStore = store({
     schemaInfoStore.loading = true;
     const logger = new ArrayLogger();
     try {
-      const parsed = await parseFile(file, logger);
+      const result = await parseFile(file, logger);
+      const parsed = extractSchema(result.documents, logger);
+
       schemaInfoStore.fieldsAvailableForClustering = parsed.fieldsAvailableForClustering;
 
       // We remember the fields the user selected for clustering on a per-schema (set of all fields)
