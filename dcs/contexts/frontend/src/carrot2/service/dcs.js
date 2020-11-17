@@ -62,7 +62,7 @@ export function fetchClusters(query, documents, fields, algorithm, parameters = 
     });
 
     if (clusteredDocs.size < documents.length) {
-      const unclustered = documents.map(d => d.id).filter(d => !clusteredDocs.has(d));
+      const unclustered = documents.map((d, i) => i).filter(d => !clusteredDocs.has(d));
       topClusters.push({
         id: "unclustered",
         labels: [ "Other topics "],

@@ -67,7 +67,7 @@ export const clusterStore = store({
       clusterStore.loading = false;
     }
 
-    // For each document, adds references to clusters to which the document below.
+    // For each document, adds references to clusters to which the document belongs.
     function addClusterReferences(documents, clusters) {
       const docToClusters = clusters.reduce(function process(map, cluster) {
         for (let doc of cluster.uniqueDocuments) {
@@ -87,7 +87,7 @@ export const clusterStore = store({
       // Modify the existing documents, these are proxies and components
       // that reference those documents will render the clusters automatically.
       for (let doc of documents) {
-        doc.clusters = docToClusters.get(doc.id);
+        doc.clusters = docToClusters.get(doc.__id);
       }
       return documents;
     }

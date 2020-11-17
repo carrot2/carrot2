@@ -93,7 +93,7 @@ autoEffect(function () {
   const newVisibleDocuments = new Set();
   addDocumentsFromClusters(clusterSelectionStore.selected, newVisibleDocuments);
   for (let doc of documentSelectionStore.selected) {
-    newVisibleDocuments.add(doc.id);
+    newVisibleDocuments.add(doc.__id);
   }
   documentVisibilityStore.replaceVisible(newVisibleDocuments);
 
