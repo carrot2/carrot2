@@ -4,13 +4,9 @@ import "./LocalFile.css";
 
 import { autoEffect, store, view } from "@risingstack/react-easy-state";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamationTriangle, faInfoSquare } from "@fortawesome/pro-regular-svg-icons";
-
 import { GenericSearchEngineErrorMessage } from "../../apps/search-app/ui/ErrorMessage.js";
-import { addFactory} from "../../../carrotsearch/ui/settings/Settings.js";
+import { addFactory } from "../../../carrotsearch/ui/settings/Settings.js";
 import { parseFile } from "./file-parser.js";
-import { Checkbox } from "@blueprintjs/core";
 import { Loading } from "../../../carrotsearch/ui/Loading.js";
 
 import {
@@ -20,22 +16,15 @@ import {
 } from "./CustomSchemaResult.js";
 import { persistentLruStore } from "../../../carrotsearch/store/persistent-store.js";
 import { Setting } from "../../../carrotsearch/ui/settings/Setting.js";
+import { FieldList } from "./CustomSchemaSource.js";
+import { ArrayLogger, LogEntries } from "../../../carrotsearch/ui/LogEntries.js";
 
 const resultConfigStore = createResultConfigStore("localFile");
 
-const ArrayLogger = function () {
-  const entries = [];
-
-  this.log = message => entries.push({ level: "info", message: message });
-  this.warn = message => entries.push({ level: "warning", message: message });
-  this.error = message => entries.push({ level: "error", message: message });
-  this.getEntries = () => entries.slice(0);
-};
-
-// A non-reactive store for the contents of the last loaded file. This is not reactive, so that
+// A non-reactive holder for the contents of the last loaded file. This is not reactive, so that
 // the results display component does not update right after a new file is selected, but when
 // documents are requested from the source for clustering.
-const fileContentsStore = {
+const fileContentsHolder = {
   query: "",
   documents: [],
   fieldStats: [],
@@ -43,18 +32,18 @@ const fileContentsStore = {
 };
 
 // A reactive store backing the local file loading user interface.
-const fileInfoStore = store({
+const schemaInfoStore = store({
   loading: false,
   log: [],
   fileLoaded: false,
   fieldsAvailableForClustering: [],
   fieldsToCluster: [],
   load: async file => {
-    fileInfoStore.loading = true;
+    schemaInfoStore.loading = true;
     const logger = new ArrayLogger();
     try {
       const parsed = await parseFile(file, logger);
-      fileInfoStore.fieldsAvailableForClustering = parsed.fieldsAvailableForClustering;
+      schemaInfoStore.fieldsAvailableForClustering = parsed.fieldsAvailableForClustering;
 
       // We remember the fields the user selected for clustering on a per-schema (set of all fields)
       // basis, so that the user doesn't have to re-select the right fields every time they upload
@@ -71,16 +60,16 @@ const fileInfoStore = store({
         newToCluster = new Set(parsed.fieldsToCluster);
       }
 
-      fileInfoStore.fieldsToCluster = newToCluster;
-      fileInfoStore.fileLoaded = true;
+      schemaInfoStore.fieldsToCluster = newToCluster;
+      schemaInfoStore.fileLoaded = true;
 
-      fileContentsStore.documents = parsed.documents;
-      fileContentsStore.fieldStats = parsed.fieldStats;
-      fileContentsStore.fieldsAvailable = parsed.fieldsAvailable;
+      fileContentsHolder.documents = parsed.documents;
+      fileContentsHolder.fieldStats = parsed.fieldStats;
+      fileContentsHolder.fieldsAvailable = parsed.fieldsAvailable;
 
     } finally {
-      fileInfoStore.log = logger.getEntries();
-      fileInfoStore.loading = false;
+      schemaInfoStore.log = logger.getEntries();
+      schemaInfoStore.loading = false;
     }
   }
 });
@@ -90,64 +79,26 @@ const fieldsToClusterConfigsKey = item => item.join("--");
 const fieldsToClusterConfigs = persistentLruStore(
     "workbench:source:localFile:lastConfigs",
     () => {
-      const fieldsAvailable = fileContentsStore.fieldsAvailable;
+      const fieldsAvailable = fileContentsHolder.fieldsAvailable;
       return fieldsAvailable.length > 0 ? fieldsToClusterConfigsKey(fieldsAvailable) : null;
     },
     () => {
-      return Array.from(fileInfoStore.fieldsToCluster);
+      return Array.from(schemaInfoStore.fieldsToCluster);
     }
 );
-
-const FieldList = view(() => {
-  const store = fileInfoStore;
-  const availableForClustering = store.fieldsAvailableForClustering;
-  const toCluster = store.fieldsToCluster;
-  const noContentMessage = availableForClustering.length === 0 ?
-    <small>No natural text content detected</small> : null;
-
-  return (
-      <div className="FieldList">
-        {noContentMessage}
-        {
-          availableForClustering.map(f => {
-            return <Checkbox label={f} key={f} checked={toCluster.has(f)}
-                             onChange={e => {
-                               e.target.checked ? toCluster.add(f) : toCluster.delete(f);
-                             }} />;
-          })
-        }
-      </div>
-  );
-});
-
-const LEVEL_ICONS = {
-  "error": faExclamationTriangle,
-  "warning": faExclamationTriangle,
-  "info": faInfoSquare
-}
-export const LogEntry = ({ entry }) => {
-  const { level, message } = entry;
-  return (
-      <div className={`LogEntry LogEntry-${level}`}>
-        <FontAwesomeIcon icon={LEVEL_ICONS[level]} /> {message}
-      </div>
-  );
-};
 
 const FieldChoiceSetting = view(({ setting, get, set }) => {
   const { label, description } = setting;
 
-  const children = fileInfoStore.loading ?
-      <Loading store={fileInfoStore} />
+  const children = schemaInfoStore.loading ?
+      <Loading store={schemaInfoStore} />
       :
-      <FieldList />;
+      <FieldList schemaInfoStore={schemaInfoStore} />;
 
   return (
       <Setting className="FieldChoiceSetting" label={label} description={description}>
         {children}
-        {
-          fileInfoStore.log.map((e, i) => <LogEntry entry={e} key={i} />)
-        }
+        <LogEntries entries={schemaInfoStore.log} />
       </Setting>
   );
 });
@@ -168,15 +119,15 @@ const settings = [
         label: "File",
         get: () => null,
         set: (sett, file) => {
-          fileInfoStore.load(file);
+          schemaInfoStore.load(file);
         }
       },
       {
         id: "file:fieldChoice",
         type: "field-choice",
         label: "Fields to cluster",
-        visible: () => fileInfoStore.fileLoaded,
-        get: () => fileInfoStore.fieldsToCluster,
+        visible: () => schemaInfoStore.fileLoaded,
+        get: () => schemaInfoStore.fieldsToCluster,
         set: () => {
         }
       }
@@ -189,20 +140,20 @@ const localFileSource = () => {
   // for clustering. If we did that right after the file was loaded, we'd swap
   // the configuration for the set of documents being currently displayed
   // (possibly with a different schema).
-  resultConfigStore.load(fileContentsStore.fieldStats);
+  resultConfigStore.load(fileContentsHolder.fieldStats);
   return {
-    query: fileInfoStore.query,
-    matches: fileContentsStore.documents.length,
-    documents: fileContentsStore.documents
+    query: schemaInfoStore.query,
+    matches: fileContentsHolder.documents.length,
+    documents: fileContentsHolder.documents
   };
 };
 
 // Create a local copy of fields to cluster. The cluster store calls the getFieldsToCluster() method
-// before clustering and if the method returned a value from the fileInfoStore reactive store,
+// before clustering and if the method returned a value from the schemaInfoStore reactive store,
 // clustering would be triggered right after the selection of fields changed, which we want to avoid.
 let currentFieldsToCluster;
 autoEffect(() => {
-  currentFieldsToCluster = Array.from(fileInfoStore.fieldsToCluster);
+  currentFieldsToCluster = Array.from(schemaInfoStore.fieldsToCluster);
 });
 
 export const localFileSourceDescriptor = {
@@ -217,7 +168,7 @@ export const localFileSourceDescriptor = {
   },
   createConfig: () => (
       <CustomSchemaResultConfig configStore={resultConfigStore}
-                                previewResultProvider={() => fileContentsStore.documents[0]} />
+                                previewResultProvider={() => fileContentsHolder.documents[0]} />
   ),
   createSourceConfig: (props) => {
     throw new Error("Not available in search app.");

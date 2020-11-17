@@ -1,0 +1,15 @@
+.LogEntry {
+  margin-left: 0.125em;
+  color: var(--text-color-lightest);
+}
+
+.LogEntry-error svg {
+  color: var(--text-color-red);
+}
+.LogEntry-error {
+  color: var(--text-color-light);
+}
+
+.LogEntry svg {
+  margin-right: 0.5em;
+}
