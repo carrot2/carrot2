@@ -15,6 +15,7 @@ import {
   PubMedSourceConfig
 } from "./ui/sources/PubMed.js";
 import { localFileSourceDescriptor } from "./ui/sources/LocalFile.js";
+import { solrSourceDescriptor } from "./ui/sources/Solr.js";
 
 export const sources = {
   "web": {
@@ -60,7 +61,8 @@ export const sources = {
     getFieldsToCluster: () => [ "title", "snippet" ]
   },
 
-  "file": localFileSourceDescriptor
+  "file": localFileSourceDescriptor,
+  "solr": solrSourceDescriptor
 };
 
 export const searchAppSources = {

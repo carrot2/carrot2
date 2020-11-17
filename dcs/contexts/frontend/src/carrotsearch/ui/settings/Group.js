@@ -11,6 +11,7 @@ import { NumericSetting, NumericSettingSimple } from "./NumericSetting.js";
 import { SelectSetting } from "./SelectSetting.js";
 import { StringArraySetting } from "./StringArraySetting.js";
 import { FileSetting } from "./FileSetting.js";
+import { ServiceUrlSetting } from "./ServiceUrlSetting.js";
 
 const visible = visible => visible ? null : { display: "none" };
 
@@ -73,6 +74,10 @@ const factories = {
     } else {
       return <NumericSettingSimple setting={s} get={get} set={set} />;
     }
+  },
+
+  "service-url": (s, get, set) => {
+    return <ServiceUrlSetting setting={s} get={get} set={set} />
   }
 };
 const getFactory = s => {
