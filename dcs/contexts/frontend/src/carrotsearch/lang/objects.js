@@ -18,3 +18,7 @@ export const incrementInMap = (map, key, diff) => {
     map.set(key, diff);
   }
 };
+
+export const isEmpty = obj => {
+  return obj === undefined || obj === null || ((typeof obj === "string") && obj === "");
+}

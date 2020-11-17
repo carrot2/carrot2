@@ -13,18 +13,21 @@ import { resultListConfigStore } from "../results/ResultListConfig.js";
 import { ResultWrapper } from "../results/ResultList.js";
 import { mapUpToMaxLength, wrapIfNotArray } from "../../../carrotsearch/lang/arrays.js";
 import { displayNoneIf } from "../../apps/search-app/ui/Optional.js";
+import { isEmpty } from "../../../carrotsearch/lang/objects.js";
 
 export const createResultConfigStore = (key) => {
   const keyFromFields = fields => fields.join("--");
 
-  const fieldStore = store({
+  const fieldConfigStore = store({
     fieldRoles: {},
-    isEmpty: () => Object.keys(fieldStore.fieldRoles).length === 0,
-    load: fieldStats => {
+    resultForPreview: undefined,
+    isEmpty: () => Object.keys(fieldConfigStore.fieldRoles).length === 0,
+    load: (fieldStats, result) => {
       if (fieldStats.length === 0) {
         return;
       }
 
+      // Guess initial field display mappings based on field statistics.
       let map = resultConfigs.get(keyFromFields(fieldStats.map(f => f.field)));
       if (!map) {
         map = fieldStats.reduce((map, field) => {
@@ -50,18 +53,24 @@ export const createResultConfigStore = (key) => {
           map[byTitle[0].field] = "title";
         }
       }
+      fieldConfigStore.fieldRoles = map;
 
-      fieldStore.fieldRoles = map;
+      // Choose the document with all fields available for preview
+      fieldConfigStore.resultForPreview = result.documents.find(d => {
+        return Object.keys(d).reduce((hasField, field) => {
+          return hasField && !isEmpty(d[field]);
+        }, true) || result.documents[0];
+      });
     }
   });
 
   const resultConfigs = persistentLruStore(
       `workbench:source:${key}:resultConfigs`,
       item => keyFromFields(Object.keys(item)),
-      () => fieldStore.fieldRoles
+      () => fieldConfigStore.fieldRoles
   );
 
-  return fieldStore;
+  return fieldConfigStore;
 };
 
 const FIELD_ROLES = [
@@ -92,8 +101,8 @@ const FieldRoles = ({ configStore }) => {
   );
 };
 
-export const ResultPreview = view(({ configStore, previewResultProvider }) => {
-  const result = previewResultProvider();
+export const ResultPreview = view(({ configStore }) => {
+  const result = configStore.resultForPreview;
   const preview = result ?
       <ResultWrapper document={result}>
         <CustomSchemaResult document={result} rank={1} configStore={configStore} />
@@ -117,7 +126,7 @@ export const CustomSchemaResultConfig = view(({ configStore, previewResultProvid
           <p>Choose the fields to show:</p>
           <FieldRoles configStore={configStore} />
         </div>
-        <ResultPreview configStore={configStore} previewResultProvider={previewResultProvider} />
+        <ResultPreview configStore={configStore} />
       </div>
   );
 });

@@ -2,8 +2,90 @@ import React from "react";
 
 import "./CustomSchemaSource.css";
 
-import { view } from "@risingstack/react-easy-state";
+import { store, view } from "@risingstack/react-easy-state";
 import { Checkbox } from "@blueprintjs/core";
+import { ArrayLogger, LogEntries } from "../../../carrotsearch/ui/LogEntries.js";
+import { extractSchema } from "./schema-extractor.js";
+import { persistentLruStore } from "../../../carrotsearch/store/persistent-store.js";
+import { Loading } from "../../../carrotsearch/ui/Loading.js";
+import { Setting } from "../../../carrotsearch/ui/settings/Setting.js";
+import { addFactory } from "../../../carrotsearch/ui/settings/Group.js";
+
+export const createSchemaExtractorStores = (sourceId) => {
+  // A non-reactive holder for the contents of the last loaded file. This is not reactive, so that
+  // the results display component does not update right after a new file is selected, but when
+  // documents are requested from the source for clustering.
+  const resultHolder = {
+    query: "",
+    documents: [],
+  };
+
+  // A reactive store backing the local file loading user interface.
+  const schemaInfoStore = store({
+    loading: false,
+    log: [],
+    fileLoaded: false,
+    fieldStats: [],
+    fieldsAvailable: [],
+    fieldsAvailableForClustering: [],
+    fieldsToCluster: [],
+    load: async (loader) => {
+      schemaInfoStore.loading = true;
+      const logger = new ArrayLogger();
+      try {
+        const result = await loader(logger);
+        const parsed = extractSchema(result.documents, logger);
+
+        schemaInfoStore.fieldsAvailableForClustering = parsed.fieldsAvailableForClustering;
+
+        // We remember the fields the user selected for clustering on a per-schema (set of all fields)
+        // basis, so that the user doesn't have to re-select the right fields every time they upload
+        // a similar data set.
+        const cachedToCluster = fieldsToClusterConfigs.get(
+            fieldsToClusterConfigsKey(parsed.fieldsAvailable));
+        let newToCluster;
+        if (cachedToCluster && cachedToCluster.length > 0) {
+          const cached = new Set(cachedToCluster);
+
+          // Intersection of parsed and cached set of fields, in case this specific instance
+          // had data that caused some field to be unsuitable for clustering.
+          newToCluster = new Set([ ...parsed.fieldsToCluster ].filter(f => cached.has(f)))
+        } else {
+          newToCluster = new Set(parsed.fieldsToCluster);
+        }
+
+        schemaInfoStore.fieldsToCluster = newToCluster;
+        schemaInfoStore.fieldStats = parsed.fieldStats;
+        schemaInfoStore.fieldsAvailable = parsed.fieldsAvailable;
+        schemaInfoStore.fileLoaded = true;
+
+        resultHolder.documents = result.documents;
+        resultHolder.query = result.query;
+      } finally {
+        schemaInfoStore.log = logger.getEntries();
+        schemaInfoStore.loading = false;
+      }
+    }
+  });
+
+  // Store the last selected set of fields to cluster for each schema
+  const fieldsToClusterConfigsKey = item => item.join("--");
+  const fieldsToClusterConfigs = persistentLruStore(
+      `workbench:source:${sourceId}:lastConfigs`,
+      () => {
+        const fieldsAvailable = schemaInfoStore.fieldsAvailable;
+        return fieldsAvailable.length > 0 ? fieldsToClusterConfigsKey(fieldsAvailable) : null;
+      },
+      () => {
+        return Array.from(schemaInfoStore.fieldsToCluster);
+      }
+  );
+
+  return {
+    schemaInfoStore,
+    resultHolder
+  };
+};
 
 export const FieldList = view(({ schemaInfoStore }) => {
   const store = schemaInfoStore;
@@ -26,3 +108,34 @@ export const FieldList = view(({ schemaInfoStore }) => {
       </div>
   );
 });
+
+export const FieldChoiceSetting = view(({ setting, get, set }) => {
+  const { label, description, schemaInfoStore } = setting;
+
+  const children = schemaInfoStore.loading ?
+      <Loading store={schemaInfoStore} />
+      :
+      <FieldList schemaInfoStore={schemaInfoStore} />;
+
+  return (
+      <Setting className="FieldChoiceSetting" label={label} description={description}>
+        {children}
+        <LogEntries entries={schemaInfoStore.log} />
+      </Setting>
+  );
+});
+addFactory("field-choice", (s, get, set) => {
+  return <FieldChoiceSetting setting={s} get={get} set={set} />;
+});
+
+export const createFieldChoiceSetting = (sourceId, schemaInfoStore) => {
+  return {
+    id: `${sourceId}:fieldChoice`,
+    type: "field-choice",
+    label: "Fields to cluster",
+    visible: () => schemaInfoStore.fileLoaded,
+    get: () => schemaInfoStore.fieldsToCluster,
+    set: () => {},
+    schemaInfoStore: schemaInfoStore
+  };
+};

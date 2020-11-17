@@ -205,9 +205,7 @@ export const extractSchema = (documents, logger) => {
     fieldStats: fields,
     fieldsAvailable: allFields,
     fieldsAvailableForClustering: naturalTextFields,
-    fieldsToCluster: naturalTextFields,
-    query: "",
-    documents: documents
+    fieldsToCluster: naturalTextFields
   };
 };
 
