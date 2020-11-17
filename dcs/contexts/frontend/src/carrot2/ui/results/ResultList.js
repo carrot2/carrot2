@@ -116,7 +116,7 @@ const usePaging = ({ enabled, maxPerPage, results, onChange }) => {
     end: end,
     start: start,
     total: results.length,
-    results: results.slice(start, end),
+    results: enabled ? results.slice(start, end) : results,
     next: () => {
       pagingStore.start = end;
       onChange();
