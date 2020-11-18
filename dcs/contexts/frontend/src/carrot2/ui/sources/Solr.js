@@ -4,14 +4,16 @@ import { autoEffect } from "@risingstack/react-easy-state";
 
 import { createResultConfigStore, } from "./CustomSchemaResult.js";
 import { persistentStore } from "../../../carrotsearch/store/persistent-store.js";
-import { createStore } from "../../../carrotsearch/ui/settings/ServiceUrlSetting.js";
+import { createStateStore } from "../../../carrotsearch/ui/settings/ServiceUrlSetting.js";
 import {
   createFieldChoiceSetting,
   createSchemaExtractorStores,
   createSource
 } from "./CustomSchemaSource.js";
 import { storeAccessors } from "../../../carrotsearch/ui/settings/Setting.js";
+
 import { queryStore } from "../../apps/workbench/store/query-store.js";
+import { workbenchSourceStore } from "../../apps/workbench/store/source-store.js";
 
 const resultConfigStore = createResultConfigStore("solr");
 
@@ -25,15 +27,12 @@ const solrServiceConfigStore = persistentStore("workbench:source:solr:serviceCon
   core: undefined
 });
 
-const solrServiceStateStore = createStore({
-  url: solrServiceConfigStore.serviceUrl,
+const solrServiceStateStore = createStateStore({
   isUrlValid: () => solrServiceStateStore.status === "ok",
-  cores: [],
-  checkUrl: async () => {
+  checkServiceUrl: async (url) => {
     solrServiceStateStore.status = "loading";
     solrServiceStateStore.message = "";
     try {
-      const url = solrServiceStateStore.url;
       const cores = await ky.get("admin/cores?action=STATUS", {
         prefixUrl: url,
         timeout: 4000
@@ -46,14 +45,18 @@ const solrServiceStateStore = createStore({
       solrServiceStateStore.status = "error";
       solrServiceStateStore.message = e instanceof Error ? e.toString() : e;
     }
-  }
+  },
+  cores: []
 });
 
 // Check Solr service URL when the page loads.
-// TODO: do this only when Solr source is selected
-solrServiceStateStore.checkUrl();
 autoEffect(() => {
-  if (solrServiceStateStore.isUrlValid()) {
+  if (workbenchSourceStore.source === "solr") {
+    solrServiceStateStore.checkServiceUrl(solrServiceConfigStore.serviceUrl);
+  }
+});
+autoEffect(() => {
+  if (workbenchSourceStore.source === "solr" && solrServiceStateStore.isUrlValid()) {
     schemaInfoStore.load(async () => {
       const result = await searchCurrentCore("*:*", 50);
       resultHolder.documents = result.documents;
@@ -93,7 +96,9 @@ const settings = [
         type: "service-url",
         label: "Solr service URL",
         urlStore: solrServiceStateStore,
-        checkUrl: url => solrServiceStateStore.checkUrl(url)
+        get: () => solrServiceConfigStore.serviceUrl,
+        stateStore: solrServiceStateStore,
+        checkUrl: solrServiceStateStore.checkServiceUrl
       },
       {
         id: "solr:core",

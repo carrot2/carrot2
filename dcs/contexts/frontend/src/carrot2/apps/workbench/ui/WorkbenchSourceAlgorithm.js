@@ -1,19 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import "./WorkbenchSourceAlgorithm.css";
 
 import { view } from "@risingstack/react-easy-state";
 import { FormGroup, HTMLSelect } from "@blueprintjs/core";
 
-import { persistentStore } from "../../../../carrotsearch/store/persistent-store.js";
-
 import { algorithmStore } from "../../../store/services.js";
 
 import { sources } from "../../../config-sources.js";
 import { algorithms } from "../../../config-algorithms.js";
-
-export const workbenchSourceStore = persistentStore("workbench:source", {
-  source: Object.keys(sources)[0]
-});
+import { workbenchSourceStore } from "../store/source-store.js";
 
 const ComponentSelect = view(({ label, id, components, get, set }) => {
   const htmlId = `workbench-${id}`;
@@ -34,6 +29,12 @@ const ComponentSelect = view(({ label, id, components, get, set }) => {
 });
 
 export const WorkbenchSourceAlgorithm = () => {
+  useEffect(() => {
+    if (!workbenchSourceStore.source) {
+      workbenchSourceStore.source = Object.keys(sources)[0];
+    }
+  }, []);
+
   return (
       <div className="WorkbenchSourceAlgorithm">
         <ComponentSelect label="Data source" id="source" components={sources}

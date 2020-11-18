@@ -12,9 +12,9 @@ import { sources } from "../../../config-sources.js";
 import { Loading } from "../../../../carrotsearch/ui/Loading.js";
 import { persistentStore } from "../../../../carrotsearch/store/persistent-store.js";
 
-import { workbenchSourceStore } from "./WorkbenchSourceAlgorithm.js";
 import { Stats } from "../../../../carrotsearch/ui/Stats.js";
 import { humanizeDuration } from "../../../../carrotsearch/lang/humanize.js";
+import { workbenchSourceStore } from "../store/source-store.js";
 
 const uiStore = persistentStore("workbench:ui", {
   clusterView: "folders"

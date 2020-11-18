@@ -20,13 +20,11 @@ export const CheckButton = view(({ store, onClick }) => {
   );
 });
 
-export const createStore = (overrides) => {
+export const createStateStore = (overrides) => {
   const urlStore = store(Object.assign({
-    url: null,
     message: null,
     status: "pending",
-    setUrl: url => {
-      urlStore.url = url;
+    urlDirty: () => {
       urlStore.status = "pending";
     }
   }, overrides));
@@ -34,10 +32,18 @@ export const createStore = (overrides) => {
 };
 
 export const ServiceUrlSetting = view(({ setting, get, set }) => {
-  const { label, description, urlStore, checkUrl } = setting;
+  const { label, description, stateStore, checkUrl } = setting;
 
-  const message = urlStore.message ?
-      <LogEntry entry={{ level: "error", message: urlStore.message }} /> : null;
+  const urlStore = store({
+    url: get(setting),
+    setUrl: url => {
+      urlStore.url = url;
+      stateStore.urlDirty();
+    }
+  });
+
+  const message = stateStore.message ?
+      <LogEntry entry={{ level: "error", message: stateStore.message }} /> : null;
 
   return (
       <Setting className="ServiceUrlSetting" label={label} description={description}
@@ -45,7 +51,7 @@ export const ServiceUrlSetting = view(({ setting, get, set }) => {
         <ControlGroup fill={true}>
           <InputGroup value={urlStore.url} fill={true}
                       onChange={e => urlStore.setUrl(e.target.value)} />
-          <CheckButton store={urlStore} onClick={checkUrl} />
+          <CheckButton store={stateStore} onClick={() => checkUrl(urlStore.url)} />
         </ControlGroup>
       </Setting>
   );

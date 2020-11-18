@@ -9,13 +9,14 @@ import { algorithms } from "../../../config-algorithms.js";
 import { algorithmStore, clusterStore, searchResultStore } from "../../../store/services.js";
 import { queryStore } from "../store/query-store.js";
 
-import { WorkbenchSourceAlgorithm, workbenchSourceStore } from "./WorkbenchSourceAlgorithm.js";
+import { WorkbenchSourceAlgorithm} from "./WorkbenchSourceAlgorithm.js";
 
 import { Button } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlask } from "@fortawesome/pro-regular-svg-icons";
 import { Settings } from "../../../../carrotsearch/ui/settings/Settings.js";
 import { SettingsTools } from "./SettingsTools.js";
+import { workbenchSourceStore } from "../store/source-store.js";
 
 const WorkbenchLogo = () => {
   return (
