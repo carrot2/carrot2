@@ -1,7 +1,6 @@
 import { Stats } from "fast-stats";
 
 import { forEachOwnProp, incrementInMap } from "../../../carrotsearch/lang/objects.js";
-import { pluralize } from "../../../carrotsearch/lang/humanize.js";
 
 /**
  * Collects all field names appearing in the submitted JSON documents.
