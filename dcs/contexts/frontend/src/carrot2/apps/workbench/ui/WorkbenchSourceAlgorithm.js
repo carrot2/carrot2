@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import "./WorkbenchSourceAlgorithm.css";
 
 import { view } from "@risingstack/react-easy-state";
@@ -29,12 +29,6 @@ const ComponentSelect = view(({ label, id, components, get, set }) => {
 });
 
 export const WorkbenchSourceAlgorithm = () => {
-  useEffect(() => {
-    if (!workbenchSourceStore.source) {
-      workbenchSourceStore.source = Object.keys(sources)[0];
-    }
-  }, []);
-
   return (
       <div className="WorkbenchSourceAlgorithm">
         <ComponentSelect label="Data source" id="source" components={sources}
