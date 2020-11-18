@@ -2,7 +2,7 @@ import React from "react";
 
 import "./CustomSchemaSource.css";
 
-import { store, view } from "@risingstack/react-easy-state";
+import { autoEffect, store, view } from "@risingstack/react-easy-state";
 import { Checkbox } from "@blueprintjs/core";
 import { ArrayLogger, LogEntries } from "../../../carrotsearch/ui/LogEntries.js";
 import { extractSchema } from "./schema-extractor.js";
@@ -10,6 +10,8 @@ import { persistentLruStore } from "../../../carrotsearch/store/persistent-store
 import { Loading } from "../../../carrotsearch/ui/Loading.js";
 import { Setting } from "../../../carrotsearch/ui/settings/Setting.js";
 import { addFactory } from "../../../carrotsearch/ui/settings/Group.js";
+import { CustomSchemaResult, CustomSchemaResultConfig } from "./CustomSchemaResult.js";
+import { GenericSearchEngineErrorMessage } from "../../apps/search-app/ui/ErrorMessage.js";
 
 export const createSchemaExtractorStores = (sourceId) => {
   // A non-reactive holder for the contents of the last loaded file. This is not reactive, so that
@@ -61,6 +63,8 @@ export const createSchemaExtractorStores = (sourceId) => {
 
         resultHolder.documents = result.documents;
         resultHolder.query = result.query;
+      } catch (e) {
+        logger.error(e instanceof Error ? e.toString() : e);
       } finally {
         schemaInfoStore.log = logger.getEntries();
         schemaInfoStore.loading = false;
@@ -87,7 +91,7 @@ export const createSchemaExtractorStores = (sourceId) => {
   };
 };
 
-export const FieldList = view(({ schemaInfoStore }) => {
+const FieldList = view(({ schemaInfoStore }) => {
   const store = schemaInfoStore;
   const availableForClustering = store.fieldsAvailableForClustering;
   const toCluster = store.fieldsToCluster;
@@ -109,7 +113,7 @@ export const FieldList = view(({ schemaInfoStore }) => {
   );
 });
 
-export const FieldChoiceSetting = view(({ setting, get, set }) => {
+const FieldChoiceSetting = view(({ setting, get, set }) => {
   const { label, description, schemaInfoStore } = setting;
 
   const children = schemaInfoStore.loading ?
@@ -128,14 +132,37 @@ addFactory("field-choice", (s, get, set) => {
   return <FieldChoiceSetting setting={s} get={get} set={set} />;
 });
 
-export const createFieldChoiceSetting = (sourceId, schemaInfoStore) => {
-  return {
+export const createFieldChoiceSetting = (sourceId, schemaInfoStore, overrides) => {
+  return Object.assign({
     id: `${sourceId}:fieldChoice`,
     type: "field-choice",
     label: "Fields to cluster",
-    visible: () => schemaInfoStore.fileLoaded,
+    visible: () => schemaInfoStore.fileLoaded || schemaInfoStore.log.length > 0,
     get: () => schemaInfoStore.fieldsToCluster,
-    set: () => {},
+    set: () => {
+    },
     schemaInfoStore: schemaInfoStore
-  };
+  }, overrides);
+};
+
+export const createSource = (schemaInfoStore, resultConfigStore, base) => {
+  // Create a local copy of fields to cluster. The cluster store calls the getFieldsToCluster() method
+  // before clustering and if the method returned a value from the schemaInfoStore reactive store,
+  // clustering would be triggered right after the selection of fields changed, which we want to avoid.
+  let currentFieldsToCluster;
+  autoEffect(() => {
+    currentFieldsToCluster = Array.from(schemaInfoStore.fieldsToCluster);
+  });
+
+  return Object.assign(base, {
+    createResult: (props) => {
+      return <CustomSchemaResult {...props} configStore={resultConfigStore} />;
+    },
+    createError: () => <GenericSearchEngineErrorMessage />,
+    createConfig: () => <CustomSchemaResultConfig configStore={resultConfigStore} />,
+    createSourceConfig: () => {
+      throw new Error("Not available in search app.");
+    },
+    getFieldsToCluster: () => currentFieldsToCluster
+  });
 };
