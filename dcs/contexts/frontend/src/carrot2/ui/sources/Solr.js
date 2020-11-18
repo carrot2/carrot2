@@ -20,7 +20,7 @@ const {
 
 */
 const solrServiceConfigStore = persistentStore("workbench:source:solr:serviceConfig", {
-  serviceUrl: "http://localhost:8983/solr/",
+  serviceUrl: "http://localhost:8004/solr",
   collection: undefined
 });
 
@@ -38,12 +38,7 @@ const settings = [
         label: "Solr service URL",
         get: () => solrServiceConfigStore.serviceUrl,
         set: (sett, url) => solrServiceConfigStore.serviceUrl = url,
-        pingUrl: url => `${url}/admin/cores?action=STATUS`,
-        check: async response => {
-          const json = await response.json();
-          console.log(json);
-          return true;
-        }
+        pingUrl: url => `${url}/admin/cores?action=STATUS`
       }
     ]
   }

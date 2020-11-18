@@ -48,3 +48,7 @@
 .SettingDescription code {
   overflow-wrap: anywhere;
 }
+
+.SettingMessage {
+  margin: 0.5em 0;
+}

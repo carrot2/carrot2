@@ -46,13 +46,18 @@ const SettingDescription = ({ description }) => {
   return <div className="SettingDescription" dangerouslySetInnerHTML={{ __html: description }} />;
 };
 
-export const Setting = ({ className, inline = false, label, description, children }) => {
+export const Setting = ({ className, inline = false, label, description, message, children }) => {
+  let messageElement;
+  if (message) {
+    messageElement = <div className="SettingMessage">{message}</div>;
+  }
   return (
       <FormGroup className={`${className} Setting`} inline={inline}
                  label={<LabelWithHelp label={label} description={description} />}>
         {children}
+        {messageElement}
       </FormGroup>
-  )
+  );
 };
 
 export const storeAccessors = (store, property) => {
