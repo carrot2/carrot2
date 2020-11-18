@@ -199,8 +199,6 @@ export const extractSchema = (documents, logger) => {
   const allFields = fields.map(f => f.field);
   const naturalTextFields = fields.filter(f => f.naturalTextScore >= 1).map(f => f.field);
 
-  logger.log(`${pluralize(documents.length, "document", true)} loaded.`)
-
   return {
     fieldStats: fields,
     fieldsAvailable: allFields,

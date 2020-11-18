@@ -1,4 +1,5 @@
 import xmlParser from "fast-xml-parser";
+import { pluralize } from "../../../carrotsearch/lang/humanize.js";
 
 const parseSheet = async (file, logger) => {
   const XLSX = await import("xlsx");
@@ -84,6 +85,9 @@ export const parseFile = async (file, logger) => {
     logger.error(`Unknown file type ${file.type}.`);
     return EMPTY_PARSER_RESULT;
   }
+  const result = await parser(file, logger);
 
-  return parser(file, logger);
+  logger.log(`${pluralize(result.documents.length, "document", true)} loaded.`)
+
+  return result;
 };

@@ -50,6 +50,7 @@ const solrServiceStateStore = createStore({
 });
 
 // Check Solr service URL when the page loads.
+// TODO: do this only when Solr source is selected
 solrServiceStateStore.checkUrl();
 autoEffect(() => {
   if (solrServiceStateStore.isUrlValid()) {

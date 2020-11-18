@@ -139,9 +139,8 @@ export const createFieldChoiceSetting = (sourceId, schemaInfoStore, overrides) =
     label: "Fields to cluster",
     visible: () => schemaInfoStore.fileLoaded || schemaInfoStore.log.length > 0,
     get: () => schemaInfoStore.fieldsToCluster,
-    set: () => {
-    },
-    schemaInfoStore: schemaInfoStore
+    set: () => {},
+    schemaInfoStore: schemaInfoStore,
   }, overrides);
 };
 

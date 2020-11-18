@@ -1,17 +1,9 @@
-import React from 'react';
-
-import "./LocalFile.css";
-
-import { autoEffect } from "@risingstack/react-easy-state";
-
-import { GenericSearchEngineErrorMessage } from "../../apps/search-app/ui/ErrorMessage.js";
-
+import { createResultConfigStore, } from "./CustomSchemaResult.js";
 import {
-  createResultConfigStore,
-  CustomSchemaResult,
-  CustomSchemaResultConfig
-} from "./CustomSchemaResult.js";
-import { createFieldChoiceSetting, createSchemaExtractorStores } from "./CustomSchemaSource.js";
+  createFieldChoiceSetting,
+  createSchemaExtractorStores,
+  createSource
+} from "./CustomSchemaSource.js";
 import { parseFile } from "./file-parser.js";
 
 const resultConfigStore = createResultConfigStore("localFile");
@@ -20,7 +12,6 @@ const {
   schemaInfoStore,
   resultHolder
 } = createSchemaExtractorStores("localFile");
-
 
 const settings = [
   {
@@ -58,31 +49,10 @@ const localFileSource = () => {
   };
 };
 
-// Create a local copy of fields to cluster. The cluster store calls the getFieldsToCluster() method
-// before clustering and if the method returned a value from the schemaInfoStore reactive store,
-// clustering would be triggered right after the selection of fields changed, which we want to avoid.
-let currentFieldsToCluster;
-autoEffect(() => {
-  currentFieldsToCluster = Array.from(schemaInfoStore.fieldsToCluster);
-});
-
-export const localFileSourceDescriptor = {
+export const localFileSourceDescriptor = createSource(schemaInfoStore, resultConfigStore, {
   label: "Local file",
   descriptionHtml: "content read from a local file",
   source: localFileSource,
-  createResult: (props) => {
-    return <CustomSchemaResult {...props} configStore={resultConfigStore} />;
-  },
-  createError: () => {
-    return <GenericSearchEngineErrorMessage />
-  },
-  createConfig: () => (
-      <CustomSchemaResultConfig configStore={resultConfigStore} />
-  ),
-  createSourceConfig: (props) => {
-    throw new Error("Not available in search app.");
-  },
-  getSettings: () => settings,
-  getFieldsToCluster: () => currentFieldsToCluster
-};
+  getSettings: () => settings
+});
 
