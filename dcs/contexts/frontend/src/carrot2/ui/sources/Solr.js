@@ -24,7 +24,8 @@ const {
 
 const solrServiceConfigStore = persistentStore("workbench:source:solr:serviceConfig", {
   serviceUrl: "http://localhost:8983/solr",
-  core: undefined
+  core: undefined,
+  maxResults: 100
 });
 
 const solrServiceStateStore = createStateStore({
@@ -144,13 +145,24 @@ const settings = [
 </p>`,
         visible: () => isSearchPossible()
       },
+      {
+        id: "solr:maxResults",
+        type: "number",
+        label: "Max results",
+        min: 0,
+        max: 1000,
+        step: 10,
+        description: `<p>The number of search results to fetch.</p>`,
+        visible: () => isSearchPossible(),
+        ...storeAccessors(solrServiceConfigStore, "maxResults")
+      },
     ]
   }
 ];
 
 const solrFileSource = async (query) => {
   resultConfigStore.load(schemaInfoStore.fieldStats, resultHolder);
-  return searchCurrentCore(query);
+  return searchCurrentCore(query, solrServiceConfigStore.maxResults);
 };
 
 export const solrSourceDescriptor = createSource(schemaInfoStore, resultConfigStore, {
