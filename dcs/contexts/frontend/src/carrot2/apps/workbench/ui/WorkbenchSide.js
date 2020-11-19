@@ -13,7 +13,7 @@ import { WorkbenchSourceAlgorithm} from "./WorkbenchSourceAlgorithm.js";
 
 import { Button } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFlask } from "@fortawesome/pro-regular-svg-icons";
+import { faLightbulbOn } from "@fortawesome/pro-regular-svg-icons";
 import { Settings } from "../../../../carrotsearch/ui/settings/Settings.js";
 import { SettingsTools } from "./SettingsTools.js";
 import { workbenchSourceStore } from "../store/source-store.js";
@@ -121,7 +121,7 @@ const ClusterButton = view(() => {
       <Button className="ClusterButton"
               intent={parametersStateStore.sourceDirty || parametersStateStore.algorithmDirty ? "primary" : "none"}
               large={true}
-              icon={<FontAwesomeIcon icon={faFlask} />}
+              icon={<FontAwesomeIcon icon={faLightbulbOn} />}
               onClick={runSearch}
               loading={searchResultStore.loading || clusterStore.loading}>
         Cluster
