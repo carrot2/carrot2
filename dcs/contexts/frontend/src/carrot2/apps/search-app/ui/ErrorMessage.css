@@ -18,3 +18,10 @@
 .Error small {
   opacity: 0.65;
 }
+
+dl.ResponseInfo dt {
+  position: absolute;
+}
+dl.ResponseInfo dd {
+  padding-left: 1em;
+}

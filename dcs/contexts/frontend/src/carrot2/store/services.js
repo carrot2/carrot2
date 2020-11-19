@@ -127,7 +127,7 @@ export const searchResultStore = store({
     try {
       searchResultStore.searchResult = assignDocumentIds(await src.source(query), src);
     } catch (e) {
-      errors.addError(src.createError(e));
+      errors.addError(await src.createError(e));
       searchResultStore.error = true;
       searchResultStore.searchResult = {
         query: query,

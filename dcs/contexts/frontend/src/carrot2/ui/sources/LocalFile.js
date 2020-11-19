@@ -5,6 +5,8 @@ import {
   createSource
 } from "./CustomSchemaSource.js";
 import { parseFile } from "./file-parser.js";
+import { GenericSearchEngineErrorMessage } from "../../apps/search-app/ui/ErrorMessage.js";
+import React from "react";
 
 const resultConfigStore = createResultConfigStore("localFile");
 
@@ -53,6 +55,7 @@ export const localFileSourceDescriptor = createSource(schemaInfoStore, resultCon
   label: "Local file",
   descriptionHtml: "content read from a local file",
   source: localFileSource,
-  getSettings: () => settings
+  getSettings: () => settings,
+  createError: (e) => <GenericSearchEngineErrorMessage error={e} />,
 });
 

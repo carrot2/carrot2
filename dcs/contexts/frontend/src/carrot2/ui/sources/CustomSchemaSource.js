@@ -11,7 +11,6 @@ import { Loading } from "../../../carrotsearch/ui/Loading.js";
 import { Setting } from "../../../carrotsearch/ui/settings/Setting.js";
 import { addFactory } from "../../../carrotsearch/ui/settings/Group.js";
 import { CustomSchemaResult, CustomSchemaResultConfig } from "./CustomSchemaResult.js";
-import { GenericSearchEngineErrorMessage } from "../../apps/search-app/ui/ErrorMessage.js";
 
 export const createSchemaExtractorStores = (sourceId) => {
   // A non-reactive holder for the contents of the last loaded file. This is not reactive, so that
@@ -157,7 +156,6 @@ export const createSource = (schemaInfoStore, resultConfigStore, base) => {
     createResult: (props) => {
       return <CustomSchemaResult {...props} configStore={resultConfigStore} />;
     },
-    createError: (e) => <GenericSearchEngineErrorMessage error={e} />,
     createConfig: () => <CustomSchemaResultConfig configStore={resultConfigStore} />,
     createSourceConfig: () => {
       throw new Error("Not available in search app.");

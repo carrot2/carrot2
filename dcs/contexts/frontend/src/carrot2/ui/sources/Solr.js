@@ -14,6 +14,10 @@ import { storeAccessors } from "../../../carrotsearch/ui/settings/Setting.js";
 
 import { queryStore } from "../../apps/workbench/store/query-store.js";
 import { workbenchSourceStore } from "../../apps/workbench/store/source-store.js";
+import {
+  HttpErrorMessage, SearchEngineErrorMessage
+} from "../../apps/search-app/ui/ErrorMessage.js";
+import React from "react";
 
 const resultConfigStore = createResultConfigStore("solr");
 
@@ -91,7 +95,7 @@ const searchCurrentCore = async (query, results = 50, extraParams) => {
   const result = await ky.get(`${core}/select`, {
     prefixUrl: url,
     timeout: 4000,
-    searchParams: Object.assign({}, extraParams,{
+    searchParams: Object.assign({}, extraParams, {
       q: query,
       rows: results
     })
@@ -195,5 +199,24 @@ export const solrSourceDescriptor = createSource(schemaInfoStore, resultConfigSt
   descriptionHtml: "queries Apache Solr",
   source: solrFileSource,
   getSettings: () => settings,
+  createError: async (e) => {
+    // Parse the body of the error response. The JSON response contains an error message.
+    let details;
+    if (e.response) {
+      let body;
+      try {
+        body = await e.response.json();
+        details = <pre>{body.error.msg}</pre>;
+      } catch (ignored) {
+        body = await e.response.text();
+        details = <pre>{body}</pre>;
+      }
+    }
+    return (
+        <SearchEngineErrorMessage>
+          <HttpErrorMessage error={e}>{details}</HttpErrorMessage>
+        </SearchEngineErrorMessage>
+    );
+  },
 });
 
