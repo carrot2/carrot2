@@ -43,7 +43,7 @@ export const createStores = ({
 
         serviceStateStore.collections = collectionIds;
         if (collectionIds.indexOf(serviceConfigStore.collection) < 0) {
-          serviceConfigStore.core = collectionIds[0];
+          serviceConfigStore.collection = collectionIds[0];
         }
       } catch (e) {
         serviceStateStore.status = "error";
