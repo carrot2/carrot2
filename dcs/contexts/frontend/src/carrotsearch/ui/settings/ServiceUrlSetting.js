@@ -1,5 +1,9 @@
 import React from 'react';
 
+import "./ServiceUrlSetting.css";
+
+import classnames from "classnames";
+
 import { store, view } from "@risingstack/react-easy-state";
 
 import { Button, ControlGroup, InputGroup } from "@blueprintjs/core";
@@ -9,12 +13,14 @@ import { faPlug, faCheck } from "@fortawesome/pro-regular-svg-icons";
 import { Setting } from "./Setting.js";
 import { LogEntry } from "../LogEntries.js";
 
-export const CheckButton = view(({ store, onClick }) => {
+export const ConnectButton = view(({ store, onClick }) => {
   const ok = store.status === "ok";
   return (
-      <Button icon={<FontAwesomeIcon icon={ok ? faCheck : faPlug} />}
+      <Button className={classnames({ "ExtraPadding": !ok })}
+              icon={<FontAwesomeIcon icon={ok ? faCheck : faPlug} />}
               intent={ok ? "success" : "none"}
-              title="Check connection"
+              title={ok ? "Connected" : "Connect to Solr"}
+              text={ok ? "" : "Connect"}
               loading={store.status === "loading"}
               onClick={onClick} outlined={ok} />
   );
@@ -51,7 +57,7 @@ export const ServiceUrlSetting = view(({ setting, get, set }) => {
         <ControlGroup fill={true}>
           <InputGroup value={urlStore.url} fill={true}
                       onChange={e => urlStore.setUrl(e.target.value)} />
-          <CheckButton store={stateStore} onClick={() => checkUrl(urlStore.url)} />
+          <ConnectButton store={stateStore} onClick={() => checkUrl(urlStore.url)} />
         </ControlGroup>
       </Setting>
   );
