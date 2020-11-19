@@ -14,10 +14,17 @@ export const ErrorMessage = props => {
 };
 
 export const GenericErrorMessage = ({ error, children }) => {
+  let message;
+  if (error instanceof Error) {
+    message = `${error.name}: ${error.message}`;
+  } else {
+    message = error?.statusText?.replace(/([&/?])/g, "$1\u200b");
+  }
+
   return (
     <ErrorMessage error={error}>
       {children}
-      <pre>{error?.statusText?.replace(/([&/?])/g, "$1\u200b")}</pre>
+      <pre>{message}</pre>
     </ErrorMessage>
   );
 };

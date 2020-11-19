@@ -1,0 +1,4 @@
+.SelectSetting small {
+  font-size: 100%;
+  color: var(--text-color-lighter);
+}

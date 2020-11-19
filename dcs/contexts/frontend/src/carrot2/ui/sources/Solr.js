@@ -77,6 +77,15 @@ autoEffect(() => {
 const searchCurrentCore = async (query, results = 50) => {
   const url = solrServiceConfigStore.serviceUrl;
   const core = solrServiceConfigStore.core;
+
+  if (!core) {
+    return {
+      documents: [],
+      matches: 0,
+      query: ""
+    }
+  }
+
   const result = await ky.get(`${core}/select`, {
     prefixUrl: url,
     timeout: 4000,
@@ -114,6 +123,7 @@ const settings = [
         type: "enum",
         ui: "select",
         label: "Solr collection to search",
+        noOptionsMessage: "Collection list is empty, no content to search.",
         options: () => solrServiceStateStore.cores.map(c => ({ value: c })),
         visible: () => solrServiceStateStore.isUrlValid(),
         get: () => solrServiceConfigStore.core,

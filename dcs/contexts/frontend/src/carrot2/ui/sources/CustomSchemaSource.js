@@ -157,7 +157,7 @@ export const createSource = (schemaInfoStore, resultConfigStore, base) => {
     createResult: (props) => {
       return <CustomSchemaResult {...props} configStore={resultConfigStore} />;
     },
-    createError: () => <GenericSearchEngineErrorMessage />,
+    createError: (e) => <GenericSearchEngineErrorMessage error={e} />,
     createConfig: () => <CustomSchemaResultConfig configStore={resultConfigStore} />,
     createSourceConfig: () => {
       throw new Error("Not available in search app.");
