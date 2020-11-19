@@ -39,8 +39,13 @@ const solrServiceStateStore = createStateStore({
       }).json();
 
       solrServiceConfigStore.serviceUrl = url;
-      solrServiceStateStore.cores = Object.keys(cores.status);
       solrServiceStateStore.status = "ok";
+
+      const coreIds = Object.keys(cores.status);
+      solrServiceStateStore.cores = coreIds;
+      if (coreIds.indexOf(solrServiceConfigStore.core) < 0) {
+        solrServiceConfigStore.core = coreIds[0];
+      }
     } catch (e) {
       solrServiceStateStore.status = "error";
       solrServiceStateStore.message = e instanceof Error ? e.toString() : e;
@@ -49,6 +54,10 @@ const solrServiceStateStore = createStateStore({
   cores: []
 });
 
+const isSearchPossible = () =>
+    solrServiceStateStore.isUrlValid() &&
+    !!solrServiceConfigStore.core;
+
 // Check Solr service URL when the page loads.
 autoEffect(() => {
   if (workbenchSourceStore.source === "solr") {
@@ -56,7 +65,7 @@ autoEffect(() => {
   }
 });
 autoEffect(() => {
-  if (workbenchSourceStore.source === "solr" && solrServiceStateStore.isUrlValid()) {
+  if (workbenchSourceStore.source === "solr" && isSearchPossible()) {
     schemaInfoStore.load(async () => {
       const result = await searchCurrentCore("*:*", 50);
       resultHolder.documents = result.documents;
@@ -111,7 +120,7 @@ const settings = [
         set: (sett, core) => solrServiceConfigStore.core = core
       },
       createFieldChoiceSetting("solr", schemaInfoStore, {
-        visible: () => solrServiceStateStore.isUrlValid()
+        visible: () => isSearchPossible()
       }),
       {
         id: "solr:query",
@@ -123,7 +132,7 @@ const settings = [
   The search query to pass to Solr. Use 
   <a target=_blank href="https://lucene.apache.org/solr/guide/8_6/the-standard-query-parser.html#specifying-terms-for-the-standard-query-parser">Solr query syntax</a>.
 </p>`,
-        visible: () => solrServiceStateStore.isUrlValid()
+        visible: () => isSearchPossible()
       },
     ]
   }
