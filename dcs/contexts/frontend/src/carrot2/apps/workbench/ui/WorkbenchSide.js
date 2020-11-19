@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import "./WorkbenchSide.css";
 
@@ -117,11 +117,23 @@ const runSearch = () => {
 };
 
 const ClusterButton = view(() => {
+  useEffect(() => {
+    const listener = e => {
+      if (e.keyCode === 13 && e.ctrlKey) {
+        runSearch();
+      }
+    };
+
+    window.addEventListener("keypress", listener);
+    return () => window.removeEventListener("keypress", listener);
+  }, [])
+
   return (
       <Button className="ClusterButton"
               intent={parametersStateStore.sourceDirty || parametersStateStore.algorithmDirty ? "primary" : "none"}
               large={true}
               icon={<FontAwesomeIcon icon={faLightbulbOn} />}
+              title="Press Ctrl+Enter to perform clustering"
               onClick={runSearch}
               loading={searchResultStore.loading || clusterStore.loading}>
         Cluster
