@@ -16,7 +16,7 @@ export const CheckButton = view(({ store, onClick }) => {
               intent={ok ? "success" : "none"}
               title="Check connection"
               loading={store.status === "loading"}
-              onClick={onClick} />
+              onClick={onClick} outlined={ok} />
   );
 });
 
