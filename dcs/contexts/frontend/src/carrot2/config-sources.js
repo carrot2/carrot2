@@ -16,6 +16,7 @@ import {
 } from "./ui/sources/PubMed.js";
 import { localFileSourceDescriptor } from "./ui/sources/LocalFile.js";
 import { solrSourceDescriptor } from "./ui/sources/Solr.js";
+import { esSourceDescriptor } from "./ui/sources/Elasticsearch.js";
 
 export const sources = {
   "web": {
@@ -62,7 +63,8 @@ export const sources = {
   },
 
   "file": localFileSourceDescriptor,
-  "solr": solrSourceDescriptor
+  "solr": solrSourceDescriptor,
+  "es": esSourceDescriptor
 };
 
 export const searchAppSources = {

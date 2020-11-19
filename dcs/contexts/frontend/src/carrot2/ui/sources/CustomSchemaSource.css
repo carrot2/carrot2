@@ -1,7 +1,3 @@
-.FieldChoiceSetting {
-  min-height: 6em;
-}
-
 .FieldChoiceSetting .bp3-form-content {
   position: relative;
 }
@@ -14,8 +10,7 @@
 }
 
 .FieldChoiceSetting .FieldList {
-  margin-bottom: 1em;
-  max-height: 16em;
+  max-height: 16.5em;
   overflow: auto;
 }
 
