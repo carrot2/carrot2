@@ -25,7 +25,8 @@ const {
 const solrServiceConfigStore = persistentStore("workbench:source:solr:serviceConfig", {
   serviceUrl: "http://localhost:8983/solr",
   core: undefined,
-  maxResults: 100
+  maxResults: 100,
+  extraHttpGetParams: ""
 });
 
 const solrServiceStateStore = createStateStore({
@@ -75,7 +76,7 @@ autoEffect(() => {
   }
 });
 
-const searchCurrentCore = async (query, results = 50) => {
+const searchCurrentCore = async (query, results = 50, extraParams) => {
   const url = solrServiceConfigStore.serviceUrl;
   const core = solrServiceConfigStore.core;
 
@@ -90,10 +91,10 @@ const searchCurrentCore = async (query, results = 50) => {
   const result = await ky.get(`${core}/select`, {
     prefixUrl: url,
     timeout: 4000,
-    searchParams: {
+    searchParams: Object.assign({}, extraParams,{
       q: query,
       rows: results
-    }
+    })
   }).json();
 
   return {
@@ -119,6 +120,7 @@ const settings = [
         stateStore: solrServiceStateStore,
         checkUrl: solrServiceStateStore.checkServiceUrl
       },
+
       {
         id: "solr:core",
         type: "enum",
@@ -130,9 +132,11 @@ const settings = [
         get: () => solrServiceConfigStore.core,
         set: (sett, core) => solrServiceConfigStore.core = core
       },
+
       createFieldChoiceSetting("solr", schemaInfoStore, {
         visible: () => isSearchPossible()
       }),
+
       {
         id: "solr:query",
         ...storeAccessors(queryStore, "query"),
@@ -145,6 +149,7 @@ const settings = [
 </p>`,
         visible: () => isSearchPossible()
       },
+
       {
         id: "solr:maxResults",
         type: "number",
@@ -156,13 +161,33 @@ const settings = [
         visible: () => isSearchPossible(),
         ...storeAccessors(solrServiceConfigStore, "maxResults")
       },
+
+      {
+        id: "solr:extraParameters",
+        type: "string",
+        label: "Additional search request parameters",
+        description: `
+<p>
+  The extra HTTP GET parameters to pass to the <code>/select</code> endpoint, for example: 
+</p>
+<pre>defType=dismax&fq=category:important</pre>`,
+        visible: () => isSearchPossible(),
+        ...storeAccessors(solrServiceConfigStore, "extraHttpGetParams")
+      }
     ]
   }
 ];
 
 const solrFileSource = async (query) => {
   resultConfigStore.load(schemaInfoStore.fieldStats, resultHolder);
-  return searchCurrentCore(query, solrServiceConfigStore.maxResults);
+
+  const params = {};
+  new URLSearchParams(solrServiceConfigStore.extraHttpGetParams)
+      .forEach((val, key) => {
+        params[key] = val;
+      });
+
+  return searchCurrentCore(query, solrServiceConfigStore.maxResults, params);
 };
 
 export const solrSourceDescriptor = createSource(schemaInfoStore, resultConfigStore, {

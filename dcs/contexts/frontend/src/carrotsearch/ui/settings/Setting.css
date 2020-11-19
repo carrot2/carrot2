@@ -44,6 +44,7 @@
 .SettingDescription > p:last-of-type {
   margin-bottom: 0;
 }
+.SettingDescription pre,
 .SettingDescription code {
   overflow-wrap: anywhere;
 }
