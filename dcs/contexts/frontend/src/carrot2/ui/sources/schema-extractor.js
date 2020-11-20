@@ -198,7 +198,6 @@ const collectFieldInformation = json => {
   });
 
   collectFileTypeScores(fields, json.length);
-  console.log(fields);
   return fields;
 };
 
@@ -206,7 +205,7 @@ export const extractSchema = (documents, logger) => {
   const fields = collectFieldInformation(documents);
 
   const allFields = fields.map(f => f.field);
-  const naturalTextFields = fields.filter(f => f.naturalTextScore >= 1).map(f => f.field);
+  const naturalTextFields = fields.filter(f => f.naturalTextScore >= 8).map(f => f.field);
 
   return {
     fieldStats: fields,
