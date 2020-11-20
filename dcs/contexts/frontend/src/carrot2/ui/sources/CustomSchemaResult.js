@@ -36,7 +36,7 @@ export const createResultConfigStore = (key) => {
           } else if (field.propScore > 1 && field.propScore > field.tagScore && field.distinct
               > 1) {
             map[field.field] = "property";
-          } else if (field.naturalTextScore > 2) {
+          } else if (field.naturalTextScore >= 8) {
             map[field.field] = "body";
           } else {
             map[field.field] = "not shown";

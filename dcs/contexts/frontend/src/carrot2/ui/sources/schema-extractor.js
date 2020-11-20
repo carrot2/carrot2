@@ -142,7 +142,7 @@ const collectFileTypeScores = (fields, docCount) => {
     }
 
     if (/title/i.test(f.field)) {
-      titleScore *= 2.0;
+      titleScore *= 4.0;
       naturalTextScore *= 2.0;
     }
 
@@ -151,15 +151,24 @@ const collectFileTypeScores = (fields, docCount) => {
       naturalTextScore *= 2.0;
     }
 
-    if (f.distinct === docCount) {
+    if (f.distinct === docCount && f.count.avg === 1) {
       titleScore *= 2.0;
-      naturalTextScore *= 2.0;
       idScore *= 2;
+    }
+
+    const distinctRatio = f.distinct / (f.count.avg * docCount);
+    if (distinctRatio === 1) {
+      naturalTextScore *= 2.0;
     } else {
+      // Penalize fields that contain repeated values.
+      naturalTextScore *= 1 / Math.exp(Math.abs(2 * (distinctRatio - 1)))
+    }
+
+    if (f.distinct !== docCount) {
       idScore = 0;
     }
 
-    if (f.length.avg > 10 && f.length.avg < 140) {
+    if (f.length.avg > 10 && f.length.avg < 200) {
       titleScore *= 2.0;
     }
 
@@ -189,6 +198,7 @@ const collectFieldInformation = json => {
   });
 
   collectFileTypeScores(fields, json.length);
+  console.log(fields);
   return fields;
 };
 
