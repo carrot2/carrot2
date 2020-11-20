@@ -28,7 +28,6 @@ First release:
 * Auto run clustering on setting change
 * export of parameters JSON for pasting into code
 * tuning of stopwords (Lingo3G)
-* maxCharsPerResult -> remember per-source?
 * Custom document renderer: display of URL-typed fields
 * Hide data source and algorithm combo boxes to make space for settings
 
