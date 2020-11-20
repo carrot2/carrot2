@@ -96,7 +96,7 @@ const FieldRoles = ({ configStore }) => {
   return (
       <div className="FieldRoles">
         {
-          Object.keys(configStore.fieldRoles).map(f => {
+          Object.keys(configStore.fieldRoles).sort().map(f => {
             return <FieldRole key={f} field={f} configStore={configStore} />;
           })
         }

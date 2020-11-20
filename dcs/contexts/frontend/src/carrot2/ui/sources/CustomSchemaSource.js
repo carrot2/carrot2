@@ -101,7 +101,7 @@ const FieldList = view(({ schemaInfoStore }) => {
       <div className="FieldList">
         {noContentMessage}
         {
-          availableForClustering.map(f => {
+          availableForClustering.sort().map(f => {
             return <Checkbox label={f} key={f} checked={toCluster.has(f)}
                              onChange={e => {
                                e.target.checked ? toCluster.add(f) : toCluster.delete(f);
