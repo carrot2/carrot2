@@ -30,7 +30,7 @@
 }
 .CustomSchemeResultConfig .main .bp3-label span:first-child {
   flex-grow: 1;
-  max-width: 10em;
+  width: 10em;
   overflow: hidden;
   text-overflow: ellipsis;
   margin-right: 0.5em;
