@@ -6,6 +6,9 @@
   max-height: 24em;
   overflow-y: auto;
 }
+.CustomSchemeResultConfig .FieldRoles .empty select {
+  color: var(--text-color-lightest);
+}
 .CustomSchemeResultConfig .ResultPreview {
   width: 24em;
   padding: 0.25em;

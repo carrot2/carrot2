@@ -77,9 +77,10 @@ const FIELD_ROLES = [
   "not shown", "title", "body", "tag", "property", "id"
 ];
 const FieldRole = view(({ field, configStore }) => {
+  const role = configStore.fieldRoles[field];
   return (
       <FormGroup label={<><span>{field}</span><small>show as</small></>} inline={true}>
-        <HTMLSelect value={configStore.fieldRoles[field]}
+        <HTMLSelect value={role} className={role === "not shown" ? "empty" : null}
                     onChange={e => configStore.fieldRoles[field] = e.currentTarget.value}>
           {
             FIELD_ROLES.map(role => <option key={role} value={role}>{role}</option>)
