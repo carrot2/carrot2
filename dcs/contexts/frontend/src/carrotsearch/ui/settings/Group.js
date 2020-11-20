@@ -12,8 +12,10 @@ import { SelectSetting } from "./SelectSetting.js";
 import { StringArraySetting } from "./StringArraySetting.js";
 import { FileSetting } from "./FileSetting.js";
 import { ServiceUrlSetting } from "./ServiceUrlSetting.js";
+import { persistentStore } from "../../store/persistent-store.js";
+import { displayNoneIf } from "../../../carrot2/apps/search-app/ui/Optional.js";
 
-const visible = visible => visible ? null : { display: "none" };
+const foldingStore = persistentStore("carrotsearch:settings:folding", {});
 
 export const Group = view(({ setting, get, set, className }) => {
   const { label, description } = setting;
@@ -24,18 +26,21 @@ export const Group = view(({ setting, get, set, className }) => {
   const settings = setting.settings.map(s => {
     const settingVisible = !s.visible || s.visible();
     groupVisible |= settingVisible;
-    return <section key={s.id} id={s.id} style={visible(settingVisible)}>
+    return <section key={s.id} id={s.id} style={displayNoneIf(!settingVisible)}>
       {getFactory(s)(s, s.get || setting.get || get, s.set || setting.set || set)}
     </section>
   });
 
+  const groupId = setting.id;
   if (label) {
-    return <Section className={className} label={label} style={visible(groupVisible)}>
+    return <Section className={className} label={label} style={displayNoneIf(!groupVisible)}
+                    isFolded={() => foldingStore[groupId]}
+                    onCaretClick={() => foldingStore[groupId] = !foldingStore[groupId]}>
       <p>{description}</p>
       {settings}
     </Section>;
   } else {
-    return <section className={className} style={visible(groupVisible)}>{settings}</section>;
+    return <section className={className} style={displayNoneIf(!groupVisible)}>{settings}</section>;
   }
 });
 
