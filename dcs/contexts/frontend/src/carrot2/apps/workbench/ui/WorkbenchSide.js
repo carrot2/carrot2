@@ -8,13 +8,17 @@ import { sources } from "../../../config-sources.js";
 import { algorithms } from "../../../config-algorithms.js";
 import { algorithmStore, clusterStore, searchResultStore } from "../../../store/services.js";
 import { queryStore } from "../store/query-store.js";
+import { settingsStateStore } from "./SettingsTools.js";
 
 import { WorkbenchSourceAlgorithm} from "./WorkbenchSourceAlgorithm.js";
 
 import { Button } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLightbulbOn } from "@fortawesome/pro-regular-svg-icons";
-import { Settings } from "../../../../carrotsearch/ui/settings/Settings.js";
+import {
+  addAdvancedSettingsVisibility,
+  Settings
+} from "../../../../carrotsearch/ui/settings/Settings.js";
 import { SettingsTools } from "./SettingsTools.js";
 import { workbenchSourceStore } from "../store/source-store.js";
 
@@ -52,6 +56,8 @@ const settings = {
     })
   }).flat(2)
 };
+
+addAdvancedSettingsVisibility(settings.settings, () => settingsStateStore.showAdvancedSettings);
 
 const parametersStateStore = store({
   sourceDirty: false,

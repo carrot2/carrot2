@@ -88,6 +88,7 @@ const solrSettings = [
       {
         id: "solr:extraParameters",
         type: "string",
+        advanced: true,
         label: "Additional search request parameters",
         description: `
 <p>

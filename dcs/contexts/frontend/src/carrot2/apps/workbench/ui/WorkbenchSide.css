@@ -54,3 +54,6 @@
 .WorkbenchSide .SettingsTools {
   margin-top: var(--leading);
 }
+.WorkbenchSide .SettingsTools button:not(:last-child) {
+  margin-right: 0.25em;
+}

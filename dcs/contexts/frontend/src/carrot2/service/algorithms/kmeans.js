@@ -2,6 +2,7 @@ import descriptor
   from "./descriptors/org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm.json";
 import { persistentStore } from "../../../carrotsearch/store/persistent-store.js";
 import {
+  advanced,
   collectDefaults,
   getDescriptorsById,
   settingFromDescriptor,
@@ -28,8 +29,8 @@ const languageModelSettings = [
   ...settingFromRecursive("matrixBuilder.termWeighting", getterProvider),
   settingFrom("matrixBuilder.boostFields"),
   settingFrom("matrixBuilder.boostedFieldWeight"),
-  settingFrom("matrixBuilder.maxWordDf"),
-  settingFrom("preprocessing.wordDfThreshold"),
+  advanced(settingFrom("matrixBuilder.maxWordDf")),
+  advanced(settingFrom("preprocessing.wordDfThreshold")),
   settingFrom("useDimensionalityReduction"),
   ...settingFromRecursive("matrixReducer.factorizationFactory", getterProvider),
   settingFrom("matrixBuilder.maximumMatrixSize")

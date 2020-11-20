@@ -1,6 +1,7 @@
 import descriptor from "./descriptors/org.carrot2.clustering.lingo.LingoClusteringAlgorithm.json";
 import { persistentStore } from "../../../carrotsearch/store/persistent-store.js";
 import {
+  advanced,
   collectDefaults,
   getDescriptorsById,
   settingFromDescriptor,
@@ -21,13 +22,13 @@ const clusterSettings = [
   settingFrom("preprocessing.documentAssigner.minClusterSize"),
   ...settingFromRecursive("clusterBuilder.labelAssigner", getterProvider, () => ({ ui: "radio" })),
   settingFrom("preprocessing.documentAssigner.exactPhraseAssignment"),
-  settingFrom("clusterBuilder.clusterMergingThreshold"),
-  settingFrom("scoreWeight", { label: "Size-score sorting ratio" }),
+  advanced(settingFrom("clusterBuilder.clusterMergingThreshold")),
+  advanced(settingFrom("scoreWeight", { label: "Size-score sorting ratio" })),
 ];
 const labelSettings = [
   settingFrom("clusterBuilder.phraseLabelBoost"),
-  settingFrom("clusterBuilder.phraseLengthPenaltyStart"),
-  settingFrom("clusterBuilder.phraseLengthPenaltyStop"),
+  advanced(settingFrom("clusterBuilder.phraseLengthPenaltyStart")),
+  advanced(settingFrom("clusterBuilder.phraseLengthPenaltyStop")),
   ...settingFromFilter("preprocessing.labelFilters.completeLabelFilter", getterProvider),
   ...settingFromFilter("preprocessing.labelFilters.genitiveLabelFilter", getterProvider),
   ...settingFromFilter("preprocessing.labelFilters.minLengthLabelFilter", getterProvider),
@@ -38,11 +39,11 @@ const labelSettings = [
 ];
 const languageModelSettings = [
   ...settingFromRecursive("matrixBuilder.termWeighting", getterProvider),
-  settingFrom("matrixBuilder.boostFields"),
+  settingFrom("matrixBuilder.boostFields", { label: "Boosted fields" }),
   settingFrom("matrixBuilder.boostedFieldWeight"),
-  settingFrom("preprocessing.phraseDfThreshold"),
-  settingFrom("preprocessing.wordDfThreshold"),
-  settingFrom("matrixBuilder.maxWordDf"),
+  advanced(settingFrom("preprocessing.phraseDfThreshold")),
+  advanced(settingFrom("preprocessing.wordDfThreshold")),
+  advanced(settingFrom("matrixBuilder.maxWordDf")),
   ...settingFromRecursive("matrixReducer.factorizationFactory", getterProvider),
   settingFrom("matrixBuilder.maximumMatrixSize")
 ];

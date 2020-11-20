@@ -223,3 +223,7 @@ export const collectParameters = (settings, getter) => settings.reduce(
     }, {}
 );
 
+export const advanced = setting => {
+  setting.advanced = true;
+  return setting;
+}

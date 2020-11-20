@@ -1,6 +1,11 @@
 import descriptor from "./descriptors/org.carrot2.clustering.stc.STCClusteringAlgorithm.json";
 import { persistentStore } from "../../../carrotsearch/store/persistent-store.js";
-import { collectDefaults, getDescriptorsById, settingFromDescriptor } from "./attributes.js";
+import {
+  advanced,
+  collectDefaults,
+  getDescriptorsById,
+  settingFromDescriptor
+} from "./attributes.js";
 
 const descriptorsById = getDescriptorsById(descriptor);
 
@@ -12,9 +17,9 @@ const clusterSettings = [
   settingFrom("minBaseClusterScore"),
   settingFrom("minBaseClusterSize"),
   settingFrom("documentCountBoost"),
-  settingFrom("mergeStemEquivalentBaseClusters"),
-  settingFrom("mergeThreshold"),
-  settingFrom("scoreWeight")
+  advanced(settingFrom("mergeStemEquivalentBaseClusters")),
+  advanced(settingFrom("mergeThreshold")),
+  advanced(settingFrom("scoreWeight"))
 ];
 const labelSettings = [
   settingFrom("singleTermBoost"),
@@ -22,12 +27,12 @@ const labelSettings = [
   settingFrom("optimalPhraseLengthDev"),
   settingFrom("maxWordsPerLabel"),
   settingFrom("maxPhrasesPerLabel"),
-  settingFrom("maxPhraseOverlap"),
-  settingFrom("mostGeneralPhraseCoverage"),
+  advanced(settingFrom("maxPhraseOverlap")),
+  advanced(settingFrom("mostGeneralPhraseCoverage"))
 ];
 const languageModelSettings = [
-  settingFrom("ignoreWordIfInHigherDocsPercent"),
-  settingFrom("preprocessing.wordDfThreshold"),
+  advanced(settingFrom("ignoreWordIfInHigherDocsPercent", { label: "Max relative word DF" })),
+  advanced(settingFrom("preprocessing.wordDfThreshold"))
 ];
 
 const parameterStore = persistentStore(

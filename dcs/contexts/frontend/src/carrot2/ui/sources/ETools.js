@@ -118,6 +118,7 @@ export const etoolsSettings = [
         ui: "radio",
         inline: true,
         label: "Data sources",
+        advanced: true,
         options: etoolsDataSourcesOptions,
         description: `
 <p>
@@ -129,6 +130,7 @@ export const etoolsSettings = [
         ...storeAccessors(etoolsSourceConfigStore, "partner"),
         type: "string",
         label: "Partner",
+        advanced: true,
         description: `
 <p>
   If you have a custom service agreement with eTools, provide your partner ID here.  
@@ -139,6 +141,7 @@ export const etoolsSettings = [
         ...storeAccessors(etoolsSourceConfigStore, "customerId"),
         type: "string",
         label: "Customer ID",
+        advanced: true,
         description: `
 <p>
   Customer ID, optional. If you have a custom service agreement with eTools, provide your customer ID here.  
