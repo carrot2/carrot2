@@ -2,7 +2,7 @@ import React from 'react';
 
 import "./CustomSchemaResult.css";
 
-import { FormGroup, HTMLSelect } from "@blueprintjs/core";
+import { FormGroup, HTMLSelect, NumericInput } from "@blueprintjs/core";
 import { store, view } from "@risingstack/react-easy-state";
 
 import { persistentLruStore } from "../../../carrotsearch/store/persistent-store.js";
@@ -21,6 +21,8 @@ export const createResultConfigStore = (key) => {
   const fieldConfigStore = store({
     fieldRoles: {},
     resultForPreview: undefined,
+    maxPropertyValuesToShow: 3,
+    maxTagValuesToShow: 8,
     isEmpty: () => Object.keys(fieldConfigStore.fieldRoles).length === 0,
     load: (fieldStats, result) => {
       if (fieldStats.length === 0) {
@@ -120,14 +122,34 @@ export const ResultPreview = view(({ configStore }) => {
   )
 });
 
-export const CustomSchemaResultConfig = view(({ configStore, previewResultProvider }) => {
+export const FieldConfigs = view(({ configStore }) => {
+  return (
+      <div className="FieldConfigs">
+        <FormGroup inline={true} label="Max property values" labelFor="max-property-values">
+          <NumericInput id="max-property-values" min={1} value={configStore.maxPropertyValuesToShow}
+                        onValueChange={v => configStore.maxPropertyValuesToShow = v}
+                        majorStepSize={5} stepSize={1} minorStepSize={1} />
+        </FormGroup>
+        <FormGroup inline={true} label="Max tag values" labelFor="max-tag-values">
+          <NumericInput id="max-tag-values" min={1} value={configStore.maxTagValuesToShow}
+                        onValueChange={v => configStore.maxTagValuesToShow = v}
+                        majorStepSize={5} stepSize={1} minorStepSize={1} />
+        </FormGroup>
+      </div>
+  );
+});
+
+export const CustomSchemaResultConfig = view(({ configStore }) => {
   return (
       <div className="CustomSchemeResultConfig" style={displayNoneIf(configStore.isEmpty())}>
-        <div>
-          <p>Choose the fields to show:</p>
-          <FieldRoles configStore={configStore} />
+        <div className="main">
+          <div>
+            <p>Choose the fields to show:</p>
+            <FieldRoles configStore={configStore} />
+          </div>
+          <ResultPreview configStore={configStore} />
         </div>
-        <ResultPreview configStore={configStore} />
+        <FieldConfigs configStore={configStore} />
       </div>
   );
 });
@@ -158,8 +180,15 @@ export const CustomSchemaResult = view(({ document, rank, configStore }) => {
   }, []);
 
   const allProperties = roles["property"].reduce((arr, field) => {
-    const val = wrapIfNotArray(document[field]);
-    arr.push({ field: field, text: val.join(", ") })
+    const val = wrapIfNotArray(document[field]).reduce((arr, val) => {
+      if (arr.length < configStore.maxPropertyValuesToShow && !isEmpty(val)) {
+        arr.push(val);
+      }
+      return arr;
+    }, []);
+    if (val.length > 0) {
+      arr.push({ field: field, text: val.join(", ") });
+    }
     return arr;
   }, []);
 
@@ -187,7 +216,7 @@ export const CustomSchemaResult = view(({ document, rank, configStore }) => {
 
         {
           [...roles["id"], ...roles["tag"]].map(field => {
-            const tags = wrapIfNotArray(document[field]);
+            const tags = wrapIfNotArray(document[field]).slice(0, configStore.maxTagValuesToShow);
             return (
                 <div className="tags" key={field}>
                   <span>{field}</span>
