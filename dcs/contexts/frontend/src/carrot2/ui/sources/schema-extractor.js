@@ -1,17 +1,22 @@
 import { Stats } from "fast-stats";
 
-import { forEachOwnProp, incrementInMap } from "../../../carrotsearch/lang/objects.js";
+import {
+  forEachOwnProp,
+  incrementInMap
+} from "../../../carrotsearch/lang/objects.js";
 
 /**
  * Collects all field names appearing in the submitted JSON documents.
  */
 const collectFieldNames = json => {
-  return Array.from(json.reduce((set, entry) => {
-    forEachOwnProp(entry, (val, prop) => {
-      set.add(prop);
-    });
-    return set;
-  }, new Set()));
+  return Array.from(
+    json.reduce((set, entry) => {
+      forEachOwnProp(entry, (val, prop) => {
+        set.add(prop);
+      });
+      return set;
+    }, new Set())
+  );
 };
 
 /**
@@ -27,12 +32,17 @@ const collectFieldMajorityTypes = (json, fields) => {
   json.forEach(entry => {
     forEachOwnProp(entry, (val, prop) => {
       const v = Array.isArray(val) ? val?.[0] : val;
-      incrementInMap(typeCounts.get(prop), Object.prototype.toString.call(v), 1);
+      incrementInMap(
+        typeCounts.get(prop),
+        Object.prototype.toString.call(v),
+        1
+      );
     });
   });
 
   return Array.from(typeCounts.keys()).reduce((map, f) => {
-    let maxCount = 0, majorityType = null;
+    let maxCount = 0,
+      majorityType = null;
     typeCounts.get(f).forEach((count, type) => {
       if (maxCount < count) {
         maxCount = count;
@@ -51,7 +61,7 @@ const countSpaces = str => {
   }
   let spaces = 0;
   for (let i = 0; i < str.length; i++) {
-    if (str.charAt(i) === ' ') {
+    if (str.charAt(i) === " ") {
       spaces++;
     }
   }
@@ -131,7 +141,8 @@ const collectFieldValueStats = (json, fields) => {
 const collectFileTypeScores = (fields, docCount) => {
   fields.forEach(f => {
     let idScore = Math.pow(2, 16 / f.length.avg);
-    let tagScore = (f.count.avg - 1) * f.distinct / (docCount * (f.spaces.avg + 1));
+    let tagScore =
+      ((f.count.avg - 1) * f.distinct) / (docCount * (f.spaces.avg + 1));
     let propScore = Math.pow(2, 16 / f.distinct) / (f.spaces.avg + 1);
     let titleScore = f.length.avg >= 4 ? 1.0 : 0;
     let naturalTextScore = f.spaces.avg;
@@ -146,7 +157,11 @@ const collectFileTypeScores = (fields, docCount) => {
       naturalTextScore *= 2.0;
     }
 
-    if (/content|body|abstract|comment|question|answer|post|message/i.test(f.field)) {
+    if (
+      /content|body|abstract|comment|question|answer|post|message/i.test(
+        f.field
+      )
+    ) {
       titleScore *= 2.0;
       naturalTextScore *= 2.0;
     }
@@ -161,7 +176,7 @@ const collectFileTypeScores = (fields, docCount) => {
       naturalTextScore *= 2.0;
     } else {
       // Penalize fields that contain repeated values.
-      naturalTextScore *= 1 / Math.exp(Math.abs(2 * (distinctRatio - 1)))
+      naturalTextScore *= 1 / Math.exp(Math.abs(2 * (distinctRatio - 1)));
     }
 
     if (f.distinct !== docCount) {
@@ -191,10 +206,13 @@ const collectFieldInformation = json => {
 
   // Combine all the information
   const fields = allFieldNames.map(f => {
-    return Object.assign({
-      field: f,
-      type: types.get(f)
-    }, stats.get(f));
+    return Object.assign(
+      {
+        field: f,
+        type: types.get(f)
+      },
+      stats.get(f)
+    );
   });
 
   collectFileTypeScores(fields, json.length);
@@ -205,7 +223,9 @@ export const extractSchema = (documents, logger) => {
   const fields = collectFieldInformation(documents);
 
   const allFields = fields.map(f => f.field);
-  const naturalTextFields = fields.filter(f => f.naturalTextScore >= 8).map(f => f.field);
+  const naturalTextFields = fields
+    .filter(f => f.naturalTextScore >= 8)
+    .map(f => f.field);
 
   return {
     fieldStats: fields,
@@ -214,4 +234,3 @@ export const extractSchema = (documents, logger) => {
     fieldsToCluster: naturalTextFields
   };
 };
-

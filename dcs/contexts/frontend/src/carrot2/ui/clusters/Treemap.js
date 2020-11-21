@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 import { clusterStore } from "../../store/services.js";
 import { clusterSelectionStore } from "../../store/selection.js";
@@ -13,16 +13,17 @@ const darkThemeOptions = {
   groupHoverStrokeLightnessShift: 20,
   groupSelectionOutlineColor: "rgba(255, 255, 255, 0.6)",
   attributionTheme: "dark",
-  groupColorDecorator: function(opts, props, vars) {
+  groupColorDecorator: function (opts, props, vars) {
     if (props.level === 0) {
-      vars.groupColor.s = props.group.cluster && props.group.cluster.unclustered ? 0 : 60;
+      vars.groupColor.s =
+        props.group.cluster && props.group.cluster.unclustered ? 0 : 60;
     }
     vars.groupColor.l = 25;
     if (!props.hasChildren && !props.selected && !props.hovered) {
       vars.groupColor.a = 0.95;
     }
     if (props.group.rank) {
-      vars.groupColor.l = 10 + 40 * props.group.rank
+      vars.groupColor.l = 10 + 40 * props.group.rank;
     }
     vars.labelColor = "white";
   }
@@ -33,22 +34,29 @@ const lightThemeOptions = {
   groupHoverStrokeLightnessShift: -20,
   attributionTheme: "light",
   groupSelectionOutlineColor: "rgba(0, 0, 0, 0.6)",
-  groupColorDecorator: function(opts, props, vars) {
+  groupColorDecorator: function (opts, props, vars) {
     if (props.level === 0) {
-      vars.groupColor.s = props.group.cluster && props.group.cluster.unclustered ? 0 : 60;
+      vars.groupColor.s =
+        props.group.cluster && props.group.cluster.unclustered ? 0 : 60;
     }
     vars.groupColor.l = 55;
     if (!props.hasChildren && !props.selected && !props.hovered) {
       vars.groupColor.a = 0.95;
     }
     if (props.group.rank) {
-      vars.groupColor.l = 35 + 40 * props.group.rank
+      vars.groupColor.l = 35 + 40 * props.group.rank;
     }
     vars.labelColor = "black";
   }
 };
 
-function buildOptions(theme, layout, stacking, clusterSelectionStore, documentSelectionStore) {
+function buildOptions(
+  theme,
+  layout,
+  stacking,
+  clusterSelectionStore,
+  documentSelectionStore
+) {
   const flattened = stacking === "flattened";
 
   return {
@@ -60,7 +68,6 @@ function buildOptions(theme, layout, stacking, clusterSelectionStore, documentSe
     finalCompleteDrawMaxDuration: 20000,
     finalIncrementalDrawMaxDuration: 20000,
     wireframeLabelDrawing: "always",
-
 
     layout: layout,
     stacking: stacking,
@@ -85,8 +92,12 @@ function buildOptions(theme, layout, stacking, clusterSelectionStore, documentSe
     groupSelectionOutlineWidth: 3.5,
 
     onGroupSelectionChanged: function (e) {
-      clusterSelectionStore.replaceSelection(e.groups.filter(g => !!g.cluster).map(g => g.cluster));
-      documentSelectionStore.replaceSelection(e.groups.filter(g => !!g.document).map(g => g.document));
+      clusterSelectionStore.replaceSelection(
+        e.groups.filter(g => !!g.cluster).map(g => g.cluster)
+      );
+      documentSelectionStore.replaceSelection(
+        e.groups.filter(g => !!g.document).map(g => g.document)
+      );
     },
 
     groupLabelDecorator: (opts, props, vars) => {
@@ -118,21 +129,40 @@ export const Treemap = ({ visible, configStore, implRef }) => {
   });
   clusterStore.documents.forEach(ignored => {});
 
-  const [ dataObject ] = useDataObject(clusterStore.clusters, clusterStore.documents, visible, configStore.includeResults);
-  const [ selection ] = useSelection(clusterSelectionStore,
-    documentSelectionStore, dataObject);
+  const [dataObject] = useDataObject(
+    clusterStore.clusters,
+    clusterStore.documents,
+    visible,
+    configStore.includeResults
+  );
+  const [selection] = useSelection(
+    clusterSelectionStore,
+    documentSelectionStore,
+    dataObject
+  );
 
-  const [ options, setOptions ] = useState({});
+  const [options, setOptions] = useState({});
   const theme = themeStore.theme;
   useEffect(() => {
-    setOptions(buildOptions(theme, configStore.layout, configStore.stacking,
-      clusterSelectionStore, documentSelectionStore));
-  }, [ theme, configStore.layout, configStore.stacking ]);
+    setOptions(
+      buildOptions(
+        theme,
+        configStore.layout,
+        configStore.stacking,
+        clusterSelectionStore,
+        documentSelectionStore
+      )
+    );
+  }, [theme, configStore.layout, configStore.stacking]);
 
   return (
-    <FoamTree implRef={implRef} options={options} dataObject={dataObject} selection={selection} />
+    <FoamTree
+      implRef={implRef}
+      options={options}
+      dataObject={dataObject}
+      selection={selection}
+    />
   );
 };
 
-Treemap.propTypes = {
-};
+Treemap.propTypes = {};

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import "./WorkbenchResults.css";
 
@@ -18,7 +18,7 @@ import { workbenchSourceStore } from "../store/source-store.js";
 
 const uiStore = persistentStore("workbench:ui", {
   clusterView: "folders"
-})
+});
 
 const ResultStats = view(() => {
   const stats = [
@@ -45,38 +45,44 @@ const ResultStats = view(() => {
   ];
 
   return (
-      <div className="stats">
-        <Stats stats={stats} />
-      </div>
+    <div className="stats">
+      <Stats stats={stats} />
+    </div>
   );
 });
 
 const WorkbenchMain = view(() => {
   return (
-      <div className="WorkbenchMain">
-        <ResultStats />
-        <div className="clusters">
-          <Views activeView={uiStore.clusterView} views={clusterViews}
-                 onViewChange={newView => uiStore.clusterView = newView}>
-            <Loading store={clusterStore} />
-          </Views>
-        </div>
-        <div className="docs">
-          <Views views={resultsViews} activeView="list"
-                 onViewChange={() => {}}
-                 source={sources[workbenchSourceStore.source]}>
-            <Loading store={searchResultStore} />
-          </Views>
-        </div>
+    <div className="WorkbenchMain">
+      <ResultStats />
+      <div className="clusters">
+        <Views
+          activeView={uiStore.clusterView}
+          views={clusterViews}
+          onViewChange={newView => (uiStore.clusterView = newView)}
+        >
+          <Loading store={clusterStore} />
+        </Views>
       </div>
+      <div className="docs">
+        <Views
+          views={resultsViews}
+          activeView="list"
+          onViewChange={() => {}}
+          source={sources[workbenchSourceStore.source]}
+        >
+          <Loading store={searchResultStore} />
+        </Views>
+      </div>
+    </div>
   );
 });
 
 export const WorkbenchResults = () => {
   return (
-      <div className="WorkbenchResults">
-        <WorkbenchSide />
-        <WorkbenchMain />
-      </div>
+    <div className="WorkbenchResults">
+      <WorkbenchSide />
+      <WorkbenchMain />
+    </div>
   );
 };

@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 import { view } from "@risingstack/react-easy-state";
 
@@ -26,46 +26,62 @@ export const Group = view(({ setting, get, set, className }) => {
   const settings = setting.settings.map(s => {
     const settingVisible = !s.visible || s.visible();
     groupVisible |= settingVisible;
-    return <section key={s.id} id={s.id} style={displayNoneIf(!settingVisible)}>
-      {getFactory(s)(s, s.get || setting.get || get, s.set || setting.set || set)}
-    </section>
+    return (
+      <section key={s.id} id={s.id} style={displayNoneIf(!settingVisible)}>
+        {getFactory(s)(
+          s,
+          s.get || setting.get || get,
+          s.set || setting.set || set
+        )}
+      </section>
+    );
   });
 
   const groupId = setting.id;
   if (label) {
-    return <Section className={className} label={label} style={displayNoneIf(!groupVisible)}
-                    isFolded={() => foldingStore[groupId]}
-                    onCaretClick={() => foldingStore[groupId] = !foldingStore[groupId]}>
-      <p>{description}</p>
-      {settings}
-    </Section>;
+    return (
+      <Section
+        className={className}
+        label={label}
+        style={displayNoneIf(!groupVisible)}
+        isFolded={() => foldingStore[groupId]}
+        onCaretClick={() => (foldingStore[groupId] = !foldingStore[groupId])}
+      >
+        <p>{description}</p>
+        {settings}
+      </Section>
+    );
   } else {
-    return <section className={className} style={displayNoneIf(!groupVisible)}>{settings}</section>;
+    return (
+      <section className={className} style={displayNoneIf(!groupVisible)}>
+        {settings}
+      </section>
+    );
   }
 });
 
 const factories = {
-  "group": (s, get, set) => {
+  group: (s, get, set) => {
     return <Group setting={s} get={get} set={set} />;
   },
 
-  "boolean": (s, get, set) => {
+  boolean: (s, get, set) => {
     return <BooleanSetting setting={s} get={get} set={set} />;
   },
 
-  "string": (s, get, set) => {
-    return <StringSetting setting={s} get={get} set={set} />
+  string: (s, get, set) => {
+    return <StringSetting setting={s} get={get} set={set} />;
   },
 
-  "file": (s, get, set) => {
-    return <FileSetting setting={s} get={get} set={set} />
+  file: (s, get, set) => {
+    return <FileSetting setting={s} get={get} set={set} />;
   },
 
   "string-array": (s, get, set) => {
-    return <StringArraySetting setting={s} get={get} set={set} />
+    return <StringArraySetting setting={s} get={get} set={set} />;
   },
 
-  "enum": (s, get, set) => {
+  enum: (s, get, set) => {
     if (s.ui === "radio") {
       return <RadioSetting setting={s} get={get} set={set} />;
     }
@@ -73,7 +89,7 @@ const factories = {
       return <SelectSetting setting={s} get={get} set={set} />;
     }
   },
-  "number": (s, get, set) => {
+  number: (s, get, set) => {
     if (Number.isFinite(s.min) && Number.isFinite(s.max)) {
       return <NumericSetting setting={s} get={get} set={set} />;
     } else {
@@ -82,7 +98,7 @@ const factories = {
   },
 
   "service-url": (s, get, set) => {
-    return <ServiceUrlSetting setting={s} get={get} set={set} />
+    return <ServiceUrlSetting setting={s} get={get} set={set} />;
   }
 };
 const getFactory = s => {
@@ -93,7 +109,7 @@ const getFactory = s => {
   return factory;
 };
 
-export const addFactory = (type, factory) => factories[type] = factory
+export const addFactory = (type, factory) => (factories[type] = factory);
 
 Group.propTypes = {
   setting: PropTypes.object.isRequired

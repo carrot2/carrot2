@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import PropTypes from "prop-types";
+import React, { useState, useEffect } from "react";
 
 import { clusterStore } from "../../store/services.js";
 import { clusterSelectionStore } from "../../store/selection.js";
@@ -14,13 +14,14 @@ const darkThemeOptions = {
   groupSelectionOutlineColor: "rgba(255, 255, 255, 0.8)",
   expanderColor: "rgba(255, 255, 255, 0.15)",
   expanderOutlineColor: "rgba(255, 255, 255, 0.2)",
-  groupColorDecorator: function(opts, props, vars) {
+  groupColorDecorator: function (opts, props, vars) {
     if (props.level === 0) {
-      vars.groupColor.s = props.group.cluster && props.group.cluster.unclustered ? 0 : 60;
+      vars.groupColor.s =
+        props.group.cluster && props.group.cluster.unclustered ? 0 : 60;
     }
     vars.groupColor.l = 20;
     if (props.group.rank) {
-      vars.groupColor.l = 10 + 40 * props.group.rank
+      vars.groupColor.l = 10 + 40 * props.group.rank;
     }
     vars.labelColor = "rgba(255, 255, 255, 0.8)";
   }
@@ -31,13 +32,14 @@ const lightThemeOptions = {
   groupSelectionOutlineColor: "rgba(0, 0, 0, 0.8)",
   expanderColor: "rgba(0, 0, 0, 0.15)",
   expanderOutlineColor: "rgba(0, 0, 0, 0.2)",
-  groupColorDecorator: function(opts, props, vars) {
+  groupColorDecorator: function (opts, props, vars) {
     if (props.level === 0) {
-      vars.groupColor.s = props.group.cluster && props.group.cluster.unclustered ? 0 : 60;
+      vars.groupColor.s =
+        props.group.cluster && props.group.cluster.unclustered ? 0 : 60;
     }
     vars.groupColor.l = 70;
     if (props.group.rank) {
-      vars.groupColor.l = 35 + 40 * props.group.rank
+      vars.groupColor.l = 35 + 40 * props.group.rank;
     }
   }
 };
@@ -49,8 +51,12 @@ function buildOptions(theme, clusterSelectionStore, documentSelectionStore) {
     rainbowEndColor: "hsla(300, 100%, 50%, 1.0)",
     angleStart: 180,
     onGroupSelectionChanged: function (e) {
-      clusterSelectionStore.replaceSelection(e.groups.filter(g => !!g.cluster).map(g => g.cluster));
-      documentSelectionStore.replaceSelection(e.groups.filter(g => !!g.document).map(g => g.document));
+      clusterSelectionStore.replaceSelection(
+        e.groups.filter(g => !!g.cluster).map(g => g.cluster)
+      );
+      documentSelectionStore.replaceSelection(
+        e.groups.filter(g => !!g.document).map(g => g.document)
+      );
     },
     ...getThemeOptions()
   };
@@ -60,20 +66,34 @@ function buildOptions(theme, clusterSelectionStore, documentSelectionStore) {
   }
 }
 
-
 export const PieChart = ({ visible, configStore, implRef }) => {
-  const [ dataObject ] = useDataObject(clusterStore.clusters, clusterStore.documents, visible, configStore.includeResults);
-  const [ selection ] = useSelection(clusterSelectionStore,
-    documentSelectionStore, dataObject);
+  const [dataObject] = useDataObject(
+    clusterStore.clusters,
+    clusterStore.documents,
+    visible,
+    configStore.includeResults
+  );
+  const [selection] = useSelection(
+    clusterSelectionStore,
+    documentSelectionStore,
+    dataObject
+  );
 
-  const [ options, setOptions ] = useState({});
+  const [options, setOptions] = useState({});
   const theme = themeStore.theme;
   useEffect(() => {
-    setOptions(buildOptions(theme, clusterSelectionStore, documentSelectionStore));
-  }, [ theme ]);
+    setOptions(
+      buildOptions(theme, clusterSelectionStore, documentSelectionStore)
+    );
+  }, [theme]);
 
   return (
-    <Circles implRef={implRef} options={options} dataObject={dataObject} selection={selection} />
+    <Circles
+      implRef={implRef}
+      options={options}
+      dataObject={dataObject}
+      selection={selection}
+    />
   );
 };
 

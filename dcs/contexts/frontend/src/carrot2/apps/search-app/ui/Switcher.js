@@ -3,14 +3,19 @@ import PropTypes from "prop-types";
 
 export function Switcher(props) {
   const panels = props.panels;
-  return <>
-    {
-      panels.map(p => {
-        return <Switch key={p.id} visible={p.isVisible(props.visible, p)}
-                       createElement={p.createElement} />
-      })
-    }
-  </>;
+  return (
+    <>
+      {panels.map(p => {
+        return (
+          <Switch
+            key={p.id}
+            visible={p.isVisible(props.visible, p)}
+            createElement={p.createElement}
+          />
+        );
+      })}
+    </>
+  );
 }
 
 Switcher.propTypes = {
@@ -19,20 +24,27 @@ Switcher.propTypes = {
 };
 
 function Switch(props) {
-  const [ initialized, setInitialized ] = useState(false);
+  const [initialized, setInitialized] = useState(false);
   useEffect(() => {
     if (props.visible) {
       setInitialized(true);
     }
-  }, [ props.visible ]);
+  }, [props.visible]);
 
   if (!initialized) {
     return null;
   }
 
-  return <div style={{display: props.visible ? "block" : "none", position: "relative"}}>
-    { props.createElement(props.visible) }
-  </div>;
+  return (
+    <div
+      style={{
+        display: props.visible ? "block" : "none",
+        position: "relative"
+      }}
+    >
+      {props.createElement(props.visible)}
+    </div>
+  );
 }
 
 Switch.propTypes = {

@@ -16,13 +16,19 @@ export const PieChartHints = view(() => {
           </tr>
 
           <tr>
-            <td><kbd>Ctrl</kbd> + click</td>
+            <td>
+              <kbd>Ctrl</kbd> + click
+            </td>
             <td>Select or unselect multiple groups.</td>
           </tr>
 
           <tr>
             <td>Double click</td>
-            <td>Expand group for easier browsing.<br />Double click again to collapse.</td>
+            <td>
+              Expand group for easier browsing.
+              <br />
+              Double click again to collapse.
+            </td>
           </tr>
         </tbody>
       </table>

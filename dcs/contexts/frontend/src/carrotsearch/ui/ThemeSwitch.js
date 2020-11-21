@@ -1,19 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 import { view } from "@risingstack/react-easy-state";
 import { LightDarkSwitch } from "./LightDarkSwitch.js";
 import { persistentStore } from "../store/persistent-store.js";
 
-const isDarkSchemePreferred = () => window.matchMedia("(prefers-color-scheme: dark)").matches;
+const isDarkSchemePreferred = () =>
+  window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-export const themeStore = persistentStore("uiConfig",
+export const themeStore = persistentStore(
+  "uiConfig",
   {
     theme: isDarkSchemePreferred() ? "dark" : "light"
   },
   {
-    flipTheme: () => themeStore.theme = themeStore.isDarkTheme() ? "light" : "dark",
+    flipTheme: () =>
+      (themeStore.theme = themeStore.isDarkTheme() ? "light" : "dark"),
     isDarkTheme: () => themeStore.theme === "dark"
-  });
+  }
+);
 
 export const ThemeSwitch = view(() => {
   const updateTheme = () => {
@@ -39,6 +43,10 @@ export const ThemeSwitch = view(() => {
 
   const isDarkTheme = themeStore.isDarkTheme();
   return (
-    <LightDarkSwitch className="ThemeSwitch" dark={isDarkTheme} onChange={flipTheme} />
+    <LightDarkSwitch
+      className="ThemeSwitch"
+      dark={isDarkTheme}
+      onChange={flipTheme}
+    />
   );
 });

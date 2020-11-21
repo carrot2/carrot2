@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 import { generateBackground, generatePalette } from "./background-generator.js";
 
 const colors = generatePalette();
@@ -13,10 +13,13 @@ export const Backdrop = () => {
   useEffect(() => {
     generateBackground(ref.current, colors);
     setVisible(true);
-  }, [ ref, setVisible ]);
+  }, [ref, setVisible]);
 
   return (
-    <canvas className={`Backdrop ${visible ? "" : " hidden"}`} ref={ref}
-            style={{opacity: visible}} />
+    <canvas
+      className={`Backdrop ${visible ? "" : " hidden"}`}
+      ref={ref}
+      style={{ opacity: visible }}
+    />
   );
 };

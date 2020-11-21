@@ -1,7 +1,15 @@
-import React from 'react';
+import React from "react";
 import "./ButtonLink.css";
 import classnames from "classnames";
 
 export const ButtonLink = ({ className = "", children, enabled, ...rest }) => {
-  return <button {...rest} disabled={!enabled} className={classnames("link", className)}>{children}</button>;
+  return (
+    <button
+      {...rest}
+      disabled={!enabled}
+      className={classnames("link", className)}
+    >
+      {children}
+    </button>
+  );
 };

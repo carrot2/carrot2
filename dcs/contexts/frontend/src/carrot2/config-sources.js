@@ -4,13 +4,15 @@ import { GenericSearchEngineErrorMessage } from "./apps/search-app/ui/ErrorMessa
 import {
   EToolsIpBannedError,
   EToolsResult,
-  EToolsResultConfig, etoolsSettings,
+  EToolsResultConfig,
+  etoolsSettings,
   etoolsSource,
   EToolsSourceConfig
 } from "./ui/sources/ETools.js";
 import {
   PubMedResult,
-  PubMedResultConfig, pubmedSettings,
+  PubMedResultConfig,
+  pubmedSettings,
   pubmedSource,
   PubMedSourceConfig
 } from "./ui/sources/PubMed.js";
@@ -19,55 +21,57 @@ import { solrSourceDescriptor } from "./ui/sources/Solr.js";
 import { esSourceDescriptor } from "./ui/sources/Elasticsearch.js";
 
 export const sources = {
-  "web": {
+  web: {
     label: "Web",
-    descriptionHtml: "web search results provided by <a href='https://etools.ch' target='_blank'>etools.ch</a>. Extensive use may require special arrangements with the <a href='mailto:sschmid@comcepta.com' target='_blank'>owner</a> of the etools.ch service.",
+    descriptionHtml:
+      "web search results provided by <a href='https://etools.ch' target='_blank'>etools.ch</a>. Extensive use may require special arrangements with the <a href='mailto:sschmid@comcepta.com' target='_blank'>owner</a> of the etools.ch service.",
     source: etoolsSource,
-    createResult: (props) => {
+    createResult: props => {
       return <EToolsResult {...props} />;
     },
-    createError: (error) => {
+    createError: error => {
       if (error && error.status === 403) {
         return <EToolsIpBannedError />;
       }
-      return <GenericSearchEngineErrorMessage />
+      return <GenericSearchEngineErrorMessage />;
     },
     createConfig: () => {
       return <EToolsResultConfig />;
     },
-    createSourceConfig: (props) => {
+    createSourceConfig: props => {
       return <EToolsSourceConfig {...props} />;
     },
     getSettings: () => etoolsSettings,
-    getFieldsToCluster: () => [ "title", "snippet" ]
+    getFieldsToCluster: () => ["title", "snippet"]
   },
 
-  "pubmed": {
+  pubmed: {
     label: "PubMed",
-    descriptionHtml: "abstracts of medical papers from the PubMed database provided by NCBI.",
+    descriptionHtml:
+      "abstracts of medical papers from the PubMed database provided by NCBI.",
     source: pubmedSource,
-    createResult: (props) => {
+    createResult: props => {
       return <PubMedResult {...props} />;
     },
-    createError: (props) => {
-      return <GenericSearchEngineErrorMessage {...props} />
+    createError: props => {
+      return <GenericSearchEngineErrorMessage {...props} />;
     },
     createConfig: () => {
       return <PubMedResultConfig />;
     },
-    createSourceConfig: (props) => {
+    createSourceConfig: props => {
       return <PubMedSourceConfig {...props} />;
     },
-    getSettings: () =>  pubmedSettings,
-    getFieldsToCluster: () => [ "title", "snippet" ]
+    getSettings: () => pubmedSettings,
+    getFieldsToCluster: () => ["title", "snippet"]
   },
 
-  "file": localFileSourceDescriptor,
-  "solr": solrSourceDescriptor,
-  "es": esSourceDescriptor
+  file: localFileSourceDescriptor,
+  solr: solrSourceDescriptor,
+  es: esSourceDescriptor
 };
 
 export const searchAppSources = {
-  "web": sources.web,
-  "pubmed": sources.pubmed
+  web: sources.web,
+  pubmed: sources.pubmed
 };

@@ -9,7 +9,8 @@ import {
 
 const descriptorsById = getDescriptorsById(descriptor);
 
-const settingFrom = (id, overrides) => settingFromDescriptor(descriptorsById, id, overrides);
+const settingFrom = (id, overrides) =>
+  settingFromDescriptor(descriptorsById, id, overrides);
 
 const clusterSettings = [
   settingFrom("maxClusters"),
@@ -31,17 +32,21 @@ const labelSettings = [
   advanced(settingFrom("mostGeneralPhraseCoverage"))
 ];
 const languageModelSettings = [
-  advanced(settingFrom("ignoreWordIfInHigherDocsPercent", { label: "Max relative word DF" })),
+  advanced(
+    settingFrom("ignoreWordIfInHigherDocsPercent", {
+      label: "Max relative word DF"
+    })
+  ),
   advanced(settingFrom("preprocessing.wordDfThreshold"))
 ];
 
 const parameterStore = persistentStore(
-    "parameters:algorithm:stc",
-    collectDefaults(descriptorsById, [
-      clusterSettings,
-      labelSettings,
-      languageModelSettings
-    ])
+  "parameters:algorithm:stc",
+  collectDefaults(descriptorsById, [
+    clusterSettings,
+    labelSettings,
+    languageModelSettings
+  ])
 );
 const getter = setting => parameterStore[setting.id];
 const settings = [
@@ -54,7 +59,8 @@ const settings = [
         type: "group",
         label: "Clusters",
         settings: clusterSettings,
-        description: "Parameters affecting the number, structure and content of clusters."
+        description:
+          "Parameters affecting the number, structure and content of clusters."
       },
 
       {
@@ -70,18 +76,20 @@ const settings = [
         type: "group",
         label: "Language model",
         settings: languageModelSettings,
-        description: "Parameters of the document representation used by the clustering algorithm."
+        description:
+          "Parameters of the document representation used by the clustering algorithm."
       }
     ],
     get: getter,
-    set: (setting, val) => parameterStore[setting.id] = val
+    set: (setting, val) => (parameterStore[setting.id] = val)
   }
 ];
 
 export const stc = {
   label: "STC",
   description: "Flat clusters, fast algorithm.",
-  descriptionHtml: "the classic search results clustering algorithm. Produces flat cluster with adequate description, very fast. Available as part of the open source <a href='http://project.carrot2.org' target='_blank'>Carrot<sup>2</sup> framework</a>",
+  descriptionHtml:
+    "the classic search results clustering algorithm. Produces flat cluster with adequate description, very fast. Available as part of the open source <a href='http://project.carrot2.org' target='_blank'>Carrot<sup>2</sup> framework</a>",
   tag: "open source",
   getSettings: () => settings,
   resetToDefaults: parameterStore.resetToDefaults

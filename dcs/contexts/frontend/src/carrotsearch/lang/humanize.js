@@ -1,9 +1,9 @@
 function maxDigits(number, digits) {
   const fixed = number.toFixed(digits - 1);
   return fixed
-      .substring(0, Math.max(fixed.indexOf("."), digits + 1))
-      .replace(/\.(\d*?)(0)+$/, ".$1") // trim trailing zeros
-      .replace(/\.$/, "");             // trim trailing decimal point
+    .substring(0, Math.max(fixed.indexOf("."), digits + 1))
+    .replace(/\.(\d*?)(0)+$/, ".$1") // trim trailing zeros
+    .replace(/\.$/, ""); // trim trailing decimal point
 }
 
 export const humanizeDuration = function (milliseconds) {

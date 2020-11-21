@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import "./Section.css";
 
@@ -12,21 +12,27 @@ export const SectionDivider = ({ label, folded, onCaretClick = () => {} }) => {
   }
 
   return (
-      <h4 className="SectionDivider">
-        <span onClick={onCaretClick}>{label}<span className={classnames("Caret", { "CaretRight": folded })} /></span>
-      </h4>
+    <h4 className="SectionDivider">
+      <span onClick={onCaretClick}>
+        {label}
+        <span className={classnames("Caret", { CaretRight: folded })} />
+      </span>
+    </h4>
   );
 };
 
-export const Section = view(({ label, children, className, style, isFolded, onCaretClick }) => {
-  const folded = isFolded ? isFolded() : false;
-  return (
+export const Section = view(
+  ({ label, children, className, style, isFolded, onCaretClick }) => {
+    const folded = isFolded ? isFolded() : false;
+    return (
       <section className={classnames("Section", className)} style={style}>
-        <SectionDivider label={label} folded={folded}
-                        onCaretClick={onCaretClick} />
-        <div style={displayNoneIf(folded)}>
-          {children}
-        </div>
+        <SectionDivider
+          label={label}
+          folded={folded}
+          onCaretClick={onCaretClick}
+        />
+        <div style={displayNoneIf(folded)}>{children}</div>
       </section>
-  );
-});
+    );
+  }
+);

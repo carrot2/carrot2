@@ -16,7 +16,9 @@ export const TreemapHints = view(() => {
           </tr>
 
           <tr className="separator">
-            <td><kbd>Ctrl</kbd> + click</td>
+            <td>
+              <kbd>Ctrl</kbd> + click
+            </td>
             <td>Select or unselect multiple groups.</td>
           </tr>
 
@@ -26,7 +28,9 @@ export const TreemapHints = view(() => {
           </tr>
 
           <tr className="separator">
-            <td><kbd>Shift</kbd> + double click</td>
+            <td>
+              <kbd>Shift</kbd> + double click
+            </td>
             <td>Unzoom and close group.</td>
           </tr>
 
@@ -36,17 +40,25 @@ export const TreemapHints = view(() => {
           </tr>
 
           <tr className="separator">
-            <td><kbd>Shift</kbd> + click-and-hold</td>
+            <td>
+              <kbd>Shift</kbd> + click-and-hold
+            </td>
             <td>Close group.</td>
           </tr>
 
           <tr>
-            <td>Mouse wheel,<br/>click and move</td>
+            <td>
+              Mouse wheel,
+              <br />
+              click and move
+            </td>
             <td>Zoom in and out, pan around.</td>
           </tr>
 
           <tr>
-            <td><kbd>Esc</kbd></td>
+            <td>
+              <kbd>Esc</kbd>
+            </td>
             <td>Reset view: unzoom, close all groups.</td>
           </tr>
         </tbody>

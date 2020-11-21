@@ -1,7 +1,15 @@
-import React from 'react';
+import React from "react";
 import "./ETools.css";
 
-import { Button, FormGroup, HTMLSelect, InputGroup, Radio, RadioGroup, Switch } from "@blueprintjs/core";
+import {
+  Button,
+  FormGroup,
+  HTMLSelect,
+  InputGroup,
+  Radio,
+  RadioGroup,
+  Switch
+} from "@blueprintjs/core";
 
 import { store, view } from "@risingstack/react-easy-state";
 
@@ -16,23 +24,19 @@ import { queryStore } from "../../apps/workbench/store/query-store.js";
 import { resultListConfigStore } from "../results/ResultListConfig.js";
 import { storeAccessors } from "../../../carrotsearch/ui/settings/Setting.js";
 
-const etoolsResultsConfigStore = persistentStore("etoolsResultConfig",
-  {
-    showSiteIcons: false,
-    showSources: true
-  }
-);
+const etoolsResultsConfigStore = persistentStore("etoolsResultConfig", {
+  showSiteIcons: false,
+  showSources: true
+});
 
-const etoolsSourceConfigStore = persistentStore("etoolsSourceConfig",
-  {
-    safeSearch: true,
-    dataSources: "all",
-    language: "en",
-    country: "web",
-    partner: "Carrot2Json",
-    customerId: ""
-  }
-);
+const etoolsSourceConfigStore = persistentStore("etoolsSourceConfig", {
+  safeSearch: true,
+  dataSources: "all",
+  language: "en",
+  country: "web",
+  partner: "Carrot2Json",
+  customerId: ""
+});
 
 const etoolsDataSourcesOptions = [
   { label: "All", value: "all" },
@@ -151,7 +155,7 @@ export const etoolsSettings = [
   }
 ];
 
-export const etoolsSource = (query) => {
+export const etoolsSource = query => {
   const store = etoolsSourceConfigStore;
   return etools(query, {
     safeSearch: store.safeSearch,
@@ -164,18 +168,26 @@ export const etoolsSource = (query) => {
 /**
  * Renders a single web search result from eTools.
  */
-export const EToolsResult = view((props) => {
+export const EToolsResult = view(props => {
   const document = props.document;
   const appProtocol = new URL(window.location).protocol;
-  const docHostname = new URL(document.url.startsWith("//") ?
-    appProtocol + document.url : document.url).hostname;
+  const docHostname = new URL(
+    document.url.startsWith("//") ? appProtocol + document.url : document.url
+  ).hostname;
   const config = etoolsResultsConfigStore;
   const commonConfig = resultListConfigStore;
 
   let urlWithIcon = null;
   if (config.showSiteIcons) {
     urlWithIcon = (
-      <span className="url with-site-icon" style={{ backgroundImage: `url(${appProtocol}//${docHostname + "/favicon.ico"})` }}>
+      <span
+        className="url with-site-icon"
+        style={{
+          backgroundImage: `url(${appProtocol}//${
+            docHostname + "/favicon.ico"
+          })`
+        }}
+      >
         <span>{document.url}</span>
       </span>
     );
@@ -195,16 +207,23 @@ export const EToolsResult = view((props) => {
 
   return (
     <>
-      <TitleAndRank title={document.title} rank={props.rank} showRank={commonConfig.showRank} />
+      <TitleAndRank
+        title={document.title}
+        rank={props.rank}
+        showRank={commonConfig.showRank}
+      />
       <div>{snippet}</div>
       {urlWithIcon}
-      <Optional visible={config.showSources} content={() => (
-        <div className="sources">
-          {
-            document.sources.map((source, index) => <span key={index}>{source}</span>)
-          }
-        </div>
-      )}/>
+      <Optional
+        visible={config.showSources}
+        content={() => (
+          <div className="sources">
+            {document.sources.map((source, index) => (
+              <span key={index}>{source}</span>
+            ))}
+          </div>
+        )}
+      />
     </>
   );
 });
@@ -213,10 +232,16 @@ export const EToolsResultConfig = view(() => {
   const store = etoolsResultsConfigStore;
   return (
     <>
-      <Switch label="Show site icons" checked={store.showSiteIcons}
-              onChange={e => store.showSiteIcons = e.target.checked } />
-      <Switch label="Show sources" checked={store.showSources}
-              onChange={e => store.showSources = e.target.checked } />
+      <Switch
+        label="Show site icons"
+        checked={store.showSiteIcons}
+        onChange={e => (store.showSiteIcons = e.target.checked)}
+      />
+      <Switch
+        label="Show sources"
+        checked={store.showSources}
+        onChange={e => (store.showSources = e.target.checked)}
+      />
     </>
   );
 });
@@ -227,16 +252,37 @@ const detailsVisibleStore = store({
 
 const EToolsTokensForm = view(props => {
   const store = etoolsSourceConfigStore;
-  const onChange = () => { props.onChange && props.onChange(); };
+  const onChange = () => {
+    props.onChange && props.onChange();
+  };
 
   return (
     <div className="EToolsAccessDetails">
       <h4>eTools access tokens</h4>
       <FormGroup label="Partner ID" labelFor="partner-id" inline={true}>
-        <InputGroup id="partner-id" value={store.partner} onChange={e => { onChange(); return store.partner = e.target.value; } } />
+        <InputGroup
+          id="partner-id"
+          value={store.partner}
+          onChange={e => {
+            onChange();
+            return (store.partner = e.target.value);
+          }}
+        />
       </FormGroup>
-      <FormGroup label="Customer ID" labelInfo="(optional)" labelFor="customer-id" inline={true}>
-        <InputGroup id="customer-id" value={store.customerId} onChange={e => { onChange(); return store.customerId = e.target.value; } } />
+      <FormGroup
+        label="Customer ID"
+        labelInfo="(optional)"
+        labelFor="customer-id"
+        inline={true}
+      >
+        <InputGroup
+          id="customer-id"
+          value={store.customerId}
+          onChange={e => {
+            onChange();
+            return (store.customerId = e.target.value);
+          }}
+        />
       </FormGroup>
     </div>
   );
@@ -246,17 +292,24 @@ const EToolsTokensButton = props => {
   const store = detailsVisibleStore;
 
   return (
-    <ButtonLink onClick={(e) => { e.preventDefault(); store.detailsVisible = !store.detailsVisible; } }>
+    <ButtonLink
+      onClick={e => {
+        e.preventDefault();
+        store.detailsVisible = !store.detailsVisible;
+      }}
+    >
       {props.children}
     </ButtonLink>
   );
 };
 
-const EToolsTokensFormContainer = view((props) => {
+const EToolsTokensFormContainer = view(props => {
   const detailsVisible = detailsVisibleStore.detailsVisible;
 
   return (
-    <div style={{display: detailsVisible ? "block" : "none", marginTop: "2em"}}>
+    <div
+      style={{ display: detailsVisible ? "block" : "none", marginTop: "2em" }}
+    >
       <EToolsTokensForm onChange={props.onChange} />
       {props.children}
     </div>
@@ -265,48 +318,81 @@ const EToolsTokensFormContainer = view((props) => {
 
 export const EToolsLink = () => {
   return (
-    <a href="https://etools.ch" target="_blank" rel="noopener noreferrer">eTools</a>
+    <a href="https://etools.ch" target="_blank" rel="noopener noreferrer">
+      eTools
+    </a>
   );
 };
 
-export const EToolsSourceConfig = view((props) => {
+export const EToolsSourceConfig = view(props => {
   const store = etoolsSourceConfigStore;
   return (
     <div className="EToolsSourceConfig">
       <FormGroup label="Language" labelFor="etools-language" inline={true}>
-        <HTMLSelect onChange={e => { store.language = e.currentTarget.value; props.onChange(); }}
-                    id="etools-language" value={store.language}>
-          {
-            etoolsLanguageOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)
-          }
+        <HTMLSelect
+          onChange={e => {
+            store.language = e.currentTarget.value;
+            props.onChange();
+          }}
+          id="etools-language"
+          value={store.language}
+        >
+          {etoolsLanguageOptions.map(o => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
         </HTMLSelect>
       </FormGroup>
       <FormGroup label="Country" labelFor="etools-country" inline={true}>
-        <HTMLSelect onChange={e => { store.country = e.currentTarget.value; props.onChange(); }}
-                    id="etools-country" value={store.country}>
-          {
-            etoolsCountryOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)
-          }
+        <HTMLSelect
+          onChange={e => {
+            store.country = e.currentTarget.value;
+            props.onChange();
+          }}
+          id="etools-country"
+          value={store.country}
+        >
+          {etoolsCountryOptions.map(o => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
         </HTMLSelect>
       </FormGroup>
       <FormGroup inline={true} label="Sources" labelFor="etools-sources">
-        <RadioGroup onChange={e => { store.dataSources = e.currentTarget.value; props.onChange(); }}
-                    selectedValue={store.dataSources}
-                    id="etools-sources" inline={true}>
-          {
-            etoolsDataSourcesOptions.map(o => <Radio key={o.value} {...o} />)
-          }
+        <RadioGroup
+          onChange={e => {
+            store.dataSources = e.currentTarget.value;
+            props.onChange();
+          }}
+          selectedValue={store.dataSources}
+          id="etools-sources"
+          inline={true}
+        >
+          {etoolsDataSourcesOptions.map(o => (
+            <Radio key={o.value} {...o} />
+          ))}
         </RadioGroup>
       </FormGroup>
       <FormGroup inline={true} label=" ">
-        <Switch label="Safe search" checked={store.safeSearch}
-                onChange={e => { store.safeSearch = e.target.checked; props.onChange(); } } />
+        <Switch
+          label="Safe search"
+          checked={store.safeSearch}
+          onChange={e => {
+            store.safeSearch = e.target.checked;
+            props.onChange();
+          }}
+        />
       </FormGroup>
 
-      <p><small>
-        Web search feed is kindly provided to us by <EToolsLink />.
-        If you have custom eTools access tokens, <EToolsTokensButton>provide them here</EToolsTokensButton>.
-      </small></p>
+      <p>
+        <small>
+          Web search feed is kindly provided to us by <EToolsLink />. If you
+          have custom eTools access tokens,{" "}
+          <EToolsTokensButton>provide them here</EToolsTokensButton>.
+        </small>
+      </p>
 
       <EToolsTokensFormContainer onChange={props.onChange} />
     </div>
@@ -319,23 +405,33 @@ export const EToolsIpBannedError = view(() => {
       <h3>Search limit exceeded</h3>
 
       <p>
-        <EToolsLink/>, our web search results provider, blocked access to the service
-        due automated querying or excessive number of searches issued
+        <EToolsLink />, our web search results provider, blocked access to the
+        service due automated querying or excessive number of searches issued
         from your IP address.
       </p>
 
       <p>
         The block may be lifted after some time, but if you keep seeing this
-        message, you may need to <a href="mailto:sschmid@comcepta.com" target="_blank" rel="noopener noreferrer">contact
-        eTools</a> to arrange for an unlimited search service.
+        message, you may need to{" "}
+        <a
+          href="mailto:sschmid@comcepta.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          contact eTools
+        </a>{" "}
+        to arrange for an unlimited search service.
       </p>
 
       <p>
-        Once you get your eTools access tokens, <EToolsTokensButton>provide them here</EToolsTokensButton>.
+        Once you get your eTools access tokens,{" "}
+        <EToolsTokensButton>provide them here</EToolsTokensButton>.
       </p>
 
       <EToolsTokensFormContainer>
-        <Button onClick={() => document.location.reload()} intent="primary">Apply and re-run search</Button>
+        <Button onClick={() => document.location.reload()} intent="primary">
+          Apply and re-run search
+        </Button>
       </EToolsTokensFormContainer>
     </div>
   );

@@ -17,7 +17,9 @@ function saveJpeg(impl, fileNameSuffix) {
   const type = "image/jpeg";
 
   // Use the actual background color for the exported bitmap
-  const style = window.getComputedStyle(impl.get("element").parentElement.parentElement);
+  const style = window.getComputedStyle(
+    impl.get("element").parentElement.parentElement
+  );
 
   const base64 = impl.get("imageData", {
     format: type,
@@ -39,8 +41,10 @@ function saveJson(impl, fileNameSuffix) {
   const data = Object.assign({}, impl.get());
   delete data.element;
 
-  saveAs(new Blob( [ JSON.stringify(data) ], { type: type }),
-    buildFileName(fileNameSuffix, `json`));
+  saveAs(
+    new Blob([JSON.stringify(data)], { type: type }),
+    buildFileName(fileNameSuffix, `json`)
+  );
 }
 
 const save = (impl, fileNameSuffix, type) => {
@@ -60,8 +64,16 @@ const save = (impl, fileNameSuffix, type) => {
 
 export const VisualizationExport = props => {
   return (
-    <Button icon="floppy-disk" minimal={true} 
-            onClick={e => save(props.implRef.current, props.fileNameSuffix,
-              e.shiftKey ? "json" : "jpeg")} />
+    <Button
+      icon="floppy-disk"
+      minimal={true}
+      onClick={e =>
+        save(
+          props.implRef.current,
+          props.fileNameSuffix,
+          e.shiftKey ? "json" : "jpeg"
+        )
+      }
+    />
   );
 };

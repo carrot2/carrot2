@@ -28,7 +28,7 @@ export const getDescriptorsById = descriptors => {
     map.set(a.id, a);
     return map;
   }, new Map());
-}
+};
 
 const parseNumberConstraint = constraints => {
   return (constraints || []).reduce((result, constraint) => {
@@ -50,7 +50,7 @@ const parseNumberConstraint = constraints => {
   }, {});
 };
 
-const settingConfigFromNumberDescriptor = (descriptor) => {
+const settingConfigFromNumberDescriptor = descriptor => {
   const constraints = parseNumberConstraint(descriptor.constraints);
   return {
     type: "number",
@@ -70,7 +70,7 @@ const settingConfigFromInterfaceDescriptor = descriptor => {
         description: implementations[impl].javadoc.text
       };
     })
-  }
+  };
 };
 
 const settingConfigFromEnumDescriptor = descriptor => {
@@ -84,7 +84,7 @@ const settingConfigFromEnumDescriptor = descriptor => {
         label: v
       };
     })
-  }
+  };
 };
 
 const getDescriptor = (map, id) => {
@@ -113,11 +113,17 @@ export const settingFromDescriptor = (map, id, override) => {
     switch (descriptor.type) {
       case "Double":
       case "Float":
-        Object.assign(setting, settingConfigFromNumberDescriptor(descriptor, override));
+        Object.assign(
+          setting,
+          settingConfigFromNumberDescriptor(descriptor, override)
+        );
         break;
 
       case "Integer":
-        Object.assign(setting, settingConfigFromNumberDescriptor(descriptor, override));
+        Object.assign(
+          setting,
+          settingConfigFromNumberDescriptor(descriptor, override)
+        );
         setting.integer = true;
         break;
 
@@ -137,7 +143,12 @@ export const settingFromDescriptor = (map, id, override) => {
   return Object.assign(setting, override);
 };
 
-export const settingFromDescriptorRecursive = (map, id, getterProvider, override = () => null) => {
+export const settingFromDescriptorRecursive = (
+  map,
+  id,
+  getterProvider,
+  override = () => null
+) => {
   const descriptor = getDescriptor(map, id);
   const rootSetting = settingFromDescriptor(map, id, override(descriptor));
   const implementations = descriptor.implementations;
@@ -149,24 +160,30 @@ export const settingFromDescriptorRecursive = (map, id, getterProvider, override
     return [
       rootSetting,
       ...Object.keys(implementations)
-          .filter(k => {
-            const implAttributes = implementations[k].attributes;
-            return Object.keys(implAttributes).length > 0;
-          })
-          .map(k => {
-            const implAttributes = implementations[k].attributes;
-            return {
-              type: "group",
-              id: descriptor.id + ":" + k,
-              visible: () => getterProvider()(rootSetting) === k,
-              settings: Object.keys(implAttributes).map(ak => {
-                return settingFromDescriptorRecursive(map, implAttributes[ak].id, override);
-              }).flat()
-            };
-          })
+        .filter(k => {
+          const implAttributes = implementations[k].attributes;
+          return Object.keys(implAttributes).length > 0;
+        })
+        .map(k => {
+          const implAttributes = implementations[k].attributes;
+          return {
+            type: "group",
+            id: descriptor.id + ":" + k,
+            visible: () => getterProvider()(rootSetting) === k,
+            settings: Object.keys(implAttributes)
+              .map(ak => {
+                return settingFromDescriptorRecursive(
+                  map,
+                  implAttributes[ak].id,
+                  override
+                );
+              })
+              .flat()
+          };
+        })
     ];
   } else {
-    return [ rootSetting ];
+    return [rootSetting];
   }
 };
 
@@ -178,10 +195,11 @@ export const settingFromFilterDescriptor = (map, id, getterProvider) => {
   enabledSetting.description = implementation.javadoc.text;
 
   const attributes = implementation.attributes;
-  const settings =
-      Object.keys(attributes).filter(att => att !== "enabled").map(a => {
-        return settingFromDescriptor(map, attributes[a].id);
-      });
+  const settings = Object.keys(attributes)
+    .filter(att => att !== "enabled")
+    .map(a => {
+      return settingFromDescriptor(map, attributes[a].id);
+    });
   if (settings.length > 0) {
     return [
       enabledSetting,
@@ -191,39 +209,37 @@ export const settingFromFilterDescriptor = (map, id, getterProvider) => {
         visible: () => getterProvider()(enabledSetting),
         settings: settings
       }
-    ]
+    ];
   } else {
-    return [ enabledSetting ];
+    return [enabledSetting];
   }
 };
 
-export const collectDefaults = (map, settings) => settings.flat().reduce(
-    function collect(defs, setting) {
-      if (setting.type === "group") {
-        setting.settings.reduce(collect, defs);
-      } else {
-        defs[setting.id] = map.get(setting.id).value;
-      }
-      return defs;
-    }, {}
-);
+export const collectDefaults = (map, settings) =>
+  settings.flat().reduce(function collect(defs, setting) {
+    if (setting.type === "group") {
+      setting.settings.reduce(collect, defs);
+    } else {
+      defs[setting.id] = map.get(setting.id).value;
+    }
+    return defs;
+  }, {});
 
-export const collectParameters = (settings, getter) => settings.reduce(
-    function collect(params, setting) {
-      if (setting.visible && !setting.visible()) {
-        return params;
-      }
-      if (setting.type === "group") {
-        setting.settings.reduce(collect, params);
-      } else {
-        _set(params, setting.pathRest, getter(setting));
-      }
-
+export const collectParameters = (settings, getter) =>
+  settings.reduce(function collect(params, setting) {
+    if (setting.visible && !setting.visible()) {
       return params;
-    }, {}
-);
+    }
+    if (setting.type === "group") {
+      setting.settings.reduce(collect, params);
+    } else {
+      _set(params, setting.pathRest, getter(setting));
+    }
+
+    return params;
+  }, {});
 
 export const advanced = setting => {
   setting.advanced = true;
   return setting;
-}
+};

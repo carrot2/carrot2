@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import "./RadioSetting.css";
 
@@ -10,17 +10,21 @@ export const RadioSetting = view(({ setting, get, set }) => {
   const { label, description, options, inline } = setting;
 
   return (
-      <Setting className="RadioSetting" label={label} description={description}>
-        <RadioGroup onChange={e => set(setting, e.target.value)}
-                    selectedValue={get(setting)} inline={inline}>
-          {
-            options.map(o => (
-                <Radio value={o.value} key={o.value}>
-                  <LabelWithHelp label={o.label || o.value} description={o.description} />
-                </Radio>
-            ))
-          }
-        </RadioGroup>
-      </Setting>
+    <Setting className="RadioSetting" label={label} description={description}>
+      <RadioGroup
+        onChange={e => set(setting, e.target.value)}
+        selectedValue={get(setting)}
+        inline={inline}
+      >
+        {options.map(o => (
+          <Radio value={o.value} key={o.value}>
+            <LabelWithHelp
+              label={o.label || o.value}
+              description={o.description}
+            />
+          </Radio>
+        ))}
+      </RadioGroup>
+    </Setting>
   );
 });

@@ -1,4 +1,4 @@
-import { compile } from 'path-to-regexp';
+import { compile } from "path-to-regexp";
 
 class RouteSpec {
   path;

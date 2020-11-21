@@ -8,8 +8,8 @@ import classnames from "classnames";
 
 export const Loading = view(({ store }) => {
   return (
-      <div className={classnames("Loading", { "visible" : store.loading })}>
-        <div className="dot-bricks" />
-      </div>
+    <div className={classnames("Loading", { visible: store.loading })}>
+      <div className="dot-bricks" />
+    </div>
   );
 });

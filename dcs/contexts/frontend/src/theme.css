@@ -8,7 +8,8 @@
   --backdrop-color-hue: 0;
 }
 
-.light, body {
+.light,
+body {
   --background-color: #fff;
   --background-color-secondary: #f4f4f4;
   --background-color-tertiary: #fbfbfb;
@@ -16,12 +17,12 @@
   --text-color: black;
   --text-color-inverted: white;
   --text-color-light: rgba(0, 0, 0, 0.8);
-  --text-color-lighter: rgba(0, 0, 0, 0.60);
-  --text-color-lightest: rgba(0, 0, 0, 0.40);
-  --text-color-secondary: hsla(208, 30%, 50%, 1.0);
+  --text-color-lighter: rgba(0, 0, 0, 0.6);
+  --text-color-lightest: rgba(0, 0, 0, 0.4);
+  --text-color-secondary: hsla(208, 30%, 50%, 1);
   --text-color-nav: rgba(255, 255, 255, 0.75);
-  --text-color-red: hsla(0, 80%, 55%, 1.0);
-  --text-color-green: hsla(120, 80%, 40%, 1.0);
+  --text-color-red: hsla(0, 80%, 55%, 1);
+  --text-color-green: hsla(120, 80%, 40%, 1);
   --link-color: hsl(203, 82%, 35%);
   --link-icon-color: hsl(203, 82%, 70%);
   --border-color: rgba(0, 0, 0, 0.12);
@@ -33,7 +34,7 @@
   --kbd-outer-border-color: #ccc;
   --kbd-inner-border-color: var(--background-color);
   --kbd-background-color: hsla(0, 0%, 0%, 0.07);
-  --logo-color: #1D3557;
+  --logo-color: #1d3557;
   --logo-color-inverted: #fff;
   --block-highlight-background-color: hsla(45, 83%, 69%, 0.05);
   --block-highlight-border-color: hsla(45, 93%, 50%, 0.3);
@@ -50,14 +51,14 @@
   --background-color-secondary: hsl(210, 18%, 18%);
   --background-color-tertiary: hsl(210, 18%, 16.5%);
   --nav-background-color: hsla(207, 28%, 1%, 0.3);
-  --text-color: rgba(255, 255, 255, 1.0);
+  --text-color: rgba(255, 255, 255, 1);
   --text-color-light: rgba(255, 255, 255, 0.75);
   --text-color-lighter: rgba(255, 255, 255, 0.55);
-  --text-color-lightest: rgba(255, 255, 255, 0.30);
-  --text-color-secondary: hsla(208, 30%, 70%, 1.0);
+  --text-color-lightest: rgba(255, 255, 255, 0.3);
+  --text-color-secondary: hsla(208, 30%, 70%, 1);
   --text-color-nav: rgba(255, 255, 255, 0.75);
-  --text-color-red: hsla(0, 70%, 50%, 1.0);
-  --text-color-green: hsla(120, 80%, 40%, 1.0);
+  --text-color-red: hsla(0, 70%, 50%, 1);
+  --text-color-green: hsla(120, 80%, 40%, 1);
   --text-color-inverted: black;
   --link-color: hsl(203, 85%, 61%);
   --link-icon-color: hsl(203, 82%, 40%);
@@ -65,11 +66,11 @@
   --cluster-icon-color: #ffb366;
   --label-icon-color: var(--cluster-icon-color);
   --hr: hsla(0, 0%, 100%, 0.15);
-  --kbd-outer-border-color: hsl(207, 28%, 11%);;
+  --kbd-outer-border-color: hsl(207, 28%, 11%);
   --kbd-inner-border-color: hsl(207, 23%, 27%);
-  --kbd-background-color: hsl(207, 23%, 22%);;
+  --kbd-background-color: hsl(207, 23%, 22%);
   --logo-color: #fff;
-  --logo-color-inverted: #1D3557;
+  --logo-color-inverted: #1d3557;
   --tab-background-color: hsl(207, 23%, 22%);
   --tab-border-color: hsl(207, 28%, 12%);
   --tab-accent-color: hsl(208, 82%, 55%);
@@ -81,15 +82,28 @@ body {
   color: var(--text-color);
 }
 
-body, input, button, select {
+body,
+input,
+button,
+select {
   font-family: Lato, sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: Raleway, sans-serif;
 }
 
-h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, h6:first-child {
+h1:first-child,
+h2:first-child,
+h3:first-child,
+h4:first-child,
+h5:first-child,
+h6:first-child {
   margin-top: 0;
 }
 
@@ -113,9 +127,10 @@ kbd {
   display: inline-block;
   border: 1px solid var(--kbd-outer-border-color);
   border-radius: 4px;
-  padding: 0.0em 0.35em;
+  padding: 0em 0.35em;
   margin: 0 0.2em;
-  box-shadow: 0 1.5px 0 var(--kbd-outer-border-color), 0 0 0 1.5px var(--kbd-inner-border-color) inset;
+  box-shadow: 0 1.5px 0 var(--kbd-outer-border-color),
+    0 0 0 1.5px var(--kbd-inner-border-color) inset;
   background-color: var(--kbd-background-color);
 }
 

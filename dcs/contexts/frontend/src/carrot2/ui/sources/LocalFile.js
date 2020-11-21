@@ -1,4 +1,4 @@
-import { createResultConfigStore, } from "./CustomSchemaResult.js";
+import { createResultConfigStore } from "./CustomSchemaResult.js";
 import {
   createFieldChoiceSetting,
   createSchemaExtractorStores,
@@ -10,17 +10,17 @@ import React from "react";
 
 const resultConfigStore = createResultConfigStore("localFile");
 
-const {
-  schemaInfoStore,
-  resultHolder
-} = createSchemaExtractorStores("localFile");
+const { schemaInfoStore, resultHolder } = createSchemaExtractorStores(
+  "localFile"
+);
 
 const settings = [
   {
     id: "file",
     type: "group",
     label: "Local file",
-    description: "Loads documents from a local file. Carrot2 XML, JSON, CSV and Excel formats are supported.",
+    description:
+      "Loads documents from a local file. Carrot2 XML, JSON, CSV and Excel formats are supported.",
     settings: [
       {
         id: "file:file",
@@ -28,7 +28,7 @@ const settings = [
         label: "File",
         get: () => null,
         set: (sett, file) => {
-          schemaInfoStore.load(async (logger) => {
+          schemaInfoStore.load(async logger => {
             return parseFile(file, logger);
           });
         }
@@ -51,11 +51,14 @@ const localFileSource = () => {
   };
 };
 
-export const localFileSourceDescriptor = createSource(schemaInfoStore, resultConfigStore, {
-  label: "Local file",
-  descriptionHtml: "content read from a local file",
-  source: localFileSource,
-  getSettings: () => settings,
-  createError: (e) => <GenericSearchEngineErrorMessage error={e} />,
-});
-
+export const localFileSourceDescriptor = createSource(
+  schemaInfoStore,
+  resultConfigStore,
+  {
+    label: "Local file",
+    descriptionHtml: "content read from a local file",
+    source: localFileSource,
+    getSettings: () => settings,
+    createError: e => <GenericSearchEngineErrorMessage error={e} />
+  }
+);

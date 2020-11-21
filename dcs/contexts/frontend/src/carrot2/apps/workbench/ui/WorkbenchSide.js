@@ -6,11 +6,15 @@ import { autoEffect, batch, store, view } from "@risingstack/react-easy-state";
 
 import { sources } from "../../../config-sources.js";
 import { algorithms } from "../../../config-algorithms.js";
-import { algorithmStore, clusterStore, searchResultStore } from "../../../store/services.js";
+import {
+  algorithmStore,
+  clusterStore,
+  searchResultStore
+} from "../../../store/services.js";
 import { queryStore } from "../store/query-store.js";
 import { settingsStateStore } from "./SettingsTools.js";
 
-import { WorkbenchSourceAlgorithm} from "./WorkbenchSourceAlgorithm.js";
+import { WorkbenchSourceAlgorithm } from "./WorkbenchSourceAlgorithm.js";
 
 import { Button } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,9 +28,12 @@ import { workbenchSourceStore } from "../store/source-store.js";
 
 const WorkbenchLogo = () => {
   return (
-      <div className="WorkbenchLogo">
-        <span><span>clustering</span><span className="initial">W</span>orkbench</span>
-      </div>
+    <div className="WorkbenchLogo">
+      <span>
+        <span>clustering</span>
+        <span className="initial">W</span>orkbench
+      </span>
+    </div>
   );
 };
 
@@ -35,29 +42,34 @@ const settings = {
   settings: [
     { components: sources, type: "source" },
     { components: algorithms, type: "algorithm" }
-  ].map(t => {
-    return Object.keys(t.components).map(k => {
-      const settings = t.components[k].getSettings();
-      settings.forEach(s => {
-        s.visible = s => {
-          switch (t.type) {
-            case "source":
-              return k === workbenchSourceStore.source;
+  ]
+    .map(t => {
+      return Object.keys(t.components).map(k => {
+        const settings = t.components[k].getSettings();
+        settings.forEach(s => {
+          s.visible = s => {
+            switch (t.type) {
+              case "source":
+                return k === workbenchSourceStore.source;
 
-            case "algorithm":
-              return k === algorithmStore.clusteringAlgorithm;
+              case "algorithm":
+                return k === algorithmStore.clusteringAlgorithm;
 
-            default:
-              return false;
-          }
-        };
+              default:
+                return false;
+            }
+          };
+        });
+        return settings;
       });
-      return settings;
     })
-  }).flat(2)
+    .flat(2)
 };
 
-addAdvancedSettingsVisibility(settings.settings, () => settingsStateStore.showAdvancedSettings);
+addAdvancedSettingsVisibility(
+  settings.settings,
+  () => settingsStateStore.showAdvancedSettings
+);
 
 const parametersStateStore = store({
   sourceDirty: false,
@@ -114,7 +126,10 @@ autoEffect(() => {
 
 const runSearch = () => {
   if (parametersStateStore.sourceDirty) {
-    searchResultStore.load(sources[workbenchSourceStore.source], queryStore.query);
+    searchResultStore.load(
+      sources[workbenchSourceStore.source],
+      queryStore.query
+    );
   } else {
     clusterStore.reload();
   }
@@ -132,35 +147,41 @@ const ClusterButton = view(() => {
 
     window.addEventListener("keypress", listener);
     return () => window.removeEventListener("keypress", listener);
-  }, [])
+  }, []);
 
   return (
-      <Button className="ClusterButton"
-              intent={parametersStateStore.sourceDirty || parametersStateStore.algorithmDirty ? "primary" : "none"}
-              large={true}
-              icon={<FontAwesomeIcon icon={faLightbulbOn} />}
-              title="Press Ctrl+Enter to perform clustering"
-              onClick={runSearch}
-              loading={searchResultStore.loading || clusterStore.loading}>
-        Cluster
-      </Button>
+    <Button
+      className="ClusterButton"
+      intent={
+        parametersStateStore.sourceDirty || parametersStateStore.algorithmDirty
+          ? "primary"
+          : "none"
+      }
+      large={true}
+      icon={<FontAwesomeIcon icon={faLightbulbOn} />}
+      title="Press Ctrl+Enter to perform clustering"
+      onClick={runSearch}
+      loading={searchResultStore.loading || clusterStore.loading}
+    >
+      Cluster
+    </Button>
   );
 });
 
-export const WorkbenchSide = (() => {
+export const WorkbenchSide = () => {
   return (
-      <div className="WorkbenchSide">
-        <div className="WorkbenchSideFixed">
-          <div className="WorkbenchSideHeader">
-            <WorkbenchLogo />
-            <ClusterButton />
-          </div>
-
-          <WorkbenchSourceAlgorithm />
-          <SettingsTools />
+    <div className="WorkbenchSide">
+      <div className="WorkbenchSideFixed">
+        <div className="WorkbenchSideHeader">
+          <WorkbenchLogo />
+          <ClusterButton />
         </div>
 
-        <Settings settings={settings} />
+        <WorkbenchSourceAlgorithm />
+        <SettingsTools />
       </div>
+
+      <Settings settings={settings} />
+    </div>
   );
-});
+};

@@ -1,6 +1,10 @@
 import React from "react";
 
-import { faCog, faQuestionCircle, faSave } from "@fortawesome/pro-regular-svg-icons";
+import {
+  faCog,
+  faQuestionCircle,
+  faSave
+} from "@fortawesome/pro-regular-svg-icons";
 
 import { view } from "@risingstack/react-easy-state";
 import { PieChartHints } from "./ui/clusters/PieChartHints.js";
@@ -23,37 +27,33 @@ import {
 
 const ClusterListView = view(ClusterList);
 
-const treemapConfigStore = persistentStore("treemapConfig",
-    {
-      layout: "relaxed",
-      stacking: "hierarchical",
-      includeResults: true
-    }
-);
+const treemapConfigStore = persistentStore("treemapConfig", {
+  layout: "relaxed",
+  stacking: "hierarchical",
+  includeResults: true
+});
 
-const pieChartConfigStore = persistentStore("pieChartConfig",
-    {
-      includeResults: true
-    }
-);
+const pieChartConfigStore = persistentStore("pieChartConfig", {
+  includeResults: true
+});
 
 const treemapImplRef = { current: undefined };
 const piechartImplRef = { current: undefined };
 
 const treemapLoader = () => {
   return import(
-      /* webpackChunkName: "treemap" */
-      /* webpackPrefetch: true */
-      "./ui/clusters/Treemap.js")
-      .then(module => view(module.Treemap));
+    /* webpackChunkName: "treemap" */
+    /* webpackPrefetch: true */
+    "./ui/clusters/Treemap.js"
+  ).then(module => view(module.Treemap));
 };
 
 const piechartLoader = () => {
   return import(
-      /* webpackChunkName: "piechart" */
-      /* webpackPrefetch: true */
-      "./ui/clusters/PieChart.js")
-      .then(module => view(module.PieChart));
+    /* webpackChunkName: "piechart" */
+    /* webpackPrefetch: true */
+    "./ui/clusters/PieChart.js"
+  ).then(module => view(module.PieChart));
 };
 
 // TODO: convert to a series of some internal API calls?
@@ -61,17 +61,17 @@ export const clusterViews = [
   {
     label: "Clusters",
     views: {
-      "folders": {
+      folders: {
         label: "list",
-        createContentElement: (props) => {
-          return <ClusterListView {...props} />
+        createContentElement: props => {
+          return <ClusterListView {...props} />;
         },
         tools: []
       },
 
-      "treemap": {
+      treemap: {
         label: "treemap",
-        createContentElement: (visible) => {
+        createContentElement: visible => {
           const treemapProps = {
             visible: visible,
             configStore: treemapConfigStore,
@@ -83,7 +83,7 @@ export const clusterViews = [
           {
             id: "interaction",
             icon: faQuestionCircle,
-            createContentElement: (props) => {
+            createContentElement: props => {
               return <TreemapHints />;
             },
             title: "Treemap interaction help"
@@ -91,15 +91,20 @@ export const clusterViews = [
           {
             id: "export-image",
             icon: faSave,
-            createContentElement: (props) => {
-              return <VisualizationExport implRef={treemapImplRef} fileNameSuffix="treemap" />;
+            createContentElement: props => {
+              return (
+                <VisualizationExport
+                  implRef={treemapImplRef}
+                  fileNameSuffix="treemap"
+                />
+              );
             },
             title: "Export treemap as JPEG"
           },
           {
             id: "config",
             icon: faCog,
-            createContentElement: (props) => {
+            createContentElement: props => {
               return <TreemapConfig store={treemapConfigStore} />;
             },
             title: "Treemap settings"
@@ -109,7 +114,7 @@ export const clusterViews = [
 
       "pie-chart": {
         label: "pie-chart",
-        createContentElement: (visible) => {
+        createContentElement: visible => {
           const piechartProps = {
             visible: visible,
             configStore: pieChartConfigStore,
@@ -121,22 +126,27 @@ export const clusterViews = [
           {
             id: "interaction",
             icon: faQuestionCircle,
-            createContentElement: (props) => {
+            createContentElement: props => {
               return <PieChartHints />;
             }
           },
           {
             id: "export-image",
             icon: faSave,
-            createContentElement: (props) => {
-              return <VisualizationExport implRef={piechartImplRef} fileNameSuffix="pie-chart" />;
+            createContentElement: props => {
+              return (
+                <VisualizationExport
+                  implRef={piechartImplRef}
+                  fileNameSuffix="pie-chart"
+                />
+              );
             },
             title: "Export pie-chart as JPEG"
           },
           {
             id: "config",
             icon: faCog,
-            createContentElement: (props) => {
+            createContentElement: props => {
               return <PieChartConfig store={pieChartConfigStore} />;
             }
           }
@@ -150,24 +160,27 @@ export const resultsViews = [
   {
     label: "Results",
     views: {
-      "list": {
+      list: {
         label: "list",
         createContentElement: props => {
           return (
-              <ResultList {...props} store={searchResultStore}
-                          visibilityStore={documentVisibilityStore}
-                          clusterSelectionStore={clusterSelectionStore} />
+            <ResultList
+              {...props}
+              store={searchResultStore}
+              visibilityStore={documentVisibilityStore}
+              clusterSelectionStore={clusterSelectionStore}
+            />
           );
         },
         tools: [
           {
             id: "config",
             icon: faCog,
-            createContentElement: (props) => {
+            createContentElement: props => {
               return (
-                  <ResultListConfig>
-                    {props.source.createConfig()}
-                  </ResultListConfig>
+                <ResultListConfig>
+                  {props.source.createConfig()}
+                </ResultListConfig>
               );
             }
           }

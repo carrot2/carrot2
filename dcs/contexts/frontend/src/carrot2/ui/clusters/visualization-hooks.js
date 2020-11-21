@@ -17,8 +17,8 @@ const EMPTY_OBJECT = {};
  *   between visualizations.
  */
 export const useDataObject = (clusters, documents, visible, includeResults) => {
-  const [ dataObject, setDataObject ] = useState(EMPTY_OBJECT);
-  const [ dataObjectInternal, setDataObjectInternal ] = useState(EMPTY_OBJECT);
+  const [dataObject, setDataObject] = useState(EMPTY_OBJECT);
+  const [dataObjectInternal, setDataObjectInternal] = useState(EMPTY_OBJECT);
   const prevDataObjectInternal = useRef(dataObjectInternal);
 
   // Get references to arrays before setting up the side effect.
@@ -36,19 +36,21 @@ export const useDataObject = (clusters, documents, visible, includeResults) => {
           cluster: c,
           label: `${c.labels.join(", ")} (${c.size})`,
           weight: c.unclustered ? 0 : c.size,
-          groups: (includeResults ? c.documents : []).map(d => {
-            let document = documents[d];
-            return {
-              id: (groupId++).toString(),
-              document: document,
-              label: document && document.title,
-              rank: document && document.__rank
-            }
-          }).concat((c.clusters || []).map(clusters))
-        }
+          groups: (includeResults ? c.documents : [])
+            .map(d => {
+              let document = documents[d];
+              return {
+                id: (groupId++).toString(),
+                document: document,
+                label: document && document.title,
+                rank: document && document.__rank
+              };
+            })
+            .concat((c.clusters || []).map(clusters))
+        };
       })
     });
-  }, [ clusters, documents, includeResults ]);
+  }, [clusters, documents, includeResults]);
 
   // Transfers the internal dataObject to the visualization, if the visualization
   // panel is visible. If the panel is not visible, an empty dataObject is set
@@ -63,21 +65,29 @@ export const useDataObject = (clusters, documents, visible, includeResults) => {
         prevDataObjectInternal.current = dataObjectInternal;
       }
     }
-  }, [ dataObjectInternal, visible ]);
+  }, [dataObjectInternal, visible]);
 
-  return [ dataObject ];
+  return [dataObject];
 };
 
-export const useSelection = (clusterSelectionStore, documentSelectionStore, dataObject) => {
-  const [ selection, setSelection ] = useState([]);
+export const useSelection = (
+  clusterSelectionStore,
+  documentSelectionStore,
+  dataObject
+) => {
+  const [selection, setSelection] = useState([]);
   useEffect(() => {
     const updateSelection = () => {
       const groups = dataObject.groups;
       if (groups) {
         const toSelect = [];
         groups.forEach(function collect(group) {
-          if ((group.cluster && clusterSelectionStore.selected.has(group.cluster)) ||
-            (group.document && documentSelectionStore.selected.has(group.document))) {
+          if (
+            (group.cluster &&
+              clusterSelectionStore.selected.has(group.cluster)) ||
+            (group.document &&
+              documentSelectionStore.selected.has(group.document))
+          ) {
             toSelect.push(group);
           }
           if (group.groups) {
@@ -90,8 +100,10 @@ export const useSelection = (clusterSelectionStore, documentSelectionStore, data
 
     autoEffect(updateSelection);
 
-    return () => { clearEffect(updateSelection); };
-  }, [ clusterSelectionStore, documentSelectionStore, dataObject ]);
+    return () => {
+      clearEffect(updateSelection);
+    };
+  }, [clusterSelectionStore, documentSelectionStore, dataObject]);
 
-  return [ selection, setSelection ];
+  return [selection, setSelection];
 };

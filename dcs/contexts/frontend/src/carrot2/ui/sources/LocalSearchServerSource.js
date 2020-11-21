@@ -18,21 +18,24 @@ export const createStores = ({
   fetchCollections,
   fetchResultsForSchemaInference
 }) => {
-  const {
-    schemaInfoStore,
-    resultHolder
-  } = createSchemaExtractorStores(id);
+  const { schemaInfoStore, resultHolder } = createSchemaExtractorStores(id);
 
   const resultConfigStore = createResultConfigStore(id);
 
-  const serviceConfigStore = persistentStore(`workbench:source:${id}:serviceConfig`, Object.assign({
-    collection: undefined,
-    maxResults: 100
-  }, configOverrides));
+  const serviceConfigStore = persistentStore(
+    `workbench:source:${id}:serviceConfig`,
+    Object.assign(
+      {
+        collection: undefined,
+        maxResults: 100
+      },
+      configOverrides
+    )
+  );
 
   const serviceStateStore = createStateStore({
     isUrlValid: () => serviceStateStore.status === "ok",
-    checkServiceUrl: async (url) => {
+    checkServiceUrl: async url => {
       serviceStateStore.status = "loading";
       serviceStateStore.message = "";
       try {
@@ -54,8 +57,7 @@ export const createStores = ({
   });
 
   const isSearchPossible = () =>
-      serviceStateStore.isUrlValid() &&
-      !!serviceConfigStore.collection;
+    serviceStateStore.isUrlValid() && !!serviceConfigStore.collection;
 
   // Check service URL when the page loads.
   autoEffect(() => {
@@ -93,7 +95,7 @@ export const createStores = ({
       options: () => serviceStateStore.collections.map(c => ({ value: c })),
       visible: () => serviceStateStore.isUrlValid(),
       get: () => serviceConfigStore.collection,
-      set: (sett, collection) => serviceConfigStore.collection = collection
+      set: (sett, collection) => (serviceConfigStore.collection = collection)
     },
 
     createFieldChoiceSetting(id, schemaInfoStore, {
@@ -119,7 +121,7 @@ export const createStores = ({
     resultConfigStore.load(schemaInfoStore.fieldStats, resultHolder);
   };
 
-  const createLocalSearchSource = (base) => {
+  const createLocalSearchSource = base => {
     return createSource(schemaInfoStore, resultConfigStore, base);
   };
 
@@ -130,6 +132,5 @@ export const createStores = ({
     settings,
     afterSuccessfulSearch,
     createLocalSearchSource
-  }
+  };
 };
-

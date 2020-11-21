@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from "react";
 
-import './ResultsScreen.css';
+import "./ResultsScreen.css";
 
 import { clusterViews, resultsViews } from "../../../config-views.js";
 import { clusterStore, searchResultStore } from "../../../store/services.js";
@@ -15,24 +15,25 @@ import { sources } from "../../../config-sources.js";
 
 export const ResultsScreen = ({ match, history }) => {
   const source = decodeURIComponent(match.params.source);
-  const query  = decodeURIComponent(match.params.query);
+  const query = decodeURIComponent(match.params.query);
 
   const runSearch = useCallback(() => {
     searchResultStore.load(sources[source], query);
-    document.title = query + (query.length > 0 ? " - " : "") + branding.pageTitle;
-  }, [source, query ]);
+    document.title =
+      query + (query.length > 0 ? " - " : "") + branding.pageTitle;
+  }, [source, query]);
 
   useEffect(() => {
     runSearch();
-  }, [ source, query, runSearch ]);
+  }, [source, query, runSearch]);
 
-  const onQueryChange = (newQuery) => {
+  const onQueryChange = newQuery => {
     pushNewUrl({
       query: newQuery,
       source: source,
       view: getView()
     });
-  }
+  };
 
   const getView = () => {
     let view = match.params.view;
@@ -44,7 +45,7 @@ export const ResultsScreen = ({ match, history }) => {
     return view;
   };
 
-  const onSourceChange = (newSource) => {
+  const onSourceChange = newSource => {
     pushNewUrl({
       query: query,
       source: newSource,
@@ -52,7 +53,7 @@ export const ResultsScreen = ({ match, history }) => {
     });
   };
 
-  const onViewChange = (newView) => {
+  const onViewChange = newView => {
     pushNewUrl({
       query: query,
       source: source,
@@ -60,7 +61,7 @@ export const ResultsScreen = ({ match, history }) => {
     });
   };
 
-  const pushNewUrl = (params) => {
+  const pushNewUrl = params => {
     const newPath = routes.searchResults.buildUrl(params);
     if (newPath === encodeURI(history.location.pathname)) {
       runSearch();
@@ -70,26 +71,38 @@ export const ResultsScreen = ({ match, history }) => {
   };
 
   return (
-      <main className="ResultsScreen">
-        {/**
-         * The key prop is used to re-create the component on query changes,
-         * so that the internal state holding value is thrown away and
-         * replaced with the provided initialQuery prop.
-         */}
-        <SearchForm initialQuery={query} key={query}
-                    source={source}
-                    onSourceChange={onSourceChange}
-                    onSubmit={onQueryChange} />
-        <div className="clusters">
-          <Views activeView={getView()} views={clusterViews} onViewChange={onViewChange} >
-            <Loading store={clusterStore} />
-          </Views>
-        </div>
-        <div className="docs">
-          <Views views={resultsViews} activeView="list" onViewChange={() => {}} source={sources[source]}>
-            <Loading store={searchResultStore} />
-          </Views>
-        </div>
-      </main>
+    <main className="ResultsScreen">
+      {/**
+       * The key prop is used to re-create the component on query changes,
+       * so that the internal state holding value is thrown away and
+       * replaced with the provided initialQuery prop.
+       */}
+      <SearchForm
+        initialQuery={query}
+        key={query}
+        source={source}
+        onSourceChange={onSourceChange}
+        onSubmit={onQueryChange}
+      />
+      <div className="clusters">
+        <Views
+          activeView={getView()}
+          views={clusterViews}
+          onViewChange={onViewChange}
+        >
+          <Loading store={clusterStore} />
+        </Views>
+      </div>
+      <div className="docs">
+        <Views
+          views={resultsViews}
+          activeView="list"
+          onViewChange={() => {}}
+          source={sources[source]}
+        >
+          <Loading store={searchResultStore} />
+        </Views>
+      </div>
+    </main>
   );
 };

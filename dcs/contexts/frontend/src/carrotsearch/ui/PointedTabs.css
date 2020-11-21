@@ -32,7 +32,7 @@
 .PointedTabs > .bp3-tab-list > .bp3-tab[aria-selected="true"]:after {
   position: absolute;
   display: block;
-  content: '';
+  content: "";
   top: 100%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%) rotate(45deg);
@@ -41,8 +41,10 @@
   width: 0.57142857em;
   height: 0.57142857em;
   border: none;
-  border-bottom: var(--pointed-tabs-pointer-border-width) solid var(--tab-border-color);
-  border-right: var(--pointed-tabs-pointer-border-width) solid var(--tab-border-color);
+  border-bottom: var(--pointed-tabs-pointer-border-width) solid
+    var(--tab-border-color);
+  border-right: var(--pointed-tabs-pointer-border-width) solid
+    var(--tab-border-color);
   z-index: 2;
 }
 .PointedTabs > .bp3-tab-list > .bp3-tab-indicator-wrapper {

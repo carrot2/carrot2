@@ -20,7 +20,7 @@
 }
 .SectionDivider:before,
 .SectionDivider:after {
-  content: '';
+  content: "";
   display: table-cell;
   position: relative;
   top: -6px;

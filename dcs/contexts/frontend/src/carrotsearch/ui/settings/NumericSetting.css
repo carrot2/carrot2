@@ -21,7 +21,7 @@
   opacity: 0.6;
 }
 .NumericSetting .bp3-slider-handle .bp3-slider-label {
-  opacity: 1.0;
+  opacity: 1;
 }
 .NumericSetting .bp3-slider-handle:not(.bp3-active) .bp3-slider-label {
   display: none;

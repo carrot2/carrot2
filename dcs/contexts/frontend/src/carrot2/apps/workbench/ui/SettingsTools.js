@@ -20,21 +20,29 @@ export const settingsStateStore = persistentStore("workbench:settings:state", {
 
 const AdvancedSettingsButton = view(() => {
   return (
-      <Button icon={<FontAwesomeIcon icon={faBookSpells} />}
-              title="Show advanced settings"
-              small={true}
-              active={settingsStateStore.showAdvancedSettings}
-              onClick={() => settingsStateStore.showAdvancedSettings = !settingsStateStore.showAdvancedSettings} />
+    <Button
+      icon={<FontAwesomeIcon icon={faBookSpells} />}
+      title="Show advanced settings"
+      small={true}
+      active={settingsStateStore.showAdvancedSettings}
+      onClick={() =>
+        (settingsStateStore.showAdvancedSettings = !settingsStateStore.showAdvancedSettings)
+      }
+    />
   );
 });
 
 AdvancedSettingsButton.propTypes = { onClick: PropTypes.func };
 export const SettingsTools = () => {
   return (
-      <div className="SettingsTools">
-        <Button icon={<FontAwesomeIcon icon={faUndoAlt} />} title="Reset all settings to defaults"
-                small={true} onClick={resetAlgorithmSettings} />
-        <AdvancedSettingsButton />
-      </div>
+    <div className="SettingsTools">
+      <Button
+        icon={<FontAwesomeIcon icon={faUndoAlt} />}
+        title="Reset all settings to defaults"
+        small={true}
+        onClick={resetAlgorithmSettings}
+      />
+      <AdvancedSettingsButton />
+    </div>
   );
 };

@@ -1,10 +1,18 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import './ResultList.css';
+import React, { useCallback, useEffect, useRef } from "react";
+import "./ResultList.css";
 
 import PropTypes from "prop-types";
 
-import { autoEffect, clearEffect, store, view } from "@risingstack/react-easy-state";
-import { ClusterInSummary, ClusterSelectionSummary } from "./ClusterSelectionSummary.js";
+import {
+  autoEffect,
+  clearEffect,
+  store,
+  view
+} from "@risingstack/react-easy-state";
+import {
+  ClusterInSummary,
+  ClusterSelectionSummary
+} from "./ClusterSelectionSummary.js";
 import { Optional } from "../../apps/search-app/ui/Optional.js";
 import { clusterSelectionStore } from "../../store/selection.js";
 
@@ -14,15 +22,17 @@ import { resultListConfigStore } from "./ResultListConfig.js";
 const ResultClusters = view(props => {
   const selectionStore = clusterSelectionStore;
   return (
-      <div className="ResultClusters">
+    <div className="ResultClusters">
       <span>
-      {
-        (props.result.clusters || []).map(c =>
-            <ClusterInSummary cluster={c} key={c.id}
-                              onClick={() => selectionStore.toggleSelection(c)} />)
-      }
+        {(props.result.clusters || []).map(c => (
+          <ClusterInSummary
+            cluster={c}
+            key={c.id}
+            onClick={() => selectionStore.toggleSelection(c)}
+          />
+        ))}
       </span>
-      </div>
+    </div>
   );
 });
 
@@ -32,12 +42,19 @@ export const ResultWrapper = view(props => {
   const config = resultListConfigStore;
 
   return (
-      <a className="Result" href={document.url} target={config.openInNewTab ? "_blank" : "_self"}
-         rel="noopener noreferrer" style={{ display: visible ? "block" : "none" }}>
-        {children}
-        <Optional visible={config.showClusters}
-                  content={() => <ResultClusters result={document} />} />
-      </a>
+    <a
+      className="Result"
+      href={document.url}
+      target={config.openInNewTab ? "_blank" : "_self"}
+      rel="noopener noreferrer"
+      style={{ display: visible ? "block" : "none" }}
+    >
+      {children}
+      <Optional
+        visible={config.showClusters}
+        content={() => <ResultClusters result={document} />}
+      />
+    </a>
   );
 });
 
@@ -48,9 +65,9 @@ const SimpleResult = view(props => {
   const { document, source, visible = true } = props;
 
   return (
-      <ResultWrapper document={document} visible={visible}>
-        {source.createResult(props)}
-      </ResultWrapper>
+    <ResultWrapper document={document} visible={visible}>
+      {source.createResult(props)}
+    </ResultWrapper>
   );
 });
 
@@ -62,28 +79,44 @@ const SimpleResult = view(props => {
 const ReactiveResult = view(props => {
   const document = props.document;
   const visibilityStore = props.visibilityStore;
-  const visible = visibilityStore.allDocumentsVisible || visibilityStore.isVisible(document);
+  const visible =
+    visibilityStore.allDocumentsVisible || visibilityStore.isVisible(document);
 
   return <SimpleResult {...props} visible={visible} />;
 });
 
-const ResultListPaging = ({ enabled, start, end, total, next, prev, nextEnabled, prevEnabled }) => {
+const ResultListPaging = ({
+  enabled,
+  start,
+  end,
+  total,
+  next,
+  prev,
+  nextEnabled,
+  prevEnabled
+}) => {
   if (!enabled) {
     return null;
   }
   return (
-      <div className="ResultListPaging">
-        <ButtonLink enabled={prevEnabled} onClick={prev}>&lt; Previous</ButtonLink>
-        <span>{start + 1} &mdash; {end} of {total}</span>
-        <ButtonLink enabled={nextEnabled} onClick={next}>Next &gt;</ButtonLink>
-      </div>
+    <div className="ResultListPaging">
+      <ButtonLink enabled={prevEnabled} onClick={prev}>
+        &lt; Previous
+      </ButtonLink>
+      <span>
+        {start + 1} &mdash; {end} of {total}
+      </span>
+      <ButtonLink enabled={nextEnabled} onClick={next}>
+        Next &gt;
+      </ButtonLink>
+    </div>
   );
 };
 
 /**
  * Listens to cluster selection changes and calls the supplied callback on every change.
  */
-const useSelectionChange = (onSelectionChange) => {
+const useSelectionChange = onSelectionChange => {
   useEffect(() => {
     const listener = () => {
       const selected = clusterSelectionStore.selected;
@@ -97,7 +130,7 @@ const useSelectionChange = (onSelectionChange) => {
     };
     autoEffect(listener);
     return () => clearEffect(listener);
-  }, [ onSelectionChange ]);
+  }, [onSelectionChange]);
 };
 
 /**
@@ -108,7 +141,7 @@ const usePaging = ({ enabled, maxPerPage, results, onChange }) => {
 
   const reset = useCallback(() => {
     pagingStore.start = 0;
-  }, [ pagingStore ]);
+  }, [pagingStore]);
 
   const start = pagingStore.start;
   const end = start + maxPerPage;
@@ -123,7 +156,7 @@ const usePaging = ({ enabled, maxPerPage, results, onChange }) => {
     },
     prev: () => {
       pagingStore.start = start - maxPerPage;
-      onChange()
+      onChange();
     },
     nextEnabled: end < results.length,
     prevEnabled: start > 0,
@@ -174,7 +207,9 @@ export const ResultList = view(props => {
     if (props.visibilityStore.allDocumentsVisible) {
       visibleResults = allResults;
     } else {
-      visibleResults = allResults.filter(r => props.visibilityStore.isVisible(r));
+      visibleResults = allResults.filter(r =>
+        props.visibilityStore.isVisible(r)
+      );
     }
   } else {
     // In the small-list case where we hide documents through CSS, we need a reactive
@@ -200,23 +235,25 @@ export const ResultList = view(props => {
   const r = useCallback(() => {
     scrollReset();
     reset();
-  }, [ reset, scrollReset ]);
+  }, [reset, scrollReset]);
   useSelectionChange(r);
 
   return (
-      <div className="ResultList" ref={container}>
-        <div>
-          <ClusterSelectionSummary />
-          {
-            results.map((document, index) =>
-                <Result key={index} document={document}
-                        source={resultsStore.searchResult.source}
-                        rank={index + 1}
-                        visibilityStore={props.visibilityStore} />)
-          }
-          <ResultListPaging {...paging} />
-        </div>
+    <div className="ResultList" ref={container}>
+      <div>
+        <ClusterSelectionSummary />
+        {results.map((document, index) => (
+          <Result
+            key={index}
+            document={document}
+            source={resultsStore.searchResult.source}
+            rank={index + 1}
+            visibilityStore={props.visibilityStore}
+          />
+        ))}
+        <ResultListPaging {...paging} />
       </div>
+    </div>
   );
 });
 

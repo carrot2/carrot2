@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import "./ServiceUrlSetting.css";
 
@@ -16,24 +16,32 @@ import { LogEntry } from "../LogEntries.js";
 export const ConnectButton = view(({ store, onClick }) => {
   const ok = store.status === "ok";
   return (
-      <Button className={classnames({ "ExtraPadding": !ok })}
-              icon={<FontAwesomeIcon icon={ok ? faCheck : faPlug} />}
-              intent={ok ? "success" : "none"}
-              title={ok ? "Connected" : "Connect to Solr"}
-              text={ok ? "" : "Connect"}
-              loading={store.status === "loading"}
-              onClick={onClick} outlined={ok} />
+    <Button
+      className={classnames({ ExtraPadding: !ok })}
+      icon={<FontAwesomeIcon icon={ok ? faCheck : faPlug} />}
+      intent={ok ? "success" : "none"}
+      title={ok ? "Connected" : "Connect to Solr"}
+      text={ok ? "" : "Connect"}
+      loading={store.status === "loading"}
+      onClick={onClick}
+      outlined={ok}
+    />
   );
 });
 
-export const createStateStore = (overrides) => {
-  const urlStore = store(Object.assign({
-    message: null,
-    status: "pending",
-    urlDirty: () => {
-      urlStore.status = "pending";
-    }
-  }, overrides));
+export const createStateStore = overrides => {
+  const urlStore = store(
+    Object.assign(
+      {
+        message: null,
+        status: "pending",
+        urlDirty: () => {
+          urlStore.status = "pending";
+        }
+      },
+      overrides
+    )
+  );
   return urlStore;
 };
 
@@ -48,17 +56,28 @@ export const ServiceUrlSetting = view(({ setting, get, set }) => {
     }
   });
 
-  const message = stateStore.message ?
-      <LogEntry entry={{ level: "error", message: stateStore.message }} /> : null;
+  const message = stateStore.message ? (
+    <LogEntry entry={{ level: "error", message: stateStore.message }} />
+  ) : null;
 
   return (
-      <Setting className="ServiceUrlSetting" label={label} description={description}
-               message={message}>
-        <ControlGroup fill={true}>
-          <InputGroup value={urlStore.url} fill={true}
-                      onChange={e => urlStore.setUrl(e.target.value)} />
-          <ConnectButton store={stateStore} onClick={() => checkUrl(urlStore.url)} />
-        </ControlGroup>
-      </Setting>
+    <Setting
+      className="ServiceUrlSetting"
+      label={label}
+      description={description}
+      message={message}
+    >
+      <ControlGroup fill={true}>
+        <InputGroup
+          value={urlStore.url}
+          fill={true}
+          onChange={e => urlStore.setUrl(e.target.value)}
+        />
+        <ConnectButton
+          store={stateStore}
+          onClick={() => checkUrl(urlStore.url)}
+        />
+      </ControlGroup>
+    </Setting>
   );
 });

@@ -16,38 +16,39 @@ const {
   settings,
   afterSuccessfulSearch,
   createLocalSearchSource
-} =
-    createStores({
-      id: "solr",
-      serviceName: "Solr",
-      configOverrides: {
-        serviceUrl: "http://localhost:8983/solr",
-        extraHttpGetParams: ""
-      },
+} = createStores({
+  id: "solr",
+  serviceName: "Solr",
+  configOverrides: {
+    serviceUrl: "http://localhost:8983/solr",
+    extraHttpGetParams: ""
+  },
 
-      querySetting: id => ({
-        id: `${id}:query`,
-        ...storeAccessors(queryStore, "query"),
-        type: "string",
-        label: "Query",
-        description: `
+  querySetting: id => ({
+    id: `${id}:query`,
+    ...storeAccessors(queryStore, "query"),
+    type: "string",
+    label: "Query",
+    description: `
 <p>
   The search query to pass to Solr. Use 
   <a target=_blank href="https://lucene.apache.org/solr/guide/8_6/the-standard-query-parser.html#specifying-terms-for-the-standard-query-parser">Solr query syntax</a>.
 </p>`,
-        visible: () => isSearchPossible()
-      }),
+    visible: () => isSearchPossible()
+  }),
 
-      fetchCollections: async url => {
-        const cores = await ky.get("admin/cores?action=STATUS", {
-          prefixUrl: url,
-          timeout: 4000
-        }).json();
+  fetchCollections: async url => {
+    const cores = await ky
+      .get("admin/cores?action=STATUS", {
+        prefixUrl: url,
+        timeout: 4000
+      })
+      .json();
 
-        return Object.keys(cores.status);
-      },
-      fetchResultsForSchemaInference: async () => searchCurrentCore("*:*", 50)
-    });
+    return Object.keys(cores.status);
+  },
+  fetchResultsForSchemaInference: async () => searchCurrentCore("*:*", 50)
+});
 
 const searchCurrentCore = async (query, results = 50, extraParams) => {
   const url = serviceConfigStore.serviceUrl;
@@ -58,17 +59,19 @@ const searchCurrentCore = async (query, results = 50, extraParams) => {
       documents: [],
       matches: 0,
       query: ""
-    }
+    };
   }
 
-  const result = await ky.get(`${core}/select`, {
-    prefixUrl: url,
-    timeout: 4000,
-    searchParams: Object.assign({}, extraParams, {
-      q: query,
-      rows: results
+  const result = await ky
+    .get(`${core}/select`, {
+      prefixUrl: url,
+      timeout: 4000,
+      searchParams: Object.assign({}, extraParams, {
+        q: query,
+        rows: results
+      })
     })
-  }).json();
+    .json();
 
   return {
     documents: result.response.docs,
@@ -102,18 +105,20 @@ const solrSettings = [
   }
 ];
 
-const solrSource = async (query) => {
+const solrSource = async query => {
   const params = {};
-  new URLSearchParams(serviceConfigStore.extraHttpGetParams)
-      .forEach((val, key) => {
-        params[key] = val;
-      });
+  new URLSearchParams(serviceConfigStore.extraHttpGetParams).forEach(
+    (val, key) => {
+      params[key] = val;
+    }
+  );
 
-  return searchCurrentCore(query, serviceConfigStore.maxResults, params)
-      .then(result => {
-        afterSuccessfulSearch();
-        return result;
-      });
+  return searchCurrentCore(query, serviceConfigStore.maxResults, params).then(
+    result => {
+      afterSuccessfulSearch();
+      return result;
+    }
+  );
 };
 
 export const solrSourceDescriptor = createLocalSearchSource({
@@ -121,7 +126,7 @@ export const solrSourceDescriptor = createLocalSearchSource({
   descriptionHtml: "queries Apache Solr",
   source: solrSource,
   getSettings: () => solrSettings,
-  createError: async (e) => {
+  createError: async e => {
     // Parse the body of the error response. The JSON response contains an error message.
     let details;
     if (e.response) {
@@ -135,10 +140,9 @@ export const solrSourceDescriptor = createLocalSearchSource({
       }
     }
     return (
-        <SearchEngineErrorMessage>
-          <HttpErrorMessage error={e}>{details}</HttpErrorMessage>
-        </SearchEngineErrorMessage>
+      <SearchEngineErrorMessage>
+        <HttpErrorMessage error={e}>{details}</HttpErrorMessage>
+      </SearchEngineErrorMessage>
     );
-  },
+  }
 });
-

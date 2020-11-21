@@ -16,7 +16,7 @@ nav {
   display: flex;
   flex-direction: column;
   padding-top: calc(1.5 * var(--leading));
-  padding-bottom: calc(1.0 * var(--leading));
+  padding-bottom: calc(1 * var(--leading));
 }
 
 nav .Logo {
@@ -61,7 +61,7 @@ nav .ThemeSwitch {
 }
 .dark .Backdrop {
   filter: brightness(0.3);
-  opacity: 1.0;
+  opacity: 1;
 }
 .Backdrop.hidden {
   opacity: 0;

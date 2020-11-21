@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import "./WorkbenchApp.css";
 
@@ -9,14 +9,14 @@ import { WorkbenchResults } from "./WorkbenchResults.js";
 
 export const WorkbenchApp = () => {
   return (
-      <React.Fragment>
-        <div className="WorkbenchApp">
-          <Router>
-            <Switch>
-              <Route path={routes.workbench.path} component={WorkbenchResults} />
-            </Switch>
-          </Router>
-        </div>
-      </React.Fragment>
+    <React.Fragment>
+      <div className="WorkbenchApp">
+        <Router>
+          <Switch>
+            <Route path={routes.workbench.path} component={WorkbenchResults} />
+          </Switch>
+        </Router>
+      </div>
+    </React.Fragment>
   );
 };

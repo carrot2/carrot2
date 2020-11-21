@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import { view } from "@risingstack/react-easy-state";
 
@@ -9,8 +9,11 @@ export const StringSetting = view(({ setting, get, set }) => {
   const { label, description } = setting;
 
   return (
-      <Setting className="StringSetting" label={label} description={description}>
-        <InputGroup value={get(setting)} onChange={e => set(setting, e.target.value)} />
-      </Setting>
+    <Setting className="StringSetting" label={label} description={description}>
+      <InputGroup
+        value={get(setting)}
+        onChange={e => set(setting, e.target.value)}
+      />
+    </Setting>
   );
 });

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 import "./NumericSetting.css";
 
@@ -9,7 +9,7 @@ import { FormGroup, NumericInput, Slider } from "@blueprintjs/core";
 import { ceil125, decimalPlaces } from "../../lang/math.js";
 import { Setting } from "./Setting.js";
 
-const clampWhenInteger = (v, integer) => integer ? Math.max(1, v) : v;
+const clampWhenInteger = (v, integer) => (integer ? Math.max(1, v) : v);
 
 /**
  * Common heuristics for the spinner and spinner+slider number editors.
@@ -20,15 +20,18 @@ const useNumberSettingHeuristics = (setting, set, inputStep, initialValue) => {
   const inputPrecision = decimalPlaces(inputStep);
 
   // Render value in the input box with fewest decimal places possible.
-  const formatInputValue = v => (v * 1.0).toFixed(Math.min(decimalPlaces(v), inputPrecision));
+  const formatInputValue = v =>
+    (v * 1.0).toFixed(Math.min(decimalPlaces(v), inputPrecision));
 
   // Internal storage of the string entered in the input box.
   // We cannot convert immediately to a number because it wouldn't be possible
   // to enter a decimal point or a minus sign.
-  const [ stringValue, setStringValue ] = useState(formatInputValue(initialValue));
+  const [stringValue, setStringValue] = useState(
+    formatInputValue(initialValue)
+  );
   useEffect(() => {
     setStringValue(initialValue);
-  }, [ initialValue ]);
+  }, [initialValue]);
 
   // Triggers the change for the parent component to react on.
   const onNumberValueChange = (v, step) => {
@@ -40,7 +43,10 @@ const useNumberSettingHeuristics = (setting, set, inputStep, initialValue) => {
     // For integer inputs, we align the successive slider values to me multiples of the
     // step value. For example, if the setting has a 2...100 range and step of 5, make the slider
     // produce values of 2, 5, 10, 15, ... rather than 2, 7, 12, 17.
-    const toSet = integer && Number.isFinite(min) ? Math.max(min, vRounded - (vRounded % step)) : vRounded;
+    const toSet =
+      integer && Number.isFinite(min)
+        ? Math.max(min, vRounded - (vRounded % step))
+        : vRounded;
     setStringValue(formatInputValue(toSet));
     set(setting, toSet);
   };
@@ -58,27 +64,41 @@ export const NumericSettingSimple = view(({ setting, get, set }) => {
   const value = get(setting);
   const inputStep = clampWhenInteger(ceil125(value / 100), integer);
 
-  const { stringValue, setStringValue, onNumberValueChange } =
-      useNumberSettingHeuristics(setting, set, inputStep, value);
+  const {
+    stringValue,
+    setStringValue,
+    onNumberValueChange
+  } = useNumberSettingHeuristics(setting, set, inputStep, value);
 
   // Parse string into a float when the focus leaves the input box.
-  const commitStringValue = () => onNumberValueChange(parseFloat(stringValue), 1);
+  const commitStringValue = () =>
+    onNumberValueChange(parseFloat(stringValue), 1);
 
   const onSpinnerValueChange = v => onNumberValueChange(v, inputStep);
 
   return (
-      <Setting className="NumericSettingSimplte" label={label} description={description}>
-        <FormGroup inline={true} fill={true} className="NumericSettingControls">
-          <NumericInput onBlur={commitStringValue} onButtonClick={onSpinnerValueChange}
-                        value={stringValue} onValueChange={(v, vs) => setStringValue(vs)}
-                        fill={false}
-                        min={min} max={max}
-                        stepSize={inputStep} minorStepSize={inputStep} majorStepSize={inputStep}
-                        clampValueOnBlur={true} />
-        </FormGroup>
-      </Setting>
+    <Setting
+      className="NumericSettingSimplte"
+      label={label}
+      description={description}
+    >
+      <FormGroup inline={true} fill={true} className="NumericSettingControls">
+        <NumericInput
+          onBlur={commitStringValue}
+          onButtonClick={onSpinnerValueChange}
+          value={stringValue}
+          onValueChange={(v, vs) => setStringValue(vs)}
+          fill={false}
+          min={min}
+          max={max}
+          stepSize={inputStep}
+          minorStepSize={inputStep}
+          majorStepSize={inputStep}
+          clampValueOnBlur={true}
+        />
+      </FormGroup>
+    </Setting>
   );
-
 });
 
 /**
@@ -101,14 +121,20 @@ export const NumericSetting = view(({ setting, get, set }) => {
   const valueLabelPrecision = decimalPlaces(sliderStep);
 
   // Render bounds without decimal places, if possible.
-  const sliderLabelRenderer = v => (v * 1.0).toFixed(
-      v === min || v === max ? boundsLabelPrecision : valueLabelPrecision);
+  const sliderLabelRenderer = v =>
+    (v * 1.0).toFixed(
+      v === min || v === max ? boundsLabelPrecision : valueLabelPrecision
+    );
 
-  const { stringValue, setStringValue, onNumberValueChange } =
-      useNumberSettingHeuristics(setting, set, inputStep, value);
+  const {
+    stringValue,
+    setStringValue,
+    onNumberValueChange
+  } = useNumberSettingHeuristics(setting, set, inputStep, value);
 
   // Parse string into a float when the focus leaves the input box.
-  const commitStringValue = () => onNumberValueChange(parseFloat(stringValue), 1);
+  const commitStringValue = () =>
+    onNumberValueChange(parseFloat(stringValue), 1);
 
   const onSpinnerValueChange = v => onNumberValueChange(v, inputStep);
   const onSliderValueChange = v => onNumberValueChange(v, sliderStep);
@@ -116,18 +142,32 @@ export const NumericSetting = view(({ setting, get, set }) => {
   const v = Math.max(Math.min(value, max), min);
 
   return (
-      <Setting className="NumericSetting" label={label} description={description}>
-        <FormGroup inline={true} fill={true} className="NumericSettingControls">
-          <NumericInput onBlur={commitStringValue} onButtonClick={onSpinnerValueChange}
-                        value={stringValue} onValueChange={(v, vs) => setStringValue(vs)}
-                        fill={false}
-                        min={min} max={max}
-                        stepSize={inputStep} minorStepSize={inputStep} majorStepSize={inputStep}
-                        clampValueOnBlur={true} />
-          <Slider value={v} onChange={onSliderValueChange} fill={false}
-                  min={min} max={max} stepSize={sliderStep} labelStepSize={range}
-                  labelRenderer={sliderLabelRenderer} />
-        </FormGroup>
-      </Setting>
+    <Setting className="NumericSetting" label={label} description={description}>
+      <FormGroup inline={true} fill={true} className="NumericSettingControls">
+        <NumericInput
+          onBlur={commitStringValue}
+          onButtonClick={onSpinnerValueChange}
+          value={stringValue}
+          onValueChange={(v, vs) => setStringValue(vs)}
+          fill={false}
+          min={min}
+          max={max}
+          stepSize={inputStep}
+          minorStepSize={inputStep}
+          majorStepSize={inputStep}
+          clampValueOnBlur={true}
+        />
+        <Slider
+          value={v}
+          onChange={onSliderValueChange}
+          fill={false}
+          min={min}
+          max={max}
+          stepSize={sliderStep}
+          labelStepSize={range}
+          labelRenderer={sliderLabelRenderer}
+        />
+      </FormGroup>
+    </Setting>
   );
 });

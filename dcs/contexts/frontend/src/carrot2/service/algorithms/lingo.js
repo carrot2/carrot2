@@ -5,37 +5,69 @@ import {
   collectDefaults,
   getDescriptorsById,
   settingFromDescriptor,
-  settingFromDescriptorRecursive, settingFromFilterDescriptor
+  settingFromDescriptorRecursive,
+  settingFromFilterDescriptor
 } from "./attributes.js";
 
 const descriptorsById = getDescriptorsById(descriptor);
 
-const settingFrom = (id, overrides) => settingFromDescriptor(descriptorsById, id, overrides);
+const settingFrom = (id, overrides) =>
+  settingFromDescriptor(descriptorsById, id, overrides);
 const settingFromRecursive = (id, getterProvider, overrides) =>
-    settingFromDescriptorRecursive(descriptorsById, id, getterProvider, overrides);
+  settingFromDescriptorRecursive(
+    descriptorsById,
+    id,
+    getterProvider,
+    overrides
+  );
 const settingFromFilter = (id, getterProvider) =>
-    settingFromFilterDescriptor(descriptorsById, id, getterProvider);
+  settingFromFilterDescriptor(descriptorsById, id, getterProvider);
 
 const getterProvider = () => getter;
 const clusterSettings = [
   settingFrom("desiredClusterCount"),
   settingFrom("preprocessing.documentAssigner.minClusterSize"),
-  ...settingFromRecursive("clusterBuilder.labelAssigner", getterProvider, () => ({ ui: "radio" })),
+  ...settingFromRecursive(
+    "clusterBuilder.labelAssigner",
+    getterProvider,
+    () => ({ ui: "radio" })
+  ),
   settingFrom("preprocessing.documentAssigner.exactPhraseAssignment"),
   advanced(settingFrom("clusterBuilder.clusterMergingThreshold")),
-  advanced(settingFrom("scoreWeight", { label: "Size-score sorting ratio" })),
+  advanced(settingFrom("scoreWeight", { label: "Size-score sorting ratio" }))
 ];
 const labelSettings = [
   settingFrom("clusterBuilder.phraseLabelBoost"),
   advanced(settingFrom("clusterBuilder.phraseLengthPenaltyStart")),
   advanced(settingFrom("clusterBuilder.phraseLengthPenaltyStop")),
-  ...settingFromFilter("preprocessing.labelFilters.completeLabelFilter", getterProvider),
-  ...settingFromFilter("preprocessing.labelFilters.genitiveLabelFilter", getterProvider),
-  ...settingFromFilter("preprocessing.labelFilters.minLengthLabelFilter", getterProvider),
-  ...settingFromFilter("preprocessing.labelFilters.numericLabelFilter", getterProvider),
-  ...settingFromFilter("preprocessing.labelFilters.queryLabelFilter", getterProvider),
-  ...settingFromFilter("preprocessing.labelFilters.stopLabelFilter", getterProvider),
-  ...settingFromFilter("preprocessing.labelFilters.stopWordLabelFilter", getterProvider),
+  ...settingFromFilter(
+    "preprocessing.labelFilters.completeLabelFilter",
+    getterProvider
+  ),
+  ...settingFromFilter(
+    "preprocessing.labelFilters.genitiveLabelFilter",
+    getterProvider
+  ),
+  ...settingFromFilter(
+    "preprocessing.labelFilters.minLengthLabelFilter",
+    getterProvider
+  ),
+  ...settingFromFilter(
+    "preprocessing.labelFilters.numericLabelFilter",
+    getterProvider
+  ),
+  ...settingFromFilter(
+    "preprocessing.labelFilters.queryLabelFilter",
+    getterProvider
+  ),
+  ...settingFromFilter(
+    "preprocessing.labelFilters.stopLabelFilter",
+    getterProvider
+  ),
+  ...settingFromFilter(
+    "preprocessing.labelFilters.stopWordLabelFilter",
+    getterProvider
+  )
 ];
 const languageModelSettings = [
   ...settingFromRecursive("matrixBuilder.termWeighting", getterProvider),
@@ -49,12 +81,12 @@ const languageModelSettings = [
 ];
 
 const parameterStore = persistentStore(
-    "parameters:algorithm:lingo",
-    collectDefaults(descriptorsById, [
-      clusterSettings,
-      labelSettings,
-      languageModelSettings
-    ])
+  "parameters:algorithm:lingo",
+  collectDefaults(descriptorsById, [
+    clusterSettings,
+    labelSettings,
+    languageModelSettings
+  ])
 );
 const getter = setting => parameterStore[setting.id];
 const settings = [
@@ -67,7 +99,8 @@ const settings = [
         type: "group",
         label: "Clusters",
         settings: clusterSettings,
-        description: "Parameters affecting the number, structure and content of clusters."
+        description:
+          "Parameters affecting the number, structure and content of clusters."
       },
       {
         id: "lingo:labels",
@@ -81,20 +114,21 @@ const settings = [
         type: "group",
         label: "Language model",
         settings: languageModelSettings,
-        description: "Parameters of the document representation used by the clustering algorithm."
+        description:
+          "Parameters of the document representation used by the clustering algorithm."
       }
     ],
     get: getter,
-    set: (setting, val) => parameterStore[setting.id] = val
+    set: (setting, val) => (parameterStore[setting.id] = val)
   }
 ];
 
 export const lingo = {
   label: "Lingo",
   description: "Well-described flat clusters.",
-  descriptionHtml: "creates well-described flat clusters. Does not scale beyond a few thousand search results. Available as part of the open source <a href='http://project.carrot2.org' target='_blank'>Carrot<sup>2</sup> framework</a>.",
+  descriptionHtml:
+    "creates well-described flat clusters. Does not scale beyond a few thousand search results. Available as part of the open source <a href='http://project.carrot2.org' target='_blank'>Carrot<sup>2</sup> framework</a>.",
   tag: "open source",
   getSettings: () => settings,
   resetToDefaults: parameterStore.resetToDefaults
 };
-

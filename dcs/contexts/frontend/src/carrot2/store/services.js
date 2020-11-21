@@ -9,7 +9,7 @@ import { collectParameters } from "../service/algorithms/attributes.js";
 
 const EMPTY_ARRAY = [];
 
-export const algorithmStore = persistentStore("clusteringAlgorithm",{
+export const algorithmStore = persistentStore("clusteringAlgorithm", {
   clusteringAlgorithm: undefined,
   getAlgorithmInstance: () => algorithms[algorithmStore.clusteringAlgorithm]
 });
@@ -52,16 +52,25 @@ export const clusterStore = store({
       clusterStore.error = undefined;
       try {
         const fieldsToCluster = searchResult.source.getFieldsToCluster();
-        const response = await fetchClusters(query, documents, fieldsToCluster, algorithm, currentParams);
+        const response = await fetchClusters(
+          query,
+          documents,
+          fieldsToCluster,
+          algorithm,
+          currentParams
+        );
         clusterStore.clusters = response.clusters;
         clusterStore.serviceInfo = response.serviceInfo;
-        clusterStore.documents = addClusterReferences(documents, clusterStore.clusters);
+        clusterStore.documents = addClusterReferences(
+          documents,
+          clusterStore.clusters
+        );
       } catch (e) {
         clusterStore.clusters = EMPTY_ARRAY;
         clusterStore.documents = EMPTY_ARRAY;
         try {
           e.bodyParsed = await e.json();
-        } catch (ignored) { }
+        } catch (ignored) {}
         errors.addError(createClusteringErrorElement(e));
       }
       clusterStore.loading = false;
@@ -79,7 +88,7 @@ export const clusterStore = store({
           if (map.has(doc)) {
             map.get(doc).push(cluster);
           } else {
-            map.set(doc, [ cluster ]);
+            map.set(doc, [cluster]);
           }
         }
       }, new Map());
@@ -125,7 +134,10 @@ export const searchResultStore = store({
     searchResultStore.loading = true;
     searchResultStore.error = false;
     try {
-      searchResultStore.searchResult = assignDocumentIds(await src.source(query), src);
+      searchResultStore.searchResult = assignDocumentIds(
+        await src.source(query),
+        src
+      );
     } catch (e) {
       errors.addError(await src.createError(e));
       searchResultStore.error = true;
@@ -133,7 +145,7 @@ export const searchResultStore = store({
         query: query,
         matches: 0,
         documents: EMPTY_ARRAY
-      }
+      };
     }
     searchResultStore.loading = false;
   }
@@ -142,11 +154,11 @@ export const searchResultStore = store({
 function assignDocumentIds(result, source) {
   return {
     ...result,
-    "source": source,
-    "documents": (result.documents || []).map((doc, index) => ({
+    source: source,
+    documents: (result.documents || []).map((doc, index) => ({
       ...doc,
-      "__id": index,
-      "__rank": 1.0 - index / result.documents.length
+      __id: index,
+      __rank: 1.0 - index / result.documents.length
     }))
   };
 }

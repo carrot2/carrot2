@@ -15,38 +15,39 @@ const {
   afterSuccessfulSearch,
   createLocalSearchSource,
   isSearchPossible
-} =
-    createStores({
-      id: "es",
-      serviceName: "Elasticsearch",
-      configOverrides: {
-        serviceUrl: "http://localhost:9200/",
-        extraHttpGetParams: ""
-      },
+} = createStores({
+  id: "es",
+  serviceName: "Elasticsearch",
+  configOverrides: {
+    serviceUrl: "http://localhost:9200/",
+    extraHttpGetParams: ""
+  },
 
-      querySetting: id => ({
-        id: `${id}:query`,
-        ...storeAccessors(queryStore, "query"),
-        type: "string",
-        label: "Query",
-        description: `
+  querySetting: id => ({
+    id: `${id}:query`,
+    ...storeAccessors(queryStore, "query"),
+    type: "string",
+    label: "Query",
+    description: `
 <p>
   The search query to pass to Elasticsearch. Use 
   <a target=_blank href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#query-string-syntax">Elasticsearch DSL query syntax</a>.
 </p>`,
-        visible: () => isSearchPossible()
-      }),
+    visible: () => isSearchPossible()
+  }),
 
-      fetchCollections: async url => {
-        const indices = await ky.get("_cat/indices?format=json", {
-          prefixUrl: url,
-          timeout: 4000
-        }).json();
+  fetchCollections: async url => {
+    const indices = await ky
+      .get("_cat/indices?format=json", {
+        prefixUrl: url,
+        timeout: 4000
+      })
+      .json();
 
-        return indices.map(e => e.index);
-      },
-      fetchResultsForSchemaInference: async () => searchCurrentCollection("*:*", 50)
-    });
+    return indices.map(e => e.index);
+  },
+  fetchResultsForSchemaInference: async () => searchCurrentCollection("*:*", 50)
+});
 
 const searchCurrentCollection = async (query, results = 50) => {
   const url = serviceConfigStore.serviceUrl;
@@ -57,25 +58,27 @@ const searchCurrentCollection = async (query, results = 50) => {
       documents: [],
       matches: 0,
       query: ""
-    }
+    };
   }
 
-  const result = await ky.get(`${collection}/_search`, {
-    prefixUrl: url,
-    timeout: 4000,
-    searchParams: {
-      source: JSON.stringify({
-        query: {
-          query_string: {
-            query: query
-          }
-        },
-        from: 0,
-        size: results
-      }),
-      source_content_type: "application/json"
-    }
-  }).json();
+  const result = await ky
+    .get(`${collection}/_search`, {
+      prefixUrl: url,
+      timeout: 4000,
+      searchParams: {
+        source: JSON.stringify({
+          query: {
+            query_string: {
+              query: query
+            }
+          },
+          from: 0,
+          size: results
+        }),
+        source_content_type: "application/json"
+      }
+    })
+    .json();
 
   return {
     documents: result.hits.hits.map(h => h._source),
@@ -90,18 +93,17 @@ const esSettings = [
     type: "group",
     label: "Elasticsearch",
     description: "Queries Elasticsearch.",
-    settings: [
-      ...settings
-    ]
+    settings: [...settings]
   }
 ];
 
-const esSource = async (query) => {
-  return searchCurrentCollection(query, serviceConfigStore.maxResults)
-      .then(result => {
-        afterSuccessfulSearch();
-        return result;
-      });
+const esSource = async query => {
+  return searchCurrentCollection(query, serviceConfigStore.maxResults).then(
+    result => {
+      afterSuccessfulSearch();
+      return result;
+    }
+  );
 };
 
 export const esSourceDescriptor = createLocalSearchSource({
@@ -109,7 +111,7 @@ export const esSourceDescriptor = createLocalSearchSource({
   descriptionHtml: "queries Elasticsearch",
   source: esSource,
   getSettings: () => esSettings,
-  createError: async (e) => {
+  createError: async e => {
     // Parse the body of the error response. The JSON response contains an error message.
     let details;
     if (e.response) {
@@ -123,10 +125,9 @@ export const esSourceDescriptor = createLocalSearchSource({
       }
     }
     return (
-        <SearchEngineErrorMessage>
-          <HttpErrorMessage error={e}>{details}</HttpErrorMessage>
-        </SearchEngineErrorMessage>
+      <SearchEngineErrorMessage>
+        <HttpErrorMessage error={e}>{details}</HttpErrorMessage>
+      </SearchEngineErrorMessage>
     );
-  },
+  }
 });
-

@@ -71,7 +71,7 @@ a.Result:hover {
 
 .Result > div > p {
   margin-top: 0.5em;
-  margin-bottom: 0
+  margin-bottom: 0;
 }
 
 .Result > dl,
@@ -109,7 +109,7 @@ a.Result:hover {
   opacity: 0.5;
 }
 .ResultList .ResultClusters > span:hover .ClusterInSummary:hover {
-  opacity: 1.0;
+  opacity: 1;
 }
 .ResultList .ResultClusters:hover .ClusterInSummary:hover .bp3-icon {
   color: var(--cluster-icon-color);

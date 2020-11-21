@@ -3,7 +3,9 @@ import storage from "store2";
 import LRU from "lru-cache";
 
 export const persistentStore = (key, defaults, methods) => {
-  const backingStore = store(Object.assign({}, defaults, storage.get(key), methods));
+  const backingStore = store(
+    Object.assign({}, defaults, storage.get(key), methods)
+  );
 
   autoEffect(function () {
     storage.set(key, backingStore);
@@ -19,7 +21,12 @@ export const persistentStore = (key, defaults, methods) => {
   return backingStore;
 };
 
-export const persistentLruStore = (storeKey, itemKey, itemValue, maxItems = 1024) => {
+export const persistentLruStore = (
+  storeKey,
+  itemKey,
+  itemValue,
+  maxItems = 1024
+) => {
   const items = new LRU({ max: maxItems });
   items.load(storage.get(storeKey) || []);
 

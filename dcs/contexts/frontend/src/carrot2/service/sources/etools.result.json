@@ -1,872 +1,872 @@
 {
-	"document": {
-		"version": 1.0,
-		"partner": "Carrot2Json",
-		"timestamp": "Fri Jan 11 22:25:24 CET 2019"
-	},
-	"request": {
-		"query": "json",
-		"country": "web",
-		"language": "all",
-		"safeSearch": false,
-		"dataSourceResults": 40,
-		"maxRecords": 102,
-		"timeoutMs": 2000,
-		"sources": {
-			"count": 7,
-			"names": ["Ask", "Base", "Bing", "Faroo", "Google", "Wikipedia", "Yahoo"]
-		}
-	},
-	"response": {
-		"totalEstimatedRecords": 17101043,
-		"mergedRecords": 102,
-		"durationMs": 25,
-		"sources": {
-			"count": 7,
-			"detail": [
-				{
-					"name": "Ask",
-					"records": 40,
-					"cached": true,
-					"url": "https://www.search.ask.com/web?q=json"
-				},
-				{
-					"name": "Bing",
-					"records": 21,
-					"cached": true,
-					"url": "https://www.bing.com/search?q=%2Bjson%20language%3Aen&count=40&adlt=off"
-				},
-				{
-					"name": "Faroo",
-					"records": 10,
-					"cached": true,
-					"url": "http://www.faroo.com/#q=json&l=en&src=web&news=false"
-				},
-				{
-					"name": "Wikipedia",
-					"records": 40,
-					"cached": true,
-					"url": "https://en.wikipedia.org/w/index.php?search=json&limit=40&fulltext=1"
-				}
-			]
-		},
-		"mergedRecords": [
-			{
-				"id": 1,
-				"relevance": 10,
-				"title": "JSON - Wikipedia",
-				"text": "JSON grew out of a need for stateless, real-time server-to-browser communication protocol without using browser plugins such as Flash or Java applets, the dominant …",
-				"url": "https://en.wikipedia.org/wiki/JSON",
-				"sources": ["Ask", "Bing", "Wikipedia"]
-			},
-			{
-				"id": 2,
-				"relevance": 7,
-				"title": "JSON",
-				"text": "json element value object array string number \"true\" \"false\" \"null\" object '{' ws '}' '{' members '}' members member member ',' members …",
-				"url": "http://json.org/",
-				"sources": ["Bing", "Faroo"]
-			},
-			{
-				"id": 3,
-				"relevance": 5,
-				"title": "json — JSON encoder and decoder — Python …",
-				"text": "30.10.2018 · JSON is a subset of YAML 1.2. The JSON produced by this module’s default settings (in particular, the default separators value) is also a subset of YAML …",
-				"url": "https://docs.python.org/3/library/json.html",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 4,
-				"relevance": 5,
-				"title": "JSON Schema | The home of JSON Schema",
-				"text": "JSON Schema. Describes your existing data format(s). Provides clear human- and machine- readable documentation. Validates data which is useful for: …",
-				"url": "http://json-schema.org/",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 5,
-				"relevance": 5,
-				"title": "PHP: json_encode - Manual",
-				"text": "Returns a string containing the JSON representation of the supplied value. The encoding is affected by the supplied options and additionally the encoding of float …",
-				"url": "http://php.net/manual/en/function.json-encode.php",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 6,
-				"relevance": 5,
-				"title": "18.2. json — JSON encoder and decoder — …",
-				"text": "02.07.2015 · New in version 2.6. JSON is a subset of YAML 1.2. The JSON produced by this module’s default settings (in particular, the default separators value) is …",
-				"url": "https://docs.python.org/2/library/json.html",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 7,
-				"relevance": 5,
-				"title": "Maven - Json-lib::Welcome",
-				"text": "JSON Java; string java.lang.String, java.lang.Character, char: number java.lang.Number, byte, short, int, long, float, double: true|false java.lang …",
-				"url": "http://json-lib.sourceforge.net/",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 8,
-				"relevance": 4,
-				"title": "JSON Editor Online - view, edit and format JSON …",
-				"text": "JSON Editor Online is a web-based tool to view, edit, and format JSON. It shows your data side by side in a clear, editable treeview and in a code editor.",
-				"url": "http://jsoneditoronline.org/",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 9,
-				"relevance": 4,
-				"title": "GitHub - typicode/json-server: Get a full fake …",
-				"text": "Get a full fake REST API with zero coding in less than 30 seconds (seriously) - typicode/json-server …",
-				"url": "https://github.com/typicode/json-server",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 10,
-				"relevance": 4,
-				"title": "Standard ECMA-262 ECMAScript Language …",
-				"text": "04.01.2019 · Standard ECMA-262 ECMAScript ® 2018 Language Specification 9 th edition (June 2018) This Standard defines the ECMAScript 2018 general-purpose programming …",
-				"url": "http://www.ecma-international.org/publications/standards/Ecma-262.htm",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 11,
-				"relevance": 4,
-				"title": "JSON-LD",
-				"text": "JSON-LD (JavaScript Object Notation for Linked Data), is a method of encoding Linked Data using JSON. It was a goal to require as little effort as possible …",
-				"url": "https://en.wikipedia.org/wiki/JSON-LD",
-				"sources": ["Faroo", "Wikipedia"]
-			},
-			{
-				"id": 12,
-				"relevance": 4,
-				"title": "What is the correct JSON content type? - Stack …",
-				"text": "I've been messing around with JSON for some time, just pushing it out as text and it hasn't hurt anybody (that I know of), but I'd like to start doing things properly.",
-				"url": "https://stackoverflow.com/questions/477816/what-is-the-correct-json-content-type",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 13,
-				"relevance": 4,
-				"title": "COPY from JSON Format - Amazon Redshift",
-				"text": "Describes how to use the Amazon Redshift COPY command to load tables from data in JSON format.",
-				"url": "https://docs.aws.amazon.com/redshift/latest/dg/copy-usage_notes-copy-from-json.html?tag=comceptaag",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 14,
-				"relevance": 4,
-				"title": "JSON Binding (JSON-B) - Home",
-				"text": "What is JSON-B? JSON-B is a standard binding layer for converting Java objects to/from JSON messages. It defines a default mapping algorithm for converting …",
-				"url": "http://json-b.net/",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 15,
-				"relevance": 4,
-				"title": "JSON Formatter & Validator",
-				"text": "The JSON Formatter & Validator helps debugging JSON data by formatting and validating JSON data so that it can easily be read by human beings.",
-				"url": "https://jsonformatter.curiousconcept.com/",
-				"sources": ["Ask", "Faroo"]
-			},
-			{
-				"id": 16,
-				"relevance": 4,
-				"title": "JSLint: The JavaScript Code Quality Tool",
-				"text": "JSLint, The JavaScript Code Quality Tool. This file allows JSLint to be run from a web browser. It can accept a source program and analyze it without sending it …",
-				"url": "http://jslint.com/",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 17,
-				"relevance": 4,
-				"title": "GitHub - jakubroztocil/httpie: As easy as httpie …",
-				"text": "As easy as httpie /aitch-tee-tee-pie/ 🥧 Modern command line HTTP client – user-friendly curl alternative with intuitive UI, JSON support, syntax highlighting …",
-				"url": "https://github.com/jakubroztocil/httpie",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 18,
-				"relevance": 3,
-				"title": "JSON Functions - Amazon Redshift",
-				"text": "Describes the JSON functions for SQL that Amazon Redshift supports.",
-				"url": "https://docs.aws.amazon.com/redshift/latest/dg/json-functions.html?tag=comceptaag",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 19,
-				"relevance": 3,
-				"title": "global.json overview - .NET Core CLI | Microsoft …",
-				"text": "18.11.2016 · Learn how to use the global.json file to set the .NET Core SDK version when running .NET Core CLI commands.",
-				"url": "https://docs.microsoft.com/en-us/dotnet/core/tools/global-json",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 20,
-				"relevance": 3,
-				"title": "JSON Functions (Transact-SQL) - SQL Server | …",
-				"text": "30.03.2017 · Use the functions described on the pages in this section to validate or change JSON text or to extract simple or complex values. ISJSON Tests whether a …",
-				"url": "https://docs.microsoft.com/en-us/sql/t-sql/functions/json-functions-transact-sql",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 21,
-				"relevance": 3,
-				"title": "Import Json to excel and export excel to Json - …",
-				"text": "Excel doesn't have built-in support for JSON. Learn how to parse JSON in Excel VBA, import JSON to Excel and export Excel data using VBA-JSON.",
-				"url": "https://codingislove.com/excel-json/",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 22,
-				"relevance": 3,
-				"title": "index-of.es/",
-				"text": "z0ro Repository - Powered by z0ro … Copyright © 2013-2019 - index-of.es …",
-				"url": "http://index-of.es/",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 23,
-				"relevance": 3,
-				"title": "JSON",
-				"text": "JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. It is easy for machines to parse and generate.",
-				"url": "https://www.json.org/",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 24,
-				"relevance": 3,
-				"title": "JSON Web Token",
-				"text": "JSON Web Token (JWT, sometimes pronounced /dʒɒt/) is a JSON-based open standard (RFC 7519) for creating access tokens that assert some number of claims …",
-				"url": "https://en.wikipedia.org/wiki/JSON_Web_Token",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 25,
-				"relevance": 3,
-				"title": "Anthony Baker: How to Consume a JSON REST …",
-				"text": "In this article I’ll show you how simple it is to consume JSON based APIs from .NET. It requires just a few lines of code, is straight forward and will work across …",
-				"url": "http://blog.anthonybaker.me/2013/05/how-to-consume-json-rest-api-in-net.html",
-				"sources": ["Bing"]
-			},
-			{
-				"id": 26,
-				"relevance": 3,
-				"title": "JSON Introduction - W3Schools",
-				"text": "Exchanging Data. When exchanging data between a browser and a server, the data can only be text. JSON is text, and we can convert any JavaScript object into …",
-				"url": "https://www.w3schools.com/js/js_json_intro.asp",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 27,
-				"relevance": 3,
-				"title": "JSON Syntax - W3Schools",
-				"text": "The JSON syntax is a subset of the JavaScript syntax. JSON Syntax Rules. JSON syntax is derived from JavaScript object notation syntax: Data is in name/value …",
-				"url": "https://www.w3schools.com/js/js_json_syntax.asp",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 28,
-				"relevance": 3,
-				"title": "GeoJSON",
-				"text": "GeoJSON is an open standard format designed for representing simple geographical features, along with their non-spatial attributes. It is based on JSON, …",
-				"url": "https://en.wikipedia.org/wiki/GeoJSON",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 29,
-				"relevance": 3,
-				"title": "JSON: What It Is, How It Works, & How to Use It - Copter Labs",
-				"text": "This week I want to cover a topic that I feel has become an important part of any developer's toolkit: the ability to load and manipulate JSON feeds from other …",
-				"url": "https://www.copterlabs.com/json-what-it-is-how-it-works-how-to-use-it/",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 30,
-				"relevance": 3,
-				"title": "JSONP",
-				"text": "JSONP (JSON with Padding or JSON-P) is a javascript pattern to request data by loading a tag. It was proposed by Bob Ippolito in 2005. JSONP …",
-				"url": "https://en.wikipedia.org/wiki/JSONP",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 31,
-				"relevance": 3,
-				"title": "JSON | MDN",
-				"text": "Dec 11, 2018 … The JSON object contains methods for parsing JavaScript Object Notation (JSON ) and converting values to JSON. It can't be called or …",
-				"url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 32,
-				"relevance": 3,
-				"title": "Ajax (programming)",
-				"text": "practice, modern implementations commonly utilize JSON instead of XML due to the advantages of JSON being native to JavaScript. Ajax is not a single technology …",
-				"url": "https://en.wikipedia.org/wiki/Ajax_(programming)",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 33,
-				"relevance": 3,
-				"title": "Working with JSON | MDN",
-				"text": "Dec 14, 2018 … JavaScript Object Notation (JSON) is a standard text-based format for representing structured data based on JavaScript object syntax.",
-				"url": "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 34,
-				"relevance": 3,
-				"title": "JSON-RPC",
-				"text": "JSON-RPC is a remote procedure call protocol encoded in JSON. It is a very simple protocol (and very similar to XML-RPC), defining only a few data types …",
-				"url": "https://en.wikipedia.org/wiki/JSON-RPC",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 35,
-				"relevance": 2,
-				"title": "What Is JSON? — Squarespace Developers",
-				"text": "JSON, or JavaScript Object Notation, is a minimal, readable format for structuring data. It is used primarily to transmit data between a server and web application, …",
-				"url": "https://developers.squarespace.com/what-is-json",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 36,
-				"relevance": 2,
-				"title": "JSON streaming",
-				"text": "JSON streaming comprises communications protocols to delimit JSON objects built upon lower-level stream-oriented protocols (such as TCP), that ensures …",
-				"url": "https://en.wikipedia.org/wiki/JSON_streaming",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 37,
-				"relevance": 2,
-				"title": "Online JSON Viewer",
-				"text": "JSON Viewer - Convert JSON Strings to a Friendly Readable Format.",
-				"url": "http://jsonviewer.stack.hu/",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 38,
-				"relevance": 2,
-				"title": "JSON Web Encryption",
-				"text": "JSON Web Encryption (JWE) is an IETF standard providing a standardised syntax for the exchange of encrypted data, based on JSON and Base64. It is defined …",
-				"url": "https://en.wikipedia.org/wiki/JSON_Web_Encryption",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 39,
-				"relevance": 2,
-				"title": "Json (rapper)",
-				"text": "by the stage name Json, is an American Christian hip hop musician. He was a member of Christian hip hop collective, 116 Clique. Json was born Jason Christopher …",
-				"url": "https://en.wikipedia.org/wiki/Json_(rapper)",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 40,
-				"relevance": 2,
-				"title": "json.org",
-				"text": "",
-				"url": "//www.search.ask.com/web?page=1&q=json.org&tpr=5",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 41,
-				"relevance": 2,
-				"title": "JSON Patch",
-				"text": "existing HTTP resources. The JSON Patch media type is application/json-patch+json. A JSON Patch document is structured as a JSON array of objects where each …",
-				"url": "https://en.wikipedia.org/wiki/JSON_Patch",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 42,
-				"relevance": 2,
-				"title": "JSON Introduction",
-				"text": "",
-				"url": "//www.search.ask.com/web?page=1&q=JSON+Introduction&tpr=5",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 43,
-				"relevance": 2,
-				"title": "Document-oriented database",
-				"text": "in some standard format or encoding. Encodings in use include XML, YAML, JSON, and BSON, as well as binary forms like PDF and Microsoft Office documents …",
-				"url": "https://en.wikipedia.org/wiki/Document-oriented_database",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 44,
-				"relevance": 2,
-				"title": "JSON Syntax",
-				"text": "",
-				"url": "//www.search.ask.com/web?page=1&q=JSON+Syntax&tpr=5",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 45,
-				"relevance": 2,
-				"title": "YAML",
-				"text": "format that uses [] for lists and {} for maps making YAML 1.2 a superset of JSON. Custom data types are allowed, but YAML natively encodes scalars (such as …",
-				"url": "https://en.wikipedia.org/wiki/YAML",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 46,
-				"relevance": 2,
-				"title": "Working with JSON",
-				"text": "",
-				"url": "//www.search.ask.com/web?page=1&q=Working+with+JSON&tpr=5",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 47,
-				"relevance": 2,
-				"title": "UBJSON",
-				"text": "Universal Binary JSON (UBJSON) is a computer data interchange format. It is a binary form directly imitating JSON, but requiring fewer bytes of data. It …",
-				"url": "https://en.wikipedia.org/wiki/UBJSON",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 48,
-				"relevance": 2,
-				"title": "What Is JSON",
-				"text": "",
-				"url": "//www.search.ask.com/web?page=1&q=What+Is+JSON&tpr=5",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 49,
-				"relevance": 2,
-				"title": "VCard",
-				"text": "text/vcard+xml text/vcard+json All are oriented to \"Directory Information text\" (see RFC 2425). Other \"vCard variants\", oriented to XML and to JSON, are standard …",
-				"url": "https://en.wikipedia.org/wiki/VCard",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 50,
-				"relevance": 2,
-				"title": "Online JSON Viewer",
-				"text": "",
-				"url": "//www.search.ask.com/web?page=1&q=Online+JSON+Viewer&tpr=5",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 51,
-				"relevance": 2,
-				"title": "JSON Web Signature",
-				"text": "A JSON Web Signature (abbreviated JWS) is an IETF proposed standard [RFC7515] for signing arbitrary data. This is used as the basis for a variety of web-based …",
-				"url": "https://en.wikipedia.org/wiki/JSON_Web_Signature",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 52,
-				"relevance": 2,
-				"title": "JSON Formatter & Validator",
-				"text": "",
-				"url": "//www.search.ask.com/web?page=1&q=JSON+Formatter+%26+Validator&tpr=5",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 53,
-				"relevance": 2,
-				"title": "Schema.org",
-				"text": "propose using the schema.org vocabulary along with the Microdata, RDFa, or JSON-LD formats to mark up website content with metadata about itself. Such markup …",
-				"url": "https://en.wikipedia.org/wiki/Schema.org",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 54,
-				"relevance": 2,
-				"title": "json Media Type for JavaScript Object",
-				"text": "",
-				"url": "//www.search.ask.com/web?page=1&q=json+Media+Type+for+JavaScript+Object&tpr=5",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 55,
-				"relevance": 2,
-				"title": "JSON-WSP",
-				"text": "searching for JSON-RPC or JSON Schema. JSON-WSP (JavaScript Object Notation Web-Service Protocol) is a web-service protocol that uses JSON for service description …",
-				"url": "https://en.wikipedia.org/wiki/JSON-WSP",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 56,
-				"relevance": 2,
-				"title": "The JSON Validator",
-				"text": "",
-				"url": "//www.search.ask.com/web?page=1&q=The+JSON+Validator&tpr=5",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 57,
-				"relevance": 2,
-				"title": "Media type",
-				"text": "application/json application/x-www-form-urlencoded application/xml application/zip application/pdf application/sql application/graphql application/ld+json application/msword …",
-				"url": "https://en.wikipedia.org/wiki/Media_type",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 58,
-				"relevance": 2,
-				"title": "JSON-js",
-				"text": "",
-				"url": "//www.search.ask.com/web?page=1&q=JSON-js&tpr=5",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 59,
-				"relevance": 2,
-				"title": "List of web service frameworks",
-				"text": "WS-SecurityPolicy SOAP1.1, SOAP1.2, MTOM, WSDL 1.1, WSDL 2.0, REST, XML-RPC, JSON, JSON-RPC, XML Java Web Services Development Pack / GlassFish Java Client/Server …",
-				"url": "https://en.wikipedia.org/wiki/List_of_web_service_frameworks",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 60,
-				"relevance": 2,
-				"title": "JSON in JavaScript",
-				"text": "",
-				"url": "//www.search.ask.com/web?page=1&q=JSON+in+JavaScript&tpr=5",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 61,
-				"relevance": 2,
-				"title": "Resource Description Framework",
-				"text": "January 2014. \"JSON-LD 1.0: A JSON-based Serialization for Linked Data\". W3C. \"RDF 1.1 XML Syntax\". W3C. 25 February 2014. \"RDF 1.1 JSON Alternate Serialization …",
-				"url": "https://en.wikipedia.org/wiki/Resource_Description_Framework",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 62,
-				"relevance": 2,
-				"title": "JSON Feed: Home",
-				"text": "We — Manton Reece and Brent Simmons — have noticed that JSON has become the developers’ choice for APIs, and that developers will often go out …",
-				"url": "https://jsonfeed.org/",
-				"sources": ["Faroo"]
-			},
-			{
-				"id": 63,
-				"relevance": 2,
-				"title": "JSON-LD - JSON for Linking Data",
-				"text": "JSON-LD ( J ava S cript O bject N otation for L inking D ata) is a lightweight Linked Data format that gives your data context. It is easy for …",
-				"url": "http://json-ld.org/",
-				"sources": ["Faroo"]
-			},
-			{
-				"id": 64,
-				"relevance": 2,
-				"title": "JSON implementation for Ruby",
-				"text": "",
-				"url": "//www.search.ask.com/web?page=1&q=JSON+implementation+for+Ruby&tpr=5",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 65,
-				"relevance": 2,
-				"title": "Web service",
-				"text": "specifically for transferring machine-readable file formats such as XML and JSON. In practice, a web service commonly provides an object-oriented web-based …",
-				"url": "https://en.wikipedia.org/wiki/Web_service",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 66,
-				"relevance": 2,
-				"title": "What is JSON YouTube",
-				"text": "",
-				"url": "//www.search.ask.com/web?page=1&q=What+is+JSON+YouTube&tpr=5",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 67,
-				"relevance": 2,
-				"title": "Douglas Crockford",
-				"text": "development of the JavaScript language, for having popularized the data format JSON (JavaScript Object Notation), and for developing various JavaScript related …",
-				"url": "https://en.wikipedia.org/wiki/Douglas_Crockford",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 68,
-				"relevance": 2,
-				"title": "faroo_p2p: Our Web Search API now supports cross domain access for JSON, XML and RSS via CORS (Cross-Origin …",
-				"text": "faroo_p2p: Our Web Search API now supports cross domain access for JSON, XML and RSS via CORS (Cross-Origin Resource Sharing). http://t.",
-				"url": "http://twitter.com/faroo_p2p/statuses/228144071540084736",
-				"sources": ["Faroo"]
-			},
-			{
-				"id": 69,
-				"relevance": 2,
-				"title": "The Twitter archive looks to be useful. Tweets are available in JSON and CSV formats. One file per month …",
-				"text": "… to Navjot Singh , we now have an archive to explore. Here's the readme.txt file from Navjot's archive. Here's the HTML view of the JSON archive. …",
-				"url": "http://1xe.r2.ly/",
-				"sources": ["Faroo"]
-			},
-			{
-				"id": 70,
-				"relevance": 2,
-				"title": "11.6 The JSON Data Type",
-				"text": "",
-				"url": "//www.search.ask.com/web?page=1&q=11.6+The+JSON+Data+Type&tpr=5",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 71,
-				"relevance": 2,
-				"title": "Serialization",
-				"text": "JavaScript has included the built-in JSON object and its methods JSON.parse() and JSON.stringify(). Although JSON is originally based on a subset of JavaScript …",
-				"url": "https://en.wikipedia.org/wiki/Serialization",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 72,
-				"relevance": 2,
-				"title": "XML and JSON — Advantages and Disadvantages?",
-				"text": "I recently heard about JavaScript Object Notation (JSON), and after looking it up, it seems like it's becoming rather popular as an alternative …",
-				"url": "http://stackoverflow.com/questions/5615352/xml-and-json-advantages-and-disadvantages",
-				"sources": ["Faroo"]
-			},
-			{
-				"id": 73,
-				"relevance": 1,
-				"title": "App Store - JSON Designer",
-				"text": "Get JSON Designer on the App Store. See screenshots and ratings, and read customer reviews.",
-				"url": "http://itunes.apple.com/us/app/json-designer/id432736126?mt=8",
-				"sources": ["Faroo"]
-			},
-			{
-				"id": 74,
-				"relevance": 1,
-				"title": "JSON Types",
-				"text": "",
-				"url": "//www.search.ask.com/web?page=1&q=JSON+Types&tpr=5",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 75,
-				"relevance": 1,
-				"title": "Web Application Description Language",
-				"text": "json\"/> json\"/> <representation …",
-				"url": "https://en.wikipedia.org/wiki/Web_Application_Description_Language",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 76,
-				"relevance": 1,
-				"title": "Flickr Services",
-				"text": "… to the world, securely and privately show content to your friends and family, or blog the photos and videos you take with a cameraphone. JSON, …",
-				"url": "http://www.flickr.com/services/api/response.json.html",
-				"sources": ["Faroo"]
-			},
-			{
-				"id": 77,
-				"relevance": 1,
-				"title": "json",
-				"text": "",
-				"url": "//www.search.ask.com/web?page=1&q=json&tpr=7",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 78,
-				"relevance": 1,
-				"title": "Elasticsearch",
-				"text": "multitenant-capable full-text search engine with an HTTP web interface and schema-free JSON documents. Elasticsearch is developed in Java and is released as open source …",
-				"url": "https://en.wikipedia.org/wiki/Elasticsearch",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 79,
-				"relevance": 1,
-				"title": "BSON",
-				"text": "superset of JSON types (JSON does not have a date or a byte array type, for example), with one exception of not having a universal \"number\" type as JSON does …",
-				"url": "https://en.wikipedia.org/wiki/BSON",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 80,
-				"relevance": 1,
-				"title": "PHP: JSON - Manual",
-				"text": "json_decode — Decodes a JSON string; json_encode — Returns the JSON representation of a value; json_last_error_msg — Returns the error string of the last …",
-				"url": "http://php.net/manual/en/book.json.php",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 81,
-				"relevance": 1,
-				"title": "List of Bravest Warriors episodes",
-				"text": "Warriors', Season 1\" (JSON). YouTube. Retrieved 2013-12-08. CartoonHangover staff (2013-09-20). \"'Bravest Warriors' Minisodes\" (JSON). YouTube. Retrieved …",
-				"url": "https://en.wikipedia.org/wiki/List_of_Bravest_Warriors_episodes",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 82,
-				"relevance": 1,
-				"title": "RFC 7159 - The JavaScript Object Notation (JSON) Data Interchange …",
-				"text": "JSON defines a small set of formatting rules for the portable representation of structured data. This document removes inconsistencies with other specifications …",
-				"url": "https://tools.ietf.org/html/rfc7159",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 83,
-				"relevance": 1,
-				"title": "Abstract Syntax Notation One",
-				"text": "new JSON Encoding Rules (JER), which specify how to encode ASN.1 abstract values in JSON, so that the resulting encodings can be read by any JSON reader …",
-				"url": "https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 84,
-				"relevance": 1,
-				"title": "RFC 4627 - The application/json Media Type for JavaScript Object …",
-				"text": "The application/json Media Type for JavaScript Object Notation (JSON). Status of This Memo This memo provides information for the Internet community. It does …",
-				"url": "https://tools.ietf.org/html/rfc4627",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 85,
-				"relevance": 1,
-				"title": "Jackson (API)",
-				"text": "In computing, Jackson is a high-performance JSON processor for Java. Its developers extol the combination of fast, correct, lightweight, and ergonomic …",
-				"url": "https://en.wikipedia.org/wiki/Jackson_(API)",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 86,
-				"relevance": 1,
-				"title": "What is JSON and why would I use it? - Stack Overflow",
-				"text": "JSON (JavaScript Object Notation) is a lightweight format that is used for data interchanging. It is based on a subset of JavaScript language (the way objects are …",
-				"url": "https://stackoverflow.com/questions/383692/what-is-json-and-why-would-i-use-it",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 87,
-				"relevance": 1,
-				"title": "Ion (serialization format)",
-				"text": "The text form is a superset of JSON; thus, any valid JSON document is also a valid Ion document. As a superset of JSON, Ion includes the following data …",
-				"url": "https://en.wikipedia.org/wiki/Ion_(serialization_format)",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 88,
-				"relevance": 1,
-				"title": "JSON:API — A specification for building APIs in JSON",
-				"text": "JSON:API v1.1 RC1 has been published! Please review and try out this upcoming version of the spec before its planned release date of January 31, 2019.",
-				"url": "https://jsonapi.org/",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 89,
-				"relevance": 1,
-				"title": "List of web service protocols",
-				"text": "Protocol CTS - Canonical Text Services Protocol E-Business XML Hessian JSON-RPC JSON-WSP SOAP - outgrowth of XML-RPC, originally an acronym for Simple Object …",
-				"url": "https://en.wikipedia.org/wiki/List_of_web_service_protocols",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 90,
-				"relevance": 1,
-				"title": "JSONLint - The JSON Validator",
-				"text": "JSONLint is the free online validator and reformatter tool for JSON, a lightweight data-interchange format.",
-				"url": "https://jsonlint.com/",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 91,
-				"relevance": 1,
-				"title": "Jq (programming language)",
-				"text": "programming language with support for backtracking and managing streams of JSON data. It is related to the Icon and Haskell programming languages. The jq …",
-				"url": "https://en.wikipedia.org/wiki/Jq_(programming_language)",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 92,
-				"relevance": 1,
-				"title": "GitHub - douglascrockford/JSON-js: JSON in JavaScript",
-				"text": "JSON in JavaScript. Contribute to douglascrockford/JSON-js development by creating an account on GitHub.",
-				"url": "https://github.com/douglascrockford/JSON-js",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 93,
-				"relevance": 1,
-				"title": "Npm (software)",
-				"text": "command, all the dependencies of a project through the package.json file. In the package.json file, each dependency can specify a range of valid versions …",
-				"url": "https://en.wikipedia.org/wiki/Npm_(software)",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 94,
-				"relevance": 1,
-				"title": "GitHub - flori/json: JSON implementation for Ruby",
-				"text": "JSON implementation for Ruby. Contribute to flori/json development by creating an account on GitHub.",
-				"url": "https://github.com/flori/json",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 95,
-				"relevance": 1,
-				"title": "JSONiq",
-				"text": "transform collections of hierarchical and heterogeneous data in format of JSON, XML, as well as unstructured, textual data. JSONiq is an open specification …",
-				"url": "https://en.wikipedia.org/wiki/JSONiq",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 96,
-				"relevance": 1,
-				"title": "Module: JSON (Ruby 2.0.0) - Ruby-Doc.org",
-				"text": "JSON is a lightweight data-interchange format. It is easy for us humans to read and write. Plus, equally simple for machines to generate or parse. JSON is …",
-				"url": "http://ruby-doc.org/stdlib-2.0.0/libdoc/json/rdoc/JSON.html",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 97,
-				"relevance": 1,
-				"title": "JWK",
-				"text": "1964), English actress sometimes credited as Joanne Whalley-Kilmer JSON Web Key in JSON Web Signature Warwick railway station, Perth, in Western Australia …",
-				"url": "https://en.wikipedia.org/wiki/JWK",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 98,
-				"relevance": 1,
-				"title": "What is JSON ? - YouTube",
-				"text": "Jun 26, 2017 … Learn Spring Boot : https://goo.gl/5Wgsk6 Restful Web Services Tutorial : https:// goo.gl/3mosnz Servlet and JSP complete playlist …",
-				"url": "https://www.youtube.com/watch?v=JuFdz8f-cT4",
-				"sources": ["Ask"]
-			},
-			{
-				"id": 99,
-				"relevance": 1,
-				"title": "Gson",
-				"text": "open-source Java library to serialize and deserialize Java objects to (and from) JSON. The Gson library was originally developed for internal purposes of Google …",
-				"url": "https://en.wikipedia.org/wiki/Gson",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 100,
-				"relevance": 1,
-				"title": "J Son",
-				"text": "singer J'son (comics), Marvel Comics character Json (rapper) American Christian hip-hop musician JSON (JavaScript Object Notation), for data interchange …",
-				"url": "https://en.wikipedia.org/wiki/J_Son",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 101,
-				"relevance": 1,
-				"title": "MessagePack",
-				"text": "than JSON, but imposes limitations on array and integer sizes. On the other hand, it allows binary data and non UTF-8 encoded strings. In JSON, map keys …",
-				"url": "https://en.wikipedia.org/wiki/MessagePack",
-				"sources": ["Wikipedia"]
-			},
-			{
-				"id": 102,
-				"relevance": 1,
-				"title": "Representational state transfer",
-				"text": "resource's URI will elicit a response with a payload formatted in HTML, XML, JSON, or some other format. The response can confirm that some alteration has …",
-				"url": "https://en.wikipedia.org/wiki/Representational_state_transfer",
-				"sources": ["Wikipedia"]
-			}
-		]
-	}
+  "document": {
+    "version": 1.0,
+    "partner": "Carrot2Json",
+    "timestamp": "Fri Jan 11 22:25:24 CET 2019"
+  },
+  "request": {
+    "query": "json",
+    "country": "web",
+    "language": "all",
+    "safeSearch": false,
+    "dataSourceResults": 40,
+    "maxRecords": 102,
+    "timeoutMs": 2000,
+    "sources": {
+      "count": 7,
+      "names": ["Ask", "Base", "Bing", "Faroo", "Google", "Wikipedia", "Yahoo"]
+    }
+  },
+  "response": {
+    "totalEstimatedRecords": 17101043,
+    "mergedRecords": 102,
+    "durationMs": 25,
+    "sources": {
+      "count": 7,
+      "detail": [
+        {
+          "name": "Ask",
+          "records": 40,
+          "cached": true,
+          "url": "https://www.search.ask.com/web?q=json"
+        },
+        {
+          "name": "Bing",
+          "records": 21,
+          "cached": true,
+          "url": "https://www.bing.com/search?q=%2Bjson%20language%3Aen&count=40&adlt=off"
+        },
+        {
+          "name": "Faroo",
+          "records": 10,
+          "cached": true,
+          "url": "http://www.faroo.com/#q=json&l=en&src=web&news=false"
+        },
+        {
+          "name": "Wikipedia",
+          "records": 40,
+          "cached": true,
+          "url": "https://en.wikipedia.org/w/index.php?search=json&limit=40&fulltext=1"
+        }
+      ]
+    },
+    "mergedRecords": [
+      {
+        "id": 1,
+        "relevance": 10,
+        "title": "JSON - Wikipedia",
+        "text": "JSON grew out of a need for stateless, real-time server-to-browser communication protocol without using browser plugins such as Flash or Java applets, the dominant …",
+        "url": "https://en.wikipedia.org/wiki/JSON",
+        "sources": ["Ask", "Bing", "Wikipedia"]
+      },
+      {
+        "id": 2,
+        "relevance": 7,
+        "title": "JSON",
+        "text": "json element value object array string number \"true\" \"false\" \"null\" object '{' ws '}' '{' members '}' members member member ',' members …",
+        "url": "http://json.org/",
+        "sources": ["Bing", "Faroo"]
+      },
+      {
+        "id": 3,
+        "relevance": 5,
+        "title": "json — JSON encoder and decoder — Python …",
+        "text": "30.10.2018 · JSON is a subset of YAML 1.2. The JSON produced by this module’s default settings (in particular, the default separators value) is also a subset of YAML …",
+        "url": "https://docs.python.org/3/library/json.html",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 4,
+        "relevance": 5,
+        "title": "JSON Schema | The home of JSON Schema",
+        "text": "JSON Schema. Describes your existing data format(s). Provides clear human- and machine- readable documentation. Validates data which is useful for: …",
+        "url": "http://json-schema.org/",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 5,
+        "relevance": 5,
+        "title": "PHP: json_encode - Manual",
+        "text": "Returns a string containing the JSON representation of the supplied value. The encoding is affected by the supplied options and additionally the encoding of float …",
+        "url": "http://php.net/manual/en/function.json-encode.php",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 6,
+        "relevance": 5,
+        "title": "18.2. json — JSON encoder and decoder — …",
+        "text": "02.07.2015 · New in version 2.6. JSON is a subset of YAML 1.2. The JSON produced by this module’s default settings (in particular, the default separators value) is …",
+        "url": "https://docs.python.org/2/library/json.html",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 7,
+        "relevance": 5,
+        "title": "Maven - Json-lib::Welcome",
+        "text": "JSON Java; string java.lang.String, java.lang.Character, char: number java.lang.Number, byte, short, int, long, float, double: true|false java.lang …",
+        "url": "http://json-lib.sourceforge.net/",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 8,
+        "relevance": 4,
+        "title": "JSON Editor Online - view, edit and format JSON …",
+        "text": "JSON Editor Online is a web-based tool to view, edit, and format JSON. It shows your data side by side in a clear, editable treeview and in a code editor.",
+        "url": "http://jsoneditoronline.org/",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 9,
+        "relevance": 4,
+        "title": "GitHub - typicode/json-server: Get a full fake …",
+        "text": "Get a full fake REST API with zero coding in less than 30 seconds (seriously) - typicode/json-server …",
+        "url": "https://github.com/typicode/json-server",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 10,
+        "relevance": 4,
+        "title": "Standard ECMA-262 ECMAScript Language …",
+        "text": "04.01.2019 · Standard ECMA-262 ECMAScript ® 2018 Language Specification 9 th edition (June 2018) This Standard defines the ECMAScript 2018 general-purpose programming …",
+        "url": "http://www.ecma-international.org/publications/standards/Ecma-262.htm",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 11,
+        "relevance": 4,
+        "title": "JSON-LD",
+        "text": "JSON-LD (JavaScript Object Notation for Linked Data), is a method of encoding Linked Data using JSON. It was a goal to require as little effort as possible …",
+        "url": "https://en.wikipedia.org/wiki/JSON-LD",
+        "sources": ["Faroo", "Wikipedia"]
+      },
+      {
+        "id": 12,
+        "relevance": 4,
+        "title": "What is the correct JSON content type? - Stack …",
+        "text": "I've been messing around with JSON for some time, just pushing it out as text and it hasn't hurt anybody (that I know of), but I'd like to start doing things properly.",
+        "url": "https://stackoverflow.com/questions/477816/what-is-the-correct-json-content-type",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 13,
+        "relevance": 4,
+        "title": "COPY from JSON Format - Amazon Redshift",
+        "text": "Describes how to use the Amazon Redshift COPY command to load tables from data in JSON format.",
+        "url": "https://docs.aws.amazon.com/redshift/latest/dg/copy-usage_notes-copy-from-json.html?tag=comceptaag",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 14,
+        "relevance": 4,
+        "title": "JSON Binding (JSON-B) - Home",
+        "text": "What is JSON-B? JSON-B is a standard binding layer for converting Java objects to/from JSON messages. It defines a default mapping algorithm for converting …",
+        "url": "http://json-b.net/",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 15,
+        "relevance": 4,
+        "title": "JSON Formatter & Validator",
+        "text": "The JSON Formatter & Validator helps debugging JSON data by formatting and validating JSON data so that it can easily be read by human beings.",
+        "url": "https://jsonformatter.curiousconcept.com/",
+        "sources": ["Ask", "Faroo"]
+      },
+      {
+        "id": 16,
+        "relevance": 4,
+        "title": "JSLint: The JavaScript Code Quality Tool",
+        "text": "JSLint, The JavaScript Code Quality Tool. This file allows JSLint to be run from a web browser. It can accept a source program and analyze it without sending it …",
+        "url": "http://jslint.com/",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 17,
+        "relevance": 4,
+        "title": "GitHub - jakubroztocil/httpie: As easy as httpie …",
+        "text": "As easy as httpie /aitch-tee-tee-pie/ 🥧 Modern command line HTTP client – user-friendly curl alternative with intuitive UI, JSON support, syntax highlighting …",
+        "url": "https://github.com/jakubroztocil/httpie",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 18,
+        "relevance": 3,
+        "title": "JSON Functions - Amazon Redshift",
+        "text": "Describes the JSON functions for SQL that Amazon Redshift supports.",
+        "url": "https://docs.aws.amazon.com/redshift/latest/dg/json-functions.html?tag=comceptaag",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 19,
+        "relevance": 3,
+        "title": "global.json overview - .NET Core CLI | Microsoft …",
+        "text": "18.11.2016 · Learn how to use the global.json file to set the .NET Core SDK version when running .NET Core CLI commands.",
+        "url": "https://docs.microsoft.com/en-us/dotnet/core/tools/global-json",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 20,
+        "relevance": 3,
+        "title": "JSON Functions (Transact-SQL) - SQL Server | …",
+        "text": "30.03.2017 · Use the functions described on the pages in this section to validate or change JSON text or to extract simple or complex values. ISJSON Tests whether a …",
+        "url": "https://docs.microsoft.com/en-us/sql/t-sql/functions/json-functions-transact-sql",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 21,
+        "relevance": 3,
+        "title": "Import Json to excel and export excel to Json - …",
+        "text": "Excel doesn't have built-in support for JSON. Learn how to parse JSON in Excel VBA, import JSON to Excel and export Excel data using VBA-JSON.",
+        "url": "https://codingislove.com/excel-json/",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 22,
+        "relevance": 3,
+        "title": "index-of.es/",
+        "text": "z0ro Repository - Powered by z0ro … Copyright © 2013-2019 - index-of.es …",
+        "url": "http://index-of.es/",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 23,
+        "relevance": 3,
+        "title": "JSON",
+        "text": "JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. It is easy for machines to parse and generate.",
+        "url": "https://www.json.org/",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 24,
+        "relevance": 3,
+        "title": "JSON Web Token",
+        "text": "JSON Web Token (JWT, sometimes pronounced /dʒɒt/) is a JSON-based open standard (RFC 7519) for creating access tokens that assert some number of claims …",
+        "url": "https://en.wikipedia.org/wiki/JSON_Web_Token",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 25,
+        "relevance": 3,
+        "title": "Anthony Baker: How to Consume a JSON REST …",
+        "text": "In this article I’ll show you how simple it is to consume JSON based APIs from .NET. It requires just a few lines of code, is straight forward and will work across …",
+        "url": "http://blog.anthonybaker.me/2013/05/how-to-consume-json-rest-api-in-net.html",
+        "sources": ["Bing"]
+      },
+      {
+        "id": 26,
+        "relevance": 3,
+        "title": "JSON Introduction - W3Schools",
+        "text": "Exchanging Data. When exchanging data between a browser and a server, the data can only be text. JSON is text, and we can convert any JavaScript object into …",
+        "url": "https://www.w3schools.com/js/js_json_intro.asp",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 27,
+        "relevance": 3,
+        "title": "JSON Syntax - W3Schools",
+        "text": "The JSON syntax is a subset of the JavaScript syntax. JSON Syntax Rules. JSON syntax is derived from JavaScript object notation syntax: Data is in name/value …",
+        "url": "https://www.w3schools.com/js/js_json_syntax.asp",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 28,
+        "relevance": 3,
+        "title": "GeoJSON",
+        "text": "GeoJSON is an open standard format designed for representing simple geographical features, along with their non-spatial attributes. It is based on JSON, …",
+        "url": "https://en.wikipedia.org/wiki/GeoJSON",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 29,
+        "relevance": 3,
+        "title": "JSON: What It Is, How It Works, & How to Use It - Copter Labs",
+        "text": "This week I want to cover a topic that I feel has become an important part of any developer's toolkit: the ability to load and manipulate JSON feeds from other …",
+        "url": "https://www.copterlabs.com/json-what-it-is-how-it-works-how-to-use-it/",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 30,
+        "relevance": 3,
+        "title": "JSONP",
+        "text": "JSONP (JSON with Padding or JSON-P) is a javascript pattern to request data by loading a tag. It was proposed by Bob Ippolito in 2005. JSONP …",
+        "url": "https://en.wikipedia.org/wiki/JSONP",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 31,
+        "relevance": 3,
+        "title": "JSON | MDN",
+        "text": "Dec 11, 2018 … The JSON object contains methods for parsing JavaScript Object Notation (JSON ) and converting values to JSON. It can't be called or …",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 32,
+        "relevance": 3,
+        "title": "Ajax (programming)",
+        "text": "practice, modern implementations commonly utilize JSON instead of XML due to the advantages of JSON being native to JavaScript. Ajax is not a single technology …",
+        "url": "https://en.wikipedia.org/wiki/Ajax_(programming)",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 33,
+        "relevance": 3,
+        "title": "Working with JSON | MDN",
+        "text": "Dec 14, 2018 … JavaScript Object Notation (JSON) is a standard text-based format for representing structured data based on JavaScript object syntax.",
+        "url": "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 34,
+        "relevance": 3,
+        "title": "JSON-RPC",
+        "text": "JSON-RPC is a remote procedure call protocol encoded in JSON. It is a very simple protocol (and very similar to XML-RPC), defining only a few data types …",
+        "url": "https://en.wikipedia.org/wiki/JSON-RPC",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 35,
+        "relevance": 2,
+        "title": "What Is JSON? — Squarespace Developers",
+        "text": "JSON, or JavaScript Object Notation, is a minimal, readable format for structuring data. It is used primarily to transmit data between a server and web application, …",
+        "url": "https://developers.squarespace.com/what-is-json",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 36,
+        "relevance": 2,
+        "title": "JSON streaming",
+        "text": "JSON streaming comprises communications protocols to delimit JSON objects built upon lower-level stream-oriented protocols (such as TCP), that ensures …",
+        "url": "https://en.wikipedia.org/wiki/JSON_streaming",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 37,
+        "relevance": 2,
+        "title": "Online JSON Viewer",
+        "text": "JSON Viewer - Convert JSON Strings to a Friendly Readable Format.",
+        "url": "http://jsonviewer.stack.hu/",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 38,
+        "relevance": 2,
+        "title": "JSON Web Encryption",
+        "text": "JSON Web Encryption (JWE) is an IETF standard providing a standardised syntax for the exchange of encrypted data, based on JSON and Base64. It is defined …",
+        "url": "https://en.wikipedia.org/wiki/JSON_Web_Encryption",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 39,
+        "relevance": 2,
+        "title": "Json (rapper)",
+        "text": "by the stage name Json, is an American Christian hip hop musician. He was a member of Christian hip hop collective, 116 Clique. Json was born Jason Christopher …",
+        "url": "https://en.wikipedia.org/wiki/Json_(rapper)",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 40,
+        "relevance": 2,
+        "title": "json.org",
+        "text": "",
+        "url": "//www.search.ask.com/web?page=1&q=json.org&tpr=5",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 41,
+        "relevance": 2,
+        "title": "JSON Patch",
+        "text": "existing HTTP resources. The JSON Patch media type is application/json-patch+json. A JSON Patch document is structured as a JSON array of objects where each …",
+        "url": "https://en.wikipedia.org/wiki/JSON_Patch",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 42,
+        "relevance": 2,
+        "title": "JSON Introduction",
+        "text": "",
+        "url": "//www.search.ask.com/web?page=1&q=JSON+Introduction&tpr=5",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 43,
+        "relevance": 2,
+        "title": "Document-oriented database",
+        "text": "in some standard format or encoding. Encodings in use include XML, YAML, JSON, and BSON, as well as binary forms like PDF and Microsoft Office documents …",
+        "url": "https://en.wikipedia.org/wiki/Document-oriented_database",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 44,
+        "relevance": 2,
+        "title": "JSON Syntax",
+        "text": "",
+        "url": "//www.search.ask.com/web?page=1&q=JSON+Syntax&tpr=5",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 45,
+        "relevance": 2,
+        "title": "YAML",
+        "text": "format that uses [] for lists and {} for maps making YAML 1.2 a superset of JSON. Custom data types are allowed, but YAML natively encodes scalars (such as …",
+        "url": "https://en.wikipedia.org/wiki/YAML",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 46,
+        "relevance": 2,
+        "title": "Working with JSON",
+        "text": "",
+        "url": "//www.search.ask.com/web?page=1&q=Working+with+JSON&tpr=5",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 47,
+        "relevance": 2,
+        "title": "UBJSON",
+        "text": "Universal Binary JSON (UBJSON) is a computer data interchange format. It is a binary form directly imitating JSON, but requiring fewer bytes of data. It …",
+        "url": "https://en.wikipedia.org/wiki/UBJSON",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 48,
+        "relevance": 2,
+        "title": "What Is JSON",
+        "text": "",
+        "url": "//www.search.ask.com/web?page=1&q=What+Is+JSON&tpr=5",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 49,
+        "relevance": 2,
+        "title": "VCard",
+        "text": "text/vcard+xml text/vcard+json All are oriented to \"Directory Information text\" (see RFC 2425). Other \"vCard variants\", oriented to XML and to JSON, are standard …",
+        "url": "https://en.wikipedia.org/wiki/VCard",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 50,
+        "relevance": 2,
+        "title": "Online JSON Viewer",
+        "text": "",
+        "url": "//www.search.ask.com/web?page=1&q=Online+JSON+Viewer&tpr=5",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 51,
+        "relevance": 2,
+        "title": "JSON Web Signature",
+        "text": "A JSON Web Signature (abbreviated JWS) is an IETF proposed standard [RFC7515] for signing arbitrary data. This is used as the basis for a variety of web-based …",
+        "url": "https://en.wikipedia.org/wiki/JSON_Web_Signature",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 52,
+        "relevance": 2,
+        "title": "JSON Formatter & Validator",
+        "text": "",
+        "url": "//www.search.ask.com/web?page=1&q=JSON+Formatter+%26+Validator&tpr=5",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 53,
+        "relevance": 2,
+        "title": "Schema.org",
+        "text": "propose using the schema.org vocabulary along with the Microdata, RDFa, or JSON-LD formats to mark up website content with metadata about itself. Such markup …",
+        "url": "https://en.wikipedia.org/wiki/Schema.org",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 54,
+        "relevance": 2,
+        "title": "json Media Type for JavaScript Object",
+        "text": "",
+        "url": "//www.search.ask.com/web?page=1&q=json+Media+Type+for+JavaScript+Object&tpr=5",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 55,
+        "relevance": 2,
+        "title": "JSON-WSP",
+        "text": "searching for JSON-RPC or JSON Schema. JSON-WSP (JavaScript Object Notation Web-Service Protocol) is a web-service protocol that uses JSON for service description …",
+        "url": "https://en.wikipedia.org/wiki/JSON-WSP",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 56,
+        "relevance": 2,
+        "title": "The JSON Validator",
+        "text": "",
+        "url": "//www.search.ask.com/web?page=1&q=The+JSON+Validator&tpr=5",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 57,
+        "relevance": 2,
+        "title": "Media type",
+        "text": "application/json application/x-www-form-urlencoded application/xml application/zip application/pdf application/sql application/graphql application/ld+json application/msword …",
+        "url": "https://en.wikipedia.org/wiki/Media_type",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 58,
+        "relevance": 2,
+        "title": "JSON-js",
+        "text": "",
+        "url": "//www.search.ask.com/web?page=1&q=JSON-js&tpr=5",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 59,
+        "relevance": 2,
+        "title": "List of web service frameworks",
+        "text": "WS-SecurityPolicy SOAP1.1, SOAP1.2, MTOM, WSDL 1.1, WSDL 2.0, REST, XML-RPC, JSON, JSON-RPC, XML Java Web Services Development Pack / GlassFish Java Client/Server …",
+        "url": "https://en.wikipedia.org/wiki/List_of_web_service_frameworks",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 60,
+        "relevance": 2,
+        "title": "JSON in JavaScript",
+        "text": "",
+        "url": "//www.search.ask.com/web?page=1&q=JSON+in+JavaScript&tpr=5",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 61,
+        "relevance": 2,
+        "title": "Resource Description Framework",
+        "text": "January 2014. \"JSON-LD 1.0: A JSON-based Serialization for Linked Data\". W3C. \"RDF 1.1 XML Syntax\". W3C. 25 February 2014. \"RDF 1.1 JSON Alternate Serialization …",
+        "url": "https://en.wikipedia.org/wiki/Resource_Description_Framework",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 62,
+        "relevance": 2,
+        "title": "JSON Feed: Home",
+        "text": "We — Manton Reece and Brent Simmons — have noticed that JSON has become the developers’ choice for APIs, and that developers will often go out …",
+        "url": "https://jsonfeed.org/",
+        "sources": ["Faroo"]
+      },
+      {
+        "id": 63,
+        "relevance": 2,
+        "title": "JSON-LD - JSON for Linking Data",
+        "text": "JSON-LD ( J ava S cript O bject N otation for L inking D ata) is a lightweight Linked Data format that gives your data context. It is easy for …",
+        "url": "http://json-ld.org/",
+        "sources": ["Faroo"]
+      },
+      {
+        "id": 64,
+        "relevance": 2,
+        "title": "JSON implementation for Ruby",
+        "text": "",
+        "url": "//www.search.ask.com/web?page=1&q=JSON+implementation+for+Ruby&tpr=5",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 65,
+        "relevance": 2,
+        "title": "Web service",
+        "text": "specifically for transferring machine-readable file formats such as XML and JSON. In practice, a web service commonly provides an object-oriented web-based …",
+        "url": "https://en.wikipedia.org/wiki/Web_service",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 66,
+        "relevance": 2,
+        "title": "What is JSON YouTube",
+        "text": "",
+        "url": "//www.search.ask.com/web?page=1&q=What+is+JSON+YouTube&tpr=5",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 67,
+        "relevance": 2,
+        "title": "Douglas Crockford",
+        "text": "development of the JavaScript language, for having popularized the data format JSON (JavaScript Object Notation), and for developing various JavaScript related …",
+        "url": "https://en.wikipedia.org/wiki/Douglas_Crockford",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 68,
+        "relevance": 2,
+        "title": "faroo_p2p: Our Web Search API now supports cross domain access for JSON, XML and RSS via CORS (Cross-Origin …",
+        "text": "faroo_p2p: Our Web Search API now supports cross domain access for JSON, XML and RSS via CORS (Cross-Origin Resource Sharing). http://t.",
+        "url": "http://twitter.com/faroo_p2p/statuses/228144071540084736",
+        "sources": ["Faroo"]
+      },
+      {
+        "id": 69,
+        "relevance": 2,
+        "title": "The Twitter archive looks to be useful. Tweets are available in JSON and CSV formats. One file per month …",
+        "text": "… to Navjot Singh , we now have an archive to explore. Here's the readme.txt file from Navjot's archive. Here's the HTML view of the JSON archive. …",
+        "url": "http://1xe.r2.ly/",
+        "sources": ["Faroo"]
+      },
+      {
+        "id": 70,
+        "relevance": 2,
+        "title": "11.6 The JSON Data Type",
+        "text": "",
+        "url": "//www.search.ask.com/web?page=1&q=11.6+The+JSON+Data+Type&tpr=5",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 71,
+        "relevance": 2,
+        "title": "Serialization",
+        "text": "JavaScript has included the built-in JSON object and its methods JSON.parse() and JSON.stringify(). Although JSON is originally based on a subset of JavaScript …",
+        "url": "https://en.wikipedia.org/wiki/Serialization",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 72,
+        "relevance": 2,
+        "title": "XML and JSON — Advantages and Disadvantages?",
+        "text": "I recently heard about JavaScript Object Notation (JSON), and after looking it up, it seems like it's becoming rather popular as an alternative …",
+        "url": "http://stackoverflow.com/questions/5615352/xml-and-json-advantages-and-disadvantages",
+        "sources": ["Faroo"]
+      },
+      {
+        "id": 73,
+        "relevance": 1,
+        "title": "App Store - JSON Designer",
+        "text": "Get JSON Designer on the App Store. See screenshots and ratings, and read customer reviews.",
+        "url": "http://itunes.apple.com/us/app/json-designer/id432736126?mt=8",
+        "sources": ["Faroo"]
+      },
+      {
+        "id": 74,
+        "relevance": 1,
+        "title": "JSON Types",
+        "text": "",
+        "url": "//www.search.ask.com/web?page=1&q=JSON+Types&tpr=5",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 75,
+        "relevance": 1,
+        "title": "Web Application Description Language",
+        "text": "json\"/> json\"/> <representation …",
+        "url": "https://en.wikipedia.org/wiki/Web_Application_Description_Language",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 76,
+        "relevance": 1,
+        "title": "Flickr Services",
+        "text": "… to the world, securely and privately show content to your friends and family, or blog the photos and videos you take with a cameraphone. JSON, …",
+        "url": "http://www.flickr.com/services/api/response.json.html",
+        "sources": ["Faroo"]
+      },
+      {
+        "id": 77,
+        "relevance": 1,
+        "title": "json",
+        "text": "",
+        "url": "//www.search.ask.com/web?page=1&q=json&tpr=7",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 78,
+        "relevance": 1,
+        "title": "Elasticsearch",
+        "text": "multitenant-capable full-text search engine with an HTTP web interface and schema-free JSON documents. Elasticsearch is developed in Java and is released as open source …",
+        "url": "https://en.wikipedia.org/wiki/Elasticsearch",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 79,
+        "relevance": 1,
+        "title": "BSON",
+        "text": "superset of JSON types (JSON does not have a date or a byte array type, for example), with one exception of not having a universal \"number\" type as JSON does …",
+        "url": "https://en.wikipedia.org/wiki/BSON",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 80,
+        "relevance": 1,
+        "title": "PHP: JSON - Manual",
+        "text": "json_decode — Decodes a JSON string; json_encode — Returns the JSON representation of a value; json_last_error_msg — Returns the error string of the last …",
+        "url": "http://php.net/manual/en/book.json.php",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 81,
+        "relevance": 1,
+        "title": "List of Bravest Warriors episodes",
+        "text": "Warriors', Season 1\" (JSON). YouTube. Retrieved 2013-12-08. CartoonHangover staff (2013-09-20). \"'Bravest Warriors' Minisodes\" (JSON). YouTube. Retrieved …",
+        "url": "https://en.wikipedia.org/wiki/List_of_Bravest_Warriors_episodes",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 82,
+        "relevance": 1,
+        "title": "RFC 7159 - The JavaScript Object Notation (JSON) Data Interchange …",
+        "text": "JSON defines a small set of formatting rules for the portable representation of structured data. This document removes inconsistencies with other specifications …",
+        "url": "https://tools.ietf.org/html/rfc7159",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 83,
+        "relevance": 1,
+        "title": "Abstract Syntax Notation One",
+        "text": "new JSON Encoding Rules (JER), which specify how to encode ASN.1 abstract values in JSON, so that the resulting encodings can be read by any JSON reader …",
+        "url": "https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 84,
+        "relevance": 1,
+        "title": "RFC 4627 - The application/json Media Type for JavaScript Object …",
+        "text": "The application/json Media Type for JavaScript Object Notation (JSON). Status of This Memo This memo provides information for the Internet community. It does …",
+        "url": "https://tools.ietf.org/html/rfc4627",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 85,
+        "relevance": 1,
+        "title": "Jackson (API)",
+        "text": "In computing, Jackson is a high-performance JSON processor for Java. Its developers extol the combination of fast, correct, lightweight, and ergonomic …",
+        "url": "https://en.wikipedia.org/wiki/Jackson_(API)",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 86,
+        "relevance": 1,
+        "title": "What is JSON and why would I use it? - Stack Overflow",
+        "text": "JSON (JavaScript Object Notation) is a lightweight format that is used for data interchanging. It is based on a subset of JavaScript language (the way objects are …",
+        "url": "https://stackoverflow.com/questions/383692/what-is-json-and-why-would-i-use-it",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 87,
+        "relevance": 1,
+        "title": "Ion (serialization format)",
+        "text": "The text form is a superset of JSON; thus, any valid JSON document is also a valid Ion document. As a superset of JSON, Ion includes the following data …",
+        "url": "https://en.wikipedia.org/wiki/Ion_(serialization_format)",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 88,
+        "relevance": 1,
+        "title": "JSON:API — A specification for building APIs in JSON",
+        "text": "JSON:API v1.1 RC1 has been published! Please review and try out this upcoming version of the spec before its planned release date of January 31, 2019.",
+        "url": "https://jsonapi.org/",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 89,
+        "relevance": 1,
+        "title": "List of web service protocols",
+        "text": "Protocol CTS - Canonical Text Services Protocol E-Business XML Hessian JSON-RPC JSON-WSP SOAP - outgrowth of XML-RPC, originally an acronym for Simple Object …",
+        "url": "https://en.wikipedia.org/wiki/List_of_web_service_protocols",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 90,
+        "relevance": 1,
+        "title": "JSONLint - The JSON Validator",
+        "text": "JSONLint is the free online validator and reformatter tool for JSON, a lightweight data-interchange format.",
+        "url": "https://jsonlint.com/",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 91,
+        "relevance": 1,
+        "title": "Jq (programming language)",
+        "text": "programming language with support for backtracking and managing streams of JSON data. It is related to the Icon and Haskell programming languages. The jq …",
+        "url": "https://en.wikipedia.org/wiki/Jq_(programming_language)",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 92,
+        "relevance": 1,
+        "title": "GitHub - douglascrockford/JSON-js: JSON in JavaScript",
+        "text": "JSON in JavaScript. Contribute to douglascrockford/JSON-js development by creating an account on GitHub.",
+        "url": "https://github.com/douglascrockford/JSON-js",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 93,
+        "relevance": 1,
+        "title": "Npm (software)",
+        "text": "command, all the dependencies of a project through the package.json file. In the package.json file, each dependency can specify a range of valid versions …",
+        "url": "https://en.wikipedia.org/wiki/Npm_(software)",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 94,
+        "relevance": 1,
+        "title": "GitHub - flori/json: JSON implementation for Ruby",
+        "text": "JSON implementation for Ruby. Contribute to flori/json development by creating an account on GitHub.",
+        "url": "https://github.com/flori/json",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 95,
+        "relevance": 1,
+        "title": "JSONiq",
+        "text": "transform collections of hierarchical and heterogeneous data in format of JSON, XML, as well as unstructured, textual data. JSONiq is an open specification …",
+        "url": "https://en.wikipedia.org/wiki/JSONiq",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 96,
+        "relevance": 1,
+        "title": "Module: JSON (Ruby 2.0.0) - Ruby-Doc.org",
+        "text": "JSON is a lightweight data-interchange format. It is easy for us humans to read and write. Plus, equally simple for machines to generate or parse. JSON is …",
+        "url": "http://ruby-doc.org/stdlib-2.0.0/libdoc/json/rdoc/JSON.html",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 97,
+        "relevance": 1,
+        "title": "JWK",
+        "text": "1964), English actress sometimes credited as Joanne Whalley-Kilmer JSON Web Key in JSON Web Signature Warwick railway station, Perth, in Western Australia …",
+        "url": "https://en.wikipedia.org/wiki/JWK",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 98,
+        "relevance": 1,
+        "title": "What is JSON ? - YouTube",
+        "text": "Jun 26, 2017 … Learn Spring Boot : https://goo.gl/5Wgsk6 Restful Web Services Tutorial : https:// goo.gl/3mosnz Servlet and JSP complete playlist …",
+        "url": "https://www.youtube.com/watch?v=JuFdz8f-cT4",
+        "sources": ["Ask"]
+      },
+      {
+        "id": 99,
+        "relevance": 1,
+        "title": "Gson",
+        "text": "open-source Java library to serialize and deserialize Java objects to (and from) JSON. The Gson library was originally developed for internal purposes of Google …",
+        "url": "https://en.wikipedia.org/wiki/Gson",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 100,
+        "relevance": 1,
+        "title": "J Son",
+        "text": "singer J'son (comics), Marvel Comics character Json (rapper) American Christian hip-hop musician JSON (JavaScript Object Notation), for data interchange …",
+        "url": "https://en.wikipedia.org/wiki/J_Son",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 101,
+        "relevance": 1,
+        "title": "MessagePack",
+        "text": "than JSON, but imposes limitations on array and integer sizes. On the other hand, it allows binary data and non UTF-8 encoded strings. In JSON, map keys …",
+        "url": "https://en.wikipedia.org/wiki/MessagePack",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 102,
+        "relevance": 1,
+        "title": "Representational state transfer",
+        "text": "resource's URI will elicit a response with a payload formatted in HTML, XML, JSON, or some other format. The response can confirm that some alteration has …",
+        "url": "https://en.wikipedia.org/wiki/Representational_state_transfer",
+        "sources": ["Wikipedia"]
+      }
+    ]
+  }
 }

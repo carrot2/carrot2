@@ -54,7 +54,7 @@ const parserResultFrom = (documents, query = "") => {
   return {
     documents: documents,
     query: query
-  }
+  };
 };
 
 const parsers = {
@@ -66,7 +66,10 @@ const parsers = {
       logger.error("XML must be in Carrot2 format.");
       return EMPTY_PARSER_RESULT;
     } else {
-      return parserResultFrom(xmlJson.searchresult.document, xmlJson.searchresult.query);
+      return parserResultFrom(
+        xmlJson.searchresult.document,
+        xmlJson.searchresult.query
+      );
     }
   },
 
@@ -87,7 +90,7 @@ export const parseFile = async (file, logger) => {
   }
   const result = await parser(file, logger);
 
-  logger.log(`${pluralize(result.documents.length, "document", true)} loaded.`)
+  logger.log(`${pluralize(result.documents.length, "document", true)} loaded.`);
 
   return result;
 };
