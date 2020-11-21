@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { Group } from "./Group.js";
+import { isEmpty } from "../../lang/objects.js";
 
 export { addFactory } from "./Group.js";
 
@@ -37,6 +38,19 @@ export const addAdvancedSettingsVisibility = (settings, isAdvancedVisible) => {
           (s.advanced || false) === isAdvancedVisible() &&
           (!visibilityFn || visibilityFn())
         );
+      };
+    }
+  });
+};
+
+export const addGroupFolding = (settings, isFolded, setFolded) => {
+  forEachSetting(settings, s => {
+    if (s.type === "group" && !isEmpty(s.label)) {
+      s.folded = () => {
+        return isFolded(s);
+      }
+      s.onHeaderClick = () => {
+        setFolded(s, !isFolded(s));
       };
     }
   });

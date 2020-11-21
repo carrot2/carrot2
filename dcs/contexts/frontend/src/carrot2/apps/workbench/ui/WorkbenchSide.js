@@ -21,10 +21,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLightbulbOn } from "@fortawesome/pro-regular-svg-icons";
 import {
   addAdvancedSettingsVisibility,
+  addGroupFolding,
   Settings
 } from "../../../../carrotsearch/ui/settings/Settings.js";
 import { SettingsTools } from "./SettingsTools.js";
 import { workbenchSourceStore } from "../store/source-store.js";
+import { persistentStore } from "../../../../carrotsearch/store/persistent-store.js";
 
 const WorkbenchLogo = () => {
   return (
@@ -70,6 +72,13 @@ addAdvancedSettingsVisibility(
   settings.settings,
   () => settingsStateStore.showAdvancedSettings
 );
+addGroupFolding(
+  settings.settings,
+  setting => foldingStore[setting.id],
+  (setting, folded) => (foldingStore[setting.id] = folded)
+);
+
+const foldingStore = persistentStore("workbench:settings:folding", {});
 
 const parametersStateStore = store({
   sourceDirty: false,

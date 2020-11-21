@@ -6,14 +6,14 @@ import { view } from "@risingstack/react-easy-state";
 import classnames from "classnames";
 import { displayNoneIf } from "../../carrot2/apps/search-app/ui/Optional.js";
 
-export const SectionDivider = ({ label, folded, onCaretClick = () => {} }) => {
+export const SectionDivider = ({ label, folded, onHeaderClick = () => {} }) => {
   if (!label) {
     return null;
   }
 
   return (
     <h4 className="SectionDivider">
-      <span onClick={onCaretClick}>
+      <span onClick={onHeaderClick}>
         {label}
         <span className={classnames("Caret", { CaretRight: folded })} />
       </span>
@@ -22,16 +22,16 @@ export const SectionDivider = ({ label, folded, onCaretClick = () => {} }) => {
 };
 
 export const Section = view(
-  ({ label, children, className, style, isFolded, onCaretClick }) => {
-    const folded = isFolded ? isFolded() : false;
+  ({ label, children, className, style, folded, onHeaderClick }) => {
+    const isFolded = folded ? folded() : false;
     return (
       <section className={classnames("Section", className)} style={style}>
         <SectionDivider
           label={label}
-          folded={folded}
-          onCaretClick={onCaretClick}
+          folded={isFolded}
+          onHeaderClick={onHeaderClick}
         />
-        <div style={displayNoneIf(folded)}>{children}</div>
+        <div style={displayNoneIf(isFolded)}>{children}</div>
       </section>
     );
   }
