@@ -58,7 +58,7 @@ const SourceConfigurationStep = view(() => {
   return (
     <li className="SourceConfiguration">
       <DottedAngledArrow />
-      <h3>Configure data source</h3>
+      <h3>Configure <strong>{source.label}</strong> data source</h3>
       {help}
     </li>
   );

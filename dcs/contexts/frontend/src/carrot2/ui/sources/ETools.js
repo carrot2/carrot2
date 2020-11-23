@@ -440,9 +440,11 @@ export const EToolsIpBannedError = view(() => {
 
 export const IntroHelp = () => {
   return (
-      <>
-        Type your query in the <strong>Query</strong> box.
-      </>
+    <>
+      Type your query in the <strong>Query</strong> box. Use the common web
+      search engine syntax such as double quotes for phrase search, <code>-</code> to
+      exclude words or phrases etc.
+    </>
   );
 };
 
@@ -461,5 +463,6 @@ export const etoolsSourceDescriptor = {
   createConfig: () => <EToolsResultConfig />,
   createSourceConfig: props => <EToolsSourceConfig {...props} />,
   getSettings: () => etoolsSettings,
-  getFieldsToCluster: () => ["title", "snippet"]
+  getFieldsToCluster: () => ["title", "snippet"],
+  createIntroHelp: () => <IntroHelp />
 };

@@ -12,6 +12,7 @@ import { TitleAndRank, Url } from "../results/Result.js";
 import { queryStore } from "../../apps/workbench/store/query-store.js";
 
 import { resultListConfigStore } from "../results/ResultListConfig.js";
+import { GenericSearchEngineErrorMessage } from "../../apps/search-app/ui/ErrorMessage.js";
 
 const pubmedConfigStore = persistentStore("pubmedResultConfig", {
   showJournal: true,
@@ -206,3 +207,34 @@ export const PubMedSourceConfig = view(props => {
     </div>
   );
 });
+
+export const PubMedIntro = () => {
+  return (
+    <>
+      <p>
+        Type your PubMed query in the <strong>Query</strong> box.
+      </p>
+
+      <p>
+        To request larger numbers of PubMed results, you may need to get the{" "}
+        <a href="https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/">
+          NCBI API key
+        </a> and provide it in the <strong>API key</strong> field.
+      </p>
+    </>
+  );
+};
+
+export const pubmedSourceDescriptor = {
+  label: "PubMed",
+  descriptionHtml:
+    "abstracts of medical papers from the PubMed database provided by NCBI.",
+  source: pubmedSource,
+  createResult: props => <PubMedResult {...props} />,
+  createError: props => <GenericSearchEngineErrorMessage {...props} />,
+  createConfig: () => <PubMedResultConfig />,
+  createSourceConfig: props => <PubMedSourceConfig {...props} />,
+  getSettings: () => pubmedSettings,
+  getFieldsToCluster: () => ["title", "snippet"],
+  createIntroHelp: () => <PubMedIntro />
+};

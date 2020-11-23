@@ -154,6 +154,7 @@
 }
 
 .WorkbenchIntroSteps .SourceConfiguration {
+  min-height: 12rem;
 }
 
 .WorkbenchIntroSteps .SourceConfiguration .DottedArrowAngled {

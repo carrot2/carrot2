@@ -121,6 +121,30 @@ const solrSource = async query => {
   );
 };
 
+export const SolrIntro = () => {
+  return (
+    <>
+      <p>
+        Provide the address of your Solr instance in the{" "}
+        <strong>Solr service URL</strong> field and press{" "}
+        <strong>Connect</strong>.
+      </p>
+
+      <p>
+        Once Workbench connects to your Solr instance, it will fetch the list of
+        available Solr cores. Choose the core you'd like to query and type your
+        query using{" "}
+        <a
+          target="_blank" rel="noreferrer"
+          href="https://lucene.apache.org/solr/guide/8_6/the-standard-query-parser.html#specifying-terms-for-the-standard-query-parser"
+        >
+          Solr query syntax
+        </a>.
+      </p>
+    </>
+  );
+};
+
 export const solrSourceDescriptor = createLocalSearchSource({
   label: "Solr",
   descriptionHtml: "queries Apache Solr",
@@ -144,5 +168,6 @@ export const solrSourceDescriptor = createLocalSearchSource({
         <HttpErrorMessage error={e}>{details}</HttpErrorMessage>
       </SearchEngineErrorMessage>
     );
-  }
+  },
+  createIntroHelp: () => <SolrIntro />
 });

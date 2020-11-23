@@ -106,6 +106,30 @@ const esSource = async query => {
   );
 };
 
+export const ElasticsearchIntro = () => {
+  return (
+    <>
+      <p>
+        Provide the address of your Elasticsearch instance in the{" "}
+        <strong>Elasticsearch service URL</strong> field and press{" "}
+        <strong>Connect</strong>.
+      </p>
+
+      <p>
+        Once Workbench connects to your Elasticsearch instance, it will fetch
+        the list of available indices. Choose the index you'd like to query and
+        type your query using{" "}
+        <a
+          target="_blank" rel="noreferrer"
+          href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#query-string-syntax"
+        >
+          Elasticsearch DSL query syntax
+        </a>.
+      </p>
+    </>
+  );
+};
+
 export const esSourceDescriptor = createLocalSearchSource({
   label: "Elasticsearch",
   descriptionHtml: "queries Elasticsearch",
@@ -129,5 +153,6 @@ export const esSourceDescriptor = createLocalSearchSource({
         <HttpErrorMessage error={e}>{details}</HttpErrorMessage>
       </SearchEngineErrorMessage>
     );
-  }
+  },
+  createIntroHelp: () => <ElasticsearchIntro />
 });
