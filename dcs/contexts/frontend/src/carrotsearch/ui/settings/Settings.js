@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import { Group } from "./Group.js";
 import { isEmpty } from "../../lang/objects.js";
+import { persistentStore } from "../../store/persistent-store.js";
 
 export { addFactory } from "./Group.js";
 
@@ -14,7 +15,7 @@ Settings.propTypes = {
   settings: PropTypes.object.isRequired
 };
 
-const forEachSetting = (settings, cb) => {
+export const forEachSetting = (settings, cb) => {
   settings.forEach(s => {
     cb(s);
     if (s.type === "group") {
@@ -43,15 +44,32 @@ export const addAdvancedSettingsVisibility = (settings, isAdvancedVisible) => {
   });
 };
 
-export const addGroupFolding = (settings, isFolded, setFolded) => {
+export const addGroupFolding = (settings, key) => {
+  const foldingStore = persistentStore(key, {});
+  const isGroupFolded = s => foldingStore[s.id];
+  const setGroupFolded = (s, folded) => foldingStore[s.id] = folded;
+
+  const foldableGroups = [];
   forEachSetting(settings, s => {
     if (s.type === "group" && !isEmpty(s.label)) {
+      foldableGroups.push(s);
       s.folded = () => {
-        return isFolded(s);
+        return isGroupFolded(s);
       }
       s.onHeaderClick = () => {
-        setFolded(s, !isFolded(s));
+        setGroupFolded(s, !isGroupFolded(s));
       };
     }
   });
+
+  const isAllFolded = () => foldableGroups.every(g => foldingStore[g.id]);
+  const setFolding = folded => {
+    foldableGroups.forEach(g => {
+      foldingStore[g.id] = folded;
+    });
+  };
+  const foldAll = () => setFolding(true);
+  const expandAll = () => setFolding(false);
+
+  return { isAllFolded, foldAll, expandAll };
 };
