@@ -9,8 +9,8 @@ import { faFolder, faLightbulb } from "@fortawesome/pro-regular-svg-icons";
 
 import { searchResultStore } from "../../store/services.js";
 import {
-  documentVisibilityStore,
-  clusterSelectionStore
+  clusterSelectionStore,
+  documentVisibilityStore
 } from "../../store/selection.js";
 import { pluralize } from "../../../carrotsearch/lang/humanize.js";
 
@@ -47,12 +47,13 @@ export const ClusterSelectionSummary = view(() => {
   if (searchResultStore.error) {
     content = <>Search results could not be retrieved due to an error.</>;
   } else if (selectedDocs.size === 0) {
-    content = (
-      <>
-        All retrieved results ({searchResultStore.searchResult.documents.length}
-        )
-      </>
-    );
+    const totalDocCount = searchResultStore.searchResult.documents.length;
+    content =
+      totalDocCount > 0 ? (
+        <>All retrieved results ({totalDocCount})</>
+      ) : (
+        <>No results to show</>
+      );
   } else if (clusterSelection.size === 1) {
     const it = clusterSelection.values();
     const cluster = it.next().value;

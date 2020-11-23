@@ -93,13 +93,17 @@ export const ClusterList = () => {
   return (
     <div className={"ClusterList" + (flatClusters ? " flat" : "")}>
       <div>
-        {clusters.map(cluster => (
-          <TopClusterView
-            cluster={cluster}
-            key={cluster.id}
-            clusterSelectionStore={clusterSelectionStore}
-          />
-        ))}
+        {clusters.length > 0 ? (
+          clusters.map(cluster => (
+            <TopClusterView
+              cluster={cluster}
+              key={cluster.id}
+              clusterSelectionStore={clusterSelectionStore}
+            />
+          ))
+        ) : (
+          <div>No clusters to show</div>
+        )}
       </div>
     </div>
   );

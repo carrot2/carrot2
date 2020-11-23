@@ -22,12 +22,12 @@ const ResultStats = view(() => {
   const stats = [
     {
       id: "result-count",
-      value: searchResultStore.searchResult?.documents?.length,
+      value: searchResultStore.searchResult.documents.length,
       label: "results"
     },
     {
       id: "cluster-count",
-      value: clusterStore?.clusters?.length,
+      value: clusterStore.clusters.length,
       label: "clusters"
     },
     {

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 import { clusterStore } from "../../store/services.js";
-import { clusterSelectionStore } from "../../store/selection.js";
-import { documentSelectionStore } from "../../store/selection.js";
+import {
+  clusterSelectionStore,
+  documentSelectionStore
+} from "../../store/selection.js";
 import { themeStore } from "../../../carrotsearch/ui/ThemeSwitch.js";
 
 import { FoamTree } from "../../../carrotsearch/foamtree/FoamTree.js";
@@ -155,13 +157,18 @@ export const Treemap = ({ visible, configStore, implRef }) => {
     );
   }, [theme, configStore.layout, configStore.stacking]);
 
+  const noClustersMessage =
+    clusterStore.clusters.length === 0 ? <div>No clusters to show</div> : null;
   return (
-    <FoamTree
-      implRef={implRef}
-      options={options}
-      dataObject={dataObject}
-      selection={selection}
-    />
+    <>
+      {noClustersMessage}
+      <FoamTree
+        implRef={implRef}
+        options={options}
+        dataObject={dataObject}
+        selection={selection}
+      />
+    </>
   );
 };
 

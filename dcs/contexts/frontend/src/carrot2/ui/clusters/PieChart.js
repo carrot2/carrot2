@@ -1,9 +1,11 @@
 import PropTypes from "prop-types";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { clusterStore } from "../../store/services.js";
-import { clusterSelectionStore } from "../../store/selection.js";
-import { documentSelectionStore } from "../../store/selection.js";
+import {
+  clusterSelectionStore,
+  documentSelectionStore
+} from "../../store/selection.js";
 import { themeStore } from "../../../carrotsearch/ui/ThemeSwitch.js";
 
 import { Circles } from "../../../carrotsearch/circles/Circles.js";
@@ -87,13 +89,18 @@ export const PieChart = ({ visible, configStore, implRef }) => {
     );
   }, [theme]);
 
+  const noClustersMessage =
+    clusterStore.clusters.length === 0 ? <div>No clusters to show</div> : null;
   return (
-    <Circles
-      implRef={implRef}
-      options={options}
-      dataObject={dataObject}
-      selection={selection}
-    />
+    <>
+      {noClustersMessage}
+      <Circles
+        implRef={implRef}
+        options={options}
+        dataObject={dataObject}
+        selection={selection}
+      />
+    </>
   );
 };
 

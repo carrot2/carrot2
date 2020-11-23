@@ -122,6 +122,7 @@ export const clusterStore = store({
 export const searchResultStore = store({
   loading: false,
   error: false,
+  initial: true,
   searchResult: {
     query: "",
     matches: 0,
@@ -138,6 +139,7 @@ export const searchResultStore = store({
         await src.source(query),
         src
       );
+      searchResultStore.initial = false;
     } catch (e) {
       errors.addError(await src.createError(e));
       searchResultStore.error = true;
