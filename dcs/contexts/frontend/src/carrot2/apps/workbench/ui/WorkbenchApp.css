@@ -1,3 +1,71 @@
 .WorkbenchApp {
-  height: 100%;
+  display: grid;
+  height: 100vh;
+
+  grid-template-columns: auto 8fr;
+  grid-template-rows: auto;
+  grid-template-areas: "params results";
+}
+
+.WorkbenchMain {
+  display: grid;
+  height: 100vh;
+
+  grid-template-columns: auto 24em;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "stats stats"
+    "clusters docs";
+
+  --selection-border-width: 2px;
+}
+
+.WorkbenchMain .stats {
+  grid-area: stats;
+  overflow-x: hidden;
+  padding-top: var(--leading);
+  padding-left: var(--leading);
+  padding-bottom: var(--leading);
+  margin-top: -0.375em;
+}
+
+.WorkbenchMain .ViewsTabs,
+.WorkbenchMain .stats {
+  background-color: var(--background-color-tertiary);
+}
+
+.WorkbenchMain .docs {
+  grid-area: docs;
+  overflow-x: hidden;
+}
+
+.WorkbenchMain .clusters {
+  grid-area: clusters;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.WorkbenchMain .docs .ViewsTabs,
+.WorkbenchMain .docs .ViewsContent {
+  padding-right: var(--leading);
+}
+
+.WorkbenchMain .clusters .ViewsTabs,
+.WorkbenchMain .clusters .ViewsContent {
+  padding-right: calc(0.5 * var(--leading));
+}
+.WorkbenchMain .docs .ViewsContent,
+.WorkbenchMain .clusters .ViewsContent {
+  padding-bottom: calc(var(--leading));
+}
+
+.WorkbenchMain .clusters .ViewsContent {
+  margin-left: var(--leading);
+}
+
+.WorkbenchMain .clusters .ViewsTabs {
+  padding-left: calc(1.125 * var(--leading));
+}
+.WorkbenchMain .docs .ViewsTabs {
+  padding-left: calc(0.625 * var(--leading));
 }
