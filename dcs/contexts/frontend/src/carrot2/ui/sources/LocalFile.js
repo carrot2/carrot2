@@ -52,11 +52,19 @@ const localFileSource = () => {
 };
 
 const exampleDocs = [
-  { title: "Title 1", body: "Text", tags: ["media"] },
-  { title: "Title 2", body: "Text", tags: ["sport"] }
+  { title: "Title 1", body: "Text", views: 583 },
+  { title: "Title 2", body: "Text", views: 23 }
 ];
 
-export const LocalFileFormatInfo = () => {
+export const SampleDownload = ({ file }) => {
+  return (
+    <a href={`workbench/examples/${file}`} download={true}>
+      download sample
+    </a>
+  );
+};
+
+const LocalFileFormatInfo = () => {
   return (
     <>
       <p>
@@ -66,19 +74,20 @@ export const LocalFileFormatInfo = () => {
       <ul>
         <li>
           <p>
-            <strong>Excel, OpenOffice, CSV</strong> &mdash; one document per row,
-            the first row is treated as a header with document field names.
+            <strong>Excel, OpenOffice, CSV</strong> &mdash; one document per
+            row, the first row is treated as a header with document field names.
           </p>
         </li>
         <li>
           <p>
-            <strong>JSON</strong> &mdash; an array of flat JSON objects
-            representing documents to cluster:
+            <strong>JSON</strong> (<SampleDownload file={"serverfault.json"} />)
+            &mdash; an array of flat JSON objects representing documents to
+            cluster:
           </p>
           <pre>
             {"[\n" +
-              exampleDocs.map(d => JSON.stringify(d)).join(",\n") +
-              ",\n...\n]"}
+              exampleDocs.map(d => "  " + JSON.stringify(d)).join(",\n") +
+              ",\n  ...\n]"}
           </pre>
           <p>
             The objects can have text and non-text fields, Carrot<sup>2</sup>{" "}
@@ -87,7 +96,16 @@ export const LocalFileFormatInfo = () => {
         </li>
         <li>
           <p>
-            <strong>XML</strong> &ndash; the legacy Carrot<sup>2</sup> XML format.
+            <strong>XML</strong> (<SampleDownload file={"seattle.xml"} />) &ndash;
+            the{" "}
+            <a
+              href="https://doc.carrot2.org/#section.architecture.input-xml"
+              target="_blank"
+              rel="noopener"
+            >
+              legacy Carrot<sup>2</sup> XML format
+            </a>
+            .
           </p>
         </li>
       </ul>

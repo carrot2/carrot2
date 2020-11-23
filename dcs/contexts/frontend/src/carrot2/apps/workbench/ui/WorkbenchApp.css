@@ -75,7 +75,7 @@
 
 .WorkbenchMain.WorkbenchIntro {
   grid-template-columns: 1fr;
-  grid-template-rows: 4fr 1fr;
+  grid-template-rows: 5fr 1fr;
   grid-template-areas: "steps""welcome";
   max-width: 64rem;
 }
