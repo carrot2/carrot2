@@ -59,7 +59,7 @@ const WorkbenchMain = view(() => {
               views={clusterViews}
               onViewChange={newView => (uiStore.clusterView = newView)}
           >
-            <Loading store={clusterStore} />
+            <Loading isLoading={() => clusterStore.loading} />
           </Views>
         </div>
         <div className="docs">
@@ -69,7 +69,7 @@ const WorkbenchMain = view(() => {
               onViewChange={() => {}}
               source={sources[workbenchSourceStore.source]}
           >
-            <Loading store={searchResultStore} />
+            <Loading isLoading={() => searchResultStore.loading} />
           </Views>
         </div>
       </div>

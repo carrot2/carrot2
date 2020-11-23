@@ -90,7 +90,7 @@ export const ResultsScreen = ({ match, history }) => {
           views={clusterViews}
           onViewChange={onViewChange}
         >
-          <Loading store={clusterStore} />
+          <Loading isLoading={() => clusterStore.loading} />
         </Views>
       </div>
       <div className="docs">
@@ -100,7 +100,7 @@ export const ResultsScreen = ({ match, history }) => {
           onViewChange={() => {}}
           source={sources[source]}
         >
-          <Loading store={searchResultStore} />
+          <Loading isLoading={() => searchResultStore.loading} />
         </Views>
       </div>
     </main>

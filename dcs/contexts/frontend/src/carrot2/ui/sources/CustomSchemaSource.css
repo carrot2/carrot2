@@ -4,9 +4,10 @@
 
 .FieldChoiceSetting .Loading {
   background-color: var(--background-color-side);
+  height: 100%;
 }
 .FieldChoiceSetting .Loading > div {
-  margin-top: 2em;
+  margin-top: 1em;
 }
 
 .FieldChoiceSetting .FieldList {

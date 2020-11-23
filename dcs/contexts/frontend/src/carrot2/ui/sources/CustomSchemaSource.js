@@ -133,19 +133,14 @@ const FieldList = view(({ schemaInfoStore }) => {
 const FieldChoiceSetting = view(({ setting, get, set }) => {
   const { label, description, schemaInfoStore } = setting;
 
-  const children = schemaInfoStore.loading ? (
-    <Loading store={schemaInfoStore} />
-  ) : (
-    <FieldList schemaInfoStore={schemaInfoStore} />
-  );
-
   return (
     <Setting
       className="FieldChoiceSetting"
       label={label}
       description={description}
     >
-      {children}
+      <Loading isLoading={() => schemaInfoStore.loading} />
+      <FieldList schemaInfoStore={schemaInfoStore} />
       <LogEntries entries={schemaInfoStore.log} />
     </Setting>
   );
@@ -165,7 +160,9 @@ export const createFieldChoiceSetting = (
       type: "field-choice",
       label: "Fields to cluster",
       visible: () =>
-        schemaInfoStore.fileLoaded || schemaInfoStore.log.length > 0,
+        schemaInfoStore.loading ||
+        schemaInfoStore.fileLoaded ||
+        schemaInfoStore.log.length > 0,
       get: () => schemaInfoStore.fieldsToCluster,
       set: () => {},
       schemaInfoStore: schemaInfoStore
