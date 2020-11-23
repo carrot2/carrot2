@@ -1,14 +1,7 @@
 import React from "react";
 import { GenericSearchEngineErrorMessage } from "./apps/search-app/ui/ErrorMessage.js";
 
-import {
-  EToolsIpBannedError,
-  EToolsResult,
-  EToolsResultConfig,
-  etoolsSettings,
-  etoolsSource,
-  EToolsSourceConfig
-} from "./ui/sources/ETools.js";
+import { etoolsSourceDescriptor } from "./ui/sources/ETools.js";
 import {
   PubMedResult,
   PubMedResultConfig,
@@ -21,29 +14,7 @@ import { solrSourceDescriptor } from "./ui/sources/Solr.js";
 import { esSourceDescriptor } from "./ui/sources/Elasticsearch.js";
 
 export const sources = {
-  web: {
-    label: "Web",
-    descriptionHtml:
-      "web search results provided by <a href='https://etools.ch' target='_blank'>etools.ch</a>. Extensive use may require special arrangements with the <a href='mailto:sschmid@comcepta.com' target='_blank'>owner</a> of the etools.ch service.",
-    source: etoolsSource,
-    createResult: props => {
-      return <EToolsResult {...props} />;
-    },
-    createError: error => {
-      if (error && error.status === 403) {
-        return <EToolsIpBannedError />;
-      }
-      return <GenericSearchEngineErrorMessage />;
-    },
-    createConfig: () => {
-      return <EToolsResultConfig />;
-    },
-    createSourceConfig: props => {
-      return <EToolsSourceConfig {...props} />;
-    },
-    getSettings: () => etoolsSettings,
-    getFieldsToCluster: () => ["title", "snippet"]
-  },
+  web: etoolsSourceDescriptor,
 
   pubmed: {
     label: "PubMed",

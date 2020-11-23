@@ -54,6 +54,7 @@
 .WorkbenchMain .clusters .ViewsContent {
   padding-right: calc(0.5 * var(--leading));
 }
+
 .WorkbenchMain .docs .ViewsContent,
 .WorkbenchMain .clusters .ViewsContent {
   padding-bottom: calc(var(--leading));
@@ -66,6 +67,112 @@
 .WorkbenchMain .clusters .ViewsTabs {
   padding-left: calc(1.125 * var(--leading));
 }
+
 .WorkbenchMain .docs .ViewsTabs {
   padding-left: calc(0.625 * var(--leading));
+}
+
+
+.WorkbenchMain.WorkbenchIntro {
+  grid-template-columns: 1fr;
+  grid-template-rows: 4fr 1fr;
+  grid-template-areas: "steps""welcome";
+  max-width: 64rem;
+}
+
+.WorkbenchIntroWelcome {
+  text-align: center;
+}
+.WorkbenchIntroWelcome ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.WorkbenchIntroWelcome ul li {
+  margin-right: 2em;
+}
+
+.WorkbenchIntroSteps {
+  position: relative;
+  overflow: auto;
+  margin-top: 5rem;
+  margin-right: 1rem;
+}
+
+.WorkbenchIntroSteps > ol {
+  counter-reset: steps;
+  list-style: none;
+  position: absolute;
+  max-width: 36em;
+}
+
+.WorkbenchIntroSteps > ol > li {
+  counter-increment: steps;
+  position: relative;
+  padding-left: 3rem;
+  padding-top: 0.75rem;
+  margin-left: 3em;
+}
+
+.WorkbenchIntroSteps > ol > li:before {
+  content: counter(steps);
+  display: inline-block;
+  position: absolute;
+  top: 0.125em;
+  left: 0;
+  color: var(--logo-color);
+  background-color: var(--background-color-secondary);
+  font-family: Lato, sans-serif;
+  font-size: 1.75rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 1.25rem;
+  text-align: center;
+  margin-right: 0.5rem;
+}
+
+.WorkbenchIntroSteps > ol > li > h3 {
+  font-family: Raleway, sans-serif;
+  font-size: 1.125rem;
+  font-weight: normal;
+  margin-top: 0;
+}
+
+.WorkbenchIntroSteps .DottedArrow {
+  position: absolute;
+  fill: var(--text-color-secondary);
+}
+
+.WorkbenchIntroSteps .SourceAlgorithmChoice {
+}
+
+.WorkbenchIntroSteps .SourceAlgorithmChoice .DottedArrowStraight {
+  left: -4.5rem;
+  top: -0.5rem;
+  width: 4rem;
+  transform: rotate(-90deg);
+}
+
+.WorkbenchIntroSteps .SourceConfiguration {
+}
+
+.WorkbenchIntroSteps .SourceConfiguration .DottedArrowAngled {
+  left: -3.5rem;
+  top: 3rem;
+  width: 4.5rem;
+  transform: scale(-1.25, 1.0);
+}
+
+.WorkbenchIntroSteps .ButtonPress {
+}
+
+.WorkbenchIntroSteps .ButtonPress .DottedArrowCurly {
+  left: -4.75rem;
+  top: -3rem;
+  width: 6em;
+  transform: scale(-1, 1) rotate(-60deg);
+}
+
+.WorkbenchIntroSteps ul {
+  padding-left: 1em;
 }

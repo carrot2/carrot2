@@ -51,6 +51,50 @@ const localFileSource = () => {
   };
 };
 
+const exampleDocs = [
+  { title: "Title 1", body: "Text", tags: ["media"] },
+  { title: "Title 2", body: "Text", tags: ["sport"] }
+];
+
+export const LocalFileFormatInfo = () => {
+  return (
+    <>
+      <p>
+        Data for clustering is extracted from the file you provide. The
+        following file types are supported:
+      </p>
+      <ul>
+        <li>
+          <p>
+            <strong>Excel, OpenOffice, CSV</strong> &mdash; one document per row,
+            the first row is treated as a header with document field names.
+          </p>
+        </li>
+        <li>
+          <p>
+            <strong>JSON</strong> &mdash; an array of flat JSON objects
+            representing documents to cluster:
+          </p>
+          <pre>
+            {"[\n" +
+              exampleDocs.map(d => JSON.stringify(d)).join(",\n") +
+              ",\n...\n]"}
+          </pre>
+          <p>
+            The objects can have text and non-text fields, Carrot<sup>2</sup>{" "}
+            will try to detect the ones to cluster.
+          </p>
+        </li>
+        <li>
+          <p>
+            <strong>XML</strong> &ndash; the legacy Carrot<sup>2</sup> XML format.
+          </p>
+        </li>
+      </ul>
+    </>
+  );
+};
+
 export const localFileSourceDescriptor = createSource(
   schemaInfoStore,
   resultConfigStore,
@@ -59,6 +103,7 @@ export const localFileSourceDescriptor = createSource(
     descriptionHtml: "content read from a local file",
     source: localFileSource,
     getSettings: () => settings,
-    createError: e => <GenericSearchEngineErrorMessage error={e} />
+    createError: e => <GenericSearchEngineErrorMessage error={e} />,
+    createIntroHelp: () => <LocalFileFormatInfo />
   }
 );

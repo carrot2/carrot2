@@ -13,6 +13,9 @@ import { Loading } from "../../../../carrotsearch/ui/Loading.js";
 import { sources } from "../../../config-sources.js";
 import { workbenchSourceStore } from "../store/source-store.js";
 import { WorkbenchSide } from "./WorkbenchSide.js";
+import { DottedStraightArrow } from "../../../../carrotsearch/ui/arrows/DottedStraightArrow.js";
+import { DottedAngledArrow } from "../../../../carrotsearch/ui/arrows/DottedAngledArrow.js";
+import { DottedArrowCurly } from "../../../../carrotsearch/ui/arrows/DottedArrowCurly.js";
 
 const uiStore = persistentStore("workbench:ui", {
   clusterView: "folders"
@@ -43,44 +46,101 @@ const ResultStats = view(() => {
   ];
 
   return (
-      <div className="stats">
-        <Stats stats={stats} />
-      </div>
+    <div className="stats">
+      <Stats stats={stats} />
+    </div>
   );
 });
 
-const WorkbenchMain = view(() => {
+const SourceConfigurationStep = view(() => {
+  const source = sources[workbenchSourceStore.source];
+  const help = source.createIntroHelp?.();
   return (
-      <div className="WorkbenchMain">
-        <ResultStats />
-        <div className="clusters">
-          <Views
-              activeView={uiStore.clusterView}
-              views={clusterViews}
-              onViewChange={newView => (uiStore.clusterView = newView)}
-          >
-            <Loading isLoading={() => clusterStore.loading} />
-          </Views>
-        </div>
-        <div className="docs">
-          <Views
-              views={resultsViews}
-              activeView="list"
-              onViewChange={() => {}}
-              source={sources[workbenchSourceStore.source]}
-          >
-            <Loading isLoading={() => searchResultStore.loading} />
-          </Views>
-        </div>
+    <li className="SourceConfiguration">
+      <DottedAngledArrow />
+      <h3>Configure data source</h3>
+      {help}
+    </li>
+  );
+});
+
+const WorkbenchIntroSteps = () => {
+  return (
+    <div className="WorkbenchIntroSteps">
+      <ol>
+        <li className="SourceAlgorithmChoice">
+          <DottedStraightArrow />
+          <h3>Choose data source and clustering algorithm</h3>
+        </li>
+        <SourceConfigurationStep />
+        <li className="ButtonPress">
+          <DottedArrowCurly />
+          <h3>
+            Press the <strong>Cluster</strong> button
+          </h3>
+        </li>
+      </ol>
+    </div>
+  );
+};
+
+export const WorkbenchIntro = () => {
+  return (
+    <div className="WorkbenchMain WorkbenchIntro">
+      <WorkbenchIntroSteps />
+      <div className="WorkbenchIntroWelcome">
+        <h2>
+          This is Carrot<sup>2</sup> Clustering Workbench
+        </h2>
+
+        <ul>
+          <li>
+            clustering data from files, Solr, Elasticsearch
+          </li>
+          <li>experimenting with clustering parameters</li>
+          <li>exporting results</li>
+        </ul>
       </div>
+    </div>
+  );
+};
+
+const WorkbenchMain = view(() => {
+  if (searchResultStore.initial) {
+    return <WorkbenchIntro />;
+  }
+
+  return (
+    <div className="WorkbenchMain">
+      <ResultStats />
+      <div className="clusters">
+        <Views
+          activeView={uiStore.clusterView}
+          views={clusterViews}
+          onViewChange={newView => (uiStore.clusterView = newView)}
+        >
+          <Loading isLoading={() => clusterStore.loading} />
+        </Views>
+      </div>
+      <div className="docs">
+        <Views
+          views={resultsViews}
+          activeView="list"
+          onViewChange={() => {}}
+          source={sources[workbenchSourceStore.source]}
+        >
+          <Loading isLoading={() => searchResultStore.loading} />
+        </Views>
+      </div>
+    </div>
   );
 });
 
 export const WorkbenchApp = () => {
   return (
-      <div className="WorkbenchApp">
-        <WorkbenchSide />
-        <WorkbenchMain />
-      </div>
+    <div className="WorkbenchApp">
+      <WorkbenchSide />
+      <WorkbenchMain />
+    </div>
   );
 };

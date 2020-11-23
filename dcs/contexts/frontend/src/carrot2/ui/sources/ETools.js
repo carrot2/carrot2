@@ -23,6 +23,7 @@ import { queryStore } from "../../apps/workbench/store/query-store.js";
 
 import { resultListConfigStore } from "../results/ResultListConfig.js";
 import { storeAccessors } from "../../../carrotsearch/ui/settings/Setting.js";
+import { GenericSearchEngineErrorMessage } from "../../apps/search-app/ui/ErrorMessage.js";
 
 const etoolsResultsConfigStore = persistentStore("etoolsResultConfig", {
   showSiteIcons: false,
@@ -436,3 +437,29 @@ export const EToolsIpBannedError = view(() => {
     </div>
   );
 });
+
+export const IntroHelp = () => {
+  return (
+      <>
+        Type your query in the <strong>Query</strong> box.
+      </>
+  );
+};
+
+export const etoolsSourceDescriptor = {
+  label: "Web",
+  descriptionHtml:
+    "web search results provided by <a href='https://etools.ch' target='_blank'>etools.ch</a>. Extensive use may require special arrangements with the <a href='mailto:sschmid@comcepta.com' target='_blank'>owner</a> of the etools.ch service.",
+  source: etoolsSource,
+  createResult: props => <EToolsResult {...props} />,
+  createError: error => {
+    if (error && error.status === 403) {
+      return <EToolsIpBannedError />;
+    }
+    return <GenericSearchEngineErrorMessage />;
+  },
+  createConfig: () => <EToolsResultConfig />,
+  createSourceConfig: props => <EToolsSourceConfig {...props} />,
+  getSettings: () => etoolsSettings,
+  getFieldsToCluster: () => ["title", "snippet"]
+};
