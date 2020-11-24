@@ -9,6 +9,9 @@ export function fetchClusters(
   parameters = {},
   language
 ) {
+  // Query hint
+  parameters.queryHint = query;
+
   // Just pick the content fields we want to cluster. No IDs, URLs, or anything else.
   const request = {
     algorithm: algorithm,
