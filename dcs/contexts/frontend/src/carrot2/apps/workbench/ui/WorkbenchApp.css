@@ -72,11 +72,10 @@
   padding-left: calc(0.625 * var(--leading));
 }
 
-
 .WorkbenchMain.WorkbenchIntro {
   grid-template-columns: 1fr;
   grid-template-rows: 5fr 1fr;
-  grid-template-areas: "steps""welcome";
+  grid-template-areas: "steps" "welcome";
   max-width: 64rem;
 }
 
@@ -161,7 +160,7 @@
   left: -3.5rem;
   top: 3rem;
   width: 4.5rem;
-  transform: scale(-1.25, 1.0);
+  transform: scale(-1.25, 1);
 }
 
 .WorkbenchIntroSteps .ButtonPress {

@@ -47,7 +47,7 @@ export const addAdvancedSettingsVisibility = (settings, isAdvancedVisible) => {
 export const addGroupFolding = (settings, key) => {
   const foldingStore = persistentStore(key, {});
   const isGroupFolded = s => foldingStore[s.id];
-  const setGroupFolded = (s, folded) => foldingStore[s.id] = folded;
+  const setGroupFolded = (s, folded) => (foldingStore[s.id] = folded);
 
   const foldableGroups = [];
   forEachSetting(settings, s => {
@@ -55,7 +55,7 @@ export const addGroupFolding = (settings, key) => {
       foldableGroups.push(s);
       s.folded = () => {
         return isGroupFolded(s);
-      }
+      };
       s.onHeaderClick = () => {
         setGroupFolded(s, !isGroupFolded(s));
       };

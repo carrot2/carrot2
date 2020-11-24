@@ -38,7 +38,6 @@ autoEffect(() => {
   currentLanguage = algorithm.getLanguage();
 });
 
-
 export const clusterStore = store({
   loading: false,
   clusters: EMPTY_ARRAY,

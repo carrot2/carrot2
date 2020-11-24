@@ -219,7 +219,8 @@ export const PubMedIntro = () => {
         To request larger numbers of PubMed results, you may need to get the{" "}
         <a href="https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/">
           NCBI API key
-        </a> and provide it in the <strong>API key</strong> field.
+        </a>{" "}
+        and provide it in the <strong>API key</strong> field.
       </p>
     </>
   );

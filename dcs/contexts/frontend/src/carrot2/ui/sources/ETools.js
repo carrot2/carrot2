@@ -442,8 +442,8 @@ export const IntroHelp = () => {
   return (
     <>
       Type your query in the <strong>Query</strong> box. Use the common web
-      search engine syntax such as double quotes for phrase search, <code>-</code> to
-      exclude words or phrases etc.
+      search engine syntax such as double quotes for phrase search,{" "}
+      <code>-</code> to exclude words or phrases etc.
     </>
   );
 };

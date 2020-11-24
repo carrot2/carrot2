@@ -58,7 +58,9 @@ const SourceConfigurationStep = view(() => {
   return (
     <li className="SourceConfiguration">
       <DottedAngledArrow />
-      <h3>Configure <strong>{source.label}</strong> data source</h3>
+      <h3>
+        Configure <strong>{source.label}</strong> data source
+      </h3>
       {help}
     </li>
   );
@@ -94,9 +96,7 @@ export const WorkbenchIntro = () => {
         </h2>
 
         <ul>
-          <li>
-            clustering data from files, Solr, Elasticsearch
-          </li>
+          <li>clustering data from files, Solr, Elasticsearch</li>
           <li>experimenting with clustering parameters</li>
           <li>exporting results</li>
         </ul>
