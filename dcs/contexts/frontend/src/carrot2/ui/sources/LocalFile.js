@@ -96,12 +96,12 @@ const LocalFileFormatInfo = () => {
         </li>
         <li>
           <p>
-            <strong>XML</strong> (<SampleDownload file={"seattle.xml"} />) &ndash;
-            the{" "}
+            <strong>XML</strong> (<SampleDownload file={"seattle.xml"} />)
+            &ndash; the{" "}
             <a
               href="https://doc.carrot2.org/#section.architecture.input-xml"
               target="_blank"
-              rel="noopener"
+              rel="noreferrer"
             >
               legacy Carrot<sup>2</sup> XML format
             </a>
