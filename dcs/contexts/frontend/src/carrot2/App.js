@@ -39,11 +39,11 @@ import { WorkbenchApp } from "./apps/workbench/ui/WorkbenchApp.js";
 import { CarrotLogo } from "../carrotsearch/logo/CarrotLogo.js";
 import { AboutApp } from "./apps/about/AboutApp.js";
 
-const AppLink = ({ to, title, children, icon }) => {
+const AppLink = ({ to, title, children, icon, current}) => {
   const [open, setOpen] = useState(false);
 
   const handlePopoverInteraction = (nextOpenState, e) => {
-    setOpen(nextOpenState);
+    setOpen(nextOpenState && to !== current);
   };
   const handleLinkClick = () => {
     setOpen(false);
@@ -108,6 +108,7 @@ export const AppInternal = ({ location }) => {
           to={routes.search.path}
           title="Web search clustering"
           icon={faSearch}
+          current={location.pathname}
         >
           <p>Clustering of search results public search engines.</p>
         </AppLink>
@@ -115,6 +116,7 @@ export const AppInternal = ({ location }) => {
           to={routes.workbench.path}
           title="Clustering workbench"
           icon={faFlask}
+          current={location.pathname}
         >
           <ul className="WorkbenchLinkPopover">
             <li>clustering data from files, Solr, Elasticsearch</li>
