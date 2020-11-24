@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./App.css";
 
@@ -40,13 +40,29 @@ import { CarrotLogo } from "../carrotsearch/logo/CarrotLogo.js";
 import { AboutApp } from "./apps/about/AboutApp.js";
 
 const AppLink = ({ to, title, children, icon }) => {
+  const [open, setOpen] = useState(false);
+
+  const handlePopoverInteraction = (nextOpenState, e) => {
+    setOpen(nextOpenState);
+  };
+  const handleLinkClick = () => {
+    setOpen(false);
+  };
+
   return (
-    <NavLink className="NavLink AppLink" to={to} activeClassName="active">
+    <NavLink
+      onClick={handleLinkClick}
+      className="NavLink AppLink"
+      to={to}
+      activeClassName="active"
+    >
       <Popover
         popoverClassName="NavPopover"
         position={PopoverPosition.RIGHT}
         interactionKind={PopoverInteractionKind.HOVER}
-        hoverOpenDelay={650}
+        onInteraction={handlePopoverInteraction}
+        hoverOpenDelay={450}
+        isOpen={open}
       >
         <FontAwesomeIcon icon={icon} size="2x" />
         <div className="NavPopoverContent">
@@ -93,19 +109,17 @@ export const AppInternal = ({ location }) => {
           title="Web search clustering"
           icon={faSearch}
         >
-          <p>Clustering of search results from different search engines.</p>
+          <p>Clustering of search results public search engines.</p>
         </AppLink>
         <AppLink
           to={routes.workbench.path}
           title="Clustering workbench"
           icon={faFlask}
         >
-          <p>Parameter tuning, clustering of data from:</p>
-
-          <ul>
-            <li>JSON, XML, CSV and Excel files,</li>
-            <li>web search results,</li>
-            <li>search results from Solr and Elasticsearch.</li>
+          <ul className="WorkbenchLinkPopover">
+            <li>clustering data from files, Solr, Elasticsearch</li>
+            <li>experimenting with clustering parameters</li>
+            <li>exporting results to Excel/OpenOffice</li>
           </ul>
         </AppLink>
 
