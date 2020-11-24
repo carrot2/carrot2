@@ -46,11 +46,13 @@ export const DescriptionPopover = ({ description }) => {
 };
 
 const SettingDescription = ({ description }) => {
-  return (
+  return typeof description === "string" ? (
     <div
       className="SettingDescription"
       dangerouslySetInnerHTML={{ __html: description }}
     />
+  ) : (
+    <div className="SettingDescription">{description}</div>
   );
 };
 

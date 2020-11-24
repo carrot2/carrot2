@@ -46,9 +46,9 @@ nav .ThemeSwitch {
 .NavPopover {
   max-width: 22em;
 }
-.NavPopoverContent {
-  padding: var(--leading);
-  padding-bottom: calc(0.5 * var(--leading));
+.NavPopoverContent ul:last-child,
+.NavPopoverContent h3:last-child {
+  margin-bottom: 0;
 }
 
 /** Backdrop */
@@ -124,6 +124,10 @@ main {
 }
 
 /** BlueprintJS tweaks */
+.bp3-popover-content {
+  padding: 1em;
+}
+
 button.bp3-disabled {
   cursor: pointer !important;
 }

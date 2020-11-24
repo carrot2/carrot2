@@ -39,7 +39,7 @@
 }
 
 .SettingDescription {
-  max-width: 22rem;
+  max-width: 24rem;
 }
 .SettingDescription > p:last-of-type {
   margin-bottom: 0;
@@ -49,6 +49,9 @@
   overflow-wrap: anywhere;
 }
 
+.SettingDescription ul {
+  padding-left: 1em;
+}
 .SettingMessage {
   margin: 0.5em 0;
 }
