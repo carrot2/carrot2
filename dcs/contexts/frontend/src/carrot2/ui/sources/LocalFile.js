@@ -18,10 +18,7 @@ const { schemaInfoStore, resultHolder } = createSchemaExtractorStores(
 const LocalFileFormatInfo = () => {
   return (
     <>
-      <p>
-        Data for clustering is extracted from the file you provide. The
-        following file types are supported:
-      </p>
+      <p>The following file types are supported:</p>
       <ul>
         <li>
           <p>
@@ -77,9 +74,10 @@ const settings = [
         type: "file",
         label: "File",
         description: (
-          <div>
+          <>
+            <p>The file from which to read data for clustering.</p>
             <LocalFileFormatInfo />
-          </div>
+          </>
         ),
         get: () => null,
         set: (sett, file) => {
@@ -128,6 +126,11 @@ export const localFileSourceDescriptor = createSource(
     source: localFileSource,
     getSettings: () => settings,
     createError: e => <GenericSearchEngineErrorMessage error={e} />,
-    createIntroHelp: () => <LocalFileFormatInfo />
+    createIntroHelp: () => (
+      <>
+        <p>Data for clustering is extracted from the file you provide.</p>
+        <LocalFileFormatInfo />
+      </>
+    )
   }
 );
