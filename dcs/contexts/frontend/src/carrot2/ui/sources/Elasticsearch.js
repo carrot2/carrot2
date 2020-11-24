@@ -114,17 +114,30 @@ export const ElasticsearchIntro = () => {
         <strong>Elasticsearch service URL</strong> field and press{" "}
         <strong>Connect</strong>.
       </p>
+      <p>
+        Make sure Elasticsearch is configured with{" "}
+        <a
+          href="https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-http.html"
+          target="_blank"
+          rel="noreferrer"
+        >
+          CORS headers
+        </a>{" "}
+        enabled, otherwise the connection will fail.
+      </p>
 
       <p>
         Once Workbench connects to your Elasticsearch instance, it will fetch
         the list of available indices. Choose the index you'd like to query and
         type your query using{" "}
         <a
-          target="_blank" rel="noreferrer"
+          target="_blank"
+          rel="noreferrer"
           href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#query-string-syntax"
         >
           Elasticsearch DSL query syntax
-        </a>.
+        </a>
+        .
       </p>
     </>
   );

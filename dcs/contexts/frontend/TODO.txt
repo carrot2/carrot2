@@ -1,48 +1,11 @@
-Workbench:
-
-* query and non-query data sources
-  - for spreadsheet and JSON input, use document display settings per "schema"?
-  - a creator for configuring Solr and ES as data source?
-* customization of clustering dictionaries
-* export of clusters and documents as CSV?
-* visualization coloring by document attributes
-* we need to note that the user's data will be sent to our server for clustering.
-  Data will not be stored on the server.
-* Solr/ES without CORS: paste response in a text box / support Solr/ES as files?
-
-Workbench workflow:
-
-* Carrot2 XML: we process the file right away
-* Excel/CSV/JSON: we process all text fields we find in the file, allow configuration afterwards
-* Solr/ES: initial configuration of the service on the welcome screen (quick ping if the service works), initial query
-* Public search engines: provide initial query box on the welcome screen
-
-First release:
-
-* file input:
-  * accept only allowed file types
-  * format documentation and examples?
-* clustering language selection
-* Pass query hint to algorithms
-* Parameter section folding
-* Auto run clustering on setting change
-* export of parameters JSON for pasting into code
-* tuning of stopwords (Lingo3G)
-* Custom document renderer: display of URL-typed fields
-* Hide data source and algorithm combo boxes to make space for settings
-
 Later:
 
 * tuning of labels (label set comparison)
-
-
-Refactoring:
+* visualization coloring by document attributes
 
 
 Later:
-* Limit the number of results displayed at once?
 * Check background color on Circles export when implemented.
-* Copy/save results as CSV
 * Single document preview
 * Mobile version
 * Close popovers on Esc (should work, might be a BlueprintJS bug)

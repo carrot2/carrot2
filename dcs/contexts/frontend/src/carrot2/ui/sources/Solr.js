@@ -127,7 +127,8 @@ export const SolrIntro = () => {
       <p>
         Provide the address of your Solr instance in the{" "}
         <strong>Solr service URL</strong> field and press{" "}
-        <strong>Connect</strong>.
+        <strong>Connect</strong>. Make sure the instance emits correct CORS
+        headers, otherwise the connection will fail.
       </p>
 
       <p>
@@ -135,11 +136,13 @@ export const SolrIntro = () => {
         available Solr cores. Choose the core you'd like to query and type your
         query using{" "}
         <a
-          target="_blank" rel="noreferrer"
+          target="_blank"
+          rel="noreferrer"
           href="https://lucene.apache.org/solr/guide/8_6/the-standard-query-parser.html#specifying-terms-for-the-standard-query-parser"
         >
           Solr query syntax
-        </a>.
+        </a>
+        .
       </p>
     </>
   );
