@@ -18,7 +18,6 @@ import {
   settings,
   SettingsTools
 } from "./WorkbenchSettings.js";
-import { Loading } from "../../../../carrotsearch/ui/Loading.js";
 
 const WorkbenchLogo = () => {
   return (
@@ -69,8 +68,12 @@ export const AllSettings = () => {
     setTimeout(() => {
       setShow(true);
     }, 20);
-  }, [ setShow ]);
-  return show ? <Settings settings={settings} /> : <div className="Initializing">Initializing...</div>;
+  }, [setShow]);
+  return show ? (
+    <Settings settings={settings} />
+  ) : (
+    <div className="Initializing">Initializing...</div>
+  );
 };
 
 export const WorkbenchSide = () => {
