@@ -54,7 +54,6 @@ export const clusterStore = store({
     } else {
       // TODO: cancel currently running request
       clusterStore.loading = true;
-      clusterStore.clusters = EMPTY_ARRAY;
       clusterStore.error = undefined;
       try {
         const fieldsToCluster = searchResult.source.getFieldsToCluster();
