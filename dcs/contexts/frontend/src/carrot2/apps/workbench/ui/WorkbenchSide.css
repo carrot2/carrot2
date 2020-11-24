@@ -48,7 +48,8 @@
   top: -0.55rem;
 }
 
-.WorkbenchSide .Settings {
+.WorkbenchSide .Settings,
+.WorkbenchSide .Initializing {
   padding: var(--leading);
 }
 .WorkbenchSide .SettingsTools {
@@ -59,4 +60,8 @@
 }
 .WorkbenchSide .SettingsTools button:not(:last-child) {
   margin-right: 0.25em;
+}
+
+.WorkbenchSide .Initializing {
+  color: var(--text-color-lightest);
 }

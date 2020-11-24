@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./WorkbenchSide.css";
 
@@ -18,6 +18,7 @@ import {
   settings,
   SettingsTools
 } from "./WorkbenchSettings.js";
+import { Loading } from "../../../../carrotsearch/ui/Loading.js";
 
 const WorkbenchLogo = () => {
   return (
@@ -61,6 +62,17 @@ const ClusterButton = view(() => {
   );
 });
 
+// Initializes the settings with a short delay, so that the UI scaffolding shows immediately.
+export const AllSettings = () => {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setShow(true);
+    }, 20);
+  }, [ setShow ]);
+  return show ? <Settings settings={settings} /> : <div className="Initializing">Initializing...</div>;
+};
+
 export const WorkbenchSide = () => {
   return (
     <div className="WorkbenchSide">
@@ -74,7 +86,7 @@ export const WorkbenchSide = () => {
         <SettingsTools />
       </div>
 
-      <Settings settings={settings} />
+      <AllSettings />
     </div>
   );
 };
