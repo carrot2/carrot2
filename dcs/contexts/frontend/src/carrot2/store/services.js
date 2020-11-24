@@ -32,6 +32,13 @@ autoEffect(() => {
   currentAlgorithm = algorithmStore.clusteringAlgorithm;
 });
 
+let currentLanguage;
+autoEffect(() => {
+  const algorithm = algorithmStore.getAlgorithmInstance();
+  currentLanguage = algorithm.getLanguage();
+});
+
+
 export const clusterStore = store({
   loading: false,
   clusters: EMPTY_ARRAY,
@@ -57,7 +64,8 @@ export const clusterStore = store({
           documents,
           fieldsToCluster,
           algorithm,
-          currentParams
+          currentParams,
+          currentLanguage
         );
         clusterStore.clusters = response.clusters;
         clusterStore.serviceInfo = response.serviceInfo;

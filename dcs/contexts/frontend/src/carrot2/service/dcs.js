@@ -6,11 +6,13 @@ export function fetchClusters(
   documents,
   fields,
   algorithm,
-  parameters = {}
+  parameters = {},
+  language
 ) {
   // Just pick the content fields we want to cluster. No IDs, URLs, or anything else.
   const request = {
     algorithm: algorithm,
+    language: language,
     parameters: parameters,
     documents: documents.map(doc => {
       return fields.reduce((obj, key) => {

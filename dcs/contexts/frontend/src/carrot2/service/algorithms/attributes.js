@@ -233,7 +233,9 @@ export const collectParameters = (settings, getter) =>
     if (setting.type === "group") {
       setting.settings.reduce(collect, params);
     } else {
-      _set(params, setting.pathRest, getter(setting));
+      if (setting.pathRest) {
+        _set(params, setting.pathRest, getter(setting));
+      }
     }
 
     return params;

@@ -8,6 +8,8 @@ import {
   settingFromDescriptorRecursive,
   settingFromFilterDescriptor
 } from "./attributes.js";
+import { createLanguageSetting } from "./language.js";
+import { storeAccessors } from "../../../carrotsearch/ui/settings/Setting.js";
 
 const descriptorsById = getDescriptorsById(descriptor);
 
@@ -82,12 +84,26 @@ const languageModelSettings = [
 
 const parameterStore = persistentStore(
   "parameters:algorithm:lingo",
-  collectDefaults(descriptorsById, [
-    clusterSettings,
-    labelSettings,
-    languageModelSettings
-  ])
+  Object.assign(
+    { language: "English" },
+    collectDefaults(descriptorsById, [
+      clusterSettings,
+      labelSettings,
+      languageModelSettings
+    ])
+  )
 );
+
+// Add language setting separately, so that it doesn't participate in the process of
+// collecting default values (language is not a parameter).
+languageModelSettings.unshift(
+  createLanguageSetting(
+    "lingo",
+    "Lingo",
+    storeAccessors(parameterStore, "language")
+  )
+);
+
 const getter = setting => parameterStore[setting.id];
 const settings = [
   {
@@ -130,5 +146,6 @@ export const lingo = {
     "creates well-described flat clusters. Does not scale beyond a few thousand search results. Available as part of the open source <a href='http://project.carrot2.org' target='_blank'>Carrot<sup>2</sup> framework</a>.",
   tag: "open source",
   getSettings: () => settings,
+  getLanguage: () => parameterStore.language,
   resetToDefaults: parameterStore.resetToDefaults
 };
