@@ -39,7 +39,7 @@ import { WorkbenchApp } from "./apps/workbench/ui/WorkbenchApp.js";
 import { CarrotLogo } from "../carrotsearch/logo/CarrotLogo.js";
 import { AboutApp } from "./apps/about/AboutApp.js";
 
-const AppLink = ({ to, title, children, icon, current}) => {
+const AppLink = ({ to, title, children, icon, current }) => {
   const [open, setOpen] = useState(false);
 
   const handlePopoverInteraction = (nextOpenState, e) => {

@@ -1,7 +1,5 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./ResultList.css";
-
-import PropTypes from "prop-types";
 
 import {
   autoEffect,
@@ -180,7 +178,7 @@ const useScrollReset = () => {
 
 const MAX_RESULTS_FOR_REACTIVE_DISPLAY = 200;
 
-export const ResultList = view(props => {
+const ResultListImpl = view(props => {
   const resultsStore = props.store;
   const allResults = resultsStore.searchResult.documents;
 
@@ -238,11 +236,13 @@ export const ResultList = view(props => {
   }, [reset, scrollReset]);
   useSelectionChange(r);
 
+  const limitedResults = props.limit ? results.slice(0, 5) : results;
+
   return (
     <div className="ResultList" ref={container}>
       <div>
         <ClusterSelectionSummary />
-        {results.map((document, index) => (
+        {limitedResults.map((document, index) => (
           <Result
             key={index}
             document={document}
@@ -257,7 +257,17 @@ export const ResultList = view(props => {
   );
 });
 
-ResultList.propTypes = {
-  store: PropTypes.object.isRequired,
-  visibilityStore: PropTypes.object.isRequired
+// A wrapper that renders a limited number of documents during the initial render.
+// This is to speed up switching between workbench and other apps when a long list
+// of documents is displaying. Every switch re-creates the DOM elements and creating
+// hundreds of documents would stop the browser for a while.
+export const ResultList = props => {
+  const [limit, setLimit] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setLimit(false);
+    }, 100);
+  }, [setLimit]);
+
+  return <ResultListImpl {...props} limit={limit} />;
 };
