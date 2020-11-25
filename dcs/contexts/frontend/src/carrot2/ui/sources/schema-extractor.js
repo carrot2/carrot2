@@ -224,7 +224,7 @@ export const extractSchema = (documents, logger) => {
 
   const allFields = fields.map(f => f.field);
   const naturalTextFields = fields
-    .filter(f => f.naturalTextScore >= 8)
+    .filter(f => f.naturalTextScore >= 8 || f.titleScore >= 8)
     .map(f => f.field);
 
   return {
