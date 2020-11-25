@@ -1,3 +1,16 @@
+
+// Try to detect IntelliJ model loader early.
+rootProject.ext {
+  isIdea = System.getProperty("idea.active") != null ||
+      gradle.startParameter.taskNames.contains('idea') ||
+      gradle.startParameter.taskNames.contains('cleanIdea')
+
+  if (isIdea) {
+    logger.lifecycle("IntelliJ Idea IDE detected.")
+  }
+}
+
+// Apply intellij plugin to all projects.
 allprojects {
   apply plugin: 'idea'
 
@@ -10,3 +23,27 @@ allprojects {
   }
 }
 
+// GH-37: skip certain long tasks if we're building within IntelliJ.
+if (rootProject.isIdea) {
+  gradle.taskGraph.whenReady { taskGraph ->
+    def tasks = taskGraph.getAllTasks()
+
+    def skipTasks = [
+        // Skip any tasks from distribution or DCS distribution.
+        ":distribution:.+",
+        ":dcs:distribution:.+",
+        // Skip yarn-related stuff.
+        ".*:(yarnSetup|yarnInstall|yarnBuild)",
+        // Skip WAR or ZIP assembly.
+        ".*:(war|zip)"
+    ]
+
+    tasks.each { task ->
+      def taskPath = task.path
+      if (skipTasks.any {pattern -> taskPath ==~ pattern}) {
+        logger.debug("Skipping task on IntelliJ: " + taskPath)
+        task.enabled = false
+      }
+    }
+  }
+}
