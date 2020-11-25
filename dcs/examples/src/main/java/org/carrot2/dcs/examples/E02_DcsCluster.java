@@ -110,7 +110,7 @@ public class E02_DcsCluster extends CommandScaffold {
         throw new ReportCommandException(ExitCodes.ERROR_INVALID_ARGUMENTS);
       }
 
-      String template = config.templates.get(0);
+      String template = config.templates.keySet().iterator().next();
       Loggers.CONSOLE.info(
           "No algorithm or language specified. Using the first available template: {}", template);
       return template;

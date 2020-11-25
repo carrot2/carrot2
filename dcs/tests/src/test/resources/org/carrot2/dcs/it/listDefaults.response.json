@@ -100,10 +100,22 @@
       "Turkish"
     ]
   },
-  "templates" : [
-    "frontend-default",
-    "lingo",
-    "stc",
-    "bkmeans"
-  ]
+  "templates" : {
+    "frontend-default" : {
+      "language" : "English",
+      "algorithm" : "Lingo"
+    },
+    "lingo" : {
+      "language" : "English",
+      "algorithm" : "Lingo"
+    },
+    "stc" : {
+      "language" : "English",
+      "algorithm" : "STC"
+    },
+    "bkmeans" : {
+      "language" : "English",
+      "algorithm" : "Bisecting K-Means"
+    }
+  }
 }

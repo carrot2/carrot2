@@ -5,8 +5,38 @@
     Release history for Carrot2 4.0.x (and bugfix releases).
   </p>
 
+  <section id="v4.1.0">
+    <h2>Version 4.1.0 [unreleased]</h2>
+
+    <p>
+      This is a minor release with minor changes to REST API formats.
+    </p>
+
+    <ul>
+      <li><p>GH-38:
+        [DCS] Expose the language and algorithm of all resolved template in <code>/list</code>. The response
+        format of the endpoint has changed. Previously, the <code>templates</code> element was a list of template
+        names, now it will contain an object with template names as keys and template content as values, for example:
+        </p>
+        <pre>...
+  "templates" : {
+    "template1" : {
+      "language" : "English",
+      "algorithm" : "algorithm1"
+    },
+    "template2" : {
+      "algorithm" : "algorithm1"
+    }
+  }</pre>
+      </li>
+      <li><p>GH-37:
+        [build] Only recompile code under IntelliJ IDEA (improve dev experience).</p>
+      </li>
+    </ul>
+  </section>
+
   <section id="v4.0.5">
-    <h2>Version 4.0.5</h2>
+    <h2>Version 4.0.5 [unreleased]</h2>
 
     <p>
       This is a bugfix release.

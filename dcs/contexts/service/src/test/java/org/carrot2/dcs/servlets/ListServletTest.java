@@ -62,7 +62,7 @@ public class ListServletTest extends AbstractServletTest {
               .containsExactlyElementsOf(allLangs);
         });
 
-    Assertions.assertThat(response.templates)
+    Assertions.assertThat(response.templates.keySet().stream())
         .containsExactly("template2", "template1", "template3");
 
     Assertions.assertThat(content).isEqualToIgnoringNewLines(resourceString("list.response.json"));
@@ -82,7 +82,8 @@ public class ListServletTest extends AbstractServletTest {
     pw.flush();
 
     ObjectMapper om = new ObjectMapper();
-    Assertions.assertThat(om.readValue(sw.toString(), ListResponse.class).templates)
+    Assertions.assertThat(
+            om.readValue(sw.toString(), ListResponse.class).templates.keySet().stream())
         .containsOnly("template1", "template-no-algorithm");
   }
 

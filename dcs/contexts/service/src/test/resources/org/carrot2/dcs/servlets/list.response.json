@@ -133,9 +133,18 @@
       "Turkish"
     ]
   },
-  "templates" : [
-    "template2",
-    "template1",
-    "template3"
-  ]
+  "templates" : {
+    "template2" : {
+      "language" : "English",
+      "algorithm" : "Dummy"
+    },
+    "template1" : {
+      "language" : "English",
+      "algorithm" : "Dummy"
+    },
+    "template3" : {
+      "language" : "English",
+      "algorithm" : "Dummy"
+    }
+  }
 }

@@ -175,12 +175,15 @@ paths:
                       "Lingo": [ "English", "French" ],
                       "STC": [ "English", "French" ]
                     },
-                    "templates": [
-                      "frontend-default",
-                      "lingo",
-                      "stc",
-                      "bkmeans"
-                    ]
+                    "templates": {
+                      "frontend-default": {
+                        "algorithm" : "English",
+                        "language" : "Lingo"
+                      },
+                      "stc": {
+                        "algorithm": "STC"
+                      }
+                    }
                   }
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -265,10 +268,18 @@ components:
               type: string
         templates:
           description: >-
-            An array of named request templates preconfigured on the server.
-          type: array
-          items:
-            type: string
+            An map of named request templates and their template body content.
+          example: {
+            "templates": {
+              "template-name": {
+                "algorithm": "foo",
+                "language": "bar"
+              }
+            }
+          }
+          type: object
+          additionalProperties:
+            type: object
       required:
         - algorithms
         - templates

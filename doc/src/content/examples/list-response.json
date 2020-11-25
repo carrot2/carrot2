@@ -12,10 +12,13 @@
       ...
     ]
   },
-  "templates" : [
-    "frontend-default",
-    "lingo",
-    "stc",
-    "bkmeans"
-  ]
+  "templates" : {
+    "frontend-default": {
+      "algorithm" : "English",
+      "language" : "Lingo"
+    },
+    "lingo": { ... },
+    "stc": { ... },
+    "bkmeans": { ... }
+  }
 }

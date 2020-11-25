@@ -11,7 +11,6 @@
 package org.carrot2.dcs.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,21 +20,23 @@ import org.carrot2.dcs.model.ListResponse;
 @SuppressWarnings("serial")
 public class ListServlet extends RestEndpoint {
   private DcsContext dcsContext;
-  private ListResponse defaultResponse;
+  private ListResponse constantResponse;
 
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
 
     dcsContext = DcsContext.load(config.getServletContext());
-    defaultResponse =
+
+    constantResponse =
         new ListResponse(
-            dcsContext.algorithmLanguages, new ArrayList<>(dcsContext.templates.keySet()));
+            dcsContext.algorithmLanguages,
+            ListResponse.filterSensitiveDataFromTemplates(dcsContext.templates));
   }
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException {
-    writeJsonResponse(response, shouldIndent(request), defaultResponse);
+    writeJsonResponse(response, shouldIndent(request), constantResponse);
   }
 }

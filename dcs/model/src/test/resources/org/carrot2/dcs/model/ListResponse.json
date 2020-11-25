@@ -1,0 +1,15 @@
+{
+  "algorithms" : {
+    "algorithm2" : [ "lang3", "lang4" ],
+    "algorithm1" : [ "lang1", "lang2" ]
+  },
+  "templates" : {
+    "template1" : {
+      "language" : "lang1",
+      "algorithm" : "algorithm1"
+    },
+    "template2" : {
+      "algorithm" : "algorithm1"
+    }
+  }
+}
