@@ -44,8 +44,16 @@ const ExportFormatConfig = view(() => {
 const ExportOutputConfig = view(() => {
   return (
     <div style={{ marginBottom: "2em" }}>
-      <StoreCheckbox label="Clusters" store={exportConfig} property="includeClusters" />
-      <StoreCheckbox label="Documents" store={exportConfig} property="includeDocuments" />
+      <StoreCheckbox
+        label="Clusters"
+        store={exportConfig}
+        property="includeClusters"
+      />
+      <StoreCheckbox
+        label="Documents"
+        store={exportConfig}
+        property="includeDocuments"
+      />
     </div>
   );
 });
@@ -59,7 +67,9 @@ const ExportBody = () => {
       <p>Chose what to export:</p>
       <ExportOutputConfig />
 
-      <Button intent={Intent.PRIMARY} onClick={doExport}>Export</Button>
+      <Button intent={Intent.PRIMARY} onClick={doExport}>
+        Export
+      </Button>
     </div>
   );
 };
@@ -72,19 +82,21 @@ const doExport = () => {
   }
 };
 
-const getExportDocs = () => clusterStore.documents.map(d => {
-  // remove our internal properties
-  const { __id, __rank, clusters, ...toExport } = d;
-  return toExport;
-});
-const getExportClusters = () => clusterStore.clusters.map(function prepare(c) {
-  // Remove the "uniqueDocs" property
-  const { uniqueDocuments, ...toExport } = c;
-  if (toExport.clusters) {
-    toExport.clusters = toExport.clusters.map(prepare);
-  }
-  return toExport;
-});
+const getExportDocs = () =>
+  clusterStore.documents.map(d => {
+    // remove our internal properties
+    const { __id, __rank, clusters, ...toExport } = d;
+    return toExport;
+  });
+const getExportClusters = () =>
+  clusterStore.clusters.map(function prepare(c) {
+    // Remove the "uniqueDocs" property
+    const { uniqueDocuments, ...toExport } = c;
+    if (toExport.clusters) {
+      toExport.clusters = toExport.clusters.map(prepare);
+    }
+    return toExport;
+  });
 
 const exportJson = () => {
   const type = "application/json";
@@ -108,7 +120,6 @@ const exportJson = () => {
     buildFileName("result", `json`)
   );
 };
-
 
 export const Export = () => {
   return (

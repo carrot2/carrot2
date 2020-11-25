@@ -90,7 +90,9 @@ export const WorkbenchSide = () => {
         <SettingsTools />
       </div>
 
-      <Deferred timeout={20}><Settings settings={settings} /></Deferred>
+      <Deferred timeout={20}>
+        <Settings settings={settings} />
+      </Deferred>
     </div>
   );
 };

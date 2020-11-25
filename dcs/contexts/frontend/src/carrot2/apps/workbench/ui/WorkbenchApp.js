@@ -46,9 +46,7 @@ const ResultStats = view(() => {
     }
   ];
 
-  return (
-    <Stats stats={stats} />
-  );
+  return <Stats stats={stats} />;
 });
 
 const SourceConfigurationStep = view(() => {
