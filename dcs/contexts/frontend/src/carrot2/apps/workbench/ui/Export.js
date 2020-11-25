@@ -1,5 +1,7 @@
 import React from "react";
 
+import "./Export.css";
+
 import { view } from "@risingstack/react-easy-state";
 import { saveAs } from "file-saver";
 
@@ -21,7 +23,6 @@ export const ExportFormatButton = view(({ value, ...props }) => {
   const active = exportConfig.format === value;
   return (
     <Button
-      outlined={true}
       active={active}
       intent={active ? Intent.PRIMARY : Intent.NONE}
       onClick={() => (exportConfig.format = value)}
@@ -32,7 +33,7 @@ export const ExportFormatButton = view(({ value, ...props }) => {
 
 const ExportFormatConfig = view(() => {
   return (
-    <ControlGroup style={{ marginBottom: "2em" }}>
+    <ControlGroup className="ExportFormatConfig">
       <ExportFormatButton value={"excel"} text="Excel" />
       <ExportFormatButton value={"openoffice"} text="OpenOffice" />
       <ExportFormatButton value={"csv"} text="CSV" />
@@ -43,7 +44,7 @@ const ExportFormatConfig = view(() => {
 
 const ExportOutputConfig = view(() => {
   return (
-    <div style={{ marginBottom: "2em" }}>
+    <div className="ExportOutputConfig">
       <StoreCheckbox
         label="Clusters"
         store={exportConfig}
