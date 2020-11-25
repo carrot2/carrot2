@@ -3,15 +3,7 @@ import { Button } from "@blueprintjs/core";
 import { saveAs } from "file-saver";
 import React from "react";
 
-import { searchResultStore } from "../../store/services.js";
-
-function buildFileName(fileNameSuffix, extension) {
-  const queryCleaned = searchResultStore.searchResult.query
-    .replace(/[\s:]+/g, "_")
-    .replace(/[+-\\"'/\\?]+/g, "");
-  const source = searchResultStore.source;
-  return `${source}-${queryCleaned}-${fileNameSuffix}.${extension}`;
-}
+import { buildFileName } from "../../store/services.js";
 
 function saveJpeg(impl, fileNameSuffix) {
   const type = "image/jpeg";

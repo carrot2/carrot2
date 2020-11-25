@@ -1,4 +1,4 @@
-import { store, autoEffect } from "@risingstack/react-easy-state";
+import { autoEffect, store } from "@risingstack/react-easy-state";
 import { algorithms } from "../config-algorithms.js";
 import { fetchClusters } from "../service/dcs.js";
 import { persistentStore } from "../../carrotsearch/store/persistent-store.js";
@@ -183,3 +183,11 @@ autoEffect(() => {
     clusterStore.clusters = EMPTY_ARRAY;
   }
 });
+
+export const buildFileName = (fileNameSuffix, extension) => {
+  const queryCleaned = searchResultStore.searchResult.query
+    .replace(/[\s:]+/g, "_")
+    .replace(/[+-\\"'/\\?]+/g, "");
+  const source = searchResultStore.source;
+  return `${source}-${queryCleaned}-${fileNameSuffix}.${extension}`;
+};

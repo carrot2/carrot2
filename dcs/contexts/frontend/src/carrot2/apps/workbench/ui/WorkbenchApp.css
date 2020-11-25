@@ -163,9 +163,6 @@
   transform: scale(-1.25, 1);
 }
 
-.WorkbenchIntroSteps .ButtonPress {
-}
-
 .WorkbenchIntroSteps .ButtonPress .DottedArrowCurly {
   left: -4.75rem;
   top: -3rem;
@@ -175,4 +172,10 @@
 
 .WorkbenchIntroSteps ul {
   padding-left: 1em;
+}
+
+.WorkbenchMain .Export {
+  position: absolute;
+  top: 1em;
+  right: 1em;
 }
