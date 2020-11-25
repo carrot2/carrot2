@@ -11,7 +11,7 @@ import { persistentStore } from "../../../../carrotsearch/store/persistent-store
 import { StoreCheckbox } from "../../../../carrotsearch/ui/form/StoreCheckbox.js";
 import { buildFileName, clusterStore } from "../../../store/services.js";
 
-const exportConfig = persistentStore({
+const exportConfig = persistentStore("workbench:export:config", {
   format: "excel",
   includeClusters: true,
   includeDocuments: true
