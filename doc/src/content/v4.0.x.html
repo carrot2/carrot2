@@ -9,12 +9,12 @@
     <h2>Version 4.1.0 [unreleased]</h2>
 
     <p>
-      This is a minor release with minor changes to REST API formats.
+      This is a minor release with changes to REST API formats and minor bug fixes.
     </p>
 
     <ul>
       <li><p>GH-38:
-        [DCS] Expose the language and algorithm of all resolved template in <code>/list</code>. The response
+        [DCS, API CHANGE] Expose the language and algorithm of all resolved template in <code>/list</code>. The response
         format of the endpoint has changed. Previously, the <code>templates</code> element was a list of template
         names, now it will contain an object with template names as keys and template content as values, for example:
         </p>
@@ -29,12 +29,28 @@
     }
   }</pre>
       </li>
+
       <li><p>GH-37:
         [build] Only recompile code under IntelliJ IDEA (improve dev experience).</p>
+      </li>
+
+      <li><p>GH-35:
+        [DCS] Added request processing/ service information to clustering response. This information
+        is optional and is returned when <code>serviceInfo</code> HTTP parameter is enabled on a clustering request.</p>
+      </li>
+
+      <li><p>GH-34, CARROT-1280:
+        [DCS] Clustering of documents containing multi-value fields (array of strings)
+        fails with an exception.</p>
+      </li>
+
+      <li><p>GH-33:
+        [DCS] Upgrade Jackson dependency to 2.11.3.</p>
       </li>
     </ul>
   </section>
 
+  <!--
   <section id="v4.0.5">
     <h2>Version 4.0.5 [unreleased]</h2>
 
@@ -43,17 +59,7 @@
     </p>
 
     <ul>
-      <li><p>GH-35:
-        [DCS] Added request processing/ service information to clustering response. This information
-        is optional and is returned when <code>serviceInfo</code> HTTP parameter is enabled on a clustering request.</p>
-      </li>
-      <li><p>GH-34, CARROT-1280:
-        [DCS] Clustering of documents containing multi-value fields (array of strings)
-        fails with an exception.</p>
-      </li>
-      <li><p>GH-33:
-        [DCS] Upgrade Jackson dependency to 2.11.3.</p>
-      </li>
     </ul>
   </section>
+  -->
 </article>
