@@ -79,6 +79,8 @@ const doExport = () => {
     case "json":
       exportJson();
       break;
+
+    default:
   }
 };
 
