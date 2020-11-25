@@ -81,7 +81,15 @@ const doExport = async () => {
       break;
 
     case "excel":
-      await exportSheet();
+      await exportSheet("xlsx");
+      break;
+
+    case "openoffice":
+      await exportSheet("ods");
+      break;
+
+    case "csv":
+      await exportSheet("csv");
       break;
 
     default:
@@ -127,7 +135,7 @@ const exportJson = () => {
   );
 };
 
-const exportSheet = async () => {
+const exportSheet = async (format) => {
   const XLSX = await import("xlsx");
 
   // TODO: Flatten arrays into comma-separated lists?
@@ -136,7 +144,7 @@ const exportSheet = async () => {
   const wb = XLSX.utils.book_new();
   wb.SheetNames.push("Export");
   wb.Sheets["Export"] = ws;
-  XLSX.writeFile(wb, buildFileName("result", "xlsx"));
+  XLSX.writeFile(wb, buildFileName("result", format));
 };
 
 export const Export = () => {
