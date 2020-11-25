@@ -74,10 +74,14 @@ const ExportBody = () => {
   );
 };
 
-const doExport = () => {
+const doExport = async () => {
   switch (exportConfig.format) {
     case "json":
       exportJson();
+      break;
+
+    case "excel":
+      await exportSheet();
       break;
 
     default:
@@ -121,6 +125,18 @@ const exportJson = () => {
     new Blob([JSON.stringify(toExport)], { type: type }),
     buildFileName("result", `json`)
   );
+};
+
+const exportSheet = async () => {
+  const XLSX = await import("xlsx");
+
+  // TODO: Flatten arrays into comma-separated lists?
+  const docs = getExportDocs();
+  const ws = XLSX.utils.json_to_sheet(docs);
+  const wb = XLSX.utils.book_new();
+  wb.SheetNames.push("Export");
+  wb.Sheets["Export"] = ws;
+  XLSX.writeFile(wb, buildFileName("result", "xlsx"));
 };
 
 export const Export = () => {
