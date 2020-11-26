@@ -59,6 +59,18 @@ const ExportOutputConfig = view(() => {
   );
 });
 
+const ExportButton = view(() => {
+  return (
+    <Button
+      intent={Intent.PRIMARY}
+      onClick={doExport}
+      disabled={!exportConfig.includeDocuments && !exportConfig.includeClusters}
+    >
+      Export
+    </Button>
+  );
+});
+
 const ExportBody = () => {
   return (
     <div>
@@ -68,9 +80,7 @@ const ExportBody = () => {
       <p>Chose what to export:</p>
       <ExportOutputConfig />
 
-      <Button intent={Intent.PRIMARY} onClick={doExport}>
-        Export
-      </Button>
+      <ExportButton />
     </div>
   );
 };
@@ -136,12 +146,50 @@ const exportJson = () => {
   );
 };
 
-const exportSheet = async (format) => {
+const exportSheet = async format => {
   const XLSX = await import("xlsx");
 
-  // TODO: Flatten arrays into comma-separated lists?
-  const docs = getExportDocs();
-  const ws = XLSX.utils.json_to_sheet(docs);
+  let rows = [];
+  if (exportConfig.includeClusters) {
+    const documents = getExportDocs();
+    const collect = (c, parentLabels) => {
+      c.documents.forEach(docIndex => {
+        const doc = {};
+        parentLabels.forEach((l, index) => {
+          doc[`Cluster Level ${index + 1}`] = l.join(", ");
+        });
+        doc[`Cluster Level ${parentLabels.length + 1}`] = c.labels.join(",");
+
+        if (exportConfig.includeDocuments) {
+          Object.assign(doc, documents[docIndex]);
+        }
+
+        rows.push(doc);
+      });
+
+      const newParents = [...parentLabels, c.labels];
+      c.clusters?.forEach(c => {
+        collect(c, newParents);
+      });
+    };
+
+    clusterStore.clusters.forEach(c => {
+      collect(c, []);
+    });
+  } else {
+    rows = getExportDocs();
+  }
+
+  // Flatten arrays into comma-separated lists
+  rows.forEach(r => {
+    Object.keys(r).forEach(p => {
+      if (Array.isArray(r[p])) {
+        r[p] = r[p].flat(Number.MAX_SAFE_INTEGER).join(", ");
+      }
+    });
+  });
+
+  const ws = XLSX.utils.json_to_sheet(rows);
   const wb = XLSX.utils.book_new();
   wb.SheetNames.push("Export");
   wb.Sheets["Export"] = ws;

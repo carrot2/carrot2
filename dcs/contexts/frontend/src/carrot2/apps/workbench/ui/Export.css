@@ -1,6 +1,6 @@
 .ExportOutputConfig {
   margin-bottom: 2em;
-  display: flex
+  display: flex;
 }
 
 .ExportOutputConfig .bp3-checkbox {
