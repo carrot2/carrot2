@@ -17,6 +17,7 @@ export const persistentStore = (key, defaults, methods) => {
       backingStore[prop] = defaults[prop];
     });
   };
+  backingStore.getDefaults = () => defaults;
 
   return backingStore;
 };

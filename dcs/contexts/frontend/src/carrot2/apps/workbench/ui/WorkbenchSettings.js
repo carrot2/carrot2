@@ -5,7 +5,7 @@ import { algorithms } from "../../../config-algorithms.js";
 import { workbenchSourceStore } from "../store/source-store.js";
 import {
   algorithmStore,
-  clusterStore,
+  reloadClusters,
   searchResultStore
 } from "../../../store/services.js";
 import { persistentStore } from "../../../../carrotsearch/store/persistent-store.js";
@@ -23,6 +23,7 @@ import {
   faUndoAlt
 } from "@fortawesome/pro-regular-svg-icons";
 import { queryStore } from "../store/query-store.js";
+import { ExportParameters } from "./ExportParameters.js";
 
 // Settings of all sources and algorithms, combined. We'll show and hide
 // the right settings based on the source and algorithm selection.
@@ -157,6 +158,7 @@ export const SettingsTools = () => {
       />
       <AdvancedSettingsButton />
       <FoldSettingsButton />
+      <ExportParameters />
     </div>
   );
 };
@@ -172,8 +174,9 @@ export const runSearch = () => {
       queryStore.query
     );
   } else {
-    clusterStore.reload();
+    reloadClusters();
   }
+
   parametersStateStore.algorithmDirty = false;
   parametersStateStore.sourceDirty = false;
 };

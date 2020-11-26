@@ -27,6 +27,7 @@
     "xlsx": "0.16.8",
     "lru-cache": "6.0.0",
     "ky": "0.25.0",
+    "json-format-highlight": "1.0.4",
     "@fortawesome/fontawesome-pro": "5.15.0",
     "@fortawesome/fontawesome-svg-core": "1.2.32",
     "@fortawesome/pro-duotone-svg-icons": "5.15.0",

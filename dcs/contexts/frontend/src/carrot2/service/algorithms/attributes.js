@@ -225,7 +225,7 @@ export const collectDefaults = (map, settings) =>
     return defs;
   }, {});
 
-export const collectParameters = (settings, getter) =>
+export const collectParameters = (settings, getter, filter) =>
   settings.reduce(function collect(params, setting) {
     if (setting.visible && !setting.visible()) {
       return params;
@@ -234,7 +234,10 @@ export const collectParameters = (settings, getter) =>
       setting.settings.reduce(collect, params);
     } else {
       if (setting.pathRest) {
-        _set(params, setting.pathRest, getter(setting));
+        const value = getter(setting);
+        if (!filter || filter(setting, value)) {
+          _set(params, setting.pathRest, value);
+        }
       }
     }
 

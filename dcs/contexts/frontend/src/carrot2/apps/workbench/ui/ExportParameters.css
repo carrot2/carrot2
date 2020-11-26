@@ -1,0 +1,41 @@
+.ExportParametersBody pre {
+  max-height: 24rem;
+  width: 32rem;
+  overflow: auto;
+  color: var(--text-color-lighter);
+  line-height: 1.1;
+}
+
+.ExportParametersBody pre span[style*="color:prop"] {
+  color: #477d7f;
+}
+
+.ExportParametersBody pre span[style*="color:string"] {
+  color: #be3647;
+}
+
+.ExportParametersBody pre span[style*="color:number"] {
+  color: hsl(210, 80%, 40%);
+}
+
+.ExportParametersBody pre span[style*="color:false"],
+.ExportParametersBody pre span[style*="color:true"] {
+  color: hsl(30, 100%, 35%);
+}
+
+.dark .ExportParametersBody pre span[style*="color:prop"] {
+  color: hsl(182, 28%, 55%);
+}
+
+.dark .ExportParametersBody pre span[style*="color:string"] {
+  color: hsl(353, 80%, 65%);
+}
+
+.dark .ExportParametersBody pre span[style*="color:number"] {
+  color: hsl(200, 100%, 55%);
+}
+
+.dark .ExportParametersBody pre span[style*="color:false"],
+.dark .ExportParametersBody pre span[style*="color:true"] {
+  color: hsl(30, 100%, 50%);
+}

@@ -107,5 +107,6 @@ export const kmeans = {
   tag: "open source",
   getSettings: () => settings,
   getLanguage: () => parameterStore.language,
+  getDefaults: parameterStore.getDefaults,
   resetToDefaults: parameterStore.resetToDefaults
 };

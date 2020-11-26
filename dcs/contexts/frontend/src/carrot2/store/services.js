@@ -38,17 +38,32 @@ export const clusterStore = store({
   }
 });
 
-export const buildRequestJson = () => {
+export const buildRequestJson = (onlyNonDefault = false) => {
   const algorithm = algorithmStore.getAlgorithmInstance();
   const settings = algorithm.getSettings();
-  const currentParams = collectParameters(settings, settings[0].get);
+  const defaults = algorithm.getDefaults();
+  console.log(JSON.stringify(defaults, null, 2));
+  const currentParams = collectParameters(
+    settings,
+    settings[0].get,
+    onlyNonDefault
+      ? (setting, value) => {
+          const def = defaults[setting.pathRest];
+          const acc = value !== def;
+          if (acc) {
+            console.log(setting.pathRest, def, value);
+          }
+          return acc;
+        }
+      : null
+  );
   const currentLanguage = algorithm.getLanguage();
 
   return {
     algorithm: algorithmStore.clusteringAlgorithm,
     language: currentLanguage,
     parameters: currentParams
-  }
+  };
 };
 
 const loadClusters = async function (searchResult) {
@@ -70,15 +85,15 @@ const loadClusters = async function (searchResult) {
       requestJson.parameters.queryHint = query;
 
       const response = await fetchClusters(
-          requestJson,
-          documents,
-          fieldsToCluster
+        requestJson,
+        documents,
+        fieldsToCluster
       );
       clusterStore.clusters = response.clusters;
       clusterStore.serviceInfo = response.serviceInfo;
       clusterStore.documents = addClusterReferences(
-          documents,
-          clusterStore.clusters
+        documents,
+        clusterStore.clusters
       );
     } catch (e) {
       clusterStore.clusters = EMPTY_ARRAY;
