@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./Export.css";
+import "./ExportResults.css";
 
 import { view } from "@risingstack/react-easy-state";
 import { saveAs } from "file-saver";
@@ -203,7 +203,7 @@ const exportSheet = async format => {
   XLSX.writeFile(wb, buildFileName("result", format));
 };
 
-export const Export = () => {
+export const ExportResults = () => {
   return (
     <Popover className="Export" boundary="viewport">
       <Button

@@ -16,7 +16,7 @@ import { WorkbenchSide } from "./WorkbenchSide.js";
 import { DottedStraightArrow } from "../../../../carrotsearch/ui/arrows/DottedStraightArrow.js";
 import { DottedAngledArrow } from "../../../../carrotsearch/ui/arrows/DottedAngledArrow.js";
 import { DottedArrowCurly } from "../../../../carrotsearch/ui/arrows/DottedArrowCurly.js";
-import { Export } from "./Export.js";
+import { ExportResults } from "./ExportResults.js";
 
 const uiStore = persistentStore("workbench:ui", {
   clusterView: "folders"
@@ -111,7 +111,7 @@ const WorkbenchMain = view(() => {
     <div className="WorkbenchMain">
       <div className="stats">
         <ResultStats />
-        <Export />
+        <ExportResults />
       </div>
 
       <div className="clusters">
