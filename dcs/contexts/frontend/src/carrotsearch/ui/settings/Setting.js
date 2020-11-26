@@ -39,6 +39,7 @@ export const DescriptionPopover = ({ description }) => {
       canEscapeKeyClose={true}
       isOpen={open}
       onInteraction={setOpen}
+      boundary="viewport"
     >
       <FontAwesomeIcon className="HelpIcon" icon={faQuestionCircle} />
     </Popover>
