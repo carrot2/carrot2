@@ -10,6 +10,7 @@ import { CarrotSearchText } from "../carrotsearch/logo/CarrotSearchText.js";
 const carrot2 = isCarrot2Distribution();
 
 const carrot2Branding = {
+  product: "Carrot2",
   pageTitle: process.env.REACT_APP_META_TITLE,
   createSlogan: () => (
     <>
@@ -52,6 +53,7 @@ const carrot2Branding = {
 };
 
 const lingo3gBranding = {
+  product: "Lingo3G",
   pageTitle: process.env.REACT_APP_META_TITLE,
   createSlogan: () => (
     <>

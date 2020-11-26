@@ -12,6 +12,7 @@ import { faFileExcel } from "@fortawesome/pro-regular-svg-icons";
 import { persistentStore } from "../../../../carrotsearch/store/persistent-store.js";
 import { StoreCheckbox } from "../../../../carrotsearch/ui/form/StoreCheckbox.js";
 import { buildFileName, clusterStore } from "../../../store/services.js";
+import { branding } from "../../../config-branding.js";
 
 const exportConfig = persistentStore("workbench:export:config", {
   format: "excel",
@@ -189,8 +190,14 @@ const exportSheet = async format => {
     });
   });
 
-  const ws = XLSX.utils.json_to_sheet(rows);
   const wb = XLSX.utils.book_new();
+  wb.Props = {
+    Title: `${branding.product} Clustering Workbench results export`,
+    Author: `${branding.product} Clustering Workbench`,
+    CreatedDate: new Date()
+  };
+
+  const ws = XLSX.utils.json_to_sheet(rows);
   wb.SheetNames.push("Export");
   wb.Sheets["Export"] = ws;
   XLSX.writeFile(wb, buildFileName("result", format));
