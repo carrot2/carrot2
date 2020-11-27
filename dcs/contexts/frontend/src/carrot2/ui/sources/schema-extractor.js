@@ -138,7 +138,7 @@ const collectFieldValueStats = (json, fields) => {
  * Computes various score helping to determine whether the field is clusterable, contains
  * a document title etc.
  */
-const collectFileTypeScores = (fields, docCount) => {
+const collectFieldTypeScores = (fields, docCount) => {
   fields.forEach(f => {
     let idScore = Math.pow(2, 16 / f.length.avg);
     let tagScore =
@@ -215,7 +215,7 @@ const collectFieldInformation = json => {
     );
   });
 
-  collectFileTypeScores(fields, json.length);
+  collectFieldTypeScores(fields, json.length);
   return fields;
 };
 
@@ -226,6 +226,22 @@ export const extractSchema = (documents, logger) => {
   const naturalTextFields = fields
     .filter(f => f.naturalTextScore >= 8 || f.titleScore >= 8)
     .map(f => f.field);
+
+  // If some field looks like a URL, put it in the "url" property so that the URL becomes active.
+  const re = /^https?:\/\//i;
+  const stringFields = fields.filter(f => f.type === "String");
+  documents.forEach(d => {
+    if (d.url !== undefined) {
+      return;
+    }
+    for (const f of stringFields) {
+      const val = d[f.field];
+      if (f.naturalTextScore < 2 && re.test(val)) {
+        d.url = val;
+        break;
+      }
+    }
+  });
 
   return {
     fieldStats: fields,
