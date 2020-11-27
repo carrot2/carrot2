@@ -22,24 +22,24 @@ export function fetchClusters(requestJson, documents, fields) {
     },
     body: JSON.stringify(request)
   })
-      .catch(function (e) {
-        return {
-          statusText: finishingPeriod(
-              `Failed to connect to the DCS at ${dcsServiceUrl()}: ${e.message}`
-          )
-        };
-      })
-      .then(function (response) {
-        if (!response.ok) {
-          throw response;
-        }
-        return response.json();
-      })
-      .then(function (json) {
-        enrichClusters(json.clusters, "");
-        addOtherTopicsCluster(documents, json.clusters);
-        return json;
-      });
+    .catch(function (e) {
+      return {
+        statusText: finishingPeriod(
+          `Failed to connect to the DCS at ${dcsServiceUrl()}: ${e.message}`
+        )
+      };
+    })
+    .then(function (response) {
+      if (!response.ok) {
+        throw response;
+      }
+      return response.json();
+    })
+    .then(function (json) {
+      enrichClusters(json.clusters, "");
+      addOtherTopicsCluster(documents, json.clusters);
+      return json;
+    });
 
   // Assign unique IDs to clusters and compute additional information about
   // their deep size, etc. This is done in-place.
@@ -52,13 +52,13 @@ export function fetchClusters(requestJson, documents, fields) {
       enrichClusters(subclusters, prefix + id + ".");
 
       cluster.uniqueDocuments = Array.from(
-          subclusters.reduce(function fold(set, sc) {
-            (sc.clusters || []).reduce(fold, set);
-            for (const doc of sc.documents) {
-              set.add(doc);
-            }
-            return set;
-          }, new Set(documents))
+        subclusters.reduce(function fold(set, sc) {
+          (sc.clusters || []).reduce(fold, set);
+          for (const doc of sc.documents) {
+            set.add(doc);
+          }
+          return set;
+        }, new Set(documents))
       );
       cluster.id = prefix + id++;
       cluster.size = cluster.uniqueDocuments.length;
@@ -73,11 +73,11 @@ export function fetchClusters(requestJson, documents, fields) {
 
     if (clusteredDocs.size < documents.length) {
       const unclustered = documents
-          .map((d, i) => i)
-          .filter(d => !clusteredDocs.has(d));
+        .map((d, i) => i)
+        .filter(d => !clusteredDocs.has(d));
       topClusters.push({
         id: "unclustered",
-        labels: [ "Other topics " ],
+        labels: ["Other topics "],
         documents: unclustered,
         uniqueDocuments: unclustered,
         size: unclustered.length,
