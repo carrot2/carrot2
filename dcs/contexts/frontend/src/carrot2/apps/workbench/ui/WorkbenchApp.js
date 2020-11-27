@@ -86,18 +86,13 @@ const WorkbenchIntroSteps = () => {
 export const WorkbenchIntro = () => {
   return (
     <div className="WorkbenchMain WorkbenchIntro">
-      <WorkbenchIntroSteps />
       <div className="WorkbenchIntroWelcome">
         <h2>
-          This is Carrot<sup>2</sup> Clustering Workbench
+          Welcome to Clustering Workbench
         </h2>
-
-        <ul>
-          <li>clustering data from files, Solr, Elasticsearch</li>
-          <li>experimenting with clustering parameters</li>
-          <li>exporting results</li>
-        </ul>
+        <h3>the expert-level Carrot<sup>2</sup> application</h3>
       </div>
+      <WorkbenchIntroSteps />
     </div>
   );
 };
