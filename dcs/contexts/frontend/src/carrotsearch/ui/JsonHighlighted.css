@@ -1,0 +1,37 @@
+pre.JsonHighlighted {
+  color: var(--text-color-lighter);
+}
+
+pre.JsonHighlighted span[style*="color:prop"] {
+  color: #477d7f;
+}
+
+pre.JsonHighlighted span[style*="color:string"] {
+  color: #be3647;
+}
+
+pre.JsonHighlighted span[style*="color:number"] {
+  color: hsl(210, 80%, 40%);
+}
+
+pre.JsonHighlighted span[style*="color:false"],
+pre.JsonHighlighted span[style*="color:true"] {
+  color: hsl(30, 100%, 35%);
+}
+
+.dark pre.JsonHighlighted span[style*="color:prop"] {
+  color: hsl(182, 28%, 55%);
+}
+
+.dark pre.JsonHighlighted span[style*="color:string"] {
+  color: hsl(353, 80%, 65%);
+}
+
+.dark pre.JsonHighlighted span[style*="color:number"] {
+  color: hsl(200, 100%, 55%);
+}
+
+.dark pre.JsonHighlighted span[style*="color:false"],
+.dark pre.JsonHighlighted span[style*="color:true"] {
+  color: hsl(30, 100%, 50%);
+}

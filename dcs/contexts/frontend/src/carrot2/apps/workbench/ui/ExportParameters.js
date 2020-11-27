@@ -3,7 +3,6 @@ import React from "react";
 import "./ExportParameters.css";
 
 import { view } from "@risingstack/react-easy-state";
-import formatHighlight from "json-format-highlight";
 
 import { Button, Popover, Position } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,25 +11,14 @@ import { buildRequestJson } from "../../../store/services.js";
 import { persistentStore } from "../../../../carrotsearch/store/persistent-store.js";
 import { StoreCheckbox } from "../../../../carrotsearch/ui/form/StoreCheckbox.js";
 import { CopyToClipboard } from "../../../../carrotsearch/ui/CopyToClipboard.js";
+import { JsonHighlighted } from "../../../../carrotsearch/ui/JsonHighlighted.js";
 
 const config = persistentStore("workbench:parameterExport:config", {
   onlyNonDefault: true
 });
 
 const ExportParametersBody = view(() => {
-  const jsonString = JSON.stringify(
-    buildRequestJson(config.onlyNonDefault),
-    null,
-    "  "
-  );
-  const jsonHtml = formatHighlight(jsonString, {
-    keyColor: "prop",
-    numberColor: "number",
-    stringColor: "string",
-    trueColor: "true",
-    falseColor: "false",
-    nullColor: "null"
-  });
+  const json = buildRequestJson(config.onlyNonDefault);
 
   return (
     <div className="ExportParametersBody">
@@ -41,9 +29,9 @@ const ExportParametersBody = view(() => {
           store={config}
           property="onlyNonDefault"
         />
-        <CopyToClipboard contentProvider={() => jsonString} />
+        <CopyToClipboard contentProvider={() => json} />
       </div>
-      <pre dangerouslySetInnerHTML={{ __html: jsonHtml }} />
+      <JsonHighlighted jsonString={JSON.stringify(json, null, "  ")} />
     </div>
   );
 });

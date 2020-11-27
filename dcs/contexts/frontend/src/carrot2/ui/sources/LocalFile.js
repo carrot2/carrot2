@@ -8,6 +8,7 @@ import {
 } from "./CustomSchemaSource.js";
 import { parseFile } from "./file-parser.js";
 import { GenericSearchEngineErrorMessage } from "../../apps/search-app/ui/ErrorMessage.js";
+import { JsonHighlighted } from "../../../carrotsearch/ui/JsonHighlighted.js";
 
 const resultConfigStore = createResultConfigStore("localFile");
 
@@ -16,6 +17,9 @@ const { schemaInfoStore, resultHolder } = createSchemaExtractorStores(
 );
 
 const LocalFileFormatInfo = () => {
+  const jsonString = "[\n" +
+    exampleDocs.map(d => "  " + JSON.stringify(d)).join(",\n") +
+    ",\n  ...\n]";
   return (
     <>
       <p>The following file types are supported:</p>
@@ -32,11 +36,7 @@ const LocalFileFormatInfo = () => {
             &mdash; an array of flat JSON objects representing documents to
             cluster:
           </p>
-          <pre>
-            {"[\n" +
-              exampleDocs.map(d => "  " + JSON.stringify(d)).join(",\n") +
-              ",\n  ...\n]"}
-          </pre>
+          <JsonHighlighted jsonString={jsonString} />
           <p>
             The objects can have text and non-text fields, Carrot<sup>2</sup>{" "}
             will try to detect the ones to cluster.

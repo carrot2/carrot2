@@ -46,6 +46,7 @@ nav .ThemeSwitch {
 .NavPopover {
   max-width: 22em;
 }
+.NavPopoverContent p,
 .NavPopoverContent ul:last-child,
 .NavPopoverContent h3:last-child {
   margin-bottom: 0;
