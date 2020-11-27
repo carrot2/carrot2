@@ -26,3 +26,11 @@
   margin-top: 2em;
   max-width: 32em;
 }
+
+.StartScreen .WorkbenchHint {
+  margin-top: 2em;
+  color: var(--text-color-lighter);
+}
+.StartScreen .WorkbenchHint a {
+  color: var(--text-color);
+}

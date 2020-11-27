@@ -2,13 +2,15 @@ import React from "react";
 
 import "./StartScreen.css";
 
-import { Redirect } from "react-router-dom";
+import { NavLink, Redirect } from "react-router-dom";
 import { sources } from "../../../config-sources.js";
 import { clusterViews } from "../../../config-views.js";
 import { SearchForm } from "./SearchForm";
 import { branding } from "../../../config-branding.js";
 
 import { routes } from "../../../routes.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFlask } from "@fortawesome/pro-regular-svg-icons";
 
 export const StartScreen = ({ match, history }) => {
   const runSearch = query => {
@@ -40,6 +42,14 @@ export const StartScreen = ({ match, history }) => {
       />
 
       <div className="slogan">{branding.createSlogan()}</div>
+
+      <div className="WorkbenchHint">
+        New! Try{" "}
+        <NavLink to={routes.workbench.path}>
+          <FontAwesomeIcon icon={faFlask} /> Clustering Workbench
+        </NavLink>{" "}
+        to process data from local files, Solr, Elasticsearch.
+      </div>
     </main>
   );
 };
