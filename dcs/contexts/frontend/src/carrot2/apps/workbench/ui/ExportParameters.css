@@ -1,5 +1,5 @@
 .ExportParametersBody pre {
-  max-height: 24rem;
+  height: 20rem;
   width: 32rem;
   overflow: auto;
   color: var(--text-color-lighter);
@@ -38,4 +38,14 @@
 .dark .ExportParametersBody pre span[style*="color:false"],
 .dark .ExportParametersBody pre span[style*="color:true"] {
   color: hsl(30, 100%, 50%);
+}
+
+.ExportParametersTools {
+  display: flex;
+  align-items: center;
+}
+
+.ExportParametersTools .bp3-checkbox {
+  margin-bottom: 0;
+  flex: 1;
 }

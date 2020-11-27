@@ -7,6 +7,7 @@ import { errors } from "./errors.js";
 import { createClusteringErrorElement } from "../apps/search-app/ui/ErrorMessage.js";
 import { collectParameters } from "../service/algorithms/attributes.js";
 import { defer } from "../../carrotsearch/lang/lang.js";
+import { equals } from "../../carrotsearch/lang/arrays.js";
 
 const EMPTY_ARRAY = [];
 
@@ -42,18 +43,13 @@ export const buildRequestJson = (onlyNonDefault = false) => {
   const algorithm = algorithmStore.getAlgorithmInstance();
   const settings = algorithm.getSettings();
   const defaults = algorithm.getDefaults();
-  console.log(JSON.stringify(defaults, null, 2));
   const currentParams = collectParameters(
     settings,
     settings[0].get,
     onlyNonDefault
       ? (setting, value) => {
-          const def = defaults[setting.pathRest];
-          const acc = value !== def;
-          if (acc) {
-            console.log(setting.pathRest, def, value);
-          }
-          return acc;
+          const def = defaults[setting.id];
+          return !(Array.isArray(value) ? equals(value, def) : value === def);
         }
       : null
   );

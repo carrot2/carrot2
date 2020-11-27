@@ -39,3 +39,12 @@ export const mapUpToMaxLength = (
 export const wrapIfNotArray = element => {
   return Array.isArray(element) ? element : [element];
 };
+
+export const equals = (a1, a2) => {
+  return (
+    Array.isArray(a1) &&
+    Array.isArray(a2) &&
+    a1.length === a2.length &&
+    a1.every((v, i) => v === a2[i])
+  );
+};
