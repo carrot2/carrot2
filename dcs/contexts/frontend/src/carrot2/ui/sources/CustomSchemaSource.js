@@ -43,8 +43,6 @@ export const createSchemaExtractorStores = sourceId => {
         const result = await loader(logger);
         const parsed = extractSchema(result.documents, logger);
 
-        console.log(parsed.fieldStats);
-
         schemaInfoStore.fieldsAvailableForClustering =
           parsed.fieldsAvailableForClustering;
 
