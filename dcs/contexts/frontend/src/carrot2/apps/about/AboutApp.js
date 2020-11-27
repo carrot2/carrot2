@@ -1,8 +1,6 @@
 import React from "react";
 import "./AboutApp.css";
 
-import { Icon } from "@blueprintjs/core";
-
 import { branding } from "../../config-branding.js";
 import { sources } from "../../config-sources.js";
 import { algorithms } from "../../config-algorithms.js";
@@ -27,10 +25,6 @@ export const SearchEnginesInfo = () => {
 export const ClusteringEnginesInfo = () => {
   return (
     <>
-      <p>
-        Click the <Icon icon="wrench" /> button to choose from the following
-        clustering algorithms:
-      </p>
       <ul>
         {Object.keys(algorithms).map(a => (
           <li key={a}>
@@ -68,18 +62,20 @@ export const VersionInfo = () => {
 export const AboutApp = () => {
   return (
     <div className="SearchAppInfo">
-      <h2>{branding.pageTitle}</h2>
-      {branding.createAboutIntro()}
+      <h2>{branding.createProductName()} clustering engine</h2>
+      <main>
+        {branding.createAboutIntro()}
 
-      <h3>Search engines</h3>
-      <SearchEnginesInfo />
+        <h3>Search engines</h3>
+        <SearchEnginesInfo />
 
-      <h3>Clustering algorithms</h3>
-      <ClusteringEnginesInfo />
+        <h3>Clustering algorithms</h3>
+        <ClusteringEnginesInfo />
 
-      {branding.createAboutDetails()}
+        {branding.createAboutDetails()}
 
-      <VersionInfo />
+        <VersionInfo />
+      </main>
     </div>
   );
 };

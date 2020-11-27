@@ -6,12 +6,21 @@ import { isCarrot2Distribution } from "./config.js";
 import { CarrotLogo } from "../carrotsearch/logo/CarrotLogo.js";
 import { Carrot2Text } from "../carrotsearch/logo/Carrot2Text.js";
 import { CarrotSearchText } from "../carrotsearch/logo/CarrotSearchText.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFlask, faSearch } from "@fortawesome/pro-regular-svg-icons";
+import { routes } from "./routes.js";
+import { NavLink } from "react-router-dom";
 
 const carrot2 = isCarrot2Distribution();
 
 const carrot2Branding = {
   product: "Carrot2",
   pageTitle: process.env.REACT_APP_META_TITLE,
+  createProductName: () => (
+    <>
+      Carrot<sup>2</sup>
+    </>
+  ),
   createSlogan: () => (
     <>
       <a href="http://project.carrot2.org">
@@ -28,7 +37,35 @@ const carrot2Branding = {
     </>
   ),
   createAboutIntro: () => (
-    <div dangerouslySetInnerHTML={{ __html: carrot2IntroHtml }} />
+    <>
+      <p>
+        This is the demo application of the{" "}
+        <a href="http://project.carrot2.org" target="_blank" rel="noreferrer">
+          Carrot<sup>2</sup> clustering engine
+        </a>
+        . It uses Carrot<sup>2</sup>'s algorithms to organize search results
+        into thematic folders.
+      </p>
+
+      <h3>User interfaces</h3>
+
+      <ul style={{listStyle: "none", paddingLeft: "0"}}>
+        <li>
+          <NavLink to={routes.searchStart.path}>
+            <FontAwesomeIcon icon={faSearch} />Web Search Clustering
+          </NavLink>: organizes search results from public search
+          engines into clusters; offers treemap- and pie-chart visualizations
+          of the clusters.
+        </li>
+        <li>
+          <NavLink to={routes.workbench.path}>
+            <FontAwesomeIcon icon={faFlask} />Clustering Workbench
+          </NavLink>: clustering of content from local files in
+          JSON or Excel format, Solr or Elasticsearch; tuning of clustering
+          parameters, export of results into Excel or JSON.
+        </li>
+      </ul>
+    </>
   ),
   createAboutDetails: () => (
     <div dangerouslySetInnerHTML={{ __html: carrot2DetailsHtml }} />
@@ -54,6 +91,7 @@ const carrot2Branding = {
 
 const lingo3gBranding = {
   product: "Lingo3G",
+  createProductName: () => <>Lingo3G</>,
   pageTitle: process.env.REACT_APP_META_TITLE,
   createSlogan: () => (
     <>
