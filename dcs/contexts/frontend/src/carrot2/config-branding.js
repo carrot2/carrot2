@@ -49,20 +49,23 @@ const carrot2Branding = {
 
       <h3>User interfaces</h3>
 
-      <ul style={{listStyle: "none", paddingLeft: "0"}}>
+      <ul style={{ listStyle: "none", paddingLeft: "0" }}>
         <li>
           <NavLink to={routes.searchStart.path}>
-            <FontAwesomeIcon icon={faSearch} />Web Search Clustering
-          </NavLink>: organizes search results from public search
-          engines into clusters; offers treemap- and pie-chart visualizations
-          of the clusters.
+            <FontAwesomeIcon icon={faSearch} />
+            Web Search Clustering
+          </NavLink>
+          : organizes search results from public search engines into clusters;
+          offers treemap- and pie-chart visualizations of the clusters.
         </li>
         <li>
           <NavLink to={routes.workbench.path}>
-            <FontAwesomeIcon icon={faFlask} />Clustering Workbench
-          </NavLink>: clustering of content from local files in
-          JSON or Excel format, Solr or Elasticsearch; tuning of clustering
-          parameters, export of results into Excel or JSON.
+            <FontAwesomeIcon icon={faFlask} />
+            Clustering Workbench
+          </NavLink>
+          : clustering of content from local files in JSON or Excel format, Solr
+          or Elasticsearch; tuning of clustering parameters, export of results
+          into Excel or JSON.
         </li>
       </ul>
     </>

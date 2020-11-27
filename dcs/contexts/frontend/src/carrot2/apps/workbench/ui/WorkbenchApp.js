@@ -87,10 +87,10 @@ export const WorkbenchIntro = () => {
   return (
     <div className="WorkbenchMain WorkbenchIntro">
       <div className="WorkbenchIntroWelcome">
-        <h2>
-          Welcome to Clustering Workbench
-        </h2>
-        <h3>the expert-level Carrot<sup>2</sup> application</h3>
+        <h2>Welcome to Clustering Workbench</h2>
+        <h3>
+          the expert-level Carrot<sup>2</sup> application
+        </h3>
       </div>
       <WorkbenchIntroSteps />
     </div>

@@ -17,7 +17,8 @@ const { schemaInfoStore, resultHolder } = createSchemaExtractorStores(
 );
 
 const LocalFileFormatInfo = () => {
-  const jsonString = "[\n" +
+  const jsonString =
+    "[\n" +
     exampleDocs.map(d => "  " + JSON.stringify(d)).join(",\n") +
     ",\n  ...\n]";
   return (
