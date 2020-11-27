@@ -2,8 +2,7 @@ import React from "react";
 
 import {
   faCog,
-  faQuestionCircle,
-  faSave
+  faQuestionCircle
 } from "@fortawesome/pro-regular-svg-icons";
 
 import { view } from "@risingstack/react-easy-state";
@@ -90,7 +89,6 @@ export const clusterViews = [
           },
           {
             id: "export-image",
-            icon: faSave,
             createContentElement: props => {
               return (
                 <VisualizationExport
@@ -132,7 +130,6 @@ export const clusterViews = [
           },
           {
             id: "export-image",
-            icon: faSave,
             createContentElement: props => {
               return (
                 <VisualizationExport

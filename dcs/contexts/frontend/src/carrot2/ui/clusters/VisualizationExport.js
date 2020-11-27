@@ -4,6 +4,8 @@ import { saveAs } from "file-saver";
 import React from "react";
 
 import { buildFileName } from "../../store/services.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSave } from "@fortawesome/pro-regular-svg-icons";
 
 function saveJpeg(impl, fileNameSuffix) {
   const type = "image/jpeg";
@@ -57,7 +59,7 @@ const save = (impl, fileNameSuffix, type) => {
 export const VisualizationExport = props => {
   return (
     <Button
-      icon="floppy-disk"
+      icon={<FontAwesomeIcon icon={faSave} />}
       minimal={true}
       onClick={e =>
         save(
