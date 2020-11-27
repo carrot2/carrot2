@@ -2,7 +2,7 @@ import React from "react";
 import "./ButtonLink.css";
 import classnames from "classnames";
 
-export const ButtonLink = ({ className = "", children, enabled, ...rest }) => {
+export const ButtonLink = ({ className = "", children, enabled = true, ...rest }) => {
   return (
     <button
       {...rest}
