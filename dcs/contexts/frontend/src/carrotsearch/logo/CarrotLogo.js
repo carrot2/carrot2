@@ -14,7 +14,7 @@ export const CarrotLogo = ({ className = "" }) => {
     >
       <g
         transform="translate(0.511764 .041011)"
-        fillOpacity=".8"
+        fillOpacity=".95"
         strokeOpacity="0.15"
         strokeWidth="0.5"
       >
