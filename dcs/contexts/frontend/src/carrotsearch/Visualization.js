@@ -34,7 +34,7 @@ export function Visualization(props) {
         ...props.options
       });
       if (props.implRef) {
-        props.implRef.current = instance.current;
+        props.implRef.setCurrent(instance.current);
       }
     }
   }, [props.options, props.impl, props.implRef]);

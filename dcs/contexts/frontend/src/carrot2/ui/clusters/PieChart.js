@@ -48,6 +48,7 @@ const lightThemeOptions = {
 
 function buildOptions(theme, clusterSelectionStore, documentSelectionStore) {
   return {
+    pullbackTime: 0,
     groupFontFamily: "Cabin Condensed, sans-serif",
     rainbowStartColor: "hsla(0, 100%, 50%, 1.0)",
     rainbowEndColor: "hsla(300, 100%, 50%, 1.0)",

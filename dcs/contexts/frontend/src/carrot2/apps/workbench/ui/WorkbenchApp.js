@@ -120,7 +120,15 @@ const WorkbenchMain = view(() => {
           views={clusterViews}
           onViewChange={newView => (uiStore.clusterView = newView)}
         >
-          <Loading isLoading={() => clusterStore.loading} />
+          <Loading
+            isLoading={() => {
+              // Combine the DCS and view-specific loading state.
+              // Visualizations take longer to initialize, so in their case
+              // the loading state will take longer.
+              const view = clusterViews[0].views[uiStore.clusterView];
+              return clusterStore.loading || (!!view.isLoading && view.isLoading());
+            }}
+          />
         </Views>
       </div>
       <div className="docs">

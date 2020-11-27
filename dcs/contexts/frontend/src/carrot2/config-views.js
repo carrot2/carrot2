@@ -1,11 +1,8 @@
 import React from "react";
 
-import {
-  faCog,
-  faQuestionCircle
-} from "@fortawesome/pro-regular-svg-icons";
+import { faCog, faQuestionCircle } from "@fortawesome/pro-regular-svg-icons";
 
-import { view } from "@risingstack/react-easy-state";
+import { autoEffect, store, view } from "@risingstack/react-easy-state";
 import { PieChartHints } from "./ui/clusters/PieChartHints.js";
 import { TreemapHints } from "./ui/clusters/TreemapHints.js";
 import { VisualizationExport } from "./ui/clusters/VisualizationExport.js";
@@ -18,7 +15,7 @@ import { PieChartConfig } from "./ui/clusters/PieChartConfig.js";
 import { TreemapConfig } from "./ui/clusters/TreemapConfig.js";
 
 import { ResultList } from "./ui/results/ResultList.js";
-import { searchResultStore } from "./store/services.js";
+import { clusterStore, searchResultStore } from "./store/services.js";
 import {
   clusterSelectionStore,
   documentVisibilityStore
@@ -36,8 +33,40 @@ const pieChartConfigStore = persistentStore("pieChartConfig", {
   includeResults: true
 });
 
-const treemapImplRef = { current: undefined };
-const piechartImplRef = { current: undefined };
+// A mechanism for capturing the "loading" state of visualizations, which should include
+// time spent on initializing the view for new data (which may take a while in case of FoamTree).
+const createImplRef = () => {
+  // A reactive store for the visualization loading state.
+  const loading = store({ loading: false });
+
+  // Called when the visualization is initialized.
+  const setRef = newRef => {
+    ref.current = newRef;
+
+    // Clear loading state when rollout starts.
+    newRef.set("onRolloutStart", () => (loading.loading = false));
+  };
+
+  const ref = {
+    current: undefined,
+    setCurrent: setRef,
+
+    // This reactive method will be called by the "Loading" overlay to see
+    // if the overlay should show.
+    isLoading: () => loading.loading
+  };
+
+  // Set loading state when there is a non-empty list of clusters to display.
+  autoEffect(() => {
+    if (clusterStore.clusters.length > 0) {
+      loading.loading = true;
+    }
+  });
+  return ref;
+};
+
+const treemapImplRef = createImplRef();
+const piechartImplRef = createImplRef();
 
 const treemapLoader = () => {
   return import(
@@ -70,6 +99,7 @@ export const clusterViews = [
 
       treemap: {
         label: "treemap",
+        isLoading: treemapImplRef.isLoading,
         createContentElement: visible => {
           const treemapProps = {
             visible: visible,
@@ -112,6 +142,7 @@ export const clusterViews = [
 
       "pie-chart": {
         label: "pie-chart",
+        isLoading: piechartImplRef.isLoading,
         createContentElement: visible => {
           const piechartProps = {
             visible: visible,
