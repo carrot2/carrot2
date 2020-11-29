@@ -123,7 +123,8 @@ export const localFileSourceDescriptor = createSource(
   resultConfigStore,
   {
     label: "Local file",
-    descriptionHtml: "content read from a local file in Carrot2 XML, JSON, CSV or Excel format.",
+    descriptionHtml:
+      "content read from a local file in Carrot2 XML, JSON, CSV or Excel format.",
     source: localFileSource,
     getSettings: () => settings,
     createError: e => <GenericSearchEngineErrorMessage error={e} />,
