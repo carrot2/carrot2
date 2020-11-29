@@ -1,4 +1,3 @@
-import queryString from "query-string";
 import { finishingPeriod } from "../../../carrotsearch/lang/humanize.js";
 
 // TODO: add support for aborting running requests a'la fetch API.
@@ -22,7 +21,7 @@ export function etools(query, params) {
 function live(query, params) {
   const url =
     "https://www.etools.ch/partnerSearch.do?" +
-    queryString.stringify(
+    new URLSearchParams(
       Object.assign(
         {
           partner: "Carrot2Json",

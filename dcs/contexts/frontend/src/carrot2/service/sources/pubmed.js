@@ -1,5 +1,3 @@
-import queryString from "query-string";
-
 function XPathProcessor(xmlString) {
   const domParser = new DOMParser();
   const document = domParser.parseFromString(xmlString, "application/xml");
@@ -38,7 +36,7 @@ function XPathProcessor(xmlString) {
 
 // TODO: add support for aborting running requests a'la fetch API.
 export function pubmed(query, params) {
-  const isProduction = process.env.NODE_ENV === "production";
+  const isProduction = true;//process.env.NODE_ENV === "production";
   const serviceESearch = isProduction ? liveESearch : cachedESearch;
   const serviceEFetch = isProduction ? liveEFetch : cachedEFetch;
 
@@ -88,7 +86,7 @@ const withApiKey = (request, params) => {
 function liveESearch(query, params) {
   const url =
     "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?" +
-    queryString.stringify(
+    new URLSearchParams(
       withApiKey(
         {
           db: "pubmed",
@@ -129,7 +127,7 @@ function cachedESearch() {
 }
 
 function liveEFetch(ids, params) {
-  let data = queryString.stringify(
+  let data = new URLSearchParams(
     withApiKey(
       {
         db: "pubmed",
