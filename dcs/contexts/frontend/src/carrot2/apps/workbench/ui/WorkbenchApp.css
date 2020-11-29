@@ -85,18 +85,22 @@
   margin-top: 2em;
   margin-left: 1.5em;
 }
+
 .WorkbenchIntroWelcome h2,
 .WorkbenchIntroWelcome h3 {
   margin: 0;
 }
+
 .WorkbenchIntroWelcome h3 {
   font-weight: normal;
 }
+
 .WorkbenchIntroWelcome ul {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
+
 .WorkbenchIntroWelcome ul li {
   margin-right: 2em;
 }
