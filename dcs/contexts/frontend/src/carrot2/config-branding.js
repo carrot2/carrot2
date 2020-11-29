@@ -117,7 +117,7 @@ const carrot2Branding = {
         <li>
           Source code of this application and several clustering algorithms is
           available in the{" "}
-          <a href="http://project.carrot2.org" target="_blank">
+          <a href="http://project.carrot2.org" target="_blank" rel="noreferrer">
             Carrot<sup>2</sup> framework
           </a>
           .
