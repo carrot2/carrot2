@@ -27,7 +27,7 @@ export const ClusteringEnginesInfo = () => {
     <>
       <ul>
         {Object.keys(algorithms).map(a => (
-          <li key={a}>
+          <li key={a} style={{breakInside: "avoid"}}>
             <strong>{algorithms[a].label}</strong>:&nbsp;
             <span
               dangerouslySetInnerHTML={{

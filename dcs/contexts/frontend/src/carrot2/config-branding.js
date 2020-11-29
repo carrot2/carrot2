@@ -1,7 +1,6 @@
 import React from "react";
-import carrot2IntroHtml from "./apps/about/about-intro-carrot2.html";
-import carrot2DetailsHtml from "./apps/about/about-details-carrot2.html";
-import { isCarrot2Distribution } from "./config.js";
+
+import { dcsServiceUrl, isCarrot2Distribution } from "./config.js";
 
 import { CarrotLogo } from "../carrotsearch/logo/CarrotLogo.js";
 import { Carrot2Text } from "../carrotsearch/logo/Carrot2Text.js";
@@ -51,27 +50,94 @@ const carrot2Branding = {
 
       <ul style={{ listStyle: "none", paddingLeft: "0" }}>
         <li>
-          <NavLink to={routes.searchStart.path}>
-            <FontAwesomeIcon icon={faSearch} />
-            Web Search Clustering
-          </NavLink>
-          : organizes search results from public search engines into clusters;
+          <strong>
+            <NavLink to={routes.searchStart.path}>
+              <FontAwesomeIcon icon={faSearch} />
+              Web Search Clustering
+            </NavLink>
+          </strong>{" "}
+          organizes search results from public search engines into clusters;
           offers treemap- and pie-chart visualizations of the clusters.
         </li>
         <li>
-          <NavLink to={routes.workbench.path}>
-            <FontAwesomeIcon icon={faFlask} />
-            Clustering Workbench
-          </NavLink>
-          : clustering of content from local files in JSON or Excel format, Solr
-          or Elasticsearch; tuning of clustering parameters, export of results
-          into Excel or JSON.
+          <strong>
+            <NavLink to={routes.workbench.path}>
+              <FontAwesomeIcon icon={faFlask} />
+              Clustering Workbench
+            </NavLink>
+          </strong>{" "}
+          clusters content from local files in JSON or Excel format, Solr or
+          Elasticsearch; allows tuning of clustering parameters and exporting
+          results as Excel or JSON.
         </li>
       </ul>
     </>
   ),
   createAboutDetails: () => (
-    <div dangerouslySetInnerHTML={{ __html: carrot2DetailsHtml }} />
+    <>
+      <h3>FAQ</h3>
+
+      <dl>
+        <dt>Is this application Open Source?</dt>
+        <dd>
+          <p>
+            Yes, the source code of this demo application is available as part
+            of the{" "}
+            <a href="http://project.carrot2.org">
+              Carrot<sup>2</sup>
+            </a>{" "}
+            framework under the Apache Software License 2.0. This means you can
+            freely reuse this application, along with Carrot<sup>2</sup>{" "}
+            clustering algorithms, for your open source or commercial projects.
+          </p>
+        </dd>
+
+        <dt>What happens to the data I submit for clustering?</dt>
+        <dd>
+          <p>
+            The data is sent to Carrot<sup>2</sup> Document Clustering Server,
+            located at{" "}
+            <a
+              href={dcsServiceUrl().toString()}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {dcsServiceUrl().toString()}
+            </a>
+            , for clustering. The server will keep the data in memory for the
+            duration of the clustering process. None of the data you submit will
+            be permanently stored or logged.
+          </p>
+        </dd>
+      </dl>
+
+      <h3>Further reading</h3>
+
+      <ul>
+        <li>
+          Source code of this application and several clustering algorithms is
+          available in the{" "}
+          <a href="http://project.carrot2.org" target="_blank">
+            Carrot<sup>2</sup> framework
+          </a>
+          .
+        </li>
+
+        <li>
+          The treemap view uses the{" "}
+          <a href="https://carrotsearch.com/foamtree/">
+            Carrot Search FoamTree
+          </a>{" "}
+          visualization component.
+        </li>
+
+        <li>
+          The pie-chart view uses the{" "}
+          <a href="https://carrotsearch.com/circles/">Carrot Search Circles</a>{" "}
+          visualization component.
+        </li>
+      </ul>
+    </>
   ),
   createUnlimitedDistributionInfo: () => {
     return (
@@ -110,12 +176,8 @@ const lingo3gBranding = {
       <CarrotSearchText title="Carrot Search" />
     </>
   ),
-  createAboutIntro: () => (
-    <div dangerouslySetInnerHTML={{ __html: carrot2IntroHtml }} />
-  ),
-  createAboutDetails: () => (
-    <div dangerouslySetInnerHTML={{ __html: carrot2DetailsHtml }} />
-  ),
+  createAboutIntro: () => <div>TBD</div>,
+  createAboutDetails: () => <div>TBD</div>,
   createUnlimitedDistributionInfo: () => {
     return (
       <>
