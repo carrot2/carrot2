@@ -7,7 +7,7 @@ import {
   SearchEngineErrorMessage
 } from "../../apps/search-app/ui/ErrorMessage.js";
 import React from "react";
-import { createStores } from "./LocalSearchServerSource.js";
+import { createLocalSearch } from "./LocalSearchServerSource.js";
 import { queryStore } from "../../apps/workbench/store/query-store.js";
 
 const {
@@ -16,7 +16,7 @@ const {
   settings,
   afterSuccessfulSearch,
   createLocalSearchSource
-} = createStores({
+} = createLocalSearch({
   id: "solr",
   serviceName: "Solr",
   configOverrides: {

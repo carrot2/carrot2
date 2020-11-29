@@ -10,7 +10,7 @@ import {
 import { storeAccessors } from "../../../carrotsearch/ui/settings/Setting.js";
 import { createResultConfigStore } from "./CustomSchemaResult.js";
 
-export const createStores = ({
+export const createLocalSearch = ({
   id,
   serviceName,
   configOverrides,

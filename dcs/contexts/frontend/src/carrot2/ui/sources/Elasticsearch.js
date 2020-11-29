@@ -5,7 +5,7 @@ import {
   SearchEngineErrorMessage
 } from "../../apps/search-app/ui/ErrorMessage.js";
 import React from "react";
-import { createStores } from "./LocalSearchServerSource.js";
+import { createLocalSearch } from "./LocalSearchServerSource.js";
 import { storeAccessors } from "../../../carrotsearch/ui/settings/Setting.js";
 import { queryStore } from "../../apps/workbench/store/query-store.js";
 
@@ -15,7 +15,7 @@ const {
   afterSuccessfulSearch,
   createLocalSearchSource,
   isSearchPossible
-} = createStores({
+} = createLocalSearch({
   id: "es",
   serviceName: "Elasticsearch",
   configOverrides: {
