@@ -17,10 +17,22 @@ import com.carrotsearch.hppc.cursors.IntCursor;
 import com.carrotsearch.hppc.cursors.IntIntCursor;
 import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.carrot2.attrs.*;
+import org.carrot2.attrs.AttrBoolean;
+import org.carrot2.attrs.AttrComposite;
+import org.carrot2.attrs.AttrInteger;
+import org.carrot2.attrs.AttrObject;
+import org.carrot2.attrs.AttrString;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.Document;
@@ -57,26 +69,26 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
   public static final String NAME = "Bisecting K-Means";
 
   /**
-   * The number of clusters to create. The algorithm will create at most the specified number of
+   * Number of clusters to create. The algorithm will create at most the specified number of
    * clusters.
    */
   public final AttrInteger clusterCount =
       attributes.register(
           "clusterCount", AttrInteger.builder().label("Cluster count").min(2).defaultValue(25));
 
-  /** The maximum number of k-means iterations to perform. */
+  /** Maximum number of k-means iterations to perform. */
   public final AttrInteger maxIterations =
       attributes.register(
           "maxIterations",
           AttrInteger.builder().label("Maximum iterations").min(1).defaultValue(15));
 
-  /** Partition count. The number of partitions to create at each k-means clustering iteration. */
+  /** Number of partitions to create at each k-means clustering iteration. */
   public final AttrInteger partitionCount =
       attributes.register(
           "partitionCount",
           AttrInteger.builder().label("Partition count").min(2).max(10).defaultValue(2));
 
-  /** Label count. The minimum number of labels to return for each cluster. */
+  /** Minimum number of labels to return for each cluster. */
   public final AttrInteger labelCount =
       attributes.register(
           "labelCount", AttrInteger.builder().label("Label count").min(1).max(10).defaultValue(3));
@@ -88,11 +100,10 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
       attributes.register("queryHint", SharedInfrastructure.queryHintAttribute());
 
   /**
-   * Use dimensionality reduction. If {@code true}, k-means will be applied on the
-   * dimensionality-reduced term-document matrix with the number of dimensions being equal to twice
-   * the number of requested clusters. If the number of dimensions is lower than the number of input
-   * documents, reduction will not be performed. If {@code false}, the k-means will be performed
-   * directly on the original term-document matrix.
+   * If enabled, k-means will be applied on the dimensionality-reduced term-document matrix. The
+   * number of dimensions will be equal to twice the number of requested clusters. If the number of
+   * dimensions is lower than the number of input documents, reduction will not be performed. If
+   * disabled, the k-means will be performed directly on the original term-document matrix.
    */
   public final AttrBoolean useDimensionalityReduction =
       attributes.register(
