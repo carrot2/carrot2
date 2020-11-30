@@ -27,8 +27,10 @@ const LocalFileFormatInfo = () => {
       <ul>
         <li>
           <p>
-            <strong>Excel, OpenOffice, CSV</strong> &mdash; one document per
-            row, the first row is treated as a header with document field names.
+            <strong>Excel, OpenOffice, CSV</strong> (
+            <SampleDownload file={"serverfault.xlsx"} />) &mdash; one document
+            per row, the first row is treated as a header with document field
+            names.
           </p>
         </li>
         <li>
