@@ -23,6 +23,7 @@ import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.SharedInfrastructure;
+import org.carrot2.language.Dictionaries;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.LexicalData;
 import org.carrot2.language.Stemmer;
@@ -126,6 +127,22 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
   }
 
   /**
+   * Per-request overrides of language components (dictionaries).
+   *
+   * @since 4.1.0
+   */
+  public Dictionaries dictionaries;
+
+  {
+    attributes.register(
+        "dictionaries",
+        AttrObject.builder(Dictionaries.class)
+            .label("Per-request overrides of language components")
+            .getset(() -> dictionaries, (v) -> dictionaries = v)
+            .defaultValue(Dictionaries::new));
+  }
+
+  /**
    * Query hint. Query terms used to retrieve documents being clustered. The query is used as a hint
    * to avoid creating trivial clusters consisting only of query words.
    */
@@ -142,6 +159,11 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
   public <T extends Document> List<Cluster<T>> cluster(
       Stream<? extends T> docStream, LanguageComponents languageComponents) {
     List<T> documents = docStream.collect(Collectors.toList());
+
+    // Apply ad-hoc dictionaries.
+    if (this.dictionaries != null) {
+      languageComponents = this.dictionaries.override(languageComponents);
+    }
 
     // Preprocessing of documents
     final PreprocessingContext context =

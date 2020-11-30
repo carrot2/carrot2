@@ -14,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /** A set of language-specific components. */
@@ -47,6 +48,14 @@ public final class LanguageComponents {
     Map<Class<?>, Supplier<?>> clonedSuppliers = new LinkedHashMap<>(components);
     clonedSuppliers.put(clazz, supplier);
     return new LanguageComponents(language, clonedSuppliers);
+  }
+
+  /** @since 4.1.0 */
+  public <T> LanguageComponents override(
+      Class<T> clazz, Function<Supplier<T>, Supplier<? extends T>> modifier) {
+    @SuppressWarnings("unchecked")
+    Supplier<T> existingSupplier = (Supplier<T>) components.get(clazz);
+    return override(clazz, modifier.apply(existingSupplier));
   }
 
   public Set<Class<?>> components() {

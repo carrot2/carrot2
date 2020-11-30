@@ -98,8 +98,9 @@
     <dl>
       <dt><i>lang</i>.stopwords.utf8</dt>
       <dd>
-        A plain-text list of words to ignore. Each line contains exactly one full word (token).
-        Something like the following:
+        A plain-text list of words to ignore. Each line contains exactly one word (token).
+        Entries in this dictionary are applied to tokens after case normalization and should be
+        lowercased, for example:
         <pre>a
 about
 above
@@ -109,9 +110,12 @@ across
 
       <dt><i>lang</i>.stoplabels.utf8</dt>
       <dd>
-        A plain-text list of Java regular expression patterns to ignore. Each line contains exactly
+        A plain-text list of regular expression patterns to ignore. Patterns
+        should be compatible with Java Pattern class specification. Each line contains exactly
         one expression that, if it matches the input label, causes the label to be discarded and
-        ignored during clustering. An example stop labels file could look like this:
+        ignored during clustering. Both the patterns and label candidates passed for matching
+        are case-sensitive. Case-insensitive patterns can be created with local pattern flags
+        as shown in the example stop labels file below:
         <pre>(?i)information (about|on).*
 (?i)(index|list) of.*
 ...</pre>

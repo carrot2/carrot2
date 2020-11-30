@@ -10,7 +10,13 @@
  */
 package org.carrot2.language;
 
-/** Provides additional word and label filtering information for a given language. */
-// fragment-start{lexical-data}
-public interface LexicalData extends WordFilter, LabelFilter {}
-// fragment-end{lexical-data}
+/**
+ * A cluster label candidate filter.
+ *
+ * @since 4.1.0
+ */
+@FunctionalInterface
+public interface LabelFilter {
+  /** @return Return true if the label candidate should be ignored in processing. */
+  boolean ignoreLabel(CharSequence labelCandidate);
+}

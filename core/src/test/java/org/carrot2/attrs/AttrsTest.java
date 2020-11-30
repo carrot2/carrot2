@@ -33,45 +33,50 @@ public class AttrsTest extends TestBase {
         .isNotNull();
   }
 
+  interface AdHocDict extends AcceptingVisitor {}
+
+  static class Entry implements AcceptingVisitor {
+    String match;
+    String[] tokens;
+
+    @Override
+    public void accept(AttrVisitor visitor) {
+      AttrString a1 = AttrString.builder().defaultValue(match);
+      visitor.visit("match", a1);
+      this.match = a1.get();
+
+      AttrStringArray a2 = AttrStringArray.builder().defaultValue(tokens);
+      visitor.visit("tokens", a2);
+      tokens = a2.get();
+    }
+  }
+
+  static class AdHocDict1 extends AttrComposite implements AdHocDict {
+    List<Entry> entries;
+
+    public AdHocDict1() {}
+
+    {
+      attributes.register(
+          "entries",
+          AttrObjectArray.builder(Entry.class, Entry::new)
+              .getset(() -> entries, (list) -> entries = list)
+              .defaultValue(null));
+    }
+  }
+
   @Test
   public void testCustomDictionary() {
-    class Entry implements AcceptingVisitor {
-      String match;
-      String[] tokens;
-
-      @Override
-      public void accept(AttrVisitor visitor) {
-        AttrString a1 = AttrString.builder().defaultValue(match);
-        visitor.visit("match", a1);
-        this.match = a1.get();
-
-        AttrStringArray a2 = AttrStringArray.builder().defaultValue(tokens);
-        visitor.visit("tokens", a2);
-        tokens = a2.get();
-      }
-    }
-
-    class AdHocDict extends AttrComposite {
-      List<Entry> entries;
-
-      {
-        attributes.register(
-            "entries",
-            AttrObjectArray.builder(Entry.class, () -> new Entry())
-                .getset(() -> entries, (list) -> entries = list)
-                .defaultValue(null));
-      }
-    }
 
     class Clazz extends AttrComposite {
-      AdHocDict adHocDict = new AdHocDict();
+      AdHocDict adHocDict = new AdHocDict1();
 
       {
         attributes.register(
             "adhoc",
             AttrObject.builder(AdHocDict.class)
                 .getset(() -> adHocDict, (v) -> adHocDict = v)
-                .defaultValue(() -> new AdHocDict()));
+                .defaultValue(AdHocDict1::new));
       }
     }
 
@@ -80,8 +85,15 @@ public class AttrsTest extends TestBase {
     entry.tokens = new String[] {"foo", "bar"};
 
     Clazz ob = new Clazz();
-    ob.adHocDict.entries = Arrays.asList(entry, entry);
-    System.out.println(Attrs.toJson(ob, JvmNameMapper.INSTANCE));
+    var adHocDict = new AdHocDict1();
+    adHocDict.entries = Arrays.asList(entry, entry);
+    ob.adHocDict = adHocDict;
+    String json = Attrs.toJson(ob, JvmNameMapper.INSTANCE);
+    System.out.println(json);
+
+    var asMap = Attrs.extract(ob, JvmNameMapper.INSTANCE::toName);
+    Clazz ob2 = Attrs.populate(new Clazz(), asMap, JvmNameMapper.INSTANCE::fromName);
+    System.out.println(Attrs.toJson(ob2, JvmNameMapper.INSTANCE));
   }
 
   private enum EnumClazz {

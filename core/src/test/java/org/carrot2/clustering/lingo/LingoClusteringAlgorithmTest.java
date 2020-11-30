@@ -11,13 +11,20 @@
 package org.carrot2.clustering.lingo;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.carrot2.AwaitsFix;
-import org.carrot2.clustering.*;
+import org.carrot2.attrs.AliasMapper;
+import org.carrot2.attrs.Attrs;
+import org.carrot2.clustering.CachedLangComponents;
 import org.carrot2.clustering.Cluster;
+import org.carrot2.clustering.ClusteringAlgorithmTestBase;
 import org.carrot2.clustering.Document;
+import org.carrot2.clustering.SampleDocumentData;
+import org.carrot2.clustering.TestDocument;
+import org.carrot2.language.RegExpLabelFilter;
+import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
+import org.carrot2.language.WordListFilter;
 import org.junit.Test;
 
 public class LingoClusteringAlgorithmTest
@@ -63,17 +70,54 @@ public class LingoClusteringAlgorithmTest
     Stream<Document> documents =
         Stream.of(
                 "program", "programs", "programming", "program", "programs", "programming", "other")
-            .map(title -> new TestDocument(title));
+            .map(TestDocument::new);
 
     List<Cluster<Document>> clusters =
         algorithm.cluster(documents, CachedLangComponents.loadCached("English"));
 
-    Assertions.assertThat(clusters).isNotEmpty();
-    Assertions.assertThat(
-            clusters.stream()
-                .flatMap(c -> c.getLabels().stream())
-                .map(label -> label.toLowerCase(Locale.ROOT)))
-        .containsOnly("program");
+    Assertions.assertThat(clusterLabels(clusters)).containsOnly("program");
+  }
+
+  @Test
+  public void testRequestWordFilters() {
+    // Set 'bar' to be a stop word. so that neither 'foo bar'
+    // nor 'bar' on its own forms a cluster label.
+    Stream<Document> documents =
+        Stream.of("foo bar", "bar", "baz", "foo bar").map(TestDocument::new);
+
+    LingoClusteringAlgorithm algorithm = algorithm();
+    algorithm.preprocessing.phraseDfThreshold.set(1);
+    algorithm.preprocessing.wordDfThreshold.set(1);
+
+    algorithm.dictionaries.wordFilters.set(List.of(new WordListFilter("bar")));
+
+    List<Cluster<Document>> clusters =
+        algorithm.cluster(
+            documents,
+            CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant1.NAME));
+
+    Assertions.assertThat(clusterLabels(clusters)).containsOnly("foo");
+
+    System.out.println(Attrs.toJson(algorithm.dictionaries, AliasMapper.SPI_DEFAULTS));
+  }
+
+  @Test
+  public void testRequestLabelFilters() {
+    // Set 'bar' to be a stop label.
+    Stream<Document> documents =
+        Stream.of("foo bar", "bar", "baz", "foo bar").map(TestDocument::new);
+
+    LingoClusteringAlgorithm algorithm = algorithm();
+    algorithm.preprocessing.phraseDfThreshold.set(1);
+    algorithm.preprocessing.wordDfThreshold.set(1);
+    algorithm.dictionaries.labelFilters.set(List.of(new RegExpLabelFilter("(?i)^foo bar$")));
+
+    List<Cluster<Document>> clusters =
+        algorithm.cluster(
+            documents,
+            CachedLangComponents.loadCached(TestsLanguageComponentsFactoryVariant1.NAME));
+
+    Assertions.assertThat(clusterLabels(clusters)).containsOnly("bar", "foo");
   }
 
   // TODO: CARROT-1195 (clustering not deterministic)

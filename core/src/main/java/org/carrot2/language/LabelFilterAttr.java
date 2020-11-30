@@ -10,7 +10,8 @@
  */
 package org.carrot2.language;
 
-/** Provides additional word and label filtering information for a given language. */
-// fragment-start{lexical-data}
-public interface LexicalData extends WordFilter, LabelFilter {}
-// fragment-end{lexical-data}
+import org.carrot2.attrs.AcceptingVisitor;
+
+public interface LabelFilterAttr extends AcceptingVisitor {
+  LabelFilter get();
+}
