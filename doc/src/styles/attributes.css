@@ -4,7 +4,7 @@
 .implementation:not(:last-child) {
   margin: 0.5ch 0 0.5ch 1.5ch;
   padding: 0.5ch 0;
-  border-left: 1px solid hsla(40, 40%, 80%, 0.7);
+  border-left: 1px solid hsla(40, 0%, 55%, 0.7);
   border-radius: 0.5ch;
 }
 .implementation > .attribute {
@@ -14,7 +14,7 @@
   font-family: var(--text-font-family);
   font-size: var(--small-font-size);
   font-weight: 300;
-  color: hsla(40, 40%, 80%, 0.7);
+  color: hsla(40, 0%, 55%, 0.7);
   margin: 0.5em 0 0.5em 0.7em;
 }
 

@@ -1,15 +1,11 @@
 const escapeForHtml = require('escape-html');
 
-const isContainer = require("./attributes").isContainer;
-
 const depthFirstAttributes = descriptor => {
   const collect = (descriptor, target) => {
     Object.keys(descriptor.attributes).forEach(k => {
       const attribute = descriptor.attributes[k];
 
-      if (!isContainer(attribute)) {
-        target.push(attribute);
-      }
+      target.push(attribute);
 
       if (attribute.attributes) {
         collect(attribute, target);

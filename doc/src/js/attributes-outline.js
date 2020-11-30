@@ -1,7 +1,5 @@
 const escapeForHtml = require('escape-html');
 
-const isContainer = require("./attributes").isContainer;
-
 const implementationWrapper = content => {
   return `<div class="implementation">${content}</div>`;
 };
@@ -43,7 +41,7 @@ function attributeProperty(attribute, descriptor) {
   // https://github.com/cheeriojs/cheerio/issues/1219
   const title = descriptor ? escapeForHtml(escapeForHtml(descriptor.javadoc.summary)) : "";
   const href = escapeForHtml(escapeForHtml(descriptor.id));
-  const link = descriptor && !isContainer(descriptor) ? `<a href="#${href}" title="${title}">${attribute}</a>` : attribute;
+  const link = descriptor ? `<a href="#${href}" title="${title}">${attribute}</a>` : attribute;
   return token("property", `"${link}"`);
 }
 

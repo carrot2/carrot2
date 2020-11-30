@@ -2,11 +2,6 @@ const path = require("path");
 const fs = require("fs");
 
 exports.isContainer = descriptor => {
-  const implementations = descriptor.implementations;
-  if (implementations) {
-    const implementationKeys = Object.keys(implementations);
-    return implementationKeys.length === 1 && descriptor.type === implementations[implementationKeys[0]].type;
-  }
   return false;
 };
 
