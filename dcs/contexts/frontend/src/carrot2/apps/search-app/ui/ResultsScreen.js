@@ -18,7 +18,7 @@ export const ResultsScreen = ({ match, history }) => {
   const query = decodeURIComponent(match.params.query);
 
   const runSearch = useCallback(() => {
-    searchResultStore.load(sources[source], query);
+    searchResultStore.load(source, sources[source], query);
     document.title =
       query + (query.length > 0 ? " - " : "") + branding.pageTitle;
   }, [source, query]);

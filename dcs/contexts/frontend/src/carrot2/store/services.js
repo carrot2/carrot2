@@ -149,20 +149,18 @@ export const searchResultStore = store({
     matches: 0,
     documents: EMPTY_ARRAY
   },
-  load: async function (source, query) {
-    const src = source;
-
+  load: async function (sourceId, source, query) {
     // TODO: cancel currently running request
     searchResultStore.loading = true;
     searchResultStore.error = false;
     try {
       searchResultStore.searchResult = assignDocumentIds(
-        await src.source(query),
-        src
+        await source.source(query),
+        sourceId, source
       );
       searchResultStore.initial = false;
     } catch (e) {
-      errors.addError(await src.createError(e));
+      errors.addError(await source.createError(e));
       searchResultStore.error = true;
       searchResultStore.searchResult = {
         query: query,
@@ -174,9 +172,10 @@ export const searchResultStore = store({
   }
 });
 
-function assignDocumentIds(result, source) {
+function assignDocumentIds(result, sourceId, source) {
   return {
     ...result,
+    sourceId: sourceId,
     source: source,
     documents: (result.documents || []).map((doc, index) => ({
       ...doc,
@@ -203,6 +202,6 @@ export const buildFileName = (fileNameSuffix, extension) => {
   const queryCleaned = searchResultStore.searchResult.query
     .replace(/[\s:]+/g, "_")
     .replace(/[+-\\"'/\\?]+/g, "");
-  const source = searchResultStore.source;
-  return `${source}-${queryCleaned}-${fileNameSuffix}.${extension}`;
+  const source = searchResultStore.searchResult.sourceId;
+  return `${source}-${queryCleaned}${queryCleaned.length > 0 ? "-": ""}${fileNameSuffix}.${extension}`;
 };

@@ -170,6 +170,7 @@ addAdvancedSettingsVisibility(
 export const runSearch = () => {
   if (parametersStateStore.sourceDirty) {
     searchResultStore.load(
+      workbenchSourceStore.source,
       sources[workbenchSourceStore.source],
       queryStore.query
     );
