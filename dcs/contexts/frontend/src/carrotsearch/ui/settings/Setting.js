@@ -6,6 +6,8 @@ import { FormGroup, Popover, PopoverPosition } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestionCircle } from "@fortawesome/pro-regular-svg-icons";
 
+export const isSettingVisible = s => !s.visible || s.visible();
+
 export const LabelWithHelp = ({ label, description }) => {
   if (description) {
     return (

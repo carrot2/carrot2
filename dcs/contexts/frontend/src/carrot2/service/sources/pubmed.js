@@ -36,7 +36,7 @@ function XPathProcessor(xmlString) {
 
 // TODO: add support for aborting running requests a'la fetch API.
 export function pubmed(query, params) {
-  const isProduction = true;//process.env.NODE_ENV === "production";
+  const isProduction = true; //process.env.NODE_ENV === "production";
   const serviceESearch = isProduction ? liveESearch : cachedESearch;
   const serviceEFetch = isProduction ? liveEFetch : cachedEFetch;
 

@@ -18,7 +18,6 @@ import {
   settings,
   SettingsTools
 } from "./WorkbenchSettings.js";
-import { Deferred } from "../../../../carrotsearch/ui/Deferred.js";
 
 const WorkbenchLogo = () => {
   return (
@@ -75,9 +74,7 @@ export const WorkbenchSide = () => {
         <SettingsTools />
       </div>
 
-      <Deferred timeout={20}>
-        <Settings settings={settings} />
-      </Deferred>
+      <Settings settings={settings} defer={true} />
     </div>
   );
 };

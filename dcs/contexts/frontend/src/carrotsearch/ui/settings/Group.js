@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 import { view } from "@risingstack/react-easy-state";
@@ -13,6 +13,38 @@ import { StringArraySetting } from "./StringArraySetting.js";
 import { FileSetting } from "./FileSetting.js";
 import { ServiceUrlSetting } from "./ServiceUrlSetting.js";
 import { displayNoneIf } from "../../../carrot2/apps/search-app/ui/Optional.js";
+import { isSettingVisible } from "./Setting.js";
+import { DeferredPlaceholder } from "../Deferred.js";
+
+const useDeferredDisplay = (setting, timeout) => {
+  const { settings, ...deferredSetting } = { ...setting };
+  const [deferred, setDeferred] = useState(true);
+
+  useEffect(() => {
+    const to = setTimeout(() => {
+      setDeferred(false);
+    }, timeout);
+    return () => {
+      clearTimeout(to);
+    };
+  }, [setDeferred, timeout]);
+
+  const allVisible = settings.filter(isSettingVisible);
+  deferredSetting.settings = deferred ? allVisible.slice(0, 1) : settings;
+
+  return [deferredSetting, deferred && allVisible.length > 1];
+};
+
+export const DeferredGroups = view(({ timeout, setting, ...props }) => {
+  const [deferredSetting, hasMore] = useDeferredDisplay(setting, timeout);
+  const initializing = hasMore ? <DeferredPlaceholder /> : null;
+  return (
+    <>
+      <Group setting={deferredSetting} {...props} />
+      {initializing}
+    </>
+  );
+});
 
 export const Group = view(({ setting, get, set, className }) => {
   const { label, description } = setting;
@@ -21,7 +53,7 @@ export const Group = view(({ setting, get, set, className }) => {
   // rather than by removing/adding them to the DOM. The former is much faster.
   let groupVisible = false;
   const settings = setting.settings.map(s => {
-    const settingVisible = !s.visible || s.visible();
+    const settingVisible = isSettingVisible(s);
     groupVisible |= settingVisible;
     return (
       <section key={s.id} id={s.id} style={displayNoneIf(!settingVisible)}>

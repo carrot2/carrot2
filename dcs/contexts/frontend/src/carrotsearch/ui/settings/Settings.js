@@ -1,15 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { Group } from "./Group.js";
+import { DeferredGroups, Group } from "./Group.js";
 import { isEmpty } from "../../lang/objects.js";
 import { persistentStore } from "../../store/persistent-store.js";
 
 export { addFactory } from "./Group.js";
 
-export const Settings = ({ settings, get, set }) => (
-  <Group className="Settings" setting={settings} set={set} get={get} />
-);
+export const Settings = ({ settings, get, set, defer = false, timeout }) =>
+  defer ? (
+    <DeferredGroups
+      className="Settings"
+      setting={settings}
+      set={set}
+      get={get}
+      timeout={timeout}
+    />
+  ) : (
+    <Group className="Settings" setting={settings} set={set} get={get} />
+  );
 
 Settings.propTypes = {
   settings: PropTypes.object.isRequired

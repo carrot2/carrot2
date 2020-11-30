@@ -1,6 +1,6 @@
 .WorkbenchSide {
   width: 24em;
-  overflow-y: auto;
+  overflow-y: scroll;
   position: relative;
   background-color: var(--background-color-side);
 
@@ -51,6 +51,9 @@
 .WorkbenchSide .Settings,
 .WorkbenchSide .Deferred {
   padding: var(--leading);
+}
+.WorkbenchSide .Deferred {
+  padding-top: 0;
 }
 .WorkbenchSide .SettingsTools {
   margin-top: var(--leading);
