@@ -1,0 +1,167 @@
+<article>
+  <h1>Choosing the algorithm</h1>
+
+  <p>
+    This section characterizes the available clustering algorithms and offers some suggestions on
+    how to choose the clustering algorithm suitable for specific input data.
+  </p>
+
+  <p>
+    Carrot<sup>2</sup> offers a number of clustering algorithms of varying performance and quality
+    characteristics. There is also Lingo3G, a fast highly-tunable commercial algorithm that
+    seamlessly integrates with Carrot<sup>2</sup>.
+  </p>
+
+  <section id="algorithm-characteristics">
+    <h2>Algorithms to choose from</h2>
+
+    <p>
+      As part of Carrot<sup>2</sup> framework you can use the following clustering algorithms.
+    </p>
+
+    <section id="lingo">
+      <h3>Lingo</h3>
+
+      <p>
+        The <a href="http://project.carrot2.org/publications/osinski04-dimensionality.pdf">Lingo
+        algorithm</a> employs term-document matrix dimensionality reduction techniques to figure
+        out the structure of topics present in the input. The algorithm is reasonably fast and nicely
+        separates diverse topics into separate groups. This will typically be the default algorithm
+        you may want to use.
+      </p>
+    </section>
+
+    <section id="stc">
+      <h3>STC</h3>
+
+      <p>
+        The key data structure in the STC algorithm is the Generalized Suffix Tree (GST) built for all
+        input documents. The algorithm traverses the GST to identify words and phrases that occurred
+        frequently in the input documents and merges sub-groups of documents with high overlap. The
+        algorithm is very fast, even for large sets of documents, but suffers from the lack of cluster
+        diversity.
+      </p>
+    </section>
+
+    <section id="bisecting-kmeans">
+      <h3>Bisecting k-means</h3>
+
+      <p>
+        Bisecting k-means is an implementation of a generic cluster analysis technique, contrary to
+        Lingo and STC which are text-specific. The algorithm attempts to recursively split
+        the documents into smaller and smaller groups until the splits become unfeasible. The
+        disadvantage of this algorithm is that it creates single-term labels, which are often subpar
+        compared to phrase-based labels produced by STC or Lingo.
+      </p>
+    </section>
+
+    <section id="lingo3g">
+      <h3>Lingo3G</h3>
+
+      <p>
+        Lingo3G is a commercial successor to the Lingo algorithm. The algorithm
+        offers much higher performance, lower memory consumption and many more tuning options
+        compared to Lingo. Please refer to <a href="https://carrotsearch.com/lingo3g/">Carrot Search
+        Lingo3G</a> web site for details.
+      </p>
+    </section>
+  </section>
+
+  <section id="choosing-the-algorithm">
+    <h2>Choosing the algorithm</h2>
+
+    <p>
+      It's quite difficult to give one clear recommendation as to which algorithm is
+      "the best". The decision is a problem of weighing multiple criteria such as performance or cluster
+      label legibility. Compare the following three sets of cluster labels acquired for the
+      same input using different algorithms:
+    </p>
+
+    <figure class="round">
+      <img src="images/output-compared-light.png"
+           alt="The same input clustered with different algorithms.">
+      <figcaption>
+        <p>
+          The same input ("data mining" search results) clustered with three different clustering
+          algorithms.
+        </p>
+      </figcaption>
+    </figure>
+
+    <p>
+      Many people (including us) have a subjective feeling that the Lingo-family of algorithms
+      (<a href="choosing-clustering-algorithm.html#lingo">Lingo</a> and
+      <a href="choosing-clustering-algorithm.html#lingo3g">Lingo3G</a>) delivers more intuitive and diverse clusters
+      compared to other algorithms.
+      Sometimes it is other characteristics, such as performance or cluster structure, that should be
+      taken into account.
+    </p>
+
+    <p>
+      The following table summarizes key characteristics of each algorithm shipped in
+      Carrot<sup>2</sup>.
+    </p>
+
+    <figure class="round">
+      <table>
+        <caption>A comparison of key characteristics of Carrot<sup>2</sup> clustering algorithms.
+        </caption>
+        <thead>
+        <tr>
+          <th scope="col">Feature</th>
+          <th scope="col">Lingo</th>
+          <th scope="col">STC</th>
+          <th scope="col">k-means</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th scope="row">Cluster diversity</th>
+          <td><strong>High</strong>, many small (outlier) clusters highlighted</td>
+          <td><strong>Low</strong>, small (outlier) clusters rarely highlighted</td>
+          <td><strong>Low</strong>, small (outlier) clusters rarely highlighted</td>
+        </tr>
+        <tr>
+          <th scope="row">Cluster labels</th>
+          <td><strong>Longer</strong>, often more descriptive</td>
+          <td><strong>Shorter</strong>, but still appropriate</td>
+          <td><strong>One-word only</strong>, may not always describe all documents in the cluster
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Scalability</th>
+          <td>
+            <strong>Low</strong>. For more than about 1000 documents, Lingo clustering will take a
+            long time and large memory
+            <footnote></footnote>
+            .
+          </td>
+          <td><strong>High</strong></td>
+          <td><strong>Low</strong>, based on similar data structures as Lingo.</td>
+        </tr>
+        <tr>
+          <th scope="row">Overlapping clusters</th>
+          <td><strong>Yes</strong>. A document can belong to more than one cluster.</td>
+          <td><strong>Yes</strong>. A document can belong to more than one cluster.</td>
+          <td><strong>No</strong>. A document can belong to only one cluster.</td>
+        </tr>
+        </tbody>
+      </table>
+    </figure>
+
+    <p class="warning">
+      <a href="choosing-clustering-algorithm.html#lingo3g">Lingo3G</a>, the commercial algorithm that plugs into
+      Carrot<sup>2</sup> has a <a href="https://carrotsearch.com/lingo3g/comparison/">separate
+      page</a> where its features are compared against the open source algorithms.
+    </p>
+
+    <p>
+      While the table above can be useful to determine which algorithm to choose,
+      the ultimate judgment should be based on an empirical evaluation with your specific document
+      collection.
+      While we provide some general <a href="tuning-quality.html">algorithm
+      choice advice</a> and <a href="tuning-performance.html">performance tuning hints</a>, you will
+      ultimately need to experiment, tweak parameters, and select what fits your data and use case.
+    </p>
+  </section>
+</article>
