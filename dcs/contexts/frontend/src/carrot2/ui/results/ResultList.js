@@ -23,11 +23,13 @@ const ResultClusters = view(props => {
     <div className="ResultClusters">
       <span>
         {(props.result.clusters || []).map(c => (
-          <ClusterInSummary
-            cluster={c}
-            key={c.id}
-            onClick={() => selectionStore.toggleSelection(c)}
-          />
+          <>
+            <ClusterInSummary
+              cluster={c}
+              key={c.id}
+              onClick={() => selectionStore.toggleSelection(c)}
+            />{" "}
+          </>
         ))}
       </span>
     </div>
