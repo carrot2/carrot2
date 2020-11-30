@@ -43,7 +43,12 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
 public final class STCClusteringAlgorithm extends AttrComposite implements ClusteringAlgorithm {
   private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS =
       new HashSet<>(
-          Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class, LabelFormatter.class));
+          Arrays.asList(
+              Stemmer.class,
+              Tokenizer.class,
+              WordFilter.class,
+              LabelFilter.class,
+              LabelFormatter.class));
 
   public static final String NAME = "STC";
 
@@ -381,17 +386,17 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
      * First we sort by the base clusters score, then pick the top-K entries,
      * filtering out any stop labels on the way.
      */
-    Collections.sort(candidates, (c1, c2) -> -Float.compare(c1.score, c2.score));
+    candidates.sort((c1, c2) -> -Float.compare(c1.score, c2.score));
 
     j = 0;
-    LexicalData lexicalData = context.languageComponents.get(LexicalData.class);
+    LabelFilter labelFilter = context.languageComponents.get(LabelFilter.class);
     int maxBaseClusters = this.maxBaseClusters.get();
     for (int max = candidates.size(), i = 0; i < max && j < maxBaseClusters; i++) {
       ClusterCandidate cc = candidates.get(i);
       // Build the candidate cluster's label for filtering. This may be costly so
       // we only do this for base clusters which are promoted to merging phase.
       assert cc.phrases.size() == 1;
-      if (!lexicalData.ignoreLabel(buildLabel(cc.phrases.get(0)))) {
+      if (!labelFilter.ignoreLabel(buildLabel(cc.phrases.get(0)))) {
         candidates.set(j++, cc);
       }
     }
@@ -597,8 +602,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     markOverlappingPhrases(context, phrases);
     phrases.removeIf(NOT_SELECTED);
 
-    Collections.sort(
-        phrases,
+    phrases.sort(
         (p1, p2) -> {
           if (p1.coverage < p2.coverage) return 1;
           if (p1.coverage > p2.coverage) return -1;

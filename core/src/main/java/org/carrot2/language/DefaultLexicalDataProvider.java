@@ -11,7 +11,6 @@
 package org.carrot2.language;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -32,7 +31,7 @@ public class DefaultLexicalDataProvider implements LanguageComponentsProvider {
 
   @Override
   public Set<Class<?>> componentTypes() {
-    return Collections.singleton(LexicalData.class);
+    return Set.of(WordFilter.class, LabelFilter.class);
   }
 
   @Override
@@ -44,11 +43,11 @@ public class DefaultLexicalDataProvider implements LanguageComponentsProvider {
     }
 
     String langPrefix = language.toLowerCase(Locale.ROOT);
-    LexicalData lexicalData =
-        new LexicalDataImpl(
-            resourceLookup, langPrefix + ".stopwords.utf8", langPrefix + ".stoplabels.utf8");
 
-    return Map.of(LexicalData.class, () -> lexicalData);
+    // Load and precompile legacy defaults.
+    return Map.of(
+        WordFilter.class, legacyPlainTextWordFilter(langPrefix, resourceLookup),
+        LabelFilter.class, legacyPlainTextLabelFilter(langPrefix, resourceLookup));
   }
 
   @Override
@@ -56,5 +55,23 @@ public class DefaultLexicalDataProvider implements LanguageComponentsProvider {
     return "Carrot2 Lexical Data ("
         + String.join(", ", DefaultStemmersProvider.STEMMER_SUPPLIERS.keySet())
         + ")";
+  }
+
+  public static Supplier<LabelFilter> legacyPlainTextLabelFilter(
+      String langPrefix, ResourceLookup resourceLookup) throws IOException {
+    LabelFilter labelFilter =
+        RegExpLabelFilter.loadFromPlainText(
+                resourceLookup, langPrefix.toLowerCase(Locale.ROOT) + ".stoplabels.utf8")
+            .get();
+    return () -> labelFilter;
+  }
+
+  public static Supplier<WordFilter> legacyPlainTextWordFilter(
+      String langPrefix, ResourceLookup resourceLookup) throws IOException {
+    WordFilter wordFilter =
+        WordListFilter.loadFromPlainText(
+                resourceLookup, langPrefix.toLowerCase(Locale.ROOT) + ".stopwords.utf8")
+            .get();
+    return () -> wordFilter;
   }
 }

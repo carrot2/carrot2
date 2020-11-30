@@ -13,8 +13,8 @@ package org.carrot2.text.preprocessing.filter;
 import org.carrot2.attrs.AttrComposite;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
-/** A base for {@link LabelFilter} implementations that handle each label independently. */
-public abstract class SingleLabelFilterBase extends AttrComposite implements LabelFilter {
+/** A base for {@link ContextLabelFilter} implementations that handle each label independently. */
+public abstract class SingleLabelFilterBase extends AttrComposite implements ContextLabelFilter {
 
   public void filter(
       PreprocessingContext context, boolean[] acceptedStems, boolean[] acceptedPhrases) {

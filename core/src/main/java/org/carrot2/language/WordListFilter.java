@@ -42,7 +42,7 @@ public class WordListFilter extends AttrComposite implements WordFilterAttr {
     return (word) -> entries.contains(word.toString());
   }
 
-  static HashSet<String> loadFromPlainText(ResourceLookup loader, String stopwordsResource)
+  static WordListFilter loadFromPlainText(ResourceLookup loader, String stopwordsResource)
       throws IOException {
     HashSet<String> stopwords = new HashSet<>();
     try (InputStream is = loader.open(stopwordsResource);
@@ -51,6 +51,6 @@ public class WordListFilter extends AttrComposite implements WordFilterAttr {
       RegExpLabelFilter.readLines(reader)
           .forEach(word -> stopwords.add(word.toLowerCase(Locale.ROOT)));
     }
-    return stopwords;
+    return new WordListFilter(stopwords.toArray(String[]::new));
   }
 }

@@ -27,11 +27,12 @@ import org.apache.lucene.util.AttributeFactory;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
+import org.carrot2.language.LabelFilter;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.LanguageComponentsProvider;
-import org.carrot2.language.LexicalData;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
+import org.carrot2.language.WordFilter;
 import org.carrot2.language.extras.LuceneAnalyzerTokenizerAdapter;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.LabelFormatterImpl;
@@ -115,21 +116,18 @@ public class E03_CustomLanguageComponents {
     // fragment-end{custom-stemmer}
 
     // fragment-start{custom-lexical-data}
+    // Ignore words from the list and anything shorter than 4 characters.
     final Set<String> ignored = new HashSet<>(Arrays.asList("from", "what"));
-    Supplier<LexicalData> lexicalDataSupplier =
-        () ->
-            new LexicalData() {
-              @Override
-              public boolean ignoreLabel(CharSequence candidate) {
-                // Ignore any label that has a substring 'data' in it.
-                return candidate.toString().toLowerCase(Locale.ROOT).contains("data");
-              }
+    final WordFilter wordFilter =
+        (word) -> {
+          return word.length() < 4 || ignored.contains(word.toString());
+        };
 
-              @Override
-              public boolean ignoreWord(CharSequence word) {
-                return word.length() < 4 || ignored.contains(word.toString());
-              }
-            };
+    final LabelFilter labelFilter =
+        (label) -> {
+          // Ignore any label that has a substring 'data' in it.
+          return label.toString().toLowerCase(Locale.ROOT).contains("data");
+        };
     // fragment-end{custom-lexical-data}
 
     // fragment-start{custom-overrides}
@@ -138,7 +136,10 @@ public class E03_CustomLanguageComponents {
             .load()
             .language("English")
             .override(Stemmer.class, stemmerSupplier)
-            .override(LexicalData.class, lexicalDataSupplier);
+            // Word and label filters are thread-safe here so we
+            // supply the same instance all the time.
+            .override(WordFilter.class, () -> wordFilter)
+            .override(LabelFilter.class, () -> labelFilter);
     // fragment-end{custom-overrides}
 
     LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
@@ -160,23 +161,19 @@ public class E03_CustomLanguageComponents {
         Stemmer.class,
         (Supplier<Stemmer>) () -> ((word) -> word.toString().toLowerCase(Locale.ROOT)));
 
-    suppliers.put(
-        LexicalData.class,
-        () ->
-            new LexicalData() {
-              Set<String> ignored = new HashSet<>(Arrays.asList("from", "what"));
+    final Set<String> ignored = new HashSet<>(Arrays.asList("from", "what"));
+    final WordFilter wordFilter =
+        (word) -> {
+          return word.length() <= 3 || ignored.contains(word.toString());
+        };
+    suppliers.put(WordFilter.class, () -> wordFilter);
 
-              @Override
-              public boolean ignoreLabel(CharSequence labelCandidate) {
-                // Ignore any label that has a substring 'data' in it; example.
-                return labelCandidate.toString().toLowerCase(Locale.ROOT).contains("data");
-              }
-
-              @Override
-              public boolean ignoreWord(CharSequence word) {
-                return word.length() <= 3 || ignored.contains(word.toString());
-              }
-            });
+    final LabelFilter labelFilter =
+        (label) -> {
+          // Ignore any label that has a substring 'data' in it.
+          return label.toString().toLowerCase(Locale.ROOT).contains("data");
+        };
+    suppliers.put(LabelFilter.class, () -> labelFilter);
 
     // Use an ICU analyzer from Lucene and an adapter to Tokenizer interface.
     class ICUAnalyzer extends Analyzer {

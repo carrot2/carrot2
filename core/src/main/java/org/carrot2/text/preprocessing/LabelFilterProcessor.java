@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 import org.carrot2.attrs.AttrComposite;
 import org.carrot2.attrs.AttrObject;
-import org.carrot2.language.LexicalData;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllPhrases;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
@@ -75,10 +74,7 @@ public class LabelFilterProcessor extends AttrComposite {
     attributes.register(
         "stopLabelFilter",
         AttrObject.builder(StopLabelFilter.class)
-            .label(
-                "Filters out labels that are declared ignorable by the "
-                    + LexicalData.class.getSimpleName()
-                    + " implementation")
+            .label("Filters out labels tagged ignorable by the lexical data filters")
             .getset(() -> stopLabelFilter, (v) -> stopLabelFilter = v)
             .defaultValue(StopLabelFilter::new));
   }
@@ -149,7 +145,7 @@ public class LabelFilterProcessor extends AttrComposite {
             stopLabelFilter,
             completeLabelFilter)
         .forEachOrdered(
-            (LabelFilter filter) -> {
+            (ContextLabelFilter filter) -> {
               if (filter != null) {
                 filter.filter(context, acceptedStems, acceptedPhrases);
               }

@@ -13,7 +13,6 @@ package org.carrot2.language;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -81,10 +80,8 @@ public abstract class SingleLanguageComponentsProviderImpl implements LanguageCo
     register(clazz, (language, resourceLoader) -> supplier);
   }
 
-  protected static LexicalData loadLexicalData(String language, ResourceLookup resourceLookup)
-      throws IOException {
-    String langPrefix = language.toLowerCase(Locale.ROOT);
-    return new LexicalDataImpl(
-        resourceLookup, langPrefix + ".stopwords.utf8", langPrefix + ".stoplabels.utf8");
+  protected final void registerDefaultLexicalData() {
+    register(WordFilter.class, DefaultLexicalDataProvider::legacyPlainTextWordFilter);
+    register(LabelFilter.class, DefaultLexicalDataProvider::legacyPlainTextLabelFilter);
   }
 }

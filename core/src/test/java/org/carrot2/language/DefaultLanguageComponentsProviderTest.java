@@ -117,9 +117,9 @@ public class DefaultLanguageComponentsProviderTest extends TestBase {
       Assertions.assertThat(stemmer.stem(pair[0]).toString()).isEqualTo(pair[1]);
     }
 
-    LexicalData lexicalData = components.get(LexicalData.class);
+    WordFilter wordFilter = components.get(WordFilter.class);
     for (String word : commonWords) {
-      assertTrue(lexicalData.ignoreWord(new MutableCharArray(word)));
+      assertTrue(wordFilter.ignoreWord(new MutableCharArray(word)));
     }
   }
 }

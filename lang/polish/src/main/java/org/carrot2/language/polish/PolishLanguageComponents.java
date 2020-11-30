@@ -14,7 +14,6 @@ import java.util.List;
 import morfologik.stemming.WordData;
 import morfologik.stemming.polish.PolishStemmer;
 import org.carrot2.language.ExtendedWhitespaceTokenizer;
-import org.carrot2.language.LexicalData;
 import org.carrot2.language.SingleLanguageComponentsProviderImpl;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
@@ -27,15 +26,10 @@ public class PolishLanguageComponents extends SingleLanguageComponentsProviderIm
 
   public PolishLanguageComponents() {
     super("Carrot2 (" + NAME + ")", NAME);
+    registerDefaultLexicalData();
     registerResourceless(Stemmer.class, this::createStemmer);
     registerResourceless(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
     registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
-    register(
-        LexicalData.class,
-        (language, resourceLookup) -> {
-          LexicalData lexicalData = loadLexicalData(NAME, resourceLookup);
-          return () -> lexicalData;
-        });
   }
 
   private Stemmer createStemmer() {

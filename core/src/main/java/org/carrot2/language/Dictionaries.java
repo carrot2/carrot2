@@ -10,6 +10,7 @@
  */
 package org.carrot2.language;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class Dictionaries extends AttrComposite {
    */
   public AttrObjectArray<WordFilterAttr> wordFilters =
       attributes.register(
-          "words",
+          "wordFilters",
           AttrObjectArray.builder(WordFilterAttr.class, WordListFilter::new)
               .label("Common word filtering dictionaries.")
               .defaultValue(Collections.emptyList()));
@@ -42,7 +43,7 @@ public class Dictionaries extends AttrComposite {
    */
   public AttrObjectArray<LabelFilterAttr> labelFilters =
       attributes.register(
-          "labels",
+          "labelFilters",
           AttrObjectArray.builder(LabelFilterAttr.class, RegExpLabelFilter::new)
               .label("Cluster label filtering dictionaries.")
               .defaultValue(Collections.emptyList()));
@@ -52,27 +53,50 @@ public class Dictionaries extends AttrComposite {
    * dictionaries.
    */
   public LanguageComponents override(LanguageComponents languageComponents) {
-    List<WordFilter> wordFilters;
-    {
-      List<WordFilterAttr> wordFilterAttrs = this.wordFilters.get();
-      if (wordFilterAttrs == null) {
-        wordFilterAttrs = Collections.emptyList();
-      }
-      wordFilters = wordFilterAttrs.stream().map(WordFilterAttr::get).collect(Collectors.toList());
+    List<WordFilterAttr> wordFilterAttrs = this.wordFilters.get();
+    if (wordFilterAttrs != null || !wordFilterAttrs.isEmpty()) {
+      List<WordFilter> wordFilters =
+          wordFilterAttrs.stream().map(WordFilterAttr::get).collect(Collectors.toList());
+
+      languageComponents =
+          languageComponents.override(
+              WordFilter.class,
+              (previous) ->
+                  () -> {
+                    List<WordFilter> filters;
+                    WordFilter previousFilter = previous.get();
+                    if (previousFilter != null) {
+                      filters = new ArrayList<>(wordFilters);
+                      filters.add(previousFilter);
+                      return new ChainedWordFilter(filters);
+                    } else {
+                      return new ChainedWordFilter(wordFilters);
+                    }
+                  });
     }
 
-    List<LabelFilter> labelFilters;
-    {
-      List<LabelFilterAttr> labelFilterAttrs = this.labelFilters.get();
-      if (labelFilterAttrs == null) {
-        labelFilterAttrs = Collections.emptyList();
-      }
-      labelFilters =
+    List<LabelFilterAttr> labelFilterAttrs = this.labelFilters.get();
+    if (labelFilterAttrs != null || !labelFilterAttrs.isEmpty()) {
+      List<LabelFilter> labelFilters =
           labelFilterAttrs.stream().map(LabelFilterAttr::get).collect(Collectors.toList());
+
+      languageComponents =
+          languageComponents.override(
+              LabelFilter.class,
+              (previous) ->
+                  () -> {
+                    List<LabelFilter> filters;
+                    LabelFilter previousFilter = previous.get();
+                    if (previousFilter != null) {
+                      filters = new ArrayList<>(labelFilters);
+                      filters.add(previousFilter);
+                      return new ChainedLabelFilter(filters);
+                    } else {
+                      return new ChainedLabelFilter(labelFilters);
+                    }
+                  });
     }
 
-    LexicalData lexicalData = new LexicalDataImpl2(wordFilters, labelFilters);
-    return languageComponents.override(
-        LexicalData.class, (previous) -> () -> new ChainedLexicalData(lexicalData, previous.get()));
+    return languageComponents;
   }
 }

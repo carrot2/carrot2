@@ -25,10 +25,11 @@ import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.SharedInfrastructure;
+import org.carrot2.language.LabelFilter;
 import org.carrot2.language.LanguageComponents;
-import org.carrot2.language.LexicalData;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
+import org.carrot2.language.WordFilter;
 import org.carrot2.math.mahout.function.Functions;
 import org.carrot2.math.mahout.matrix.DoubleMatrix1D;
 import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
@@ -52,7 +53,12 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
     implements ClusteringAlgorithm {
   private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS =
       new HashSet<>(
-          Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class, LabelFormatter.class));
+          Arrays.asList(
+              Stemmer.class,
+              Tokenizer.class,
+              WordFilter.class,
+              LabelFilter.class,
+              LabelFormatter.class));
 
   public static final String NAME = "Bisecting K-Means";
 

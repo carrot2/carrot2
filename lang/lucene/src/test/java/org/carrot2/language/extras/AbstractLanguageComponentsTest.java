@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.carrot2.language.LanguageComponents;
-import org.carrot2.language.LexicalData;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
+import org.carrot2.language.WordFilter;
 import org.carrot2.util.MutableCharArray;
 import org.junit.Test;
 
@@ -55,10 +55,9 @@ public abstract class AbstractLanguageComponentsTest {
   /** */
   @Test
   public void testCommonWords() {
-    LexicalData lexicalData = components.get(LexicalData.class);
-    final String[] testData = stopWords;
-    for (String word : testData) {
-      Assertions.assertThat(lexicalData.ignoreWord(new MutableCharArray(word))).as(word).isTrue();
+    WordFilter wordFilter = components.get(WordFilter.class);
+    for (String word : stopWords) {
+      Assertions.assertThat(wordFilter.ignoreWord(new MutableCharArray(word))).as(word).isTrue();
     }
   }
 

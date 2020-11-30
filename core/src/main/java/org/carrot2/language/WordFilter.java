@@ -13,7 +13,6 @@ package org.carrot2.language;
 /**
  * A stop word filter.
  *
- * @see LexicalData
  * @see Dictionaries
  * @since 4.1.0
  */

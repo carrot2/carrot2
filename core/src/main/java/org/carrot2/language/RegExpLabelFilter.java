@@ -56,15 +56,14 @@ public class RegExpLabelFilter extends AttrComposite implements LabelFilterAttr 
     }
   }
 
-  static Pattern loadFromPlainText(ResourceLookup loader, String stoplabelsResource)
+  static RegExpLabelFilter loadFromPlainText(ResourceLookup loader, String stoplabelsResource)
       throws IOException {
     List<Pattern> stoplabels;
     try (InputStream is = loader.open(stoplabelsResource);
         BufferedReader reader =
             new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-      stoplabels = compile(readLines(reader));
+      return new RegExpLabelFilter(readLines(reader).toArray(String[]::new));
     }
-    return union(stoplabels);
   }
 
   /**

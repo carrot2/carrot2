@@ -10,19 +10,19 @@
  */
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.language.LexicalData;
+import org.carrot2.language.LabelFilter;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
 /** Accepts labels that are not declared as stop labels in the {@code stoplabels.<lang>} files. */
 public class StopLabelFilter extends SingleLabelFilterBase {
   private LabelFormatter labelFormatter;
-  private LexicalData lexicalData;
+  private LabelFilter lexicalData;
 
   @Override
   public void filter(
       PreprocessingContext context, boolean[] acceptedStems, boolean[] acceptedPhrases) {
-    lexicalData = context.languageComponents.get(LexicalData.class);
+    lexicalData = context.languageComponents.get(LabelFilter.class);
     labelFormatter = context.languageComponents.get(LabelFormatter.class);
     super.filter(context, acceptedStems, acceptedPhrases);
   }

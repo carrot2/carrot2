@@ -11,13 +11,12 @@
 package org.carrot2.language.polish;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import org.assertj.core.api.Assertions;
 import org.carrot2.language.LanguageComponents;
-import org.carrot2.language.LexicalData;
 import org.carrot2.language.Stemmer;
+import org.carrot2.language.WordFilter;
 import org.carrot2.util.MutableCharArray;
 import org.junit.Test;
 
@@ -56,10 +55,9 @@ public class PolishLanguageComponentsTest {
   /** */
   @Test
   public void testCommonWords() throws Exception {
-    LexicalData lexicalData = getComponents().get(LexicalData.class);
-    final String[] testData = getCommonWordsTestData();
-    for (String word : testData) {
-      assertTrue(lexicalData.ignoreWord(new MutableCharArray(word)));
+    WordFilter wordFilter = getComponents().get(WordFilter.class);
+    for (String word : getCommonWordsTestData()) {
+      Assertions.assertThat(wordFilter.ignoreWord(new MutableCharArray(word))).as(word).isTrue();
     }
   }
 }

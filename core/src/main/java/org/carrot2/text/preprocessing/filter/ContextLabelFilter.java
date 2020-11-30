@@ -19,7 +19,7 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
  *
  * @see LabelFilterProcessor
  */
-public interface LabelFilter {
+public interface ContextLabelFilter {
   /**
    * Called to perform label filtering.
    *

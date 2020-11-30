@@ -24,10 +24,11 @@ import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.SharedInfrastructure;
 import org.carrot2.language.Dictionaries;
+import org.carrot2.language.LabelFilter;
 import org.carrot2.language.LanguageComponents;
-import org.carrot2.language.LexicalData;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
+import org.carrot2.language.WordFilter;
 import org.carrot2.text.preprocessing.CompletePreprocessingPipeline;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
@@ -46,7 +47,12 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
 
   private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS =
       new HashSet<>(
-          Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class, LabelFormatter.class));
+          Arrays.asList(
+              Stemmer.class,
+              Tokenizer.class,
+              WordFilter.class,
+              LabelFilter.class,
+              LabelFormatter.class));
 
   /**
    * Balance between cluster score and size during cluster sorting. Value equal to 0.0 will cause

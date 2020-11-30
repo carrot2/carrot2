@@ -26,7 +26,7 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
  * <p>See <a href="http://project.carrot2.org/publications/osinski-2003-lingo.pdf">this
  * document</a>, page 31 for a definition of a complete phrase.
  */
-public class CompleteLabelFilter extends AttrComposite implements LabelFilter {
+public class CompleteLabelFilter extends AttrComposite implements ContextLabelFilter {
   /**
    * Truncated label threshold. Determines the strength of the truncated label filter. The lowest
    * value means strongest truncated labels elimination, which may lead to overlong cluster labels
