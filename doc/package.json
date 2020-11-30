@@ -12,8 +12,6 @@
   },
   "dependencies": {
     "@carrotsearch/gatsby-theme-apidocs": "1.0.0",
-    "gatsby": "2.27.4",
-    "react": "16.14.0",
-    "react-dom": "16.14.0"
+    "gatsby": "2.27.4"
   }
 }
