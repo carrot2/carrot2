@@ -71,7 +71,7 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
           "desiredClusterCount",
           AttrInteger.builder().label("Desired cluster count").min(2).max(100).defaultValue(30));
 
-  /** Preprocessing pipeline. */
+  /** Configuration of the text preprocessing stage. */
   public CompletePreprocessingPipeline preprocessing;
 
   {

@@ -110,7 +110,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
           "useDimensionalityReduction",
           AttrBoolean.builder().label("Use dimensionality reduction").defaultValue(true));
 
-  /** Term-document matrix builder for the algorithm. */
+  /** Configuration of the size and contents of the term-document matrix. */
   public TermDocumentMatrixBuilder matrixBuilder;
 
   {
@@ -122,7 +122,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
             .defaultValue(TermDocumentMatrixBuilder::new));
   }
 
-  /** Term-document matrix reducer for the algorithm. */
+  /** Configuration of the matrix decomposition method to use for clustering. */
   public TermDocumentMatrixReducer matrixReducer;
 
   {
@@ -134,9 +134,7 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
             .defaultValue(TermDocumentMatrixReducer::new));
   }
 
-  /**
-   * A pipeline of components transforming input documents into a {@linkplain PreprocessingContext}.
-   */
+  /** Configuration of the text preprocessing stage. */
   public BasicPreprocessingPipeline preprocessing;
 
   {

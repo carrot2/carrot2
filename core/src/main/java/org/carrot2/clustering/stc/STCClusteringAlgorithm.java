@@ -208,7 +208,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
               .label("Merge all stem-equivalent phrases when discovering base clusters")
               .defaultValue(true));
 
-  /** Preprocessing pipeline. */
+  /** Configuration of the text preprocessing stage. */
   public BasicPreprocessingPipeline preprocessing;
 
   {
