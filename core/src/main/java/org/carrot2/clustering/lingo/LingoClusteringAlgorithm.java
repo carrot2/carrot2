@@ -107,9 +107,7 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
             .defaultValue(TermDocumentMatrixReducer::new));
   }
 
-  /**
-   * Configuration of the structure and labels of clusters.
-   */
+  /** Configuration of the structure and labels of clusters. */
   public ClusterBuilder clusterBuilder;
 
   {
@@ -122,8 +120,8 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
   }
 
   /**
-   * Query terms used to retrieve documents being clustered. The query is used as a hint
-   * to avoid creating trivial clusters consisting only of query words.
+   * Query terms used to retrieve documents being clustered. The query is used as a hint to avoid
+   * creating trivial clusters consisting only of query words.
    */
   public final AttrString queryHint =
       attributes.register("queryHint", SharedInfrastructure.queryHintAttribute());
