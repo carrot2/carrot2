@@ -15,7 +15,7 @@ import static org.carrot2.language.TokenTypeUtils.isCommon;
 import org.carrot2.attrs.AttrBoolean;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
-/** Accepts words that are not stop words and phrases that do not start nor end in a stop word. */
+/** Removes labels that start or end in a stop word. */
 public class StopWordLabelFilter extends SingleLabelFilterBase {
   /** Enables or disables the stop word label filter. */
   public AttrBoolean enabled =

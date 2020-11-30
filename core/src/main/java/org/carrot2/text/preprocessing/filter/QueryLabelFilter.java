@@ -14,7 +14,7 @@ import org.carrot2.attrs.AttrBoolean;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
-/** Accepts labels that do not consist only of query words. */
+/** Removes labels that consist only of query words. */
 public class QueryLabelFilter extends SingleLabelFilterBase {
   /** Enables or disables the query label filter. */
   public AttrBoolean enabled =

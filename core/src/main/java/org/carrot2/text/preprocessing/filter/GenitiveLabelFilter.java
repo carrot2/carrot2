@@ -15,8 +15,8 @@ import org.carrot2.attrs.AttrBoolean;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
 /**
- * Accepts labels that do not end in words in the Saxon Genitive form (e.g. "Threatening the
- * Country's").
+ * Removes labels that end in words in the Saxon Genitive form, for example <em>Threatening the
+ * Country's</em>.
  */
 public class GenitiveLabelFilter extends SingleLabelFilterBase {
   /** Enables or disables the genitive label filter. */

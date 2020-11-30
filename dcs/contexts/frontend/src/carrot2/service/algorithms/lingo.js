@@ -36,7 +36,7 @@ const clusterSettings = [
   ),
   settingFrom("preprocessing.documentAssigner.exactPhraseAssignment"),
   advanced(settingFrom("clusterBuilder.clusterMergingThreshold")),
-  advanced(settingFrom("scoreWeight", { label: "Size-score sorting ratio" }))
+  advanced(settingFrom("scoreWeight"))
 ];
 const labelSettings = [
   settingFrom("clusterBuilder.phraseLabelBoost"),
@@ -73,7 +73,7 @@ const labelSettings = [
 ];
 const languageModelSettings = [
   ...settingFromRecursive("matrixBuilder.termWeighting", getterProvider),
-  settingFrom("matrixBuilder.boostFields", { label: "Boosted fields" }),
+  settingFrom("matrixBuilder.boostFields"),
   settingFrom("matrixBuilder.boostedFieldWeight"),
   advanced(settingFrom("preprocessing.phraseDfThreshold")),
   advanced(settingFrom("preprocessing.wordDfThreshold")),

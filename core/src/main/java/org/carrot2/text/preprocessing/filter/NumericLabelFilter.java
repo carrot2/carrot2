@@ -14,7 +14,7 @@ import org.carrot2.attrs.AttrBoolean;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
-/** Accepts labels that start with a non-numeric token. */
+/** Removes labels that start with a numeric token. */
 public class NumericLabelFilter extends SingleLabelFilterBase {
   /** Enables or disables the numeric label filter. */
   public AttrBoolean enabled =

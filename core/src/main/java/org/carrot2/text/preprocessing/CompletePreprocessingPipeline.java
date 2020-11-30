@@ -33,8 +33,8 @@ import org.carrot2.language.LanguageComponents;
  */
 public class CompletePreprocessingPipeline extends AttrComposite implements ContextPreprocessor {
   /**
-   * Word Document Frequency threshold. Words appearing in fewer than <code>wordDfThreshold</code>
-   * documents will be ignored.
+   * Word Document Frequency cut-off threshold. Words appearing in fewer than <code>wordDfThreshold
+   * </code> documents will be ignored.
    */
   public final AttrInteger wordDfThreshold =
       attributes.register(
@@ -46,8 +46,8 @@ public class CompletePreprocessingPipeline extends AttrComposite implements Cont
               .defaultValue(1));
 
   /**
-   * Phrase Document Frequency threshold. Phrases appearing in fewer than <code>phraseDfThreshold
-   * </code> documents will be ignored.
+   * Phrase Document Frequency cut-off threshold. Phrases appearing in fewer than <code>
+   * phraseDfThreshold</code> documents will be ignored.
    */
   public final AttrInteger phraseDfThreshold =
       attributes.register(

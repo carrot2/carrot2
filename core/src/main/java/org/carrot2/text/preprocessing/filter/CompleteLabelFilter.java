@@ -34,7 +34,7 @@ public class CompleteLabelFilter extends LabelFilter {
           AttrBoolean.builder().label("Truncated label filter enabled").defaultValue(true));
 
   /**
-   * Truncated label threshold. Determines the strength of the truncated label filter. The lowest
+   * Determines the strength of the truncated label filter. The lowest
    * value means strongest truncated labels elimination, which may lead to overlong cluster labels
    * and many unclustered documents. The highest value effectively disables the filter, which may
    * result in short or truncated labels.

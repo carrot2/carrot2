@@ -48,7 +48,10 @@ public class DocumentAssigner extends AttrComposite {
           "exactPhraseAssignment",
           AttrBoolean.builder().label("Exact phrase assignment").defaultValue(false));
 
-  /** Determines the minimum number of documents in each cluster. */
+  /**
+   * Minimum required number of documents in each cluster. Clusters containing fewer documents will
+   * not be created.
+   */
   public AttrInteger minClusterSize =
       attributes.register(
           "minClusterSize",
