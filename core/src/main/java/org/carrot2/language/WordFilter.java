@@ -17,7 +17,9 @@ package org.carrot2.language;
  * @since 4.1.0
  */
 @FunctionalInterface
+// fragment-start{word-filter}
 public interface WordFilter {
   /** @return Return true if the provided term should be ignored in processing. */
   boolean ignoreWord(CharSequence word);
 }
+// fragment-end{word-filter}

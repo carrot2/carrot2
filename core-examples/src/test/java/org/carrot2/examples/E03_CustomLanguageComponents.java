@@ -107,7 +107,8 @@ public class E03_CustomLanguageComponents {
     // requirements. Here, we modify the stemmer and lexical data for the default English
     // component set, leaving any other components as they were originally defined for English.
 
-    // We override the suppliers of Stemmer and LexicalData interfaces. These suppliers must be
+    // We override the suppliers of Stemmer, WordFilter and LabelFilter interfaces. These suppliers
+    // must be
     // thread-safe, but the instances of corresponding components will not be reused across threads.
 
     // fragment-start{custom-stemmer}

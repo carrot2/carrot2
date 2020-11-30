@@ -17,12 +17,12 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
 /** Accepts labels that are not declared as stop labels in the {@code stoplabels.<lang>} files. */
 public class StopLabelFilter extends SingleLabelFilterBase {
   private LabelFormatter labelFormatter;
-  private LabelFilter lexicalData;
+  private LabelFilter labelFilter;
 
   @Override
   public void filter(
       PreprocessingContext context, boolean[] acceptedStems, boolean[] acceptedPhrases) {
-    lexicalData = context.languageComponents.get(LabelFilter.class);
+    labelFilter = context.languageComponents.get(LabelFilter.class);
     labelFormatter = context.languageComponents.get(LabelFormatter.class);
     super.filter(context, acceptedStems, acceptedPhrases);
   }
@@ -31,12 +31,12 @@ public class StopLabelFilter extends SingleLabelFilterBase {
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {
     final String formatedLabel =
         context.format(labelFormatter, phraseIndex + context.allWords.image.length);
-    return !lexicalData.ignoreLabel(formatedLabel);
+    return !labelFilter.ignoreLabel(formatedLabel);
   }
 
   @Override
   public boolean acceptWord(PreprocessingContext context, int wordIndex) {
     final String formattedLabel = context.format(labelFormatter, wordIndex);
-    return !lexicalData.ignoreLabel(formattedLabel);
+    return !labelFilter.ignoreLabel(formattedLabel);
   }
 }

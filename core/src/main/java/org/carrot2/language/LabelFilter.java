@@ -16,7 +16,9 @@ package org.carrot2.language;
  * @since 4.1.0
  */
 @FunctionalInterface
+// fragment-start{label-filter}
 public interface LabelFilter {
   /** @return Return true if the label candidate should be ignored in processing. */
   boolean ignoreLabel(CharSequence labelCandidate);
 }
+// fragment-end{label-filter}

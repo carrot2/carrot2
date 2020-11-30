@@ -46,7 +46,8 @@
   > English
     Component: org.carrot2.language.Stemmer
     Component: org.carrot2.language.Tokenizer
-    Component: org.carrot2.language.LexicalData
+    Component: org.carrot2.language.WordFilter
+    Component: org.carrot2.language.LabelFilter
     Component: org.carrot2.text.preprocessing.LabelFormatter
   [...]</pre>
 
@@ -77,21 +78,33 @@
     <h2>Tweaking lexical data resources</h2>
 
     <p>
-      The <code>LexicalData</code> component is responsible
-      for telling the algorithm whether a term or a candidate cluster
+      Lexical components are responsible for telling the algorithm whether a term or a candidate cluster
       label should be ignored. Such ignorable elements typically include function
       words like prepositions, conjunctions or domain-specific boilerplate language that
       is not a good candidate for a cluster.
     </p>
 
-    <pre data-embed="%CORE%/org/carrot2/language/LexicalData.java"
-         data-fragment="lexical-data"></pre>
+    <p>
+      The <code>WordFilter</code> interface controls low-level filtering
+      of individual terms:
+    </p>
+
+    <pre data-embed="%CORE%/org/carrot2/language/WordFilter.java"
+         data-fragment="word-filter"></pre>
 
     <p>
-      The most common quality tuning step is modifying the
-      resources provided for the <code>LexicalData</code> component's
-      default implementation (<code>LexicalDataImpl</code>). This class
-      attempts to load two files (where the <i>lang</i> prefix is replaced with the
+      The <code>LabelFilter</code> interface controls low-level filtering
+      of undesired cluster labels.
+    </p>
+
+    <pre data-embed="%CORE%/org/carrot2/language/LabelFilter.java"
+         data-fragment="label-filter"></pre>
+
+    <p>
+      While both these components can be explicitly provided (or overriden) in a <code>LanguageData</code>
+      instance, the easiest and most common quality tuning step is to modify the
+      default implementation's existing text resources. Carrot<sup>2</sup> attempts to load
+      two files for each language (where the <i>lang</i> prefix is replaced with the
       name of the language the component is instantiated for):
     </p>
 
@@ -163,8 +176,8 @@ across
          data-fragment="custom-stemmer"></pre>
 
     <p>
-      We will also replace the default <code>LexicalData</code> implementation with simple custom
-      filtering based on hardcoded rules:
+      We will also replace the default <code>WordFilter</code> and <code>LabelFilter</code> components
+      with custom filters based on hardcoded rules:
     </p>
 
     <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
