@@ -27,7 +27,7 @@ task yarnInstall(type: YarnTask) {
     }
     outputs.file('node_modules/.yarn-integrity')
 
-    args = [ 'install']
+    args = ['install', '--frozen-lockfile']
 }
 
 task yarnBuild(type: YarnTask) {
