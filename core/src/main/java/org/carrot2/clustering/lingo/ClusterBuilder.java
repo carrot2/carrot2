@@ -34,8 +34,8 @@ import org.carrot2.util.GraphUtils;
  */
 public class ClusterBuilder extends AttrComposite {
   /**
-   * Phrase label boost. The weight of multi-word labels relative to one-word labels. Low values
-   * will result in more one-word labels being produced, higher values will favor multi-word labels.
+   * Weight of multi-word labels relative to one-word labels. Low values will result in more
+   * one-word labels being produced, higher values will favor multi-word labels.
    */
   public AttrDouble phraseLabelBoost =
       attributes.register(
@@ -43,9 +43,8 @@ public class ClusterBuilder extends AttrComposite {
           AttrDouble.builder().label("Phrase label boost").min(0).max(10).defaultValue(1.5));
 
   /**
-   * Phrase length penalty start. The phrase length at which the overlong multi-word labels should
-   * start to be penalized. Phrases of length smaller than <code>phraseLengthPenaltyStart</code>
-   * will not be penalized.
+   * Phrase length at which the overlong multi-word labels should start to be penalized. Phrases of
+   * length smaller than <code>phraseLengthPenaltyStart</code> will not be penalized.
    */
   public AttrInteger phraseLengthPenaltyStart =
       attributes.register(
@@ -53,9 +52,8 @@ public class ClusterBuilder extends AttrComposite {
           AttrInteger.builder().label("Phrase length penalty start").min(2).max(8).defaultValue(8));
 
   /**
-   * Phrase length penalty stop. The phrase length at which the overlong multi-word labels should be
-   * removed completely. Phrases of length larger than <code>phraseLengthPenaltyStop</code> will be
-   * removed.
+   * Phrase length at which the overlong multi-word labels should be removed completely. Phrases of
+   * length larger than <code>phraseLengthPenaltyStop</code> will be removed.
    */
   public AttrInteger phraseLengthPenaltyStop =
       attributes.register(
@@ -63,17 +61,17 @@ public class ClusterBuilder extends AttrComposite {
           AttrInteger.builder().label("Phrase length penalty stop").min(2).max(8).defaultValue(8));
 
   /**
-   * Cluster merging threshold. The percentage overlap between two cluster's documents required for
-   * the clusters to be merged into one cluster. Low values will result in more aggressive merging,
-   * which may lead to irrelevant documents in clusters. High values will result in fewer clusters
-   * being merged, which may lead to very similar or duplicated clusters.
+   * Percentage of overlap between two cluster's document sets at which to merge the clusters. Low
+   * values will result in more aggressive merging, which may lead to irrelevant documents in
+   * clusters. High values will result in fewer clusters being merged, which may lead to very
+   * similar or duplicated clusters.
    */
   public AttrDouble clusterMergingThreshold =
       attributes.register(
           "clusterMergingThreshold",
           AttrDouble.builder().label("Cluster merging threshold").min(0).max(1).defaultValue(0.7));
 
-  /** Cluster label assignment method. */
+  /** The method of assigning documents to labels when forming clusters. */
   public LabelAssigner labelAssigner;
 
   {

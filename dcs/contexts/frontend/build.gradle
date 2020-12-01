@@ -1,0 +1,24 @@
+configurations {
+  descriptors
+}
+
+dependencies {
+  descriptors project(path: ":infra:docattrs", configuration: "descriptors")
+}
+
+ext {
+  descriptorsDir = file("src/carrot2/service/algorithms/descriptors")
+}
+
+task descriptors(type: Sync) {
+  from configurations.descriptors
+  into descriptorsDir
+
+  // Preserve commercial descriptor stub.
+  preserve {
+    include "com.carrotsearch.*"
+  }
+}
+
+yarnBuild.dependsOn descriptors
+

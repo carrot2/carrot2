@@ -1,0 +1,41 @@
+.SearchForm {
+  width: 41em;
+  max-width: 70vw;
+  position: relative;
+  text-align: left;
+}
+
+.SearchForm > .sources {
+  margin-bottom: 0.75em;
+  margin-left: 0.125em;
+  display: inline-block;
+}
+
+.SearchForm button[type="submit"] {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.SearchForm input.bp3-input:focus {
+  z-index: 5;
+  position: relative;
+}
+
+.SearchForm button svg {
+  color: var(--text-color-lighter);
+}
+
+.light .SearchForm {
+  --tab-background-color: hsl(0, 0%, 99%);
+  --tab-border-color: rgba(0, 0, 0, 0.08);
+}
+
+.light .WithBackdrop .SearchForm {
+  --tab-background-color: hsl(var(--backdrop-color-hue), 90%, 80%);
+  --tab-border-color: hsl(var(--backdrop-color-hue), 60%, 70%);
+  filter: saturate(40%) brightness(1.05);
+}
+.dark .WithBackdrop .SearchForm {
+  --tab-background-color: hsl(var(--backdrop-color-hue), 80%, 13%);
+  --tab-border-color: hsl(var(--backdrop-color-hue), 50%, 11%);
+}

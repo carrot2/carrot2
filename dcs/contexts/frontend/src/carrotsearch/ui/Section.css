@@ -1,0 +1,48 @@
+.Section {
+  margin-bottom: 3em;
+}
+
+.SectionDivider {
+  font-size: 1em;
+  text-transform: uppercase;
+  text-align: center;
+
+  display: table;
+  white-space: nowrap;
+  height: auto;
+  line-height: 1;
+  color: var(--text-color-light);
+}
+.SectionDivider > span {
+  padding: 0 1em;
+  cursor: pointer;
+  user-select: none;
+}
+.SectionDivider:before,
+.SectionDivider:after {
+  content: "";
+  display: table-cell;
+  position: relative;
+  top: -6px;
+  width: 50%;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.SectionDivider .Caret {
+  display: inline-block;
+  padding: 0;
+  width: 0;
+  height: 0;
+  position: relative;
+  top: -0.125em;
+  left: 0.5em;
+
+  --caret-size: 0.375em;
+  border-left: var(--caret-size) solid transparent;
+  border-right: var(--caret-size) solid transparent;
+  border-top: var(--caret-size) solid var(--text-color-lightest);
+  transition: transform 0.125s;
+}
+.SectionDivider .CaretRight {
+  transform: rotate(-90deg);
+}

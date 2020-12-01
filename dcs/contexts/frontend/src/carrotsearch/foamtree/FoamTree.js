@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 import { Visualization } from "../Visualization.js";
 import { CarrotSearchFoamTree } from "./foamtree-impl.js";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 FoamTree.propTypes = {
   options: PropTypes.object,
@@ -10,7 +10,7 @@ FoamTree.propTypes = {
 };
 
 const impl = {
-  embed: (options) => new CarrotSearchFoamTree(options),
+  embed: options => new CarrotSearchFoamTree(options),
   set: (instance, ...rest) => {
     const reloadNeeded = willChange("layout") || willChange("stacking");
 
@@ -40,12 +40,10 @@ const impl = {
     }
     instance.select({ groups: selection, keepPrevious: false });
   },
-  resize: (instance) => instance.resize(),
-  dispose: (instance) => instance.dispose()
+  resize: instance => instance.resize(),
+  dispose: instance => instance.dispose()
 };
 
 export function FoamTree(props) {
-  return (
-    <Visualization impl={impl} {...props} />
-  );
+  return <Visualization impl={impl} {...props} />;
 }

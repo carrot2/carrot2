@@ -1,0 +1,25 @@
+.VisualizationHints {
+  max-width: 30em;
+}
+
+.VisualizationHints kbd:first-child {
+  margin-left: 0;
+}
+
+.VisualizationHints td:first-child {
+  font-weight: bold;
+  text-align: right;
+  padding-right: 1em;
+  min-width: 8em;
+}
+.VisualizationHints td {
+  padding-bottom: 0.5em;
+  vertical-align: top;
+}
+
+.VisualizationHints tr.separator td {
+}
+
+.VisualizationHints tr.separator + tr td {
+  padding-top: 1em;
+}

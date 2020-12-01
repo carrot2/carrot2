@@ -1,0 +1,8 @@
+.BooleanSetting {
+  margin-bottom: 2em;
+}
+
+.BooleanSetting .bp3-control.bp3-inline {
+  margin-right: 0;
+  font-weight: bold;
+}

@@ -3,8 +3,7 @@
     {
       "title": "Overview",
       "articles": [
-        "hello-carrot2",
-        "algorithms"
+        "hello-carrot2"
       ]
     },
     {
@@ -27,6 +26,7 @@
     {
       "title": "Advanced topics",
       "articles": [
+        "choosing-clustering-algorithm",
         "tuning-quality",
         "tuning-performance"
       ]

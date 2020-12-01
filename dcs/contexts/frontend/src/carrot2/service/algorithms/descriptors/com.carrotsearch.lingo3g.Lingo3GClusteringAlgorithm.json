@@ -1,0 +1,9 @@
+{
+  "name": "Lingo3G",
+  "type": "com.carrotsearch.lingo3g.Lingo3GClusteringAlgorithm",
+  "javadoc": {
+    "text": "Stub descriptor for the Lingo3G clustering algorithm.",
+    "summary": "Lingo3G clustering algorithm."
+  },
+  "attributes": {}
+}

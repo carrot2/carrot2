@@ -1,0 +1,24 @@
+.FileSettingDropZone {
+  border: 2px dashed var(--text-color-secondary);
+  padding: 1em;
+  border-radius: 0.5em;
+}
+.FileSettingDropZoneActive {
+  border-color: var(--text-color-green);
+}
+.FileSettingDropZone button {
+  vertical-align: baseline;
+}
+
+.FileSettingFileInfo {
+  margin-bottom: 1em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.FileSettingFileInfo span:not(:last-of-type) {
+  margin-right: 0.5em;
+}
+.FileSettingFileInfo span + span {
+  color: var(--text-color-lighter);
+}

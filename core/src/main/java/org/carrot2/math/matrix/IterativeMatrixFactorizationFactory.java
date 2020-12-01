@@ -22,8 +22,8 @@ import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 public abstract class IterativeMatrixFactorizationFactory extends AttrComposite
     implements MatrixFactorizationFactory {
   /**
-   * Factorization quality. The number of iterations of matrix factorization to perform. The higher
-   * the required quality, the more time-consuming clustering.
+   * Number of iterations of matrix factorization to perform. The higher the required quality, the
+   * more time-consuming clustering.
    */
   public final AttrEnum<FactorizationQuality> factorizationQuality =
       attributes.register(

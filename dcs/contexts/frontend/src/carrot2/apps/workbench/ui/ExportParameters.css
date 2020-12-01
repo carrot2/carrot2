@@ -1,0 +1,19 @@
+.ExportParametersBody pre {
+  height: 20rem;
+  width: 32rem;
+  overflow: auto;
+  line-height: 1.1;
+  border: 1px solid var(--border-color);
+  padding: 0.5em;
+  border-radius: 0.125em;
+}
+
+.ExportParametersTools {
+  display: flex;
+  align-items: center;
+}
+
+.ExportParametersTools .bp3-checkbox {
+  margin-bottom: 0;
+  flex: 1;
+}

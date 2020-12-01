@@ -1,0 +1,12 @@
+.WorkbenchSourceAlgorithm {
+  margin-top: 2em;
+}
+.WorkbenchSourceAlgorithm .bp3-label {
+  width: 9em;
+}
+.WorkbenchSourceAlgorithm .bp3-form-group {
+  margin-bottom: 0.25em;
+}
+.WorkbenchSourceAlgorithm .bp3-form-content {
+  flex-grow: 1;
+}

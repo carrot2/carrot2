@@ -11,7 +11,11 @@
 package org.carrot2.clustering.lingo;
 
 import com.carrotsearch.hppc.BitSet;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.carrot2.attrs.AttrComposite;
@@ -58,17 +62,16 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
           AttrDouble.builder().label("Size-score sorting ratio").min(0).max(1).defaultValue(0.));
 
   /**
-   * Desired cluster count. A factor used to calculate the number of clusters based on the number of
-   * documents on input. The larger the value, the more clusters will be created. The number of
-   * clusters created by the algorithm will be proportionally adjusted to the desired cluster count,
-   * but may be different.
+   * Determines number of clusters to create. The larger the value, the more clusters will be
+   * created. The number of clusters created by the algorithm will be proportional to the value of
+   * this parameter, but may be different.
    */
   public AttrInteger desiredClusterCount =
       attributes.register(
           "desiredClusterCount",
           AttrInteger.builder().label("Desired cluster count").min(2).max(100).defaultValue(30));
 
-  /** Preprocessing pipeline. */
+  /** Configuration of the text preprocessing stage. */
   public CompletePreprocessingPipeline preprocessing;
 
   {
@@ -80,10 +83,7 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
             .defaultValue(CompletePreprocessingPipeline::new));
   }
 
-  /**
-   * Term-document matrix builder, contains attributes determining the size and contents of the
-   * matrix
-   */
+  /** Configuration of the size and contents of the term-document matrix. */
   public TermDocumentMatrixBuilder matrixBuilder;
 
   {
@@ -95,10 +95,7 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
             .defaultValue(TermDocumentMatrixBuilder::new));
   }
 
-  /**
-   * Term-document matrix reducer, contains attributes determining the matrix decomposition method
-   * to be used during clustering.
-   */
+  /** Configuration of the matrix decomposition method to use for clustering. */
   public TermDocumentMatrixReducer matrixReducer;
 
   {
@@ -110,10 +107,7 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
             .defaultValue(TermDocumentMatrixReducer::new));
   }
 
-  /**
-   * Cluster builder, contains attributes determining the structure and labels of clusters produced
-   * by the Lingo algorithm.
-   */
+  /** Configuration of the structure and labels of clusters. */
   public ClusterBuilder clusterBuilder;
 
   {
@@ -126,8 +120,8 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
   }
 
   /**
-   * Query hint. Query terms used to retrieve documents being clustered. The query is used as a hint
-   * to avoid creating trivial clusters consisting only of query words.
+   * Query terms used to retrieve documents being clustered. The query is used as a hint to avoid
+   * creating trivial clusters consisting only of query words.
    */
   public final AttrString queryHint =
       attributes.register("queryHint", SharedInfrastructure.queryHintAttribute());

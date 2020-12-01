@@ -1,15 +1,13 @@
 const escapeForHtml = require('escape-html');
 
-const isContainer = require("./attributes").isContainer;
+const attributeOutlineHtml = require("./attributes-outline").attributeOutlineHtml;
 
 const depthFirstAttributes = descriptor => {
   const collect = (descriptor, target) => {
     Object.keys(descriptor.attributes).forEach(k => {
       const attribute = descriptor.attributes[k];
 
-      if (!isContainer(attribute)) {
-        target.push(attribute);
-      }
+      target.push(attribute);
 
       if (attribute.attributes) {
         collect(attribute, target);
@@ -54,8 +52,18 @@ const implementationDetailsHtml = implementation => (`<li>
     ${descriptionText(implementation)}
   </p>
   
+  ${childAttributesOutline(implementation)}
+  
   ${allAttributeDetailsHtml(implementation)}
 </li>`);
+
+const childAttributesOutline = descriptor => {
+  if (Object.keys(descriptor.attributes).length > 0) {
+    return attributeOutlineHtml(descriptor);
+  } else {
+    return "";
+  }
+};
 
 const allImplementationDetailsHtml = attribute => (`<p>Available implementations:</p>
 <ol>
@@ -67,8 +75,21 @@ ${Object.keys(attribute.implementations)
 
 const attributeDetailsHtml = (attribute) => {
   const name = attribute.pathRest.split(".").pop();
-  const implementationsHtml = attribute.implementations && Object.keys(
-      attribute.implementations).length > 1 ? allImplementationDetailsHtml(attribute) : "";
+
+  let implementationsHtml = "";
+  let outline = "";
+
+  const implementations = attribute.implementations;
+  if (implementations) {
+    const implementationKeys = Object.keys(implementations);
+    if (implementationKeys.length > 1) {
+      implementationsHtml = allImplementationDetailsHtml(attribute);
+    }
+
+    if (implementationKeys.length === 1) {
+      outline = childAttributesOutline(implementations[implementationKeys[0]]);
+    }
+  }
 
   // We need to double-escape the content due to HTML escaping mess in cheerio:
   // https://github.com/cheeriojs/cheerio/issues/1198. I'll clean this up once
@@ -95,6 +116,8 @@ const attributeDetailsHtml = (attribute) => {
   <p>
     ${descriptionText(attribute)}
   </p>
+  
+  ${outline}
   
   ${implementationsHtml}
 </section>`

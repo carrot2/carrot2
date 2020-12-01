@@ -1,0 +1,12 @@
+.ExportOutputConfig {
+  margin-bottom: 2em;
+  display: flex;
+}
+
+.ExportOutputConfig .bp3-checkbox {
+  margin-right: 1.5em;
+}
+
+.ExportFormatConfig {
+  margin-bottom: 2em;
+}

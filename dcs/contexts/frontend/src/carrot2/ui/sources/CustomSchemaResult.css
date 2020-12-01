@@ -1,0 +1,51 @@
+.CustomSchemeResultConfig .main {
+  display: flex;
+  margin-bottom: var(--leading);
+}
+.CustomSchemeResultConfig .ResultPreview,
+.CustomSchemeResultConfig .FieldRoles {
+  max-height: 24em;
+  overflow-y: auto;
+}
+.CustomSchemeResultConfig .FieldRoles .empty select {
+  color: var(--text-color-lightest);
+}
+.CustomSchemeResultConfig .ResultPreview {
+  width: 24em;
+  padding: 0.25em;
+}
+.CustomSchemeResultConfig .FieldRoles {
+  padding-top: 0.125em;
+}
+
+.CustomSchemeResultConfig .main .bp3-form-group {
+  padding-right: 0.5em;
+  margin-bottom: 0.25em;
+}
+
+.CustomSchemeResultConfig .main .bp3-label {
+  display: flex;
+  flex-grow: 1;
+  white-space: nowrap;
+}
+.CustomSchemeResultConfig .main .bp3-label span:first-child {
+  flex-grow: 1;
+  width: 10em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 0.5em;
+}
+
+.CustomSchemeResultConfig .bp3-label small {
+  font-size: 100%;
+  font-weight: 300;
+  color: var(--text-color-lightest);
+}
+
+.CustomSchemeResultConfig .FieldConfigs {
+  display: flex;
+}
+.CustomSchemeResultConfig .FieldConfigs .bp3-form-group {
+  margin-bottom: 0;
+  margin-right: 2em;
+}

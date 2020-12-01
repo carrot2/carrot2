@@ -1,0 +1,21 @@
+.FieldChoiceSetting .bp3-form-content {
+  position: relative;
+}
+
+.FieldChoiceSetting .Loading {
+  background-color: var(--background-color-side);
+  height: 100%;
+}
+.FieldChoiceSetting .Loading > div {
+  margin-top: 1em;
+}
+
+.FieldChoiceSetting .FieldList {
+  max-height: 16.5em;
+  overflow: auto;
+}
+
+.FieldChoiceSetting .FieldList small {
+  font-size: 100%;
+  color: var(--text-color-lighter);
+}

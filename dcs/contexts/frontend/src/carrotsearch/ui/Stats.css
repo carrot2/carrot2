@@ -1,0 +1,22 @@
+.Stats {
+}
+
+.Stat {
+  display: inline-block;
+  text-align: center;
+  margin-right: var(--leading);
+  line-height: 1;
+}
+
+.Stat > strong {
+  font-family: Raleway, sans-serif;
+  font-size: 240%;
+  font-weight: normal;
+  display: block;
+  margin-bottom: 0.125em;
+}
+
+.Stat > small {
+  font-size: 100%;
+  color: var(--text-color-lighter);
+}

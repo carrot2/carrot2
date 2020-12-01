@@ -1,7 +1,11 @@
 Later:
-* Limit the number of results displayed at once?
+
+* tuning of labels (label set comparison)
+* visualization coloring by document attributes
+
+
+Later:
 * Check background color on Circles export when implemented.
-* Copy/save results as CSV
 * Single document preview
 * Mobile version
 * Close popovers on Esc (should work, might be a BlueprintJS bug)

@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 import { Visualization } from "../Visualization.js";
 import { CarrotSearchCircles } from "./circles-impl.js";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 Circles.propTypes = {
   options: PropTypes.object,
@@ -10,7 +10,7 @@ Circles.propTypes = {
 };
 
 const impl = {
-  embed: (options) => new CarrotSearchCircles(options),
+  embed: options => new CarrotSearchCircles(options),
   set: (instance, ...rest) => {
     instance.set.apply(instance, rest);
   },
@@ -21,14 +21,15 @@ const impl = {
     if (!selection.keepPrevious) {
       instance.set("selection", { all: true, selected: false });
     }
-    instance.set("selection", { groups: selection.groups.map(g => g.id), selected: true });
+    instance.set("selection", {
+      groups: selection.groups.map(g => g.id),
+      selected: true
+    });
   },
-  resize: (instance) => instance.resize(),
-  dispose: () => { }, // no-op, Circles does not support disposing
+  resize: instance => instance.resize(),
+  dispose: () => {} // no-op, Circles does not support disposing
 };
 
 export function Circles(props) {
-  return (
-    <Visualization impl={impl} {...props} />
-  );
+  return <Visualization impl={impl} {...props} />;
 }

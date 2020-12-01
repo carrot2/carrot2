@@ -1,0 +1,26 @@
+button.link {
+  color: var(--link-color);
+  text-underline-width: 1px;
+  font-size: inherit;
+}
+button.link:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+button.link {
+  border: none;
+  background-color: transparent;
+  outline: none;
+  padding: 0;
+}
+button.link .bp3-icon {
+  margin-right: 0.25em;
+  position: relative;
+  top: -0.1em;
+}
+button.link[disabled] {
+  opacity: 0.35;
+}
+button.link[disabled]:hover {
+  text-decoration: none;
+}

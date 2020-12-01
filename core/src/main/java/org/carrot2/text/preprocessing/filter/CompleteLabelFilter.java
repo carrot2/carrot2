@@ -10,7 +10,7 @@
  */
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.attrs.AttrComposite;
+import org.carrot2.attrs.AttrBoolean;
 import org.carrot2.attrs.AttrDouble;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
@@ -26,12 +26,18 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
  * <p>See <a href="http://project.carrot2.org/publications/osinski-2003-lingo.pdf">this
  * document</a>, page 31 for a definition of a complete phrase.
  */
-public class CompleteLabelFilter extends AttrComposite implements LabelFilter {
+public class CompleteLabelFilter extends LabelFilter {
+  /** Enables or disables the truncated label filter. */
+  public AttrBoolean enabled =
+      attributes.register(
+          "enabled",
+          AttrBoolean.builder().label("Truncated label filter enabled").defaultValue(true));
+
   /**
-   * Truncated label threshold. Determines the strength of the truncated label filter. The lowest
-   * value means strongest truncated labels elimination, which may lead to overlong cluster labels
-   * and many unclustered documents. The highest value effectively disables the filter, which may
-   * result in short or truncated labels.
+   * Determines the strength of the truncated label filter. The lowest value means strongest
+   * truncated labels elimination, which may lead to overlong cluster labels and many unclustered
+   * documents. The highest value effectively disables the filter, which may result in short or
+   * truncated labels.
    */
   public AttrDouble labelOverrideThreshold =
       attributes.register(
@@ -51,5 +57,10 @@ public class CompleteLabelFilter extends AttrComposite implements LabelFilter {
     leftCompleteLabelFilter.filter(context, acceptedStems, acceptedPhrases, labelOverrideThreshold);
     rightCompleteLabelFilter.filter(
         context, acceptedStems, acceptedPhrases, labelOverrideThreshold);
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return enabled.get();
   }
 }

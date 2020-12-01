@@ -32,8 +32,8 @@ import org.carrot2.text.preprocessing.PreprocessingContext.AllFields;
 /** Builds a term document matrix based on the provided {@link PreprocessingContext}. */
 public class TermDocumentMatrixBuilder extends AttrComposite {
   /**
-   * Gives more weight to words that appeared in title fields. The larger the value, the stronger
-   * boost the title words will receive.
+   * The extra weight to apply to words that appeared in boosted fields. The larger the value, the
+   * stronger the boost.
    */
   public final AttrDouble boostedFieldWeight =
       attributes.register(
@@ -41,20 +41,18 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
           AttrDouble.builder().label("Boosted fields weight").min(0).max(10).defaultValue(2.));
 
   /**
-   * Specifies a list of field names that are boosted by {@link #boostedFieldWeight
-   * boostedFieldWeight} attribute. Content of fields provided in this attribute can be given more
-   * weight during clustering.
+   * A list fields for which to apply extra weight. Content of fields provided in this attribute can
+   * be given more weight during clustering. You may want to boost, for example, the title field
+   * with the assumption that it accurately summarizes the content of the whole document.
    */
   public AttrStringArray boostFields =
       attributes.register(
           "boostFields",
-          AttrStringArray.builder()
-              .label("Fields with boosted scores")
-              .defaultValue(new String[] {}));
+          AttrStringArray.builder().label("Boosted fields").defaultValue(new String[] {}));
 
   /**
-   * Maximum term-document matrix size. Determines the maximum number of the term-document matrix
-   * elements. The larger the size, the more accurate, time- and memory-consuming clustering.
+   * Maximum number of elements the term-document matrix can have. The larger the allowed matrix
+   * size, the more accurate, time- and memory-consuming clustering.
    */
   public final AttrInteger maximumMatrixSize =
       attributes.register(
@@ -65,11 +63,11 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
               .defaultValue(250 * 150));
 
   /**
-   * Maximum word document frequency. The maximum document frequency allowed for words as a fraction
-   * of all documents. Words with document frequency larger than {@link #maxWordDf} will be ignored.
-   * For example, when {@link #maxWordDf} is 0.4, words appearing in more than 40% of documents will
-   * be be ignored. A value of 1.0 means that all words will be taken into account, no matter in how
-   * many documents they appear.
+   * Maximum document frequency allowed for words as a fraction of all documents. Words with
+   * document frequency larger than {@link #maxWordDf} will be ignored. For example, when {@link
+   * #maxWordDf} is 0.4, words appearing in more than 40% of documents will be be ignored. A value
+   * of 1.0 means that all words will be taken into account, no matter in how many documents they
+   * appear.
    *
    * <p>This attribute may be useful when certain words appear in most of the input documents (e.g.
    * company name from header or footer) and such words dominate the cluster labels. In such case,
@@ -88,7 +86,7 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
               .max(1)
               .defaultValue(0.9));
 
-  /** Term weighting. The method for calculating weight of words in the term-document matrices. */
+  /** Method for calculating weights of words in the term-document matrices. */
   public TermWeighting termWeighting;
 
   {

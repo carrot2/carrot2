@@ -1,46 +1,18 @@
-import React from "react";
-import { GenericSearchEngineErrorMessage } from "./search-app/ui/ErrorMessage.js";
-
-import { EToolsResult, EToolsResultConfig, EToolsSourceConfig, EToolsIpBannedError, etoolsSource } from "./search-app/ui/view/results/ETools.js";
-import { PubMedResult, PubMedResultConfig, PubMedSourceConfig, pubmedSource } from "./search-app/ui/view/results/PubMed.js";
+import { etoolsSourceDescriptor } from "./ui/sources/ETools.js";
+import { pubmedSourceDescriptor } from "./ui/sources/PubMed.js";
+import { localFileSourceDescriptor } from "./ui/sources/LocalFile.js";
+import { solrSourceDescriptor } from "./ui/sources/Solr.js";
+import { esSourceDescriptor } from "./ui/sources/Elasticsearch.js";
 
 export const sources = {
-  "web": {
-    label: "Web",
-    descriptionHtml: "web search results provided by <a href='https://etools.ch'>etools.ch</a>. Extensive use may require special arrangements with the <a href='mailto:sschmid@comcepta.com' target='_blank'>owner</a> of the etools.ch service.",
-    source: etoolsSource,
-    createResult: (props) => {
-      return <EToolsResult {...props} />;
-    },
-    createError: (props) => {
-      const error = props.store.error;
-      if (error && error.status === 403) {
-        return <EToolsIpBannedError {...props} />;
-      }
-      return <GenericSearchEngineErrorMessage {...props} />
-    },
-    createConfig: () => {
-      return <EToolsResultConfig />;
-    },
-    createSourceConfig: (props) => {
-      return <EToolsSourceConfig {...props} />;
-    }
-  },
-  "pubmed": {
-    label: "PubMed",
-    descriptionHtml: "abstracts of medical papers from the PubMed database provided by NCBI.",
-    source: pubmedSource,
-    createResult: (props) => {
-      return <PubMedResult {...props} />;
-    },
-    createError: (props) => {
-      return <GenericSearchEngineErrorMessage {...props} />
-    },
-    createConfig: () => {
-      return <PubMedResultConfig />;
-    },
-    createSourceConfig: (props) => {
-      return <PubMedSourceConfig {...props} />;
-    }
-  }
+  web: etoolsSourceDescriptor,
+  pubmed: pubmedSourceDescriptor,
+  file: localFileSourceDescriptor,
+  solr: solrSourceDescriptor,
+  es: esSourceDescriptor
+};
+
+export const searchAppSources = {
+  web: sources.web,
+  pubmed: sources.pubmed
 };

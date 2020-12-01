@@ -1,0 +1,52 @@
+.PointedTabs {
+  --pointed-tabs-border-width: 0.0625em;
+  --pointed-tabs-pointer-border-width: 0.0625em;
+}
+
+.dark .PointedTabs {
+  --pointed-tabs-pointer-border-width: calc(var(--pointed-tabs-border-width));
+}
+
+.PointedTabs > .bp3-tab-list {
+  border-bottom: var(--pointed-tabs-border-width) solid var(--tab-border-color);
+  line-height: 26px;
+}
+
+.PointedTabs > .bp3-tab-list > .bp3-tab {
+  color: var(--text-color) !important;
+  padding: 0 0.375em;
+  overflow: visible;
+  line-height: 26px;
+}
+.PointedTabs > .bp3-tab-list > *:not(:last-child) {
+  margin-right: 0.25em;
+}
+.PointedTabs > .bp3-tab-list > .TabGroupLabel {
+  margin-right: 0.5em;
+  color: var(--text-color-lighter);
+}
+.PointedTabs > .bp3-tab-list > .bp3-tab[aria-selected="true"] {
+  box-shadow: var(--tab-accent-color) 0 2px 0 inset !important;
+  background-color: var(--tab-background-color) !important;
+}
+.PointedTabs > .bp3-tab-list > .bp3-tab[aria-selected="true"]:after {
+  position: absolute;
+  display: block;
+  content: "";
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%) rotate(45deg);
+  background-color: var(--tab-background-color);
+  margin: 1px 0 0;
+  width: 0.57142857em;
+  height: 0.57142857em;
+  border: none;
+  border-bottom: var(--pointed-tabs-pointer-border-width) solid
+    var(--tab-border-color);
+  border-right: var(--pointed-tabs-pointer-border-width) solid
+    var(--tab-border-color);
+  z-index: 2;
+}
+.PointedTabs > .bp3-tab-list > .bp3-tab-indicator-wrapper {
+  display: none;
+}

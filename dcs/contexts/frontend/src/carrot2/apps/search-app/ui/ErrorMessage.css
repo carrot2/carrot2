@@ -1,0 +1,27 @@
+.Error {
+}
+
+.Error h3 {
+  margin-bottom: 1.5em;
+}
+
+.Error pre {
+  margin: 1.5em 0;
+  white-space: pre-wrap;
+}
+
+.Error a,
+.Error button.link {
+  padding: 0.0625em 0.125em;
+}
+
+.Error small {
+  opacity: 0.65;
+}
+
+dl.ResponseInfo dt {
+  position: absolute;
+}
+dl.ResponseInfo dd {
+  padding-left: 1em;
+}
