@@ -32,3 +32,10 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew check
+
+      - name: Archive distribution artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: |
+            distribution/build/distZip/*.zip
