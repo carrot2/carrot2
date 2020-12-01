@@ -24,6 +24,14 @@ figure.round img {
   border-radius: calc(0.125 * var(--leading));
 }
 
+body.dark figure .preview.light,
+body.dark figure img.light {
+  display: none;
+}
+body.light figure .preview.dark,
+body.light figure img.dark {
+  display: none;
+}
 
 .logo > a {
   text-decoration: none;
