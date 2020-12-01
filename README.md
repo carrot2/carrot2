@@ -12,7 +12,7 @@ groups like these:
 
 
 [![Travis Build Status](https://travis-ci.org/carrot2/carrot2.svg?branch=master)](https://travis-ci.org/carrot2/carrot2)
-![Github Build Status](https://github.com/actions/hello-world/workflows/Greet%20Everyone/badge.svg)
+![Github Build Status](https://github.com/carrot2/carrot2/workflows/Gradle%20Check/badge.svg)
 
 https://github.com/carrot2/carrot2/workflows/Gradle%20Check/badge.svg
 
