@@ -13,6 +13,7 @@ groups like these:
 
 [![Build Status](https://travis-ci.org/carrot2/carrot2.svg?branch=master)](https://travis-ci.org/carrot2/carrot2)
 
+https://github.com/carrot2/carrot2/workflows/Gradle%20Check/badge.svg
 
 Installation
 ------------
