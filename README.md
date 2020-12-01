@@ -11,7 +11,8 @@ groups like these:
 ![Search result titles and snippets and corresponding cluster labels (right).](doc/src/content/images/carrot2-intro-example-light.png "")
 
 
-[![Build Status](https://travis-ci.org/carrot2/carrot2.svg?branch=master)](https://travis-ci.org/carrot2/carrot2)
+[![Travis Build Status](https://travis-ci.org/carrot2/carrot2.svg?branch=master)](https://travis-ci.org/carrot2/carrot2)
+![Github Build Status](https://github.com/actions/hello-world/workflows/Greet%20Everyone/badge.svg)
 
 https://github.com/carrot2/carrot2/workflows/Gradle%20Check/badge.svg
 
