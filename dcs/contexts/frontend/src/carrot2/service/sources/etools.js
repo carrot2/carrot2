@@ -2,7 +2,7 @@ import { finishingPeriod } from "../../../carrotsearch/lang/humanize.js";
 
 // TODO: add support for aborting running requests a'la fetch API.
 export function etools(query, params) {
-  const service = true || process.env.NODE_ENV === "production" ? live : cached;
+  const service = process.env.NODE_ENV === "production" ? live : cached;
   return service(query, params).then(function (json) {
     return {
       query: json.request.query,
