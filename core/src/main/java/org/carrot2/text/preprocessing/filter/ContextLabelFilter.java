@@ -20,7 +20,7 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
  *
  * @see LabelFilterProcessor
  */
-public abstract class LabelFilter extends AttrComposite {
+public abstract class ContextLabelFilter extends AttrComposite {
   /**
    * Called to perform label filtering.
    *

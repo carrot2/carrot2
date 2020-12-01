@@ -10,7 +10,7 @@
  */
 package org.carrot2.text.preprocessing;
 
-import org.carrot2.language.LexicalData;
+import org.carrot2.language.StopwordFilter;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
 import org.carrot2.util.CharArrayUtils;
@@ -35,7 +35,7 @@ final class StopListMarker {
 
     final MutableCharArray mutableCharArray = new MutableCharArray("");
     char[] buffer = new char[128];
-    final LexicalData lexData = context.languageComponents.get(LexicalData.class);
+    final StopwordFilter lexData = context.languageComponents.get(StopwordFilter.class);
 
     for (int i = 0; i < wordImages.length; i++) {
       final char[] word = wordImages[i];

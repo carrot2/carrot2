@@ -10,13 +10,16 @@
  */
 package org.carrot2.language;
 
-/** Provides additional word and label filtering information for a given language. */
-// fragment-start{lexical-data}
-public interface LexicalData {
+/**
+ * A stop word filter.
+ *
+ * @see EphemeralDictionaries
+ * @since 4.1.0
+ */
+@FunctionalInterface
+// fragment-start{word-filter}
+public interface StopwordFilter {
   /** @return Return true if the provided term should be ignored in processing. */
   boolean ignoreWord(CharSequence word);
-
-  /** @return Return true if the label candidate should be ignored in processing. */
-  boolean ignoreLabel(CharSequence labelCandidate);
 }
-// fragment-end{lexical-data}
+// fragment-end{word-filter}

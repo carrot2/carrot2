@@ -38,16 +38,20 @@
        data-fragment="component-enumeration"></pre>
 
   <p>
-    The code above prints the following when executed, revealing interfaces of components
-    provided by the default provider for English (other languages omitted):
+    The code above prints the following when executed, revealing providers
+    and components supplied for the English language (other languages omitted):
   </p>
 
-  <pre data-language="none">Provider class: Carrot2 (English, Danish, Dutch, [...]
-  > English
-    Component: org.carrot2.language.Stemmer
-    Component: org.carrot2.language.Tokenizer
-    Component: org.carrot2.language.LexicalData
-    Component: org.carrot2.text.preprocessing.LabelFormatter
+  <pre data-language="none">  > English
+    [Provider: Carrot2 Core (Stemmers)]
+      Component: org.carrot2.language.Stemmer
+    [Provider: Carrot2 Core (Tokenizers)]
+      Component: org.carrot2.language.Tokenizer
+    [Provider: Carrot2 Core (Lexical Data)]
+      Component: org.carrot2.language.LabelFilter
+      Component: org.carrot2.language.StopwordFilter
+    [Provider: Carrot2 Core (Label Formatter)]
+      Component: org.carrot2.text.preprocessing.LabelFormatter
   [...]</pre>
 
   <p>
@@ -77,29 +81,42 @@
     <h2>Tweaking lexical data resources</h2>
 
     <p>
-      The <code>LexicalData</code> component is responsible
-      for telling the algorithm whether a term or a candidate cluster
+      Lexical components are responsible for telling the algorithm whether a term or a candidate cluster
       label should be ignored. Such ignorable elements typically include function
       words like prepositions, conjunctions or domain-specific boilerplate language that
       is not a good candidate for a cluster.
     </p>
 
-    <pre data-embed="%CORE%/org/carrot2/language/LexicalData.java"
-         data-fragment="lexical-data"></pre>
+    <p>
+      The <code>StopwordFilter</code> interface controls low-level filtering
+      of individual terms:
+    </p>
+
+    <pre data-embed="%CORE%/org/carrot2/language/StopwordFilter.java"
+         data-fragment="word-filter"></pre>
 
     <p>
-      The most common quality tuning step is modifying the
-      resources provided for the <code>LexicalData</code> component's
-      default implementation (<code>LexicalDataImpl</code>). This class
-      attempts to load two files (where the <i>lang</i> prefix is replaced with the
+      The <code>LabelFilter</code> interface controls low-level filtering
+      of undesired cluster labels.
+    </p>
+
+    <pre data-embed="%CORE%/org/carrot2/language/LabelFilter.java"
+         data-fragment="label-filter"></pre>
+
+    <p>
+      While both these components can be explicitly provided (or overriden) in a <code>LanguageData</code>
+      instance, the easiest and most common quality tuning step is to modify the
+      default implementation's existing text resources. Carrot<sup>2</sup> attempts to load
+      two files for each language (where the <i>lang</i> prefix is replaced with the
       name of the language the component is instantiated for):
     </p>
 
     <dl>
       <dt><i>lang</i>.stopwords.utf8</dt>
       <dd>
-        A plain-text list of words to ignore. Each line contains exactly one full word (token).
-        Something like the following:
+        A plain-text list of words to ignore. Each line contains exactly one word (token).
+        Entries in this dictionary are applied to tokens after case normalization and should be
+        lowercased, for example:
         <pre>a
 about
 above
@@ -109,9 +126,12 @@ across
 
       <dt><i>lang</i>.stoplabels.utf8</dt>
       <dd>
-        A plain-text list of Java regular expression patterns to ignore. Each line contains exactly
+        A plain-text list of regular expression patterns to ignore. Patterns
+        should be compatible with Java Pattern class specification. Each line contains exactly
         one expression that, if it matches the input label, causes the label to be discarded and
-        ignored during clustering. An example stop labels file could look like this:
+        ignored during clustering. Both the patterns and label candidates passed for matching
+        are case-sensitive. Case-insensitive patterns can be created with local pattern flags
+        as shown in the example stop labels file below:
         <pre>(?i)information (about|on).*
 (?i)(index|list) of.*
 ...</pre>
@@ -138,13 +158,33 @@ across
     </p>
   </section>
 
+  <section id="tweaking-ephemeral-dictionaries">
+    <h2>Ephemeral dictionaries (lexical filters)</h2>
+
+    <p>
+      When labels and stop words change frequently from request to request, reloading
+      a full set of lexical resources would be slow and impractical. Ephemeral dictionaries
+      (per-request filters) are compiled for each clustering call and layered on top
+      of the default language data. Please note that this adds some additional cost to each
+      clustering call.
+    </p>
+
+    <p>
+      In the following example, the clustering algorithm uses the default language data for
+      English but adds request-specific regular patterns to exclude undesirable labels:
+    </p>
+
+    <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
+         data-fragment="use-ephemeral-dictionary"></pre>
+  </section>
+
   <section id="tweaking-components-directly">
     <h2>Tweaking components directly</h2>
 
     <p>
-      It may be sometimes desirable to provide an entirely custom implementation of a given
-      preprocessing component. An instance of <code>LanguageComponents</code> class consists
-      of a set of components (interfaces) and suppliers providing implementations of these
+      When the default dictionaries fall short of requirements, a custom implementation of a given
+      preprocessing component may be required. An <code>LanguageComponents</code> instance consists
+      of a set of interfaces and suppliers providing implementations of these
       interfaces. We can override any of these suppliers, creating a custom language preprocessing
       pipeline.
     </p>
@@ -159,17 +199,17 @@ across
          data-fragment="custom-stemmer"></pre>
 
     <p>
-      We will also replace the default <code>LexicalData</code> implementation with simple custom
-      filtering based on hardcoded rules:
+      We will also replace the default <code>StopwordFilter</code> and <code>LabelFilter</code> components
+      with custom filters based on hardcoded rules:
     </p>
 
     <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
          data-fragment="custom-lexical-data"></pre>
 
     <p>
-      Note how the initialization of the <code>ignored</code> set is pulled out of the supplier.
-      The cost of setting up a heavy component (the supplier itself here) can be high but
-      once set up, suppliers should return instances of a given component quickly.
+      Note how the initialization of the <code>ignored</code> hash set is pulled out of the supplier.
+      The cost of setting up a heavy component (creating the hash set itself in this case) can be high but
+      once set up, suppliers should return instances of the component quickly.
     </p>
 
     <p>
@@ -179,7 +219,6 @@ across
 
     <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
          data-fragment="custom-overrides"></pre>
-
   </section>
 
   <section id="other-languages">

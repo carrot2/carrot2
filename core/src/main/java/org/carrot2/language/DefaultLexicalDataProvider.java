@@ -10,8 +10,12 @@
  */
 package org.carrot2.language;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Collections;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -32,7 +36,7 @@ public class DefaultLexicalDataProvider implements LanguageComponentsProvider {
 
   @Override
   public Set<Class<?>> componentTypes() {
-    return Collections.singleton(LexicalData.class);
+    return Set.of(StopwordFilter.class, LabelFilter.class);
   }
 
   @Override
@@ -44,17 +48,58 @@ public class DefaultLexicalDataProvider implements LanguageComponentsProvider {
     }
 
     String langPrefix = language.toLowerCase(Locale.ROOT);
-    LexicalData lexicalData =
-        new LexicalDataImpl(
-            resourceLookup, langPrefix + ".stopwords.utf8", langPrefix + ".stoplabels.utf8");
 
-    return Map.of(LexicalData.class, () -> lexicalData);
+    // Load and precompile legacy defaults.
+    return Map.of(
+        StopwordFilter.class, legacyPlainTextWordFilter(langPrefix, resourceLookup),
+        LabelFilter.class, legacyPlainTextLabelFilter(langPrefix, resourceLookup));
   }
 
   @Override
   public String name() {
-    return "Carrot2 Lexical Data ("
-        + String.join(", ", DefaultStemmersProvider.STEMMER_SUPPLIERS.keySet())
-        + ")";
+    return "Carrot2 Core (Lexical Data)";
+  }
+
+  public static Supplier<LabelFilter> legacyPlainTextLabelFilter(
+      String langPrefix, ResourceLookup resourceLookup) throws IOException {
+    DefaultDictionaryImpl attr = new DefaultDictionaryImpl();
+    Set<String> regexps =
+        readLines(resourceLookup, langPrefix.toLowerCase(Locale.ROOT) + ".stoplabels.utf8");
+    attr.regexp.set(regexps.toArray(String[]::new));
+    LabelFilter labelFilter = attr.compileLabelFilter();
+    return () -> labelFilter;
+  }
+
+  public static Supplier<StopwordFilter> legacyPlainTextWordFilter(
+      String langPrefix, ResourceLookup resourceLookup) throws IOException {
+    DefaultDictionaryImpl attr = new DefaultDictionaryImpl();
+    Set<String> words =
+        readLines(resourceLookup, langPrefix.toLowerCase(Locale.ROOT) + ".stopwords.utf8");
+    attr.exact.set(words.toArray(String[]::new));
+    StopwordFilter wordFilter1 = attr.compileStopwordFilter();
+    return () -> wordFilter1;
+  }
+
+  private static Set<String> readLines(ResourceLookup resourceLookup, String resource)
+      throws IOException {
+    try (InputStream is = resourceLookup.open(resource)) {
+      return readLines(new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)));
+    }
+  }
+
+  /**
+   * Loads words from a given resource (UTF-8, one word per line, #-starting lines are considered
+   * comments).
+   */
+  private static Set<String> readLines(BufferedReader reader) throws IOException {
+    final LinkedHashSet<String> words = new LinkedHashSet<>();
+    String line;
+    while ((line = reader.readLine()) != null) {
+      line = line.trim();
+      if (!line.startsWith("#") && !line.isEmpty()) {
+        words.add(line);
+      }
+    }
+    return words;
   }
 }

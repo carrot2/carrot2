@@ -55,9 +55,7 @@ public class AttrObjectArray<T extends AcceptingVisitor> extends Attr<List<T>> {
   public boolean isDefaultClass(Object value) {
     Objects.requireNonNull(value);
     T def = newDefaultEntryValue();
-    return def != null
-        && Objects.equals(def.getClass(), value.getClass())
-        && Objects.equals(clazz, value.getClass());
+    return def != null && Objects.equals(def.getClass(), value.getClass());
   }
 
   public T newDefaultEntryValue() {

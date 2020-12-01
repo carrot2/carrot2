@@ -75,6 +75,11 @@ public class ClusterServletTest extends AbstractServletTest {
         "extraUnusedAttr.response.json");
   }
 
+  @Test
+  public void testEphemeralDictionary() throws Exception {
+    verifyRequest("dictionary.request.json", "dictionary.response.json");
+  }
+
   private void verifyInvalidRequest(
       int expectedStatus, String requestResource, String responseResource) throws Exception {
     String requestData = resourceString(requestResource);

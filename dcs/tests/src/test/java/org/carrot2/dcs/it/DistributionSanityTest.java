@@ -11,7 +11,6 @@
 package org.carrot2.dcs.it;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermission;
@@ -34,7 +33,7 @@ public class DistributionSanityTest extends AbstractDistributionTest {
     try (Stream<Path> s = Files.walk(getDistributionDir())) {
       for (Path p : s.collect(Collectors.toList())) {
         if (p.getFileName().toString().endsWith(".sh")) {
-          String content = new String(Files.readAllBytes(p), StandardCharsets.UTF_8);
+          String content = Files.readString(p);
           if (content.indexOf('\r') >= 0) {
             throw new AssertionError(p + " contains carriage \r?");
           }

@@ -12,7 +12,6 @@ package org.carrot2.language.extras;
 
 import org.apache.lucene.analysis.id.IndonesianStemmer;
 import org.carrot2.language.ExtendedWhitespaceTokenizer;
-import org.carrot2.language.LexicalData;
 import org.carrot2.language.SingleLanguageComponentsProviderImpl;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
@@ -25,16 +24,11 @@ public class IndonesianLanguageComponents extends SingleLanguageComponentsProvid
   public static final String NAME = "Indonesian";
 
   public IndonesianLanguageComponents() {
-    super("Carrot2 (extras)", NAME);
+    super("Carrot2 (" + NAME + " support via Apache Lucene components)", NAME);
 
     registerResourceless(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
     registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
-    register(
-        LexicalData.class,
-        (language, resourceLookup) -> {
-          LexicalData lexicalData = loadLexicalData(language, resourceLookup);
-          return () -> lexicalData;
-        });
+    registerDefaultLexicalData();
     registerResourceless(Stemmer.class, () -> new LuceneStemmerAdapter(new IndonesianStemming()));
   }
 

@@ -25,4 +25,25 @@
     Changes to language resource files are
     not automatically detected or reloaded, a server restart is required for changes to take effect.
   </p>
+
+  <section id="tweaking-ephemeral-dictionaries">
+    <h2>Ephemeral dictionaries</h2>
+
+    <p>
+      All Carrot<sup>2</sup> algorithms provide support for
+      <a href="java-language-components.html#tweaking-ephemeral-dictionaries">
+      ephemeral dictionaries</a> via the Java API. These dictionaries can be used to provide
+      per-request filtering to exclude stop words or cluster labels. This functionality
+      is not part of the REST API as such but is a part of each
+      algorithm's set of parameters. The parameter is called the same (<code>dictionaries</code>) across
+      all algorithms by convention.
+    </p>
+
+    <p>
+      This example shows a request to the Lingo algorithm utilizing
+      both label and word filters to filter out certain undesirable labels:
+    </p>
+    <pre data-embed="./examples/cluster-request-dictionaries.json"></pre>
+
+  </section>
 </article>

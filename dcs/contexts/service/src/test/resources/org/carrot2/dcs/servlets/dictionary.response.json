@@ -1,0 +1,28 @@
+{
+  "clusters" : [
+    {
+      "labels" : [
+        "Group 1"
+      ],
+      "documents" : [
+        0,
+        1,
+        2
+      ],
+      "clusters" : [ ],
+      "score" : null
+    },
+    {
+      "labels" : [
+        "Group 3"
+      ],
+      "documents" : [
+        6,
+        7,
+        8
+      ],
+      "clusters" : [ ],
+      "score" : null
+    }
+  ]
+}

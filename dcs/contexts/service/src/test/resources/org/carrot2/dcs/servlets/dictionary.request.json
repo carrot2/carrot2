@@ -1,0 +1,28 @@
+{
+  "language": "English",
+  "algorithm": "Dummy",
+  "parameters": {
+    "groupSize": 3,
+    "dictionaries": {
+      "labelFilters": [{
+        "exact": ["Group 2"],
+        "regexp": ["Group (4|9)"]
+      }],
+      "wordFilters": [{
+        "exact": ["foo bar"]
+      }]
+    }
+  },
+  "documents": [
+    { "field": "value 1" },
+    { "field": "value 2" },
+    { "field": "value 3" },
+    { "field": "value 4" },
+    { "field": "value 5" },
+    { "field": "value 6" },
+    { "field": "value 7" },
+    { "field": "value 8" },
+    { "field": "value 9" },
+    { "field": "value 10" }
+  ]
+},

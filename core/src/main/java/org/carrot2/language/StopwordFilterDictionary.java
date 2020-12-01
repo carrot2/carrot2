@@ -10,14 +10,14 @@
  */
 package org.carrot2.language;
 
-public class AcceptAllLexicalData implements LexicalData {
-  @Override
-  public boolean ignoreWord(CharSequence word) {
-    return false;
-  }
+import org.carrot2.attrs.AcceptingVisitor;
 
-  @Override
-  public boolean ignoreLabel(CharSequence labelCandidate) {
-    return false;
-  }
+/**
+ * An attribute supplying a {@link StopwordFilter}.
+ *
+ * @see DefaultDictionaryImpl
+ * @see EphemeralDictionaries
+ */
+public interface StopwordFilterDictionary extends AcceptingVisitor {
+  StopwordFilter compileStopwordFilter();
 }

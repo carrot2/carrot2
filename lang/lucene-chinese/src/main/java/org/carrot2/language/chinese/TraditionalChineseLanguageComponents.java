@@ -14,7 +14,6 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.icu.segmentation.DefaultICUTokenizerConfig;
 import org.apache.lucene.analysis.icu.segmentation.ICUTokenizer;
 import org.apache.lucene.util.AttributeFactory;
-import org.carrot2.language.LexicalData;
 import org.carrot2.language.SingleLanguageComponentsProviderImpl;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
@@ -27,18 +26,13 @@ public class TraditionalChineseLanguageComponents extends SingleLanguageComponen
   public static final String NAME = "Chinese-Traditional";
 
   public TraditionalChineseLanguageComponents() {
-    super("Carrot2 (Traditional Chinese)", NAME);
+    super("Carrot2 (Traditional Chinese via Apache Lucene components)", NAME);
     registerResourceless(Stemmer.class, () -> (word) -> null);
     registerResourceless(
         Tokenizer.class,
         () -> new LuceneAnalyzerTokenizerAdapter(new TraditionalChineseAnalyzer()));
     registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(""));
-    register(
-        LexicalData.class,
-        (language, resourceLookup) -> {
-          LexicalData lexicalData = loadLexicalData(NAME, resourceLookup);
-          return () -> lexicalData;
-        });
+    registerDefaultLexicalData();
   }
 
   private static class TraditionalChineseAnalyzer extends Analyzer {

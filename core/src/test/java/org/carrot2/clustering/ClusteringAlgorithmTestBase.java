@@ -291,4 +291,10 @@ public abstract class ClusteringAlgorithmTestBase<E extends ClusteringAlgorithm 
           orderDocsByHash(c.getClusters());
         });
   }
+
+  protected static Stream<String> clusterLabels(List<Cluster<Document>> clusters) {
+    return clusters.stream()
+        .flatMap(c -> c.getLabels().stream())
+        .map(label -> label.toLowerCase(Locale.ROOT));
+  }
 }

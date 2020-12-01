@@ -26,7 +26,7 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
  * <p>See <a href="http://project.carrot2.org/publications/osinski-2003-lingo.pdf">this
  * document</a>, page 31 for a definition of a complete phrase.
  */
-public class CompleteLabelFilter extends LabelFilter {
+public class CompleteLabelFilter extends ContextLabelFilter {
   /** Enables or disables the truncated label filter. */
   public AttrBoolean enabled =
       attributes.register(

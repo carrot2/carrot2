@@ -1,0 +1,31 @@
+{
+  "language": "English",
+  "algorithm": "Lingo",
+  "parameters": {
+    "preprocessing": {
+      "phraseDfThreshold": 1,
+      "wordDfThreshold": 1
+    },
+    "dictionaries": {
+      "labelFilters": [{
+        "exact": ["Foo Bar"],
+        "regexp": [
+          "(?).+BadLabel.+",
+          "(?).+[0-9]{2}.+"
+        ]
+      }],
+      "wordFilters": [{
+        "exact": [
+          "chocolate",
+          "pralines"
+        ]
+      }]
+    }
+  },
+  "documents": [
+    { "field": "foo bar" },
+    { "field": "bar" },
+    { "field": "foo baz" },
+    { "field": "foo bar" }
+  ]
+}

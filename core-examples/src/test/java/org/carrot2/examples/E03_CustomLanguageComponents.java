@@ -11,6 +11,7 @@
 package org.carrot2.examples;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.function.Supplier;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.icu.segmentation.DefaultICUTokenizerConfig;
@@ -27,10 +29,12 @@ import org.apache.lucene.util.AttributeFactory;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
+import org.carrot2.language.DefaultDictionaryImpl;
+import org.carrot2.language.LabelFilter;
 import org.carrot2.language.LanguageComponents;
 import org.carrot2.language.LanguageComponentsProvider;
-import org.carrot2.language.LexicalData;
 import org.carrot2.language.Stemmer;
+import org.carrot2.language.StopwordFilter;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.language.extras.LuceneAnalyzerTokenizerAdapter;
 import org.carrot2.text.preprocessing.LabelFormatter;
@@ -60,16 +64,25 @@ public class E03_CustomLanguageComponents {
     // fragment-start{component-enumeration}
     ServiceLoader<LanguageComponentsProvider> providers =
         ServiceLoader.load(LanguageComponentsProvider.class);
-    for (LanguageComponentsProvider prov : providers) {
-      System.out.println("Provider class: " + prov.name());
 
-      for (String language : prov.languages()) {
-        System.out.println("  > " + language);
-        for (Class<?> componentClass : prov.componentTypes()) {
-          System.out.println("    Component: " + componentClass.getName());
-        }
+    Map<String, List<LanguageComponentsProvider>> langToProviders = new TreeMap<>();
+    for (LanguageComponentsProvider prov : providers) {
+      for (String lang : prov.languages()) {
+        langToProviders.computeIfAbsent(lang, (k) -> new ArrayList<>()).add(prov);
       }
     }
+
+    langToProviders.forEach(
+        (language, provList) -> {
+          System.out.println("  > " + language);
+          provList.forEach(
+              provider -> {
+                System.out.println("    [Provider: " + provider.name() + "]");
+                for (Class<?> componentClass : provider.componentTypes()) {
+                  System.out.println("      Component: " + componentClass.getName());
+                }
+              });
+        });
     // fragment-end{component-enumeration}
   }
 
@@ -97,6 +110,39 @@ public class E03_CustomLanguageComponents {
   }
 
   @Test
+  public void useEphemeralDictionaries() throws IOException {
+    // It is often the case that clustering should be run against
+    // temporary, ephemeral lexical data. In this example we will supply such resources
+    // directly to the algorithm. Please note that there is a non-zero cost to compile
+    // ephemeral dictionaries for each clustering call. If these
+    // resources remain static, the LanguageComponents object should be overridden or modified
+    // instead.
+
+    // fragment-start{use-ephemeral-dictionary}
+    // Load the default dictionaries for English.
+    LanguageComponents english =
+        LanguageComponents.loader()
+            .limitToLanguages("English")
+            .limitToAlgorithms(new LingoClusteringAlgorithm())
+            .load()
+            .language("English");
+
+    LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
+
+    // Create an ephemeral label filter by providing a dictionary with a
+    // few regexp exclusion patterns.
+    DefaultDictionaryImpl labelFilter = new DefaultDictionaryImpl();
+    labelFilter.regexp.set("(?i).*data.*", "(?i).*mining.*");
+    algorithm.dictionaries.labelFilters.set(List.of(labelFilter));
+    // fragment-end{use-ephemeral-dictionary}
+
+    algorithm.desiredClusterCount.set(10);
+    List<Cluster<Document>> clusters = algorithm.cluster(ExamplesData.documentStream(), english);
+    System.out.println("Clusters:");
+    ExamplesCommon.printClusters(clusters);
+  }
+
+  @Test
   public void overrideDefaultComponents() throws IOException {
     // There are language-specific components required for clustering and each algorithm may
     // require a different sub-set of these. Typically, algorithms will require
@@ -106,8 +152,9 @@ public class E03_CustomLanguageComponents {
     // requirements. Here, we modify the stemmer and lexical data for the default English
     // component set, leaving any other components as they were originally defined for English.
 
-    // We override the suppliers of Stemmer and LexicalData interfaces. These suppliers must be
-    // thread-safe, but the instances of corresponding components will not be reused across threads.
+    // We override the suppliers of stemming, stop word filtering and label filtering interfaces.
+    // These suppliers must be thread-safe, but the instances of corresponding components will not
+    // be reused across threads.
 
     // fragment-start{custom-stemmer}
     Supplier<Stemmer> stemmerSupplier;
@@ -115,21 +162,19 @@ public class E03_CustomLanguageComponents {
     // fragment-end{custom-stemmer}
 
     // fragment-start{custom-lexical-data}
+    // Ignore words from the list and anything shorter than 4 characters.
     final Set<String> ignored = new HashSet<>(Arrays.asList("from", "what"));
-    Supplier<LexicalData> lexicalDataSupplier =
-        () ->
-            new LexicalData() {
-              @Override
-              public boolean ignoreLabel(CharSequence candidate) {
-                // Ignore any label that has a substring 'data' in it.
-                return candidate.toString().toLowerCase(Locale.ROOT).contains("data");
-              }
+    final StopwordFilter wordFilter =
+        (word) -> {
+          // Ignore any word shorter than 4 characters or on the explicit exclusion list.
+          return word.length() < 4 || ignored.contains(word.toString());
+        };
 
-              @Override
-              public boolean ignoreWord(CharSequence word) {
-                return word.length() < 4 || ignored.contains(word.toString());
-              }
-            };
+    final LabelFilter labelFilter =
+        (label) -> {
+          // Ignore any label that has a substring 'data' in it.
+          return label.toString().toLowerCase(Locale.ROOT).contains("data");
+        };
     // fragment-end{custom-lexical-data}
 
     // fragment-start{custom-overrides}
@@ -138,7 +183,10 @@ public class E03_CustomLanguageComponents {
             .load()
             .language("English")
             .override(Stemmer.class, stemmerSupplier)
-            .override(LexicalData.class, lexicalDataSupplier);
+            // Word and label filters are thread-safe here so we
+            // supply the same instance all the time.
+            .override(StopwordFilter.class, () -> wordFilter)
+            .override(LabelFilter.class, () -> labelFilter);
     // fragment-end{custom-overrides}
 
     LingoClusteringAlgorithm algorithm = new LingoClusteringAlgorithm();
@@ -160,23 +208,19 @@ public class E03_CustomLanguageComponents {
         Stemmer.class,
         (Supplier<Stemmer>) () -> ((word) -> word.toString().toLowerCase(Locale.ROOT)));
 
-    suppliers.put(
-        LexicalData.class,
-        () ->
-            new LexicalData() {
-              Set<String> ignored = new HashSet<>(Arrays.asList("from", "what"));
+    final Set<String> ignored = new HashSet<>(Arrays.asList("from", "what"));
+    final StopwordFilter wordFilter =
+        (word) -> {
+          return word.length() <= 3 || ignored.contains(word.toString());
+        };
+    suppliers.put(StopwordFilter.class, () -> wordFilter);
 
-              @Override
-              public boolean ignoreLabel(CharSequence labelCandidate) {
-                // Ignore any label that has a substring 'data' in it; example.
-                return labelCandidate.toString().toLowerCase(Locale.ROOT).contains("data");
-              }
-
-              @Override
-              public boolean ignoreWord(CharSequence word) {
-                return word.length() <= 3 || ignored.contains(word.toString());
-              }
-            });
+    final LabelFilter labelFilter =
+        (label) -> {
+          // Ignore any label that has a substring 'data' in it.
+          return label.toString().toLowerCase(Locale.ROOT).contains("data");
+        };
+    suppliers.put(LabelFilter.class, () -> labelFilter);
 
     // Use an ICU analyzer from Lucene and an adapter to Tokenizer interface.
     class ICUAnalyzer extends Analyzer {

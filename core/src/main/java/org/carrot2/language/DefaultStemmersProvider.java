@@ -91,6 +91,6 @@ public class DefaultStemmersProvider implements LanguageComponentsProvider {
 
   @Override
   public String name() {
-    return "Carrot2 Stemmers (" + String.join(", ", STEMMER_SUPPLIERS.keySet()) + ")";
+    return "Carrot2 Core (Stemmers)";
   }
 }

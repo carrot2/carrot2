@@ -42,3 +42,11 @@ span.token > a {
 .attribute.api dd {
   font-family: var(--monospace-font-family);
 }
+.attribute.api pre code {
+  background-color: inherit;
+  box-shadow: none;
+  border: none;
+}
+
+.attribute.api pre {
+}

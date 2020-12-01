@@ -11,7 +11,6 @@
 package org.carrot2.language.japanese;
 
 import org.apache.lucene.analysis.ja.JapaneseAnalyzer;
-import org.carrot2.language.LexicalData;
 import org.carrot2.language.SingleLanguageComponentsProviderImpl;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
@@ -24,16 +23,11 @@ public class JapaneseLanguageComponents extends SingleLanguageComponentsProvider
   public static final String NAME = "Japanese";
 
   public JapaneseLanguageComponents() {
-    super("Carrot2 (Japanese)", NAME);
+    super("Carrot2 (Japanese via Apache Lucene components)", NAME);
     registerResourceless(Stemmer.class, () -> (word) -> null);
     registerResourceless(
         Tokenizer.class, () -> new LuceneAnalyzerTokenizerAdapter(new JapaneseAnalyzer()));
     registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
-    register(
-        LexicalData.class,
-        (language, resourceLookup) -> {
-          LexicalData lexicalData = loadLexicalData(NAME, resourceLookup);
-          return () -> lexicalData;
-        });
+    registerDefaultLexicalData();
   }
 }

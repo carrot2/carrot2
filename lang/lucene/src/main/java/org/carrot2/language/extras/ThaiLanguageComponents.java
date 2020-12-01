@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.Reader;
 import org.apache.lucene.analysis.th.ThaiTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.carrot2.language.LexicalData;
 import org.carrot2.language.SingleLanguageComponentsProviderImpl;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
@@ -27,16 +26,11 @@ public class ThaiLanguageComponents extends SingleLanguageComponentsProviderImpl
   public static final String NAME = "Thai";
 
   public ThaiLanguageComponents() {
-    super("Carrot2 (extras)", NAME);
+    super("Carrot2 (" + NAME + " support via Apache Lucene components)", NAME);
 
     registerResourceless(Tokenizer.class, ThaiTokenizerAdapter::new);
     registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
-    register(
-        LexicalData.class,
-        (language, resourceLookup) -> {
-          LexicalData lexicalData = loadLexicalData(language, resourceLookup);
-          return () -> lexicalData;
-        });
+    registerDefaultLexicalData();
     registerResourceless(Stemmer.class, IdentityStemmer::new);
   }
 

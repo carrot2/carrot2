@@ -37,9 +37,12 @@ import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.SharedInfrastructure;
+import org.carrot2.internal.clustering.ClusteringAlgorithmUtilities;
+import org.carrot2.language.EphemeralDictionaries;
+import org.carrot2.language.LabelFilter;
 import org.carrot2.language.LanguageComponents;
-import org.carrot2.language.LexicalData;
 import org.carrot2.language.Stemmer;
+import org.carrot2.language.StopwordFilter;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.math.mahout.function.Functions;
 import org.carrot2.math.mahout.matrix.DoubleMatrix1D;
@@ -64,7 +67,12 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
     implements ClusteringAlgorithm {
   private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS =
       new HashSet<>(
-          Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class, LabelFormatter.class));
+          Arrays.asList(
+              Stemmer.class,
+              Tokenizer.class,
+              StopwordFilter.class,
+              LabelFilter.class,
+              LabelFormatter.class));
 
   public static final String NAME = "Bisecting K-Means";
 
@@ -146,6 +154,18 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
             .defaultValue(BasicPreprocessingPipeline::new));
   }
 
+  /**
+   * Per-request overrides of language components (dictionaries).
+   *
+   * @since 4.1.0
+   */
+  public EphemeralDictionaries dictionaries;
+
+  {
+    ClusteringAlgorithmUtilities.registerDictionaries(
+        attributes, () -> dictionaries, (v) -> dictionaries = v);
+  }
+
   @Override
   public Set<Class<?>> requiredLanguageComponents() {
     return REQUIRED_LANGUAGE_COMPONENTS;
@@ -155,6 +175,11 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
   public <T extends Document> List<Cluster<T>> cluster(
       Stream<? extends T> docStream, LanguageComponents languageComponents) {
     List<T> documents = docStream.collect(Collectors.toList());
+
+    // Apply ephemeral dictionaries.
+    if (this.dictionaries != null) {
+      languageComponents = this.dictionaries.override(languageComponents);
+    }
 
     // Preprocessing of documents
     final PreprocessingContext preprocessingContext =

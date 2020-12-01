@@ -47,8 +47,6 @@ public class DefaultTokenizersProvider implements LanguageComponentsProvider {
 
   @Override
   public String name() {
-    return "Carrot2 Tokenizers ("
-        + String.join(", ", DefaultStemmersProvider.STEMMER_SUPPLIERS.keySet())
-        + ")";
+    return "Carrot2 Core (Tokenizers)";
   }
 }

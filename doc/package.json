@@ -1,7 +1,7 @@
 {
   "name": "gatsby-starter-apidocs",
   "private": true,
-  "description": "Starter project for the Gatsby APIdocs system. Clone, customize and start documenting.",
+  "description": "Carrot2 manual.",
   "version": "1.0.0",
   "scripts": {
     "build": "gatsby build --prefix-paths",

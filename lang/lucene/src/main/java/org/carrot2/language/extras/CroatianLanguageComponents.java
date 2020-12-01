@@ -11,7 +11,6 @@
 package org.carrot2.language.extras;
 
 import org.carrot2.language.ExtendedWhitespaceTokenizer;
-import org.carrot2.language.LexicalData;
 import org.carrot2.language.SingleLanguageComponentsProviderImpl;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
@@ -23,16 +22,11 @@ public class CroatianLanguageComponents extends SingleLanguageComponentsProvider
   public static final String NAME = "Croatian";
 
   public CroatianLanguageComponents() {
-    super("Carrot2 (extras)", NAME);
+    super("Carrot2 (" + NAME + " support via Apache Lucene components)", NAME);
 
     registerResourceless(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
     registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
-    register(
-        LexicalData.class,
-        (language, resourceLookup) -> {
-          LexicalData lexicalData = loadLexicalData(language, resourceLookup);
-          return () -> lexicalData;
-        });
+    registerDefaultLexicalData();
     registerResourceless(Stemmer.class, IdentityStemmer::new);
   }
 }

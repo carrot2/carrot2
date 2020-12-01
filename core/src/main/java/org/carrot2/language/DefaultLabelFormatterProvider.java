@@ -49,8 +49,6 @@ public class DefaultLabelFormatterProvider implements LanguageComponentsProvider
 
   @Override
   public String name() {
-    return "Carrot2 Label Formatter ("
-        + String.join(", ", DefaultStemmersProvider.STEMMER_SUPPLIERS.keySet())
-        + ")";
+    return "Carrot2 Core (Label Formatter)";
   }
 }

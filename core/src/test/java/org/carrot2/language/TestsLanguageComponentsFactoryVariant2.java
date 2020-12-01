@@ -16,24 +16,15 @@ import org.carrot2.text.preprocessing.LabelFormatterImpl;
 public class TestsLanguageComponentsFactoryVariant2 extends SingleLanguageComponentsProviderImpl {
   public static final String NAME = "_tests_language_variant2_";
 
-  private static final class LexicalDataImpl implements LexicalData {
-    @Override
-    public boolean ignoreWord(CharSequence word) {
-      return word.toString().contains("stop");
-    }
-
-    @Override
-    public boolean ignoreLabel(CharSequence formattedLabel) {
-      return formattedLabel.toString().startsWith("stoplabel");
-    }
-  }
-
   public TestsLanguageComponentsFactoryVariant2() {
     super("test provider: " + NAME, NAME);
 
     registerResourceless(Stemmer.class, this::createStemmer);
     registerResourceless(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
-    registerResourceless(LexicalData.class, LexicalDataImpl::new);
+    StopwordFilter wordFilter = (word) -> word.toString().contains("stop");
+    registerResourceless(StopwordFilter.class, () -> wordFilter);
+    LabelFilter labelFilter = (label) -> label.toString().startsWith("stoplabel");
+    registerResourceless(LabelFilter.class, () -> labelFilter);
     registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
   }
 

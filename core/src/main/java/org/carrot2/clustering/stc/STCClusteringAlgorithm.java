@@ -37,9 +37,12 @@ import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.SharedInfrastructure;
 import org.carrot2.clustering.stc.GeneralizedSuffixTree.SequenceBuilder;
+import org.carrot2.internal.clustering.ClusteringAlgorithmUtilities;
+import org.carrot2.language.EphemeralDictionaries;
+import org.carrot2.language.LabelFilter;
 import org.carrot2.language.LanguageComponents;
-import org.carrot2.language.LexicalData;
 import org.carrot2.language.Stemmer;
+import org.carrot2.language.StopwordFilter;
 import org.carrot2.language.TokenTypeUtils;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.BasicPreprocessingPipeline;
@@ -55,7 +58,12 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
 public final class STCClusteringAlgorithm extends AttrComposite implements ClusteringAlgorithm {
   private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS =
       new HashSet<>(
-          Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class, LabelFormatter.class));
+          Arrays.asList(
+              Stemmer.class,
+              Tokenizer.class,
+              StopwordFilter.class,
+              LabelFilter.class,
+              LabelFormatter.class));
 
   public static final String NAME = "STC";
 
@@ -220,6 +228,18 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
             .defaultValue(BasicPreprocessingPipeline::new));
   }
 
+  /**
+   * Per-request overrides of language components (dictionaries).
+   *
+   * @since 4.1.0
+   */
+  public EphemeralDictionaries dictionaries;
+
+  {
+    ClusteringAlgorithmUtilities.registerDictionaries(
+        attributes, () -> dictionaries, (v) -> dictionaries = v);
+  }
+
   private LabelFormatter labelFormatter;
 
   /**
@@ -266,6 +286,11 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       Stream<? extends T> docStream, LanguageComponents languageComponents) {
     List<T> documents = docStream.collect(Collectors.toList());
     List<Cluster<T>> clusters = new ArrayList<>();
+
+    // Apply ephemeral dictionaries.
+    if (this.dictionaries != null) {
+      languageComponents = this.dictionaries.override(languageComponents);
+    }
 
     /*
      * Step 1. Preprocessing: tokenization, stop word marking and stemming (if available).
@@ -389,17 +414,17 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
      * First we sort by the base clusters score, then pick the top-K entries,
      * filtering out any stop labels on the way.
      */
-    Collections.sort(candidates, (c1, c2) -> -Float.compare(c1.score, c2.score));
+    candidates.sort((c1, c2) -> -Float.compare(c1.score, c2.score));
 
     j = 0;
-    LexicalData lexicalData = context.languageComponents.get(LexicalData.class);
+    LabelFilter labelFilter = context.languageComponents.get(LabelFilter.class);
     int maxBaseClusters = this.maxBaseClusters.get();
     for (int max = candidates.size(), i = 0; i < max && j < maxBaseClusters; i++) {
       ClusterCandidate cc = candidates.get(i);
       // Build the candidate cluster's label for filtering. This may be costly so
       // we only do this for base clusters which are promoted to merging phase.
       assert cc.phrases.size() == 1;
-      if (!lexicalData.ignoreLabel(buildLabel(cc.phrases.get(0)))) {
+      if (!labelFilter.ignoreLabel(buildLabel(cc.phrases.get(0)))) {
         candidates.set(j++, cc);
       }
     }
@@ -605,8 +630,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     markOverlappingPhrases(context, phrases);
     phrases.removeIf(NOT_SELECTED);
 
-    Collections.sort(
-        phrases,
+    phrases.sort(
         (p1, p2) -> {
           if (p1.coverage < p2.coverage) return 1;
           if (p1.coverage > p2.coverage) return -1;

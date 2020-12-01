@@ -15,7 +15,6 @@ import java.io.Reader;
 import java.util.regex.Pattern;
 import org.apache.lucene.analysis.cn.smart.HMMChineseTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.carrot2.language.LexicalData;
 import org.carrot2.language.SingleLanguageComponentsProviderImpl;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
@@ -28,16 +27,11 @@ public class SimplifiedChineseLanguageComponents extends SingleLanguageComponent
   public static final String NAME = "Chinese-Simplified";
 
   public SimplifiedChineseLanguageComponents() {
-    super("Carrot2 (Simplified Chinese)", NAME);
+    super("Carrot2 (Simplified Chinese via Apache Lucene components)", NAME);
     registerResourceless(Stemmer.class, () -> (word) -> null);
     registerResourceless(Tokenizer.class, ChineseTokenizerAdapter::new);
     registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(""));
-    register(
-        LexicalData.class,
-        (language, resourceLookup) -> {
-          LexicalData lexicalData = loadLexicalData(NAME, resourceLookup);
-          return () -> lexicalData;
-        });
+    registerDefaultLexicalData();
   }
 
   private static final class ChineseTokenizerAdapter implements Tokenizer {

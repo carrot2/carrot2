@@ -27,9 +27,12 @@ import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.Document;
 import org.carrot2.clustering.SharedInfrastructure;
+import org.carrot2.internal.clustering.ClusteringAlgorithmUtilities;
+import org.carrot2.language.EphemeralDictionaries;
+import org.carrot2.language.LabelFilter;
 import org.carrot2.language.LanguageComponents;
-import org.carrot2.language.LexicalData;
 import org.carrot2.language.Stemmer;
+import org.carrot2.language.StopwordFilter;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.CompletePreprocessingPipeline;
 import org.carrot2.text.preprocessing.LabelFormatter;
@@ -49,7 +52,12 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
 
   private static final Set<Class<?>> REQUIRED_LANGUAGE_COMPONENTS =
       new HashSet<>(
-          Arrays.asList(Stemmer.class, Tokenizer.class, LexicalData.class, LabelFormatter.class));
+          Arrays.asList(
+              Stemmer.class,
+              Tokenizer.class,
+              StopwordFilter.class,
+              LabelFilter.class,
+              LabelFormatter.class));
 
   /**
    * Balance between cluster score and size during cluster sorting. Value equal to 0.0 will cause
@@ -120,6 +128,18 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
   }
 
   /**
+   * Per-request overrides of language components (dictionaries).
+   *
+   * @since 4.1.0
+   */
+  public EphemeralDictionaries dictionaries;
+
+  {
+    ClusteringAlgorithmUtilities.registerDictionaries(
+        attributes, () -> dictionaries, (v) -> dictionaries = v);
+  }
+
+  /**
    * Query terms used to retrieve documents being clustered. The query is used as a hint to avoid
    * creating trivial clusters consisting only of query words.
    */
@@ -136,6 +156,11 @@ public class LingoClusteringAlgorithm extends AttrComposite implements Clusterin
   public <T extends Document> List<Cluster<T>> cluster(
       Stream<? extends T> docStream, LanguageComponents languageComponents) {
     List<T> documents = docStream.collect(Collectors.toList());
+
+    // Apply ephemeral dictionaries.
+    if (this.dictionaries != null) {
+      languageComponents = this.dictionaries.override(languageComponents);
+    }
 
     // Preprocessing of documents
     final PreprocessingContext context =

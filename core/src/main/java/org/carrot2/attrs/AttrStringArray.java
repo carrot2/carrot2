@@ -23,6 +23,14 @@ public class AttrStringArray extends Attr<String[]> {
     super.set(Stream.concat(Stream.of(value), Stream.of(values)).toArray(String[]::new));
   }
 
+  /**
+   * @return Return true if the value of this attribute is {@code null} or an empty array.
+   * @since 4.1.0
+   */
+  public boolean isEmpty() {
+    return get() == null || get().length == 0;
+  }
+
   public static class Builder extends BuilderScaffold<String[]> {
     public AttrStringArray defaultValue(String value, String... values) {
       return defaultValue(

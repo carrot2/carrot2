@@ -43,8 +43,11 @@ public class LanguageComponentsTest extends TestBase {
       LanguageComponents actual = CachedLangComponents.loadCached(lang);
       Assertions.assertThat(actual.get(Tokenizer.class)).as("Tokenizer for " + lang).isNotNull();
       Assertions.assertThat(actual.get(Stemmer.class)).as("Stemmer for " + lang).isNotNull();
-      Assertions.assertThat(actual.get(LexicalData.class))
-          .as("Lexical data for " + lang)
+      Assertions.assertThat(actual.get(StopwordFilter.class))
+          .as("Word filter for " + lang)
+          .isNotNull();
+      Assertions.assertThat(actual.get(LabelFilter.class))
+          .as("Word filter for " + lang)
           .isNotNull();
     }
   }
