@@ -10,16 +10,14 @@
  */
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.attrs.AttrBoolean;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
 /** Removes labels that consist only of query words. */
 public class QueryLabelFilter extends SingleLabelFilterBase {
-  /** Enables or disables the query label filter. */
-  public AttrBoolean enabled =
-      attributes.register(
-          "enabled", AttrBoolean.builder().label("Query label filter enabled").defaultValue(true));
+  public QueryLabelFilter() {
+    super("Query label filter enabled");
+  }
 
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {
@@ -42,10 +40,5 @@ public class QueryLabelFilter extends SingleLabelFilterBase {
 
   private final boolean isQueryWord(short flag) {
     return (flag & Tokenizer.TF_QUERY_WORD) != 0;
-  }
-
-  @Override
-  public boolean isEnabled() {
-    return enabled.get();
   }
 }

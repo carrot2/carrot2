@@ -14,6 +14,10 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
 
 /** A base for {@link ContextLabelFilter} implementations that handle each label independently. */
 public abstract class SingleLabelFilterBase extends ContextLabelFilter {
+  SingleLabelFilterBase(String label) {
+    super(label);
+  }
+
   public void filter(
       PreprocessingContext context, boolean[] acceptedStems, boolean[] acceptedPhrases) {
     final int[] mostFrequentOriginalWordIndex = context.allStems.mostFrequentOriginalWordIndex;

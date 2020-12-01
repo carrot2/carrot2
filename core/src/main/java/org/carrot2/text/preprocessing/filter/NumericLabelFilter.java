@@ -10,17 +10,14 @@
  */
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.attrs.AttrBoolean;
 import org.carrot2.language.Tokenizer;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
 /** Removes labels that start with a numeric token. */
 public class NumericLabelFilter extends SingleLabelFilterBase {
-  /** Enables or disables the numeric label filter. */
-  public AttrBoolean enabled =
-      attributes.register(
-          "enabled",
-          AttrBoolean.builder().label("Numeric label filter enabled").defaultValue(true));
+  public NumericLabelFilter() {
+    super("Numeric label filter enabled");
+  }
 
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {
@@ -35,12 +32,7 @@ public class NumericLabelFilter extends SingleLabelFilterBase {
     return !isNumeric(context.allWords.type[wordIndex]);
   }
 
-  private final boolean isNumeric(short type) {
+  private boolean isNumeric(short type) {
     return (type & Tokenizer.TYPE_MASK) == Tokenizer.TT_NUMERIC;
-  }
-
-  @Override
-  public boolean isEnabled() {
-    return enabled.get();
   }
 }

@@ -10,7 +10,6 @@
  */
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.attrs.AttrBoolean;
 import org.carrot2.language.LabelFilter;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.PreprocessingContext;
@@ -20,13 +19,12 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
  * filtered out by {@link org.carrot2.language.EphemeralDictionaries}.
  */
 public class StopLabelFilter extends SingleLabelFilterBase {
-  /** Enables or disables the stop label filter. */
-  public AttrBoolean enabled =
-      attributes.register(
-          "enabled", AttrBoolean.builder().label("Stop label filter enabled").defaultValue(true));
-
   private LabelFormatter labelFormatter;
   private LabelFilter labelFilter;
+
+  public StopLabelFilter() {
+    super("Stop label filter enabled");
+  }
 
   @Override
   public void filter(
@@ -47,10 +45,5 @@ public class StopLabelFilter extends SingleLabelFilterBase {
   public boolean acceptWord(PreprocessingContext context, int wordIndex) {
     final String formattedLabel = context.format(labelFormatter, wordIndex);
     return !labelFilter.ignoreLabel(formattedLabel);
-  }
-
-  @Override
-  public boolean isEnabled() {
-    return enabled.get();
   }
 }

@@ -18,7 +18,14 @@ import org.carrot2.attrs.AttrObject;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllLabels;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllPhrases;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllWords;
-import org.carrot2.text.preprocessing.filter.*;
+import org.carrot2.text.preprocessing.filter.CompleteLabelFilter;
+import org.carrot2.text.preprocessing.filter.ContextLabelFilter;
+import org.carrot2.text.preprocessing.filter.GenitiveLabelFilter;
+import org.carrot2.text.preprocessing.filter.MinLengthLabelFilter;
+import org.carrot2.text.preprocessing.filter.NumericLabelFilter;
+import org.carrot2.text.preprocessing.filter.QueryLabelFilter;
+import org.carrot2.text.preprocessing.filter.StopLabelFilter;
+import org.carrot2.text.preprocessing.filter.StopWordLabelFilter;
 
 /**
  * Applies basic filtering to words and phrases to produce candidates for cluster labels. Filtering

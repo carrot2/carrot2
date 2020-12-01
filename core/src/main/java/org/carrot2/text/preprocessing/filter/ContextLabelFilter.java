@@ -10,6 +10,7 @@
  */
 package org.carrot2.text.preprocessing.filter;
 
+import org.carrot2.attrs.AttrBoolean;
 import org.carrot2.attrs.AttrComposite;
 import org.carrot2.text.preprocessing.LabelFilterProcessor;
 import org.carrot2.text.preprocessing.PreprocessingContext;
@@ -21,6 +22,15 @@ import org.carrot2.text.preprocessing.PreprocessingContext;
  * @see LabelFilterProcessor
  */
 public abstract class ContextLabelFilter extends AttrComposite {
+  /** Enables or disables this filter. */
+  public final AttrBoolean enabled;
+
+  protected ContextLabelFilter(String enabledLabel) {
+    enabled =
+        attributes.register(
+            "enabled", AttrBoolean.builder().label(enabledLabel).defaultValue(true));
+  }
+
   /**
    * Called to perform label filtering.
    *
@@ -33,5 +43,8 @@ public abstract class ContextLabelFilter extends AttrComposite {
   public abstract void filter(
       PreprocessingContext context, boolean[] acceptedStems, boolean[] acceptedPhrases);
 
-  public abstract boolean isEnabled();
+  /** @return {@code true} if the filter is enabled. */
+  public final boolean isEnabled() {
+    return enabled.get();
+  }
 }

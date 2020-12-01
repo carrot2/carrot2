@@ -12,16 +12,13 @@ package org.carrot2.text.preprocessing.filter;
 
 import static org.carrot2.language.TokenTypeUtils.isCommon;
 
-import org.carrot2.attrs.AttrBoolean;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
 /** Removes labels that start or end in a stop word. */
 public class StopWordLabelFilter extends SingleLabelFilterBase {
-  /** Enables or disables the stop word label filter. */
-  public AttrBoolean enabled =
-      attributes.register(
-          "enabled",
-          AttrBoolean.builder().label("Stop word label filter enabled").defaultValue(true));
+  public StopWordLabelFilter() {
+    super("Stop word label filter enabled");
+  }
 
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {
@@ -35,10 +32,5 @@ public class StopWordLabelFilter extends SingleLabelFilterBase {
   @Override
   public boolean acceptWord(PreprocessingContext context, int wordIndex) {
     return !isCommon(context.allWords.type[wordIndex]);
-  }
-
-  @Override
-  public boolean isEnabled() {
-    return enabled.get();
   }
 }

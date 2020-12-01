@@ -10,22 +10,20 @@
  */
 package org.carrot2.text.preprocessing.filter;
 
-import org.carrot2.attrs.AttrBoolean;
 import org.carrot2.attrs.AttrInteger;
 import org.carrot2.text.preprocessing.PreprocessingContext;
 
 /** Removes labels whose length in characters is smaller than the provided value. */
 public class MinLengthLabelFilter extends SingleLabelFilterBase {
-  /** Enables or disables the truncated label filter. */
-  public AttrBoolean enabled =
-      attributes.register(
-          "enabled",
-          AttrBoolean.builder().label("Minimum label length filter enabled").defaultValue(true));
 
   /** Minimum required label length, in characters, inclusive. */
   public AttrInteger minLength =
       attributes.register(
           "minLength", AttrInteger.builder().label("Minimum label length").defaultValue(3));
+
+  public MinLengthLabelFilter() {
+    super("Minimum label length filter enabled");
+  }
 
   @Override
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {
@@ -46,10 +44,5 @@ public class MinLengthLabelFilter extends SingleLabelFilterBase {
   @Override
   public boolean acceptWord(PreprocessingContext context, int wordIndex) {
     return context.allWords.image[wordIndex].length >= minLength.get();
-  }
-
-  @Override
-  public boolean isEnabled() {
-    return enabled.get();
   }
 }
