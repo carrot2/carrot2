@@ -2,21 +2,18 @@
   <h1>Choosing the algorithm</h1>
 
   <p>
-    This section characterizes the available clustering algorithms and offers some suggestions on
-    how to choose the clustering algorithm suitable for specific input data.
+    This section offers some suggestions on how to choose the clustering algorithm suitable for
+    specific input data.
   </p>
 
-  <p>
-    Carrot<sup>2</sup> offers a number of clustering algorithms of varying performance and quality
-    characteristics. There is also Lingo3G, a fast highly-tunable commercial algorithm that
-    seamlessly integrates with Carrot<sup>2</sup>.
-  </p>
-
-  <section id="algorithm-characteristics">
+  <section id="algorithms-to-choose-from">
     <h2>Algorithms to choose from</h2>
 
     <p>
-      As part of Carrot<sup>2</sup> framework you can use the following clustering algorithms.
+      Carrot<sup>2</sup> comes with a number of clustering algorithms of varying performance and
+      quality
+      characteristics. There is also Lingo3G, a fast highly-tunable commercial algorithm that
+      seamlessly integrates with Carrot<sup>2</sup>.
     </p>
 
     <section id="lingo">
@@ -25,7 +22,8 @@
       <p>
         The <a href="http://project.carrot2.org/publications/osinski04-dimensionality.pdf">Lingo
         algorithm</a> employs term-document matrix dimensionality reduction techniques to figure
-        out the structure of topics present in the input. The algorithm is reasonably fast and nicely
+        out the structure of topics present in the input. The algorithm is reasonably fast and
+        nicely
         separates diverse topics into separate groups. This will typically be the default algorithm
         you may want to use.
       </p>
@@ -35,10 +33,12 @@
       <h3>STC</h3>
 
       <p>
-        The key data structure in the STC algorithm is the Generalized Suffix Tree (GST) built for all
+        The key data structure in the STC algorithm is the Generalized Suffix Tree (GST) built for
+        all
         input documents. The algorithm traverses the GST to identify words and phrases that occurred
         frequently in the input documents and merges sub-groups of documents with high overlap. The
-        algorithm is very fast, even for large sets of documents, but suffers from the lack of cluster
+        algorithm is very fast, even for large sets of documents, but suffers from the lack of
+        cluster
         diversity.
       </p>
     </section>
@@ -67,45 +67,16 @@
     </section>
   </section>
 
-  <section id="choosing-the-algorithm">
-    <h2>Choosing the algorithm</h2>
+  <section id="algorithm-characteristics">
+    <h2>Algorithm characteristics</h2>
 
     <p>
-      It's quite difficult to give one clear recommendation as to which algorithm is
-      "the best". The decision is a problem of weighing multiple criteria such as performance or cluster
-      label legibility. Compare the following three sets of cluster labels acquired for the
-      same input using different algorithms:
-    </p>
-
-    <figure class="round">
-      <img src="images/output-compared-light.png"
-           alt="The same input clustered with different algorithms.">
-      <figcaption>
-        <p>
-          The same input ("data mining" search results) clustered with three different clustering
-          algorithms.
-        </p>
-      </figcaption>
-    </figure>
-
-    <p>
-      Many people (including us) have a subjective feeling that the Lingo-family of algorithms
-      (<a href="choosing-clustering-algorithm.html#lingo">Lingo</a> and
-      <a href="choosing-clustering-algorithm.html#lingo3g">Lingo3G</a>) delivers more intuitive and diverse clusters
-      compared to other algorithms.
-      Sometimes it is other characteristics, such as performance or cluster structure, that should be
-      taken into account.
-    </p>
-
-    <p>
-      The following table summarizes key characteristics of each algorithm shipped in
+      The following table summarizes key characteristics of each algorithm available in
       Carrot<sup>2</sup>.
     </p>
 
-    <figure class="round">
+    <figure id="algorithm-characteristics:table">
       <table>
-        <caption>A comparison of key characteristics of Carrot<sup>2</sup> clustering algorithms.
-        </caption>
         <thead>
         <tr>
           <th scope="col">Feature</th>
@@ -132,9 +103,7 @@
           <th scope="row">Scalability</th>
           <td>
             <strong>Low</strong>. For more than about 1000 documents, Lingo clustering will take a
-            long time and large memory
-            <footnote></footnote>
-            .
+            long time and large memory.
           </td>
           <td><strong>High</strong></td>
           <td><strong>Low</strong>, based on similar data structures as Lingo.</td>
@@ -147,21 +116,89 @@
         </tr>
         </tbody>
       </table>
+      <figcaption>
+        <p>
+          A comparison of key characteristics of Carrot<sup>2</sup> clustering algorithms.
+        </p>
+      </figcaption>
     </figure>
+  </section>
 
-    <p class="warning">
-      <a href="choosing-clustering-algorithm.html#lingo3g">Lingo3G</a>, the commercial algorithm that plugs into
-      Carrot<sup>2</sup> has a <a href="https://carrotsearch.com/lingo3g/comparison/">separate
-      page</a> where its features are compared against the open source algorithms.
+  <section id="algorithm-recommendations">
+    <h2>Algorithm recommendations</h2>
+
+    <p>
+      It's quite difficult to give one clear recommendation as to which algorithm is "the best". The
+      decision is influenced by multiple criteria such as performance or cluster label legibility.
     </p>
 
     <p>
+      Many people (including us) have a subjective feeling that the Lingo-family of algorithms (<a
+      href="#lingo">Lingo</a> and <a href="choosing-clustering-algorithm.html#lingo3g">Lingo3G</a>)
+      delivers more intuitive and diverse clusters compared to other algorithms. Sometimes it is
+      other characteristics, such as performance or cluster structure, that should be taken into
+      account.
+    </p>
+
+    <p>
+      With this in mind, the following table lists the scenarios for which the specific algorithm is
+      best suited.
+    </p>
+
+    <figure id="algorithm-recommendations:table">
+      <table>
+        <thead>
+        <tr>
+          <th>Requirement</th>
+          <th>Use Lingo</th>
+          <th>Use STC</th>
+          <th>Use k-means</th>
+          <th>Consider Lingo3G</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td style="width: 50%">Well-formed longer labels required</td>
+          <td class="center">✔</td>
+          <td></td>
+          <td></td>
+          <td class="center">✔</td>
+        </tr>
+        <tr>
+          <td>Highlighting of small (outlier) clusters required</td>
+          <td class="center">✔</td>
+          <td></td>
+          <td></td>
+          <td class="center">✔</td>
+        </tr>
+        <tr>
+          <td>High clustering performance or large document set processing required</td>
+          <td></td>
+          <td class="center">✔</td>
+          <td></td>
+          <td class="center">✔</td>
+        </tr>
+        <tr>
+          <td>Need non-overlapping clusters</td>
+          <td></td>
+          <td></td>
+          <td class="center">✔</td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+      <figcaption>
+        <p>
+          Optimum usage scenarios for Carrot<sup>2</sup> clustering algorithms.
+        </p>
+      </figcaption>
+    </figure>
+
+    <p>
       While the table above can be useful to determine which algorithm to choose,
-      the ultimate judgment should be based on an empirical evaluation with your specific document
-      collection.
-      While we provide some general <a href="tuning-quality.html">algorithm
-      choice advice</a> and <a href="tuning-performance.html">performance tuning hints</a>, you will
-      ultimately need to experiment, tweak parameters, and select what fits your data and use case.
+      the ultimate judgment should be based on an empirical evaluation with your specific documents
+      Make sure to also have a look at <a href="tuning-performance.html">performance
+      tuning</a>, and <a href="tuning-quality.html">quality tuning</a> tips.
     </p>
   </section>
 </article>

@@ -4,6 +4,21 @@
   }
 }
 
+body,
+body.light {
+  --info-background-color: hsla(90, 80%, 95%, 1.0);
+  --info-border-color: hsla(90, 70%, 50%, 1.0);
+}
+body.dark {
+  --info-background-color: hsla(90, 30%, 24%, 1.0);
+  --info-border-color: hsla(90, 100%, 13%, 1.0);
+}
+
+article .info {
+  background-color: var(--info-background-color);
+  border-left-color: var(--info-border-color);
+}
+
 figure.round .preview,
 figure.round img {
   border-radius: calc(0.125 * var(--leading));
