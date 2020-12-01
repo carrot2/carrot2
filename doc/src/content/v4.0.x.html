@@ -9,12 +9,24 @@
     <h2>Version 4.1.0 [unreleased]</h2>
 
     <p>
-      This is a minor release with changes to REST API formats and minor bug fixes.
+      This release adds ephemeral per-request dictionaries and introduces minor adjustments
+      to Java and REST API formats.
     </p>
 
     <ul>
+      <li><p>GH-43:
+        [DCS, Java, API CHANGE] Lingo algorithm's filter attributes have been changed from Booleans to proper
+        objects with a dedicated <code>enabled</code> attribute. Unless you used these attributes explicitly,
+        no action is needed.
+      </p></li>
+
       <li><p>GH-44:
-        [DCS, Java, API CHANGE] Ephemeral (per-request) label and word filtering support has been added.
+        [DCS, Java, API CHANGE] Ephemeral (per-request) label and word filtering support has been added. This feature
+        allows passing per-request word and cluster label filters, without reloading the default <code>LanguageData</code>
+        resources. See <a href="java-language-components.html#tweaking-ephemeral-dictionaries">ephemeral dictionary
+        section in the Java API</a>
+        and <a href="dcs-language-components.html#tweaking-ephemeral-dictionaries">REST API</a> sections
+        for more information.
       </p></li>
 
       <li><p>GH-45:
