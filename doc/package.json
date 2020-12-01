@@ -11,7 +11,7 @@
     "serve": "gatsby serve"
   },
   "dependencies": {
-    "@carrotsearch/gatsby-theme-apidocs": "1.0.1",
+    "@carrotsearch/gatsby-theme-apidocs": "1.0.2",
     "gatsby": "2.27.4"
   }
 }

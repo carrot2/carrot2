@@ -1080,10 +1080,10 @@
     is-text-path "^2.0.0"
     p-map "^3.0.0"
 
-"@carrotsearch/gatsby-theme-apidocs@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@carrotsearch/gatsby-theme-apidocs/-/gatsby-theme-apidocs-1.0.1.tgz#8a15cc123f65aa2098496591c6a3738963f3d764"
-  integrity sha512-xAWG5gxpfOKwJOq35rSVKsBIqqefrRT/cSt5EEzrMJxM3klkGC6Cada8UweZi2LYhifzlaZ6xxZxYrTfu4gsBQ==
+"@carrotsearch/gatsby-theme-apidocs@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@carrotsearch/gatsby-theme-apidocs/-/gatsby-theme-apidocs-1.0.2.tgz#a643b9f01a9a40158759611822acf7e351719532"
+  integrity sha512-9iRtfdLjxwGpKF18e6c7dw1ONJ3rqwT47oTkMen5t0qoxlY02VwZXuon/yNhhy1d4pei8DsuYxdza1CfM5bc7A==
   dependencies:
     "@carrotsearch/gatsby-plugin-content-search" "1.0.0"
     "@carrotsearch/gatsby-plugin-relativize" "1.0.3"
