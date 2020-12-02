@@ -134,3 +134,48 @@ footer .copyright {
     margin-right: 0;
   }
 }
+
+
+.spreadsheet {
+  border-collapse: collapse;
+  position: relative;
+  z-index: 1;
+  font-size: 85%;
+  line-height: 1.0;
+  margin: 2em auto;
+  border: none;
+}
+.spreadsheet th,
+.spreadsheet td {
+  border: 1px solid #d4d4d4;
+  padding: 0.375em 0.5em;
+}
+.spreadsheet th {
+  background-color: #e6e6e6;
+  border-color: #999999;
+  user-select: none;
+}
+.spreadsheet thead th {
+  border-top: none;
+}
+.spreadsheet th:first-child {
+  border-left: none;
+}
+.spreadsheet thead th:first-child {
+  padding: 0;
+  width: 1.7em;
+}
+.spreadsheet .triangle {
+  display: inline-block;
+  position: relative;
+  bottom: -2px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 1.3em 1.3em;
+  border-color: transparent transparent #b4b4b4 transparent;
+}
+.spreadsheet tbody tr:first-child td {
+  background-color: hsl(80, 70%, 95%);
+  font-weight: bold;
+}

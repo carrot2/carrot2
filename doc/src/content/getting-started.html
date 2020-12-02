@@ -7,31 +7,242 @@
     For more options, such as Java or REST API, read on.
   </p>
 
-  <section id="try-carrot2">
-    <h2>Try Carrot<sup>2</sup> now</h2>
+  <section id="online-demo">
+    <h2>On-line demo</h2>
 
     <p>
-      The quickest way to try out Carrot<sup>2</sup> is to use the public
-      <a href="https://search.carrot2.org">live demo</a>. The demo lets you
-      play with clustering of web search results provided by the <a href="https://etools.ch">eTools</a>
-      search engine or explore medical documents from the
-      <a href="https://www.ncbi.nlm.nih.gov/pubmed/">PubMed database</a>
-      of medical abstracts.
+      You can use the <a href="https://search.carrot2.org" target=_blank>on-line demo</a> to play
+      with clustering of web search results provided by <a href="https://etools.ch">eTools</a> and
+      explore medical documents from the <a href="https://www.ncbi.nlm.nih.gov/pubmed/">PubMed
+      database</a>.
     </p>
 
     <figure id="carrot2-search-app" class="round">
-      <img class="light"
-           src="images/carrot2-search-app-light.jpg"
-           alt="Carrot2 search results clustering application, light theme.">
-      <img class="dark"
-           src="images/carrot2-search-app-dark.jpg"
-           alt="Carrot2 search results clustering application, dark theme.">
+      <a href="https://search.carrot2.org" target=_blank>
+        <img class="light"
+             src="images/carrot2-search-app-light.jpg"
+             alt="Carrot2 search results clustering application, light theme.">
+        <img class="dark"
+             src="images/carrot2-search-app-dark.jpg"
+             alt="Carrot2 search results clustering application, dark theme.">
+      </a>
       <figcaption>
         <p>
           Screenshot of the live <a href="http://search.carrot2.org">Carrot<sup>2</sup>
-          demo application</a> clustering search results for query "JSON".
+          demo application</a> clustering search results for query <em>data mining</em>.
         </p>
       </figcaption>
     </figure>
+  </section>
+
+  <section id="clustering-your-own-data">
+    <h2>Clustering your own data</h2>
+
+    <p>
+      Part of the on-line demo is also the <a
+      href="https://search.carrot2.org/#/workbench">Carrot<sup>2</sup>
+      Clustering Workbench</a> &mdash; a more advanced application for clustering
+      content from files, Solr or Elasticsearch instances. You can use it to test Carrot<sup>2</sup>
+      clustering with your own content.
+    </p>
+
+    <figure id="carrot2-workbench" class="round">
+      <a href="https://search.carrot2.org/#/workbench" target=_blank>
+        <img class="light"
+             src="images/carrot2-workbench-light.png"
+             alt="Carrot2 Clustering Workbench, light theme.">
+        <img class="dark"
+             src="images/carrot2-workbench-dark.png"
+             alt="Carrot2 Clustering Workbench, dark theme.">
+      </a>
+      <figcaption>
+        <p>
+          Screenshot of the <a href="https://search.carrot2.org/#/workbench">Carrot<sup>2</sup>
+          Clustering Workbench</a> application clustering results from a local file.
+        </p>
+      </figcaption>
+    </figure>
+
+    <p>
+      To cluster your own content:
+    </p>
+
+    <ol>
+      <li>
+        <p>
+          Put your documents in an Excel, OpenOffice or CSV spreadsheet, one document
+          per row. The first row will be treated as a header with field names,
+          for example:
+        </p>
+
+        <table class="spreadsheet">
+          <thead>
+          <tr>
+            <th><span class="triangle"></span></th>
+            <th>A</th>
+            <th>B</th>
+            <th>C</th>
+            <th>D</th>
+            <th>E</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr>
+            <th>1</th>
+            <td>id</td>
+            <td>title</td>
+            <td>question</td>
+            <td>score</td>
+            <td>views</td>
+          </tr>
+
+          <tr>
+            <th>2</th>
+            <td>67</td>
+            <td>PDF Viewer on Windows</td>
+            <td>I've tried Foxit and Adobe's reader, but I'm not satisfied with either.
+              Foxit has update nagging for non-critical junk.
+            </td>
+            <td>39</td>
+            <td>1975</td>
+          </tr>
+
+          <tr>
+            <th>3</th>
+            <td>94</td>
+            <td>What Windows services can I safely disable?
+            </td>
+            <td>
+              I'm trying to improve the boot time and general performance of a Windows XP machine
+              and ...
+            </td>
+            <td>28</td>
+            <td>4808</td>
+          </tr>
+
+          <tr>
+            <th>4</th>
+            <td>135</td>
+            <td>Log viewer on Windows</td>
+            <td>
+              I'm a developer, and I generate big log files. I've tried several log viewer
+              applications ...
+            </td>
+            <td>31</td>
+            <td>26011</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <p>
+          The spreadsheet can contain fields of all types, Workbench will try to identify
+          the natural text fields to be used for clustering.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          Open <a href="https://search.carrot2.org/#/workbench" target=_blank>Carrot<sup>2</sup>
+          Clustering Workbench</a> in a modern browser.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          Choose the <strong>Local file</strong> data source and upload the spreadsheet with your
+          data. If necessary, refine the selection of fields fields to cluster using the <strong>Fields
+          to cluster</strong> check boxes.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          Press the <strong>Cluster</strong> button to generate the clusters.
+        </p>
+
+        <div class="warning">
+          <strong>Heads up, limitations of on-line demos.</strong>
+
+          <p>
+            Please note that Workbench will transfer the contents of your file to the
+            Carrot<sup>2</sup> server for clustering. The server will keep the data in memory for
+            the
+            duration of the clustering process. None of the data you submit will be permanently
+            stored
+            or logged.
+          </p>
+
+          <p>
+            Additionally, our server limits the rate and size of clustering requests to keep
+            the service from overloading.
+          </p>
+
+          <p>
+            If you'd rather keep your data private or hit the processing limits,
+            <a href="#local-installation">install Carrot<sup>2</sup> on your own machine</a>.
+          </p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section id="local-installation">
+    <h2>Local installation</h2>
+
+    <p>
+      You can install Carrot<sup>2</sup> on your own machine to use the search results clustering
+      and Workbench applications without any limitations.
+    </p>
+
+    <p>
+      To run Carrot<sup>2</sup> on your machine:
+    </p>
+
+    <ol>
+      <li>
+        <p>
+          <a href="https://github.com/carrot2/carrot2/releases" target=_blank>Download</a> the
+          latest release package.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          Follow <a href="rest-api-basics.html#installation">Carrot<sup>2</sup> Document Clustering
+          Server</a>
+          installation instructions.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          Open <a href="http://localhost:8080">http://localhost:8080</a> in a modern browser
+          to access the applications.
+        </p>
+      </li>
+    </ol>
+  </section>
+
+  <section id="apis-and-integrations">
+    <h2>APIs and integrations</h2>
+
+    <p>
+      If you'd like to integrate Carrot<sup>2</sup> with your existing systems,
+      use one of the following options:
+    </p>
+
+    <ul>
+      <li>a <a href="java-api-basics.html">Java API</a>,</li>
+      <li>a <a href="rest-api-basics.html">REST API</a> for other programming languages,</li>
+      <li><a href="https://lucene.apache.org/solr/">Apache Solr</a> has
+        <a href="https://lucene.apache.org/solr/guide/8_2/result-clustering.html">built-in
+          support</a> for clustering search results via Carrot<sup>2</sup> algorithms,
+      </li>
+      <li><a href="https://github.com/carrot2/elasticsearch-carrot2">elasticsearch-carrot2</a>
+        plugin provides search results clustering for
+        <a href="https://github.com/elastic/elasticsearch">Elasticsearch</a>.
+      </li>
+    </ul>
   </section>
 </article>
