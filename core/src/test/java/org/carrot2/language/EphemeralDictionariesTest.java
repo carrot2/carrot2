@@ -36,7 +36,6 @@ public class EphemeralDictionariesTest extends TestBase {
     filter3.glob.set("foo bar", "foo *");
     dictionaries.labelFilters.set(List.of(filter2, filter3));
 
-
     // Serialize to JSON.
     String asJson = Attrs.toJson(dictionaries, AliasMapper.SPI_DEFAULTS);
     System.out.println(asJson);
