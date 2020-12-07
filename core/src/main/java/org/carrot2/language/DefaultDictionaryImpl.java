@@ -23,8 +23,8 @@ import org.carrot2.attrs.AttrStringArray;
 
 /**
  * Default implementation of {@link StopwordFilterDictionary} and {@link LabelFilterDictionary}
- * interfaces. Provides support for exact string matching and regular expression ({@link Pattern}
- * matching.
+ * interfaces. Provides support for exact string matching, globs (wildcard expressions) and regular
+ * expression ({@link Pattern}) matching.
  */
 public class DefaultDictionaryImpl extends AttrComposite
     implements StopwordFilterDictionary, LabelFilterDictionary {
@@ -33,6 +33,13 @@ public class DefaultDictionaryImpl extends AttrComposite
           "exact",
           AttrStringArray.builder()
               .label("Exact strings to filter out.")
+              .defaultValue(new String[] {}));
+
+  public AttrStringArray glob =
+      attributes.register(
+          "glob",
+          AttrStringArray.builder()
+              .label("Globbed expressions to filter out.")
               .defaultValue(new String[] {}));
 
   public AttrStringArray regexp =
@@ -55,28 +62,32 @@ public class DefaultDictionaryImpl extends AttrComposite
   }
 
   private Predicate<String> compile() {
-    Predicate<String> p = null;
+    ArrayList<Predicate<String>> predicates = new ArrayList<>();
 
     if (!exact.isEmpty()) {
-      p = toSet(exact.get())::contains;
+      predicates.add(toSet(exact.get())::contains);
+    }
+
+    if (!glob.isEmpty()) {
+      GlobDictionary glob = GlobDictionary.compilePatterns(toSet(this.glob.get()).stream());
+      predicates.add(glob::test);
     }
 
     if (!regexp.isEmpty()) {
       Pattern compiled = union(compile(toSet(regexp.get())));
-      Predicate<String> p2 = (label) -> compiled.matcher(label).matches();
+      predicates.add((label) -> compiled.matcher(label).matches());
+    }
 
-      if (p == null) {
-        p = p2;
-      } else {
-        p = p.or(p2);
+    if (predicates.isEmpty()) {
+      return (v) -> false;
+    } else {
+      var it = predicates.iterator();
+      var p = it.next();
+      while (it.hasNext()) {
+        p = p.or(it.next());
       }
+      return p;
     }
-
-    if (p == null) {
-      p = (v) -> false;
-    }
-
-    return p;
   }
 
   private Set<String> toSet(String[] strings) {

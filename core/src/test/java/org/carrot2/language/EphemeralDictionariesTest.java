@@ -10,6 +10,8 @@
  */
 package org.carrot2.language;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
@@ -55,5 +57,81 @@ public class EphemeralDictionariesTest extends TestBase {
     Assertions.assertThat(labelFilter.ignoreLabel("word3")).isFalse();
     Assertions.assertThat(labelFilter.ignoreLabel("foobar")).isTrue();
     Assertions.assertThat(labelFilter.ignoreLabel("prefix-foobar")).isFalse();
+  }
+
+  @Test
+  public void testGlobs() {
+    class Entry {
+      List<String> patterns = new ArrayList<>();
+      List<String> positive = new ArrayList<>();
+      List<String> negative = new ArrayList<>();
+
+      Entry(String... patterns) {
+        this.patterns.addAll(Arrays.asList(patterns));
+      }
+
+      Entry positive(String... patterns) {
+        this.positive.addAll(Arrays.asList(patterns));
+        return this;
+      }
+
+      Entry negative(String... patterns) {
+        this.negative.addAll(Arrays.asList(patterns));
+        return this;
+      }
+    }
+
+    List<Entry> entries =
+        List.of(
+            new Entry("more information")
+                .positive("More information", "MORE INFORMATION")
+                .negative(
+                    "more informations",
+                    "more informations",
+                    "more information about",
+                    "some more information"),
+            new Entry("more information *")
+                .positive("more information", "More information about", "More information about a")
+                .negative("more informations", "more informations about", "some more information"),
+            new Entry("* information *")
+                .positive(
+                    "information",
+                    "more information",
+                    "information about",
+                    "a lot more information on")
+                .negative("informations", "more informations about", "some more informations"),
+            new Entry("\"Information\" *")
+                .positive("Information", "Information about", "Information ABOUT")
+                .negative("information", "information about", "Informations about"),
+            new Entry("\"Programm*\"").positive("Programm*").negative("Programmer", "Programming"),
+            new Entry("\\\"information\\\"")
+                .positive("\"INFOrmation\"", "\"information\"")
+                .negative("information", "\"information"));
+
+    for (Entry e : entries) {
+      DefaultDictionaryImpl filter = new DefaultDictionaryImpl();
+      filter.glob.set(e.patterns.toArray(String[]::new));
+
+      LabelFilter labelFilter = filter.compileLabelFilter();
+      StopwordFilter swFilter = filter.compileStopwordFilter();
+
+      for (String positiveExample : e.positive) {
+        Assertions.assertThat(labelFilter.ignoreLabel(positiveExample))
+            .as(e.patterns.toString() + " :: " + positiveExample)
+            .isTrue();
+        Assertions.assertThat(swFilter.ignoreWord(positiveExample))
+            .as(e.patterns.toString() + " :: " + positiveExample)
+            .isTrue();
+      }
+
+      for (String negativeExample : e.negative) {
+        Assertions.assertThat(labelFilter.ignoreLabel(negativeExample))
+            .as(e.patterns.toString() + " :: " + negativeExample)
+            .isFalse();
+        Assertions.assertThat(swFilter.ignoreWord(negativeExample))
+            .as(e.patterns.toString() + " :: " + negativeExample)
+            .isFalse();
+      }
+    }
   }
 }
