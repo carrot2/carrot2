@@ -33,7 +33,9 @@ public class EphemeralDictionariesTest extends TestBase {
     filter2.regexp.set("label-regex1", "label-regex2");
     DefaultDictionaryImpl filter3 = new DefaultDictionaryImpl();
     filter3.exact.set("label-image3");
+    filter3.glob.set("foo bar", "foo *");
     dictionaries.labelFilters.set(List.of(filter2, filter3));
+
 
     // Serialize to JSON.
     String asJson = Attrs.toJson(dictionaries, AliasMapper.SPI_DEFAULTS);
