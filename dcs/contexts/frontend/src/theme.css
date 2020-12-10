@@ -13,6 +13,8 @@ body {
   --background-color: #fff;
   --background-color-secondary: #f4f4f4;
   --background-color-tertiary: #fbfbfb;
+  --background-color-text-highlight: hsla(210, 80%, 75%, 0.1);
+  --border-color-text-highlight: hsla(210, 80%, 75%, 0.25);
   --nav-background-color: hsla(207, 23%, 5%, 0.9);
   --text-color: black;
   --text-color-inverted: white;
@@ -50,6 +52,8 @@ body {
   --background-color: hsl(210, 18%, 15%);
   --background-color-secondary: hsl(210, 18%, 18%);
   --background-color-tertiary: hsl(210, 18%, 16.5%);
+  --background-color-text-highlight: hsla(210, 80%, 75%, 0.1);
+  --border-color-text-highlight: hsla(210, 80%, 75%, 0.25);
   --nav-background-color: hsla(207, 28%, 1%, 0.3);
   --text-color: rgba(255, 255, 255, 1);
   --text-color-light: rgba(255, 255, 255, 0.75);
@@ -132,6 +136,14 @@ kbd {
   box-shadow: 0 1.5px 0 var(--kbd-outer-border-color),
     0 0 0 1.5px var(--kbd-inner-border-color) inset;
   background-color: var(--kbd-background-color);
+}
+
+code {
+  background-color: var(--background-color-text-highlight);
+  border: 1px solid var(--border-color-text-highlight);
+  border-radius: 0.125em;
+  margin: 0 0.25em;
+  padding: 0 0.25em;
 }
 
 ::-webkit-scrollbar {

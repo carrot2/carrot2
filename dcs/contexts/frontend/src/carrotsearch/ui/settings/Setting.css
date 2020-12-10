@@ -40,6 +40,8 @@
 
 .SettingDescription {
   max-width: 24rem;
+  max-height: 20rem;
+  overflow-y: auto;
 }
 .SettingDescription > p:last-of-type {
   margin-bottom: 0;
@@ -51,6 +53,15 @@
 
 .SettingDescription ul {
   padding-left: 1em;
+}
+.SettingDescription li {
+  margin-bottom: 0.5em;
+}
+.SettingDescription dt {
+  margin-bottom: 0.5em;
+}
+.SettingDescription dd {
+  margin-bottom: 1em;
 }
 .SettingMessage {
   margin: 0.5em 0;

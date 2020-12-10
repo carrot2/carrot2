@@ -83,7 +83,7 @@ const languageModelSettings = [
 ];
 
 const dictionariesSettings = [
-  createExcludedLabelsSetting()
+  ...createExcludedLabelsSetting()
 ];
 
 const parameterStore = persistentStore(

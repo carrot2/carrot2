@@ -57,7 +57,7 @@ export const Group = view(({ setting, get, set, className }) => {
     groupVisible |= settingVisible;
     return (
       <section key={s.id} id={s.id} style={displayNoneIf(!settingVisible)}>
-        {getFactory(s)(
+        {(s.factory || getFactory(s))(
           s,
           s.get || setting.get || get,
           s.set || setting.set || set

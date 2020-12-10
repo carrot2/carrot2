@@ -8,6 +8,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+textarea,
 code,
 pre {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
