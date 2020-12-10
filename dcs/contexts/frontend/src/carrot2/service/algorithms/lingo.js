@@ -2,7 +2,7 @@ import descriptor from "./descriptors/org.carrot2.clustering.lingo.LingoClusteri
 import { persistentStore } from "../../../carrotsearch/store/persistent-store.js";
 import {
   advanced,
-  collectDefaults,
+  collectDefaults, createExcludedLabelsSetting,
   getDescriptorsById,
   settingFromDescriptor,
   settingFromDescriptorRecursive,
@@ -82,6 +82,10 @@ const languageModelSettings = [
   settingFrom("matrixBuilder.maximumMatrixSize")
 ];
 
+const dictionariesSettings = [
+  createExcludedLabelsSetting()
+];
+
 const parameterStore = persistentStore(
   "parameters:algorithm:lingo",
   Object.assign(
@@ -89,7 +93,8 @@ const parameterStore = persistentStore(
     collectDefaults(descriptorsById, [
       clusterSettings,
       labelSettings,
-      languageModelSettings
+      languageModelSettings,
+      dictionariesSettings
     ])
   )
 );
@@ -124,6 +129,13 @@ const settings = [
         label: "Cluster labels",
         settings: labelSettings,
         description: "Customization of cluster labels."
+      },
+      {
+        id: "lingo:dictionaries",
+        type: "group",
+        label: "Dictionaries",
+        settings: dictionariesSettings,
+        description: "Label and word exclusion dictionaries."
       },
       {
         id: "lingo:languageModel",

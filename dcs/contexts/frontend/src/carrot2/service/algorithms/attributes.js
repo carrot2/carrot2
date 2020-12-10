@@ -1,5 +1,11 @@
+import React from "react";
+
+import { view } from "@risingstack/react-easy-state";
+
 import { firstField } from "../../../carrotsearch/lang/objects.js";
 import _set from "lodash.set";
+import { addFactory } from "../../../carrotsearch/ui/settings/Group.js";
+import { Setting } from "../../../carrotsearch/ui/settings/Setting.js";
 
 const depthFirstAttributes = descriptor => {
   const collect = (descriptor, target) => {
@@ -247,4 +253,31 @@ export const collectParameters = (settings, getter, filter) =>
 export const advanced = setting => {
   setting.advanced = true;
   return setting;
+};
+
+const ExcludedLabelsSetting = view(({ setting, get, set }) => {
+  const { label, description } = setting;
+
+  return (
+    <Setting
+      className="StringListSetting"
+      label={label}
+      description={description}
+    >
+      <textarea>test</textarea>
+    </Setting>
+  );
+});
+
+addFactory("excluded-labels", (s, get, set) => (
+  <ExcludedLabelsSetting setting={s} get={get} set={set} />
+));
+
+export const createExcludedLabelsSetting = () => {
+  return {
+    id: "dictionaries.labelFilters",
+    label: "Excluded labels",
+    type: "excluded-labels",
+    restPath: "dictionaries.labelFilters"
+  };
 };
