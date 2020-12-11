@@ -37,7 +37,7 @@ export const DescriptionPopover = ({ description }) => {
   return (
     <Popover
       content={<SettingDescription description={description} />}
-      position={PopoverPosition.TOP}
+      position={PopoverPosition.RIGHT_BOTTOM}
       canEscapeKeyClose={true}
       isOpen={open}
       onInteraction={setOpen}
