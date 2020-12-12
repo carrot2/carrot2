@@ -17,6 +17,7 @@ import {
   CustomSchemaResult,
   CustomSchemaResultConfig
 } from "./CustomSchemaResult.js";
+import { ButtonLink } from "../../../carrotsearch/ui/ButtonLink.js";
 
 export const createSchemaExtractorStores = sourceId => {
   // A non-reactive holder for the contents of the last loaded file. This is not reactive, so that
@@ -35,6 +36,19 @@ export const createSchemaExtractorStores = sourceId => {
     fieldStats: [],
     fieldsAvailable: [],
     fieldsAvailableForClustering: [],
+    clusterNaturalTextOnly: true,
+    getFieldsAvailableForClustering: naturalTextOnly => {
+      const fields = schemaInfoStore.fieldStats;
+
+      // Create a fresh non-reactive array, so that we can sort it.
+      // Sorting a reactive array would cause infinite render loops.
+      return Array.from(
+        (naturalTextOnly
+          ? fields.filter(f => f.naturalTextScore >= 8 || f.titleScore >= 8)
+          : fields.filter(f => f.type === "String")
+        ).map(f => f.field)
+      ).sort();
+    },
     fieldsToCluster: [],
     load: async loader => {
       schemaInfoStore.loading = true;
@@ -42,9 +56,6 @@ export const createSchemaExtractorStores = sourceId => {
       try {
         const result = await loader(logger);
         const parsed = extractSchema(result.documents, logger);
-
-        schemaInfoStore.fieldsAvailableForClustering =
-          parsed.fieldsAvailableForClustering;
 
         // We remember the fields the user selected for clustering on a per-schema (set of all fields)
         // basis, so that the user doesn't have to re-select the right fields every time they upload
@@ -104,7 +115,9 @@ export const createSchemaExtractorStores = sourceId => {
 
 const FieldList = view(({ schemaInfoStore }) => {
   const store = schemaInfoStore;
-  const availableForClustering = store.fieldsAvailableForClustering;
+  const availableForClustering = store.getFieldsAvailableForClustering(
+    store.clusterNaturalTextOnly
+  );
   const toCluster = store.fieldsToCluster;
   const noContentMessage =
     availableForClustering.length === 0 ? (
@@ -114,7 +127,7 @@ const FieldList = view(({ schemaInfoStore }) => {
   return (
     <div className="FieldList">
       {noContentMessage}
-      {availableForClustering.sort().map(f => {
+      {availableForClustering.map(f => {
         return (
           <Checkbox
             label={f}
@@ -126,6 +139,33 @@ const FieldList = view(({ schemaInfoStore }) => {
           />
         );
       })}
+    </div>
+  );
+});
+
+const FieldChoiceFieldFilter = view(({ schemaInfoStore }) => {
+  const store = schemaInfoStore;
+  const clusterNaturalTextOnly = store.clusterNaturalTextOnly;
+
+  return (
+    <div className="FieldChoiceFieldFilter">
+      {clusterNaturalTextOnly ? (
+        <>
+          Only natural text fields shown,{" "}
+          <ButtonLink onClick={() => (store.clusterNaturalTextOnly = false)}>
+            show all fields
+          </ButtonLink>
+          .
+        </>
+      ) : (
+        <>
+          All string-typed fields shown,{" "}
+          <ButtonLink onClick={() => (store.clusterNaturalTextOnly = true)}>
+            show text fields
+          </ButtonLink>
+          .
+        </>
+      )}
     </div>
   );
 });
@@ -142,6 +182,7 @@ const FieldChoiceSetting = view(({ setting, get, set }) => {
       <Loading isLoading={() => schemaInfoStore.loading} />
       <FieldList schemaInfoStore={schemaInfoStore} />
       <LogEntries entries={schemaInfoStore.log} />
+      <FieldChoiceFieldFilter schemaInfoStore={schemaInfoStore} />
     </Setting>
   );
 });

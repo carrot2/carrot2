@@ -19,3 +19,11 @@
   font-size: 100%;
   color: var(--text-color-lighter);
 }
+
+.FieldChoiceSetting .FieldChoiceFieldFilter {
+  margin-top: 0.5em;
+  color: var(--text-color-lightest);
+}
+.FieldChoiceSetting .FieldChoiceFieldFilter button {
+  opacity: 0.6;
+}
