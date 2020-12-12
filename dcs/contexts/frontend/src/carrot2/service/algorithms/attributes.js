@@ -309,7 +309,7 @@ export const createExcludedLabelsSetting = () => {
       ),
       description:`
 <p>
- If a phrase matches any pattern listed, the phase will not be used as a cluster label.
+ If a phrase matches any pattern listed, the phrase will not be used as a cluster label.
  Put one pattern per line. Separate words with spaces, <code>*</code> matches zero or more words.
 </p>
 
