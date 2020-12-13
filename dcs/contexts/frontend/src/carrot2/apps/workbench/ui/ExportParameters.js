@@ -19,7 +19,7 @@ const config = persistentStore("workbench:parameterExport:config", {
 
 const ExportParametersBody = view(() => {
   const json = buildRequestJson(config.onlyNonDefault);
-
+  const jsonString = JSON.stringify(json, null, "  ");
   return (
     <div className="ExportParametersBody">
       <h4>Clustering parameters JSON</h4>
@@ -29,9 +29,9 @@ const ExportParametersBody = view(() => {
           store={config}
           property="onlyNonDefault"
         />
-        <CopyToClipboard contentProvider={() => json} />
+        <CopyToClipboard contentProvider={() => jsonString} />
       </div>
-      <JsonHighlighted jsonString={JSON.stringify(json, null, "  ")} />
+      <JsonHighlighted jsonString={jsonString} />
     </div>
   );
 });
