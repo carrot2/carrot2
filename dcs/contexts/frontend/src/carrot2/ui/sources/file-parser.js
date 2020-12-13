@@ -1,4 +1,3 @@
-import xmlParser from "fast-xml-parser";
 import { pluralize } from "../../../carrotsearch/lang/humanize.js";
 
 const parseSheet = async (file, logger) => {
@@ -60,6 +59,9 @@ const parserResultFrom = (documents, query = "") => {
 const parsers = {
   "text/xml": async (file, logger) => {
     const xml = await file.text();
+    const xmlParser = await import(
+      /* webpackChunkName: "xml-parser" */ "fast-xml-parser"
+    );
     const xmlJson = xmlParser.parse(xml);
 
     if (!xmlJson.searchresult) {

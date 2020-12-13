@@ -148,7 +148,7 @@ const exportJson = () => {
 };
 
 const exportSheet = async format => {
-  const XLSX = await import("xlsx");
+  const XLSX = await import(/* webpackChunkName: "xlsx" */ "xlsx");
 
   let rows = [];
   if (exportConfig.includeClusters) {
