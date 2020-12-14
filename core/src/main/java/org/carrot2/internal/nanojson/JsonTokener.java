@@ -1,13 +1,7 @@
 package org.carrot2.internal.nanojson;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Internal class for tokenizing JSON. Used by both {@link JsonParser} and {@link JsonReader}.
