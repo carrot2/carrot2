@@ -8,6 +8,7 @@ import { createClusteringErrorElement } from "../apps/search-app/ui/ErrorMessage
 import { collectParameters } from "../service/algorithms/attributes.js";
 import { defer } from "../../carrotsearch/lang/lang.js";
 import { equals } from "../../carrotsearch/lang/arrays.js";
+import { triggerClusteringRequested } from "../customizations.js";
 
 const EMPTY_ARRAY = [];
 
@@ -65,6 +66,8 @@ export const buildRequestJson = (onlyNonDefault = false) => {
 const loadClusters = async function (searchResult) {
   const documents = searchResult.documents;
   const query = searchResult.query;
+
+  triggerClusteringRequested(searchResult.sourceId, documents.length);
 
   if (documents.length === 0) {
     clusterStore.clusters = EMPTY_ARRAY;
