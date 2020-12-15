@@ -17,6 +17,12 @@
       ]
     },
     {
+      "title": "Dictionaries",
+      "articles": [
+        "dictionaries"
+      ]
+    },
+    {
       "title": "REST API",
       "articles": [
         "rest-api-basics",
@@ -44,6 +50,7 @@
     {
       "title": "Version history",
       "articles": [
+        "v4.1.x",
         "v4.0.x"
       ]
     }

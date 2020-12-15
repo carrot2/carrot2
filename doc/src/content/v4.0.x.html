@@ -5,73 +5,6 @@
     Release history for Carrot2 4.0.x and bugfix releases.
   </p>
 
-  <section id="v4.1.0">
-    <h2>Version 4.1.0 [unreleased]</h2>
-
-    <p>
-      This release adds ephemeral per-request dictionaries and introduces minor adjustments
-      to Java and REST API formats.
-    </p>
-
-    <ul>
-      <li><p>GH-43:
-        [DCS, Java, API CHANGE] Lingo algorithm's filter attributes have been changed from Booleans to proper
-        objects with a dedicated <code>enabled</code> attribute. Unless you used these attributes explicitly,
-        no action is needed.
-      </p></li>
-
-      <li><p>GH-44:
-        [DCS, Java, API CHANGE] Ephemeral (per-request) label and word filtering support has been added. This feature
-        allows passing per-request word and cluster label filters, without reloading the default <code>LanguageData</code>
-        resources. See <a href="java-language-components.html#tweaking-ephemeral-dictionaries">ephemeral dictionary
-        section in the Java API</a>
-        and <a href="dcs-language-components.html#tweaking-ephemeral-dictionaries">REST API</a> sections
-        for more information.
-      </p></li>
-
-      <li><p>GH-45:
-        [Java, API CHANGE] The <code>LexicalData</code> interface (<code>LanguageData</code> component) has been
-        split into two independent components: <code>StopwordFilter</code> and <code>LabelFilter</code>. The default
-        implementations and abstract classes have been changed accordingly.</p>
-      </li>
-
-      <li><p>GH-38:
-        [DCS, API CHANGE] Expose the language and algorithm of all resolved template in <code>/list</code>. The response
-        format of the endpoint has changed. Previously, the <code>templates</code> element was a list of template
-        names, now it will contain an object with template names as keys and template content as values, for example:
-        </p>
-        <pre>...
-  "templates" : {
-    "template1" : {
-      "language" : "English",
-      "algorithm" : "algorithm1"
-    },
-    "template2" : {
-      "algorithm" : "algorithm1"
-    }
-  }</pre>
-      </li>
-
-      <li><p>GH-37:
-        [build] Only recompile code under IntelliJ IDEA (improve dev experience).</p>
-      </li>
-
-      <li><p>GH-35:
-        [DCS] Added request processing/ service information to clustering response. This information
-        is optional and is returned when <code>serviceInfo</code> HTTP parameter is enabled on a clustering request.</p>
-      </li>
-
-      <li><p>GH-34, CARROT-1280:
-        [DCS] Clustering of documents containing multi-value fields (array of strings)
-        fails with an exception.</p>
-      </li>
-
-      <li><p>GH-33:
-        [DCS] Upgrade Jackson dependency to 2.11.3.</p>
-      </li>
-    </ul>
-  </section>
-
   <!--
   <section id="v4.0.5">
     <h2>Version 4.0.5 [unreleased]</h2>
@@ -84,4 +17,71 @@
     </ul>
   </section>
   -->
+
+  <section id="v4.0.4">
+    <h2>Version 4.0.4</h2>
+    <p class="reldate">2020/10/02</p>
+
+    <p>
+      Release 4.0.4 contains the following changes:
+    </p>
+
+    <ul>
+      <li>A workaround for palantir publishing everything in POM's dependencyManagement section. This locks
+        dependencies that should not be locked.</li>
+      <li>Documentation system rendered with apidocs theme.</li>
+    </ul>
+  </section>
+
+  <section id="v4.0.3">
+    <h2>Version 4.0.3 </h2>
+    <p class="reldate">2020/10/02</p>
+
+    <p>
+      Release 4.0.3 contains the following changes:
+    </p>
+
+    <ul>
+      <li><a href="https://issues.carrot2.org/browse/CARROT-1276">CARROT-1276</a>:
+        Allow multiple classloader SPI resolution in language components loader.</li>
+    </ul>
+  </section>
+
+  <section id="v4.0.2">
+    <h2>Version 4.0.2</h2>
+    <p class="reldate">2020/10/01</p>
+
+    <p>
+      Release 4.0.2 is a republished release of broken version 4.0.1 with complete,
+      valid artifacts.
+    </p>
+
+    <p>
+      This release contains the following changes:
+    </p>
+
+    <ul>
+      <li>AttrStringArray should accept Object[] with just strings inside.</li>
+    </ul>
+  </section>
+
+  <section id="v4.0.1">
+    <h2>Version 4.0.1</h2>
+    <p class="reldate">2020/09/30</p>
+
+    <p>
+      This bugfix release is broken due to only
+      partial artifacts (a subset of JARs) uploaded to
+      Maven Central for some reason.
+    </p>
+  </section>
+
+  <section id="v4.0.0">
+    <h2>Version 4.0.0</h2>
+    <p class="reldate">2020/07/14</p>
+
+    <p>
+      Final 4.0.0 release of Carrot2, with the new API.
+    </p>
+  </section>
 </article>
