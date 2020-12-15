@@ -144,15 +144,28 @@ footer .copyright {
   line-height: 1.0;
   margin: 2em auto;
   border: none;
+
+  --spreadsheet-cell-border-color: #d4d4d4;
+  --spreadsheet-header-border-color: #999999;
+  --spreadsheet-header-background-color: #e6e6e6;
+  --spreadsheet-triangle-color: #b4b4b4;
+  --spreadsheet-highlight-background-color: hsl(80, 70%, 95%);
+}
+.dark .spreadsheet {
+  --spreadsheet-cell-border-color: hsla(0, 0%, 100%, 0.10);
+  --spreadsheet-header-border-color: hsla(0, 0%, 100%, 0.20);
+  --spreadsheet-header-background-color: hsla(207, 28%, 1%, 0.3);
+  --spreadsheet-triangle-color: hsla(207, 28%, 20%, 1);
+  --spreadsheet-highlight-background-color: hsl(80, 60%, 15%);
 }
 .spreadsheet th,
 .spreadsheet td {
-  border: 1px solid #d4d4d4;
+  border: 1px solid var(--spreadsheet-cell-border-color);
   padding: 0.375em 0.5em;
 }
 .spreadsheet th {
-  background-color: #e6e6e6;
-  border-color: #999999;
+  background-color: var(--spreadsheet-header-background-color);
+  border-color: var(--spreadsheet-header-border-color);
   user-select: none;
 }
 .spreadsheet thead th {
@@ -173,9 +186,9 @@ footer .copyright {
   height: 0;
   border-style: solid;
   border-width: 0 0 1.3em 1.3em;
-  border-color: transparent transparent #b4b4b4 transparent;
+  border-color: transparent transparent var(--spreadsheet-triangle-color) transparent;
 }
 .spreadsheet tbody tr:first-child td {
-  background-color: hsl(80, 70%, 95%);
+  background-color: var(--spreadsheet-highlight-background-color);
   font-weight: bold;
 }
