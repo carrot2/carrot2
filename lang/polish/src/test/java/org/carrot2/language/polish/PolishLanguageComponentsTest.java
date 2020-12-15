@@ -57,7 +57,7 @@ public class PolishLanguageComponentsTest {
   public void testCommonWords() throws Exception {
     StopwordFilter wordFilter = getComponents().get(StopwordFilter.class);
     for (String word : getCommonWordsTestData()) {
-      Assertions.assertThat(wordFilter.ignoreWord(new MutableCharArray(word))).as(word).isTrue();
+      Assertions.assertThat(wordFilter.test(new MutableCharArray(word))).as(word).isFalse();
     }
   }
 }

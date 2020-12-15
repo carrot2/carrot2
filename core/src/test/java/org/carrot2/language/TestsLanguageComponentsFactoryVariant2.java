@@ -21,9 +21,9 @@ public class TestsLanguageComponentsFactoryVariant2 extends SingleLanguageCompon
 
     registerResourceless(Stemmer.class, this::createStemmer);
     registerResourceless(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
-    StopwordFilter wordFilter = (word) -> word.toString().contains("stop");
+    StopwordFilter wordFilter = (word) -> !word.toString().contains("stop");
     registerResourceless(StopwordFilter.class, () -> wordFilter);
-    LabelFilter labelFilter = (label) -> label.toString().startsWith("stoplabel");
+    LabelFilter labelFilter = (label) -> !label.toString().startsWith("stoplabel");
     registerResourceless(LabelFilter.class, () -> labelFilter);
     registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
   }

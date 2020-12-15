@@ -10,10 +10,8 @@
  */
 package org.carrot2.language;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.carrot2.attrs.AttrComposite;
 import org.carrot2.attrs.AttrObjectArray;
 
@@ -44,7 +42,7 @@ public class EphemeralDictionaries extends AttrComposite {
    *
    * @see DefaultDictionaryImpl
    * @see StopwordFilterDictionary
-   * @see StopwordFilter#ignoreWord
+   * @see StopwordFilter
    */
   public AttrObjectArray<StopwordFilterDictionary> wordFilters =
       attributes.register(
@@ -72,7 +70,7 @@ public class EphemeralDictionaries extends AttrComposite {
    *
    * @see DefaultDictionaryImpl
    * @see LabelFilterDictionary
-   * @see LabelFilter#ignoreLabel
+   * @see LabelFilter
    */
   public AttrObjectArray<LabelFilterDictionary> labelFilters =
       attributes.register(
@@ -87,49 +85,45 @@ public class EphemeralDictionaries extends AttrComposite {
    */
   public LanguageComponents override(LanguageComponents languageComponents) {
     List<StopwordFilterDictionary> wordFilterAttrs = this.wordFilters.get();
-    if (wordFilterAttrs != null || !wordFilterAttrs.isEmpty()) {
-      List<StopwordFilter> wordFilters =
+    if (wordFilterAttrs != null && !wordFilterAttrs.isEmpty()) {
+      StopwordFilter dictFilter =
           wordFilterAttrs.stream()
               .map(StopwordFilterDictionary::compileStopwordFilter)
-              .collect(Collectors.toList());
+              .reduce(StopwordFilter::and)
+              .get();
 
       languageComponents =
           languageComponents.override(
               StopwordFilter.class,
               (previous) ->
                   () -> {
-                    List<StopwordFilter> filters;
                     StopwordFilter previousFilter = previous.get();
                     if (previousFilter != null) {
-                      filters = new ArrayList<>(wordFilters);
-                      filters.add(previousFilter);
-                      return new ChainedWordFilter(filters);
+                      return previousFilter.and(dictFilter);
                     } else {
-                      return new ChainedWordFilter(wordFilters);
+                      return dictFilter;
                     }
                   });
     }
 
     List<LabelFilterDictionary> labelFilterAttrs = this.labelFilters.get();
-    if (labelFilterAttrs != null || !labelFilterAttrs.isEmpty()) {
-      List<LabelFilter> labelFilters =
+    if (labelFilterAttrs != null && !labelFilterAttrs.isEmpty()) {
+      LabelFilter dictFilter =
           labelFilterAttrs.stream()
               .map(LabelFilterDictionary::compileLabelFilter)
-              .collect(Collectors.toList());
+              .reduce(LabelFilter::and)
+              .get();
 
       languageComponents =
           languageComponents.override(
               LabelFilter.class,
               (previous) ->
                   () -> {
-                    List<LabelFilter> filters;
                     LabelFilter previousFilter = previous.get();
                     if (previousFilter != null) {
-                      filters = new ArrayList<>(labelFilters);
-                      filters.add(previousFilter);
-                      return new ChainedLabelFilter(filters);
+                      return previousFilter.and(dictFilter);
                     } else {
-                      return new ChainedLabelFilter(labelFilters);
+                      return dictFilter;
                     }
                   });
     }

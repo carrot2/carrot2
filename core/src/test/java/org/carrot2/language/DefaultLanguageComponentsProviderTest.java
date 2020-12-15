@@ -10,7 +10,7 @@
  */
 package org.carrot2.language;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -119,7 +119,7 @@ public class DefaultLanguageComponentsProviderTest extends TestBase {
 
     StopwordFilter wordFilter = components.get(StopwordFilter.class);
     for (String word : commonWords) {
-      assertTrue(wordFilter.ignoreWord(new MutableCharArray(word)));
+      assertFalse(wordFilter.test(new MutableCharArray(word)));
     }
   }
 }

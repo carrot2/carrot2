@@ -51,14 +51,14 @@ public class DefaultDictionaryImpl extends AttrComposite
 
   @Override
   public StopwordFilter compileStopwordFilter() {
-    Predicate<String> precompiled = compile();
-    return (word) -> precompiled.test(word.toString());
+    Predicate<String> compiled = compile();
+    return (t) -> !compiled.test(t.toString());
   }
 
   @Override
   public LabelFilter compileLabelFilter() {
-    Predicate<String> precompiled = compile();
-    return (label) -> precompiled.test(label.toString());
+    Predicate<String> compiled = compile();
+    return (t) -> !compiled.test(t.toString());
   }
 
   private Predicate<String> compile() {

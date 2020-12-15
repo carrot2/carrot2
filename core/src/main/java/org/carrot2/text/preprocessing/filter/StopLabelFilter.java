@@ -38,12 +38,12 @@ public class StopLabelFilter extends SingleLabelFilterBase {
   public boolean acceptPhrase(PreprocessingContext context, int phraseIndex) {
     final String formatedLabel =
         context.format(labelFormatter, phraseIndex + context.allWords.image.length);
-    return !labelFilter.ignoreLabel(formatedLabel);
+    return labelFilter.test(formatedLabel);
   }
 
   @Override
   public boolean acceptWord(PreprocessingContext context, int wordIndex) {
     final String formattedLabel = context.format(labelFormatter, wordIndex);
-    return !labelFilter.ignoreLabel(formattedLabel);
+    return labelFilter.test(formattedLabel);
   }
 }

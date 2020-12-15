@@ -60,8 +60,7 @@ public class DummyAlgorithmProvider implements ClusteringAlgorithmProvider {
       List<Cluster<T>> clusters = new ArrayList<>();
       Consumer<Cluster<T>> addToClusters =
           (c) -> {
-            if (c.getDocuments().size() > 0
-                && c.getLabels().stream().noneMatch(labelFilter::ignoreLabel)) {
+            if (c.getDocuments().size() > 0 && c.getLabels().stream().allMatch(labelFilter)) {
               clusters.add(c);
             }
           };

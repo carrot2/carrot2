@@ -424,7 +424,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
       // Build the candidate cluster's label for filtering. This may be costly so
       // we only do this for base clusters which are promoted to merging phase.
       assert cc.phrases.size() == 1;
-      if (!labelFilter.ignoreLabel(buildLabel(cc.phrases.get(0)))) {
+      if (labelFilter.test(buildLabel(cc.phrases.get(0)))) {
         candidates.set(j++, cc);
       }
     }

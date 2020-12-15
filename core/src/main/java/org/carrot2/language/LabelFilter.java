@@ -10,6 +10,9 @@
  */
 package org.carrot2.language;
 
+import java.util.Objects;
+import java.util.function.Predicate;
+
 /**
  * A cluster label candidate filter.
  *
@@ -17,8 +20,18 @@ package org.carrot2.language;
  */
 @FunctionalInterface
 // fragment-start{label-filter}
-public interface LabelFilter {
-  /** @return Return true if the label candidate should be ignored in processing. */
-  boolean ignoreLabel(CharSequence labelCandidate);
+public interface LabelFilter extends Predicate<CharSequence> {
+  /**
+   * @param label The label to test. Input labels may have mixed case, depending on the algorithm
+   *     and their surface forms collected from input documents.
+   * @return Return {@code false} if the label candidate should be ignored in processing.
+   */
+  boolean test(CharSequence label);
+  // fragment-end{label-filter}
+
+  @Override
+  default LabelFilter and(Predicate<? super CharSequence> other) {
+    Objects.requireNonNull(other);
+    return (t) -> test(t) && other.test(t);
+  }
 }
-// fragment-end{label-filter}

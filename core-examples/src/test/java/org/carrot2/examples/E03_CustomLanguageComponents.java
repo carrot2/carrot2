@@ -167,13 +167,13 @@ public class E03_CustomLanguageComponents {
     final StopwordFilter wordFilter =
         (word) -> {
           // Ignore any word shorter than 4 characters or on the explicit exclusion list.
-          return word.length() < 4 || ignored.contains(word.toString());
+          return word.length() >= 4 && !ignored.contains(word.toString());
         };
 
     final LabelFilter labelFilter =
         (label) -> {
           // Ignore any label that has a substring 'data' in it.
-          return label.toString().toLowerCase(Locale.ROOT).contains("data");
+          return !label.toString().toLowerCase(Locale.ROOT).contains("data");
         };
     // fragment-end{custom-lexical-data}
 
@@ -211,14 +211,14 @@ public class E03_CustomLanguageComponents {
     final Set<String> ignored = new HashSet<>(Arrays.asList("from", "what"));
     final StopwordFilter wordFilter =
         (word) -> {
-          return word.length() <= 3 || ignored.contains(word.toString());
+          return word.length() > 3 && !ignored.contains(word.toString());
         };
     suppliers.put(StopwordFilter.class, () -> wordFilter);
 
     final LabelFilter labelFilter =
         (label) -> {
           // Ignore any label that has a substring 'data' in it.
-          return label.toString().toLowerCase(Locale.ROOT).contains("data");
+          return !label.toString().toLowerCase(Locale.ROOT).contains("data");
         };
     suppliers.put(LabelFilter.class, () -> labelFilter);
 

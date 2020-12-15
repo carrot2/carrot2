@@ -21,8 +21,8 @@ public class TestsLanguageComponentsFactoryVariant1 extends SingleLanguageCompon
 
     registerResourceless(Stemmer.class, () -> (word) -> null);
     registerResourceless(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
-    registerResourceless(StopwordFilter.class, () -> (word) -> false);
-    registerResourceless(LabelFilter.class, () -> (label) -> false);
+    registerResourceless(StopwordFilter.class, () -> (word) -> true);
+    registerResourceless(LabelFilter.class, () -> (label) -> true);
     registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
   }
 

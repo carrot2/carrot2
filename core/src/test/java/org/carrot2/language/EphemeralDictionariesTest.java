@@ -64,11 +64,11 @@ public class EphemeralDictionariesTest extends TestBase {
     filter.regexp.set("foo.+");
 
     LabelFilter labelFilter = filter.compileLabelFilter();
-    Assertions.assertThat(labelFilter.ignoreLabel("word1")).isTrue();
-    Assertions.assertThat(labelFilter.ignoreLabel("word2")).isTrue();
-    Assertions.assertThat(labelFilter.ignoreLabel("word3")).isFalse();
-    Assertions.assertThat(labelFilter.ignoreLabel("foobar")).isTrue();
-    Assertions.assertThat(labelFilter.ignoreLabel("prefix-foobar")).isFalse();
+    Assertions.assertThat(labelFilter.test("word1")).isFalse();
+    Assertions.assertThat(labelFilter.test("word2")).isFalse();
+    Assertions.assertThat(labelFilter.test("word3")).isTrue();
+    Assertions.assertThat(labelFilter.test("foobar")).isFalse();
+    Assertions.assertThat(labelFilter.test("prefix-foobar")).isTrue();
   }
 
   @Test
@@ -128,21 +128,21 @@ public class EphemeralDictionariesTest extends TestBase {
       StopwordFilter swFilter = filter.compileStopwordFilter();
 
       for (String positiveExample : e.positive) {
-        Assertions.assertThat(labelFilter.ignoreLabel(positiveExample))
+        Assertions.assertThat(labelFilter.test(positiveExample))
             .as(e.patterns.toString() + " :: " + positiveExample)
-            .isTrue();
-        Assertions.assertThat(swFilter.ignoreWord(positiveExample))
+            .isFalse();
+        Assertions.assertThat(swFilter.test(positiveExample))
             .as(e.patterns.toString() + " :: " + positiveExample)
-            .isTrue();
+            .isFalse();
       }
 
       for (String negativeExample : e.negative) {
-        Assertions.assertThat(labelFilter.ignoreLabel(negativeExample))
+        Assertions.assertThat(labelFilter.test(negativeExample))
             .as(e.patterns.toString() + " :: " + negativeExample)
-            .isFalse();
-        Assertions.assertThat(swFilter.ignoreWord(negativeExample))
+            .isTrue();
+        Assertions.assertThat(swFilter.test(negativeExample))
             .as(e.patterns.toString() + " :: " + negativeExample)
-            .isFalse();
+            .isTrue();
       }
     }
   }

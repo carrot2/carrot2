@@ -57,7 +57,7 @@ public abstract class AbstractLanguageComponentsTest {
   public void testCommonWords() {
     StopwordFilter wordFilter = components.get(StopwordFilter.class);
     for (String word : stopWords) {
-      Assertions.assertThat(wordFilter.ignoreWord(new MutableCharArray(word))).as(word).isTrue();
+      Assertions.assertThat(wordFilter.test(new MutableCharArray(word))).as(word).isFalse();
     }
   }
 
