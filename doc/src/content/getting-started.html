@@ -63,128 +63,215 @@
       </figcaption>
     </figure>
 
-    <p>
-      To cluster your own content:
-    </p>
+    <div class="warning">
+      <strong>Heads up, limitations of on-line demos.</strong>
 
-    <ol>
-      <li>
-        <p>
-          Put your documents in an Excel, OpenOffice or CSV spreadsheet, one document
-          per row. The first row will be treated as a header with field names,
-          for example:
-        </p>
+      <p>
+        Please note that Workbench will transfer the contents of your files or search results to the
+        Carrot<sup>2</sup> server for clustering. The server will keep the data in memory for the
+        duration of the clustering process. None of the data you submit will be permanently stored
+        or logged.
+      </p>
 
-        <table class="spreadsheet">
-          <thead>
-          <tr>
-            <th><span class="triangle"></span></th>
-            <th>A</th>
-            <th>B</th>
-            <th>C</th>
-            <th>D</th>
-            <th>E</th>
-          </tr>
-          </thead>
+      <p>
+        Additionally, our server limits the rate and size of clustering requests to keep
+        the service from overloading.
+      </p>
 
-          <tbody>
-          <tr>
-            <th>1</th>
-            <td>id</td>
-            <td>title</td>
-            <td>question</td>
-            <td>score</td>
-            <td>views</td>
-          </tr>
+      <p>
+        If you'd rather keep your data private or hit the processing limits,
+        <a href="#local-installation">install Carrot<sup>2</sup> on your own machine</a>.
+      </p>
+    </div>
 
-          <tr>
-            <th>2</th>
-            <td>67</td>
-            <td>PDF Viewer on Windows</td>
-            <td>I've tried Foxit and Adobe's reader, but I'm not satisfied with either.
-              Foxit has update nagging for non-critical junk.
-            </td>
-            <td>39</td>
-            <td>1975</td>
-          </tr>
+    <section id="excel-open-office-or-csv-spreadsheet">
+      <h3>Excel, OpenOffice or CSV</h3>
 
-          <tr>
-            <th>3</th>
-            <td>94</td>
-            <td>What Windows services can I safely disable?
-            </td>
-            <td>
-              I'm trying to improve the boot time and general performance of a Windows XP machine
-              and ...
-            </td>
-            <td>28</td>
-            <td>4808</td>
-          </tr>
+      <p>
+        To cluster data from an Excel, OpenOffice or CSV spreadsheet:
+      </p>
 
-          <tr>
-            <th>4</th>
-            <td>135</td>
-            <td>Log viewer on Windows</td>
-            <td>
-              I'm a developer, and I generate big log files. I've tried several log viewer
-              applications ...
-            </td>
-            <td>31</td>
-            <td>26011</td>
-          </tr>
-          </tbody>
-        </table>
+      <ol>
+        <li>
+          <p>
+            Make sure your spreadsheet contains one document
+            per row. The first row will be treated as a header with field names,
+            for example:
+          </p>
 
-        <p>
-          The spreadsheet can contain fields of all types, Workbench will try to identify
-          the natural text fields to be used for clustering.
-        </p>
-      </li>
+          <table class="spreadsheet">
+            <thead>
+            <tr>
+              <th><span class="triangle"></span></th>
+              <th>A</th>
+              <th>B</th>
+              <th>C</th>
+              <th>D</th>
+              <th>E</th>
+            </tr>
+            </thead>
 
-      <li>
-        <p>
-          Open <a href="https://search.carrot2.org/#/workbench" target=_blank>Carrot<sup>2</sup>
-          Clustering Workbench</a> in a modern browser.
-        </p>
-      </li>
+            <tbody>
+            <tr>
+              <th>1</th>
+              <td>id</td>
+              <td>title</td>
+              <td>question</td>
+              <td>score</td>
+              <td>views</td>
+            </tr>
 
-      <li>
-        <p>
-          Choose the <strong>Local file</strong> data source and upload the spreadsheet with your
-          data. If necessary, refine the selection of fields fields to cluster using the <strong>Fields
-          to cluster</strong> check boxes.
-        </p>
-      </li>
+            <tr>
+              <th>2</th>
+              <td>67</td>
+              <td>PDF Viewer on Windows</td>
+              <td>I've tried Foxit and Adobe's reader, but I'm not satisfied with either.
+                Foxit has update nagging for non-critical junk.
+              </td>
+              <td>39</td>
+              <td>1975</td>
+            </tr>
 
-      <li>
-        <p>
-          Press the <strong>Cluster</strong> button to generate the clusters.
-        </p>
+            <tr>
+              <th>3</th>
+              <td>94</td>
+              <td>What Windows services can I safely disable?
+              </td>
+              <td>
+                I'm trying to improve the boot time and general performance of a Windows XP machine
+                and ...
+              </td>
+              <td>28</td>
+              <td>4808</td>
+            </tr>
 
-        <div class="warning">
-          <strong>Heads up, limitations of on-line demos.</strong>
+            <tr>
+              <th>4</th>
+              <td>135</td>
+              <td>Log viewer on Windows</td>
+              <td>
+                I'm a developer, and I generate big log files. I've tried several log viewer
+                applications ...
+              </td>
+              <td>31</td>
+              <td>26011</td>
+            </tr>
+            </tbody>
+          </table>
 
           <p>
-            Please note that Workbench will transfer the contents of your file to the
-            Carrot<sup>2</sup> server for clustering. The server will keep the data in memory for
-            the
-            duration of the clustering process. None of the data you submit will be permanently
-            stored
-            or logged.
+            The spreadsheet can contain fields of all types, Workbench will try to identify
+            the natural text fields to be used for clustering.
+          </p>
+        </li>
+
+        <li>
+          <p>
+            Open <a href="https://search.carrot2.org/#/workbench" target=_blank>Carrot<sup>2</sup>
+            Clustering Workbench</a> in a modern browser.
+          </p>
+        </li>
+
+        <li>
+          <p>
+            Choose the <strong>Local file</strong> in the <strong>Data source</strong> combo box and
+            upload the spreadsheet with your data. If necessary, refine the selection of fields
+            fields
+            to cluster using the <strong>Fields to cluster</strong> check boxes.
+          </p>
+        </li>
+
+        <li>
+          <p>
+            Press the <strong>Cluster</strong> button to generate the clusters.
+          </p>
+        </li>
+      </ol>
+    </section>
+
+    <section id="solr-or-elasticsearch">
+      <h3>Solr or Elasticsearch</h3>
+
+      <p>
+        If your data is stored in an Apache Solr or Elasticsearch:
+      </p>
+
+      <ol>
+        <li>
+          <p>
+            Choose <strong>Solr</strong> or <strong>Elasticsearch</strong> in the
+            <strong>Data source</strong> combo box.
+          </p>
+        </li>
+
+        <li>
+          <p>
+            Provide the service URL of your search server and press the <strong>Connect</strong>
+            button.
           </p>
 
           <p>
-            Additionally, our server limits the rate and size of clustering requests to keep
-            the service from overloading.
+            Make sure that your server is configured to emit CORS HTTP headers, otherwise
+            Workbench will not be able to query it.
           </p>
+        </li>
 
+        <li>
           <p>
-            If you'd rather keep your data private or hit the processing limits,
-            <a href="#local-installation">install Carrot<sup>2</sup> on your own machine</a>.
+            Choose the collection to search, type query and press <strong>Cluster</strong>.
           </p>
-        </div>
-      </li>
-    </ol>
+        </li>
+      </ol>
+    </section>
+
+    <section id="json-file">
+      <h3>JSON file</h3>
+
+      <p>
+        You can submit a file containing an array of flat JSON objects for clustering, for example:
+      </p>
+
+      <pre data-language="json">[
+  { title: "Title 1", body: "Text", views: 583 },
+  { title: "Title 2", body: "Text", views: 23 }
+]</pre>
+
+      <p>
+        Each object represents one document. The object can contain both textual and non-textual
+        properties, Workbench will try to determine the fields containing natural text.
+      </p>
+
+      <p>
+        To cluster the contents of a JSON file:
+      </p>
+
+      <ol>
+        <li>
+          <p>
+            Choose <strong>Local file</strong> in the <strong>Data source</strong> combo box.
+          </p>
+        </li>
+
+        <li>
+          <p>
+            Upload or drag and drop your JSON file.
+          </p>
+        </li>
+
+        <li>
+          <p>
+            Choose the fields to cluster and press <strong>Cluster</strong>.
+          </p>
+        </li>
+      </ol>
+
+      <p>
+        Workbench can also cluster files in the <a
+        href="https://doc.carrot2.org/#section.architecture.input-xml"
+        target=_blank>Carrot<sup>2</sup> legacy XML format</a>,
+        but that format is discouraged because it does not support arbitrary field types.
+      </p>
+    </section>
   </section>
 
   <section id="local-installation">
