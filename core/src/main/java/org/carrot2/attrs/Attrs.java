@@ -11,7 +11,6 @@
 package org.carrot2.attrs;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,6 +18,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.carrot2.internal.nanojson.JsonWriter;
@@ -35,9 +35,12 @@ public final class Attrs {
   private static final String KEY_WRAPPED = "@value";
   static final String KEY_TYPE = "@type";
 
-  private static class Wrapper implements AcceptingVisitor {
-    AttrObject<AcceptingVisitor> value =
-        AttrObject.builder(AcceptingVisitor.class).defaultValue(() -> null);
+  private static class Wrapper<E extends AcceptingVisitor> implements AcceptingVisitor {
+    final AttrObject<E> value;
+
+    public Wrapper(Class<E> clazz, Supplier<? extends E> defaultInstanceSupplier) {
+      value = AttrObject.builder(clazz).defaultValue(defaultInstanceSupplier);
+    }
 
     @Override
     public void accept(AttrVisitor visitor) {
@@ -68,7 +71,7 @@ public final class Attrs {
       AcceptingVisitor composite, Function<Object, String> classToName) {
     LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
-    Wrapper wrapped = new Wrapper();
+    Wrapper<AcceptingVisitor> wrapped = new Wrapper<>(AcceptingVisitor.class, () -> null);
     wrapped.value.set(composite);
     wrapped.accept(new ToMapVisitor(map, classToName));
 
@@ -96,10 +99,38 @@ public final class Attrs {
    * @see #toMap(AcceptingVisitor)
    */
   public static <E extends AcceptingVisitor> E fromMap(
-      Class<? extends E> clazz, Map<String, Object> map, Function<String, Object> nameToClass) {
-    Wrapper wrapper =
-        populate(new Wrapper(), Collections.singletonMap(KEY_WRAPPED, map), nameToClass);
+      Class<E> clazz, Map<String, Object> map, Function<String, Object> nameToClass) {
+    Wrapper<E> wrapper =
+        populate(new Wrapper<>(clazz, () -> null), Map.of(KEY_WRAPPED, map), nameToClass);
     return safeCast(wrapper.value.get(), KEY_WRAPPED, clazz);
+  }
+
+  /**
+   * Convert a map to an instance of a class.
+   *
+   * @param nameToClass Name to new class instance supplier.
+   * @see #toMap(AcceptingVisitor)
+   * @since 4.1.0
+   */
+  public static <E extends AcceptingVisitor> E fromMap(
+      Class<E> clazz,
+      Supplier<? extends E> defaultImplSupplier,
+      Map<String, Object> map,
+      Function<String, Object> nameToClass) {
+    Wrapper<E> wrapper =
+        populate(new Wrapper<>(clazz, defaultImplSupplier), Map.of(KEY_WRAPPED, map), nameToClass);
+    return safeCast(wrapper.value.get(), KEY_WRAPPED, clazz);
+  }
+
+  /**
+   * Convert a map to an instance of a class.
+   *
+   * @see #toMap(AcceptingVisitor)
+   * @since 4.1.0
+   */
+  public static <E extends AcceptingVisitor> E fromMap(
+      Class<E> clazz, Supplier<? extends E> defaultImplSupplier, Map<String, Object> map) {
+    return fromMap(clazz, defaultImplSupplier, map, AliasMapper.SPI_DEFAULTS::fromName);
   }
 
   /**
@@ -152,8 +183,15 @@ public final class Attrs {
   /**
    * Converts an instance (recursively) to JSON.
    *
-   * <p>This method uses default class name mappings.
+   * <p>This method uses default class name mappings ({@link AliasMapper#SPI_DEFAULTS}).
+   *
+   * @since 4.1.0
    */
+  public static String toJson(AcceptingVisitor composite) {
+    return toJson(composite, AliasMapper.SPI_DEFAULTS);
+  }
+
+  /** Converts an instance (recursively) to JSON. */
   public static String toJson(AcceptingVisitor composite, ClassNameMapper classNameMapper) {
     return toJson(composite, classNameMapper::toName);
   }
@@ -365,7 +403,9 @@ public final class Attrs {
       if (value == null) {
         throw new RuntimeException(
             String.format(
-                Locale.ROOT, "Default instance supplier returned null for key: '%s'", key));
+                Locale.ROOT,
+                "Default attribute implementation supplier returned null for key: '%s'",
+                key));
       }
       return value;
     }

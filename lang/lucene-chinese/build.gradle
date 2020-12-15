@@ -10,5 +10,5 @@ dependencies {
   implementation "org.apache.lucene:lucene-analyzers-smartcn"
   implementation "org.apache.lucene:lucene-analyzers-icu"
 
-  langResources fileTree(dir: 'src/main/resources', includes: ['**/*.stopwords.utf8', '**/*.stoplabels.utf8'])
+  langResources fileTree(dir: 'src/main/resources', includes: langResourcePatterns)
 }

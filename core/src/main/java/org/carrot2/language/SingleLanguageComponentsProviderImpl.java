@@ -81,7 +81,7 @@ public abstract class SingleLanguageComponentsProviderImpl implements LanguageCo
   }
 
   protected final void registerDefaultLexicalData() {
-    register(StopwordFilter.class, DefaultLexicalDataProvider::legacyPlainTextWordFilter);
-    register(LabelFilter.class, DefaultLexicalDataProvider::legacyPlainTextLabelFilter);
+    register(StopwordFilter.class, DefaultLexicalDataProvider::readDefaultWordFilters);
+    register(LabelFilter.class, DefaultLexicalDataProvider::readDefaultLabelFilters);
   }
 }

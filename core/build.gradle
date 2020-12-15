@@ -14,7 +14,7 @@ configurations {
 dependencies {
   api "com.carrotsearch:hppc"
 
-  langResources fileTree(dir: 'src/main/resources', includes: ['**/*.stopwords.utf8', '**/*.stoplabels.utf8'])
+  langResources fileTree(dir: 'src/main/resources', includes: langResourcePatterns)
 
   jsonDoclet project(":infra:jsondoclet")
 }
