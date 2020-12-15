@@ -1,8 +1,6 @@
 import React from "react";
 
 import "./WorkbenchApp.css";
-
-import { persistentStore } from "../../../../carrotsearch/store/persistent-store.js";
 import { view } from "@risingstack/react-easy-state";
 import { clusterStore, searchResultStore } from "../../../store/services.js";
 import { humanizeDuration } from "../../../../carrotsearch/lang/humanize.js";
@@ -17,10 +15,7 @@ import { DottedStraightArrow } from "../../../../carrotsearch/ui/arrows/DottedSt
 import { DottedAngledArrow } from "../../../../carrotsearch/ui/arrows/DottedAngledArrow.js";
 import { DottedArrowCurly } from "../../../../carrotsearch/ui/arrows/DottedArrowCurly.js";
 import { ExportResults } from "./ExportResults.js";
-
-const uiStore = persistentStore("workbench:ui", {
-  clusterView: "folders"
-});
+import { workbenchViewStore } from "../store/view-store.js";
 
 const ResultStats = view(() => {
   const stats = [
@@ -111,16 +106,16 @@ const WorkbenchMain = view(() => {
 
       <div className="clusters">
         <Views
-          activeView={uiStore.clusterView}
+          activeView={workbenchViewStore.clusterView}
           views={clusterViews}
-          onViewChange={newView => (uiStore.clusterView = newView)}
+          onViewChange={newView => (workbenchViewStore.clusterView = newView)}
         >
           <Loading
             isLoading={() => {
               // Combine the DCS and view-specific loading state.
               // Visualizations take longer to initialize, so in their case
               // the loading state will take longer.
-              const view = clusterViews[0].views[uiStore.clusterView];
+              const view = clusterViews[0].views[workbenchViewStore.clusterView];
               return (
                 clusterStore.loading || (!!view.isLoading && view.isLoading())
               );

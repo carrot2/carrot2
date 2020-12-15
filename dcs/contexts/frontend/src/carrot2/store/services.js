@@ -67,8 +67,6 @@ const loadClusters = async function (searchResult) {
   const documents = searchResult.documents;
   const query = searchResult.query;
 
-  triggerClusteringRequested(searchResult.sourceId, documents.length);
-
   if (documents.length === 0) {
     clusterStore.clusters = EMPTY_ARRAY;
     clusterStore.documents = EMPTY_ARRAY;
@@ -77,6 +75,9 @@ const loadClusters = async function (searchResult) {
     // TODO: cancel currently running request
     clusterStore.loading = true;
     clusterStore.error = undefined;
+
+    triggerClusteringRequested(searchResult.sourceId, documents.length);
+
     try {
       const fieldsToCluster = searchResult.source.getFieldsToCluster();
 

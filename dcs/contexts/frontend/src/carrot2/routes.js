@@ -1,12 +1,14 @@
-import { compile } from "path-to-regexp";
+import { compile, match } from "path-to-regexp";
 
 class RouteSpec {
   path;
   pathCompiled;
+  match;
 
   constructor(path) {
     this.path = path;
     this.pathCompiled = compile(path);
+    this.match = match(path);
   }
 
   buildUrl(params) {
