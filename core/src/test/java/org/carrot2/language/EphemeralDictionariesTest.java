@@ -15,19 +15,20 @@ import java.util.Arrays;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
-import org.carrot2.attrs.AliasMapper;
 import org.carrot2.attrs.Attrs;
+import org.carrot2.internal.nanojson.JsonObject;
+import org.carrot2.internal.nanojson.JsonParser;
+import org.carrot2.internal.nanojson.JsonParserException;
 import org.junit.Test;
 
 public class EphemeralDictionariesTest extends TestBase {
   @Test
-  public void testImplementationsRoundTrip() {
+  public void testImplementationsRoundTrip() throws JsonParserException {
     EphemeralDictionaries dictionaries = new EphemeralDictionaries();
 
     DefaultDictionaryImpl filter1 = new DefaultDictionaryImpl();
     filter1.exact.set("word-image1", "word-image2", "word-image3");
     dictionaries.wordFilters.set(List.of(filter1));
-
     DefaultDictionaryImpl filter2 = new DefaultDictionaryImpl();
     filter2.exact.set("label-image1", "label-image2");
     filter2.regexp.set("label-regex1", "label-regex2");
@@ -37,13 +38,23 @@ public class EphemeralDictionariesTest extends TestBase {
     dictionaries.labelFilters.set(List.of(filter2, filter3));
 
     // Serialize to JSON.
-    String asJson = Attrs.toJson(dictionaries, AliasMapper.SPI_DEFAULTS);
-    System.out.println(asJson);
+    String typedJson = Attrs.toJson(dictionaries);
 
     // Round trip to/from map.
     EphemeralDictionaries repopulated =
         Attrs.populate(new EphemeralDictionaries(), Attrs.extract(dictionaries));
-    Assertions.assertThat(Attrs.toJson(repopulated, AliasMapper.SPI_DEFAULTS)).isEqualTo(asJson);
+    Assertions.assertThat(Attrs.toJson(repopulated)).isEqualTo(typedJson);
+
+    // Round trip from json.
+    JsonObject dict = JsonParser.object().from(typedJson);
+    repopulated = Attrs.fromMap(EphemeralDictionaries.class, dict);
+    Assertions.assertThat(Attrs.toJson(repopulated)).isEqualTo(typedJson);
+
+    // Round trip from @type-less JSON.
+    String typelessJson = typedJson.replaceAll("\"@type\"[^\n]+", "");
+    dict = JsonParser.object().from(typelessJson);
+    repopulated = Attrs.fromMap(EphemeralDictionaries.class, EphemeralDictionaries::new, dict);
+    Assertions.assertThat(Attrs.toJson(repopulated)).isEqualTo(typedJson);
   }
 
   @Test

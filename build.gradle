@@ -23,6 +23,11 @@ ext {
   legal = files('carrot2.LICENSE')
 
   forbiddenApiRulesDir = file("etc/forbidden-apis")
+
+  langResourcePatterns = [
+      '**/*.label-filters.json',
+      '**/*.word-filters.json',
+  ]
 }
 
 apply from: file('gradle/validation/check-environment.gradle')

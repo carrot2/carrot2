@@ -18,6 +18,7 @@ import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.clustering.lingo.SimpleLabelAssigner;
 import org.carrot2.clustering.lingo.UniqueLabelAssigner;
 import org.carrot2.clustering.stc.STCClusteringAlgorithm;
+import org.carrot2.language.DefaultDictionaryImpl;
 import org.carrot2.language.EphemeralDictionaries;
 import org.carrot2.math.matrix.KMeansMatrixFactorizationFactory;
 import org.carrot2.math.matrix.LocalNonnegativeMatrixFactorizationFactory;
@@ -109,7 +110,8 @@ public class ClassNameAliases implements AliasMapperFactory {
             "PartialSingularValueDecompositionFactory",
             PartialSingularValueDecompositionFactory.class,
             PartialSingularValueDecompositionFactory::new)
-        .alias("EphemeralDictionaries", EphemeralDictionaries.class, EphemeralDictionaries::new);
+        .alias("EphemeralDictionaries", EphemeralDictionaries.class, EphemeralDictionaries::new)
+        .alias("DefaultDictionaryImpl", DefaultDictionaryImpl.class, DefaultDictionaryImpl::new);
   }
 
   @Override

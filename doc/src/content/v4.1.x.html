@@ -1,0 +1,96 @@
+<article>
+  <h1>Carrot<sup>2</sup> 4.1.x</h1>
+
+  <p>
+    Release history for Carrot2 4.1.x and bugfix releases.
+  </p>
+
+  <section id="v4.1.0">
+    <h2>Version 4.1.0 [unreleased]</h2>
+
+    <p>
+      This release changes the lexical data dictionary formats,
+      adds ephemeral per-request dictionaries and introduces minor adjustments
+      to Java and REST APIs.
+    </p>
+
+    <ul>
+      <li>
+        <p><a href="https://github.com/carrot2/carrot2/issues/51">GH-51</a>:
+        [DCS, Java, API CHANGE] This issue changes the default lexical data dictionary formats from
+        plain text files to JSON. The change also brings more expressive matching modes (exact, globs, regular expressions)
+        to word and label dictionaries. Please refer to the <a href="dictionaries.html">dictionaries</a> section an
+          in-depth overview of what's available.
+        </p>
+
+        <p>
+          <b>The naming convention for default resources has changed.</b> For backward compatibility,
+          if old resources can be found in the resource lookup location, they will still be used (and a warning will
+          be issued via Java logging system). Please convert old resources to the up-to-date JSON format. A simple
+          utility is included in Carrot2 core JAR and can help with the conversion. Just run it with:
+        </p>
+        <pre data-language="none">java -cp carrot2-core-4.1.0.jar org.carrot2.language.ConvertLegacyResources [dir]</pre>
+        <p>
+          Where <code>dir</code> points to a directory with old resources. New resources (in their corresponding naming
+          convention) will be written alongside old resources (which must be manually deleted).
+        </p>
+      </li>
+
+      <li><p><a href="https://github.com/carrot2/carrot2/issues/43">GH-43</a>:
+        [DCS, Java, API CHANGE] Lingo algorithm's filter attributes have been changed from Booleans to proper
+        objects with a dedicated <code>enabled</code> attribute. Unless you used these attributes explicitly,
+        no action is needed.
+      </p></li>
+
+      <li><p><a href="https://github.com/carrot2/carrot2/issues/44">GH-44</a>:
+        [DCS, Java, API CHANGE] Ephemeral (per-request) label and word filtering support has been added. This feature
+        allows passing per-request word and cluster label filters, without reloading the default <code>LanguageData</code>
+        resources. See <a href="java-language-components.html#tweaking-ephemeral-dictionaries">ephemeral dictionary
+        section in the Java API</a>
+        and <a href="dcs-language-components.html#tweaking-ephemeral-dictionaries">REST API</a> sections
+        for more information.
+      </p></li>
+
+      <li><p><a href="https://github.com/carrot2/carrot2/issues/45">GH-45</a>:
+        [Java, API CHANGE] The <code>LexicalData</code> interface (<code>LanguageData</code> component) has been
+        split into two independent components: <code>StopwordFilter</code> and <code>LabelFilter</code>. The default
+        implementations and abstract classes have been changed accordingly.</p>
+      </li>
+
+      <li><p><a href="https://github.com/carrot2/carrot2/issues/38">GH-38</a>:
+        [DCS, API CHANGE] Expose the language and algorithm of all resolved template in <code>/list</code>. The response
+        format of the endpoint has changed. Previously, the <code>templates</code> element was a list of template
+        names, now it will contain an object with template names as keys and template content as values, for example:
+        </p>
+        <pre>...
+  "templates" : {
+    "template1" : {
+      "language" : "English",
+      "algorithm" : "algorithm1"
+    },
+    "template2" : {
+      "algorithm" : "algorithm1"
+    }
+  }</pre>
+      </li>
+
+      <li><p><a href="https://github.com/carrot2/carrot2/issues/37">GH-37</a>:
+        [build] Only recompile code under IntelliJ IDEA (improve dev experience).</p>
+      </li>
+
+      <li><p><a href="https://github.com/carrot2/carrot2/issues/35">GH-35</a>:
+        [DCS] Added request processing/ service information to clustering response. This information
+        is optional and is returned when <code>serviceInfo</code> HTTP parameter is enabled on a clustering request.</p>
+      </li>
+
+      <li><p><a href="https://github.com/carrot2/carrot2/issues/34">GH-34</a>:
+        [DCS] Clustering of documents containing multi-value fields (array of strings)
+        fails with an exception.</p>
+      </li>
+
+      <li><p><a href="https://github.com/carrot2/carrot2/issues/33">GH-33</a>:
+        [DCS] Upgrade Jackson dependency to 2.11.3.</p>
+      </li>
+    </ul>
+  </section>
+</article>

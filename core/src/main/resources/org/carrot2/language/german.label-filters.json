@@ -1,0 +1,7 @@
+{
+  "exact": [],
+  "glob": [],
+  "regexp": [
+    "(?i)(neue?|information)"
+  ]
+}

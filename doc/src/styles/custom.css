@@ -192,3 +192,9 @@ footer .copyright {
   background-color: var(--spreadsheet-highlight-background-color);
   font-weight: bold;
 }
+
+p.reldate {
+  margin-top: 0;
+  font-size: small;
+  color: dimgray;
+}

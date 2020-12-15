@@ -9,5 +9,5 @@ dependencies {
   implementation project(':lang:lucene')
   implementation "org.apache.lucene:lucene-analyzers-kuromoji"
 
-  langResources fileTree(dir: 'src/main/resources', includes: ['**/*.stopwords.utf8', '**/*.stoplabels.utf8'])
+  langResources fileTree(dir: 'src/main/resources', includes: langResourcePatterns)
 }
