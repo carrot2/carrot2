@@ -1,0 +1,107 @@
+<article>
+  <h1>Types of dictionaries</h1>
+
+  <p>
+    Dictionaries help Carrot<sup>2</sup> to improve the quality of clustering
+    for a specific language. This section discusses the available dictionaries and
+    ways of tuning them to match the content you cluster.
+  </p>
+
+  <p>
+    A dictionary defines a set of words or phrases that should be ignored when
+    clustering content in a specific language. Carrot<sup>2</sup> comes
+    with basic dictionary files for all the supported languages. Additionally,
+    you can provide per-request dictionaries in the REST API and configure
+    ephemeral dictionaries using Java API.
+  </p>
+
+  <section id="types-of-dictionaries">
+    <h2>Types of dictionaries</h2>
+    
+    <p>
+      Carrot<sup>2</sup> supports two types of dictionaries:
+    </p>
+
+    <dl>
+      <dt>Word filters</dt>
+      <dd>
+        <p>
+          The set of words that should be ignored during clustering. If a word
+          is filtered out, it will not have influence on the cluster the
+          algorithm produces, but may still show in cluster labels, such as <em>University
+          of Washington</em>, to aid readability.
+        </p>
+
+        <p>
+          Typically, word filters would contain function words, such as
+          <em>of</em> or <em>between</em>.
+        </p>
+      </dd>
+
+      <dt>Label filters</dt>
+      <dd>
+        <p>
+          The set of words or phrases that must not be used as cluster labels.
+          You can use label filters to suppress offensive or non-informative
+          labels, such as <em>Official website</em>.
+        </p>
+      </dd>
+    </dl>
+  </section>
+
+  <section id="location-of-dictionary-files">
+    <h2>Location of dictionary files</h2>
+
+    <p>
+      For each language, two dictionary files are available:
+    </p>
+    
+    <dl>
+      <dt><em>lang</em>.word-filters.json</dt>
+      <dd>
+        <p>
+          Word filters dictionary for language <em>lang</em>, for example
+          <code>english.word-filters.json</code>.
+        </p>
+      </dd>
+
+      <dt><em>lang</em>.label-filters.json</dt>
+      <dd>
+        <p>
+          Label filters dictionary for language <em>lang</em>, for example
+          <code>english.label-filters.json</code>.
+        </p>
+      </dd>
+    </dl>
+
+    <p>
+      The location of the dictionary files is different for the Document
+      Clustering Server (REST API) and Java API.
+    </p>
+
+    <section id="location-of-dictionary-files:document-clustering-server">
+      <h3>Document Clustering Server</h3>
+
+      <p>
+        The Document Clustering Server reads dictionary files from the
+        <code>web/service/resources</code> directory in the server's distribution
+        directory.
+      </p>
+
+      <p>
+        For changes applied to dictionary files to take effect, you need to
+        restart the Document Clustering Server.
+      </p>
+    </section>
+
+    <section id="location-of-dictionary-files:java-api">
+      <h3>Java API</h3>
+
+      <p>
+        By default, Carrot<sup>2</sup> Java API will read dictionaries contained in
+        <code>carrot2-core-%PROJECT_VERSION%.jar</code> in the
+        <code>org/carrot2/language</code>.
+      </p>
+    </section>
+  </section>
+</article>

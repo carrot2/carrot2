@@ -17,17 +17,19 @@
       ]
     },
     {
-      "title": "Dictionaries",
-      "articles": [
-        "dictionaries"
-      ]
-    },
-    {
       "title": "REST API",
       "articles": [
         "rest-api-basics",
         "dcs-templates",
         "dcs-language-components"
+      ]
+    },
+    {
+      "title": "Dictionaries",
+      "articles": [
+        "types-of-dictionaries",
+        "word-filtering",
+        "label-filtering"
       ]
     },
     {
