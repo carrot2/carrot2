@@ -37,7 +37,7 @@ configure(project(":dcs:contexts:frontend")) { prj ->
   spotless {
     format 'js', {
       target 'src/**'
-      targetExclude "**/foamtree-impl.js", "**/circles-impl.js", "**/*.svg", "**/*.html"
+      targetExclude "**/foamtree-impl.js", "**/circles-impl.js", "**/*.svg", "**/*.html", "**/descriptors/**"
 
       prettier('2.2.1').configFile('.prettierrc.json')
 
