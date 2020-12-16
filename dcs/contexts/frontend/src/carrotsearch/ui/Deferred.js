@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import "./Deferred.css";
 
-export const DeferredPlaceholder = () => <div className="Deferred">Initializing...</div>;
+export const DeferredPlaceholder = () => (
+  <div className="Deferred">Initializing...</div>
+);
 
 export const Deferred = ({ timeout, children }) => {
   const [show, setShow] = useState(false);

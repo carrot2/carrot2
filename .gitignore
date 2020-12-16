@@ -4,6 +4,9 @@
 # Ignore Gradle build output directory
 build/
 
+# npm projects have a custom output folder for gradle.
+build-gradle/
+
 # Intellij
 .idea/
 *.iml

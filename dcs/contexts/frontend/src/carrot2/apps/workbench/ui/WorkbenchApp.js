@@ -115,7 +115,8 @@ const WorkbenchMain = view(() => {
               // Combine the DCS and view-specific loading state.
               // Visualizations take longer to initialize, so in their case
               // the loading state will take longer.
-              const view = clusterViews[0].views[workbenchViewStore.clusterView];
+              const view =
+                clusterViews[0].views[workbenchViewStore.clusterView];
               return (
                 clusterStore.loading || (!!view.isLoading && view.isLoading())
               );

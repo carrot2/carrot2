@@ -160,7 +160,8 @@ export const searchResultStore = store({
     try {
       searchResultStore.searchResult = assignDocumentIds(
         await source.source(query),
-        sourceId, source
+        sourceId,
+        source
       );
       searchResultStore.initial = false;
     } catch (e) {
@@ -207,5 +208,7 @@ export const buildFileName = (fileNameSuffix, extension) => {
     .replace(/[\s:]+/g, "_")
     .replace(/[+-\\"'/\\?]+/g, "");
   const source = searchResultStore.searchResult.sourceId;
-  return `${source}-${queryCleaned}${queryCleaned.length > 0 ? "-": ""}${fileNameSuffix}.${extension}`;
+  return `${source}-${queryCleaned}${
+    queryCleaned.length > 0 ? "-" : ""
+  }${fileNameSuffix}.${extension}`;
 };
