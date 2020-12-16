@@ -25,8 +25,8 @@ ext {
   forbiddenApiRulesDir = file("etc/forbidden-apis")
 
   langResourcePatterns = [
-      '**/*.label-filters.json',
-      '**/*.word-filters.json',
+    '**/*.label-filters.json',
+    '**/*.word-filters.json',
   ]
 }
 
@@ -54,11 +54,13 @@ apply from: file('gradle/maven/defaults-maven.gradle')
 
 subprojects {
   if (project.file("src/main/java").exists() ||
-      project.file("src/test/java").exists() ||
-      project.file("src/main/webapp").exists()) {
+  project.file("src/test/java").exists() ||
+  project.file("src/main/webapp").exists()) {
     apply plugin: 'java-library'
 
-    if (![":core-examples"].contains(project.path)) {
+    if (![
+      ":core-examples"
+    ].contains(project.path)) {
       dependencies {
         testImplementation project(':infra:tests')
       }

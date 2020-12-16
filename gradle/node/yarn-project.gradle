@@ -3,7 +3,7 @@ apply plugin: 'base'
 apply plugin: 'com.github.node-gradle.node'
 
 configurations {
-    it.default.extendsFrom archives
+  it.default.extendsFrom archives
 }
 
 // Change the default build directory for gradle so that
@@ -11,109 +11,114 @@ configurations {
 buildDir = file("build-gradle")
 
 ext {
-    srclayout = "webpack"
-    yarnEnv = [:]
+  srclayout = "webpack"
+  yarnEnv = [:]
 }
 
 node {
-    version = "${versions.node}"
-    yarnVersion = "${versions.yarn}"
-    download = true
+  version = "${versions.node}"
+  yarnVersion = "${versions.yarn}"
+  download = true
 }
 
 task touchbuild {
-    doFirst {
-        project.mkdir buildDir
-    }
+  doFirst {
+    project.mkdir buildDir
+  }
 }
 
 afterEvaluate {
-    if (project.srclayout == 'gatsby') {
-        ext.jsSources = fileTree('src') + fileTree('static')
-        // Gatsby has a non-configurable output folder, sigh.
-        // https://github.com/gatsbyjs/gatsby/issues/1878
-        ext.jsBuildDir = file("public")
-    } else {
-        ext.jsSources = fileTree('src') + fileTree('public')
-        ext.jsBuildDir = file("build")
-    }
+  if (project.srclayout == 'gatsby') {
+    ext.jsSources = fileTree('src') + fileTree('static')
+    // Gatsby has a non-configurable output folder, sigh.
+    // https://github.com/gatsbyjs/gatsby/issues/1878
+    ext.jsBuildDir = file("public")
+  } else {
+    ext.jsSources = fileTree('src') + fileTree('public')
+    ext.jsBuildDir = file("build")
+  }
 }
 
 task yarnInstall(type: YarnTask) {
-    group 'build'
+  group 'build'
 
-    inputs.file('package.json')
-    inputs.file('yarn.lock')
+  inputs.file('package.json')
+  inputs.file('yarn.lock')
 
-    outputs.upToDateWhen {
-        return project.file('node_modules').exists()
-    }
-    outputs.file('node_modules/.yarn-integrity')
+  outputs.upToDateWhen {
+    return project.file('node_modules').exists()
+  }
+  outputs.file('node_modules/.yarn-integrity')
 
-    args = ['install', '--frozen-lockfile']
+  args = [
+    'install',
+    '--frozen-lockfile'
+  ]
 }
 
 task yarnBuild(type: YarnTask) {
-    group 'build'
-    dependsOn yarnInstall
+  group 'build'
+  dependsOn yarnInstall
 
-    afterEvaluate {
-        inputs.file('package.json')
-        inputs.file('yarn.lock')
-        inputs.files { jsSources }
+  afterEvaluate {
+    inputs.file('package.json')
+    inputs.file('yarn.lock')
+    inputs.files { jsSources }
 
-        project.properties.each { k,v ->
-            if (k.startsWith("REACT_APP_")) {
-                doFirst { logger.warn("Using external env variable for yarn ({}={})", k, v) }
-                yarnEnv.put(k, v)
-            }
-        }
-
-        inputs.properties (yarnEnv.findAll {
-            it.key != "REACT_APP_BUILD_DATE" &&
-            it.key != "REACT_APP_GIT_REV"
-        })
+    project.properties.each { k,v ->
+      if (k.startsWith("REACT_APP_")) {
+        doFirst { logger.warn("Using external env variable for yarn ({}={})", k, v) }
+        yarnEnv.put(k, v)
+      }
     }
 
-    outputs.dir { jsBuildDir }
+    inputs.properties (yarnEnv.findAll {
+      it.key != "REACT_APP_BUILD_DATE" &&
+          it.key != "REACT_APP_GIT_REV"
+    })
+  }
 
-    // Set the environment once the task runs, otherwise variables trigger task
-    // changed events and rebuilds.
-    doFirst {
-        environment = yarnEnv
-    }
+  outputs.dir { jsBuildDir }
 
-    args = ['build']
+  // Set the environment once the task runs, otherwise variables trigger task
+  // changed events and rebuilds.
+  doFirst {
+    environment = yarnEnv
+  }
+
+  args = [
+    'build'
+  ]
 }
 
 task fastBuild {
-    doFirst {
-        logger.warn("Omitting full yarn build in fast build: ${project.path}")
-    }
+  doFirst {
+    logger.warn("Omitting full yarn build in fast build: ${project.path}")
+  }
 }
 
 artifacts {
-    archives provider { jsBuildDir }, {
-        if (project.hasProperty("fast")) {
-            builtBy fastBuild
-        } else {
-            builtBy yarnBuild
-        }
+  archives provider { jsBuildDir }, {
+    if (project.hasProperty("fast")) {
+      builtBy fastBuild
+    } else {
+      builtBy yarnBuild
     }
+  }
 }
 
 clean {
-    doLast {
-        if (project.srclayout == 'gatsby') {
-            delete project.files(".cache")
-            delete project.files("public")
-        }
+  doLast {
+    if (project.srclayout == 'gatsby') {
+      delete project.files(".cache")
+      delete project.files("public")
     }
+  }
 }
 
 task cleanNodeDirs(type: Delete) {
-    delete ".gradle"
-    delete "node_modules"
+  delete ".gradle"
+  delete "node_modules"
 }
 
 cleanall.dependsOn cleanNodeDirs

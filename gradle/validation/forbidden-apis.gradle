@@ -9,9 +9,9 @@ allprojects { prj ->
 
     def dynamicSignatures = { configuration ->
       def deps = configuration.resolvedConfiguration.resolvedArtifacts
-        .collect { a -> a.moduleVersion.id }
-        .collect { id -> "${id.group}-${id.name}" }
-        .sort()
+          .collect { a -> a.moduleVersion.id }
+          .collect { id -> "${id.group}-${id.name}" }
+          .sort()
 
       deps.each { dep ->
         def signaturesFile = file("${forbiddenApiRulesDir}/${dep}.txt")
@@ -63,7 +63,10 @@ allprojects { prj ->
     //
     // This is the simplest workaround possible: just point at all the rule files and indicate
     // them as inputs. This way if a rule is modified, checks will be reapplied.
-    configure([forbiddenApisMain, forbiddenApisTest]) { task ->
+    configure([
+      forbiddenApisMain,
+      forbiddenApisTest
+    ]) { task ->
       task.inputs.dir(forbiddenApiRulesDir)
     }
   })

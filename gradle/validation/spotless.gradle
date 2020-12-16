@@ -21,10 +21,11 @@ allprojects { prj ->
 
     spotless {
       java {
+        googleJavaFormat('1.9')
+
         licenseHeaderFile licenseHeader
         lineEndings 'UNIX'
         endWithNewline()
-        googleJavaFormat('1.9')
       }
     }
   }
@@ -42,6 +43,30 @@ configure(project(":dcs:contexts:frontend")) { prj ->
 
       lineEndings 'UNIX'
       endWithNewline()
+    }
+  }
+}
+
+configure(rootProject) { prj ->
+  prj.apply plugin: 'groovy'
+  prj.apply plugin: 'com.diffplug.spotless'
+
+  spotless {
+    groovy {
+      excludeJava()
+      greclipse()
+
+      licenseHeaderFile licenseHeader
+      lineEndings 'UNIX'
+      endWithNewline()
+    }
+
+    groovyGradle {
+      target '*.gradle', 'gradle/**/*.gradle'
+
+      greclipse().configFile rootProject.files(
+          'gradle/validation/spotless/spotless.eclipseformat.xml',
+          'gradle/validation/spotless/spotless.groovyformat.prefs')
     }
   }
 }

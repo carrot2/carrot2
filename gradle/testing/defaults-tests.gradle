@@ -3,7 +3,7 @@ import org.gradle.api.tasks.testing.logging.*
 
 allprojects {
   plugins.withType(JavaPlugin) {
-    def verboseMode = Boolean.parseBoolean(propertyOrDefault("tests.verbose", "false")) 
+    def verboseMode = Boolean.parseBoolean(propertyOrDefault("tests.verbose", "false"))
 
     project.ext {
       testsWorkDir = file("${buildDir}/tmp/tests-cwd")

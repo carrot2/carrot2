@@ -1,6 +1,7 @@
 // Add test duration summary at the end of the build.
 
-def allTests = []
+def allTests = [
+]
 
 allprojects {
   tasks.withType(Test) { task ->
@@ -18,14 +19,14 @@ allprojects {
 gradle.buildFinished { result ->
   if (allTests && result.getFailure() == null) {
     def slowest = allTests
-      .sort { a, b -> b.duration.compareTo(a.duration) }
-      .take(10)
-      .findAll { e -> e.duration >= 500 }
-      .collect { e -> String.format(Locale.ROOT, "%5.2fs %s", e.duration / 1000d, e.name) }
+        .sort { a, b -> b.duration.compareTo(a.duration) }
+        .take(10)
+        .findAll { e -> e.duration >= 500 }
+        .collect { e -> String.format(Locale.ROOT, "%5.2fs %s", e.duration / 1000d, e.name) }
 
     if (slowest) {
       logger.lifecycle("The slowest tests (exceeding 500 ms) during this run:\n  " +
-        slowest.join("\n  "))
+          slowest.join("\n  "))
     }
   }
 }

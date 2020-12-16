@@ -2,21 +2,21 @@
 /** Load properties from an external file to ext. */
 
 def loadProperties(File... propFiles) {
-    def props = new HashMap<>();
-    for (def propFile in propFiles) {
-        if (propFile.canRead()) {
-            def config = new Properties()
-            propFile.withInputStream { is ->
-                config.load(is)
-            }
-            for (Map.Entry property in config) {
-                props[property.key] = property.value;
-            }
-        } else {
-            throw new GradleException("Property file cannot be read: ${propFile}");
-        }
+  def props = new HashMap<>()
+  for (def propFile in propFiles) {
+    if (propFile.canRead()) {
+      def config = new Properties()
+      propFile.withInputStream { is ->
+        config.load(is)
+      }
+      for (Map.Entry property in config) {
+        props[property.key] = property.value
+      }
+    } else {
+      throw new GradleException("Property file cannot be read: ${propFile}")
     }
-    return props;
+  }
+  return props
 }
 
 ext.loadProperties = { File... source -> loadProperties(source) }

@@ -29,13 +29,13 @@ if (rootProject.isIdea) {
     def tasks = taskGraph.getAllTasks()
 
     def skipTasks = [
-        // Skip any tasks from distribution or DCS distribution.
-        ":distribution:.+",
-        ":dcs:distribution:.+",
-        // Skip yarn-related stuff.
-        ".*:(yarnSetup|yarnInstall|yarnBuild)",
-        // Skip WAR or ZIP assembly.
-        ".*:(war|zip)"
+      // Skip any tasks from distribution or DCS distribution.
+      ":distribution:.+",
+      ":dcs:distribution:.+",
+      // Skip yarn-related stuff.
+      ".*:(yarnSetup|yarnInstall|yarnBuild)",
+      // Skip WAR or ZIP assembly.
+      ".*:(war|zip)"
     ]
 
     tasks.each { task ->

@@ -9,16 +9,16 @@ def buildDateYear = now.getYear().toString()
 def buildDateTrimmed = now.truncatedTo(ChronoUnit.HOURS)
 
 rootProject.ext.replaceTokensTrigger = [
-    'product.name'     : rootProject.fullName,
-    'product.version'  : rootProject.version,
-    'product.gitrev'   : gitStatus.fullRev,
-    'product.buildDate': buildDateTrimmed,
-    'product.buildYear': buildDateYear,
-    'product.distType' : project.hasProperty("distType") ? distType : "",
+  'product.name'     : rootProject.fullName,
+  'product.version'  : rootProject.version,
+  'product.gitrev'   : gitStatus.fullRev,
+  'product.buildDate': buildDateTrimmed,
+  'product.buildYear': buildDateYear,
+  'product.distType' : project.hasProperty("distType") ? distType : "",
 ]
 
 ext.replaceTokens = [
-    *                     : replaceTokensTrigger,
-    "product.buildInstant": now.toInstant().toString(),
+  *                     : replaceTokensTrigger,
+  "product.buildInstant": now.toInstant().toString(),
 ]
 

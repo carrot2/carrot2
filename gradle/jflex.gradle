@@ -9,7 +9,9 @@ dependencies {
 sourceSets {
   main {
     java {
-      srcDirs += ["src/main/java-jflex"]
+      srcDirs += [
+        "src/main/java-jflex"
+      ]
     }
   }
 }
@@ -36,7 +38,8 @@ task jflex {
         main = "jflex.Main"
         args = [
           "-nobak",
-          "--encoding", "UTF-8",
+          "--encoding",
+          "UTF-8",
           "-d",
           jflexTarget.resolve(relative.getParent()),
           path
