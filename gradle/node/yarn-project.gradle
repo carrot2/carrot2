@@ -6,7 +6,12 @@ configurations {
     it.default.extendsFrom archives
 }
 
+// Change the default build directory for gradle so that
+// it doesn't conflict with npm builds (webpack).
+buildDir = file("build-gradle")
+
 ext {
+    srclayout = "webpack"
     yarnEnv = [:]
 }
 
@@ -14,6 +19,24 @@ node {
     version = "${versions.node}"
     yarnVersion = "${versions.yarn}"
     download = true
+}
+
+task touchbuild {
+    doFirst {
+        project.mkdir buildDir
+    }
+}
+
+afterEvaluate {
+    if (project.srclayout == 'gatsby') {
+        ext.jsSources = fileTree('src') + fileTree('static')
+        // Gatsby has a non-configurable output folder, sigh.
+        // https://github.com/gatsbyjs/gatsby/issues/1878
+        ext.jsBuildDir = file("public")
+    } else {
+        ext.jsSources = fileTree('src') + fileTree('public')
+        ext.jsBuildDir = file("build")
+    }
 }
 
 task yarnInstall(type: YarnTask) {
@@ -35,6 +58,10 @@ task yarnBuild(type: YarnTask) {
     dependsOn yarnInstall
 
     afterEvaluate {
+        inputs.file('package.json')
+        inputs.file('yarn.lock')
+        inputs.files { jsSources }
+
         project.properties.each { k,v ->
             if (k.startsWith("REACT_APP_")) {
                 doFirst { logger.warn("Using external env variable for yarn ({}={})", k, v) }
@@ -48,20 +75,7 @@ task yarnBuild(type: YarnTask) {
         })
     }
 
-    afterEvaluate {
-      if (project.hasProperty("srclayout") && project.srclayout == 'gatsby') {
-          inputs.files(fileTree('src'))
-          inputs.files(fileTree('static'))
-      } else {
-          inputs.files(fileTree('src'))
-          inputs.files(fileTree('public'))
-      }
-    }
-
-    inputs.file('package.json')
-    inputs.file('yarn.lock')
-
-    outputs.dir { project.buildDir }
+    outputs.dir { jsBuildDir }
 
     // Set the environment once the task runs, otherwise variables trigger task
     // changed events and rebuilds.
@@ -79,11 +93,20 @@ task fastBuild {
 }
 
 artifacts {
-    archives provider { project.buildDir }, {
+    archives provider { jsBuildDir }, {
         if (project.hasProperty("fast")) {
             builtBy fastBuild
         } else {
             builtBy yarnBuild
+        }
+    }
+}
+
+clean {
+    doLast {
+        if (project.srclayout == 'gatsby') {
+            delete project.files(".cache")
+            delete project.files("public")
         }
     }
 }
