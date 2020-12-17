@@ -7,21 +7,52 @@
   </p>
 
   <p>
-    Carrot<sup>2</sup> DCS (document clustering server) is a set of resources that
-    expose much of the Java API as a stateless HTTP/REST service. The DCS contains
-    the following:
+    Carrot<sup>2</sup> Document Clustering Server (DCS) exposes Carrot<sup>2</sup> clustering
+    as a stateless HTTP/REST service. The DCS contains:
   </p>
 
   <ul>
-    <li>HTTP REST service endpoints (<code>/service</code> context)
-      for document clustering, dynamic inspection of service components and an <a href="#openapi">OpenAPI
-        descriptor</a>,</li>
-    <li>an example search frontend (<code>/frontend</code> context) for PubMed and a
-      general-purpose meta search engine utilizing the service,</li>
-    <li>a few Java examples that make use of <a href="#models">model classes</a> and query
-      the service,</li>
-    <li><a href="https://www.eclipse.org/jetty/">Jetty</a> HTTP server,</li>
-    <li>this documentation.</li>
+    <li>
+      <p>
+        HTTP REST service endpoints for document clustering, dynamic inspection of
+        service components and an <a href="#openapi">OpenAPI descriptor</a>,
+      </p>
+    </li>
+
+    <li>
+      <p>
+        a search engine-like application for clustering data from public sources,
+        such web search results or PubMed abstracts,
+      </p>
+    </li>
+
+    <li>
+      <p>
+        <a href="getting-started.html#clustering-your-own-data">Clustering
+          Workbench</a>, a browser-based application for more advanced users
+        wishing to cluster content from local files (Excel, CSV, JSON), Solr or
+        Elasticsearch engines,
+      </p>
+    </li>
+
+    <li>
+      <p>
+        a few Java examples that make use of <a href="#models">model classes</a>
+        and query the REST API,
+      </p>
+    </li>
+
+    <li>
+      <p>
+        built-in <a href="https://www.eclipse.org/jetty/" target="_blank">Jetty</a> HTTP server,
+      </p>
+    </li>
+
+    <li>
+      <p>
+        this documentation.
+      </p>
+    </li>
   </ul>
 
   <p>
@@ -31,32 +62,88 @@
   </p>
 
   <section id="installation">
-    <h2>Installation</h2>
+    <h2>Installation and running</h2>
 
     <p>
-      The DCS is shipped with the Carrot<sup>2</sup> distribution under the <code>dcs</code> folder.
-      It requires <code>java</code> to be installed on the host system and will bind to port
-      <code>8080</code> by default. An alternative port can be selected by passing the
-      <code>--port</code>
-      option to the launch script, for example:
+      To install the Document Clustering Server:
     </p>
 
-    <pre data-language="none">&gt; dcs --port 8081
+    <ol>
+      <li>
+        <p>
+          Make sure you have Java 11 or later available in your system.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          Download the latest Carrot<sup>2</sup> <a
+          href="https://github.com/carrot2/carrot2/releases" target="_blank">release</a>
+          and extract the archive to a local folder.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          Run the DCS:
+        </p>
+
+        <pre data-language="shell">
+          $ cd dcs
+          $ ./dcs
+        </pre>
+
+        <p>
+          By default the DCS will bind to port 8080. To change the port number, use
+          the <code>--port</code> command line parameter.
+        </p>
+
+        <pre data-language="shell">$ dcs --port 8080
 09:47:32: DCS context initialized [algorithms: [Bisecting K-Means, Lingo, STC], templates: [frontend-default, lingo, stc, bkmeans]]
-09:47:32: Service started on port 8081.
+09:47:32: Service started on port 8080.
 </pre>
+      </li>
 
-    <p>
-      Once started, the service is ready to accept requests, by default
-      at <a href="http://localhost:8080/service/">http://localhost:8080/service/</a>.
-    </p>
+      <li>
+        <p>
+          Once started, the DCS is ready to accept requests:
+        </p>
+
+        <ul>
+          <li>
+            <p>
+              <a href="http://localhost:8080/service/">http://localhost:8080/service/</a>
+              &ndash; Carrot<sup>2</sup> REST API,
+            </p>
+          </li>
+          <li>
+            <a href="http://localhost:8080/service/openapi">http://localhost:8080/service/openapi</a>
+            &ndash; OpenAPI documentation,
+          </li>
+          <li>
+            <a href="http://localhost:8080/">http://localhost:8080/</a>
+            &ndash; search engine application,
+          </li>
+          <li>
+            <a href="http://localhost:8080/#/workbench">http://localhost:8080/#/workbench</a>
+            &ndash; Carrot<sup>2</sup> Clustering Workbench,
+          </li>
+          <li>
+            <a href="http://localhost:8080/javadoc">http://localhost:8080/doc</a>
+            &ndash; this documentation.
+          </li>
+        </ul>
+      </li>
+    </ol>
+
+
   </section>
 
   <section id="workflow">
     <h2>API workflow</h2>
 
     <p>
-      The document clustering service is essentially a single, stateless endpoint accepting JSON
+      The document clustering service is a single, stateless endpoint accepting JSON
       requests and returning JSON responses.
     </p>
 
@@ -66,7 +153,7 @@
 
     <ul>
       <li>clustering algorithm identifier,</li>
-      <li>language (language components) identifier,</li>
+      <li>language identifier,</li>
       <li>text fields of documents to be clustered.</li>
     </ul>
 
@@ -82,7 +169,7 @@
       the clustering algorithm's identifier and the language. You can assume
       that certain components, such as the <code>Lingo</code> algorithm or the <code>English</code>
       language, always exist in your DCS distribution. Alternatively, you can
-      <a href="#service-configuration">enumerate the available components dynamically</a> using the
+      <a href="#service-configuration">get the available components</a> from the
       <code>/list</code> service endpoint.
     </p>
   </section>
