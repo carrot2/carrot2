@@ -198,3 +198,9 @@ p.reldate {
   font-size: small;
   color: dimgray;
 }
+
+.glob-examples .explanation {
+  display: block;
+  color: var(--text-color-light);
+  font-size: var(--small-font-size);
+}

@@ -25,3 +25,7 @@ article thead th {
 article table td.center {
   text-align: center;
 }
+
+table td p:first-child {
+  margin-top: 0;
+}

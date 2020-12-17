@@ -85,11 +85,7 @@
       <p>
         The Document Clustering Server reads dictionary files from the
         <code>web/service/resources</code> directory in the server's distribution
-        directory.
-      </p>
-
-      <p>
-        For changes applied to dictionary files to take effect, you need to
+        directory. For changes applied to dictionary files to take effect, you need to
         restart the Document Clustering Server.
       </p>
     </section>
@@ -204,6 +200,316 @@
       TODO: point to an example (or place it here) which uses
       LanguageComponentsLoader.withResourceLookup.
       -->
+    </section>
+  </section>
+
+  <section id="syntax">
+    <h2>Syntax</h2>
+
+    <p>
+      Both the word- and label filter dictionaries use a common syntax based on
+      <em>matchers</em>. An example word or label filter dictionary is shown below.
+    </p>
+
+    <figure>
+      <pre data-language="json">
+        {
+          "exact": [
+            "Literal case-sensitive match"
+          ],
+          "glob": [
+            "starts with phrase *",
+            "* contains words *"
+          ],
+          "regexp": [
+            "(?).+BadLabel.+",
+            "(?)^[0-9]\s*.*"
+          ]
+        }
+      </pre>
+      <figcaption>
+        <p>
+          An example word or label filter dictionary with entries of three
+          different matcher types.
+        </p>
+      </figcaption>
+    </figure>
+
+    <p>
+      A matcher entry is a description of how to determine whether a word or label should
+      be filtered out. The <code>exact</code>, <code>glob</code> and
+      <code>regexp</code> properties are optional and can contain an array
+      of string entries for the specific matcher types, described in the following
+      sections. If a word or a label matches any matcher of any type, it will
+      be filtered out.
+    </p>
+
+    <div class="warning">
+      <strong>Heads up, word and label character case!</strong>
+
+      <p>
+        When performing <strong>word filtering</strong>, Carrot<sup>2</sup> will
+        check the <strong>lower-cased</strong> version of each word against
+        the dictionary. This is to make it easy to paste a lower-cased
+        list of stop words into the dictionary. Please note, however, that
+        mixed-case entries will lever match in word filtering.
+      </p>
+
+      <p>
+        On the other hand, when performing <strong>label filtering</strong>,
+        Carrot<sup>2</sup> will check the <strong>original-case</strong> version
+        of the label, as produced by the clustering algorithm. This means that
+        your label filtering entries must take character case into account
+        or use a matcher type where character case is ignored.
+      </p>
+    </div>
+
+    <section id="syntax:exact-matcher">
+      <h3>Exact matcher</h3>
+
+      <p>
+        Exact matchers require exact case-sensitive equality between the word
+        or phrase and the dictionary entry. Exact matcher entries are fast
+        to parse and very fast to apply during clustering.
+      </p>
+
+      <figure>
+        <pre data-language="json">
+          {
+            "exact": [
+              "DevOps",
+              "Windows 2000"
+            ]
+          }
+        </pre>
+        <figcaption>
+          <p>
+            An example label filter dictionary with two <code>exact</code> matcher entries.
+          </p>
+        </figcaption>
+      </figure>
+
+      <p>
+        The above dictionary definitions will match labels <em>DevOps</em> and
+        <em>Windows 2000</em>, but will not match <em>Devops</em> or
+        <em>Windows 2000 machine</em>.
+      </p>
+
+      <p>
+        For case-insensitive matching, use <a href="#syntax:glob-matcher">glob matchers</a>
+        (preferably) or case-insensitive <a href="#syntax:regular-expression-matcher">regular
+        expression matchers</a>.
+      </p>
+    </section>
+
+    <section id="syntax:glob-matcher">
+      <h3>Glob matcher</h3>
+
+      <p>
+        Glob matcher allows simple word-based wildcard matching.
+        The primary use case of the glob matcher is case-insensitive
+        matching of literal phrases, as well as "begins with...", "ends with..."
+        or "contains..." types of expressions. Glob matcher entries are fast
+        to parse and very fast to apply.
+      </p>
+
+      <figure>
+        <pre data-language="json">
+          {
+            "glob": [
+              "more information",
+              "more information *",
+              "* about *"
+            ]
+          }
+        </pre>
+        <figcaption>
+          <p>
+            An example label filter dictionary with <code>glob</code> matcher entries.
+          </p>
+        </figcaption>
+      </figure>
+
+
+      <section id="syntax:glob-matcher:matching-rules">
+        <h4>Matching rules</h4>
+
+        <ul>
+          <li>
+            <p>
+              Each entry must consist of one or more space-separated tokens.
+            </p>
+          </li>
+          <li>
+            <p>
+              A token is a sequence of arbitrary characters, such as words, numbers, identifiers.
+            </p>
+          </li>
+          <li>
+            <p>
+              Matching is case-insensitive by default. Letter case normalization is performed based
+              on the <code>ROOT</code> Java locale, which performs language-neutral
+              case conflation according to Unicode rules.
+            </p>
+          </li>
+          <li>
+            <p>
+              The <code>*</code> token matches zero or more words.
+            </p>
+          </li>
+          <li>
+            <p>
+              The <code>*</code> wildcard character cannot be used to express prefixes or suffixes.
+              For example <code>programm*</code>, is not supported.
+            </p>
+          </li>
+          <li>
+            <p>
+              A token put in double quotes, for example <code>"Rating***"</code>  is taken literally: matching
+              is case-sensitive, <code>*</code> character is allowed and compared literally.
+            </p>
+          </li>
+          <li>
+            <p>
+              To include double quotes in the token, escape them with the <code>\</code> character,
+              for example: <code>\"information\"</code>.
+            </p>
+          </li>
+        </ul>
+      </section>
+
+      <section id="syntax:glob-matcher:example-entries">
+        <h4>Example entries</h4>
+
+        <p>
+          The following table shows a number of example glob entries. The
+          "Non-matching strings" column also has an explanation why there is no
+          match.
+        </p>
+
+        <table class="glob-examples">
+          <thead>
+          <tr>
+            <th>Entry</th>
+            <th>Matching strings</th>
+            <th>Non-matching strings</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr>
+            <td><code>more&nbsp;information</code></td>
+            <td>
+              <p><code>More information</code></p>
+              <p><code>MORE INFORMATION</code></p>
+            </td>
+            <td>
+              <p><code>more informations</code><span class="explanation">'informations' does not match pattern token 'information'.</span></p>
+              <p><code>more information about</code><span class="explanation">Pattern does not contain wildards, only 2-word strings can match.</span></p>
+              <p><code>some more information</code><span class="explanation">Pattern does not contain wildards, only 2-word strings can match.</span></p>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>more&nbsp;information&nbsp;*</code></td>
+            <td>
+              <p><code>more information</code></p>
+              <p><code>More information about</code></p>
+              <p><code>More information about a</code></p>
+            </td>
+            <td>
+              <p><code>more informations</code><span class="explanation">'informations' does not match pattern token 'information'.</span></p>
+              <p><code>more informations about</code><span class="explanation">'informations' does not match pattern token 'information'.</span></p>
+              <p><code>some more information</code><span class="explanation">Pattern does not have wildcards at the beginning, matching strings must start with 'more information'.</span></p>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>*&nbsp;information&nbsp;*</code></td>
+            <td>
+              <p><code>information</code></p>
+              <p><code>more information</code></p>
+              <p><code>information about</code></p>
+              <p><code>a lot more information on</code></p>
+            </td>
+            <td>
+              <p><code>informations</code><span class="explanation">'informations' does not match pattern token 'information'.</span></p>
+              <p><code>more informations about</code><span class="explanation">'informations' does not match pattern token 'information'.</span></p>
+              <p><code>some more informations</code><span class="explanation">'informations' does not match pattern token 'information'.</span></p>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>"Information"&nbsp;*</code></td>
+            <td>
+              <p><code>Information</code></p>
+              <p><code>Information about</code></p>
+              <p><code>Information ABOUT</code></p>
+            </td>
+            <td>
+              <p><code>information</code><span class="explanation">&quot;Information&quot; token is case-sensitive, it does not match 'information'.</span></p>
+              <p><code>information about</code><span class="explanation">&quot;Information&quot; token is case-sensitive, it does not match 'information'.</span></p>
+              <p><code>Informations about</code><span class="explanation">'Informations' does not match pattern token &quot;Information&quot;.</span></p>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>"Programm*"</code></td>
+            <td>
+              <p><code>Programm*</code></p>
+            </td>
+            <td>
+              <p><code>Programmer</code><span class="explanation">&quot;Programm*&quot; token is taken literally, it matches only 'Programm*'.</span></p>
+              <p><code>Programming</code><span class="explanation">&quot;Programm*&quot; token is taken literally, it matches only 'Programm*'.</span></p>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>\"information\"</code></td>
+            <td>
+              <p><code>"information"</code></p>
+              <p><code>"INFOrmation"</code><span class="explanation">Escaped quotes are taken literally, so match is case-insensitive</span></p>
+            </td>
+            <td>
+              <p><code>information</code><span class="explanation">Escaped quotes not found in the string being matched.</span></p>
+              <p><code>"information</code><span class="explanation">Escaped quotes not found in the string being matched.</span></p>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>programm*</code></td>
+            <td colspan="2">
+              Illegal pattern, combinations of the <code>*</code> wildcard and other characters
+              are not supported.
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>"information</code></td>
+            <td colspan="2">
+              Illegal pattern, unbalanced double quotes.
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>*</code></td>
+            <td colspan="2">
+              Illegal pattern, there must be at least one non-wildcard token.
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </section>
+
+    </section>
+
+    <section id="syntax:regular-expression-matcher">
+      <h3>Regular expression matcher</h3>
+
+      <p>
+        The regular expression matcher checks words or labels against a list
+        of regular expressions.
+      </p>
     </section>
   </section>
 </article>
