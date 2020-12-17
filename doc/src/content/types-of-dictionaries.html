@@ -508,8 +508,42 @@
 
       <p>
         The regular expression matcher checks words or labels against a list
-        of regular expressions.
+        of regular expressions you provide.
       </p>
+
+      <figure>
+        <pre data-language="json">
+          {
+            "regexp": [
+              "Windows 9[58]",
+              "(?)^[0-9]\s*.*"
+            ]
+          }
+        </pre>
+        <figcaption>
+          <p>
+            An example label filter dictionary with two <code>regexp</code> matcher entries.
+          </p>
+        </figcaption>
+      </figure>
+
+      <p>
+        The regular expressions must follow
+        <a target="_blank" href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/regex/Pattern.html">Java syntax</a>.
+        If any fragment of a word or label matches any regular expression
+        provided in the dictionary, the word or label will be filtered out.
+      </p>
+
+      <div class="warning">
+        <strong>Heads up, matching performance!</strong>
+
+        <p>
+          Regular expression-based matching is a powerful mechanism, but
+          it can also result in a dramatic decrease of clustering performance.
+          Therefore, it should be used only when a similar effect cannot be
+          achieved by reasonable number of exact and glob matching entries.
+        </p>
+      </div>
     </section>
   </section>
 </article>
