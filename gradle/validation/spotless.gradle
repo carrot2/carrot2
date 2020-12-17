@@ -31,19 +31,29 @@ allprojects { prj ->
   }
 }
 
+// Verify if npm is available. We can't reuse local npm:
+// https://github.com/diffplug/spotless/issues/728
+def os = org.gradle.internal.os.OperatingSystem.current()
+def nodePath = os.findInPath("node")
+def enableSpotlessJs = nodePath != null
+
 configure(project(":dcs:contexts:frontend")) { prj ->
   prj.apply plugin: 'com.diffplug.spotless'
 
-  spotless {
-    format 'js', {
-      target 'src/**'
-      targetExclude "**/foamtree-impl.js", "**/circles-impl.js", "**/*.svg", "**/*.html", "**/descriptors/**"
+  if (enableSpotlessJs) {
+    spotless {
+      format 'js', {
+        target 'src/**'
+        targetExclude "**/foamtree-impl.js", "**/circles-impl.js", "**/*.svg", "**/*.html", "**/descriptors/**"
 
-      prettier('2.2.1').configFile('.prettierrc.json')
+        prettier('2.2.1').configFile('.prettierrc.json')
 
-      lineEndings 'UNIX'
-      endWithNewline()
+        lineEndings 'UNIX'
+        endWithNewline()
+      }
     }
+  } else {
+    logger.warn("Spotless is skipping javascript checks (npm not found in path).")
   }
 }
 
