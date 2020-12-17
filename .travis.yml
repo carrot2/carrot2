@@ -15,4 +15,4 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-  - ./gradlew check assemble --stacktrace -Dtests.slow=true -x spotlessJs -x spotlessJsApply
+  - ./gradlew check assemble --stacktrace -Dtests.slow=true -PenableSpotlessJs=false
