@@ -98,10 +98,112 @@
       <h3>Java API</h3>
 
       <p>
-        By default, Carrot<sup>2</sup> Java API will read dictionaries contained in
-        <code>carrot2-core-%PROJECT_VERSION%.jar</code> in the
-        <code>org/carrot2/language</code>.
+        By default, Carrot<sup>2</sup> Java API will try to read dictionaries
+        from the JAR file from which the supplier of its corresponding
+        <code>LanguageComponents</code> implementation comes from. The following
+        table presents source JARs and their resource package
+        for the languages of the standard Carrot<sup>2</sup> distribution.
       </p>
+
+      <figure id="dictionaries:source-jar">
+        <table>
+          <thead>
+          <tr>
+            <th>Language(s)</th>
+            <th>JAR path (package)</th>
+            <th>JAR</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>
+              Dutch,
+              English,
+              Finnish,
+              French,
+              German,
+              Hungarian,
+              Italian,
+              Norwegian,
+              Portuguese,
+              Romanian,
+              Russian,
+              Spanish,
+              Swedish,
+              Turkish
+            </td>
+            <td><code>org/carrot2/language</code></td>
+            <td style="white-space: pre"><code>carrot2-core-%PROJECT_VERSION%.jar</code></td>
+          </tr>
+          <tr>
+            <td>
+              Arabic,
+              Armenian,
+              Brazilian,
+              Bulgarian,
+              Croatian,
+              Czech,
+              Estonian,
+              Galician,
+              Greek,
+              Hindi,
+              Indonesian,
+              Irish,
+              Latvian,
+              Lithuanian,
+              Thai
+            </td>
+            <td><code>org/carrot2/language/extras</code></td>
+            <td><code>carrot2-lang-lucene-%PROJECT_VERSION%.jar</code></td>
+          </tr>
+          <tr>
+            <td>
+              Chinese-Simplified,
+              Chinese-Traditional
+            </td>
+            <td><code>org/carrot2/language/chinese</code></td>
+            <td><code>carrot2-lang-lucene-chinese-%PROJECT_VERSION%.jar</code></td>
+          </tr>
+          <tr>
+            <td>
+              Japanese
+            </td>
+            <td><code>org/carrot2/language/japanese</code></td>
+            <td><code>carrot2-lang-lucene-japanese-%PROJECT_VERSION%.jar</code></td>
+          </tr>
+          <tr>
+            <td>
+              Korean
+            </td>
+            <td><code>org/carrot2/language/korean</code></td>
+            <td><code>carrot2-lang-lucene-korean-%PROJECT_VERSION%.jar</code></td>
+          </tr>
+          <tr>
+            <td>
+              Polish
+            </td>
+            <td><code>org/carrot2/language/polish</code></td>
+            <td><code>carrot2-lang-polish-%PROJECT_VERSION%.jar</code></td>
+          </tr>
+          </tbody>
+        </table>
+        <figcaption>
+          <p>
+            Location of dictionary resources for a corresponding languages in the standard
+            Carrot<sup>2</sup> distribution.
+          </p>
+        </figcaption>
+      </figure>
+
+      <p>
+        Note that the default dictionaries shoud not be modified in-place. Instead, their
+        project-specific copy should be loaded.
+      </p>
+
+      <!--
+      TODO: point to an example (or place it here) which uses
+      LanguageComponentsLoader.withResourceLookup.
+      -->
     </section>
   </section>
 </article>
