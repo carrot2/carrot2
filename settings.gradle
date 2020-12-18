@@ -1,4 +1,11 @@
 
+pluginManagement {
+  repositories {
+    gradlePluginPortal()
+    mavenCentral()
+  }
+}
+
 rootProject.name = 'carrot2'
 
 include 'core'

@@ -1,3 +1,4 @@
+
 plugins {
   id 'base'
 
@@ -8,6 +9,12 @@ plugins {
   id "com.github.ben-manes.versions" version "0.28.0"
 
   id 'de.thetaphi.forbiddenapis' version '3.0.1' apply false
+
+  id 'com.carrotsearch.gradle.opts' version '0.0.3' apply false
+}
+
+repositories {
+  mavenCentral()
 }
 
 rootProject.version = '4.1.0-SNAPSHOT'
@@ -28,6 +35,10 @@ ext {
     '**/*.label-filters.json',
     '**/*.word-filters.json',
   ]
+}
+
+allprojects {
+  apply plugin: 'com.carrotsearch.gradle.opts'
 }
 
 apply from: file('gradle/validation/check-environment.gradle')

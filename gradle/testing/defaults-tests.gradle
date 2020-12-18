@@ -1,9 +1,8 @@
-import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.tasks.testing.logging.*
 
 allprojects {
   plugins.withType(JavaPlugin) {
-    def verboseMode = Boolean.parseBoolean(propertyOrDefault("tests.verbose", "false"))
+    def verboseMode = Boolean.parseBoolean(opts.optOrDefault("tests.verbose", "false"))
 
     project.ext {
       testsWorkDir = file("${buildDir}/tmp/tests-cwd")
@@ -11,7 +10,7 @@ allprojects {
     }
 
     test {
-      maxParallelForks = propertyOrDefault("tests.jvms", (int) Math.max(1, Math.min(Runtime.runtime.availableProcessors() / 2.0, 4.0)))
+      maxParallelForks = opts.optOrDefault("tests.jvms", (int) Math.max(1, Math.min(Runtime.runtime.availableProcessors() / 2.0, 4.0)))
 
       useJUnit()
 
