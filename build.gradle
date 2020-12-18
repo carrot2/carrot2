@@ -10,7 +10,7 @@ plugins {
 
   id 'de.thetaphi.forbiddenapis' version '3.0.1' apply false
 
-  id 'com.carrotsearch.gradle.opts' version '0.0.3' apply false
+  id 'com.carrotsearch.gradle.opts' version '0.0.4' apply false
 }
 
 repositories {
