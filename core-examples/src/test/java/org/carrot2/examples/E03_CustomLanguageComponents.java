@@ -10,18 +10,6 @@
  */
 package org.carrot2.examples;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ServiceLoader;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.function.Supplier;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.icu.segmentation.DefaultICUTokenizerConfig;
 import org.apache.lucene.analysis.icu.segmentation.ICUTokenizer;
@@ -40,8 +28,20 @@ import org.carrot2.language.extras.LuceneAnalyzerTokenizerAdapter;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.LabelFormatterImpl;
 import org.carrot2.util.ClassRelativeResourceLookup;
-import org.carrot2.util.ResourceLookup;
 import org.junit.Test;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ServiceLoader;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.function.Supplier;
 
 /** This example shows how to tweak language components prior to clustering. */
 public class E03_CustomLanguageComponents {
@@ -90,14 +90,15 @@ public class E03_CustomLanguageComponents {
   public void tweakDefaultEnglishResources() throws IOException {
     // Sometimes the default resources are not sufficient or need to be tuned.
     // fragment-start{custom-english-resources}
-    ResourceLookup resLookup = new ClassRelativeResourceLookup(E03_CustomLanguageComponents.class);
     LanguageComponents custom =
         LanguageComponents.loader()
-            // Note we restrict languages to just English because resources for other languages
-            // are missing from the location of resource lookup and would have caused an exception.
+            // Note we restrict languages to just English because resources for
+            // other languages are missing from the location of resource lookup
+            // and would have caused an exception.
             .limitToLanguages("English")
             // and we substitute resource lookup locations with our custom location.
-            .withResourceLookup(provider -> resLookup)
+            .withResourceLookup(
+                provider -> new ClassRelativeResourceLookup(E03_CustomLanguageComponents.class))
             .load()
             .language("English");
     // fragment-end{custom-english-resources}

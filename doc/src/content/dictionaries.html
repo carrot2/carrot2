@@ -75,8 +75,15 @@
     </dl>
 
     <p>
-      The location of the dictionary files is different for the Document
-      Clustering Server (REST API) and Java API.
+      The Java API does not dictate the location of these resources (but
+      comes with reasonable defaults). Applications written using the Java API
+      &mdash; like the Document Clustering Server (REST API) &mdash; may
+      expect these resources in explicit (non-configurable) locations.
+    </p>
+
+    <p>
+      The defaults of where to find the dictionary resources for the Document
+      Clustering Server (REST API) and the Java API are provided below.
     </p>
 
     <section id="location-of-dictionary-files:document-clustering-server">
@@ -101,7 +108,7 @@
         for the languages of the standard Carrot<sup>2</sup> distribution.
       </p>
 
-      <figure id="dictionaries:source-jar">
+      <figure id="dictionaries:source-jar" class="dictionaries">
         <table>
           <thead>
           <tr>
@@ -240,7 +247,7 @@
       be filtered out. The <code>exact</code>, <code>glob</code> and
       <code>regexp</code> properties are optional and can contain an array
       of string entries for the specific matcher types, described in the following
-      sections. If a word or a label matches any matcher of any type, it will
+      sections. If a word or a label matches <em>any</em> matcher of any type, it will
       be filtered out.
     </p>
 
@@ -251,16 +258,17 @@
         When performing <strong>word filtering</strong>, Carrot<sup>2</sup> will
         check the <strong>lower-cased</strong> version of each word against
         the dictionary. This is to make it easy to paste a lower-cased
-        list of stop words into the dictionary. Please note, however, that
-        mixed-case entries will lever match in word filtering.
+        list of stop words into the dictionary. This also means that
+        mixed-case entries will never match any input word.
       </p>
 
       <p>
         On the other hand, when performing <strong>label filtering</strong>,
-        Carrot<sup>2</sup> will check the <strong>original-case</strong> version
+        Carrot<sup>2</sup> will use the <strong>case sensitive</strong> version
         of the label, as produced by the clustering algorithm. This means that
         your label filtering entries must take character case into account
-        or use a matcher type where character case is ignored.
+        or use a matcher type which is oblivious of character case (the
+        <code>glob</code> matcher, for example).
       </p>
     </div>
 
@@ -268,7 +276,7 @@
       <h3>Exact matcher</h3>
 
       <p>
-        Exact matchers require exact case-sensitive equality between the word
+        Exact matchers require <strong>exact, case-sensitive</strong> equality between the word
         or phrase and the dictionary entry. Exact matcher entries are fast
         to parse and very fast to apply during clustering.
       </p>
@@ -290,7 +298,7 @@
       </figure>
 
       <p>
-        The above dictionary definitions will match labels <em>DevOps</em> and
+        The above label dictionary definitions will match labels <em>DevOps</em> and
         <em>Windows 2000</em>, but will not match <em>Devops</em> or
         <em>Windows 2000 machine</em>.
       </p>
@@ -308,9 +316,9 @@
       <p>
         Glob matcher allows simple word-based wildcard matching.
         The primary use case of the glob matcher is case-insensitive
-        matching of literal phrases, as well as "begins with...", "ends with..."
-        or "contains..." types of expressions. Glob matcher entries are fast
-        to parse and very fast to apply.
+        matching of literal phrases, as well as "begins with&hellip;",
+        "ends with&hellip;" or "contains&hellip;" types of expressions.
+        Glob matcher entries are fast to parse and very fast to apply.
       </p>
 
       <figure>

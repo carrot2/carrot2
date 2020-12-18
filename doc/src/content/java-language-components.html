@@ -23,7 +23,7 @@
     <li>lemmatisation (stemming) routines,</li>
     <li>tokenisation (word decomposition) and decompounding routines,</li>
     <li>part of speech dictionaries,</li>
-    <li>ignore lists (stop word lists).</li>
+    <li>word or label filters (<a href="dictionaries.html">dictionaries</a>).</li>
   </ul>
 
   <p>
@@ -68,85 +68,80 @@
     <strong>Some algorithms may not support all languages</strong>
 
     <p>
-      Clustering algorithms may support a subset of languages and language component instances
-      assembled
-      manually. Each clustering algorithm has a method called <code>supports(LanguageComponents
-      lc)</code>
-      which can be used to check whether the algorithm works with a given instance of language
-      components.
+      A clustering algorithm in Carrot<sup>2</sup> may support only a subset of the languages
+      available from the <code>LanguageComponentsProvider</code> extension point.
+      Each clustering algorithm has a method called <code>supports(LanguageComponents lc)</code>
+      which can be used to test whether the algorithm works with a given language.
     </p>
   </div>
 
-  <section id="tweaking-lexical-data-resources">
-    <h2>Tweaking lexical data resources</h2>
+
+
+  <section id="tweaking-lexical-filters">
+    <h2>Tweaking lexical filters</h2>
 
     <p>
-      Lexical components are responsible for telling the algorithm whether a term or a candidate cluster
+      Lexical filters are responsible for telling the algorithm whether a term or a candidate cluster
       label should be ignored. Such ignorable elements typically include function
       words like prepositions, conjunctions or domain-specific boilerplate language that
       is not a good candidate for a cluster.
     </p>
 
     <p>
-      The <code>StopwordFilter</code> interface controls low-level filtering
-      of individual terms:
+      The Java API defines two components (interfaces) that are part of each loaded
+      <code>LanguageComponents</code> instance:
     </p>
 
-    <pre data-embed="%CORE%/org/carrot2/language/StopwordFilter.java"
-         data-fragment="word-filter"></pre>
+    <ul>
+      <li>
+        <p>
+          The <code>StopwordFilter</code> interface controls low-level filtering
+          of individual terms:
+        </p>
+
+        <pre data-embed="%CORE%/org/carrot2/language/StopwordFilter.java"
+             data-fragment="word-filter"></pre>
+      </li>
+
+      <li>
+        <p>
+          The <code>LabelFilter</code> interface controls low-level filtering
+          of undesired cluster labels.
+        </p>
+
+        <pre data-embed="%CORE%/org/carrot2/language/LabelFilter.java"
+             data-fragment="label-filter"></pre>
+      </li>
+    </ul>
+
 
     <p>
-      The <code>LabelFilter</code> interface controls low-level filtering
-      of undesired cluster labels.
+      Both these components can be explicitly provided (or overridden at runtime) in a
+      <code>LanguageComponents</code>
+      instance but implementing a custom filter is often impractical.
+      It is much easier to reuse the default implementation that builds
+      filters using <a href="dictionaries.html">filter dictionaries</a> encoded in JSON.
     </p>
 
-    <pre data-embed="%CORE%/org/carrot2/language/LabelFilter.java"
-         data-fragment="label-filter"></pre>
-
     <p>
-      While both these components can be explicitly provided (or overriden) in a <code>LanguageData</code>
-      instance, the easiest and most common quality tuning step is to modify the
-      default implementation's existing text resources. Carrot<sup>2</sup> attempts to load
-      two files for each language (where the <i>lang</i> prefix is replaced with the
-      name of the language the component is instantiated for):
+      To instantiate <code>LanguageComponents</code> for a particular language with a custom
+      set of dictionary resources, copy the
+      <a href="dictionaries.html#location-of-dictionary-files">default resources</a>
+      shipped with the distribution somewhere where your application
+      can load them.
     </p>
 
-    <dl>
-      <dt><i>lang</i>.stopwords.utf8</dt>
-      <dd>
-        A plain-text list of words to ignore. Each line contains exactly one word (token).
-        Entries in this dictionary are applied to tokens after case normalization and should be
-        lowercased, for example:
-        <pre>a
-about
-above
-across
-...</pre>
-      </dd>
-
-      <dt><i>lang</i>.stoplabels.utf8</dt>
-      <dd>
-        A plain-text list of regular expression patterns to ignore. Patterns
-        should be compatible with Java Pattern class specification. Each line contains exactly
-        one expression that, if it matches the input label, causes the label to be discarded and
-        ignored during clustering. Both the patterns and label candidates passed for matching
-        are case-sensitive. Case-insensitive patterns can be created with local pattern flags
-        as shown in the example stop labels file below:
-        <pre>(?i)information (about|on).*
-(?i)(index|list) of.*
-...</pre>
-      </dd>
-    </dl>
+    <p>
+      The <code>LanguageComponentsLoader</code> class has a method to provide
+      a custom resource loader (<code>ResourceLookup</code> implementation)
+      responsible for locating any external resources language data may ask for.
+    </p>
 
     <p>
-      The <code>LanguageComponentsLoader</code> class has methods to restrict
-      the number of loaded resources to only cover the needed languages (and/ or algorithms). There
-      is also a method for adding custom <code>ResourceLookup</code> implementation, responsible
-      for locating any external resources components may require.
-      We can load our custom, modified resources using this facility without
-      touching any of the default components. It's a good idea to start tweaking custom resources
-      by first copying the defaults from Carrot<sup>2</sup> JARs and then modifying them in
-      the new location.
+      To restrict the number of loaded resources to only a subset of all available languages
+      (and/ or algorithms), use the loader's <code>limitToLanguages</code> and
+      <code>limitToAlgorithms</code> methods. Here is a full example that
+      loads English resources from a class-relative classpath location:
     </p>
 
     <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
@@ -156,17 +151,24 @@ across
       Once loaded, the <code>LanguageComponents</code> object is ready to be used for subsequent
       clustering calls.
     </p>
+
+    <p>
+      Note that language components loader does not track changes or reload anything
+      automatically (this would be a costly operation). If your lexical resources
+      change often, you'll have to resort to ephemeral dictionaries or
+      a custom implementation of filtering interfaces above.
+    </p>
   </section>
 
   <section id="tweaking-ephemeral-dictionaries">
     <h2>Ephemeral dictionaries (lexical filters)</h2>
 
     <p>
-      When labels and stop words change frequently from request to request, reloading
-      a full set of lexical resources would be slow and impractical. Ephemeral dictionaries
-      (per-request filters) are compiled for each clustering call and layered on top
-      of the default language data. Please note that this adds some additional cost to each
-      clustering call.
+      When filters for labels or stop words change frequently, reloading
+      a full set of dictionaries would be slow and impractical. Ephemeral dictionaries
+      are compiled for each clustering call and layered on top
+      of the default <code>LanguageComponents</code> implementations.
+      Please note that this adds some additional cost to each clustering call.
     </p>
 
     <p>
@@ -179,11 +181,12 @@ across
   </section>
 
   <section id="tweaking-components-directly">
-    <h2>Tweaking components directly</h2>
+    <h2>Tweaking <code>LanguageComponents</code></h2>
 
     <p>
-      When the default dictionaries fall short of requirements, a custom implementation of a given
-      preprocessing component may be required. An <code>LanguageComponents</code> instance consists
+      When the default dictionaries or other components
+      fall short of requirements, a custom replacement may be provided.
+      A <code>LanguageComponents</code> instance consists
       of a set of interfaces and suppliers providing implementations of these
       interfaces. We can override any of these suppliers, creating a custom language preprocessing
       pipeline.

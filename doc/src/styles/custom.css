@@ -204,3 +204,7 @@ p.reldate {
   color: var(--text-color-light);
   font-size: var(--small-font-size);
 }
+
+.dictionaries tr td:nth-child(n+2) {
+  font-size: small;
+}
