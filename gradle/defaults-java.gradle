@@ -31,3 +31,14 @@ allprojects {
     }
   }
 }
+
+subprojects {
+  plugins.withType(JavaPlugin) {
+    def moduleName = "${project.group}.${project.name.replaceAll('-', '.')}"
+    jar {
+      manifest {
+        attributes("Automatic-Module-Name": moduleName)
+      }
+    }
+  }
+}
