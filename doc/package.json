@@ -8,10 +8,14 @@
     "clean": "gatsby clean",
     "develop": "gatsby develop",
     "start": "npm run develop",
-    "serve": "gatsby serve"
+    "serve": "gatsby serve",
+    "test": "html-validate src\\content\\*.html"
   },
   "dependencies": {
     "@carrotsearch/gatsby-theme-apidocs": "1.0.2",
     "gatsby": "2.27.4"
+  },
+  "devDependencies": {
+    "html-validate": "4.1.0"
   }
 }
