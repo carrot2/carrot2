@@ -194,4 +194,36 @@ Data Mining Techniques, documents: 11</pre>
       approaches to running algorithms in concurrent threads.
     </p>
   </section>
+
+  <section id="customizing-dictionaries">
+    <h2>Customizing dictionaries</h2>
+
+    <p>
+      The simplest way to customize word and label
+      <a href="dictionaries.html">filter dictionaries</a> is to copy the
+      <a href="dictionaries.html#location-of-dictionary-files:java-api">default
+      dictionaries</a> to your application-specific location and provide
+      a custom <code>ResourceLookup</code> implementation when loading language
+      resources. The following example loads English resources from a class-relative
+      classpath location.
+    </p>
+
+    <figure>
+      <pre data-embed="%JAVA_EXAMPLES%/E03_CustomLanguageComponents.java"
+           data-fragment="custom-english-resources"></pre>
+      <figcaption>
+        Loading English language resources from a class-relative classpath location.
+      </figcaption>
+    </figure>
+
+    <p>
+      The <a href="java-language-components.html">Language Components</a> section
+      describes Carrot<sup>2</sup> language resource management in detail, including
+      <a href="java-language-components.html#ephemeral-dictionaries">ephemeral
+      dictionaries</a> for temporary per-clustering word and label filtering,
+      <a href="java-language-components.html#tweaking-components-directly">LanguageComponents
+      customization</a> for replacing a stemmer or custom filtering,
+      <a href="java-language-components.html#other-languages">support for other languages</a>.
+    </p>
+  </section>
 </article>

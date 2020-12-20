@@ -26,15 +26,15 @@
       <dt>Word filters</dt>
       <dd>
         <p>
-          The set of words that should be ignored during clustering. If a word
-          is filtered out, it will not have influence on the cluster the
-          algorithm produces, but may still show in cluster labels, such as <em>University
-          of Washington</em>, to aid readability.
+          The set of words, commonly known as <em>stop words</em>, that should be ignored during clustering.
+          Typically, word filters would contain function words, such as
+          <em>of</em> or <em>between</em>.
         </p>
 
         <p>
-          Typically, word filters would contain function words, such as
-          <em>of</em> or <em>between</em>.
+          If a word is filtered out, it will not have influence on the cluster
+          the algorithm produces, but may still show in cluster labels, such as
+          <em>University of Washington</em>, to aid readability.
         </p>
       </dd>
 
@@ -75,15 +75,13 @@
     </dl>
 
     <p>
-      The Java API does not dictate the location of these resources (but
-      comes with reasonable defaults). Applications written using the Java API
-      &mdash; like the Document Clustering Server (REST API) &mdash; may
-      expect these resources in explicit (non-configurable) locations.
-    </p>
-
-    <p>
-      The defaults of where to find the dictionary resources for the Document
-      Clustering Server (REST API) and the Java API are provided below.
+      Carrot<sup>2</sup> Document Clustering Server (REST API) loads dictionaries
+      from an <a href="#location-of-dictionary-files:document-clustering-server">explicit
+      non-configurable location</a> provided below.
+      The Java API does not dictate the location of these resources, but
+      comes with <a href="#location-of-dictionary-files:java-api">reasonable
+      defaults</a> and a way to load them from a
+      <a href="java-api-basics.html#customizing-dictionaries">custom location</a>.
     </p>
 
     <section id="location-of-dictionary-files:document-clustering-server">
@@ -199,14 +197,11 @@
       </figure>
 
       <p>
-        Note that the default dictionaries shoud not be modified in-place. Instead, their
-        project-specific copy should be loaded.
+        Note that you should not modify the default dictionaries in-place.
+        Instead, copy the relevant dictionaries to your application-specific
+        location and <a href="java-api-basics.html#customizing-dictionaries">load
+        them from that location</a>.
       </p>
-
-      <!--
-      TODO: point to an example (or place it here) which uses
-      LanguageComponentsLoader.withResourceLookup.
-      -->
     </section>
   </section>
 
