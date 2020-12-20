@@ -1,4 +1,5 @@
 {
+  "root": true,
   "extends": [
     "htmlvalidate:recommended"
   ],
@@ -13,6 +14,12 @@
       "th": {
         "inherit": "th",
         "requiredAttributes": []
+      }
+    },
+    {
+      "pre": {
+        "inherit": "pre",
+        "foreign": true
       }
     }
   ]
