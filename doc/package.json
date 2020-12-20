@@ -16,6 +16,7 @@
     "gatsby": "2.27.4"
   },
   "devDependencies": {
-    "html-validate": "4.1.0"
+    "html-validate": "4.1.0",
+    "link-checker": "1.4.1"
   }
 }
