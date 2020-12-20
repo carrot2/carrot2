@@ -44,7 +44,7 @@
   </section>
 
 
-  <section id="api-overview">
+  <section id="api-workflow">
     <h2>API workflow</h2>
 
     <p>
@@ -69,93 +69,94 @@
         </p>
       </li>
     </ol>
-  </section>
 
-  <section id="component-types">
-    <h2>Heavy and lightweight components</h2>
+    <section id="api-workflow:component-types">
+      <h3>Heavy and lightweight components</h3>
 
-    <p>
-      Initialization of heavy components (<code>LanguageComponents</code>) may take significant time.
-      <strong>Load them once and then reuse for all subsequent clustering calls</strong>.
-      Heavy components are thread-safe and can be reused or shared between threads.
-    </p>
+      <p>
+        Initialization of heavy components (<code>LanguageComponents</code>) may take significant time.
+        <strong>Load them once and then reuse for all subsequent clustering calls</strong>.
+        Heavy components are thread-safe and can be reused or shared between threads.
+      </p>
 
-    <p>
-      Lightweight components are cheap to instantiate so you can create a throw-away instance
-      on-demand for each clustering call.
-    </p>
-  </section>
+      <p>
+        Lightweight components, such as clustering algorithm instances, are cheap
+        to instantiate so you can create a throw-away instance on-demand for
+        each clustering call.
+      </p>
+    </section>
 
-  <section id="example-basics">
-    <h2>Clustering</h2>
+    <section id="api-workflow:clustering">
+      <h3>Clustering</h3>
 
-    <p>
-      The following example discusses code from the <code>E01_ClusteringBasics.java</code>
-      example. It shows just the key elements required to process a stream of documents
-      in English, without any parameter or language resource tuning.
-    </p>
+      <p>
+        This section discusses code from the <code>E01_ClusteringBasics.java</code>
+        example. It shows just the key elements required to process a stream of documents
+        in English, without any parameter or language resource tuning.
+      </p>
 
-    <p>
-      First, let's load the heavy components: the default resources for the English language. The
-      loaded <code>LanguageComponents</code> instance is thread-safe and should be reused for
-      any subsequent calls to clustering algorithms.
-    </p>
+      <p>
+        First, let's load the heavy components: the default resources for the English language. The
+        loaded <code>LanguageComponents</code> instance is thread-safe and should be reused for
+        any subsequent calls to clustering algorithms.
+      </p>
 
-    <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
-         data-fragment="setup-heavy-components"></pre>
+      <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
+           data-fragment="setup-heavy-components"></pre>
 
-    <p>
-      Now it's time to create the lightweight component: an instance of a clustering algorithm.
-      Let's pick the Lingo algorithm explicitly:
-    </p>
+      <p>
+        Now it's time to create the lightweight component: an instance of a clustering algorithm.
+        Let's pick the Lingo algorithm explicitly:
+      </p>
 
-    <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
-         data-fragment="setup-lightweight-components"></pre>
+      <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
+           data-fragment="setup-lightweight-components"></pre>
 
-    <p>
-      Once we have the heavy and lightweight components initialized, we can assemble the input
-      for clustering: a stream of <code>Document</code> instances. Each document must implement a
-      single method that presents its clusterable text fields to the algorithm:
-    </p>
+      <p>
+        Once we have the heavy and lightweight components initialized, we can assemble the input
+        for clustering: a stream of <code>Document</code> instances. Each document must implement a
+        single method that presents its clusterable text fields to the algorithm:
+      </p>
 
-    <pre data-embed="%CORE%/org/carrot2/clustering/Document.java"
-         data-fragment="visitor-method"></pre>
+      <pre data-embed="%CORE%/org/carrot2/clustering/Document.java"
+           data-fragment="visitor-method"></pre>
 
-    <p>
-      In this example we will use hardcoded values from an array available in the
-      <code>ExamplesData</code> class:
-    </p>
+      <p>
+        In this example we will use hardcoded values from an array available in the
+        <code>ExamplesData</code> class:
+      </p>
 
-    <pre data-embed="%JAVA_EXAMPLES%/ExamplesData.java"
-         data-fragment="search-results-array"></pre>
+      <pre data-embed="%JAVA_EXAMPLES%/ExamplesData.java"
+           data-fragment="search-results-array"></pre>
 
-    <p>
-      Because the field visitor interface is a single method, it can be implemented using a closure.
-      We convert the above data array into document instances dynamically using Java streams.
-      Note how we only expose the title and the snippet fields, the URL is omitted because
-      it is not really clusterable text content.
-    </p>
+      <p>
+        Because the field visitor interface is a single method, it can be implemented using a closure.
+        We convert the above data array into document instances dynamically using Java streams.
+        Note how we only expose the title and the snippet fields, the URL is omitted because
+        it is not really clusterable text content.
+      </p>
 
-    <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
-         data-fragment="clustering-document-stream"></pre>
+      <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
+           data-fragment="clustering-document-stream"></pre>
 
-    <p>
-      Everything is now ready to call the clustering algorithm and consume the result.
-      Here we just print the top-level cluster labels and document counts to the console:
-    </p>
+      <p>
+        Everything is now ready to call the clustering algorithm and consume the result.
+        Here we just print the top-level cluster labels and document counts to the console:
+      </p>
 
-    <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
-         data-fragment="clustering"></pre>
+      <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
+           data-fragment="clustering"></pre>
 
-    <p>
-      When executed, this example should result in this output:
-    </p>
+      <p>
+        When executed, this example should result in this output:
+      </p>
 
-    <pre data-language="none">Data Mining Software, documents: 13
+      <pre data-language="none">Data Mining Software, documents: 13
 Knowledge Discovery, documents: 13
 Data Mining Process, documents: 12
 Data Mining Applications, documents: 11
 Data Mining Techniques, documents: 11</pre>
+    </section>
   </section>
 
   <section id="tweaking-attributes">
