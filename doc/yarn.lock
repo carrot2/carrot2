@@ -7389,7 +7389,7 @@ html-react-parser@0.14.0:
     react-property "1.0.1"
     style-to-object "0.3.0"
 
-html-validate@^4.1.0:
+html-validate@4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/html-validate/-/html-validate-4.1.0.tgz#bc7607d47fcaf3480c33523a5263bd51f7c49075"
   integrity sha512-2ADmbTlvZZCRI/8/Lbu8eHhf93aNFTeIVD4ZxBENbrfaeZmJ3gzWsFRjJkq9ooetRNwuGU1q0rD3MnbXZVBh8Q==
