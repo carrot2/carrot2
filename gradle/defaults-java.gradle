@@ -13,7 +13,8 @@ allprojects {
     tasks.withType(Jar) {
       manifest {
         attributes(
-            "Implementation-Title": project.name,
+            "Implementation-Vendor": "Carrot2 (https://carrot2.org)",
+            "Implementation-Title": "Carrot2 ${project.name}",
             "Implementation-Version": "${project.version} (${replaceTokens['product.gitrev']}, ${replaceTokens['product.buildDate']})")
       }
     }
