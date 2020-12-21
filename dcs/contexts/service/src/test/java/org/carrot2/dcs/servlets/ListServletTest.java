@@ -105,6 +105,6 @@ public class ListServletTest extends AbstractServletTest {
 
     ObjectMapper om = new ObjectMapper();
     Assertions.assertThat(om.readValue(sw.toString(), ListResponse.class).algorithms.keySet())
-        .containsOnlyElementsOf(allowed);
+        .hasSameElementsAs(allowed);
   }
 }

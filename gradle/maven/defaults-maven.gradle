@@ -133,6 +133,8 @@ configure(subprojects.findAll { it.path in published }) {
           group = project.group
           artifactId = project.archivesBaseName
 
+          suppressPomMetadataWarningsFor('sourcesElements')
+
           pom(configurePom)
         }
 

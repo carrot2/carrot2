@@ -48,7 +48,7 @@ public class AttrDoubleTest extends TestBase {
     Assertions.assertThat(clazz.defValue.get()).isEqualTo(36.6d);
     Assertions.assertThat(clazz.nullValue.get()).isNull();
     Assertions.assertThat(clazz.otherValue.get()).isEqualTo(36.6d);
-    Assertions.assertThat(clazz.nanValue.get()).isEqualTo(Double.NaN);
+    Assertions.assertThat(clazz.nanValue.get()).isNaN();
     Assertions.assertThat(clazz.infValue.get()).isEqualTo(Double.POSITIVE_INFINITY);
   }
 

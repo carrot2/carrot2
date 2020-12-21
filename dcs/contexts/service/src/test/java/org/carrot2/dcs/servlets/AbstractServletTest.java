@@ -21,6 +21,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.carrot2.TestBase;
+import org.junit.After;
 import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -34,12 +35,21 @@ public abstract class AbstractServletTest extends TestBase {
 
   @Mock protected ServletContext context;
 
+  private AutoCloseable mocks;
+
   @Before
   public void setUp() {
-    MockitoAnnotations.initMocks(this);
+    mocks = MockitoAnnotations.openMocks(this);
 
     when(config.getServletContext()).thenReturn(context);
     when(request.getParameter(ClusterServlet.PARAM_INDENT)).thenReturn("true");
+  }
+
+  @After
+  public void cleanup() throws Exception {
+    if (mocks != null) {
+      mocks.close();
+    }
   }
 
   protected void setupMockTemplates(
