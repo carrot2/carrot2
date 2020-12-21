@@ -1,0 +1,26 @@
+{
+  "root": true,
+  "extends": [
+    "htmlvalidate:recommended"
+  ],
+
+  "rules": {
+    "element-required-attributes": "warn",
+    "no-inline-style": "off",
+    "no-trailing-whitespace": "off"
+  },
+  "elements": ["html5",
+    {
+      "th": {
+        "inherit": "th",
+        "requiredAttributes": []
+      }
+    },
+    {
+      "pre": {
+        "inherit": "pre",
+        "foreign": true
+      }
+    }
+  ]
+}
