@@ -13,7 +13,7 @@ package org.carrot2.language;
 import org.carrot2.attrs.AcceptingVisitor;
 
 /**
- * An attribute supplying a {@link StopwordFilter}.
+ * A parameter supplying a {@link StopwordFilter}.
  *
  * @see DefaultDictionaryImpl
  * @see EphemeralDictionaries

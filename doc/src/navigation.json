@@ -42,9 +42,9 @@
       "title": "Reference",
       "articles": [
         "rest-api-reference",
-        "lingo-attributes",
-        "stc-attributes",
-        "kmeans-attributes"
+        "lingo-parameters",
+        "stc-parameters",
+        "kmeans-parameters"
       ]
     },
     {

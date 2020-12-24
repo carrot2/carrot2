@@ -9,10 +9,10 @@ const attributeOutlineHtml = require("./attributes-outline").attributeOutlineHtm
 const attributeDetailsHtml = require("./attributes-details").attributeDetailsHtml;
 
 exports.attributeTransformer = ($, {dir, variables, reporter, loadEmbeddedContent}) => {
-  $("div[data-attributes]")
+  $("div[data-parameters]")
       .replaceWith((i, el) => {
         const $el = $(el);
-        const rawContent = loadEmbeddedContent($el.data("attributes"), dir, variables, reporter);
+        const rawContent = loadEmbeddedContent($el.data("parameters"), dir, variables, reporter);
         if (rawContent === undefined) {
           return "";
         }

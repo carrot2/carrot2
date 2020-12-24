@@ -159,7 +159,7 @@ Data Mining Techniques, documents: 11</pre>
     </section>
   </section>
 
-  <section id="tweaking-attributes">
+  <section id="tweaking-parameters">
     <h2>Tweaking parameters</h2>
 
     <p>
@@ -172,15 +172,15 @@ Data Mining Techniques, documents: 11</pre>
          data-fragment="parameters"></pre>
 
     <p>
-      Note that even primitive-type attributes like <code>wordDfThreshold</code> above have to use
+      Note that even primitive-type parameters like <code>wordDfThreshold</code> above have to use
       setter methods to modify their value. This is because arguments are validated early and
       out-of-range or otherwise incorrect values will trigger exceptions at the exact moment they
       are set in the code.
     </p>
 
     <p>
-      When an attribute's type is an interface, the concrete type variable can
-      be declared and configured prior to setting the final attribute. Local-variable
+      When a parameter's type is an interface, the concrete type variable can
+      be declared and configured prior to setting the final parameter. Local-variable
       type inference (<code>var</code>) available from Java 10 on is useful to keep these
       declaration compact and still have the compiler (and IDE) provide field suggestions upon
       typing:

@@ -47,7 +47,7 @@ public class BasicPreprocessingPipeline extends AttrComposite implements Context
   /** Stemmer used by the algorithm. */
   protected final LanguageModelStemmer stemming = new LanguageModelStemmer();
 
-  /** Stop list marker used by the algorithm, contains bindable attributes. */
+  /** Stop list marker used by the algorithm, contains modifiable parameters. */
   protected final StopListMarker stopListMarker = new StopListMarker();
 
   /** Tokenizer used by the algorithm. */

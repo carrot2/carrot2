@@ -70,7 +70,7 @@ public class CompletePreprocessingPipeline extends AttrComposite implements Cont
             .defaultValue(LabelFilterProcessor::new));
   }
 
-  /** Document assigner used by the algorithm, contains bindable attributes. */
+  /** Document assigner used by the algorithm, contains modifiable parameters.. */
   public DocumentAssigner documentAssigner;
 
   {
@@ -88,7 +88,7 @@ public class CompletePreprocessingPipeline extends AttrComposite implements Cont
   /** Stemmer used by the algorithm. */
   protected final LanguageModelStemmer stemming = new LanguageModelStemmer();
 
-  /** Stop list marker used by the algorithm, contains bindable attributes. */
+  /** Stop list marker used by the algorithm, contains modifiable parameters.. */
   protected final StopListMarker stopListMarker = new StopListMarker();
 
   /** Tokenizer used by the algorithm. */

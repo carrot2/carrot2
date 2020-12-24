@@ -41,7 +41,7 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
           AttrDouble.builder().label("Boosted fields weight").min(0).max(10).defaultValue(2.));
 
   /**
-   * A list fields for which to apply extra weight. Content of fields provided in this attribute can
+   * A list fields for which to apply extra weight. Content of fields provided in this parameter can
    * be given more weight during clustering. You may want to boost, for example, the title field
    * with the assumption that it accurately summarizes the content of the whole document.
    */
@@ -69,11 +69,11 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
    * of 1.0 means that all words will be taken into account, no matter in how many documents they
    * appear.
    *
-   * <p>This attribute may be useful when certain words appear in most of the input documents (e.g.
+   * <p>This parameter may be useful when certain words appear in most of the input documents (e.g.
    * company name from header or footer) and such words dominate the cluster labels. In such case,
    * setting it to a value lower than 1.0 (e.g. 0.9) may improve the clusters.
    *
-   * <p>Another useful application of this attribute is when there is a need to generate only very
+   * <p>Another useful application of this parameter is when there is a need to generate only very
    * specific clusters, that is clusters containing small numbers of documents. This can be achieved
    * by setting {@link #maxWordDf} to extremely low values: 0.1 or 0.05.
    */
