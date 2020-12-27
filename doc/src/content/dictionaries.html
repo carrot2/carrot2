@@ -32,9 +32,17 @@
         </p>
 
         <p>
-          If a word is filtered out, it will not have influence on the cluster
-          the algorithm produces, but may still show in cluster labels, such as
+          If a word is filtered out, it will not have influence on the clusters
+          the algorithm creates, but may still appear in cluster labels, such as
           <em>University of Washington</em>, to aid readability.
+        </p>
+
+        <p>
+          Word filters are stored in the <a href="#syntax">JSON syntax</a> for each language separately
+          in a file named <strong><em>lang</em>.word-filters.json</strong>, where <em>lang</em>
+          is the name of the language, for example <strong>english.word-filters.json</strong>.
+          <a href="#location-of-dictionary-files">Location of the dictionary files</a> is
+          application-specific.
         </p>
       </dd>
 
@@ -45,34 +53,20 @@
           You can use label filters to suppress offensive or non-informative
           labels, such as <em>Official website</em>.
         </p>
+
+        <p>
+          Label filters are stored in the <a href="#syntax">JSON syntax</a> for each language separately
+          in a file named <strong><em>lang</em>.label-filters.json</strong>, where <em>lang</em>
+          is the name of the language, for example <strong>english.label-filters.json</strong>.
+          <a href="#location-of-dictionary-files">Location of the dictionary files</a> is
+          application-specific.
+        </p>
       </dd>
     </dl>
   </section>
 
   <section id="location-of-dictionary-files">
     <h2>Location of dictionary files</h2>
-
-    <p>
-      For each language, two dictionary files are available:
-    </p>
-    
-    <dl>
-      <dt><em>lang</em>.word-filters.json</dt>
-      <dd>
-        <p>
-          Word filters dictionary for language <em>lang</em>, for example
-          <code>english.word-filters.json</code>.
-        </p>
-      </dd>
-
-      <dt><em>lang</em>.label-filters.json</dt>
-      <dd>
-        <p>
-          Label filters dictionary for language <em>lang</em>, for example
-          <code>english.label-filters.json</code>.
-        </p>
-      </dd>
-    </dl>
 
     <p>
       Carrot<sup>2</sup> Document Clustering Server (REST API) loads dictionaries
@@ -262,8 +256,8 @@
         Carrot<sup>2</sup> will use the <strong>case sensitive</strong> version
         of the label, as produced by the clustering algorithm. This means that
         your label filtering entries must take character case into account
-        or use a matcher type which is oblivious of character case (the
-        <code>glob</code> matcher, for example).
+        or use a matcher type which is oblivious of character case, such as the
+        <a href="#syntax:glob-matcher"><code>glob</code></a> matcher.
       </p>
     </div>
 
@@ -544,7 +538,9 @@
           Regular expression-based matching is a powerful mechanism, but
           it can also result in a dramatic decrease of clustering performance.
           Therefore, it should be used only when a similar effect cannot be
-          achieved by reasonable number of exact and glob matching entries.
+          achieved by reasonable number of
+          <a href="#syntax:exact-matcher"><code>exact</code></a>
+          and <a href="#syntax:glob-matcher"><code>glob</code></a> matching entries.
         </p>
       </div>
     </section>
