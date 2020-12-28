@@ -271,7 +271,7 @@ const ExclusionsSetting = view(({ setting, get, set, type }) => {
 
   const setExclusions = val => {
     const entry = findEntry();
-    const split = val.trim().length > 0 ? val.split("\r") : [];
+    const split = val.trim().length > 0 ? val.split("\n") : [];
     if (entry) {
       entry[type] = split;
     } else {
