@@ -5,7 +5,7 @@
     Release history for Carrot2 4.1.x and bugfix releases.
   </p>
 
-  <section id="v4.1.0">
+  <section id="4.1.0" data-toc="omit-children">
     <h2>Version 4.1.0 [unreleased]</h2>
 
     <p>
@@ -13,6 +13,38 @@
       adds ephemeral per-request dictionaries and introduces minor adjustments
       to Java and REST APIs.
     </p>
+
+    <section id="4.1.0:new-features">
+      <h3>New features</h3>
+
+      <dl>
+        <dt>Carrot<sup>2</sup> Workbench</dt>
+        <dd>
+          <p>
+            Carrot<sup>2</sup> Clustering Workbench has been rewritten as
+            a browser-based application.
+          </p>
+
+          <figure>
+            <img class="light"
+                 src="images/carrot2-workbench-light.png"
+                 alt="Carrot2 Clustering Workbench, light theme.">
+            <img class="dark"
+                 src="images/carrot2-workbench-dark.png"
+                 alt="Carrot2 Clustering Workbench, dark theme.">
+          </figure>
+
+          <p>
+            You can use Workbench to cluster documents from local XML, JSON,
+            Excel and CSV files, as well as Solr and Elasticsearch instances.
+            A set of sliders is available to change clustering parameters
+            in real time; you can also export the parameters JSON ready for
+            pasting into REST API requests. Finally, you can export the
+            clustering results as JSON or Excel spreadsheet.
+          </p>
+        </dd>
+      </dl>
+    </section>
 
     <ul>
       <li><p><a href="https://github.com/carrot2/carrot2/issues/61">GH-61</a>:
@@ -58,7 +90,7 @@
         allows passing per-request word and cluster label filters, without reloading the default <code>LanguageComponents</code>
         resources. See <a href="java-language-components.html#ephemeral-dictionaries">ephemeral dictionary
         section in the Java API</a>
-        and <a href="dcs-language-components.html#tweaking-ephemeral-dictionaries">REST API</a> sections
+        and <a href="rest-api-basics.html#per-request-dictionaries">REST API</a> sections
         for more information.
       </p></li>
 
