@@ -545,4 +545,33 @@
       </div>
     </section>
   </section>
+
+  <section id="per-request-and-ephemeral-dictionaries">
+    <h2>Per-request dictionaries</h2>
+
+    <p>
+      In some contexts, it may be desirable to apply additional label
+      or word exclusions for a specific clustering request. One example is
+      allowing the users to interactively tune the exclusions directory
+      while observing the results in real time.
+    </p>
+
+    <p>
+      Providing per-request dictionaries is possible both in the Java API,
+      where the <a href="java-language-components.html#ephemeral-dictionaries">
+      ephemeral dictionaries</a> is a better term, and in the
+      <a href="rest-api-basics.html#per-request-dictionaries">REST API</a>.
+      In both cases, the available set of filters and matcher syntax is the same
+      as described in this section. The per-request dictionaries are added
+      on top of the existing dictionary files.
+    </p>
+
+    <p>
+      Please note that using per-request dictionaries will incur an extra
+      performance cost associated with parsing the provided dictionary entries.
+      In case of interactive label exclusion tuning, you may want to transfer
+      the newly created dictionary entries to the main dictionary file,
+      so that the exclusions apply for all further clustering requests.
+    </p>
+  </section>
 </article>

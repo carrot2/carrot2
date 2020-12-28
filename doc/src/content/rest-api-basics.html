@@ -282,34 +282,7 @@
     </p>
 
     <figure>
-      <pre data-language="json">
-        {
-          "clusters": [
-            {
-              "labels": [
-                "Firefox"
-              ],
-              "documents": [
-                1,
-                2
-              ],
-              "clusters": [],
-              "score": 0.17439038910197008
-            },
-            {
-              "labels": [
-                "Windows"
-              ],
-              "documents": [
-                0,
-                1
-              ],
-              "clusters": [],
-              "score": 0.2183744736336805
-            }
-          ]
-        }
-      </pre>
+      <pre data-embed="./examples/cluster-response.json" />
       <figcaption>
         <p>
           An example Carrot<sup>2</sup> REST API clustering response JSON.
@@ -346,12 +319,12 @@
       </dd>
     </dl>
 
-    <section id="clustering:curl-example">
-      <h3>curl example</h3>
+    <section id="clustering:simple-example">
+      <h3>Simple example</h3>
 
       <p>
-        To make a quick test using the <code>curl</code> command, create a file
-        called <code>clustering-request.json</code> with the following contents:
+        To make a quick clustering test, create a file called <code>clustering-request.json</code>
+        with the following contents:
       </p>
 
       <pre data-embed="./examples/cluster-request.json"></pre>
@@ -362,12 +335,6 @@
         is applied to input text before clustering. In this example we will use
         hardcoded values for the <code>Lingo</code> algorithm and the <code>English</code>
         language.
-      </p>
-
-      <p>
-        Since our document list is very tiny, we use the <strong>parameters</strong>
-        section to lower the default word and phrase frequency cut-offs, so that
-        the algorithm creates at least one group.
       </p>
 
       <p>
@@ -384,11 +351,90 @@
       </p>
 
       <p>
-        As expected, the response contains a single cluster of documents
-        <code>0</code> and <code>1</code>, labeled <i>Bar</i>:
+        The response contains puts documents <code>1</code> and <code>2</code>
+        in the <em>Firefox</em> cluster and documents <code>0</code> and
+        <code>1</code> in the <em>Windows</em> cluster. This illustrates the
+        fact that certain algorithms can assign the same document to multiple
+        clusters.
       </p>
 
       <pre data-embed="./examples/cluster-response.json"></pre>
+    </section>
+
+    <section id="per-request-dictionaries">
+      <h3>Per-request dictionaries</h3>
+
+      <p>
+        This example will demonstrate how to override clustering algorithm
+        parameters and provide per-request label exclusions.
+      </p>
+
+      <p>
+        First, make the following clustering request:
+      </p>
+
+      <pre data-language="json">
+        {
+          "algorithm": "Lingo",
+          "language": "English",
+          "documents": [
+            { "title": "PDF Viewer configuration issue on Windows" },
+            { "title": "Firefox plugin configuration issue on Windows" },
+            { "title": "CPU usage for flash in Firefox" }
+          ]
+        }
+      </pre>
+
+      <p>
+        You will notice that the algorithm created two clusters:
+        <em>Configuration Issue on Windows</em> and <em>Firefox</em>. Some
+        users may perceive the former phrase as non-informative and may
+        wish to re-run clustering with the phrase excluded from cluster labeling.
+      </p>
+
+      <p>
+        You can achieve this by providing the <a
+        href="lingo-parameters.html#dictionaries">dictionaries</a> parameter for
+        the Lingo algorithm. The parameter specifies the label exclusions to
+        apply to the specific clustering request.
+      </p>
+
+      <p>
+        The following request excludes from labelling all phrases containing
+        the word <em>issue</em> and also the word <em>configuration</em>.
+        See the <a href="dictionaries.html">Dictionaries</a> page for a detailed
+        description of dictionary types and entry syntax.
+      </p>
+
+      <pre data-language="json">
+        {
+          "algorithm": "Lingo",
+          "language": "English",
+          // highlight-range{1-12}
+          "parameters": {
+            "dictionaries": {
+              "labelFilters": [
+                {
+                  "glob": [
+                    "* issue *",
+                    "configuration"
+                  ]
+                }
+              ]
+            }
+          },
+          "documents": [
+            { "title": "PDF Viewer configuration issue on Windows" },
+            { "title": "Firefox plugin configuration issue on Windows" },
+            { "title": "CPU usage for flash in Firefox" }
+          ]
+        }
+      </pre>
+
+      <p>
+        With the extra label filters in place, the algorithm will create two
+        clusters labeled <em>Firefox</em> and <em>Windows</em>.
+      </p>
     </section>
   </section>
 

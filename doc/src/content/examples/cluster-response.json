@@ -1,15 +1,26 @@
 {
-  "clusters" : [
+  "clusters": [
     {
-      "labels" : [
-        "Bar"
+      "labels": [
+        "Firefox"
       ],
-      "documents" : [
+      "documents": [
+        1,
+        2
+      ],
+      "clusters": [],
+      "score": 0.17439038910197008
+    },
+    {
+      "labels": [
+        "Windows"
+      ],
+      "documents": [
         0,
         1
       ],
-      "clusters" : [ ],
-      "score" : 0.09746237168594427
+      "clusters": [],
+      "score": 0.2183744736336805
     }
   ]
 }

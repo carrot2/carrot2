@@ -1,15 +1,9 @@
 {
   "language": "English",
   "algorithm": "Lingo",
-  "parameters": {
-    "preprocessing": {
-      "phraseDfThreshold": 1,
-      "wordDfThreshold": 1
-    }
-  },
   "documents": [
-    { "field": "foo bar" },
-    { "field": "bar" },
-    { "field": "baz" }
+    { "title": "PDF Viewer on Windows" },
+    { "title": "Firefox PDF plugin to view PDF in browser on Windows" },
+    { "title": "Limit CPU usage for flash in Firefox?" }
   ]
 }
