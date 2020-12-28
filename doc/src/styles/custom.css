@@ -1,3 +1,5 @@
+@import "vs-code.css";
+
 body,
 body.light {
   --info-background-color: hsla(90, 80%, 95%, 1.0);
@@ -208,3 +210,5 @@ p.reldate {
 .dictionaries tr td:nth-child(n+2) {
   font-size: small;
 }
+
+
