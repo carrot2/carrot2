@@ -212,3 +212,6 @@ p.reldate {
 }
 
 
+dl {
+  margin-top: var(--leading);
+}

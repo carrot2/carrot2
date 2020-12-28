@@ -1,0 +1,264 @@
+<article>
+  <h1>Tuning clustering</h1>
+
+  <p>
+    Carrot<sup>2</sup> algorithms should produce reasonably good clusters out-of-the
+    box for most inputs. If you'd like to fine-tune the quality or performance
+    of clustering, this article discusses the possible approaches.
+  </p>
+
+  <section id="input-characteristics">
+    <h2>Desirable characteristics of input</h2>
+
+    <p>
+      The quality of clusters and their labels largely depends on the
+      quality of documents provided on the input. Although there is no
+      general rule for optimum document content, below are some tips worth
+      considering.
+    </p>
+
+    <ul>
+      <li>
+        <p>
+          <strong>Carrot<sup>2</sup> is designed for small to medium collections
+            of documents</strong>. Carrot<sup>2</sup> algorithms perform in-memory
+          clustering. For this reason, as a rule of thumb, Carrot<sup>2</sup>
+          should successfully deal with up to a thousand of documents, a few
+          paragraphs each. For algorithms designed to process millions of
+          documents, check out <a href="https://mahout.apache.org/">the Apache Mahout project</a>
+          or <a href="https://carrotsearch.com/lingo4g/">Carrot Search Lingo4G</a>.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          <strong>Provide a minimum of 100 documents</strong>. Carrot<sup>2</sup>
+          clustering algorithms work better with increasing amount of data. A hundred
+          documents on input is probably the minimum for any statistical significance
+          of features discovered by the algorithm. In general, an optimum number
+          of documents would probably fall between 100 and a few thousands.
+          More than that may cause problems due to in-memory processing.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          <strong>Provide query-context snippets instead of entire documents</strong>.
+          If the input
+          documents are a result of some search query, provide contextual
+          snippets related to that query (similar to what web search engines
+          return), instead of full document content. Not only will this speed up
+          processing, but should also guide the clustering algorithm to discover
+          query-related spectrum of topics.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          <strong>Minimize noise in the input documents</strong>. All kinds of noisy
+          fragments in the input like truncated sentences, random alphanumerical strings
+          or repeated boilerplate may decrease the quality of cluster labels.
+          If you are extracting query context for clustering, retrieving complete sentences
+          instead of truncated fragments should improve cluster labels even further.
+        </p>
+      </li>
+    </ul>
+  </section>
+
+  <section id="tuning-parameters">
+    <h2>Tuning parameters</h2>
+
+    <p>
+      The default settings that come with each algorithm are good for an average case. Each
+      clustering algorithm comes with a number of parameters affecting its output and
+      runtime characteristics. See the algorithm's reference page, such as
+      <a href="lingo-parameters.html">Lingo parameters</a>, for a list and
+      description of the parameters.
+    </p>
+
+
+    <p>
+      You can easily <a href="java-api-basics.html#tweaking-parameters">adjust
+      parameters in Java API</a>. If you call the REST API from Java code,
+      a robust way to override parameters is to
+      <a href="rest-api-basics.html#models">use request model classes</a>.
+    </p>
+
+    <p id="tuning-parameters:workbench">
+      When using the REST API directly, an easy way to get the parameters JSON
+      object is to use Carrot<sup>2</sup> Workbench: set the desired values
+      using the left-hand-side panel and then press the parameter export button
+      to get the JSON with just the parameters that are different from defaults.
+    </p>
+
+    <figure>
+      <img class="light"
+           src="images/carrot2-workbench-parameter-json-light.png"
+           alt="Carrot2 Workbench, parameter JSON export, light theme." />
+      <img class="dark"
+           src="images/carrot2-workbench-parameter-json-dark.png"
+           alt="Carrot2 Workbench, parameter JSON export, dark theme." />
+      <figcaption>
+        <p>
+          Exporting parameters JSON in Carrot<sup>2</sup> Workbench.
+        </p>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section id="tuning-language-resources">
+    <h2>Tuning language resources</h2>
+
+    <p>
+      In order to achieve good cluster labels and high clustering quality it is vital
+      to <strong>adjust the default language resources</strong> so that they exclude any common
+      terms, phrases and expressions specific to:
+    </p>
+
+    <ul>
+      <li>
+        <p>
+          the selected language, including function words such as
+          <em>for</em> or <em>between</em> (the default resources should contain
+          a reasonable number of these already);
+        </p>
+      </li>
+      <li>
+        <p>
+          the domain of documents being clustered.
+        </p>
+      </li>
+    </ul>
+
+    <p>
+      For example, if clustering documents from the medical domain, certain expressions and terms
+      may be obvious and trivial to the domain. Forming clusters out of these wouldn't be of any
+      value to the users. By excluding such expressions the algorithms are guided to look for other,
+      perhaps more interesting alternative content.
+    </p>
+
+    <p>
+      Language resources can be adjusted in many ways. See the relevant
+      bits of documentation in the <a href="java-language-components.html">Java API</a>,
+      the <a href="dcs-language-components.html">REST API</a> and
+      word and label <a href="dictionaries.html">filtering dictionary syntax</a>.
+    </p>
+  </section>
+
+  <section id="performance-tuning">
+    <h2>Performance tuning</h2>
+
+    <p>
+      Carrot<sup>2</sup> clustering algorithms have been designed to work really fast
+      but the trade-off is that they store all the data structures in memory.
+      The size of the Java virtual machine's heap will increase quickly
+      with longer overall size of input text. Also, the more documents you put on input and the longer
+      the documents are, the longer the clustering will take.
+    </p>
+
+    <p>
+      Below are a few generic guidelines on improving clustering performance.
+    </p>
+
+    <section id="reduce-input-size">
+      <h3>Reduce size of input</h3>
+
+      <p>
+        In many cases clustering short document excerpts may work just as well or
+        even better than full documents. Consider the possibility of replacing
+        full content with:
+      </p>
+
+      <ul>
+        <li>query-matching document fragments (such as search result snippets), if input documents
+          are a result of some type of user-entered query,
+        </li>
+        <li>titles and abstracts of documents, if they are available,</li>
+        <li>just the leading few sentences or paragraphs of each document.</li>
+      </ul>
+    </section>
+
+    <section id="batch-and-merge">
+      <h3>Batch and merge smaller clustering runs</h3>
+
+      <p>
+        In many cases when the input collection of documents is too large to cluster as a whole,
+        dividing the input into smaller batches (or sampling smaller batches from the input), then
+        clustering separately and finally merging
+        based on cluster label text gives very reasonable results.
+      </p>
+
+      <p>
+        The above approach works because cluster labels recurring in smaller batches are very likely
+        to be significant for the entire collection. The downside is that
+        very small clusters containing just a few documents are likely to be lost during this process.
+      </p>
+    </section>
+
+    <section id="tune-algorithm">
+      <h3>Tune algorithm parameters</h3>
+
+      <p>
+        In many cases the default parameter settings for each algorithm may not be suitable for very
+        large inputs. Below are some parameter customization suggestions you should consider. You will
+        likely need to experiment a bit to adjust their values to match the size of your particular input.
+      </p>
+
+      <section>
+        <h4>STC, Bisecting k-Means</h4>
+
+        <section>
+          <h5><code>wordDfThreshold</code></h5>
+
+          <p>
+            Increase the minimum document frequency (minimum number of
+            occurrences) of terms and phrases to a higher value. Something like
+            0.5% of the number of documents will typically work. For example, for
+            a document collection of 5000 documents set the parameter to 25.
+          </p>
+        </section>
+      </section>
+
+      <section>
+        <h4>Lingo</h4>
+
+        <section>
+          <h5><code>wordDfThreshold</code>, <code>phraseDfThreshold</code></h5>
+
+          <p>
+            Increase the minimum document frequency (minimum number of
+            occurrences) of terms and phrases to a higher value. Something like
+            0.5% of the number of documents will typically work. For example, for
+            a document collection of 5000 documents set the parameter to 25.
+          </p>
+        </section>
+
+        <section>
+          <h5><code>factorizationQuality</code></h5>
+
+          <p>
+            For <code>algorithm.matrixReducer.factorizationFactory</code> implementations that support
+            this parameter, lower <code>factorizationQuality</code>. This will cause the
+            matrix factorization algorithm to perform fewer iterations and hence complete quicker.
+          </p>
+          <p>
+            Alternatively, you can set <code>algorithm.matrixReducer.factorizationFactory</code>
+            to an implementation of <code>PartialSingularValueDecompositionFactory</code>, which is
+            slightly faster than the other factorizations and does not have
+            any explicit <code>factorizationQuality</code> parameter.
+          </p>
+        </section>
+
+        <section>
+          <h5><code>maximumMatrixSize</code></h5>
+
+          <p>
+            Lower maximum matrix size in <code>matrixBuilder</code>. This will cause the matrix
+            factorization algorithm to complete quicker and use less memory. The tradeoff is that with
+            small matrix sizes, Lingo may not be able to discover smaller clusters.
+          </p>
+        </section>
+      </section>
+    </section>
+  </section>
+</article>

@@ -142,35 +142,31 @@
     <h2>API workflow</h2>
 
     <p>
-      The document clustering service is a single, stateless endpoint accepting JSON
-      requests and returning JSON responses. Therefore, all you need to do
-      cluster documents is to POST a JSON object
+      The document clustering service exposes two endpoints:
     </p>
 
-    <p>
-      A full clustering request is a JSON file containing the following elements:
-    </p>
+    <dl>
+      <dt>/service/clustering</dt>
+      <dd>
+        Performs <a href="#clustering">clustering</a> of the documents
+        provided in JSON format, returns clusters in JSON format.
+        This endpoint is stateless, the result is fully determined by the
+        contents of the request JSON.
+      </dd>
 
-    <ul>
-      <li>clustering algorithm identifier,</li>
-      <li>language identifier,</li>
-      <li>text fields of documents to be clustered.</li>
-    </ul>
+      <dt>/service/list</dt>
+      <dd>
+        Returns the list of available algorithms, their supported languages
+        and preconfigured <a href="dcs-templates.html">request templates</a>.
+      </dd>
+    </dl>
 
     <p>
-      Such a request file must be sent using HTTP POST method to the <code>/cluster</code>
-      service endpoint, which returns either a successful response containing clusters
-      or an error response with some additional
-      diagnostic information.
-    </p>
-
-    <p>
-      Note that the request contains elements that may require some <em>a priori</em> knowledge, such as
-      the clustering algorithm's identifier and the language. You can assume
-      that certain components, such as the <code>Lingo</code> algorithm or the <code>English</code>
-      language, always exist in your DCS distribution. Alternatively, you can
-      <a href="#service-configuration">get the available components</a> from the
-      <code>/list</code> service endpoint.
+      The simplest way to perform clustering is to invoke the
+      <a href="#clustering">/service/cluster</a> with a hardcoded algorithm and
+      language, such as <code>Lingo</code> and <code>English</code>. In a more
+      advanced scenario, you may want to first request the list of algorithms
+      and languages from <a href="#service-configuration">/service/list</a>.
     </p>
   </section>
 
@@ -179,134 +175,221 @@
 
     <p>
       To cluster documents, send a POST request to the <code>/service/cluster</code>
-      endpoint containing a JSON object with the documents to cluster and, optionally,
-      the algorithm, language and clustering parameters to apply.
+      endpoint containing a JSON object with the documents to cluster,
+      the clustering algorithm and language to use and, optionally, clustering
+      parameters to apply.
     </p>
 
+    <figure>
+      <pre data-language="json">
+        POST /service/cluster HTTP/1.1  // highlight-line
+        Host: localhost:8080            // highlight-line
 
-    <pre data-language="json">
-      POST /service/cluster HTTP/1.1  // highlight-line
-      Host: localhost:8080            // highlight-line
+        {
+          "algorithm": "Lingo",
+          "language": "English",
+          "parameters": {
+            "preprocessing": {
+              "documentAssigner": {
+                "exactPhraseAssignment": true
+              }
+            }
+          },
+          "documents": [
+            { "title": "PDF Viewer on Windows" },
+            { "title": "Firefox PDF plugin to view PDF in browser on Windows" },
+            { "title": "Limit CPU usage for flash in Firefox?" }
+          ]
+        }
+      </pre>
+      <figcaption>
+        <p>
+          An example Carrot<sup>2</sup> REST API clustering request.
+        </p>
+      </figcaption>
+    </figure>
 
-      {
-        "algorithm": "Lingo",
-        "language": "English",
-        "parameters": {
-          "preprocessing": {
-            "phraseDfThreshold": 1,
-            "wordDfThreshold": 1
-          }
-        },
-        "documents": [
-          { "field": "foo bar" },
-          { "field": "bar" },
-          { "field": "baz" }
-        ]
-      }
-    </pre>
 
     <p>
-      The JSON object passed as request body can contain the following properties:
+      The JSON object passed as request body supports the following properties:
     </p>
 
-    <dl class="narrow">
-      <dt>algorithm</dt>
+    <dl>
+      <dt id="clustering:request:algorithm">algorithm</dt>
       <dd>
         <p>
-          The algorithm to use to perform clustering, optional. If not provided, the
-          algorithm set in the active <a href="dcs-templates.html">request template</a>
-          will be used.
-        </p>
-
-        <p>
-          You can get the list of clustering algorithms available in the DCS from
+          The algorithm to use to perform clustering, required. You can get the
+          list of clustering algorithms available in the DCS from
           the <a href="#service-configuration">service configuration</a> endpoint.
         </p>
       </dd>
 
-      <dt>language</dt>
+      <dt id="clustering:request:language">language</dt>
       <dd>
         <p>
-          The language in which to perform clustering, optional. If not provided,
-          the language set in the active <a href="dcs-templates.html">request template</a>
-          will be used.
+          The language in which to perform clustering, required. You can get the
+          list of languages supported by each clustering algorithm from the
+          <a href="#service-configuration">service configuration</a> endpoint.
+        </p>
+      </dd>
+
+      <dt id="clustering:request:documents">documents</dt>
+      <dd>
+        <p>
+          Documents to cluster, required.
+        </p>
+
+        <p>
+          Each element in the array represents one document. Each document is
+          a JSON object with property names denoting field names and
+          property values representing the text to cluster. Field values must be
+          strings or arrays of strings.
+        </p>
+
+        <p>
+          You should limit input documents to just those fields that should be
+          clustered.
+        </p>
+      </dd>
+
+      <dt id="clustering:request:parameters">parameters</dt>
+      <dd>
+        <p>
+          Values of algorithm-specific parameters, optional. See the reference
+          page of a specific algorithm, such as <a
+          href="lingo-parameters.html">Lingo parameters</a>, for the list of
+          parameters and the JSON structure they are arranged in.
+        </p>
+
+        <p>
+          The easiest way to tune parameter values is to use Carrot<sup>2</sup>
+          Workbench, where you can observe the results in real-time and <a
+          href="tuning-clustering.html#tuning-parameters:workbench">get the
+          parameter JSON</a> ready to paste into your request.
         </p>
       </dd>
     </dl>
 
     <p>
-      Let's start by assembling the request JSON. We need to know the algorithm to be used
-      for clustering and the language in which our documents are written, so that an appropriate
-      preprocessing is applied to input text before clustering.
-      In this example we will use hardcoded values for the <code>Lingo</code> algorithm
-      and the <code>English</code> language.
+      To encapsulate the common parts of the request, you can use the
+      <a href="dcs-templates.html">request templates</a> feature.
+      Finally, the clustering endpoint supports a number of GET parameters
+      described in the <a href="#openapi">OpenAPI</a> descriptor.
     </p>
 
     <p>
-      Documents for clustering are composed of one or more fields, where each field is a pair
-      consisting of an identifier (name of the field) and value (a string or an array of strings).
-      You should limit input documents to just those fields that should be clustered.
-      In this example we will have three documents, each with one field:
+      The response will contain a JSON object similar to the one shown below.
     </p>
 
-    <pre data-embed="./examples/cluster-documents.json"></pre>
+    <figure>
+      <pre data-language="json">
+        {
+          "clusters": [
+            {
+              "labels": [
+                "Firefox"
+              ],
+              "documents": [
+                1,
+                2
+              ],
+              "clusters": [],
+              "score": 0.17439038910197008
+            },
+            {
+              "labels": [
+                "Windows"
+              ],
+              "documents": [
+                0,
+                1
+              ],
+              "clusters": [],
+              "score": 0.2183744736336805
+            }
+          ]
+        }
+      </pre>
+      <figcaption>
+        <p>
+          An example Carrot<sup>2</sup> REST API clustering response JSON.
+        </p>
+      </figcaption>
+    </figure>
 
     <p>
-      We have everything we need to put together the entire request body:
-    </p>
-
-    <pre data-embed="./examples/cluster-request.json"></pre>
-
-    <p>
-      You probably noticed that there is one element in the above request we have not discussed yet:
-      the <code>parameters</code> block. This block is used to alter Lingo's default
-      settings. Our document list is very tiny and we force the algorithm to produce
-      at least one group, so that we can see what it looks like in the response.
-    </p>
-
-    <p>
-      Assuming the DCS is running in the background, the clustering service's
-      default endpoint is at <code>http://localhost:8080/service/cluster</code>.
-      We are ready to send the above JSON for clustering using a command-line tool, such as
-      <code>curl</code>:
-    </p>
-
-    <pre data-embed="./examples/cluster-request.sh" data-language="none"></pre>
-
-    <p>
-      Note the MIME type for JSON must be properly set (<code>Content-Type: text/json</code>). The
-      response received from the service should be something like this:
-    </p>
-
-    <pre data-embed="./examples/cluster-response.json"></pre>
-
-    <p>
-      The response is a potentially recursive hierarchy of document clusters, where each
-      cluster has the following properties:
+      The <strong>clusters</strong> property contains a potentially recursive hierarchy of
+      document clusters, where each cluster has the following properties:
     </p>
 
     <dl>
       <dt>labels</dt>
       <dd>Cluster description label or labels.</dd>
+
       <dt>documents</dt>
       <dd>
-        An array of references to documents contained in the cluster. Each reference is a 0-based
-        index of the document within the clustering request.
+        An array of references to documents contained in the cluster. Each
+        reference is a 0-based index of the document within the <a
+        href="#clustering:request:documents">documents array</a> provided in the
+        clustering request.
       </dd>
+
       <dt>clusters</dt>
-      <dd>An array of subclusters of this cluster (if the algorithm supports hierarchical
-        clustering).
+      <dd>An array of subclusters of this cluster. The array will be empty if
+        the algorithm does not support hierarchical clustering or subclusters
+        could not be created.
       </dd>
+
       <dt>score</dt>
       <dd>The cluster's quality score. The score is not normalized in any way but represents
         relative quality of each cluster within this request.
       </dd>
     </dl>
 
-    <p>
-      In the response above we see a single cluster of documents <code>0</code> and <code>1</code>,
-      labeled <i>Bar</i>.
-    </p>
+    <section id="clustering:curl-example">
+      <h3>curl example</h3>
+
+      <p>
+        To make a quick test using the <code>curl</code> command, create a file
+        called <code>clustering-request.json</code> with the following contents:
+      </p>
+
+      <pre data-embed="./examples/cluster-request.json"></pre>
+
+      <p>
+        We need to know the algorithm to be used for clustering and the language
+        in which our documents are written, so that an appropriate preprocessing
+        is applied to input text before clustering. In this example we will use
+        hardcoded values for the <code>Lingo</code> algorithm and the <code>English</code>
+        language.
+      </p>
+
+      <p>
+        Since our document list is very tiny, we use the <strong>parameters</strong>
+        section to lower the default word and phrase frequency cut-offs, so that
+        the algorithm creates at least one group.
+      </p>
+
+      <p>
+        Assuming the DCS is running in the background, the clustering service's
+        default endpoint is at <code>http://localhost:8080/service/cluster</code>.
+        We are ready to send the above JSON for clustering using a command-line tool, such as
+        <code>curl</code>:
+      </p>
+
+      <pre data-embed="./examples/cluster-request.sh" data-language="none"></pre>
+
+      <p>
+        Note the MIME type for JSON must be set to <code>Content-Type: text/json</code>.
+      </p>
+
+      <p>
+        As expected, the response contains a single cluster of documents
+        <code>0</code> and <code>1</code>, labeled <i>Bar</i>:
+      </p>
+
+      <pre data-embed="./examples/cluster-response.json"></pre>
+    </section>
   </section>
 
   <section id="models">

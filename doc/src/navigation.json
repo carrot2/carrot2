@@ -34,8 +34,7 @@
       "title": "Advanced topics",
       "articles": [
         "choosing-clustering-algorithm",
-        "tuning-quality",
-        "tuning-performance"
+        "tuning-clustering"
       ]
     },
     {
