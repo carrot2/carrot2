@@ -20,8 +20,7 @@
       "title": "REST API",
       "articles": [
         "rest-api-basics",
-        "dcs-templates",
-        "dcs-language-components"
+        "dcs-templates"
       ]
     },
     {
