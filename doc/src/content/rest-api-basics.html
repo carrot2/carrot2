@@ -143,7 +143,8 @@
 
     <p>
       The document clustering service is a single, stateless endpoint accepting JSON
-      requests and returning JSON responses.
+      requests and returning JSON responses. Therefore, all you need to do
+      cluster documents is to POST a JSON object
     </p>
 
     <p>
@@ -177,9 +178,61 @@
     <h2>Clustering</h2>
 
     <p>
-      This section will go through a very basic example of a full
-      request-response cycle.
+      To cluster documents, send a POST request to the <code>/service/cluster</code>
+      endpoint containing a JSON object with the documents to cluster and, optionally,
+      the algorithm, language and clustering parameters to apply.
     </p>
+
+
+    <pre data-language="json">
+      POST /service/cluster HTTP/1.1  // highlight-line
+      Host: localhost:8080            // highlight-line
+
+      {
+        "algorithm": "Lingo",
+        "language": "English",
+        "parameters": {
+          "preprocessing": {
+            "phraseDfThreshold": 1,
+            "wordDfThreshold": 1
+          }
+        },
+        "documents": [
+          { "field": "foo bar" },
+          { "field": "bar" },
+          { "field": "baz" }
+        ]
+      }
+    </pre>
+
+    <p>
+      The JSON object passed as request body can contain the following properties:
+    </p>
+
+    <dl class="narrow">
+      <dt>algorithm</dt>
+      <dd>
+        <p>
+          The algorithm to use to perform clustering, optional. If not provided, the
+          algorithm set in the active <a href="dcs-templates.html">request template</a>
+          will be used.
+        </p>
+
+        <p>
+          You can get the list of clustering algorithms available in the DCS from
+          the <a href="#service-configuration">service configuration</a> endpoint.
+        </p>
+      </dd>
+
+      <dt>language</dt>
+      <dd>
+        <p>
+          The language in which to perform clustering, optional. If not provided,
+          the language set in the active <a href="dcs-templates.html">request template</a>
+          will be used.
+        </p>
+      </dd>
+    </dl>
 
     <p>
       Let's start by assembling the request JSON. We need to know the algorithm to be used
