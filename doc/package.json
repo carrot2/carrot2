@@ -9,7 +9,7 @@
     "develop": "gatsby develop",
     "start": "npm run develop",
     "serve": "gatsby serve",
-    "test": "html-validate src\\content\\*.html"
+    "test": "html-validate src/content/*.html"
   },
   "dependencies": {
     "@carrotsearch/gatsby-theme-apidocs": "1.0.2",
