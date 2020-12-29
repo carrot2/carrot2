@@ -195,10 +195,10 @@ footer .copyright {
   font-weight: bold;
 }
 
-p.reldate {
-  margin-top: 0;
-  font-size: small;
-  color: dimgray;
+time:after {
+  content: attr(datetime);
+  font-size: var(--small-font-size);
+  color: var(--text-color-light);
 }
 
 .glob-examples .explanation {
@@ -208,7 +208,7 @@ p.reldate {
 }
 
 .dictionaries tr td:nth-child(n+2) {
-  font-size: small;
+  font-size: var(--small-font-size);
 }
 
 
