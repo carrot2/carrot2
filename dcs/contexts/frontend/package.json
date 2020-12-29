@@ -44,11 +44,12 @@
     "raw-loader": "4.0.2",
     "react-scripts": "4.0.1",
     "madge": "3.12.0",
-    "prettier": "2.2.1"
+    "prettier": "2.2.1",
+    "glob": "7.1.6"
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
+    "build": "craco build && node ./insert-font-preloading.js",
     "test": "craco test",
     "eject": "react-scripts eject",
     "prettier": "prettier -w src/"
