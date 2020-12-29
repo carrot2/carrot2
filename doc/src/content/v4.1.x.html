@@ -42,98 +42,244 @@
             pasting into REST API requests. Finally, you can export the
             clustering results as JSON or Excel spreadsheet.
           </p>
+
+          <label class="frontend"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/36">GH-36</a>
+        </dd>
+
+        <dt id="4.1.0:new-features:json-dictionaries">JSON dictionaries</dt>
+        <dd>
+          <p>
+            Carrot<sup>2</sup> word and label filtering
+            <a href="dictionaries.html">dictionaries</a> are now stored in the
+            JSON format. This change adds more expressive matching modes, such
+            as globs for simple phrase-level filtering or regular expressions
+            for complete control of the filtering.
+            Please refer to the <a href="dictionaries.html">dictionaries</a>
+            section for an in-depth overview of what's available.
+          </p>
+
+          <p>
+            As a follow-up, the <a href="#4.1.0:api-changes:plain-text-dictionaries-deprecated">
+            plain-text dictionaries have been deprecated</a>
+            and the file naming convention for the default dictionary files
+            has changed. A <a href="#4.1.0:api-changes:plain-text-dictionaries-deprecated:conversion-utility">
+            dictionary file conversion utility</a> is available.
+          </p>
+
+          <label class="java-api"></label>
+          <label class="rest-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/51">GH-51</a>
+        </dd>
+
+        <dt>Per-request dictionaries</dt>
+        <dd>
+          <p>
+            Per-request (ephemeral) label and word
+            filtering support has been added. This feature allows passing
+            per-request word and cluster label filters to be applied in
+            addition to the default language resources. See <a
+            href="java-language-components.html#ephemeral-dictionaries">ephemeral
+            dictionary section in the Java API</a> and <a
+            href="rest-api-basics.html#per-request-dictionaries">REST API</a>
+            sections for more information.
+          </p>
+
+          <label class="java-api"></label>
+          <label class="rest-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/44">GH-44</a>
         </dd>
       </dl>
     </section>
 
-    <ul>
-      <li><p><a href="https://github.com/carrot2/carrot2/issues/61">GH-61</a>:
-        Upgrade third-party dependencies to their newest versions:
-        Apache Lucene (8.7.0),
-        Jetty (v20201120).</p>
-      </li>
+    <section id="4.1.0:api-changes">
+      <h3>API changes</h3>
 
-      <li><p><a href="https://github.com/carrot2/carrot2/issues/59">GH-59</a>:
-        [Java] Improved support for the Java module system by providing
-        <code>Automatic-Module-Name</code> entry in JAR manifests.
-      </p></li>
+      <dl>
+        <dt id="4.1.0:api-changes:plain-text-dictionaries-deprecated">
+          Plain text dictionaries deprecated
+        </dt>
+        <dd>
 
-      <li>
-        <p><a href="https://github.com/carrot2/carrot2/issues/51">GH-51</a>:
-        [DCS, Java, API CHANGE] This issue changes the default lexical data dictionary formats from
-        plain text files to JSON. The change also brings more expressive matching modes (exact, globs, regular expressions)
-        to word and label dictionaries. Please refer to the <a href="dictionaries.html">dictionaries</a> section an
-          in-depth overview of what's available.
-        </p>
+          <p>
+            As a follow-up to the
+            <a href="#4.1.0:new-features:json-dictionaries">JSON dictionaries</a>
+            new feature, the plain-text-based format has been deprecated.
+          </p>
 
-        <p>
-          <b>The naming convention for default resources has changed.</b> For backward compatibility,
-          if old resources can be found in the resource lookup location, they will still be used (and a warning will
-          be issued via Java logging system). Please convert old resources to the up-to-date JSON format. A simple
-          utility is included in Carrot2 core JAR and can help with the conversion. Just run it with:
-        </p>
-        <pre data-language="none">java -cp carrot2-core-4.1.0.jar org.carrot2.language.ConvertLegacyResources [dir]</pre>
-        <p>
-          Where <code>dir</code> points to a directory with old resources. New resources (in their corresponding naming
-          convention) will be written alongside old resources (which must be manually deleted).
-        </p>
-      </li>
+          <p>
+            <strong>File naming convention for default language resources
+            has changed.</strong> For backward compatibility, if old resources
+            can be found in the resource lookup location, they will still be
+            used and a warning will be issued via Java logging system.
+          </p>
 
-      <li><p><a href="https://github.com/carrot2/carrot2/issues/43">GH-43</a>:
-        [DCS, Java, API CHANGE] Lingo algorithm's filter parameters have been changed from Booleans to proper
-        objects with a dedicated <code>enabled</code> parameter. Unless you used these attributes explicitly,
-        no action is needed.
-      </p></li>
+          <p id="4.1.0:api-changes:plain-text-dictionaries-deprecated:conversion-utility">
+            If you have language resources in the old format,
+            please convert them to the JSON format. A simple
+            utility is included in Carrot<sup>2</sup> core JAR and can help
+            with the conversion. Just run it with:
+          </p>
 
-      <li><p><a href="https://github.com/carrot2/carrot2/issues/44">GH-44</a>:
-        [DCS, Java, API CHANGE] Ephemeral (per-request) label and word filtering support has been added. This feature
-        allows passing per-request word and cluster label filters, without reloading the default <code>LanguageComponents</code>
-        resources. See <a href="java-language-components.html#ephemeral-dictionaries">ephemeral dictionary
-        section in the Java API</a>
-        and <a href="rest-api-basics.html#per-request-dictionaries">REST API</a> sections
-        for more information.
-      </p></li>
+          <pre data-language="shell">
+            java -cp carrot2-core-4.1.0.jar org.carrot2.language.ConvertLegacyResources [dir]
+          </pre>
 
-      <li><p><a href="https://github.com/carrot2/carrot2/issues/45">GH-45</a>:
-        [Java, API CHANGE] The <code>LexicalData</code> interface (<code>LanguageComponents</code> component) has been
-        split into two independent components: <code>StopwordFilter</code> and <code>LabelFilter</code>. The default
-        implementations and abstract classes have been changed accordingly.</p>
-      </li>
+          <p>
+            Where <code>dir</code> points to a directory with old resources. New
+            resources in their corresponding naming convention will be written
+            alongside old resources. The old resource must be manually deleted
+            once the conversion completes successfully.
+          </p>
 
-      <li><p><a href="https://github.com/carrot2/carrot2/issues/38">GH-38</a>:
-        [DCS, API CHANGE] Expose the language and algorithm of all resolved template in <code>/list</code>. The response
-        format of the endpoint has changed. Previously, the <code>templates</code> element was a list of template
-        names, now it will contain an object with template names as keys and template content as values, for example:
-        </p>
-        <pre>...
-  "templates" : {
-    "template1" : {
-      "language" : "English",
-      "algorithm" : "algorithm1"
-    },
-    "template2" : {
-      "algorithm" : "algorithm1"
-    }
-  }</pre>
-      </li>
+          <label class="java-api"></label>
+          <label class="rest-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/51">GH-51</a>
+        </dd>
 
-      <li><p><a href="https://github.com/carrot2/carrot2/issues/37">GH-37</a>:
-        [build] Only recompile code under IntelliJ IDEA (improve dev experience).</p>
-      </li>
+        <dt>More details from <code>/list</code> method</dt>
+        <dd>
+          <p>
+            The <a href="rest-api-basics.html#service-configuration"><code>/service/list</code></a>
+            endpoint of the REST API now returns the language and algorithm
+            for all of the available request templates.
+          </p>
 
-      <li><p><a href="https://github.com/carrot2/carrot2/issues/35">GH-35</a>:
-        [DCS] Added request processing/ service information to clustering response. This information
-        is optional and is returned when <code>serviceInfo</code> HTTP parameter is enabled on a clustering request.</p>
-      </li>
+          <p>
+            The response format of the endpoint has changed. Previously, the
+            <code>templates</code> element was a list of template names, now it
+            will contain an object with template names as keys and template
+            content as values, for example:
+          </p>
 
-      <li><p><a href="https://github.com/carrot2/carrot2/issues/34">GH-34</a>:
-        [DCS] Clustering of documents containing multi-value fields (array of strings)
-        fails with an exception.</p>
-      </li>
+          <pre data-language="json">
+            ...
+            "templates" : {
+              "english-lingo" : {
+                "language" : "English",
+                "algorithm" : "Lingo"
+              },
+              "stc" : {
+                "algorithm" : "STC"
+              }
+            }
+          </pre>
 
-      <li><p><a href="https://github.com/carrot2/carrot2/issues/33">GH-33</a>:
-        [DCS] Upgrade Jackson dependency to 2.12.0.</p>
-      </li>
-    </ul>
+          <label class="rest-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/38">GH-38</a>
+        </dd>
+
+        <dt>Lingo filter parameter change</dt>
+        <dd>
+          <p>
+            Lingo algorithm's <a href="lingo-parameters.html#preprocessing.labelFilters">filter
+            parameters</a> have been changed from Booleans to proper objects with
+            a dedicated <code>enabled</code> parameter. Unless you used these
+            attributes explicitly, no action is needed.
+          </p>
+
+          <label class="java-api"></label>
+          <label class="rest-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/43">GH-43</a>
+        </dd>
+
+        <dt><code>LexicalData</code> interface split</dt>
+        <dd>
+          <p>
+            The <code>LexicalData</code> interface (<code>LanguageComponents</code>
+            component) has been split into two independent components: <code>StopwordFilter</code>
+            and <code>LabelFilter</code>. The default implementations and
+            abstract classes have been changed accordingly.
+          </p>
+
+          <label class="java-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/45">GH-45</a>
+        </dd>
+      </dl>
+    </section>
+
+    <section id="4.1.0:improvements">
+      <h3>Improvements</h3>
+
+      <dl>
+        <dt>Request processing information</dt>
+        <dd>
+          <p>
+            [DCS] Added clustering and request processing time information to
+            clustering response. This information is optional and is returned
+            when the <code>serviceInfo</code>HTTP parameter is enabled on a
+            clustering request.
+          </p>
+
+          <label class="rest-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/35">GH-35</a>
+        </dd>
+
+        <dt>Java module system support improved</dt>
+        <dd>
+          <p>
+            [Java] Improved support for the Java module system by providing
+            the <code>Automatic-Module-Name</code> entry in JAR manifests.
+          </p>
+
+          <label class="java-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/59">GH-59</a>
+        </dd>
+      </dl>
+    </section>
+
+    <section id="4.1.0:bug-fixes">
+      <h3>Bug fixes</h3>
+
+      <dl>
+        <dt>Clustering of multi-value fields fails</dt>
+        <dd>
+          <p>
+            Carrot<sup>2</sup> 4.0.x fails to cluster documents containing
+            multi-value fields (array of strings). Version 4.1.0 fixes the issue.
+          </p>
+
+          <label class="rest-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/34">GH-34</a>
+        </dd>
+      </dl>
+    </section>
+
+    <section id="4.1.0:infrastructure">
+      <h3>Infrastructure</h3>
+
+      <dl>
+        <dt>Dependency updates</dt>
+        <dd>
+          <p>
+            Third-party dependencies have been upgrade to their newest versions:
+          </p>
+
+          <ul>
+            <li>Apache Lucene: 8.7.0</li>
+            <li>Jetty: v20201120</li>
+            <li>Jackson: 2.12.0</li>
+          </ul>
+
+          <p>
+            <label class="dependencies"></label>
+            <a href="https://github.com/carrot2/carrot2/issues/61">GH-61</a>
+            <a href="https://github.com/carrot2/carrot2/issues/33">GH-33</a>
+          </p>
+        </dd>
+
+        <dt>IntelliJ experience</dt>
+        <dd>
+          <p>
+            Only recompile code under IntelliJ IDEA to improve developer experience.
+          </p>
+
+          <p>
+            <label class="build"></label>
+            <a href="https://github.com/carrot2/carrot2/issues/37">GH-37</a>
+          </p>
+        </dd>
+      </dl>
+    </section>
   </section>
 </article>

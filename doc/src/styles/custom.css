@@ -215,3 +215,79 @@ p.reldate {
 dl {
   margin-top: var(--leading);
 }
+
+dd label:after {
+  padding: 0.125em 0.25em;
+  margin-right: 0.25rem;
+  border-radius: 0.25em;
+  border: 1px solid transparent;
+  font-weight: normal;
+  font-size: var(--small-font-size);
+  color: var(--text-color-inverted);
+}
+
+dd label:first-of-type:before {
+  content: " ";
+  display: block;
+  margin-top: calc(0.5 * var(--leading));
+}
+
+dd label.java-api:after {
+  content: "Java API";
+  color: hsl(359, 45%, 60%);
+  border-color: hsl(359, 45%, 75%);
+  background-color: hsla(359, 98%, 36%, 0.1);
+}
+.dark dd label.java-api:after {
+  color: hsl(359, 70%, 70%);
+  border-color: hsl(359, 55%, 30%);
+  background-color: hsla(359, 98%, 36%, 0.2);
+}
+
+dd label.rest-api:after {
+  content: "REST API";
+  color: hsl(35, 45%, 45%);
+  border-color: hsl(35, 45%, 75%);
+  background-color: hsla(35, 50%, 55%, 0.1);
+}
+.dark dd label.rest-api:after {
+  color: hsl(35, 70%, 60%);
+  border-color: hsl(35, 60%, 30%);
+  background-color: hsla(35, 89%, 62%, 0.1);
+}
+
+dd label.frontend:after {
+  content: "Front-end";
+  color: hsl(131, 45%, 45%);
+  border-color: hsl(131, 45%, 75%);
+  background-color: hsla(131, 50%, 55%, 0.1);
+}
+.dark dd label.frontend:after {
+  color: hsl(131, 65%, 55%);
+  border-color: hsl(131, 55%, 25%);
+  background-color: hsla(131, 89%, 62%, 0.1);
+}
+
+dd label.build:after {
+  content: "Build";
+  color: hsl(185, 40%, 45%);
+  border-color: hsl(185, 35%, 70%);
+  background-color: hsla(185, 50%, 55%, 0.1);
+}
+.dark dd label.build:after {
+  color: hsl(185, 100%, 45%);
+  border-color: hsl(185, 100%, 23%);
+  background-color: hsla(185, 100%, 23%, 0.2);
+}
+
+dd label.dependencies:after {
+  content: "Dependencies";
+  color: hsl(230, 40%, 45%);
+  border-color: hsl(230, 35%, 70%);
+  background-color: hsla(230, 50%, 55%, 0.1);
+}
+.dark dd label.dependencies:after {
+  color: hsl(230, 80%, 70%);
+  border-color: hsl(230, 80%, 40%);
+  background-color: hsla(230, 80%, 23%, 0.2);
+}
