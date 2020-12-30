@@ -146,6 +146,7 @@ export const AppInternal = ({ location }) => {
             <Route path={routes.about.path} component={AboutApp} />
             <Route path={routes.searchStart.path} component={SearchApp} />
             <Route path={routes.workbench.path} component={WorkbenchApp} />
+            <Redirect to={routes.searchStart.path} />
           </Switch>
         </Router>
         <AppError />
