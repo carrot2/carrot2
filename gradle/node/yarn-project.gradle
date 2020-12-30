@@ -56,6 +56,16 @@ task yarnInstall(type: YarnTask) {
   ]
 }
 
+task foo {
+  doFirst {
+    System.getenv().each {k, v ->
+      if (k.startsWith("REACT_APP_")) {
+        logger.warn("Using environment variable for yarn ({}={})", k, v)
+      }
+    }
+  }
+}
+
 task yarnBuild(type: YarnTask) {
   group 'build'
   dependsOn yarnInstall
@@ -68,15 +78,12 @@ task yarnBuild(type: YarnTask) {
 
     project.properties.each { k,v ->
       if (k.startsWith("REACT_APP_")) {
-        doFirst { logger.warn("Using project variable for yarn ({}={})", k, v) }
         yarnEnv.put(k, v)
       }
     }
 
-    System.properties.stringPropertyNames().each {k ->
+    System.getenv().each {k, v ->
       if (k.startsWith("REACT_APP_")) {
-        def v = System.getProperty(k)
-        doFirst { logger.warn("Using environment variable for yarn ({}={})", k, v) }
         yarnEnv.put(k, v)
       }
     }
@@ -93,6 +100,10 @@ task yarnBuild(type: YarnTask) {
   // changed events and rebuilds.
   doFirst {
     environment = yarnEnv
+
+    yarnEnv.each { k,v ->
+      logger.lifecycle("Using yarn env variable $k=$v")
+    }
   }
 
   args = [
