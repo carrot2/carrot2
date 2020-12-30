@@ -1,7 +1,7 @@
 const head = document.getElementsByTagName("head")[0];
 const script = document.createElement("script");
 script.type = "text/javascript";
-script.src = "https://plausible.io/js/plausible.js";
+script.src = "https://stats.carrot2.org/js/index.js";
 script.dataset.domain = "search.carrot2.org";
 head.appendChild(script);
 
