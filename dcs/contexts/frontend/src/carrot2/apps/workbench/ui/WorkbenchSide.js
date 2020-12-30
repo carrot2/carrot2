@@ -33,7 +33,7 @@ const WorkbenchLogo = () => {
 const ClusterButton = view(() => {
   useEffect(() => {
     const listener = e => {
-      if (e.keyCode === 13 && e.ctrlKey) {
+      if ((e.keyCode === 13 || e.keyCode === 10) && e.ctrlKey) {
         runSearch();
       }
     };
