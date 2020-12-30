@@ -103,7 +103,7 @@ function buildOptions(
     },
 
     groupLabelDecorator: (opts, props, vars) => {
-      if (vars.labelText.length > 80) {
+      if (vars.labelText && vars.labelText.length > 80) {
         vars.labelText = vars.labelText.substring(0, 100) + "...";
       }
     },
