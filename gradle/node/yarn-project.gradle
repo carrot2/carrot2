@@ -65,9 +65,18 @@ task yarnBuild(type: YarnTask) {
     inputs.file('yarn.lock')
     inputs.files { jsSources }
 
+
     project.properties.each { k,v ->
       if (k.startsWith("REACT_APP_")) {
-        doFirst { logger.warn("Using external env variable for yarn ({}={})", k, v) }
+        doFirst { logger.warn("Using project variable for yarn ({}={})", k, v) }
+        yarnEnv.put(k, v)
+      }
+    }
+
+    System.properties.stringPropertyNames().each {k ->
+      if (k.startsWith("REACT_APP_")) {
+        def v = System.getProperty(k)
+        doFirst { logger.warn("Using environment variable for yarn ({}={})", k, v) }
         yarnEnv.put(k, v)
       }
     }
