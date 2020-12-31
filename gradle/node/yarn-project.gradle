@@ -130,8 +130,8 @@ artifacts {
 clean {
   doLast {
     if (project.srclayout == 'gatsby') {
-      delete project.files(".cache")
-      delete project.files("public")
+      project.delete project.files(".cache", "public")
+      logger.lifecycle("Cleaned .cache/public on ${project.path}, remaining:\n  ${projectDir.list().join('\n  ')}")
     }
   }
 }
