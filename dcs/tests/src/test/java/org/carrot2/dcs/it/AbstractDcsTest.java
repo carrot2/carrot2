@@ -33,7 +33,9 @@ public abstract class AbstractDcsTest extends AbstractDistributionTest {
   public static void startDcs() throws IOException {
     createTempDistMirror.createRestoreRule().restore();
 
-    DcsConfig config = new DcsConfig(createTempDistMirror.mirrorPath(), DCS_SHUTDOWN_TOKEN);
+    DcsConfig config =
+        new DcsConfig(createTempDistMirror.mirrorPath(), DCS_SHUTDOWN_TOKEN)
+            .withGzip(randomBoolean());
     dcsService = new ForkedDcs(config);
   }
 

@@ -41,7 +41,7 @@ public class SyncTest extends TestBase {
 
     new Sync().sync(src, dst);
 
-    Assertions.assertThat(listAll(src)).containsOnlyElementsOf(listAll(dst));
+    Assertions.assertThat(listAll(src)).hasSameElementsAs(listAll(dst));
   }
 
   @Test
@@ -55,10 +55,10 @@ public class SyncTest extends TestBase {
     Files.createFile(sub.resolve("src.file"));
 
     new Sync().sync(src1, dst);
-    Assertions.assertThat(listAll(src1)).containsOnlyElementsOf(listAll(dst));
+    Assertions.assertThat(listAll(src1)).hasSameElementsAs(listAll(dst));
 
     new Sync().sync(src2, dst);
-    Assertions.assertThat(listAll(src2)).containsOnlyElementsOf(listAll(dst));
+    Assertions.assertThat(listAll(src2)).hasSameElementsAs(listAll(dst));
   }
 
   private List<String> listAll(Path src) throws IOException {

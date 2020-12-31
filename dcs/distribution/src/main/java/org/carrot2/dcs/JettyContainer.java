@@ -23,12 +23,14 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ShutdownHandler;
+import org.eclipse.jetty.server.handler.gzip.GzipHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener;
@@ -42,16 +44,19 @@ public class JettyContainer {
   private final int port;
   private final Path webappContexts;
   private final String shutdownToken;
+  private final boolean useGzip;
 
   private Server server;
   private ServerConnector connector;
   private Integer maxThreads;
 
-  public JettyContainer(int port, Path contexts, String shutdownToken, Integer maxThreads) {
+  public JettyContainer(
+      int port, Path contexts, String shutdownToken, Integer maxThreads, boolean useGzip) {
     this.port = port;
     this.webappContexts = contexts;
     this.shutdownToken = shutdownToken;
     this.maxThreads = maxThreads;
+    this.useGzip = useGzip;
   }
 
   public void start() throws Exception {
@@ -136,7 +141,28 @@ public class JettyContainer {
     if (shutdownToken != null && !shutdownToken.trim().isEmpty()) {
       handlers.addHandler(new ShutdownHandler(shutdownToken, false, false));
     }
-    handlers.addHandler(new ContextHandlerCollection(ctxHandlers.toArray(new ContextHandler[0])));
+
+    Handler contentHandler =
+        new ContextHandlerCollection(ctxHandlers.toArray(new ContextHandler[0]));
+    if (useGzip) {
+      GzipHandler gzipHandler = new GzipHandler();
+      gzipHandler.setHandler(contentHandler);
+      gzipHandler.setMinGzipSize(1024);
+      gzipHandler.addIncludedMimeTypes(
+          "application/json",
+          "application/javascript",
+          "application/x-javascript",
+          "application/xml",
+          "font/woff2",
+          "text/css",
+          "text/jsx",
+          "text/html",
+          "image/svg+xml");
+      handlers.addHandler(gzipHandler);
+    } else {
+      handlers.addHandler(contentHandler);
+    }
+
     server.setHandler(handlers);
   }
 

@@ -81,4 +81,8 @@ public class HttpResponse {
     }
     return this;
   }
+
+  public Header[] getHeaders() {
+    return headers;
+  }
 }

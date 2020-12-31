@@ -59,12 +59,16 @@ public class HttpRequest {
       return this;
     }
 
-    public HttpRequestBuilder bodyAsUtf8(String spec) {
+    public HttpRequestBuilder body(byte[] bodyBytes) {
       if (body != null) {
         throw new RuntimeException("Body already set.");
       }
-      this.body = spec.getBytes(StandardCharsets.UTF_8);
+      this.body = bodyBytes;
       return this;
+    }
+
+    public HttpRequestBuilder bodyAsUtf8(String spec) {
+      return body(spec.getBytes(StandardCharsets.UTF_8));
     }
 
     public HttpRequestBuilder header(String key, String value) {

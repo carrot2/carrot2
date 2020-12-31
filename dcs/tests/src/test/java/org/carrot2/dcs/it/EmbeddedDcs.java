@@ -29,7 +29,11 @@ public class EmbeddedDcs implements DcsService {
 
     container =
         new JettyContainer(
-            0, config.distributionDir.resolve("web"), config.shutdownToken, config.maxThreads);
+            0,
+            config.distributionDir.resolve("web"),
+            config.shutdownToken,
+            config.maxThreads,
+            config.useGzip);
     try {
       container.start();
       serviceUri = URI.create("http://localhost:" + container.getPort());

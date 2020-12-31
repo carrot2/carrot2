@@ -18,8 +18,8 @@ public class DcsConfig {
   final Path distributionDir;
 
   Integer maxThreads;
-
   boolean enableTestServlet;
+  boolean useGzip;
 
   public DcsConfig(Path distributionDir, String shutdownToken) {
     this.shutdownToken = Objects.requireNonNull(shutdownToken);
@@ -33,6 +33,11 @@ public class DcsConfig {
 
   public DcsConfig withTestServlet(boolean enableTestServlet) {
     this.enableTestServlet = enableTestServlet;
+    return this;
+  }
+
+  public DcsConfig withGzip(boolean flag) {
+    this.useGzip = flag;
     return this;
   }
 }

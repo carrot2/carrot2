@@ -44,6 +44,7 @@ public class DcsLauncher extends Command<ExitCode> {
   public static final String OPT_PORT = "--port";
   public static final String OPT_HOME = "--home";
   public static final String OPT_MAX_THREADS = "--threads";
+  public static final String OPT_USE_GZIP = "--gzip";
 
   @Parameter(
       names = {"-p", OPT_PORT},
@@ -66,6 +67,12 @@ public class DcsLauncher extends Command<ExitCode> {
       description = "Shutdown service's validation token.")
   public String shutdownToken;
 
+  @Parameter(
+      names = {OPT_USE_GZIP},
+      description = "Use GZIP compression for responses.",
+      arity = 1)
+  public boolean useGzip = true;
+
   private final String tstamp =
       new DateTimeFormatterBuilder()
           .appendPattern("yyyy_MM_dd-HH_mm_ss-SSS")
@@ -75,7 +82,8 @@ public class DcsLauncher extends Command<ExitCode> {
   @Override
   public ExitCode run() {
     try {
-      JettyContainer c = new JettyContainer(port, home.resolve("web"), shutdownToken, maxThreads);
+      JettyContainer c =
+          new JettyContainer(port, home.resolve("web"), shutdownToken, maxThreads, useGzip);
       c.start();
       c.join();
       return ExitCodes.SUCCESS;

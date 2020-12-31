@@ -49,6 +49,9 @@ public class ForkedDcs implements DcsService {
       args.addAll(Arrays.asList(DcsLauncher.OPT_MAX_THREADS, Integer.toString(config.maxThreads)));
     }
 
+    args.add(DcsLauncher.OPT_USE_GZIP);
+    args.add(Boolean.toString(config.useGzip));
+
     List<String> dcsOpts = new ArrayList<>();
     dcsOpts.add("-Xmx256m");
     if (config.enableTestServlet) {
@@ -72,7 +75,7 @@ public class ForkedDcs implements DcsService {
     Pattern pattern =
         Pattern.compile(Pattern.quote(JettyContainer.SERVICE_STARTED_ON) + "(?<port>[0-9]+)");
     while (Instant.now().isBefore(deadline) && process.getProcess().isAlive()) {
-      String log = new String(Files.readAllBytes(stdout), Charset.defaultCharset());
+      String log = Files.readString(stdout, Charset.defaultCharset());
       Matcher matcher = pattern.matcher(log);
       if (matcher.find()) {
         port = Integer.parseInt(matcher.group("port"));
@@ -82,8 +85,7 @@ public class ForkedDcs implements DcsService {
 
     if (port == null) {
       Loggers.CONSOLE.error(
-          "Forked DCS emitted this log: {}",
-          new String(Files.readAllBytes(stdout), Charset.defaultCharset()));
+          "Forked DCS emitted this log: {}", Files.readString(stdout, Charset.defaultCharset()));
 
       process.close();
       throw new IOException("Could not start forked DCS (no port emitted within deadline).");

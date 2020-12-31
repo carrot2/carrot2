@@ -1,0 +1,307 @@
+{
+  "language": "English",
+  "algorithm": "Lingo",
+  "documents": [
+    {
+      "title" : "Data mining - Wikipedia, the free encyclopedia",
+      "content" : "Article about knowledge-discovery in databases (KDD), the practice of automatically searching large stores of data for patterns."
+    }, {
+      "title" : "CCSU - Data Mining",
+      "content" : "A collection of Data Mining links edited by the Central Connecticut State University ... Graduate Certificate Program. Data Mining Resources. Resources. Groups ..."
+    }, {
+      "title" : "KDnuggets: Data Mining, Web Mining, and Knowledge Discovery",
+      "content" : "Newsletter on the data mining and knowledge industries, offering information on data mining, knowledge discovery, text mining, and web mining software, courses, jobs, publications, and meetings."
+    }, {
+      "title" : "Data mining - Wikipedia, the free encyclopedia",
+      "content" : "Data mining is considered a subfield within the Computer Science field of knowledge discovery. ... claim to perform \"data mining\" by automating the creation ..."
+    }, {
+      "title" : "Data Mining: What is Data Mining?",
+      "content" : "Outlines what knowledge discovery, the process of analyzing data from different perspectives and summarizing it into useful information, can do and how it works."
+    }, {
+      "title" : "Data Mining - Home Page (Misc)",
+      "content" : "Provides information about data mining also known as knowledge discovery in databases (KDD) or simply knowledge discovery. List software, events, organizations, and people working in data mining."
+    }, {
+      "title" : "Data Mining Software, Data Mining Applications and Data Mining Solutions",
+      "content" : "... complete data mining customer ... Data mining applications, on the other hand, embed ... it, our daily lives are influenced by data mining applications. ..."
+    }, {
+      "title" : "Data Mining: Text Mining, Visualization and Social Media",
+      "content" : "Commentary on text mining, data mining, social media and data visualization. ... Opinion Mining Startups ... in sentiment mining, deriving tuples of ..."
+    }, {
+      "title" : "Data Mining Techniques",
+      "content" : "Outlines the crucial concepts in data mining, defines the data warehousing process, and offers examples of computational and graphical exploratory data analysis techniques."
+    }, {
+      "title" : "<b>answers.yahoo.com</b>/question/index?qid=1006040419333",
+      "content" : "Generally, data mining (sometimes called data or knowledge discovery) is the ... Midwest grocery chain used the data mining capacity of Oracle software to ..."
+    }, {
+      "title" : "CCSU - Data Mining",
+      "content" : "Details on how to apply to the Master of Science in data mining may be found here. ... All data mining majors are classified for business purposes as part-time ..."
+    }, {
+      "title" : "Data Mining: An Introduction",
+      "content" : "About.com article on how businesses are discovering new trends and patterns of behavior that previously went unnoticed through data mining, automated statistical analysis techniques."
+    }, {
+      "title" : "Data Mining and Analytic Technologies (Kurt Thearling)",
+      "content" : "Kurt Thearling's site dedicated to sharing information about data mining, the automated extraction of hidden predictive information from databases, and other analytic technologies."
+    }, {
+      "title" : "Data Mining Software and Text Mining | SAS",
+      "content" : "Data mining is the process of selecting, exploring and modeling large amounts of ... The knowledge gleaned from data and text mining can be used to fuel ..."
+    }, {
+      "title" : "Data Mining and Data Warehousing",
+      "content" : "From data mining tutorials to data warehousing techniques, you'll find it all! ... Administration Design Development Data Mining Database Training Careers Reviews ..."
+    }, {
+      "title" : "Oracle Data Mining",
+      "content" : "Oracle Data Mining Product Center ... Using data mining functionality embedded in Oracle Database 10g, you can find ... Mining High-Dimensional Data for ..."
+    }, {
+      "title" : "National Center for Data Mining - Welcome",
+      "content" : "Conducts research in: scaling algorithms, applications and systems to massive data sets, developing algorithms, applications, and systems for mining distributed data, and establishing standard languages, protocols, and services for data mining and predictive modeling."
+    }, {
+      "title" : "Data Mining Project",
+      "content" : "A long term Knowledge Discovery and Data Mining project which has the current ... Read more about how data mining is integrated into SQL server. Contact Us ..."
+    }, {
+      "title" : "Data Mining Group - DMG",
+      "content" : "... high performance networking, internet computing, data mining and related areas. ... Peter Stengard, Oracle Data Mining Technologies. prudsys AG, Chemnitz, ..."
+    }, {
+      "title" : "Data Mining: Text Mining, Visualization and Social Media: The Truth About Blogs",
+      "content" : "Commentary on text mining, data mining, social media and data visualization. ... Data Mining points to the latest papers from the 3rd International Workshop on ..."
+    }, {
+      "title" : "What is data mining? - a definition from Whatis.com - see also: data miner, data analysis",
+      "content" : "Data mining is the analysis of data for relationships that have not previously been discovered. ... Data mining techniques are used in a many research areas, ..."
+    }, {
+      "title" : "An Introduction to Data Mining",
+      "content" : "Data mining, the extraction of hidden predictive information from large ... prospective analyses offered by data mining move beyond the analyses of ..."
+    }, {
+      "title" : "Oracle Data Mining",
+      "content" : "Using data mining functionality embedded in ... Oracle Data Mining JDeveloper and SQL Developer ... Oracle Magazine: Using the Oracle Data Mining API ..."
+    }, {
+      "title" : "Amazon.com: data mining",
+      "content" : "A community about data mining. Tag and discover new products. ... Data Mining (Paperback) Data Mining: Practical Machine Learning Tools and Techniques, Second Edition ..."
+    }, {
+      "title" : "MIT OpenCourseWare | Sloan School of Management | 15.062 Data Mining, Spring 2003 | Home",
+      "content" : "... class of methods known as data mining that assists managers in recognizing ... Data mining is a rapidly growing field that is concerned with developing ..."
+    }, {
+      "title" : "Om Data Mining och Text Mining. Ta fram säkra beslutsunderlag med Data Miningverktyg från SAS Institute.",
+      "content" : "SAS Insitutes business intelligence ger värdefull kunskap till hela din ... Tillämpningen av data mining sträcker sig över många branscher och områden. ..."
+    }, {
+      "title" : "Open Directory - Computers: Software: Databases: Data Mining",
+      "content" : "Data Mining and Knowledge Discovery - A peer-reviewed journal publishing ... In assessing the potential of data mining based marketing campaigns one needs to ..."
+    }, {
+      "title" : "Investor Home - Data Mining",
+      "content" : "Data Mining or Data Snooping is the practice of searching for relationships and ... up by making a case study in data mining out of the Motley Fool's Foolish Four. ..."
+    }, {
+      "title" : "Amazon.com: Data Mining: Concepts and Techniques (The Morgan Kaufmann Series in Data Management Systems): Jiawei Han...",
+      "content" : "Amazon.com: Data Mining: Concepts and Techniques (The Morgan Kaufmann Series in Data Management Systems): Jiawei Han,Micheline Kamber: Books"
+    }, {
+      "title" : "Data Mining - Monografias.com",
+      "content" : "Data Mining, la extracción de información oculta y predecible de grandes bases ... Las herramientas de Data Mining predicen futuras tendencias y comportamientos, ..."
+    }, {
+      "title" : "Data Mining Technology - Megaputer",
+      "content" : "Data Mining Technology from Megaputer ... Typical tasks addressed by data mining include: ... Yet, data mining requires far more than just machine learning. ..."
+    }, {
+      "title" : "itsc data mining solutions center",
+      "content" : ""
+    }, {
+      "title" : "Hard Hats for Data Miners: Myths and Pitfalls of Data Mining",
+      "content" : "This article debunks several myths about data mining and presents a plan of action to avoid some of the pitfalls. ... a typical data mining conference or ..."
+    }, {
+      "title" : "Data Management, Exploration and Mining- Home",
+      "content" : "The Data Management Exploration and Mining Group (DMX) ... Our research effort in data mining focuses on ensuring that traditional ..."
+    }, {
+      "title" : "BioMed Central | about us | Data mining research",
+      "content" : "... a collection of links to publications on the subject of biomedical text mining. Data mining Open Access research - an article in the 8 September 2003 edition of ..."
+    }, {
+      "title" : "Data Mining",
+      "content" : "Data Mining Services provide customers with tools to quickly sift through the ... into Datapult Central for use with Data Mining tools and other Datapult products. ..."
+    }, {
+      "title" : "SIAM International Conference on Data Mining",
+      "content" : "SIAM International Conference on Data Mining, co-Sponsored by AHPCRC and ... Clustering High Dimensional Data and its Applications. Mining Scientific Datasets ..."
+    }, {
+      "title" : "Data Mining in the Yahoo! Directory",
+      "content" : "Learn about data mining and knowledge discovery, the process of finding patterns ... Cross Industry Standard Process for Data Mining (CRISP-DM) ..."
+    }, {
+      "title" : "Data Mining",
+      "content" : "... Sapphire-a semiautomated, flexible data-mining software infrastructure. ... Data mining is not a new field. ... scale, scientific data-mining efforts such ..."
+    }, {
+      "title" : "SQL Server Data Mining > Home",
+      "content" : "SQL Server Data Mining Portal ... information about our exciting data mining features. ... CTP of Microsoft SQL Server 2008 Data Mining Add-Ins for Office 2007 ..."
+    }, {
+      "title" : "DBMS - DBMS Data Mining Solutions Supplement",
+      "content" : "As recently as two years ago, data mining was a new concept for many people. Data mining products were new and marred by unpolished interfaces. ..."
+    }, {
+      "title" : "Data mining [OCLC - Projects]",
+      "content" : "Describes the goals, methodology, and timing of the Data mining project."
+    }, {
+      "title" : "Data Mining - Introduction To Data Mining (Misc)",
+      "content" : "Some example application areas are listed under Applications Of Data Mining ... Crows Introduction - \"Introduction to Data Mining and Knowledge Discovery\"- http: ..."
+    }, {
+      "title" : "Pentaho Commercial Open Source Business Intelligence: Data Mining",
+      "content" : "... (BI) to the next level by adding data mining and workflow to the mix. ... Pentaho Data Mining is differentiated by its open, standards-compliant nature, ..."
+    }, {
+      "title" : "Data Mining",
+      "content" : "This course approaches data mining topics from an Artificial Intelligence ... The course will also cover Applications and Trends in Data Mining. Textbook: ..."
+    }, {
+      "title" : "Data Mining Software & Predictive Modeling Solutions",
+      "content" : "data mining software & predictive modeling sold online by statsoft.com. ... of automated and ready-to-deploy data mining solutions for a wide variety of ..."
+    }, {
+      "title" : "Main Page - Knowledge Discovery",
+      "content" : "The Penn Data Mining Group develops principled means of modeling and ... knowledge of specific application areas to develop new approaches to data mining. ..."
+    }, {
+      "title" : "Two Crows: Data mining glossary",
+      "content" : "Data mining terms concisely defined. ... Accuracy is an important factor in assessing the success of data mining. ... data mining ..."
+    }, {
+      "title" : "NIOSH Mining: MSHA Data File Downloads | CDC/NIOSH",
+      "content" : "MSHA accident, injury, employment, and production data files in SPSS and dBase formats ... Data files on mining accidents, injuries, fatalities, employment, ..."
+    }, {
+      "title" : "Salford Data mining 2006",
+      "content" : "Objective | Previous Conferences | Call for Abstracts | LATEST INFO ..."
+    }, {
+      "title" : "Data Mining | Focused Data Mining For Discovery To Assist Management",
+      "content" : "Inductis offers high-level data mining services to assist management decisions ... The Data Mining Shootout ...more>> ISOTech 2006 - The Insurance Technology ..."
+    }, {
+      "title" : "Elder Research: Predictive Analytics & Data Mining Consulting",
+      "content" : "Provides consulting and short courses in data mining and pattern discovery patterns in data."
+    }, {
+      "title" : "Microsoft SQL Server: Data Mining",
+      "content" : "Microsoft SQL Server Data Mining helps you explore your business data and discover patterns to reveal the hidden trends about your products, customer, market, and ..."
+    }, {
+      "title" : "Data Mining Case Studies",
+      "content" : "Recognizing outstanding practical contributions in the field of data mining. ... case studies are one of the most discussed topics at data mining conferences. ..."
+    }, {
+      "title" : "What is data mining? - A Word Definition From the Webopedia Computer Dictionary",
+      "content" : "This page describes the term data mining and lists other pages on the Web where you can find additional information. ... Data Mining and Analytic Technologies ..."
+    }, {
+      "title" : "Data Mining: Practical Machine Learning Tools and Techniques",
+      "content" : "Book. Data Mining: Practical Machine Learning Tools and Techniques (Second Edition) ... Explains how data mining algorithms work. ..."
+    }, {
+      "title" : "Predictive Modeling and Predictive Analytics Solutions | Enterprise Miner Software from Insightful Software",
+      "content" : "Insightful Enterprise Miner - Enterprise data mining for predictive modeling and predictive analytics."
+    }, {
+      "title" : "SRA International - Data Mining Solutions",
+      "content" : "... and business who ask these questions are finding solutions through data mining. ... Data mining is the process of discovering previously unknown relationships in ..."
+    }, {
+      "title" : "data mining - Wiktionary",
+      "content" : "Data mining. Wikipedia. data mining. a technique for searching large-scale databases for patterns; used mainly to ... Czech: data mining n., dolování dat n. ..."
+    }, {
+      "title" : "data mining institute",
+      "content" : ""
+    }, {
+      "title" : "Videolectures category: Data Mining",
+      "content" : "Next Generation Data Mining Tools: Power laws and self-similarity for graphs, ... Parallel session 4 - Hands-on section Data mining with R. Luis Torgo. 1 comment ..."
+    }, {
+      "title" : "WWW2008 CFP - WWW 2008 Call For Papers: Refereed Papers - Data Mining",
+      "content" : "WWW2008 - The 17th International World Wide Web Conference - Beijing, China (21 - 25 April 2008) Hosted by Beihang Universit ... data mining, machine ..."
+    }, {
+      "title" : "what is data mining?",
+      "content" : "... the purchases of customers, a data mining system could identify those customers ... A simple example of data mining, often called Market Basket Analysis, ..."
+    }, {
+      "title" : "datamining2 : Data Mining Club - 1600+ members!!",
+      "content" : "datamining2: Data Mining Club - 1600+ members!"
+    }, {
+      "title" : "First SIAM International Conference on Data Mining",
+      "content" : "The field of data mining draws upon extensive work in areas such as statistics, ... recent results in data mining, including applications, algorithms, software, ..."
+    }, {
+      "title" : "St@tServ - About Data Mining",
+      "content" : "St@tServ Data Mining page ... Data mining in molecular biology, by Alvis Brazma. Graham Williams page. Knowledge Discovery and Data Mining Resources, ..."
+    }, {
+      "title" : "Data Mining and Knowledge Discovery - Data Mining and Knowledge Discovery Journals, Books & Online Media | Springer",
+      "content" : "Technical journal focused on the theory, techniques, and practice for extracting information from large databases."
+    }, {
+      "title" : "Data Mining Concepts",
+      "content" : "Data mining is frequently described as &quot;the process of extracting ... Creating a data mining model is a dynamic and iterative process. ..."
+    }, {
+      "title" : "DMI:Data Mining Institute",
+      "content" : "Data Mining Institute at UW-Madison ... The Data Mining Institute (DMI) was ... Corporation with the support of the Data Mining Group of Microsoft Research. ..."
+    }, {
+      "title" : "DataMiningConsultant.com",
+      "content" : "... Website for Data Mining Methods and ... data mining at Central Connecticut State University, he ... also provides data mining consulting and statistical ..."
+    }, {
+      "title" : "Data Mining",
+      "content" : "... business intelligence, data warehousing, data mining, CRM, analytics, ... M2007 Data Mining Conference Hitting 10th Year and Going Strong ..."
+    }, {
+      "title" : "Data Mining",
+      "content" : "What is the current state of data mining? The immediate future ... Data Mining is the process of extracting knowledge hidden from large volumes of ..."
+    }, {
+      "title" : "Data Miners Inc. We wrote the book on data mining!",
+      "content" : "Data mining consultancy; services include predictive modeling, consulting, and seminars."
+    }, {
+      "title" : "Data Mining 2.2.2 software download - Mac OS X - VersionTracker",
+      "content" : "Find Data Mining downloads, reviews, and updates for Mac OS X including commercial software, shareware and freeware on VersionTracker.com."
+    }, {
+      "title" : "New Architect: Features",
+      "content" : "Article by Dan Greening on data mining techniques applied to analyzing and making decisions from web data. ... and business analysts use data-mining techniques. ..."
+    }, {
+      "title" : "Data Mining | NetworkDictionary",
+      "content" : "Data Mining is the automated extraction of hidden predictive information from databases. ... The data mining tools can make this leap. ..."
+    }, {
+      "title" : "YouTube - What is Data Mining? - February 19, 2008",
+      "content" : "Association Labratory President and CEO Dean West discusses Data Mining and how it can be applied to associations. ... Data Mining Association Forum Dean West ..."
+    }, {
+      "title" : "Book page",
+      "content" : "Chapter 4. Data Mining Primitives, Languages, and System Architectures ... Chapter 9. Mining Complex Types of Data ... to Microsoft's OLE DB for Data Mining ..."
+    }, {
+      "title" : "Two Crows data mining home page",
+      "content" : "Dedicated to the development, marketing, sales and support of tools for knowledge discovery to make data mining accessible and easy to use."
+    }, {
+      "title" : "Statistical Data Mining Tutorials",
+      "content" : "Includes a set of tutorials on many aspects of statistical data mining, including the foundations of probability, the foundations of statistical data analysis, and most of the classic machine learning and data mining algorithms."
+    }, {
+      "title" : "E-commerce Technology: Data Mining",
+      "content" : "\"Web usage mining: discovery and applications of web usage patterns from web data\" ... Patterns and Trends by Applying OLAP and Data Mining Technology on Web Logs. ..."
+    }, {
+      "title" : "Teradata Data Mining Warehouse Solution",
+      "content" : "... a high-powered analytic warehouse that streamlines the data mining process. ... while building the analytic model using your favorite data mining tool. ..."
+    }, {
+      "title" : "Indo Datamining",
+      "content" : "Apa yang bisa dan tidak bisa dilakukan data mining ? ... Iko Pramudiono \"&raquo ... Apa itu data mining ? Iko Pramudiono \"&raquo. artikel lainnya \" tutorial ..."
+    }, {
+      "title" : "Affymetrix - Data Mining Tool (DMT) (Unsupported - Archived Product)",
+      "content" : "Affymetrix is dedicated to developing state-of-the-art technology for acquiring, analyzing, and managing complex genetic ... The Data Mining Tool (DMT) ..."
+    }, {
+      "title" : "Data Mining Student Notes, QUB",
+      "content" : "2 - Data Mining Functions. 2.1 - Classification. 2.2 - Associations ... 5 - Data Mining Examples. 5.1 - Bass Brewers. 5.2 - Northern Bank. 5.3 - TSB Group PLC ..."
+    }, {
+      "title" : "Text Mining for Clementine | Improve the accuracy of data mining",
+      "content" : "Text Mining for Clementine from SPSS enables you to use text data to improve the accuracy of predictive models. ... and about data mining in general. ..."
+    }, {
+      "title" : "Data Mining",
+      "content" : "Without data mining, a merchant isn't even close to leveraging what customers want and will buy. ... Data mining is to be found in applications like bio ..."
+    }, {
+      "title" : "Data Mining — Blogs, Pictures, and more on WordPress",
+      "content" : "Going Beyond the Numbers: Context-Sensitive Data Mining ... Data mining examples ... many websites employing data mining technology to provide recommendation ..."
+    }, {
+      "title" : "Benchmarking- Data Mining Benchmarking Association",
+      "content" : "Association of companies and organizations working to identify \"best in class\" data mining processes through benchmarking studies."
+    }, {
+      "title" : "Data Mining, Data Mining Process, Data Mining Techniques, Outsourcing Mining Data Services",
+      "content" : "... Walmart, Fundraising Data Mining, Data Mining Activities, Web-based Data Mining, ... in many industries makes us the best choice for your data mining needs. ..."
+    }, {
+      "title" : "Data Mining V: Data Mining, Text Mining... [Hardcover] | Target.com",
+      "content" : "Shop for Data Mining V: Data Mining, Text Mining and Their Business Applications : Fifth International Conference on Data Mining (Management Information System) at"
+    }, {
+      "title" : "Data Mining",
+      "content" : "... varying degrees of success, the data mining tools developed thus far, by and ... (a) we should recognize that data mining is a multi-step process, and that (b) ..."
+    }, {
+      "title" : "The Java Community Process(SM) Program - JSRs: Java Specification Requests - detail JSR# 73",
+      "content" : "Currently, there is no widely agreed upon, standard API for data mining. By using JDMAPI, implementers of data mining applications can expose a single, ..."
+    }, {
+      "title" : "Microsoft SQL Server2005: Data Mining",
+      "content" : "Data Mining es la tecnología BI que le ayudará a construir modelos analíticos complejos e integrar esos modelos con sus operaciones comerciales."
+    }, {
+      "title" : "Regional Review: Mining Data",
+      "content" : "Although data mining by itself is not going to get the Celtics to the playoffs, ... then, firms that specialize in data-mining software have been developing a ..."
+    }, {
+      "title" : "Data Mining",
+      "content" : "... are excellent candidates for data mining, fault prediction, problem diagnosis, ... Data Mining uses this theory to support Link and Affinity Group analysis – an ..."
+    }, {
+      "title" : "Discovery and Mining",
+      "content" : "Verification-Driven Data Mining. Advantages of Symbolic Classifiers. Manual vs. Automatic ... Currently, data mining solutions have been developed by large software ..."
+    }, {
+      "title" : "DataMiningConsultant.com",
+      "content" : "Companion Website for Data Mining Methods and Models ... \"This is an excellent introductory book on data mining. ... An Introduction to Data Mining at Amazon.com ..."
+    }, {
+      "title" : "People For the American Way - Data Mining",
+      "content" : "data mining, civil liberties, civil rights, terrorism, september 11th, anti-terrorism, ashcroft, government intrusion, privacy, email, patriot, american"
+    }, {
+      "title" : "Data Mining Research Group",
+      "content" : "... conducting research in various areas in data mining and other related fields. ... on Data Mining (SDM'08), (full paper), Atlanta, GA, April 2007. ..."
+    }
+  ]
+}
