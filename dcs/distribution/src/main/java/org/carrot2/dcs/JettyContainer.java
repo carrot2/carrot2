@@ -148,6 +148,7 @@ public class JettyContainer {
       GzipHandler gzipHandler = new GzipHandler();
       gzipHandler.setHandler(contentHandler);
       gzipHandler.setMinGzipSize(1024);
+      gzipHandler.setIncludedMethods("GET", "POST");
       gzipHandler.addIncludedMimeTypes(
           "application/json",
           "application/javascript",

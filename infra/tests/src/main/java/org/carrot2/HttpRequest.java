@@ -18,7 +18,6 @@ import java.util.List;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -39,6 +38,7 @@ public class HttpRequest {
     List<KeyValue> queryParams = new ArrayList<>();
     List<KeyValue> headers = new ArrayList<>();
     byte[] body;
+    boolean allowCompression = false;
 
     HttpRequestBuilder() {}
 
@@ -82,8 +82,7 @@ public class HttpRequest {
       }
     }
 
-    private HttpResponse sendRequest(URI path, RequestBuilder rb)
-        throws IOException, ClientProtocolException {
+    private HttpResponse sendRequest(URI path, RequestBuilder rb) throws IOException {
       checkPath(path);
 
       for (KeyValue qp : queryParams) {
@@ -107,7 +106,6 @@ public class HttpRequest {
       HttpClientBuilder clientBuilder =
           HttpClientBuilder.create()
               .disableAutomaticRetries()
-              .disableContentCompression()
               .disableRedirectHandling()
               .setDefaultRequestConfig(
                   RequestConfig.custom()
@@ -115,6 +113,10 @@ public class HttpRequest {
                       .setConnectionRequestTimeout(3000)
                       .setConnectTimeout(3000)
                       .build());
+
+      if (!allowCompression) {
+        clientBuilder.disableContentCompression();
+      }
 
       try (CloseableHttpClient httpclient = clientBuilder.build()) {
         try (CloseableHttpResponse response = httpclient.execute(request)) {
@@ -131,6 +133,11 @@ public class HttpRequest {
           return new HttpResponse(statusCode, reasonPhrase, allHeaders, responseBody);
         }
       }
+    }
+
+    public HttpRequestBuilder allowCompressedResponse(boolean enable) {
+      this.allowCompression = enable;
+      return this;
     }
   }
 

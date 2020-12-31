@@ -10,17 +10,19 @@
  */
 package org.carrot2.dcs.it;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.zip.GZIPInputStream;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.http.Header;
+import org.assertj.core.api.Assertions;
 import org.carrot2.HttpRequest;
 import org.carrot2.HttpResponse;
-import org.junit.Ignore;
+import org.carrot2.dcs.model.ClusterResponse;
 import org.junit.Test;
 
 public class DcsGzipTest extends AbstractDistributionTest {
   @Test
-  @Ignore
   public void verifyGzipCompression() throws IOException {
     DcsConfig config =
         new DcsConfig(createTempDistMirror.mirrorPath(), AbstractDcsTest.DCS_SHUTDOWN_TOKEN)
@@ -31,19 +33,24 @@ public class DcsGzipTest extends AbstractDistributionTest {
     try (DcsService service = new ForkedDcs(config)) {
       HttpResponse response =
           HttpRequest.builder()
+              // We do want to know if the content was compressed, don't make
+              // it transparent.
+              .allowCompressedResponse(false)
               .header("Accept-Encoding", "gzip")
               .body(requestBytes)
               .sendPost(service.getAddress().resolve("/service/cluster"))
               .assertStatus(HttpServletResponse.SC_OK);
 
-      for (Header header : response.getHeaders()) {
-        System.out.println("> " + header);
-      }
-
-      System.out.println("# " + response.bodyAsUtf8().length());
-      System.out.println(response.bodyAsUtf8());
-
+      // Ensure the response was returned compressed.
       response.assertHeader("Content-Encoding", "gzip");
+
+      // Ensure we can read the response and it's valid.
+      ObjectMapper om = new ObjectMapper();
+      ClusterResponse resp =
+          om.readValue(
+              new GZIPInputStream(new ByteArrayInputStream(response.body())).readAllBytes(),
+              ClusterResponse.class);
+      Assertions.assertThat(resp.clusters).isNotEmpty();
     }
   }
 }

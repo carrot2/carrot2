@@ -12,8 +12,11 @@ package org.carrot2;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Stream;
 import org.apache.http.Header;
 
 public class HttpResponse {
@@ -51,6 +54,13 @@ public class HttpResponse {
     return new String(responseBody, StandardCharsets.UTF_8);
   }
 
+  public byte[] body() {
+    if (responseBody == null) {
+      throw new RuntimeException("Empty response body.");
+    }
+    return responseBody;
+  }
+
   public URI locationHeader() {
     return URI.create(header("Location"));
   }
@@ -82,7 +92,8 @@ public class HttpResponse {
     return this;
   }
 
-  public Header[] getHeaders() {
-    return headers;
+  public Stream<Map.Entry<String, String>> headers() {
+    return Arrays.stream(this.headers)
+        .map(header -> Map.entry(header.getName(), header.getValue()));
   }
 }
