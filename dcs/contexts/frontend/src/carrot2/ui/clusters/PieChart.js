@@ -10,7 +10,6 @@ import { themeStore } from "../../../carrotsearch/ui/ThemeSwitch.js";
 
 import { Circles } from "../../../carrotsearch/circles/Circles.js";
 import { useDataObject, useSelection } from "./visualization-hooks.js";
-import { FoamTree } from "../../../carrotsearch/foamtree/FoamTree.js";
 
 const darkThemeOptions = {
   groupOutlineColor: "rgba(255, 255, 255, 0.1)",
