@@ -19,7 +19,7 @@ const fileWithPreload = [
 ];
 
 for (const link of assets) {
-  fileWithPreload.push(`<link rel="prefetch" href="./${link}" as="font">`);
+  fileWithPreload.push(`<link rel="preload" href="./${link}" as="font">`);
 }
 
 fileWithPreload.push(parts[1]);
