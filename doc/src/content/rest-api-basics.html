@@ -438,8 +438,30 @@
     </section>
   </section>
 
+  <section id="service-configuration">
+    <h2>Service configuration</h2>
+
+    <p>
+      To receive the list of available clustering algorithms and languages,
+      make a GET request to the <code>/list</code> endpoint.
+    </p>
+
+    <figure>
+      <pre data-embed="./examples/list-response.json"></pre>
+      <figcaption>
+        Carrot<sup>2</sup> REST API service configuration request and response.
+      </figcaption>
+    </figure>
+
+    <p>
+      Note that each algorithm has an associated list of languages it supports.
+      The <code>templates</code> block enumerates preconfigured
+      <a href="dcs-templates.html">request templates </a>.
+    </p>
+  </section>
+
   <section id="models">
-    <h2>Request and response models</h2>
+    <h2>Request and response Java models</h2>
 
     <p>
       While it is perfectly fine to assemble the request JSON by hand, the DCS distribution
@@ -461,24 +483,6 @@
     <p>
       Alternatively, the <a href="#openapi">OpenAPI descriptor</a>
       can be used to generate service binding code for Java and many other languages.
-    </p>
-  </section>
-
-  <section id="service-configuration">
-    <h2>Service configuration</h2>
-
-    <p>
-      The second service endpoint the DCS exposes is called <code>/list</code>. When invoked
-      with a single HTTP GET (without any parameters), the service returns information
-      on the available algorithms and languages. An example response can
-      look like this:
-    </p>
-
-    <pre data-embed="./examples/list-response.json"></pre>
-
-    <p>
-      Note that each algorithm has an associated list of language codes it supports.
-      The <code>templates</code> block enumerates preconfigured <a href="dcs-templates.html">request templates </a>.
     </p>
   </section>
 
