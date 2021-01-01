@@ -49,7 +49,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build && node ./insert-font-preloading.js",
+    "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
     "prettier": "prettier -w src/"

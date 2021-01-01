@@ -67,10 +67,16 @@ export function Visualization(props) {
     return () => window.removeEventListener("resize", onResize);
   }, [props.impl]);
 
+  const style = { position: "absolute", top: 0, bottom: 0, left: 0, right: 0 };
+  const fontPreload = props.fontFamily ? (
+    <span style={{ fontFamily: props.fontFamily, visibility: "hidden" }}>
+      Font preload
+    </span>
+  ) : null; 
   return (
-    <div
-      ref={element}
-      style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }}
-    />
+    <div style={style}>
+      <div style={style} ref={element} />
+      {fontPreload}
+    </div>
   );
 }

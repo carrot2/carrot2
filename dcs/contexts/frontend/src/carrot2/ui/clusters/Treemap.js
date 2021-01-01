@@ -167,6 +167,7 @@ export const Treemap = ({ visible, configStore, implRef }) => {
         options={options}
         dataObject={dataObject}
         selection={selection}
+        fontFamily="Cabin Condensed"
       />
     </>
   );
