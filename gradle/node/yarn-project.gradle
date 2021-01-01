@@ -132,6 +132,9 @@ clean {
     if (project.srclayout == 'gatsby') {
       project.delete project.files(".cache", "public")
       logger.lifecycle("Cleaned .cache/public on ${project.path}, remaining:\n  ${projectDir.list().join('\n  ')}")
+    } else {
+      project.delete project.files(project.jsBuildDir)
+      logger.lifecycle("Cleaned ${project.jsBuildDir}, remaining:\n  ${projectDir.list().join('\n  ')}")
     }
   }
 }
