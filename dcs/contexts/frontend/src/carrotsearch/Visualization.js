@@ -72,7 +72,7 @@ export function Visualization(props) {
     <span style={{ fontFamily: props.fontFamily, visibility: "hidden" }}>
       Font preload
     </span>
-  ) : null; 
+  ) : null;
   return (
     <div style={style}>
       <div style={style} ref={element} />
