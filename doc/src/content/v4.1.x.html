@@ -203,10 +203,20 @@
       <h3>Improvements</h3>
 
       <dl>
+        <dt>GZIP compression</dt>
+        <dd>
+          <p>
+            REST API built-in server now supports GZIP compression.
+          </p>
+
+          <label class="rest-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/66">GH-66</a>
+        </dd>
+
         <dt>Request processing information</dt>
         <dd>
           <p>
-            [DCS] Added clustering and request processing time information to
+            Added clustering and request processing time information to
             clustering response. This information is optional and is returned
             when the <code>serviceInfo</code>HTTP parameter is enabled on a
             clustering request.
@@ -219,7 +229,7 @@
         <dt>Java module system support improved</dt>
         <dd>
           <p>
-            [Java] Improved support for the Java module system by providing
+            Improved support for the Java module system by providing
             the <code>Automatic-Module-Name</code> entry in JAR manifests.
           </p>
 
