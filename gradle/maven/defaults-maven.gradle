@@ -1,5 +1,3 @@
-import org.w3c.dom.Element
-
 configure(rootProject) {
   configurations {
     mavenArtifacts
@@ -142,6 +140,8 @@ configure(subprojects.findAll { it.path in published }) {
           from components.java
           group = project.group
           artifactId = project.archivesBaseName
+
+          suppressPomMetadataWarningsFor('sourcesElements')
 
           pom(configurePom)
         }
