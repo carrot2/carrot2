@@ -1,3 +1,4 @@
+import java.time.Instant
 
 plugins {
   id 'base'
@@ -10,7 +11,8 @@ plugins {
 
   id 'de.thetaphi.forbiddenapis' version '3.1' apply false
 
-  id 'com.carrotsearch.gradle.opts' version '0.0.4' apply false
+  id 'com.carrotsearch.gradle.opts' apply false
+  id 'com.carrotsearch.gradle.randomizedtesting' apply false
 }
 
 repositories {
@@ -39,6 +41,7 @@ ext {
 
 allprojects {
   apply plugin: 'com.carrotsearch.gradle.opts'
+  apply plugin: 'com.carrotsearch.gradle.randomizedtesting'
 }
 
 apply from: file('gradle/validation/check-environment.gradle')
@@ -54,7 +57,6 @@ apply from: file('gradle/node/defaults-node.gradle')
 apply from: file('gradle/ide/idea.gradle')
 
 apply from: file("gradle/testing/defaults-tests.gradle")
-apply from: file("gradle/testing/fail-on-no-tests.gradle")
 apply from: file("gradle/testing/per-project-summary.gradle")
 apply from: file("gradle/testing/slowest-tests-at-end.gradle")
 

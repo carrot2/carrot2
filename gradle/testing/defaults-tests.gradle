@@ -1,8 +1,17 @@
-import org.gradle.api.tasks.testing.logging.*
+import java.time.Instant
 
 allprojects {
   plugins.withType(JavaPlugin) {
-    def verboseMode = Boolean.parseBoolean(opts.optOrDefault("tests.verbose", "false"))
+    opts {
+      option name: "tests.jvms",
+          value: {-> (int) Math.max(1, Math.min(Runtime.runtime.availableProcessors() / 2.0, 4.0)) },
+          description: "Number of JVMs to use for tests."
+    }
+
+    randomizedtesting {
+      failOnNoTests = true
+      testOpts.maxHeap.value = "100m"
+    }
 
     project.ext {
       testsWorkDir = file("${buildDir}/tmp/tests-cwd")
@@ -10,51 +19,18 @@ allprojects {
     }
 
     test {
-      maxParallelForks = opts.optOrDefault("tests.jvms", (int) Math.max(1, Math.min(Runtime.runtime.availableProcessors() / 2.0, 4.0)))
+      maxParallelForks = Integer.parseInt(opts['tests.jvms'].toString())
 
       useJUnit()
 
       workingDir testsWorkDir
       systemProperty("java.io.tmpdir", testsTmpDir)
+
       doFirst {
         testsWorkDir.mkdirs()
         testsTmpDir.mkdirs()
       }
-
-      // Set up logging.
-      if (verboseMode) {
-        testLogging {
-          events TestLogEvent.FAILED
-          exceptionFormat TestExceptionFormat.FULL
-          showExceptions true
-          showCauses true
-          showStackTraces true
-          showStandardStreams = false
-        }
-        onOutput { td, event ->
-          print event.message
-        }
-      } else {
-        testLogging {
-          events TestLogEvent.FAILED
-          exceptionFormat TestExceptionFormat.FULL
-          showExceptions true
-          showCauses true
-          showStackTraces true
-        }
-      }
-
-      // Pass any tests.* property to the runner.
-      project.properties.each { k, v ->
-        if (k.startsWith("tests.")) {
-          systemProperty k.toString(), v.toString()
-        }
-      }
-
-      doFirst {
-        // Print some diagnostics about locations used.
-        logger.info("Test folders for {}: cwd={}, tmp={}", project.path, testsWorkDir, testsTmpDir)
-      }
     }
   }
 }
+

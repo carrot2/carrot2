@@ -1,6 +1,8 @@
 
 rootProject.name = 'carrot2'
 
+include 'gradle'
+
 include 'core'
 include 'core-examples'
 
