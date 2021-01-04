@@ -1,6 +1,10 @@
 Release steps
 -------------
 
+* Check if all the issues are resolved
+
+https://github.com/carrot2/carrot2/issues
+
 * Bump version number to a non-snapshot version (rootProject.version = "...")
 
 vi build.gradle
@@ -54,9 +58,6 @@ version xxx, create a new deployment and promote to production server.
 https://builds.carrotsearch.com/browse/C2-C2DCS
 
 * Bump version number strings to the subsequent version, commit.
-
-* Update JIRA. Close issues scheduled for the release being made, 
-release the version in JIRA, create a next version in JIRA
 
 * Circulate release news
 
