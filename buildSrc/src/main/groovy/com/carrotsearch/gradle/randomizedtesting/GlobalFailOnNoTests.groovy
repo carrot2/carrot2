@@ -32,13 +32,22 @@ import java.nio.file.Path
  */
 @CompileStatic
 class GlobalFailOnNoTests {
+  private final Project project
   private final RandomizedTestingExtension conf
 
-  GlobalFailOnNoTests(RandomizedTestingExtension conf) {
-    this.conf = conf
+  GlobalFailOnNoTests(Project project) {
+    this.project = project
+    this.conf = project.extensions.findByType(RandomizedTestingExtension)
+  }
 
-    conf.project.afterEvaluate {
+  void apply() {
+    project.afterEvaluate {
       if (conf.failOnNoTests) {
+        RootProjectGlobals globals = project.rootProject.extensions.findByType(RootProjectGlobals)
+        if (globals.failOnNoTestsHook.getAndSet(false)) {
+          installAfterBuildCheck(conf.project.gradle, globals)
+        }
+
         applyToTestTasks()
       }
     }
@@ -54,11 +63,6 @@ class GlobalFailOnNoTests {
         .findByName(RootProjectGlobals.EXT_NAME) as RootProjectGlobals
 
     globals.allTestTasks.addAll(testTasks)
-  }
-
-  // Register on global (root project) hooks.
-  void registerRootGlobals(RootProjectGlobals globals) {
-    installAfterBuildCheck(conf.project.gradle, globals)
   }
 
   private static class FailureEntry {

@@ -41,7 +41,6 @@ ext {
 
 allprojects {
   apply plugin: 'com.carrotsearch.gradle.opts'
-  apply plugin: 'com.carrotsearch.gradle.randomizedtesting'
 }
 
 apply from: file('gradle/validation/check-environment.gradle')
@@ -70,6 +69,7 @@ subprojects {
   project.file("src/test/java").exists() ||
   project.file("src/main/webapp").exists()) {
     apply plugin: 'java-library'
+    apply plugin: 'com.carrotsearch.gradle.randomizedtesting'
 
     if (![
       ":core-examples"

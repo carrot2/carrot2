@@ -12,7 +12,6 @@ class RandomizedTestingExtension {
 
 Spec<? extends Test> testTaskFilter
   TestOpts testOpts
-
   boolean failOnNoTests
 
   RandomizedTestingExtension(Project project) {

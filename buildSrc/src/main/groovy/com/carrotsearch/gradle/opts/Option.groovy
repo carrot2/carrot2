@@ -1,65 +1,60 @@
 package com.carrotsearch.gradle.opts
 
 import groovy.transform.CompileStatic
-import org.gradle.api.GradleException
+import groovy.transform.MapConstructor
 import org.gradle.api.Project
-import org.gradle.api.provider.Provider
 
 import java.util.function.Consumer
 
 @CompileStatic
+@MapConstructor
 class Option {
   static def UNRESOLVED = new Object()
 
-  String name
-  String description
-  private def defaultValue
+  final Project project
+  final String name
+  final String description
+  Object defaultValue
+
+  Option(Project project, String name, String description = "", Object defaultValue = null) {
+    this.project = project
+    this.name = name
+    this.description = description
+    this.defaultValue = defaultValue
+  }
+
   private def otherProperties = [:]
 
-  private def value = UNRESOLVED
-  private def valueSource
-  OptsPluginExtension ext
+  private def resolvedValue = UNRESOLVED
+  private def resolvedValueSource
 
   def propertyMissing(String name, value) { otherProperties[name] = value }
   def propertyMissing(String name) { otherProperties[name] }
-
-  void setValue(Object v) {
-    this.defaultValue = v
-  }
 
   Object getValue() {
     return resolve()
   }
 
-  private Project getProject() {
-    def project = ext.project
-    if (project == null) {
-      throw new GradleException("Option not bound to any project: ${name}")
-    }
-    return project
-  }
-
-  Object resolve() {
-    if (value == UNRESOLVED) {
+  private Object resolve() {
+    if (resolvedValue == UNRESOLVED) {
       if (project.hasProperty(name)) {
-        value = project.property(name)
-        valueSource = "project property"
+        resolvedValue = project.property(name)
+        resolvedValueSource = "project property"
       } else if (System.properties.containsKey(name)) {
-        value = System.properties.get(name)
-        valueSource = "system property"
+        resolvedValue = System.properties.get(name)
+        resolvedValueSource = "system property"
       } else if (defaultValue instanceof Closure) {
-        value = defaultValue.call()
-        valueSource = "closure"
+        resolvedValue = defaultValue.call()
+        resolvedValueSource = "closure"
       } else {
-        value = defaultValue
-        valueSource = "default value"
+        resolvedValue = defaultValue
+        resolvedValueSource = "default value"
       }
     }
-    return value
+    return resolvedValue
   }
 
   Object acceptIfNotNull(Consumer<Object> consumer) {
-    def value = resolve()
     if (value != null) {
       consumer.accept(value)
     }
@@ -68,7 +63,7 @@ class Option {
 
   @Override
   String toString() {
-    return getValue()
+    return Objects.toString(value)
   }
 
   boolean isDynamic() {
@@ -76,7 +71,12 @@ class Option {
   }
 
   boolean isEqualsDefault() {
-    return Objects.equals(resolve(), defaultValue)
+    return Objects.equals(value, defaultValue)
+  }
+
+  String getResolvedValueSource() {
+    resolve()
+    return resolvedValueSource
   }
 
   String toInfoString() {
@@ -87,11 +87,7 @@ class Option {
         value,
         equalsDefault
             ? ""
-            : "(source: ${valueSource}${dynamic ? '' : ", default: " + defaultValue}) ",
+            : "(source: ${resolvedValueSource}${dynamic ? '' : ", default: " + defaultValue}) ",
         description)
-  }
-
-  Provider<Object> asProvider() {
-    return project.provider({-> value })
   }
 }

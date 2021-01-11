@@ -13,12 +13,14 @@ import org.gradle.util.GradleVersion
 class RandomizedTestingPlugin implements Plugin<Project> {
   static String EXTENSION_NAME = "randomizedtesting"
 
-  RootProjectGlobals globals
-
   @Override
   void apply(Project project) {
     if (GradleVersion.current() < GradleVersion.version("6.2")) {
       project.logger.error("Requires Gradle >= 6.2")
+    }
+
+    if (project != project.rootProject) {
+      project.rootProject.plugins.apply(RandomizedTestingRootPlugin)
     }
 
     def ext = new RandomizedTestingExtension(project)
@@ -28,16 +30,7 @@ class RandomizedTestingPlugin implements Plugin<Project> {
     def testTasks = ext.tasks
     testTasks*.reports.html.enabled = false
 
-    def failOnNoTests = new GlobalFailOnNoTests(ext)
-    def handleOutputs = new HandleOutputs(ext)
-
-    globals = project.rootProject.extensions.findByName(RootProjectGlobals.EXT_NAME) as RootProjectGlobals
-    if (globals == null) {
-      globals = new RootProjectGlobals()
-      globals.rootSeed = String.format("%08X", new Random().nextLong())
-      project.rootProject.extensions.add(RootProjectGlobals.EXT_NAME, globals)
-
-      failOnNoTests.registerRootGlobals(globals)
-    }
+    new GlobalFailOnNoTests(project).apply()
+    new HandleOutputs(project).apply()
   }
 }

@@ -1,22 +1,23 @@
-import java.time.Instant
+import com.carrotsearch.gradle.randomizedtesting.RandomizedTestingPlugin
 
 allprojects {
-  plugins.withType(JavaPlugin) {
+  plugins.withType(RandomizedTestingPlugin) {
     opts {
-      option name: "tests.jvms",
-          value: {-> (int) Math.max(1, Math.min(Runtime.runtime.availableProcessors() / 2.0, 4.0)) },
-          description: "Number of JVMs to use for tests."
+      option(name: "tests.jvms",
+          defaultValue: {-> (int) Math.max(1, Math.min(Runtime.runtime.availableProcessors() / 2.0, 4.0)) },
+          description: "Number of JVMs to use for tests.")
     }
 
     randomizedtesting {
       failOnNoTests = true
-      testOpts.maxHeap.value = "100m"
+      testOpts.maxHeap.defaultValue = "100m"
     }
 
     project.ext {
       testsWorkDir = file("${buildDir}/tmp/tests-cwd")
       testsTmpDir = file("${buildDir}/tmp/tests-tmp")
     }
+
 
     test {
       maxParallelForks = Integer.parseInt(opts['tests.jvms'].toString())

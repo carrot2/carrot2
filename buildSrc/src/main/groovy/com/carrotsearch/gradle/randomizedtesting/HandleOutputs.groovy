@@ -1,6 +1,7 @@
 package com.carrotsearch.gradle.randomizedtesting
 
 import groovy.transform.CompileStatic
+import org.gradle.api.Project
 import org.gradle.api.internal.tasks.testing.logging.DefaultTestLogging
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -17,14 +18,15 @@ class HandleOutputs {
   final static String TEST_OUTPUTS_DIR = "test-outputs"
   final static String TEST_OUTPUTS_DIR_PROPERTY = "testOutputsDir"
 
+  private final Project project
   private final RandomizedTestingExtension conf
 
-  HandleOutputs(RandomizedTestingExtension conf) {
-    this.conf = conf
-    apply()
+  HandleOutputs(Project project) {
+    this.project = project
+    this.conf = project.extensions.findByType(RandomizedTestingExtension)
   }
 
-  private void apply() {
+  void apply() {
     def testTasks = conf.tasks
 
     // Set up error logging and a custom error stream redirector.
@@ -40,7 +42,7 @@ class HandleOutputs {
     }
 
     def verboseModeProvider =
-        conf.project.provider({-> Boolean.parseBoolean(conf.testOpts.verboseMode.toString())})
+        project.provider({-> Boolean.parseBoolean(conf.testOpts.verboseMode.toString())})
 
     // Set up custom output redirector.
     testTasks.all { Test test ->
@@ -61,8 +63,7 @@ class HandleOutputs {
       logging.showStackTraces = true
       logging.stackTraceFilters.clear()
 
-      def listener = new ErrorReportingTestListener(logging, spillDir, testOutputsDir,
-          verboseModeProvider)
+      def listener = new ErrorReportingTestListener(logging, spillDir, testOutputsDir, verboseModeProvider)
       test.addTestOutputListener(listener)
       test.addTestListener(listener)
     }
