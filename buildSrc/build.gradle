@@ -1,21 +1,20 @@
+
 plugins {
   id 'java-gradle-plugin'
 }
 
+repositories {
+  gradlePluginPortal()
+}
 
 dependencies {
+  implementation "com.carrotsearch.gradle.opts:gradle-opts-plugin:0.0.5"
   implementation gradleApi()
   implementation localGroovy()
 }
 
 gradlePlugin {
   plugins {
-    opts {
-      id = 'com.carrotsearch.gradle.opts'
-      implementationClass = 'com.carrotsearch.gradle.opts.OptsPlugin'
-      displayName = "Configurable options management"
-      description = project.description
-    }
     randomizedtesting {
       id = 'com.carrotsearch.gradle.randomizedtesting'
       implementationClass = 'com.carrotsearch.gradle.randomizedtesting.RandomizedTestingPlugin'

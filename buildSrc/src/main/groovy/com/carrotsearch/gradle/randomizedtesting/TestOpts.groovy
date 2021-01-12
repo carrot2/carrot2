@@ -38,6 +38,7 @@ class TestOpts {
       throw new GradleException("Test options can only be applied to Java projects, apply the Java plugin to: ${project.path}")
     }
 
+    // Apply opts plugin, we need it.
     project.plugins.apply(OptsPlugin.class)
 
     def opts = project.extensions.findByName(OptsPlugin.OPTIONS_EXTENSION_NAME) as OptsPluginExtension

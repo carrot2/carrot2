@@ -11,7 +11,6 @@ plugins {
 
   id 'de.thetaphi.forbiddenapis' version '3.1' apply false
 
-  id 'com.carrotsearch.gradle.opts' apply false
   id 'com.carrotsearch.gradle.randomizedtesting' apply false
 }
 
@@ -37,10 +36,6 @@ ext {
     '**/*.label-filters.json',
     '**/*.word-filters.json',
   ]
-}
-
-allprojects {
-  apply plugin: 'com.carrotsearch.gradle.opts'
 }
 
 apply from: file('gradle/validation/check-environment.gradle')
@@ -81,7 +76,7 @@ subprojects {
   }
 }
 
-allprojects {
+allprojects { prj ->
   plugins.withType(WarPlugin) {
     configurations {
       war {}
