@@ -4,6 +4,7 @@ import com.carrotsearch.gradle.opts.Option
 import com.carrotsearch.gradle.opts.OptsPluginExtension
 import groovy.transform.CompileStatic
 import org.apache.tools.ant.types.Commandline
+import org.gradle.BuildResult
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.execution.TaskExecutionGraph
@@ -128,9 +129,14 @@ class GlobalFailOnNoTests {
         }
 
         // After the build is finished, check the test count.
-        gradle.buildFinished {
+        gradle.buildFinished { BuildResult result ->
           if (hasTestFilters) {
             if (executedTests == 0) {
+              if (result.failure) {
+                // Skip reporting tests if something else failed.
+                return
+              }
+
               if (executedTasks > 0) {
                 throw new GradleException("No tests executed, the provided filters excluded all tests, maybe?")
               } else {

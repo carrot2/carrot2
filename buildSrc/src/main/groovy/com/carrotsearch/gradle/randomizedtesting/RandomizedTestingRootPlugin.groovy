@@ -22,9 +22,10 @@ class RandomizedTestingRootPlugin implements Plugin<Project> {
       throw new GradleException("This plugin can only be applied to the root project.")
     }
 
-    globals = new RootProjectGlobals()
-    globals.rootSeed = Utilities.propertyOrDefault(
+    def rootSeed = (String) Utilities.propertyOrDefault(
         project, TestOpts.PROP_TESTS_SEED, String.format("%08X", new Random().nextLong()))
+
+    globals = new RootProjectGlobals(rootSeed, project)
     project.extensions.add(RootProjectGlobals.EXT_NAME, globals)
 
     def randomizationInfoTask = project.tasks.register(RANDOMIZATION_INFO_TASK_NAME, {task ->
