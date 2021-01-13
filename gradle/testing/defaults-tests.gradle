@@ -1,7 +1,5 @@
-import com.carrotsearch.gradle.randomizedtesting.RandomizedTestingPlugin
-
 allprojects {
-  plugins.withType(RandomizedTestingPlugin) {
+  plugins.withId("com.carrotsearch.gradle.randomizedtesting") {
     randomizedtesting {
       failOnNoTests = true
       testOpts.maxHeap.defaultValue = "100m"
