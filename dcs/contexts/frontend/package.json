@@ -29,6 +29,7 @@
     "json-format-highlight": "1.0.4",
     "clipboard-copy": "4.0.1",
     "mitt": "2.1.0",
+    "@carrotsearch/foamtree": "3.5.0",
     "@fortawesome/fontawesome-pro": "5.15.0",
     "@fortawesome/fontawesome-svg-core": "1.2.32",
     "@fortawesome/pro-duotone-svg-icons": "5.15.0",
