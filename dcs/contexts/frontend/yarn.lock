@@ -1910,6 +1910,11 @@
     classnames "^2.2"
     tslib "~1.13.0"
 
+"@carrotsearch/circles@2.3.8":
+  version "2.3.8"
+  resolved "https://registry.yarnpkg.com/@carrotsearch/circles/-/circles-2.3.8.tgz#aae4810571adc8b315495f345cafdf0cc9030125"
+  integrity sha512-1PbKHnaYxv+UKHvYT0gK6wYIObI+oxbdZr4QbWKn8IAuf0sNsC/jueKZfQXwb9ExNBUhUz+ye4efbvmS+h4vTw==
+
 "@carrotsearch/foamtree@3.5.0":
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/@carrotsearch/foamtree/-/foamtree-3.5.0.tgz#202009dcf1395110e88745af686c713475afbd44"
