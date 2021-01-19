@@ -1,6 +1,6 @@
 import React from "react";
 import { Visualization } from "../Visualization.js";
-import { CarrotSearchFoamTree } from "./foamtree-impl.js";
+import { FoamTree as CarrotSearchFoamTree } from "@carrotsearch/foamtree";
 import PropTypes from "prop-types";
 
 FoamTree.propTypes = {
