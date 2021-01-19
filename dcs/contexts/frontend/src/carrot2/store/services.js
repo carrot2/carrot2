@@ -158,12 +158,12 @@ export const searchResultStore = store({
     searchResultStore.loading = true;
     searchResultStore.error = false;
     try {
+      searchResultStore.initial = false;
       searchResultStore.searchResult = assignDocumentIds(
         await source.source(query),
         sourceId,
         source
       );
-      searchResultStore.initial = false;
     } catch (e) {
       errors.addError(await source.createError(e));
       searchResultStore.error = true;
