@@ -118,7 +118,9 @@ const WorkbenchMain = view(() => {
               const view =
                 clusterViews[0].views[workbenchViewStore.clusterView];
               return (
-                searchResultStore.loading || clusterStore.loading || view.isLoading?.()
+                searchResultStore.loading ||
+                clusterStore.loading ||
+                view.isLoading?.()
               );
             }}
           />
