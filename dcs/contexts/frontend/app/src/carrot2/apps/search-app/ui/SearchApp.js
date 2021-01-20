@@ -5,8 +5,8 @@ import "./SearchApp.css";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 
 import { routes } from "../../../routes.js";
-import { ResultsScreen } from "./ResultsScreen";
-import { StartScreen } from "./StartScreen";
+import { ResultsScreen } from "./ResultsScreen.js";
+import { StartScreen } from "./StartScreen.js";
 
 export const SearchApp = () => (
   <React.Fragment>

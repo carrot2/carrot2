@@ -1,4 +1,4 @@
-import { dcsServiceUrl } from "../config";
+import { dcsServiceUrl } from "../config.js";
 import { finishingPeriod } from "../../carrotsearch/lang/humanize.js";
 
 export function fetchClusters(requestJson, documents, fields) {

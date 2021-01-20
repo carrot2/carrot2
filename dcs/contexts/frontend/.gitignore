@@ -10,7 +10,7 @@
 /build
 
 # misc
-.env.local
+app/.env.local
 .env.development.local
 .env.test.local
 .env.production.local
@@ -22,4 +22,4 @@ yarn-debug.log*
 .gradle/
 
 # Ignore open source descriptors, they're generated.
-src/carrot2/service/algorithms/descriptors/org.carrot2*
+app/src/carrot2/service/algorithms/descriptors/org.carrot2*

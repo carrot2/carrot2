@@ -19,7 +19,7 @@ import { ClusteringEngineSettings } from "./ClusteringEngineSettings.js";
 
 import { SearchEngineSettings } from "./SearchEngineSettings.js";
 
-import { SourceTabs } from "./SourceTabs";
+import { SourceTabs } from "./SourceTabs.js";
 
 export const SearchForm = ({
   initialQuery,

@@ -7,7 +7,7 @@ import { clusterStore, searchResultStore } from "../../../store/services.js";
 
 import { routes } from "../../../routes.js";
 
-import { SearchForm } from "./SearchForm";
+import { SearchForm } from "./SearchForm.js";
 import { Views } from "../../../../carrotsearch/ui/Views.js";
 import { branding } from "../../../config-branding.js";
 import { Loading } from "../../../../carrotsearch/ui/Loading.js";

@@ -54,7 +54,7 @@
 }
 
 .tgl-ios + .tgl-btn {
-  background: #2e9fe6 url(../../flaticon/contrast.svg) no-repeat 88% center;
+  background: #2e9fe6 url(src/flaticon/contrast.svg) no-repeat 88% center;
   background-size: 37%;
   border-radius: 2em;
 }
@@ -65,7 +65,7 @@
     padding 0.3s ease;
 }
 .tgl-ios:checked + .tgl-btn {
-  background: #111a2f url(../../flaticon/crescent-moon.svg) no-repeat 15% center;
+  background: #111a2f url(src/flaticon/crescent-moon.svg) no-repeat 15% center;
   background-size: 32%;
 }
 .tgl-ios + .tgl-btn:after,

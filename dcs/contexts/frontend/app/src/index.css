@@ -1,5 +1,5 @@
-@import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "./theme.css";
+@import "../../node_modules/@blueprintjs/core/lib/css/blueprint.css";
+@import "src/theme.css";
 
 body {
   margin: 0;

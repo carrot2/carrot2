@@ -1,6 +1,6 @@
-@import "~typeface-lato";
-@import "~typeface-cabin-condensed";
-@import "~typeface-raleway";
+@import "../../node_modules/typeface-lato";
+@import "../../node_modules/typeface-cabin-condensed";
+@import "../../node_modules/typeface-raleway";
 
 :root {
   --leading: 1rem;

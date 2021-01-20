@@ -5,7 +5,7 @@ import "./StartScreen.css";
 import { NavLink, Redirect } from "react-router-dom";
 import { sources } from "../../../config-sources.js";
 import { clusterViews } from "../../../config-views.js";
-import { SearchForm } from "./SearchForm";
+import { SearchForm } from "./SearchForm.js";
 import { branding } from "../../../config-branding.js";
 
 import { routes } from "../../../routes.js";
