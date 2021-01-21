@@ -1,8 +1,0 @@
-{
-  "name": "@carrotsearch/ui-components",
-  "version": "0.1.0",
-  "dependencies": {
-    "@carrotsearch/ui-theme": "0.1.0",
-    "clipboard-copy": "4.0.1"
-  }
-}

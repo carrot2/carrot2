@@ -37,7 +37,7 @@
     "@fortawesome/pro-regular-svg-icons": "5.15.0",
     "@fortawesome/react-fontawesome": "0.1.11",
     "@fortawesome/free-brands-svg-icons": "5.15.1",
-    "@carrotsearch/ui-components": "0.1.0"
+    "@carrotsearch/ui": "0.1.0"
   },
   "devDependencies": {
     "@craco/craco": "5.8.0",

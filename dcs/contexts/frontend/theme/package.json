@@ -1,5 +1,5 @@
 {
-  "name": "@carrotsearch/ui-theme",
+  "name": "@carrotsearch/theme",
   "version": "0.1.0",
   "dependencies": {
     "typeface-lato": "0.0.75",
