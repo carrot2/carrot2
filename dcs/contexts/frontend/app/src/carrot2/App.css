@@ -25,7 +25,7 @@ nav .Logo {
 }
 nav a.NavLink {
   padding: calc(0.75 * var(--leading));
-  color: var(--text-color-nav) !important;
+  color: var(--nav-text-color) !important;
 }
 nav a.NavLink:hover {
   background-color: rgba(0, 0, 0, 0.4);

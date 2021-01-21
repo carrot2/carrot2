@@ -43,7 +43,7 @@
 }
 
 .view-tool-content h4 {
-  border-bottom: 1px solid var(--hr);
+  border-bottom: 1px solid var(--hr-color);
   padding-bottom: var(--leading);
   margin-bottom: var(--leading);
 }

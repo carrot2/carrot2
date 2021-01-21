@@ -14,7 +14,7 @@ svg.Logo .inverted.color {
 svg.Logo .text {
   position: relative;
   font-size: 0.75rem;
-  color: var(--text-color-nav);
+  color: var(--nav-text-color);
 }
 svg.Logo .opaque.text {
   background-color: var(--background-color);
