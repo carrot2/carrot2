@@ -1,6 +1,5 @@
 @import "~@carrotsearch/ui-theme/theme.css";
 
-
 body {
   background-color: var(--background-color);
   color: var(--text-color);
@@ -9,7 +8,6 @@ body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
 }
-
 
 h1:first-child,
 h2:first-child,
@@ -43,7 +41,8 @@ kbd {
   border-radius: 4px;
   padding: 0 0.35em;
   margin: 0 0.2em;
-  box-shadow: 0 0.093em 0 var(--kbd-outer-border-color), 0 0 0 0.093em var(--kbd-inner-border-color) inset;
+  box-shadow: 0 0.093em 0 var(--kbd-outer-border-color),
+    0 0 0 0.093em var(--kbd-inner-border-color) inset;
   background-color: var(--kbd-background-color);
 }
 

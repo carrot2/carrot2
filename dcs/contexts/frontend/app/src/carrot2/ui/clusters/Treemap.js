@@ -7,7 +7,7 @@ import {
 } from "../../store/selection.js";
 import { themeStore } from "../../../carrotsearch/ui/ThemeSwitch.js";
 
-import { FoamTree } from "../../../carrotsearch/foamtree/FoamTree.js";
+import { FoamTree } from "../../../carrotsearch/visualizations/FoamTree.js";
 import { useDataObject, useSelection } from "./visualization-hooks.js";
 
 const darkThemeOptions = {

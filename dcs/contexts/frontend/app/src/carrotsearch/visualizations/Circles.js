@@ -1,5 +1,5 @@
 import React from "react";
-import { Visualization } from "../Visualization.js";
+import { Visualization } from "./Visualization.js";
 import { Circles as CarrotSearchCircles } from "@carrotsearch/circles";
 import PropTypes from "prop-types";
 

@@ -1,7 +1,7 @@
 {
   "private": true,
   "workspaces": [
-    "app", "ui-theme"
+    "app", "ui-theme", "ui-components"
   ],
   "scripts": {
     "start": "yarn workspace app start",

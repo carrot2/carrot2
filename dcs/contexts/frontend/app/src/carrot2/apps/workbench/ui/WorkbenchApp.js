@@ -11,9 +11,9 @@ import { Loading } from "../../../../carrotsearch/ui/Loading.js";
 import { sources } from "../../../config-sources.js";
 import { workbenchSourceStore } from "../store/source-store.js";
 import { WorkbenchSide } from "./WorkbenchSide.js";
-import { DottedStraightArrow } from "../../../../carrotsearch/ui/arrows/DottedStraightArrow.js";
-import { DottedAngledArrow } from "../../../../carrotsearch/ui/arrows/DottedAngledArrow.js";
-import { DottedArrowCurly } from "../../../../carrotsearch/ui/arrows/DottedArrowCurly.js";
+import { DottedStraightArrow } from "./arrows/DottedStraightArrow.js";
+import { DottedAngledArrow } from "./arrows/DottedAngledArrow.js";
+import { DottedArrowCurly } from "./arrows/DottedArrowCurly.js";
 import { ExportResults } from "./ExportResults.js";
 import { workbenchViewStore } from "../store/view-store.js";
 

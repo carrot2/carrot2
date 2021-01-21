@@ -2,9 +2,9 @@ import React from "react";
 
 import { dcsServiceUrl, isCarrot2Distribution } from "./config.js";
 
-import { CarrotLogo } from "../carrotsearch/logo/CarrotLogo.js";
-import { Carrot2Text } from "../carrotsearch/logo/Carrot2Text.js";
-import { CarrotSearchText } from "../carrotsearch/logo/CarrotSearchText.js";
+import { CarrotLogo } from "../carrotsearch/ui/logo/CarrotLogo.js";
+import { Carrot2Text } from "../carrotsearch/ui/logo/Carrot2Text.js";
+import { CarrotSearchText } from "../carrotsearch/ui/logo/CarrotSearchText.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlask, faSearch } from "@fortawesome/pro-regular-svg-icons";
 import { routes } from "./routes.js";

@@ -8,7 +8,7 @@ import {
 } from "../../store/selection.js";
 import { themeStore } from "../../../carrotsearch/ui/ThemeSwitch.js";
 
-import { Circles } from "../../../carrotsearch/circles/Circles.js";
+import { Circles } from "../../../carrotsearch/visualizations/Circles.js";
 import { useDataObject, useSelection } from "./visualization-hooks.js";
 
 const darkThemeOptions = {

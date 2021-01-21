@@ -36,7 +36,7 @@ import { routes } from "./routes.js";
 import { Backdrop } from "../carrotsearch/ui/backdrop/Backdrop.js";
 import { ThemeSwitch } from "../carrotsearch/ui/ThemeSwitch.js";
 import { WorkbenchApp } from "./apps/workbench/ui/WorkbenchApp.js";
-import { CarrotLogo } from "../carrotsearch/logo/CarrotLogo.js";
+import { CarrotLogo } from "../carrotsearch/ui/logo/CarrotLogo.js";
 import { AboutApp } from "./apps/about/AboutApp.js";
 
 const AppLink = ({ to, title, children, icon, current }) => {
