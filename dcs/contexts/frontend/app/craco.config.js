@@ -1,5 +1,4 @@
 const path = require("path");
-const rawLoader = require("craco-raw-loader");
 const { NormalModuleReplacementPlugin } = require("webpack");
 
 module.exports = {
@@ -23,10 +22,5 @@ module.exports = {
       return webpackConfig;
     }
   },
-  plugins: [
-    {
-      plugin: rawLoader,
-      options: { test: /\.html$/ }
-    }
-  ]
+  plugins: []
 };
