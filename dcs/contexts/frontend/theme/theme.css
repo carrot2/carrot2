@@ -37,8 +37,8 @@ body {
   --border-color: rgba(0, 0, 0, 0.12);
   --hr-color: hsla(0, 0%, 0%, 0.15);
 
-  --cluster-icon-color: hsl(45, 100%, 50%);
-  --label-icon-color: var(--cluster-icon-color);
+  --item-icon-color: hsl(45, 100%, 50%);
+  --label-icon-color: var(--item-icon-color);
 
   --kbd-outer-border-color: #ccc;
   --kbd-inner-border-color: var(--background-color);
@@ -80,8 +80,8 @@ body {
   --border-color: rgba(255, 255, 255, 0.12);
   --hr-color: hsla(0, 0%, 100%, 0.15);
 
-  --cluster-icon-color: #ffb366;
-  --label-icon-color: var(--cluster-icon-color);
+  --item-icon-color: #ffb366;
+  --label-icon-color: var(--item-icon-color);
 
   --kbd-outer-border-color: hsl(207, 28%, 11%);
   --kbd-inner-border-color: hsl(207, 23%, 27%);

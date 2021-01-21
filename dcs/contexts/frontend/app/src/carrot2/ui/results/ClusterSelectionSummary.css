@@ -9,7 +9,7 @@
 }
 
 .ClusterInSummary .icon {
-  color: var(--cluster-icon-color);
+  color: var(--item-icon-color);
 }
 .ClusterInSummary:first-child .icon {
   margin-left: 0;

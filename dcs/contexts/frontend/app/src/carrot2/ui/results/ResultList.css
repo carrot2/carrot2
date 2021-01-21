@@ -112,7 +112,7 @@ a.Result:hover {
   opacity: 1;
 }
 .ResultList .ResultClusters:hover .ClusterInSummary:hover .bp3-icon {
-  color: var(--cluster-icon-color);
+  color: var(--item-icon-color);
 }
 
 .ResultList .ResultListPaging {
