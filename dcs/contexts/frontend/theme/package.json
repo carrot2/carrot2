@@ -1,0 +1,8 @@
+{
+  "name": "@carrotsearch/ui-theme",
+  "version": "0.1.0",
+  "dependencies": {
+    "typeface-lato": "0.0.75",
+    "typeface-raleway": "1.1.13"
+  }
+}
