@@ -14,7 +14,7 @@ import {
 import { Optional } from "../../apps/search-app/ui/Optional.js";
 import { clusterSelectionStore } from "../../store/selection.js";
 
-import { ButtonLink } from "../../../carrotsearch/ui/ButtonLink.js";
+import { ButtonLink } from "../../../carrotsearch/ButtonLink.js";
 import { resultListConfigStore } from "./ResultListConfig.js";
 
 const ResultClusters = view(props => {

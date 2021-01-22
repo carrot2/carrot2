@@ -10,7 +10,7 @@ import {
   settingFromFilterDescriptor
 } from "./attributes.js";
 import { createLanguageSetting } from "./language.js";
-import { storeAccessors } from "../../../carrotsearch/ui/settings/Setting.js";
+import { storeAccessors } from "../../../carrotsearch/settings/Setting.js";
 
 const descriptorsById = getDescriptorsById(descriptor);
 

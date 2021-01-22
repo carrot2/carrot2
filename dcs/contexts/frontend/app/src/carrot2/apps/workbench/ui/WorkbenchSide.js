@@ -11,7 +11,7 @@ import { WorkbenchSourceAlgorithm } from "./WorkbenchSourceAlgorithm.js";
 import { Button } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLightbulbOn } from "@fortawesome/pro-regular-svg-icons";
-import { Settings } from "../../../../carrotsearch/ui/settings/Settings.js";
+import { Settings } from "../../../../carrotsearch/settings/Settings.js";
 import {
   parametersStateStore,
   runSearch,

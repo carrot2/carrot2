@@ -1,4 +1,4 @@
-@import "~@carrotsearch/theme/theme.css";
+@import "../../../node_modules/@carrotsearch/theme/theme.css";
 
 body {
   background-color: var(--background-color);

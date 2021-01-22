@@ -6,7 +6,7 @@ import {
   clusterSelectionStore,
   documentSelectionStore
 } from "../../store/selection.js";
-import { themeStore } from "../../../carrotsearch/ui/ThemeSwitch.js";
+import { themeStore } from "../../../carrotsearch/ThemeSwitch.js";
 
 import { Circles } from "../../../carrotsearch/visualizations/Circles.js";
 import { useDataObject, useSelection } from "./visualization-hooks.js";

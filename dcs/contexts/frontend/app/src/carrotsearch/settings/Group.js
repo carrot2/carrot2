@@ -12,7 +12,7 @@ import { SelectSetting } from "./SelectSetting.js";
 import { StringArraySetting } from "./StringArraySetting.js";
 import { FileSetting } from "./FileSetting.js";
 import { ServiceUrlSetting } from "./ServiceUrlSetting.js";
-import { displayNoneIf } from "../../../carrot2/apps/search-app/ui/Optional.js";
+import { displayNoneIf } from "../../carrot2/apps/search-app/ui/Optional.js";
 import { isSettingVisible } from "./Setting.js";
 import { DeferredPlaceholder } from "../Deferred.js";
 

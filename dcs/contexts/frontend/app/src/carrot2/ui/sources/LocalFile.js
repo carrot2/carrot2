@@ -8,7 +8,7 @@ import {
 } from "./CustomSchemaSource.js";
 import { parseFile } from "./file-parser.js";
 import { GenericSearchEngineErrorMessage } from "../../apps/search-app/ui/ErrorMessage.js";
-import { JsonHighlighted } from "../../../carrotsearch/ui/JsonHighlighted.js";
+import { JsonHighlighted } from "../../../carrotsearch/JsonHighlighted.js";
 
 const resultConfigStore = createResultConfigStore("localFile");
 

@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { DeferredGroups, Group } from "./Group.js";
-import { isEmpty } from "../../lang/objects.js";
-import { persistentStore } from "../../store/persistent-store.js";
+import { isEmpty } from "../lang/objects.js";
+import { persistentStore } from "../store/persistent-store.js";
 
 export { addFactory } from "./Group.js";
 

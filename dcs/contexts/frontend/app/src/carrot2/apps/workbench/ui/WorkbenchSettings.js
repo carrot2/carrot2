@@ -13,7 +13,7 @@ import { autoEffect, batch, store, view } from "@risingstack/react-easy-state";
 import {
   addAdvancedSettingsVisibility,
   addGroupFolding
-} from "../../../../carrotsearch/ui/settings/Settings.js";
+} from "../../../../carrotsearch/settings/Settings.js";
 import { Button } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

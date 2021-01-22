@@ -4,7 +4,7 @@ import { view } from "@risingstack/react-easy-state";
 
 import { firstField } from "../../../carrotsearch/lang/objects.js";
 import _set from "lodash.set";
-import { Setting } from "../../../carrotsearch/ui/settings/Setting.js";
+import { Setting } from "../../../carrotsearch/settings/Setting.js";
 import { TextArea } from "@blueprintjs/core";
 
 const depthFirstAttributes = descriptor => {

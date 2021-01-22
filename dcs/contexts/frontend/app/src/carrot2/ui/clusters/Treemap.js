@@ -5,7 +5,7 @@ import {
   clusterSelectionStore,
   documentSelectionStore
 } from "../../store/selection.js";
-import { themeStore } from "../../../carrotsearch/ui/ThemeSwitch.js";
+import { themeStore } from "../../../carrotsearch/ThemeSwitch.js";
 
 import { FoamTree } from "../../../carrotsearch/visualizations/FoamTree.js";
 import { useDataObject, useSelection } from "./visualization-hooks.js";

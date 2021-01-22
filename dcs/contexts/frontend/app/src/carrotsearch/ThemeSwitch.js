@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import { view } from "@risingstack/react-easy-state";
 import { LightDarkSwitch } from "./LightDarkSwitch.js";
-import { persistentStore } from "../store/persistent-store.js";
+import { persistentStore } from "./store/persistent-store.js";
 
 const isDarkSchemePreferred = () =>
   window.matchMedia("(prefers-color-scheme: dark)").matches;

@@ -6,7 +6,7 @@ import {
 } from "../../apps/search-app/ui/ErrorMessage.js";
 import React from "react";
 import { createLocalSearch } from "./LocalSearchServerSource.js";
-import { storeAccessors } from "../../../carrotsearch/ui/settings/Setting.js";
+import { storeAccessors } from "../../../carrotsearch/settings/Setting.js";
 import { queryStore } from "../../apps/workbench/store/query-store.js";
 
 const {

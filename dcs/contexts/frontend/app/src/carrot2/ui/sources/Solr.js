@@ -1,6 +1,6 @@
 import ky from "ky";
 
-import { storeAccessors } from "../../../carrotsearch/ui/settings/Setting.js";
+import { storeAccessors } from "../../../carrotsearch/settings/Setting.js";
 
 import {
   HttpErrorMessage,

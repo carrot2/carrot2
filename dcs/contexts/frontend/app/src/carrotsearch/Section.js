@@ -4,7 +4,7 @@ import "./Section.css";
 
 import { view } from "@risingstack/react-easy-state";
 import classnames from "classnames";
-import { displayNoneIf } from "../../carrot2/apps/search-app/ui/Optional.js";
+import { displayNoneIf } from "../carrot2/apps/search-app/ui/Optional.js";
 
 export const SectionDivider = ({ label, folded, onHeaderClick = () => {} }) => {
   if (!label) {
