@@ -8,7 +8,7 @@ dependencies {
 
 ext {
   srclayout = 'webpack'
-  descriptorsDir = file("src/carrot2/service/algorithms/descriptors")
+  descriptorsDir = file("app/src/carrot2/service/algorithms/descriptors")
 }
 
 task descriptors(type: Sync) {
