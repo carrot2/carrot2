@@ -1,0 +1,119 @@
+.AppContainer {
+  display: grid;
+  height: 100vh;
+
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto;
+  grid-template-areas: "nav main";
+}
+
+/** Nav bar */
+nav {
+  position: relative;
+  background-color: var(--nav-background-color);
+  text-align: center;
+  width: 5em;
+  display: flex;
+  flex-direction: column;
+  padding-top: calc(1.5 * var(--leading));
+  padding-bottom: calc(1 * var(--leading));
+}
+
+nav .Logo {
+  width: 2.5em;
+  margin-bottom: 1.5em;
+}
+nav a.NavLink {
+  padding: calc(0.75 * var(--leading));
+  color: var(--nav-text-color) !important;
+}
+nav a.NavLink:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+nav a.AppLink.active {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+nav .NavExtras {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+}
+nav .ThemeSwitch {
+  margin-top: var(--leading);
+}
+
+.NavPopover {
+  max-width: 22em;
+}
+.NavPopoverContent p,
+.NavPopoverContent ul:last-child,
+.NavPopoverContent h3:last-child {
+  margin-bottom: 0;
+}
+
+/** Backdrop */
+.Backdrop {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  filter: brightness(1.5) contrast(0.5);
+  opacity: 0.5;
+}
+.dark .Backdrop {
+  filter: brightness(0.3);
+  opacity: 1;
+}
+.Backdrop.hidden {
+  opacity: 0;
+}
+
+/** Error overlay */
+.AppError {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--overlay-background-color);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.AppError.visible {
+  opacity: 1;
+  pointer-events: unset;
+}
+.AppError pre {
+  overflow-y: auto;
+  max-height: 40vh;
+}
+.AppError .Error h2 {
+  margin-bottom: 1.5em;
+}
+.AppError > div {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 30em;
+  margin: auto;
+  max-width: 60vw;
+}
+.AppError svg {
+  position: absolute;
+  left: -1.5em;
+  top: -0.05em;
+}
+.AppError .AppErrorButtons {
+  margin-top: 2em;
+}
+
+/** App content */
+main {
+  position: relative;
+}

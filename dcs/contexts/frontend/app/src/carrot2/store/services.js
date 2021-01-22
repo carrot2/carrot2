@@ -3,7 +3,7 @@ import { algorithms } from "../config-algorithms.js";
 import { fetchClusters } from "../service/dcs.js";
 import { persistentStore } from "../../carrotsearch/store/persistent-store.js";
 
-import { errors } from "./errors.js";
+import { errors } from "../../carrotsearch/store/errors.js";
 import { createClusteringErrorElement } from "../apps/search-app/ui/ErrorMessage.js";
 import { collectParameters } from "../service/algorithms/attributes.js";
 import { defer } from "../../carrotsearch/lang/lang.js";

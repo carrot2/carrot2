@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import { App } from "./carrot2/App.js";
+import { Carrot2App } from "./carrot2/Carrot2App.js";
 import * as serviceWorker from "./serviceWorker.js";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<Carrot2App />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

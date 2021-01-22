@@ -84,3 +84,12 @@ code {
 .bp3-dark ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.12);
 }
+
+/** BlueprintJS tweaks */
+.bp3-popover-content {
+  padding: 1em;
+}
+
+button.bp3-disabled {
+  cursor: pointer !important;
+}
