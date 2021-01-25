@@ -1885,12 +1885,12 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@blueprintjs/core@3.36.0":
-  version "3.36.0"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-3.36.0.tgz#0a271092050c17b84f29426594708180a1b5401a"
-  integrity sha512-7VUyF+qWelDysajK0Xowlou+iqbGAFfGaM3znpmm7OEEIli5XRWjG9rhNuEk3sP7zbdOJpyqh5PAPDQvm5Sxmg==
+"@blueprintjs/core@3.38.0":
+  version "3.38.0"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-3.38.0.tgz#9b8eb086e22b424153fa0e1483c4c8abd9e6c8e0"
+  integrity sha512-U4yf6B+SbCspNDuvSU2/pl+a80hr9iQgyf2cJ2cOz5It+RV8M+dg9BgB1WaZgqdWgxx/4+A425X5zt2Jw9xalw==
   dependencies:
-    "@blueprintjs/icons" "^3.23.0"
+    "@blueprintjs/icons" "^3.24.0"
     "@types/dom4" "^2.0.1"
     classnames "^2.2"
     dom4 "^2.1.5"
@@ -1902,10 +1902,10 @@
     resize-observer-polyfill "^1.5.1"
     tslib "~1.13.0"
 
-"@blueprintjs/icons@^3.23.0":
-  version "3.23.0"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-3.23.0.tgz#4cfe0db4363971ac5d8a0a59590a6efc16115dc6"
-  integrity sha512-QOQ3P5bU1FiEwnMBl5Chn433ONSSTIMgC+zZJttyXV0m8R7D1bPBJJqIMuANXtRld/Fj+8IzoQ6jfaVUG16slA==
+"@blueprintjs/icons@^3.24.0":
+  version "3.24.0"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-3.24.0.tgz#aa7e6042e40806d22f85da8d62990ff0296adcf2"
+  integrity sha512-OvDDI5EUueS1Y3t594iS8LAGoHhLhYjC2GuN/01a85n+ASLSp0jf0/+uix2JeCOj41iTdRRCINbWuRwVQNNGPw==
   dependencies:
     classnames "^2.2"
     tslib "~1.13.0"
@@ -6175,10 +6175,10 @@ fast-stats@0.0.6:
   resolved "https://registry.yarnpkg.com/fast-stats/-/fast-stats-0.0.6.tgz#949e7a97ef12effba710c6322a1fad3fcc8609e7"
   integrity sha512-m0zkwa7Z07Wc4xm1YtcrCHmhzNxiYRrrfUyhkdhSZPzaAH/Ewbocdaq7EPVBFz19GWfIyyPcLfRHjHJYe83jlg==
 
-fast-xml-parser@3.17.4:
-  version "3.17.4"
-  resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-3.17.4.tgz#d668495fb3e4bbcf7970f3c24ac0019d82e76477"
-  integrity sha512-qudnQuyYBgnvzf5Lj/yxMcf4L9NcVWihXJg7CiU1L+oUCq8MUnFEfH2/nXR/W5uq+yvUN1h7z6s7vs2v1WkL1A==
+fast-xml-parser@3.17.6:
+  version "3.17.6"
+  resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-3.17.6.tgz#4f5df8cf927c3e59a10362abcfb7335c34bc5c5f"
+  integrity sha512-40WHI/5d2MOzf1sD2bSaTXlPn1lueJLAX6j1xH5dSAr6tNeut8B9ktEL6sjAK9yVON4uNj9//axOdBJUuruCzw==
 
 fastq@^1.6.0:
   version "1.8.0"
@@ -8507,11 +8507,6 @@ lodash._reinterpolate@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz#0ccf2d89166af03b3663c796538b75ac6e114d9d"
   integrity sha1-DM8tiRZq8Ds2Y8eWU4t1rG4RTZ0=
-
-lodash.isfunction@3.0.9:
-  version "3.0.9"
-  resolved "https://registry.yarnpkg.com/lodash.isfunction/-/lodash.isfunction-3.0.9.tgz#06de25df4db327ac931981d1bdb067e5af68d051"
-  integrity sha512-AirXNj15uRIMMPihnkInB4i3NHeb4iBtNg9WRWuK2o31S+ePwwNmDPaTL3o7dTJ+VXNZim7rFs4rxN4YU1oUJw==
 
 lodash.memoize@^4.1.2:
   version "4.1.2"
