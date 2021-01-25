@@ -1,14 +1,14 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 
+import { themeStore } from "@carrotsearch/ui/ThemeSwitch.js";
+import { Circles } from "@carrotsearch/ui/visualizations/Circles.js";
+
 import { clusterStore } from "../../store/services.js";
 import {
   clusterSelectionStore,
   documentSelectionStore
 } from "../../store/selection.js";
-import { themeStore } from "../../../carrotsearch/ThemeSwitch.js";
-
-import { Circles } from "../../../carrotsearch/visualizations/Circles.js";
 import { useDataObject, useSelection } from "./visualization-hooks.js";
 
 const darkThemeOptions = {

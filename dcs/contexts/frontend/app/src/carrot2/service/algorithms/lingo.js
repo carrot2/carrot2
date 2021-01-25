@@ -1,5 +1,8 @@
 import descriptor from "./descriptors/org.carrot2.clustering.lingo.LingoClusteringAlgorithm.json";
-import { persistentStore } from "../../../carrotsearch/store/persistent-store.js";
+
+import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
+import { storeAccessors } from "@carrotsearch/ui/settings/Setting.js";
+
 import {
   advanced,
   collectDefaults,
@@ -10,7 +13,6 @@ import {
   settingFromFilterDescriptor
 } from "./attributes.js";
 import { createLanguageSetting } from "./language.js";
-import { storeAccessors } from "../../../carrotsearch/settings/Setting.js";
 
 const descriptorsById = getDescriptorsById(descriptor);
 

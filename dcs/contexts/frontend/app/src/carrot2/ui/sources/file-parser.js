@@ -1,4 +1,4 @@
-import { pluralize } from "../../../carrotsearch/lang/humanize.js";
+import { pluralize } from "@carrotsearch/ui/lang/humanize.js";
 
 const parseSheet = async (file, logger) => {
   const XLSX = await import("xlsx");

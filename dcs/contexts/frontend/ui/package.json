@@ -2,7 +2,10 @@
   "name": "@carrotsearch/ui",
   "version": "0.1.0",
   "dependencies": {
+    "@blueprintjs/core": "3.36.0",
     "@carrotsearch/theme": "0.1.0",
-    "clipboard-copy": "4.0.1"
+    "clipboard-copy": "4.0.1",
+    "three-dots": "0.2.0",
+    "store2": "2.12.0"
   }
 }

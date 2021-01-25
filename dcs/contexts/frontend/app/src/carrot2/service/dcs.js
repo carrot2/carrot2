@@ -1,5 +1,5 @@
+import { finishingPeriod } from "@carrotsearch/ui/lang/humanize.js";
 import { dcsServiceUrl } from "../config.js";
-import { finishingPeriod } from "../../carrotsearch/lang/humanize.js";
 
 export function fetchClusters(requestJson, documents, fields) {
   // Just pick the content fields we want to cluster. No IDs, URLs, or anything else.

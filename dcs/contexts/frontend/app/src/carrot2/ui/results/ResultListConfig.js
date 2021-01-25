@@ -3,7 +3,8 @@ import React from "react";
 import { view } from "@risingstack/react-easy-state";
 
 import { Switch, NumericInput, FormGroup } from "@blueprintjs/core";
-import { persistentStore } from "../../../carrotsearch/store/persistent-store.js";
+
+import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
 
 export const resultListConfigStore = persistentStore("resultListConfig", {
   showRank: true,

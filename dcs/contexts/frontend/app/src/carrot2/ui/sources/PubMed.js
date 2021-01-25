@@ -1,13 +1,14 @@
 import React from "react";
+
 import "./PubMed.css";
 
 import { FormGroup, InputGroup, NumericInput, Switch } from "@blueprintjs/core";
 
 import { view } from "@risingstack/react-easy-state";
+import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
+import { Optional } from "@carrotsearch/ui/Optional.js";
 
 import { pubmed } from "../../service/sources/pubmed.js";
-import { persistentStore } from "../../../carrotsearch/store/persistent-store.js";
-import { Optional } from "../../apps/search-app/ui/Optional.js";
 import { TitleAndRank, Url } from "../results/Result.js";
 import { queryStore } from "../../apps/workbench/store/query-store.js";
 

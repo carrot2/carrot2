@@ -13,16 +13,17 @@ import {
 
 import { store, view } from "@risingstack/react-easy-state";
 
+import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
+import { ButtonLink } from "@carrotsearch/ui/ButtonLink.js";
+import { storeAccessors } from "@carrotsearch/ui/settings/Setting.js";
+import { Optional } from "@carrotsearch/ui/Optional.js";
+
 import { etools } from "../../service/sources/etools.js";
-import { persistentStore } from "../../../carrotsearch/store/persistent-store.js";
-import { Optional } from "../../apps/search-app/ui/Optional.js";
 import { TitleAndRank, Url } from "../results/Result.js";
-import { ButtonLink } from "../../../carrotsearch/ButtonLink.js";
 
 import { queryStore } from "../../apps/workbench/store/query-store.js";
 
 import { resultListConfigStore } from "../results/ResultListConfig.js";
-import { storeAccessors } from "../../../carrotsearch/settings/Setting.js";
 import { GenericSearchEngineErrorMessage } from "../../apps/search-app/ui/ErrorMessage.js";
 
 const etoolsResultsConfigStore = persistentStore("etoolsResultConfig", {

@@ -1,4 +1,4 @@
-import { persistentStore } from "../../../../carrotsearch/store/persistent-store.js";
+import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
 
 // The initial value of the source is hardcoded. We could import all sources and take
 // the first defined key, but this would create a circular dependency and cause

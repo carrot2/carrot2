@@ -1,13 +1,15 @@
 import { autoEffect, store } from "@risingstack/react-easy-state";
-import { algorithms } from "../config-algorithms.js";
-import { fetchClusters } from "../service/dcs.js";
-import { persistentStore } from "../../carrotsearch/store/persistent-store.js";
 
-import { errors } from "../../carrotsearch/store/errors.js";
+import { defer } from "@carrotsearch/ui/lang/lang.js";
+import { equals } from "@carrotsearch/ui/lang/arrays.js";
+import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
+import { errors } from "@carrotsearch/ui/store/errors.js";
+
+import { algorithms } from "../config-algorithms.js";
+
+import { fetchClusters } from "../service/dcs.js";
 import { createClusteringErrorElement } from "../apps/search-app/ui/ErrorMessage.js";
 import { collectParameters } from "../service/algorithms/attributes.js";
-import { defer } from "../../carrotsearch/lang/lang.js";
-import { equals } from "../../carrotsearch/lang/arrays.js";
 import { triggerClusteringRequested } from "../customizations.js";
 
 const EMPTY_ARRAY = [];

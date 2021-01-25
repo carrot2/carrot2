@@ -5,7 +5,10 @@ import "./CustomSchemaResult.css";
 import { FormGroup, HTMLSelect, NumericInput } from "@blueprintjs/core";
 import { store, view } from "@risingstack/react-easy-state";
 
-import { persistentLruStore } from "../../../carrotsearch/store/persistent-store.js";
+import { persistentLruStore } from "@carrotsearch/ui/store/persistent-store.js";
+import { isEmpty } from "@carrotsearch/ui/lang/objects.js";
+import { displayNoneIf } from "@carrotsearch/ui/Optional.js";
+
 import { TitleAndRank } from "../results/Result.js";
 
 import { resultListConfigStore } from "../results/ResultListConfig.js";
@@ -14,9 +17,7 @@ import { ResultWrapper } from "../results/ResultList.js";
 import {
   mapUpToMaxLength,
   wrapIfNotArray
-} from "../../../carrotsearch/lang/arrays.js";
-import { displayNoneIf } from "../../apps/search-app/ui/Optional.js";
-import { isEmpty } from "../../../carrotsearch/lang/objects.js";
+} from "@carrotsearch/ui/lang/arrays.js";
 
 export const createResultConfigStore = key => {
   const keyFromFields = fields => fields.join("--");

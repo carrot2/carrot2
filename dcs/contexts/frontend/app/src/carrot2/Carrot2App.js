@@ -1,18 +1,21 @@
 import React from "react";
 
-import "./App.css";
+import "./Carrot2App.css";
+
+import { matchPath, Route, Switch } from "react-router-dom";
 
 import { faFlask, faInfo, faSearch } from "@fortawesome/pro-regular-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
-import { SearchApp } from "./apps/search-app/ui/SearchApp.js";
 import { routes } from "./routes.js";
+
+import { AppContainer, App } from "@carrotsearch/ui/AppContainer.js";
+import { Backdrop } from "@carrotsearch/ui/backdrop/Backdrop.js";
+import { CarrotLogo } from "@carrotsearch/ui/logo/CarrotLogo.js";
+
+import { SearchApp } from "./apps/search-app/ui/SearchApp.js";
 import { WorkbenchApp } from "./apps/workbench/ui/WorkbenchApp.js";
-import { CarrotLogo } from "../carrotsearch/logo/CarrotLogo.js";
-import { AppContainer, App } from "../carrotsearch/AppContainer.js";
 import { AboutApp } from "./apps/about/AboutApp.js";
-import { matchPath, Route, Switch } from "react-router-dom";
-import { Backdrop } from "../carrotsearch/backdrop/Backdrop.js";
 
 export const Carrot2App = () => {
   const className = location => {

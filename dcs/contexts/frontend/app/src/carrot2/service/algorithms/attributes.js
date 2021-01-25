@@ -2,10 +2,12 @@ import React from "react";
 
 import { view } from "@risingstack/react-easy-state";
 
-import { firstField } from "../../../carrotsearch/lang/objects.js";
 import _set from "lodash.set";
-import { Setting } from "../../../carrotsearch/settings/Setting.js";
+
 import { TextArea } from "@blueprintjs/core";
+
+import { firstField } from "@carrotsearch/ui/lang/objects.js";
+import { Setting } from "@carrotsearch/ui/settings/Setting.js";
 
 const depthFirstAttributes = descriptor => {
   const collect = (descriptor, target) => {

@@ -1,5 +1,6 @@
 import React from "react";
-import { Optional } from "../../apps/search-app/ui/Optional.js";
+
+import { Optional } from "@carrotsearch/ui/Optional.js";
 
 export const TitleAndRank = props => {
   return (

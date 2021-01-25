@@ -3,20 +3,25 @@ import React, { useEffect } from "react";
 import "./WorkbenchApp.css";
 
 import { view } from "@risingstack/react-easy-state";
+
+import { faLightbulbOn } from "@fortawesome/pro-regular-svg-icons";
+
+import { humanizeDuration } from "@carrotsearch/ui/lang/humanize.js";
+import { Stats } from "@carrotsearch/ui/Stats.js";
+import { Views } from "@carrotsearch/ui/Views.js";
+import { Loading } from "@carrotsearch/ui/Loading.js";
+import {
+  AppMainButton,
+  AppWithSidePanel
+} from "@carrotsearch/ui/AppWithSidePanel.js";
+import { Settings } from "@carrotsearch/ui/settings/Settings.js";
+
 import { clusterStore, searchResultStore } from "../../../store/services.js";
-import { humanizeDuration } from "../../../../carrotsearch/lang/humanize.js";
-import { Stats } from "../../../../carrotsearch/Stats.js";
-import { Views } from "../../../../carrotsearch/Views.js";
 import { clusterViews, resultsViews } from "../../../config-views.js";
-import { Loading } from "../../../../carrotsearch/Loading.js";
 import { sources } from "../../../config-sources.js";
 import { workbenchSourceStore } from "../store/source-store.js";
 import { ExportResults } from "./ExportResults.js";
 import { workbenchViewStore } from "../store/view-store.js";
-import {
-  AppMainButton,
-  AppWithSidePanel
-} from "../../../../carrotsearch/AppWithSidePanel.js";
 import { WorkbenchSourceAlgorithm } from "./WorkbenchSourceAlgorithm.js";
 import {
   parametersStateStore,
@@ -24,8 +29,6 @@ import {
   settings,
   SettingsTools
 } from "./WorkbenchSettings.js";
-import { Settings } from "../../../../carrotsearch/settings/Settings.js";
-import { faLightbulbOn } from "@fortawesome/pro-regular-svg-icons";
 import { WorkbenchIntro } from "./WorkbenchWelcome.js";
 
 export const WorkbenchLogo = () => {

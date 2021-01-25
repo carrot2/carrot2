@@ -5,7 +5,7 @@ import React from "react";
 import { view } from "@risingstack/react-easy-state";
 
 import { Radio, RadioGroup, Tag } from "@blueprintjs/core";
-import { Optional } from "./Optional.js";
+import { Optional } from "@carrotsearch/ui/Optional.js";
 
 import { algorithms } from "../../../config-algorithms.js";
 

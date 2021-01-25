@@ -1,19 +1,7 @@
 import React from "react";
 
-import { sources } from "../../../config-sources.js";
-import { algorithms } from "../../../config-algorithms.js";
-import { workbenchSourceStore } from "../store/source-store.js";
-import {
-  algorithmStore,
-  reloadClusters,
-  searchResultStore
-} from "../../../store/services.js";
-import { persistentStore } from "../../../../carrotsearch/store/persistent-store.js";
 import { autoEffect, batch, store, view } from "@risingstack/react-easy-state";
-import {
-  addAdvancedSettingsVisibility,
-  addGroupFolding
-} from "../../../../carrotsearch/settings/Settings.js";
+
 import { Button } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -22,6 +10,22 @@ import {
   faExpandAlt,
   faUndoAlt
 } from "@fortawesome/pro-regular-svg-icons";
+
+import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
+import {
+  addAdvancedSettingsVisibility,
+  addGroupFolding
+} from "@carrotsearch/ui/settings/Settings.js";
+
+import { sources } from "../../../config-sources.js";
+import { algorithms } from "../../../config-algorithms.js";
+import { workbenchSourceStore } from "../store/source-store.js";
+import {
+  algorithmStore,
+  reloadClusters,
+  searchResultStore
+} from "../../../store/services.js";
+
 import { queryStore } from "../store/query-store.js";
 import { ExportParameters } from "./ExportParameters.js";
 

@@ -3,14 +3,16 @@ import React from "react";
 import "./StartScreen.css";
 
 import { NavLink, Redirect } from "react-router-dom";
+
+import { faFlask } from "@fortawesome/pro-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { sources } from "../../../config-sources.js";
 import { clusterViews } from "../../../config-views.js";
-import { SearchForm } from "./SearchForm.js";
 import { branding } from "../../../config-branding.js";
-
 import { routes } from "../../../routes.js";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFlask } from "@fortawesome/pro-regular-svg-icons";
+
+import { SearchForm } from "./SearchForm.js";
 
 export const StartScreen = ({ match, history }) => {
   const runSearch = query => {

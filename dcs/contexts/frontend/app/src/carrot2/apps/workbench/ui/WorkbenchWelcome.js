@@ -1,5 +1,3 @@
-import { DottedStraightArrow } from "./arrows/DottedStraightArrow.js";
-import { DottedArrowCurly } from "./arrows/DottedArrowCurly.js";
 import React from "react";
 
 import "./WorkbenchWelcome.css";
@@ -8,7 +6,10 @@ import { view } from "@risingstack/react-easy-state";
 
 import { sources } from "../../../config-sources.js";
 import { workbenchSourceStore } from "../store/source-store.js";
+
 import { DottedAngledArrow } from "./arrows/DottedAngledArrow.js";
+import { DottedStraightArrow } from "./arrows/DottedStraightArrow.js";
+import { DottedArrowCurly } from "./arrows/DottedArrowCurly.js";
 
 const SourceConfigurationStep = view(() => {
   const source = sources[workbenchSourceStore.source];

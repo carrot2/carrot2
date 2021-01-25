@@ -1,6 +1,6 @@
-import "./VisualizationHints.css";
-
 import React from "react";
+
+import "./VisualizationHints.css";
 
 import { view } from "@risingstack/react-easy-state";
 

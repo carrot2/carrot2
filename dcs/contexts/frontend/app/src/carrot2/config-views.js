@@ -3,11 +3,12 @@ import React from "react";
 import { faCog, faQuestionCircle } from "@fortawesome/pro-regular-svg-icons";
 
 import { autoEffect, store, view } from "@risingstack/react-easy-state";
+import { Lazy } from "@carrotsearch/ui/Lazy.js";
+import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
+
 import { PieChartHints } from "./ui/clusters/PieChartHints.js";
 import { TreemapHints } from "./ui/clusters/TreemapHints.js";
 import { VisualizationExport } from "./ui/clusters/VisualizationExport.js";
-import { Lazy } from "../carrotsearch/Lazy.js";
-import { persistentStore } from "../carrotsearch/store/persistent-store.js";
 
 import { ResultListConfig } from "./ui/results/ResultListConfig.js";
 import { ClusterList } from "./ui/clusters/ClusterList.js";

@@ -1,12 +1,13 @@
-import "./ClusterList.css";
-
 import React from "react";
 
+import "./ClusterList.css";
+
+import classNames from "classnames";
+
+import { Icon } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLightbulb } from "@fortawesome/pro-regular-svg-icons";
-import { Icon } from "@blueprintjs/core/lib/esm/index.js";
 import { view } from "@risingstack/react-easy-state";
-import classNames from "classnames";
 
 import { clusterStore } from "../../store/services.js";
 import { clusterSelectionStore } from "../../store/selection.js";

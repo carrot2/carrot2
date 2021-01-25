@@ -7,12 +7,13 @@ import { view } from "@risingstack/react-easy-state";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolder, faLightbulb } from "@fortawesome/pro-regular-svg-icons";
 
+import { pluralize } from "@carrotsearch/ui/lang/humanize.js";
+
 import { searchResultStore } from "../../store/services.js";
 import {
   clusterSelectionStore,
   documentVisibilityStore
 } from "../../store/selection.js";
-import { pluralize } from "../../../carrotsearch/lang/humanize.js";
 
 export const ClusterInSummary = props => {
   const cluster = props.cluster;

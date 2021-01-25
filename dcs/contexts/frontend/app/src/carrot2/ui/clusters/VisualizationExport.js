@@ -1,11 +1,12 @@
-import { Button } from "@blueprintjs/core";
-
-import { saveAs } from "file-saver";
 import React from "react";
 
-import { buildFileName } from "../../store/services.js";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { saveAs } from "file-saver";
+
+import { Button } from "@blueprintjs/core";
 import { faSave } from "@fortawesome/pro-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { buildFileName } from "../../store/services.js";
 
 function saveJpeg(impl, fileNameSuffix) {
   const type = "image/jpeg";

@@ -7,10 +7,11 @@ import { saveAs } from "file-saver";
 
 import { Button, ControlGroup, Intent, Popover } from "@blueprintjs/core";
 
+import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
+import { StoreCheckbox } from "@carrotsearch/ui/form/StoreCheckbox.js";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileExcel } from "@fortawesome/pro-regular-svg-icons";
-import { persistentStore } from "../../../../carrotsearch/store/persistent-store.js";
-import { StoreCheckbox } from "../../../../carrotsearch/form/StoreCheckbox.js";
 import { buildFileName, clusterStore } from "../../../store/services.js";
 import { branding } from "../../../config-branding.js";
 

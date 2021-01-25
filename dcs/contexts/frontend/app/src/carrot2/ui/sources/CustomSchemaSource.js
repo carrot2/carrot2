@@ -4,20 +4,20 @@ import "./CustomSchemaSource.css";
 
 import { autoEffect, store, view } from "@risingstack/react-easy-state";
 import { Checkbox } from "@blueprintjs/core";
-import {
-  ArrayLogger,
-  LogEntries
-} from "../../../carrotsearch/LogEntries.js";
+
+import { ButtonLink } from "@carrotsearch/ui/ButtonLink.js";
+import { ArrayLogger, LogEntries } from "@carrotsearch/ui/LogEntries.js";
+import { persistentLruStore } from "@carrotsearch/ui/store/persistent-store.js";
+import { Loading } from "@carrotsearch/ui/Loading.js";
+import { Setting } from "@carrotsearch/ui/settings/Setting.js";
+import { addFactory } from "@carrotsearch/ui/settings/Group.js";
+
 import { extractSchema } from "./schema-extractor.js";
-import { persistentLruStore } from "../../../carrotsearch/store/persistent-store.js";
-import { Loading } from "../../../carrotsearch/Loading.js";
-import { Setting } from "../../../carrotsearch/settings/Setting.js";
-import { addFactory } from "../../../carrotsearch/settings/Group.js";
+
 import {
   CustomSchemaResult,
   CustomSchemaResultConfig
 } from "./CustomSchemaResult.js";
-import { ButtonLink } from "../../../carrotsearch/ButtonLink.js";
 
 export const createSchemaExtractorStores = sourceId => {
   // A non-reactive holder for the contents of the last loaded file. This is not reactive, so that

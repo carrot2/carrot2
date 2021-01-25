@@ -6,7 +6,7 @@ import {
   Radio,
   FormGroup,
   Switch
-} from "@blueprintjs/core/lib/esm/index.js";
+} from "@blueprintjs/core";
 
 import { view } from "@risingstack/react-easy-state";
 

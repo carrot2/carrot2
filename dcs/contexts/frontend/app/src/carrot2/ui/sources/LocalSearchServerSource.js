@@ -1,13 +1,16 @@
-import { persistentStore } from "../../../carrotsearch/store/persistent-store.js";
-import { createStateStore } from "../../../carrotsearch/settings/ServiceUrlSetting.js";
 import { autoEffect } from "@risingstack/react-easy-state";
+
+
+import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
+import { createStateStore } from "@carrotsearch/ui/settings/ServiceUrlSetting.js";
+import { storeAccessors } from "@carrotsearch/ui/settings/Setting.js";
+
 import { workbenchSourceStore } from "../../apps/workbench/store/source-store.js";
 import {
   createFieldChoiceSetting,
   createSchemaExtractorStores,
   createSource
 } from "./CustomSchemaSource.js";
-import { storeAccessors } from "../../../carrotsearch/settings/Setting.js";
 import { createResultConfigStore } from "./CustomSchemaResult.js";
 
 export const createLocalSearch = ({

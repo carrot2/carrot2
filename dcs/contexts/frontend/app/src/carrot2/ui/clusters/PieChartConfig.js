@@ -1,6 +1,6 @@
-import { view } from "@risingstack/react-easy-state";
-
 import React from "react";
+
+import { view } from "@risingstack/react-easy-state";
 import { Switch } from "@blueprintjs/core";
 
 export const PieChartConfig = view(props => {

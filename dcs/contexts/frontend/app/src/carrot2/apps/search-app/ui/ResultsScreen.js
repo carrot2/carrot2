@@ -2,16 +2,18 @@ import React, { useCallback, useEffect } from "react";
 
 import "./ResultsScreen.css";
 
+import { Views } from "@carrotsearch/ui/Views.js";
+import { Loading } from "@carrotsearch/ui/Loading.js";
+
 import { clusterViews, resultsViews } from "../../../config-views.js";
+
 import { clusterStore, searchResultStore } from "../../../store/services.js";
 
 import { routes } from "../../../routes.js";
+import { branding } from "../../../config-branding.js";
+import { sources } from "../../../config-sources.js";
 
 import { SearchForm } from "./SearchForm.js";
-import { Views } from "../../../../carrotsearch/Views.js";
-import { branding } from "../../../config-branding.js";
-import { Loading } from "../../../../carrotsearch/Loading.js";
-import { sources } from "../../../config-sources.js";
 
 export const ResultsScreen = ({ match, history }) => {
   const source = decodeURIComponent(match.params.source);

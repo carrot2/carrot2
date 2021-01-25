@@ -3,7 +3,7 @@ import { Stats } from "fast-stats";
 import {
   forEachOwnProp,
   incrementInMap
-} from "../../../carrotsearch/lang/objects.js";
+} from "@carrotsearch/ui/lang/objects.js";
 
 /**
  * Collects all field names appearing in the submitted JSON documents.

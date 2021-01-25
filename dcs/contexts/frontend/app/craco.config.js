@@ -2,8 +2,7 @@ const path = require("path");
 const { NormalModuleReplacementPlugin } = require("webpack");
 const { getLoader, loaderByName } = require("@craco/craco");
 
-const absolutePath = path.join(__dirname, "../ui-components");
-
+const absolutePath = path.join(__dirname, "../ui");
 
 module.exports = {
   webpack: {
