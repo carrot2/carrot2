@@ -24,3 +24,4 @@ yarn-debug.log*
 # Ignore open source descriptors, they're generated.
 app/src/carrot2/service/algorithms/descriptors/org.carrot2*
 /app/node_modules/
+/app/.eslintcache
