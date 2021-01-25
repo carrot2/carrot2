@@ -9,7 +9,6 @@ import { view } from "@risingstack/react-easy-state";
 import {
   HashRouter as Router,
   Link,
-  matchPath,
   NavLink,
   Redirect,
   Route,
