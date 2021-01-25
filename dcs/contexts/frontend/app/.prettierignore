@@ -1,4 +1,2 @@
 build
 *.html
-src/carrotsearch/visualizations/foamtree/foamtree-impl.js
-src/carrotsearch/visualizations/circles/circles-impl.js
