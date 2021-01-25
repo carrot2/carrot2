@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import "./WorkbenchApp.css";
+
 import { view } from "@risingstack/react-easy-state";
 import { clusterStore, searchResultStore } from "../../../store/services.js";
 import { humanizeDuration } from "../../../../carrotsearch/lang/humanize.js";
@@ -10,12 +11,62 @@ import { clusterViews, resultsViews } from "../../../config-views.js";
 import { Loading } from "../../../../carrotsearch/Loading.js";
 import { sources } from "../../../config-sources.js";
 import { workbenchSourceStore } from "../store/source-store.js";
-import { WorkbenchSide } from "./WorkbenchSide.js";
-import { DottedStraightArrow } from "./arrows/DottedStraightArrow.js";
-import { DottedAngledArrow } from "./arrows/DottedAngledArrow.js";
-import { DottedArrowCurly } from "./arrows/DottedArrowCurly.js";
 import { ExportResults } from "./ExportResults.js";
 import { workbenchViewStore } from "../store/view-store.js";
+import {
+  AppMainButton,
+  AppWithSidePanel
+} from "../../../../carrotsearch/AppWithSidePanel.js";
+import { WorkbenchSourceAlgorithm } from "./WorkbenchSourceAlgorithm.js";
+import {
+  parametersStateStore,
+  runSearch,
+  settings,
+  SettingsTools
+} from "./WorkbenchSettings.js";
+import { Settings } from "../../../../carrotsearch/settings/Settings.js";
+import { faLightbulbOn } from "@fortawesome/pro-regular-svg-icons";
+import { WorkbenchIntro } from "./WorkbenchWelcome.js";
+
+export const WorkbenchLogo = () => {
+  return (
+    <div className="WorkbenchLogo">
+      <span>
+        <span>clustering</span>
+        <span className="initial">W</span>orkbench
+      </span>
+    </div>
+  );
+};
+
+export const ClusterButton = view(() => {
+  useEffect(() => {
+    const listener = e => {
+      if ((e.keyCode === 13 || e.keyCode === 10) && e.ctrlKey) {
+        runSearch();
+      }
+    };
+
+    window.addEventListener("keypress", listener);
+    return () => window.removeEventListener("keypress", listener);
+  }, []);
+
+  return (
+    <AppMainButton
+      intent={
+        parametersStateStore.sourceDirty || parametersStateStore.algorithmDirty
+          ? "primary"
+          : "none"
+      }
+      icon={faLightbulbOn}
+      title="Press Ctrl+Enter to perform clustering"
+      onClick={runSearch}
+      loading={searchResultStore.loading || clusterStore.loading}
+    >
+      Cluster
+    </AppMainButton>
+  );
+});
 
 const ResultStats = view(() => {
   const stats = [
@@ -44,66 +95,9 @@ const ResultStats = view(() => {
   return <Stats stats={stats} />;
 });
 
-const SourceConfigurationStep = view(() => {
-  const source = sources[workbenchSourceStore.source];
-  const help = source.createIntroHelp?.();
-  return (
-    <li className="SourceConfiguration">
-      <DottedAngledArrow />
-      <h3>
-        Configure <strong>{source.label}</strong> data source
-      </h3>
-      {help}
-    </li>
-  );
-});
-
-const WorkbenchIntroSteps = () => {
-  return (
-    <div className="WorkbenchIntroSteps">
-      <ol>
-        <li className="SourceAlgorithmChoice">
-          <DottedStraightArrow />
-          <h3>Choose data source and clustering algorithm</h3>
-        </li>
-        <SourceConfigurationStep />
-        <li className="ButtonPress">
-          <DottedArrowCurly />
-          <h3>
-            Press the <strong>Cluster</strong> button
-          </h3>
-        </li>
-      </ol>
-    </div>
-  );
-};
-
-export const WorkbenchIntro = () => {
-  return (
-    <div className="WorkbenchMain WorkbenchIntro">
-      <div className="WorkbenchIntroWelcome">
-        <h2>Welcome to Clustering Workbench</h2>
-        <h3>
-          the expert-level Carrot<sup>2</sup> application
-        </h3>
-      </div>
-      <WorkbenchIntroSteps />
-    </div>
-  );
-};
-
 const WorkbenchMain = view(() => {
-  if (searchResultStore.initial) {
-    return <WorkbenchIntro />;
-  }
-
   return (
-    <div className="WorkbenchMain">
-      <div className="stats">
-        <ResultStats />
-        <ExportResults />
-      </div>
-
+    <>
       <div className="clusters">
         <Views
           activeView={workbenchViewStore.clusterView}
@@ -136,15 +130,28 @@ const WorkbenchMain = view(() => {
           <Loading isLoading={() => searchResultStore.loading} />
         </Views>
       </div>
-    </div>
+    </>
   );
 });
 
-export const WorkbenchApp = () => {
+export const WorkbenchApp = view(() => {
   return (
-    <div className="WorkbenchApp">
-      <WorkbenchSide />
-      <WorkbenchMain />
-    </div>
+    <AppWithSidePanel
+      className="WorkbenchApp"
+      isInitial={searchResultStore.initial}
+      welcome={<WorkbenchIntro />}
+      logo={<WorkbenchLogo />}
+      button={<ClusterButton />}
+      sideFixed={
+        <>
+          <WorkbenchSourceAlgorithm />
+          <SettingsTools />
+        </>
+      }
+      sideMain={<Settings settings={settings} defer={true} />}
+      stats={<ResultStats />}
+      globalActions={<ExportResults />}
+      main={<WorkbenchMain />}
+    />
   );
-};
+});

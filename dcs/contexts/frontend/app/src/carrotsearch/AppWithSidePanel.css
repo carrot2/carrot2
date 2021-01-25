@@ -1,0 +1,87 @@
+.AppWithSidePanel {
+  display: grid;
+  height: 100vh;
+
+  grid-template-columns: auto 8fr;
+  grid-template-rows: auto;
+  grid-template-areas: "side results";
+}
+
+.AppSide {
+  width: 24em;
+  overflow-y: scroll;
+  position: relative;
+  background-color: var(--background-color-side);
+
+  --background-color-side: var(--background-color-secondary);
+}
+
+.AppSideFixed {
+  position: sticky;
+  top: 0;
+  background-color: var(--background-color-side);
+  z-index: 1;
+  padding: var(--leading);
+}
+
+.AppSideHeader {
+  display: flex;
+}
+
+.AppSideHeader .AppMainButton {
+  align-self: center;
+}
+
+.AppSideHeader .AppButton {
+  align-self: center;
+}
+
+.AppLogo {
+  font-family: Raleway, sans-serif;
+  font-size: 1.5rem;
+  line-height: 1;
+  margin-right: auto;
+}
+
+.AppSide .Settings,
+.AppSide .Deferred {
+  padding: var(--leading);
+}
+.AppSide .Deferred {
+  padding-top: 0;
+}
+
+.AppMain {
+  display: grid;
+  height: 100vh;
+
+  grid-template-columns: auto 24em;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "stats stats"
+    "clusters docs";
+}
+
+.AppMain .stats {
+  grid-area: stats;
+  overflow-x: hidden;
+  padding-top: var(--leading);
+  padding-left: var(--leading);
+  padding-bottom: var(--leading);
+  margin-top: -0.375em;
+}
+
+.AppMain .ViewsTabs,
+.AppMain .stats {
+  background-color: var(--background-color-tertiary);
+}
+
+.AppMain .AppMainPanel {
+  grid-area: docs;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.WorkbenchMain .AppMainPanel .ViewsContent {
+  padding-bottom: calc(var(--leading));
+}

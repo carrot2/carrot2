@@ -7,189 +7,91 @@
   grid-template-areas: "params results";
 }
 
-.WorkbenchMain {
-  display: grid;
-  height: 100vh;
+/** Side panel */
 
-  grid-template-columns: auto 24em;
-  grid-template-rows: auto 1fr;
-  grid-template-areas:
-    "stats stats"
-    "clusters docs";
+.WorkbenchLogo {
+  font-family: Raleway, sans-serif;
+  font-size: 1.5rem;
+  line-height: 1;
+  margin-right: auto;
+  margin-left: -0.25em;
+  margin-top: 0.25em;
+}
+.WorkbenchLogo > span {
+  position: relative;
+}
+.WorkbenchLogo .initial {
+  font-size: 2.4rem;
+  position: relative;
+  left: 0.35rem;
+  font-weight: 300;
+}
+.WorkbenchLogo > span > span:not(.initial) {
+  font-weight: normal;
+  font-size: 0.8rem;
+  position: absolute;
+  left: 3rem;
+  top: -0.55rem;
+}
 
+.WorkbenchApp .AppSide .SettingsTools {
+  margin-top: var(--leading);
+}
+
+.WorkbenchApp .AppSide .SettingsTools button {
+  width: 2em;
+}
+
+.WorkbenchApp .AppSide .SettingsTools button:not(:last-child) {
+  margin-right: 0.25em;
+}
+
+/** Main area */
+
+.WorkbenchApp .AppMain {
   --selection-border-width: 2px;
 }
 
-.WorkbenchMain .stats {
-  grid-area: stats;
-  overflow-x: hidden;
-  padding-top: var(--leading);
-  padding-left: var(--leading);
-  padding-bottom: var(--leading);
-  margin-top: -0.375em;
-}
-
-.WorkbenchMain .ViewsTabs,
-.WorkbenchMain .stats {
-  background-color: var(--background-color-tertiary);
-}
-
-.WorkbenchMain .docs {
+.WorkbenchApp .AppMain .docs {
   grid-area: docs;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
-.WorkbenchMain .clusters {
+.WorkbenchApp .AppMain .clusters {
   grid-area: clusters;
-  overflow-x: hidden;
-  position: relative;
+  overflow-y: auto;
 }
 
-.WorkbenchMain .docs .ViewsTabs,
-.WorkbenchMain .docs .ViewsContent {
-  padding-right: var(--leading);
-}
-
-.WorkbenchMain .clusters .ViewsTabs,
-.WorkbenchMain .clusters .ViewsContent {
-  padding-right: calc(0.5 * var(--leading));
-}
-
-.WorkbenchMain .docs .ViewsContent,
-.WorkbenchMain .clusters .ViewsContent {
-  padding-bottom: calc(var(--leading));
-}
-
-.WorkbenchMain .clusters .ViewsContent {
-  margin-left: var(--leading);
-}
-
-.WorkbenchMain .clusters .ViewsTabs {
-  padding-left: calc(1.125 * var(--leading));
-}
-
-.WorkbenchMain .docs .ViewsTabs {
-  padding-left: calc(0.625 * var(--leading));
-}
-
-.WorkbenchMain.WorkbenchIntro {
-  grid-template-columns: 1fr;
-  grid-template-rows: auto 1fr;
-  grid-template-areas: "steps" "welcome";
-  max-width: 64rem;
-}
-
-.WorkbenchIntroWelcome {
-  text-align: center;
-  max-width: 36em;
-  margin-top: 2em;
-  margin-left: 1.5em;
-}
-
-.WorkbenchIntroWelcome h2,
-.WorkbenchIntroWelcome h3 {
-  margin: 0;
-}
-
-.WorkbenchIntroWelcome h3 {
-  font-weight: normal;
-}
-
-.WorkbenchIntroWelcome ul {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.WorkbenchIntroWelcome ul li {
-  margin-right: 2em;
-}
-
-.WorkbenchIntroSteps {
-  position: relative;
-  overflow: auto;
-  margin-top: 2rem;
-  margin-right: 1rem;
-}
-
-.WorkbenchIntroSteps > ol {
-  counter-reset: steps;
-  list-style: none;
-  position: absolute;
-  max-width: 36em;
-}
-
-.WorkbenchIntroSteps > ol > li {
-  counter-increment: steps;
-  position: relative;
-  padding-left: 3rem;
-  padding-top: 0.75rem;
-  margin-left: 1.5em;
-}
-
-.WorkbenchIntroSteps > ol > li:before {
-  content: counter(steps);
-  display: inline-block;
-  position: absolute;
-  top: 0.125em;
-  left: 0;
-  color: var(--logo-color);
-  background-color: var(--background-color-secondary);
-  font-family: Lato, sans-serif;
-  font-size: 1.75rem;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 1.25rem;
-  text-align: center;
-  margin-right: 0.5rem;
-}
-
-.WorkbenchIntroSteps > ol > li > h3 {
-  font-family: Raleway, sans-serif;
-  font-size: 1.125rem;
-  font-weight: normal;
-  margin-top: 0;
-}
-
-.WorkbenchIntroSteps .DottedArrow {
-  position: absolute;
-  fill: var(--text-color-secondary);
-}
-
-.WorkbenchIntroSteps .SourceAlgorithmChoice {
-}
-
-.WorkbenchIntroSteps .SourceAlgorithmChoice .DottedArrowStraight {
-  left: -3rem;
-  top: -1rem;
-  width: 2.75rem;
-  transform: rotate(-70deg);
-}
-
-.WorkbenchIntroSteps .SourceConfiguration {
-  min-height: 12rem;
-}
-
-.WorkbenchIntroSteps .SourceConfiguration .DottedArrowAngled {
-  left: -2rem;
-  top: 3rem;
-  width: 3rem;
-  transform: scale(-1.25, 1);
-}
-
-.WorkbenchIntroSteps .ButtonPress .DottedArrowCurly {
-  left: -3.25rem;
-  top: -2rem;
-  width: 4.5em;
-  transform: scale(-1, 1) rotate(-70deg);
-}
-
-.WorkbenchIntroSteps ul {
-  padding-left: 1em;
-}
-
-.WorkbenchMain .Export {
+.WorkbenchApp .AppMain .Export {
   position: absolute;
   top: 1em;
   right: 1em;
+}
+
+.AppMain .docs .ViewsTabs,
+.AppMain .docs .ViewsContent {
+  padding-right: var(--leading);
+}
+
+.AppMain .clusters .ViewsTabs,
+.AppMain .clusters .ViewsContent {
+  padding-right: calc(0.5 * var(--leading));
+}
+
+.AppMain .docs .ViewsContent,
+.AppMain .clusters .ViewsContent {
+  padding-bottom: calc(var(--leading));
+}
+
+.AppMain .clusters .ViewsContent {
+  margin-left: var(--leading);
+}
+
+.AppMain .clusters .ViewsTabs {
+  padding-left: calc(1.125 * var(--leading));
+}
+
+.AppMain .docs .ViewsTabs {
+  padding-left: calc(0.625 * var(--leading));
 }
