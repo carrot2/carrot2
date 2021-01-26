@@ -1,6 +1,6 @@
 [submodule "dcs/contexts/frontend/theme"]
 	path = dcs/contexts/frontend/theme
-	url = git@github.com:carrotsearch/theme.git
+	url = https://github.com/carrotsearch/theme.git
 [submodule "dcs/contexts/frontend/ui"]
 	path = dcs/contexts/frontend/ui
-	url = git@github.com:carrotsearch/ui.git
+	url = https://github.com/carrotsearch/ui.git
