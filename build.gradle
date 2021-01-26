@@ -44,7 +44,7 @@ apply from: file('gradle/gitinfo.gradle')
 apply from: file('gradle/buildinfo.gradle')
 apply from: file('gradle/defaults-java.gradle')
 
-apply from: file('gradle/node/defaults-node.gradle')
+apply from: file('gradle/node/yarn-projects.gradle')
 
 apply from: file('gradle/ide/idea.gradle')
 

@@ -7,8 +7,14 @@ dependencies {
 }
 
 ext {
-  srclayout = 'gatsby'
   descriptorsDir = file("src/descriptors")
+
+  // Input sources (for incremental checks).
+  jsSources = fileTree('src') + fileTree('static')
+
+  // Gatsby has a non-configurable output folder, sigh.
+  // https://github.com/gatsbyjs/gatsby/issues/1878
+  jsBuildDir = file("public")
 }
 
 task descriptors(type: Sync) {
@@ -17,3 +23,7 @@ task descriptors(type: Sync) {
 }
 
 yarnBuild.dependsOn descriptors
+
+clean {
+  delete ".cache"
+}
