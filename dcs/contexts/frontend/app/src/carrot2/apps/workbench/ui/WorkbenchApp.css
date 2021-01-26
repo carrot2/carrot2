@@ -1,0 +1,97 @@
+.WorkbenchApp {
+  display: grid;
+  height: 100vh;
+
+  grid-template-columns: auto 8fr;
+  grid-template-rows: auto;
+  grid-template-areas: "params results";
+}
+
+/** Side panel */
+
+.WorkbenchLogo {
+  font-family: Raleway, sans-serif;
+  font-size: 1.5rem;
+  line-height: 1;
+  margin-right: auto;
+  margin-left: -0.25em;
+  margin-top: 0.25em;
+}
+.WorkbenchLogo > span {
+  position: relative;
+}
+.WorkbenchLogo .initial {
+  font-size: 2.4rem;
+  position: relative;
+  left: 0.35rem;
+  font-weight: 300;
+}
+.WorkbenchLogo > span > span:not(.initial) {
+  font-weight: normal;
+  font-size: 0.8rem;
+  position: absolute;
+  left: 3rem;
+  top: -0.55rem;
+}
+
+.WorkbenchApp .AppSide .SettingsTools {
+  margin-top: var(--leading);
+}
+
+.WorkbenchApp .AppSide .SettingsTools button {
+  width: 2em;
+}
+
+.WorkbenchApp .AppSide .SettingsTools button:not(:last-child) {
+  margin-right: 0.25em;
+}
+
+/** Main area */
+
+.WorkbenchApp .AppMain {
+  --selection-border-width: 2px;
+}
+
+.WorkbenchApp .AppMain .docs {
+  grid-area: docs;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.WorkbenchApp .AppMain .clusters {
+  grid-area: clusters;
+  overflow-y: auto;
+}
+
+.WorkbenchApp .AppMain .Export {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+}
+
+.AppMain .docs .ViewsTabs,
+.AppMain .docs .ViewsContent {
+  padding-right: var(--leading);
+}
+
+.AppMain .clusters .ViewsTabs,
+.AppMain .clusters .ViewsContent {
+  padding-right: calc(0.5 * var(--leading));
+}
+
+.AppMain .docs .ViewsContent,
+.AppMain .clusters .ViewsContent {
+  padding-bottom: calc(var(--leading));
+}
+
+.AppMain .clusters .ViewsContent {
+  margin-left: var(--leading);
+}
+
+.AppMain .clusters .ViewsTabs {
+  padding-left: calc(1.125 * var(--leading));
+}
+
+.AppMain .docs .ViewsTabs {
+  padding-left: calc(0.625 * var(--leading));
+}

@@ -1,0 +1,57 @@
+.SearchAppInfo {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 1.5em 4em 2em 2em;
+  overflow-y: auto;
+}
+.SearchAppInfo h2 {
+  font-size: 1.8rem;
+  line-height: 1.1;
+}
+.SearchAppInfo main {
+  column-width: 32em;
+}
+
+.SearchAppInfo h3:not(:first-child) {
+  margin-top: 2em;
+}
+
+.SearchAppInfo ul {
+  padding: 0 0 0 1em;
+}
+.SearchAppInfo ul > li {
+  margin-bottom: 0.5em;
+}
+
+.SearchAppInfo dt {
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+.SearchAppInfo dd {
+  margin-left: 0;
+  margin-bottom: 1em;
+}
+
+.VersionInfo {
+  margin-top: 4em;
+  border-top: 1px solid var(--hr-color);
+  font-weight: 300;
+}
+
+.VersionInfo span {
+  color: var(--text-color-lighter);
+}
+
+.VersionInfo ul {
+  list-style: none;
+  padding: 0;
+}
+.VersionInfo ul > li {
+  margin-bottom: 0;
+}
+
+.SearchAppInfo a > svg:first-child {
+  margin-right: 0.35em;
+}

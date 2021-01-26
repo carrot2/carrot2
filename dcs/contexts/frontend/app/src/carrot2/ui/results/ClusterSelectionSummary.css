@@ -1,0 +1,25 @@
+.ClusterSelectionSummary {
+  text-align: left;
+  padding: 0.25em 0.25em 0.25em 0.5em;
+  margin-bottom: 1rem;
+}
+
+.ClusterSelectionSummary .icon {
+  margin-left: 0.25em !important;
+}
+
+.ClusterInSummary .icon {
+  color: var(--item-icon-color);
+}
+.ClusterInSummary:first-child .icon {
+  margin-left: 0;
+}
+
+.ClusterInSummary .bp3-icon-folder-close {
+  padding-right: 0.125em;
+}
+
+.ClusterInSummary {
+  padding-right: 0.5em;
+  white-space: nowrap;
+}

@@ -1,0 +1,122 @@
+.ResultList {
+  overflow-y: auto;
+  height: 100%;
+}
+
+.ResultList > div {
+  text-align: left;
+  padding-right: 0.5em;
+  padding-left: 0.25em;
+}
+
+.ResultList .Loading {
+  padding: 0.25em 0.25em 0.25em 0.5em;
+}
+
+a.Result {
+  color: var(--text-color);
+  margin-bottom: 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  border-radius: 0.1875em;
+  text-decoration: none;
+  padding: 0.25em 0.25em 0.25em 0.5em;
+}
+a.Result:hover {
+  color: inherit;
+  background-color: rgba(59, 131, 192, 0.05);
+  box-shadow: 0 0 0 2px rgba(59, 131, 192, 0.3);
+}
+
+.Result > strong {
+  display: block;
+}
+.Result > strong > span,
+.Result > div > p > span,
+.Result > .tags > span,
+.Result > .properties > dt,
+.Result > .keywords > span,
+.Result > .sources > span {
+  font-size: 70%;
+  font-weight: normal;
+  background-color: rgba(59, 131, 192, 0.05);
+  box-shadow: 0 0 0 1px rgba(59, 131, 192, 0.3);
+  padding: 0 0.125rem;
+  margin-right: 0.25rem;
+  vertical-align: 10%;
+  border-radius: 0.125rem;
+  color: var(--text-color-secondary);
+}
+.Result > div > p > span,
+.Result > .keywords > span,
+.Result > .tags > span,
+.Result > .properties > dt,
+.Result > .sources > span {
+  background-color: hsla(258, 10%, 38%, 0.03);
+  box-shadow: 0 0 0 1px hsla(208, 10%, 49%, 0.2);
+  font-weight: 300;
+  text-transform: uppercase;
+  color: var(--text-color-secondary);
+}
+
+.Result .properties dt,
+.Result .properties dd {
+  display: inline;
+  margin-left: 0;
+}
+.Result .properties dd {
+  margin-right: 1em;
+}
+
+.Result > div > p {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+}
+
+.Result > dl,
+.Result > div {
+  color: var(--text-color-light);
+  margin: 0.5em 0;
+}
+
+.Result > span.url {
+  display: block;
+  height: 1.5em;
+  white-space: nowrap;
+  font-weight: 300;
+  color: inherit;
+}
+.Result > span.url.with-site-icon {
+  background-size: auto 75%;
+  background-position: 0 0.0625em;
+  background-repeat: no-repeat;
+  padding-left: 1.5em;
+}
+.Result > span.url:hover {
+  color: inherit;
+}
+
+.Result > span.url > span {
+  opacity: 0.7;
+}
+
+.ResultList .ResultClusters {
+  min-height: 18px;
+}
+
+.ResultList .ResultClusters > span:hover .ClusterInSummary {
+  opacity: 0.5;
+}
+.ResultList .ResultClusters > span:hover .ClusterInSummary:hover {
+  opacity: 1;
+}
+.ResultList .ResultClusters:hover .ClusterInSummary:hover .bp3-icon {
+  color: var(--item-icon-color);
+}
+
+.ResultList .ResultListPaging {
+  display: flex;
+  justify-content: space-between;
+  line-height: 26px; /** to match button height */
+}
