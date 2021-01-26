@@ -46,8 +46,7 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject",
-    "prettier": "prettier -w src/"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"

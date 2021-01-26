@@ -3,10 +3,13 @@
   "workspaces": [
     "app", "theme", "ui"
   ],
+  "devDependencies": {
+    "prettier": "2.2.1"
+  },
   "scripts": {
     "start": "yarn workspace app start",
     "build": "yarn workspace app build",
     "test": "yarn workspace app test",
-    "prettier": "yarn workspace app prettier"
+    "prettier": "prettier -w app/src/ ui/ theme/"
   }
 }
