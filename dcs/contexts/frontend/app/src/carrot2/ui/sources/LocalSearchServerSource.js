@@ -1,6 +1,5 @@
 import { autoEffect } from "@risingstack/react-easy-state";
 
-
 import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
 import { createStateStore } from "@carrotsearch/ui/settings/ServiceUrlSetting.js";
 import { storeAccessors } from "@carrotsearch/ui/settings/Setting.js";

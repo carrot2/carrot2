@@ -55,7 +55,9 @@ function cached() {
     window.setTimeout(function () {
       // reject({ status: 403, statusText: "IP banned" });
       resolve(
-        import("./etools.result.json" /* webpackChunkName: "etools-result-json" */)
+        import(
+          "./etools.result.json" /* webpackChunkName: "etools-result-json" */
+        )
       );
     }, 300);
   });

@@ -1,12 +1,7 @@
 import "./TreemapConfig.css";
 
 import React from "react";
-import {
-  RadioGroup,
-  Radio,
-  FormGroup,
-  Switch
-} from "@blueprintjs/core";
+import { RadioGroup, Radio, FormGroup, Switch } from "@blueprintjs/core";
 
 import { view } from "@risingstack/react-easy-state";
 

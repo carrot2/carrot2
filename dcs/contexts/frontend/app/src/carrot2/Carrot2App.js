@@ -22,7 +22,9 @@ export const Carrot2App = () => {
     return matchPath(location.pathname, {
       path: routes.searchStart.path,
       exact: true
-    }) ? "WithBackdrop" : null;
+    })
+      ? "WithBackdrop"
+      : null;
   };
 
   return (
