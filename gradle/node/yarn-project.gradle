@@ -34,8 +34,8 @@ afterEvaluate {
     // https://github.com/gatsbyjs/gatsby/issues/1878
     ext.jsBuildDir = file("public")
   } else {
-    ext.jsSources = fileTree('src') + fileTree('public')
-    ext.jsBuildDir = file("build")
+    ext.jsSources = fileTree('app/src') + fileTree('app/public')
+    ext.jsBuildDir = file("app/build")
   }
 }
 
