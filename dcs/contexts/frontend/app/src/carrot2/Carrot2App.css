@@ -3,3 +3,8 @@
   margin-bottom: 1em;
   width: 24em;
 }
+
+nav .CarrotLogo {
+  position: relative;
+  top: 0.2em;
+}
