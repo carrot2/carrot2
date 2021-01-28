@@ -44,12 +44,13 @@ configure(project(":dcs:contexts:frontend")) { prj ->
       format 'js', {
         target "app/src/**", "ui/**", "theme/**"
         //targetExclude "**/foamtree-impl.js", "**/circles-impl.js", "**/*.svg", "**/*.html", "**/descriptors/**"
-        targetExclude "**/*.svg", 
+        targetExclude "**/*.svg",
           "**/*.html",
           "**/LICENSE",
           "**/README*",
           "**/package.json",
-          "**/descriptors/**"
+          "**/descriptors/**",
+          "**/node_modules/**"
 
         prettier('2.2.1').configFile('.prettierrc.json')
 

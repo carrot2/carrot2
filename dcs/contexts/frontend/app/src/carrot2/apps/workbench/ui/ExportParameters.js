@@ -40,7 +40,10 @@ const ExportParametersBody = view(() => {
 
 export const ExportParameters = () => {
   return (
-    <ToolPopover position={Position.TOP_LEFT} popoverClassName="ExportParameters">
+    <ToolPopover
+      position={Position.TOP_LEFT}
+      popoverClassName="ExportParameters"
+    >
       <Button
         icon={<FontAwesomeIcon icon={faBracketsCurly} />}
         title="Clustering parameters as JSON"
