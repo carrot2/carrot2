@@ -50,6 +50,12 @@
 /** Main area */
 
 .WorkbenchApp .AppMain {
+  grid-template-columns: auto 24em;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "stats stats"
+    "clusters docs";
+
   --selection-border-width: 2px;
 }
 
