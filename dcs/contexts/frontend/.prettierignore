@@ -1,3 +1,5 @@
 build
 *.html
 package.json
+ui/node_modules/
+theme/node_modules/
