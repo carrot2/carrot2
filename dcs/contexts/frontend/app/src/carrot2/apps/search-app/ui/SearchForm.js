@@ -20,6 +20,7 @@ import { ClusteringEngineSettings } from "./ClusteringEngineSettings.js";
 import { SearchEngineSettings } from "./SearchEngineSettings.js";
 
 import { SourceTabs } from "./SourceTabs.js";
+import { ToolPopover } from "@carrotsearch/ui/ToolPopover.js";
 
 export const SearchForm = ({
   initialQuery,
@@ -57,10 +58,10 @@ export const SearchForm = ({
   };
 
   const searchEngineSettings = (
-    <Popover
+    <ToolPopover
       position={Position.BOTTOM}
       className={Classes.FIXED}
-      popoverClassName="bp3-popover-content-sizing SearchAppSettingsContainer"
+      popoverClassName="SearchAppSettingsContainer"
     >
       <Button
         rightIcon="caret-down"
@@ -69,15 +70,15 @@ export const SearchForm = ({
         title="Search engine options"
       />
       <SearchEngineSettings source={source} onApply={triggerOnSubmit} />
-    </Popover>
+    </ToolPopover>
   );
 
   const clusteringEngineSettings =
     Object.keys(algorithms).length < 2 ? null : (
-      <Popover
+      <ToolPopover
         position={Position.RIGHT_TOP}
         className={Classes.FIXED}
-        popoverClassName="bp3-popover-content-sizing SearchAppSettingsContainer"
+        popoverClassName="SearchAppSettingsContainer"
       >
         <Button
           icon={<FontAwesomeIcon icon={faWrench} />}
@@ -85,7 +86,7 @@ export const SearchForm = ({
           title="Clustering algorithm"
         />
         <ClusteringEngineSettings />
-      </Popover>
+      </ToolPopover>
     );
 
   return (

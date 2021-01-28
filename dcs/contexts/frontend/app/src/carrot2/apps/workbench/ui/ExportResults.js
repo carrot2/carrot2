@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileExcel } from "@fortawesome/pro-regular-svg-icons";
 import { buildFileName, clusterStore } from "../../../store/services.js";
 import { branding } from "../../../config-branding.js";
+import { ToolPopover } from "@carrotsearch/ui/ToolPopover.js";
 
 const exportConfig = persistentStore("workbench:export:config", {
   format: "excel",
@@ -206,7 +207,7 @@ const exportSheet = async format => {
 
 export const ExportResults = () => {
   return (
-    <Popover className="Export" boundary="viewport">
+    <ToolPopover className="Export" boundary="viewport">
       <Button
         minimal={true}
         small={true}
@@ -215,6 +216,6 @@ export const ExportResults = () => {
         icon={<FontAwesomeIcon icon={faFileExcel} />}
       />
       <ExportBody />
-    </Popover>
+    </ToolPopover>
   );
 };

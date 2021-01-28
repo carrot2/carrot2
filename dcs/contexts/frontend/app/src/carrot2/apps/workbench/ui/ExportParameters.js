@@ -13,6 +13,7 @@ import { Button, Popover, Position } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBracketsCurly } from "@fortawesome/pro-regular-svg-icons";
 import { buildRequestJson } from "../../../store/services.js";
+import { ToolPopover } from "@carrotsearch/ui/ToolPopover.js";
 
 const config = persistentStore("workbench:parameterExport:config", {
   onlyNonDefault: true
@@ -22,7 +23,7 @@ const ExportParametersBody = view(() => {
   const json = buildRequestJson(config.onlyNonDefault);
   const jsonString = JSON.stringify(json, null, "  ");
   return (
-    <div className="ExportParametersBody">
+    <>
       <h4>Clustering parameters JSON</h4>
       <div className="ExportParametersTools">
         <StoreCheckbox
@@ -33,19 +34,19 @@ const ExportParametersBody = view(() => {
         <CopyToClipboard contentProvider={() => jsonString} />
       </div>
       <JsonHighlighted jsonString={jsonString} />
-    </div>
+    </>
   );
 });
 
 export const ExportParameters = () => {
   return (
-    <Popover boundary="viewport" position={Position.TOP_LEFT}>
+    <ToolPopover position={Position.TOP_LEFT} popoverClassName="ExportParameters">
       <Button
         icon={<FontAwesomeIcon icon={faBracketsCurly} />}
         title="Clustering parameters as JSON"
         small={true}
       />
       <ExportParametersBody />
-    </Popover>
+    </ToolPopover>
   );
 };

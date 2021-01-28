@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "./",
   "dependencies": {
-    "@blueprintjs/core": "3.38.0",
+    "@blueprintjs/core": "3.38.1",
     "@carrotsearch/circles": "2.3.8",
     "@carrotsearch/foamtree": "3.5.0",
     "@carrotsearch/ui": "0.1.0",
