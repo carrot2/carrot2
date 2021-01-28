@@ -5,13 +5,13 @@ import "./SearchForm.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faWrench } from "@fortawesome/free-solid-svg-icons";
+import { ToolPopover } from "@carrotsearch/ui/ToolPopover.js";
 
 import {
   Button,
   Classes,
   ControlGroup,
   InputGroup,
-  Popover,
   Position
 } from "@blueprintjs/core";
 import { algorithms } from "../../../config-algorithms.js";
@@ -20,7 +20,6 @@ import { ClusteringEngineSettings } from "./ClusteringEngineSettings.js";
 import { SearchEngineSettings } from "./SearchEngineSettings.js";
 
 import { SourceTabs } from "./SourceTabs.js";
-import { ToolPopover } from "@carrotsearch/ui/ToolPopover.js";
 
 export const SearchForm = ({
   initialQuery,

@@ -8,12 +8,12 @@ import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
 import { StoreCheckbox } from "@carrotsearch/ui/form/StoreCheckbox.js";
 import { CopyToClipboard } from "@carrotsearch/ui/CopyToClipboard.js";
 import { JsonHighlighted } from "@carrotsearch/ui/JsonHighlighted.js";
+import { ToolPopover } from "@carrotsearch/ui/ToolPopover.js";
 
-import { Button, Popover, Position } from "@blueprintjs/core";
+import { Button, Position } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBracketsCurly } from "@fortawesome/pro-regular-svg-icons";
 import { buildRequestJson } from "../../../store/services.js";
-import { ToolPopover } from "@carrotsearch/ui/ToolPopover.js";
 
 const config = persistentStore("workbench:parameterExport:config", {
   onlyNonDefault: true
