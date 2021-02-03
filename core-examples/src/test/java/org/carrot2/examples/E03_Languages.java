@@ -96,8 +96,7 @@ public class E03_Languages {
             // and would have caused an exception.
             .limitToLanguages("English")
             // and we substitute resource lookup locations with our custom location.
-            .withResourceLookup(
-                provider -> new ClassRelativeResourceLookup(E03_Languages.class))
+            .withResourceLookup(provider -> new ClassRelativeResourceLookup(E03_Languages.class))
             .load()
             .language("English");
     // fragment-end{custom-english-resources}

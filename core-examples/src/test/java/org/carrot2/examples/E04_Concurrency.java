@@ -29,15 +29,17 @@ import org.junit.Test;
 public class E04_Concurrency {
   @Test
   public void ephemeral() throws Exception {
-    // Loading language components can be heavy. Once loaded, the language components can be reused
-    // across concurrent threads so this is done prior to any clustering.
+    // Loading language components can be a heavy operation so it's best to do it once.
+    // After language components have been loaded, they can be reused
+    // across concurrent threads.
     LanguageComponents english = LanguageComponents.loader().load().language("English");
 
     // Carrot2 components are *not* designed to be reused concurrently by multiple threads. A single
     // algorithm should only be used by one thread at a time.
     //
-    // If multi-core concurrent clustering is needed, the application needs to guarantee the above
-    // property. The simplest way to achieve thread-safety is to create components on the fly and
+    // If clustering is to be performed in parallel, the application needs to
+    // provide separate algorithm instances for each thread. The simplest
+    // way to achieve thread-safety is to create components on the fly and
     // discard them after the clustering completes.
 
     // fragment-start{ephemeral}
@@ -86,6 +88,10 @@ public class E04_Concurrency {
     // fragment-end{cloning}
   }
 
+  /**
+   * This method runs multiple concurrent threads and applies the same clustering function predicate
+   * to a randomized document stream.
+   */
   private void runConcurrentClustering(
       Function<Stream<Document>, List<Cluster<Document>>> processor)
       throws InterruptedException, ExecutionException {
@@ -127,7 +133,7 @@ public class E04_Concurrency {
 
     ExecutorService service = ForkJoinPool.commonPool();
     for (Future<List<Cluster<Document>>> future : service.invokeAll(tasks)) {
-      // Consume the output.
+      // Consume the output of all tasks.
       future.get();
     }
   }
