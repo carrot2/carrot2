@@ -43,7 +43,7 @@ import org.carrot2.util.ClassRelativeResourceLookup;
 import org.junit.Test;
 
 /** This example shows how to tweak language components prior to clustering. */
-public class E03_CustomLanguageComponents {
+public class E03_Languages {
   @Test
   public void listAllAvailableLanguages() throws IOException {
     // Preprocessing components for several languages are provided in the Carrot2 distribution (and
@@ -97,7 +97,7 @@ public class E03_CustomLanguageComponents {
             .limitToLanguages("English")
             // and we substitute resource lookup locations with our custom location.
             .withResourceLookup(
-                provider -> new ClassRelativeResourceLookup(E03_CustomLanguageComponents.class))
+                provider -> new ClassRelativeResourceLookup(E03_Languages.class))
             .load()
             .language("English");
     // fragment-end{custom-english-resources}
