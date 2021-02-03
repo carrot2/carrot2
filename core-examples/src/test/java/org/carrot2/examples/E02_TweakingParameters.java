@@ -27,7 +27,7 @@ import org.carrot2.math.matrix.LocalNonnegativeMatrixFactorizationFactory;
 import org.junit.Test;
 
 /** This example shows how to tweak clustering algorithm parameters, prior to clustering. */
-public class E02_TweakingAttributes {
+public class E02_TweakingParameters {
   @Test
   public void tweakLingo() throws IOException {
     LanguageComponents languageComponents = LanguageComponents.loader().load().language("English");
