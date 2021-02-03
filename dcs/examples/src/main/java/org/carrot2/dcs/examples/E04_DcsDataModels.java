@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.http.HttpHeaders;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ByteArrayEntity;
@@ -65,10 +64,12 @@ public class E04_DcsDataModels extends CommandScaffold {
     requestBuilder.setEntity(new ByteArrayEntity(om.writeValueAsBytes(request)));
 
     try (CloseableHttpResponse httpResponse = httpClient.execute(requestBuilder.build())) {
-      expect(httpResponse, HttpStatus.SC_OK);
-
       ClusterResponse response =
-          om.readValue(httpResponse.getEntity().getContent(), ClusterResponse.class);
+          ifValid(
+              om,
+              httpResponse,
+              content ->
+                  om.readValue(httpResponse.getEntity().getContent(), ClusterResponse.class));
 
       Loggers.CONSOLE.info("Clusters returned:");
       printClusters(response.clusters);

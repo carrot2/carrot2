@@ -24,7 +24,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
 import org.apache.http.HttpHeaders;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
@@ -85,10 +84,12 @@ public class E03_DcsClusterWithParams extends CommandScaffold {
                       om.writeValueAsString(request).getBytes(StandardCharsets.UTF_8)));
 
       try (CloseableHttpResponse httpResponse = httpClient.execute(requestBuilder.build())) {
-        expect(httpResponse, HttpStatus.SC_OK);
-
         ClusterResponse response =
-            om.readValue(httpResponse.getEntity().getContent(), ClusterResponse.class);
+            ifValid(
+                om,
+                httpResponse,
+                content ->
+                    om.readValue(httpResponse.getEntity().getContent(), ClusterResponse.class));
 
         Loggers.CONSOLE.info("Clusters returned for file {}:", input);
         printClusters(response.clusters);
@@ -102,10 +103,10 @@ public class E03_DcsClusterWithParams extends CommandScaffold {
       throws IOException {
     HttpUriRequest request = RequestBuilder.get(dcsService.resolve("list")).build();
     try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
-      expect(httpResponse, HttpStatus.SC_OK);
-
-      ListResponse config = om.readValue(httpResponse.getEntity().getContent(), ListResponse.class);
-      return config;
+      return ifValid(
+          om,
+          httpResponse,
+          content -> om.readValue(httpResponse.getEntity().getContent(), ListResponse.class));
     }
   }
 }

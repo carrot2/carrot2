@@ -13,18 +13,24 @@ package org.carrot2.dcs.examples;
 import com.carrotsearch.console.jcommander.Parameter;
 import com.carrotsearch.console.launcher.Command;
 import com.carrotsearch.console.launcher.ExitCode;
+import com.carrotsearch.console.launcher.ExitCodes;
 import com.carrotsearch.console.launcher.Loggers;
+import com.carrotsearch.console.launcher.ReportCommandException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.carrot2.clustering.Cluster;
+import org.carrot2.dcs.model.ErrorResponse;
 import org.carrot2.util.SuppressForbidden;
 
 abstract class CommandScaffold extends Command<ExitCode> {
@@ -69,10 +75,43 @@ abstract class CommandScaffold extends Command<ExitCode> {
     }
   }
 
-  protected static void expect(CloseableHttpResponse httpResponse, int code) throws IOException {
-    if (httpResponse.getStatusLine().getStatusCode() != code) {
-      throw new IOException("Unexpected response: " + httpResponse.getStatusLine());
+  protected static <T> T ifValid(
+      ObjectMapper om, CloseableHttpResponse httpResponse, ResponseConsumer<T> responseConsumer)
+      throws IOException {
+    if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+      return responseConsumer.accept(httpResponse.getEntity().getContent());
     }
+
+    // Something went wrong. Try to parse DCS response body and see if it corresponds to
+    // a known error response structure.
+    try {
+      ErrorResponse errorResponse =
+          om.readValue(httpResponse.getEntity().getContent(), ErrorResponse.class);
+
+      Loggers.CONSOLE.error(
+          String.format(
+              Locale.ROOT,
+              "The request resulted in an error:\n"
+                  + "  HTTP code: %s\n"
+                  + "  type: %s\n"
+                  + "  exception: %s\n"
+                  + "  message: %s\n"
+                  + "  stack trace:\n%s\n",
+              httpResponse.getStatusLine().getStatusCode(),
+              errorResponse.type,
+              errorResponse.exception,
+              errorResponse.message,
+              Objects.requireNonNull(errorResponse.stacktrace, "--")
+                  .replaceAll("[^\n]*\n", "  | $0")));
+
+      throw new ReportCommandException(ExitCodes.ERROR_UNKNOWN);
+    } catch (IOException e) {
+      // Fall through.
+    }
+
+    throw new ReportCommandException(
+        "DCS returned an unexpected response: " + httpResponse.getStatusLine(),
+        ExitCodes.ERROR_UNKNOWN);
   }
 
   abstract ExitCode run(CloseableHttpClient httpClient, ObjectMapper om) throws IOException;

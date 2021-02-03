@@ -25,7 +25,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import org.apache.http.HttpHeaders;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
@@ -69,6 +68,12 @@ public class E02_DcsCluster extends CommandScaffold {
       if (language != null) {
         request.language = language;
       }
+
+      if (!Files.isRegularFile(input)) {
+        Loggers.CONSOLE.warn("This path is not a file, ignoring: {}", input);
+        continue;
+      }
+
       request.documents =
           om.readValue(
               Files.readAllBytes(input), new TypeReference<List<ClusterRequest.Document>>() {});
@@ -83,13 +88,16 @@ public class E02_DcsCluster extends CommandScaffold {
           new ByteArrayEntity(om.writeValueAsString(request).getBytes(StandardCharsets.UTF_8)));
 
       try (CloseableHttpResponse httpResponse = httpClient.execute(requestBuilder.build())) {
-        expect(httpResponse, HttpStatus.SC_OK);
-
         ClusterResponse response =
-            om.readValue(httpResponse.getEntity().getContent(), ClusterResponse.class);
+            ifValid(
+                om,
+                httpResponse,
+                content ->
+                    om.readValue(httpResponse.getEntity().getContent(), ClusterResponse.class));
 
         Loggers.CONSOLE.info("Clusters returned for file {}:", input);
         printClusters(response.clusters);
+        return ExitCodes.SUCCESS;
       }
     }
 
@@ -100,9 +108,11 @@ public class E02_DcsCluster extends CommandScaffold {
       throws IOException {
     HttpUriRequest request = RequestBuilder.get(dcsService.resolve("list")).build();
     try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
-      expect(httpResponse, HttpStatus.SC_OK);
-
-      ListResponse config = om.readValue(httpResponse.getEntity().getContent(), ListResponse.class);
+      ListResponse config =
+          ifValid(
+              om,
+              httpResponse,
+              content -> om.readValue(httpResponse.getEntity().getContent(), ListResponse.class));
 
       if (config.templates.isEmpty()) {
         Loggers.CONSOLE.error(

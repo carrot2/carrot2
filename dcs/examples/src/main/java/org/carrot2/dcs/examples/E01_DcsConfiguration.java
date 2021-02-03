@@ -17,7 +17,6 @@ import com.carrotsearch.console.launcher.Launcher;
 import com.carrotsearch.console.launcher.Loggers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
@@ -30,15 +29,17 @@ public class E01_DcsConfiguration extends CommandScaffold {
   ExitCode run(CloseableHttpClient httpClient, ObjectMapper om) throws IOException {
     HttpUriRequest request = RequestBuilder.get(dcsService.resolve("list")).build();
     try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
-      expect(httpResponse, HttpStatus.SC_OK);
+      return ifValid(
+          om,
+          httpResponse,
+          content -> {
+            ListResponse response = om.readValue(content, ListResponse.class);
 
-      ListResponse response =
-          om.readValue(httpResponse.getEntity().getContent(), ListResponse.class);
-
-      Loggers.CONSOLE.info("Available algorithms: {}", response.algorithms.keySet());
-      Loggers.CONSOLE.info("Available templates: {}", response.templates);
+            Loggers.CONSOLE.info("Available algorithms: {}", response.algorithms.keySet());
+            Loggers.CONSOLE.info("Available templates: {}", response.templates);
+            return ExitCodes.SUCCESS;
+          });
     }
-    return ExitCodes.SUCCESS;
   }
 
   public static void main(String[] args) {
