@@ -63,8 +63,11 @@
   border-radius: 0 0.125em 0.125em 0;
 }
 
+.ClusterList .SubCluster {
+  line-height: 1.5;
+}
+
 .ClusterList .SubCluster > .icon {
-  vertical-align: 15%;
   white-space: nowrap;
   margin-right: 0.125em;
 }

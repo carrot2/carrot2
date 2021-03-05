@@ -4,9 +4,8 @@ import "./ClusterList.css";
 
 import classNames from "classnames";
 
-import { Icon } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLightbulb } from "@fortawesome/pro-regular-svg-icons";
+import { faFolder, faLightbulb } from "@fortawesome/pro-regular-svg-icons";
 import { view } from "@risingstack/react-easy-state";
 
 import { clusterStore } from "../../store/services.js";
@@ -71,7 +70,7 @@ function SubCluster(props) {
       }}
     >
       <span className="icon">
-        <Icon icon="folder-close" iconSize="0.9em" />
+        <FontAwesomeIcon icon={faFolder} />
         {"\u00a0"}
       </span>
       <span className="labels">{labels}</span>
