@@ -13,7 +13,6 @@ import { Setting } from "@carrotsearch/ui/settings/Setting.js";
 import { Views } from "@carrotsearch/ui/Views.js";
 import { globExclusionsHelpHtml } from "@carrot2/app/service/algorithms/settings/ExclusionsHelp.js";
 import { faQuestionCircle } from "@fortawesome/pro-regular-svg-icons";
-import { TreemapHints } from "@carrot2/app/ui/clusters/TreemapHints.js";
 
 const depthFirstAttributes = descriptor => {
   const collect = (descriptor, target) => {
