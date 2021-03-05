@@ -11,11 +11,11 @@ import { routes } from "./routes.js";
 
 import { AppContainer, App } from "@carrotsearch/ui/AppContainer.js";
 import { Backdrop } from "@carrotsearch/ui/backdrop/Backdrop.js";
-import { CarrotLogo } from "@carrotsearch/ui/logo/CarrotLogo.js";
 
 import { SearchApp } from "./apps/search-app/ui/SearchApp.js";
 import { WorkbenchApp } from "./apps/workbench/ui/WorkbenchApp.js";
 import { AboutApp } from "./apps/about/AboutApp.js";
+import { branding } from "@carrot2/config/branding.js";
 
 export const Carrot2App = () => {
   const className = location => {
@@ -29,7 +29,7 @@ export const Carrot2App = () => {
 
   return (
     <AppContainer containerClassName={className}>
-      <CarrotLogo className="dark" />
+      {branding.createAppLogo()}
 
       <>
         <App

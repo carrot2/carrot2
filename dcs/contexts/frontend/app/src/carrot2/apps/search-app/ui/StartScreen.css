@@ -6,8 +6,10 @@
   padding-top: 20vh;
 }
 
-.StartScreen .CarrotLogo {
+.StartScreen .Logo {
   width: 10em;
+}
+.StartScreen .CarrotLogo {
   transform: translateX(8%);
 }
 .StartScreen .Carrot2Text {

@@ -22,6 +22,7 @@ const carrot2Branding = {
       Carrot<sup>2</sup>
     </>
   ),
+  createAppLogo: () => <CarrotLogo />,
   createSlogan: () => (
     <>
       <a href="http://project.carrot2.org">
