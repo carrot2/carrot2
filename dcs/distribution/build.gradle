@@ -128,10 +128,13 @@ task distDir {
             collectDependencies,
             collectCtxService,
             collectCtxRoot,
-            collectCtxDoc,
             collectCtxJavadoc,
             collectCtxFrontend,
             collectExamples
+
+  if (!project.hasProperty("intellij.launch.skipDocs")) {
+    dependsOn collectCtxDoc
+  }
 
   outputs.file("$outputDir")
 }
