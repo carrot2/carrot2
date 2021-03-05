@@ -4,7 +4,7 @@ import "./WorkbenchWelcome.css";
 
 import { view } from "@risingstack/react-easy-state";
 
-import { sources } from "../../../config-sources.js";
+import { sources } from "../../../sources.js";
 import { workbenchSourceStore } from "../store/source-store.js";
 
 import { DottedAngledArrow } from "./arrows/DottedAngledArrow.js";

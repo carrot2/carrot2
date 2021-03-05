@@ -5,13 +5,13 @@ import "./ResultsScreen.css";
 import { Views } from "@carrotsearch/ui/Views.js";
 import { Loading } from "@carrotsearch/ui/Loading.js";
 
-import { clusterViews, resultsViews } from "../../../config-views.js";
+import { clusterViews, resultsViews } from "../../../views.js";
 
 import { clusterStore, searchResultStore } from "../../../store/services.js";
 
 import { routes } from "../../../routes.js";
-import { branding } from "../../../config-branding.js";
-import { sources } from "../../../config-sources.js";
+import { branding } from "@carrot2/config/branding.js";
+import { sources } from "../../../sources.js";
 
 import { SearchForm } from "./SearchForm.js";
 

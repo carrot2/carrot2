@@ -5,7 +5,7 @@ import { equals } from "@carrotsearch/ui/lang/arrays.js";
 import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
 import { errors } from "@carrotsearch/ui/store/errors.js";
 
-import { algorithms } from "../config-algorithms.js";
+import { algorithms } from "@carrot2/config/algorithms.js";
 
 import { fetchClusters } from "../service/dcs.js";
 import { createClusteringErrorElement } from "../apps/search-app/ui/ErrorMessage.js";

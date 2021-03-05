@@ -4,7 +4,7 @@ import React from "react";
 
 import { view } from "@risingstack/react-easy-state";
 
-import { sources } from "../../../config-sources.js";
+import { sources } from "../../../sources.js";
 
 export const SearchEngineSettings = view(props => {
   const source = sources[props.source];

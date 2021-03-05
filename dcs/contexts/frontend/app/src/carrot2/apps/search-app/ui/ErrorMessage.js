@@ -2,7 +2,7 @@ import "./ErrorMessage.css";
 
 import React from "react";
 
-import { branding } from "../../../config-branding.js";
+import { branding } from "@carrot2/config/branding.js";
 
 export const ErrorMessage = ({ children }) => {
   return (

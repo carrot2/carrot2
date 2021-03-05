@@ -17,8 +17,8 @@ import {
   addGroupFolding
 } from "@carrotsearch/ui/settings/Settings.js";
 
-import { sources } from "../../../config-sources.js";
-import { algorithms } from "../../../config-algorithms.js";
+import { sources } from "../../../sources.js";
+import { algorithms } from "@carrot2/config/algorithms.js";
 import { workbenchSourceStore } from "../store/source-store.js";
 import {
   algorithmStore,

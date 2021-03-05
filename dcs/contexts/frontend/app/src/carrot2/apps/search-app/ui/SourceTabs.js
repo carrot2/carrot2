@@ -3,7 +3,7 @@ import React from "react";
 import { Tab } from "@blueprintjs/core";
 import { PointedTabs } from "@carrotsearch/ui/PointedTabs.js";
 
-import { searchAppSources } from "../../../config-sources.js";
+import { searchAppSources } from "../../../sources.js";
 
 export function SourceTabs(props) {
   return (

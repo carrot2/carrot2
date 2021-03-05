@@ -14,7 +14,7 @@ import { ToolPopover } from "@carrotsearch/ui/ToolPopover.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileExcel } from "@fortawesome/pro-regular-svg-icons";
 import { buildFileName, clusterStore } from "../../../store/services.js";
-import { branding } from "../../../config-branding.js";
+import { branding } from "@carrot2/config/branding.js";
 
 const exportConfig = persistentStore("workbench:export:config", {
   format: "excel",

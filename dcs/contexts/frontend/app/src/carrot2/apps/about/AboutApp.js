@@ -1,9 +1,9 @@
 import React from "react";
 import "./AboutApp.css";
 
-import { branding } from "../../config-branding.js";
-import { sources } from "../../config-sources.js";
-import { algorithms } from "../../config-algorithms.js";
+import { branding } from "@carrot2/config/branding.js";
+import { algorithms } from "@carrot2/config/algorithms.js";
+import { sources } from "@carrot2/app/sources.js";
 
 export const SearchEnginesInfo = () => {
   return (

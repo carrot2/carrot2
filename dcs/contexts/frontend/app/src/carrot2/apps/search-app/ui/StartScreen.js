@@ -7,9 +7,9 @@ import { NavLink, Redirect } from "react-router-dom";
 import { faFlask } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { sources } from "../../../config-sources.js";
-import { clusterViews } from "../../../config-views.js";
-import { branding } from "../../../config-branding.js";
+import { sources } from "../../../sources.js";
+import { clusterViews } from "../../../views.js";
+import { branding } from "@carrot2/config/branding.js";
 import { routes } from "../../../routes.js";
 
 import { SearchForm } from "./SearchForm.js";

@@ -2,7 +2,14 @@ const path = require("path");
 const { NormalModuleReplacementPlugin } = require("webpack");
 const { getLoader, loaderByName } = require("@craco/craco");
 
-const absolutePath = path.join(__dirname, "../ui");
+const uiPath = path.resolve(__dirname, "../ui");
+const appPath = path.resolve(__dirname, "src/carrot2/");
+
+// Configuration of algorithms and branding. The location must be
+// inside the directory in which the build scripts are executed,
+// otherwise various things will fail.
+const configPath = path.resolve(__dirname,
+  process.env.CARROT2_CONFIG_PATH || "src/carrot2/config");
 
 module.exports = {
   webpack: {
@@ -21,7 +28,10 @@ module.exports = {
         ({ constructor }) => constructor && constructor.name === 'ModuleScopePlugin'
       );
 
+      // webpackConfig.resolve.modules = [ overridesPath, ...webpackConfig.resolve.modules ];
       webpackConfig.resolve.plugins.splice(scopePluginIndex, 1);
+      webpackConfig.resolve.alias["@carrot2/app"] = appPath;
+      webpackConfig.resolve.alias["@carrot2/config"] = configPath;
 
       // Create React App processes through Babel only the files found in /src.
       // To use common components in the source form, we need to add the
@@ -34,7 +44,7 @@ module.exports = {
         const include = Array.isArray(match.loader.include)
           ? match.loader.include
           : [match.loader.include];
-        match.loader.include = include.concat(absolutePath);
+        match.loader.include = [ configPath, uiPath, ...include ];
       }
 
       return webpackConfig;

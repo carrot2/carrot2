@@ -25,3 +25,6 @@ yarn-debug.log*
 app/src/carrot2/service/algorithms/descriptors/org.carrot2*
 /app/node_modules/
 /app/.eslintcache
+
+# Customizations at development time
+/app/src/lingo3g/

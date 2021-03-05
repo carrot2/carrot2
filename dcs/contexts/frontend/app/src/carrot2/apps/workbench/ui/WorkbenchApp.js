@@ -17,8 +17,8 @@ import {
 import { Settings } from "@carrotsearch/ui/settings/Settings.js";
 
 import { clusterStore, searchResultStore } from "../../../store/services.js";
-import { clusterViews, resultsViews } from "../../../config-views.js";
-import { sources } from "../../../config-sources.js";
+import { clusterViews, resultsViews } from "../../../views.js";
+import { sources } from "../../../sources.js";
 import { workbenchSourceStore } from "../store/source-store.js";
 import { ExportResults } from "./ExportResults.js";
 import { workbenchViewStore } from "../store/view-store.js";

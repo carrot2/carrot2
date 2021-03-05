@@ -7,8 +7,8 @@ import { FormGroup, HTMLSelect } from "@blueprintjs/core";
 
 import { algorithmStore } from "../../../store/services.js";
 
-import { sources } from "../../../config-sources.js";
-import { algorithms } from "../../../config-algorithms.js";
+import { sources } from "../../../sources.js";
+import { algorithms } from "@carrot2/config/algorithms.js";
 import { workbenchSourceStore } from "../store/source-store.js";
 
 const ComponentSelect = view(({ label, id, components, get, set }) => {

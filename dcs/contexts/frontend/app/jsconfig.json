@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@carrot2/app/*": ["./carrot2/*"],
+      "@carrot2/config/*": ["./carrot2/config/*"]
+    }
+  }
+}

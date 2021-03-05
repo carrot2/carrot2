@@ -7,7 +7,7 @@ import { view } from "@risingstack/react-easy-state";
 import { Radio, RadioGroup, Tag } from "@blueprintjs/core";
 import { Optional } from "@carrotsearch/ui/Optional.js";
 
-import { algorithms } from "../../../config-algorithms.js";
+import { algorithms } from "@carrot2/config/algorithms.js";
 
 import { algorithmStore } from "../../../store/services.js";
 import { Link } from "react-router-dom";

@@ -14,7 +14,7 @@ import {
   InputGroup,
   Position
 } from "@blueprintjs/core";
-import { algorithms } from "../../../config-algorithms.js";
+import { algorithms } from "@carrot2/config/algorithms.js";
 import { ClusteringEngineSettings } from "./ClusteringEngineSettings.js";
 
 import { SearchEngineSettings } from "./SearchEngineSettings.js";

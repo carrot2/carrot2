@@ -9,8 +9,8 @@ import { CarrotLogo } from "@carrotsearch/ui/logo/CarrotLogo.js";
 import { Carrot2Text } from "@carrotsearch/ui/logo/Carrot2Text.js";
 import { CarrotSearchText } from "@carrotsearch/ui/logo/CarrotSearchText.js";
 
-import { dcsServiceUrl, isCarrot2Distribution } from "./config.js";
-import { routes } from "./routes.js";
+import { dcsServiceUrl, isCarrot2Distribution } from "../config.js";
+import { routes } from "../routes.js";
 
 const carrot2 = isCarrot2Distribution();
 
