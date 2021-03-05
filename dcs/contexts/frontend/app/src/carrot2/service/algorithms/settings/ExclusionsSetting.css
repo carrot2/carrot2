@@ -1,0 +1,20 @@
+.ExclusionsSetting {
+  --tab-background-color: var(--tab-background-color-secondary);
+  --tab-border-color: var(--tab-border-color-secondary);
+}
+
+.ExclusionsSetting .ViewsContent {
+  overflow: visible; /* to avoid clipping of the focus ring */
+  margin-top: 0.125em;
+}
+
+.ExclusionsSetting .ViewsTabs {
+  z-index: 1;
+  border-bottom: none;
+}
+
+.ExclusionsSettingHelp {
+  max-width: 32em;
+  max-height: 24em;
+  overflow: auto;
+}

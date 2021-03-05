@@ -85,7 +85,7 @@ const languageModelSettings = [
   settingFrom("matrixBuilder.maximumMatrixSize")
 ];
 
-const dictionariesSettings = [...createExcludedLabelsSetting()];
+const dictionariesSettings = [...createExcludedLabelsSetting("lingo")];
 
 const parameterStore = persistentStore(
   "parameters:algorithm:lingo",
