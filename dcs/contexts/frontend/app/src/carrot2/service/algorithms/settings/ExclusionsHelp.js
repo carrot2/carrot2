@@ -1,12 +1,64 @@
+export const exactExclusionsHelpHtml = `
+<p>
+  Exact patterns require exact, case-sensitive equality between the word or phrase and
+  the dictionary entry. Exact patterns are fast to parse and very fast to apply
+  during clustering.
+</p>
+
+<p>
+  Put one exact pattern per line.
+</p>
+
+<p>
+  For case-insensitive matching, use glob matchers (preferably) or case-insensitive
+  regexp matchers.
+</p>
+
+<h4>Example patterns</h4>
+
+<dl>
+  <dt><code>DevOps</code></dt>
+  <dd>
+    Matches:
+    <ul>
+      <li><code>DevOps</code></li>
+    </ul>
+
+    Does not match:
+
+    <ul>
+      <li><code title="character case does not match'.">devops</code><br/></li>
+      <li><code>DevOps position</code></li>
+    </ul>
+  </dd>
+</dl>`;
+
+export const regexpExclusionsHelpHtml = `
+<p>
+  The regexp patterns check words or phrases against a list of regular expressions you provide.
+  Put one entry per line, use 
+  <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/regex/Pattern.html"
+  target="_blank" >Java regular expressions syntax</a>. If any fragment of a word or phrase matches
+   any regular expression provided in the dictionary, the word or phrase will be filtered out.
+</p>
+
+<p>
+  Regular expression-based matching can result in a dramatic decrease of clustering performance.
+  Use it only when a similar effect cannot be achieved by reasonable number of exact and glob 
+  matching entries.
+</p>`;
+
 export const globExclusionsHelpHtml = `
 <p>
- If a phrase matches any pattern listed, the phrase will not be used as a cluster label.
- Put one pattern per line. Separate words with spaces, <code>*</code> matches zero or more words.
+  Glob patterns allow simple word-based wildcard matching. Use them for case-insensitive
+  matching of literal phrases, as well as "begins with…", "ends with…" or "contains…"
+  types of expressions. Glob patterns are fast to parse and very fast to apply.
 </p>
 
 <h4>Pattern syntax and matching rules</h4>
 
 <ul>
+  <li>Put one entry per line.</li>
   <li>Each entry must consist of one or more space-separated tokens.</li>
   <li>A token can be a sequence of arbitrary characters, such as words, numbers, identifiers.</li>
   <li>Matching is case-insensitive by default.</li>
@@ -63,7 +115,6 @@ export const globExclusionsHelpHtml = `
       <li title="'informations' does not match pattern token 'information'."><code>some more informations</code></li>
     </ul>
   </dd>
-
 
   <dt><code>* more information *</code> (containing match)</dt>
   <dd>

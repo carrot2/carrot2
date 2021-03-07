@@ -2,17 +2,11 @@ import React from "react";
 
 import "./settings/ExclusionsSetting.css";
 
-import { view } from "@risingstack/react-easy-state";
-
 import _set from "lodash.set";
 
-import { TextArea } from "@blueprintjs/core";
-
 import { firstField } from "@carrotsearch/ui/lang/objects.js";
-import { Setting } from "@carrotsearch/ui/settings/Setting.js";
-import { Views } from "@carrotsearch/ui/Views.js";
-import { globExclusionsHelpHtml } from "@carrot2/app/service/algorithms/settings/ExclusionsHelp.js";
-import { faQuestionCircle } from "@fortawesome/pro-regular-svg-icons";
+import { ExclusionsSetting } from "@carrot2/app/service/algorithms/settings/ExclusionsSetting.js";
+import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
 
 const depthFirstAttributes = descriptor => {
   const collect = (descriptor, target) => {
@@ -262,128 +256,92 @@ export const advanced = setting => {
   return setting;
 };
 
-const PlainTextExclusionSetting = view(({ setting, get, set, type }) => {
-  const findEntry = () => {
-    const array = get(setting);
-    return array.find(e => Array.isArray(e[type]));
-  };
-
-  // Look for the first entry containing the "glob" list or create one.
-  const getExclusions = () => {
-    const entry = findEntry();
-    return entry ? entry[type].join("\r") : "";
-  };
-
-  const setExclusions = val => {
-    const entry = findEntry();
-    const split = val.trim().length > 0 ? val.split("\n") : [];
-    if (entry) {
-      entry[type] = split;
-    } else {
-      const array = get(setting);
-      array.push({ [type]: split });
-    }
-
-    // Set a new shallow copy so that the upstream code sees the change we made inside the array.
-    set(setting, get(setting).slice(0));
-  };
-
-  return (
-    <TextArea
-      style={{ width: "100%", minHeight: "8rem" }}
-      value={getExclusions()}
-      onChange={e => setExclusions(e.target.value)}
-    />
-  );
-});
-
-const createExclusionView = (type, help) => {
-  return {
-    label: type,
-    createContentElement: (visible, { setting, get, set }) => {
-      return (
-        <PlainTextExclusionSetting
-          setting={setting}
-          get={get}
-          set={set}
-          type={type}
-        />
-      );
+const createActiveViewStore = (algorithmId, paramName) => {
+  const activeViewStore = persistentStore(
+    `workbench:settings:${algorithmId}:${paramName}:view`,
+    {
+      activeView: "glob"
     },
-    tools: [
-      {
-        id: "interaction",
-        icon: faQuestionCircle,
-        createContentElement: () => {
-          return (
-            <div
-              className="ExclusionsSettingHelp"
-              dangerouslySetInnerHTML={{ __html: help }}
-            />
-          );
-        },
-        title: "Syntax help"
-      }
-    ]
+    {
+      get: () => activeViewStore.activeView,
+      set: v => (activeViewStore.activeView = v)
+    }
+  );
+  return activeViewStore;
+};
+
+const patternTypesHelp = `
+<p>
+  Three pattern types are available:
+</p>
+
+<ul>
+  <li>
+    <strong>glob</strong>: allows simple word-based wildcard matching. 
+    Use it for case-insensitive matching of literal phrases, as well as "begins with…", 
+    "ends with…" or "contains…" types of expressions.
+  </li>
+  <li>
+    <strong>exact</strong>: requires exact case-sensitive equality between the word or phrase
+    and the dictionary entry.  
+  </li>
+  <li>
+    <strong>regex</strong>: word and phrase filtering based on Java regular expressions.
+  </li>
+</ul>
+
+<p>
+  Combine some or all pattern types as required.
+</p>`;
+
+export const createExcludedLabelsSetting = algorithmId => {
+  const activeViewStore = createActiveViewStore(algorithmId, "labelExclusions");
+
+  return {
+    id: "dictionaries.labelFilters",
+    label: "Excluded label patterns",
+    pathRest: "dictionaries.labelFilters",
+    factory: (s, get, set) => (
+      <ExclusionsSetting
+        setting={s}
+        get={get}
+        set={set}
+        getActiveView={activeViewStore.get}
+        setActiveView={activeViewStore.set}
+      />
+    ),
+    description: `
+<p>
+  Label exclusion patterns. If a word or a phrase matches any of the patterns provided here,
+  it will not be used as a cluster label.  
+</p>
+
+${patternTypesHelp}`
   };
 };
-const exclusionViews = [
-  {
-    views: {
-      glob: createExclusionView("glob", globExclusionsHelpHtml),
-      exact: createExclusionView("exact"),
-      regex: createExclusionView("regex")
-    }
-  }
-];
 
-const ExclusionsSetting = view(
-  ({ setting, get, set, getActiveView, setActiveView }) => {
-    const { label, description } = setting;
-
-    return (
-      <Setting
-        className="ExclusionsSetting"
-        label={label}
-        description={description}
-      >
-        <Views
-          views={exclusionViews}
-          activeView="glob"
-          onViewChange={() => {}}
-          setting={setting}
-          get={get}
-          set={set}
-        />
-      </Setting>
-    );
-  }
-);
-
-export const createExcludedLabelsSetting = () => {
-  return [
-    {
-      id: "dictionaries.labelFilters",
-      label: "Excluded label patterns",
-      pathRest: "dictionaries.labelFilters",
-      factory: (s, get, set) => (
-        <ExclusionsSetting setting={s} get={get} set={set} />
-      ),
-      description: globExclusionsHelpHtml
-    },
-
-    {
-      id: "dictionaries.wordFilters",
-      label: "Stop words",
-      pathRest: "dictionaries.wordFilters",
-      description: `
+export const createExcludedWordsSetting = algorithmId => {
+  const activeViewStore = createActiveViewStore(algorithmId, "wordExclusions");
+  return {
+    id: "dictionaries.wordFilters",
+    label: "Stop words",
+    pathRest: "dictionaries.wordFilters",
+    description: `
 <p>
-  List of words to exclude from processing. Put one word per line, matching is
-  case-insensitive.
-</p>`,
-      factory: (s, get, set) => (
-        <ExclusionsSetting setting={s} get={get} set={set} />
-      )
-    }
-  ];
+  List of words to exclude from processing. If a word is excluded, it will not have
+   influence on the clusters the algorithm creates, but may still appear in cluster 
+   labels, such as <em>University of Washington</em>, to aid readability.
+</p>
+
+${patternTypesHelp}`,
+    factory: (s, get, set) => (
+      <ExclusionsSetting
+        setting={s}
+        get={get}
+        set={set}
+        getActiveView={activeViewStore.get}
+        setActiveView={activeViewStore.set}
+      />
+    )
+  };
 };

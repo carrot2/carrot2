@@ -7,6 +7,7 @@ import {
   advanced,
   collectDefaults,
   createExcludedLabelsSetting,
+  createExcludedWordsSetting,
   getDescriptorsById,
   settingFromDescriptor,
   settingFromDescriptorRecursive,
@@ -85,7 +86,10 @@ const languageModelSettings = [
   settingFrom("matrixBuilder.maximumMatrixSize")
 ];
 
-const dictionariesSettings = [...createExcludedLabelsSetting("lingo")];
+const dictionariesSettings = [
+  createExcludedLabelsSetting("lingo"),
+  createExcludedWordsSetting("lingo")
+];
 
 const parameterStore = persistentStore(
   "parameters:algorithm:lingo",

@@ -18,3 +18,9 @@
   max-height: 24em;
   overflow: auto;
 }
+
+.ExclusionsSettingInlineHelp {
+  min-height: 3em;
+  color: var(--text-color-lighter);
+  margin-top: 0.25em;
+}
