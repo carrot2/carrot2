@@ -53,7 +53,11 @@ public final class LanguageComponentsLoader {
     if (algorithmRestriction != null) {
       Set<Class<?>> components =
           Arrays.stream(algorithmRestriction)
-              .flatMap(algorithm -> algorithm.requiredLanguageComponents().stream())
+              .flatMap(
+                  algorithm ->
+                      Stream.concat(
+                          algorithm.optionalLanguageComponents().stream(),
+                          algorithm.requiredLanguageComponents().stream()))
               .collect(Collectors.toSet());
       componentFilters =
           fullSet -> {
