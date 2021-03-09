@@ -51,7 +51,13 @@ const createPlainTextExclusionEditor = (type, setting, get, set) => (
   <PlainTextExclusionEditor setting={setting} get={get} set={set} type={type} />
 );
 
-const createExclusionView = (label, settingFactory, helpLine, helpText, tools) => {
+const createExclusionView = (
+  label,
+  settingFactory,
+  helpLine,
+  helpText,
+  tools
+) => {
   return {
     label: label,
     createContentElement: (visible, { setting, get, set }) => (
