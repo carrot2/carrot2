@@ -5,7 +5,10 @@ import "./settings/ExclusionsSetting.css";
 import _set from "lodash.set";
 
 import { firstField } from "@carrotsearch/ui/lang/objects.js";
-import { ExclusionsSetting } from "@carrot2/app/service/algorithms/settings/ExclusionsSetting.js";
+import {
+  createExclusionViews,
+  ExclusionsSetting
+} from "@carrot2/app/service/algorithms/settings/ExclusionsSetting.js";
 import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
 
 const depthFirstAttributes = descriptor => {
@@ -294,8 +297,9 @@ const patternTypesHelp = `
   Combine some or all pattern types as required.
 </p>`;
 
-export const createExcludedLabelsSetting = algorithmId => {
+export const createExcludedLabelsSetting = (algorithmId, viewCustomizer) => {
   const activeViewStore = createActiveViewStore(algorithmId, "labelExclusions");
+  const views = createExclusionViews(viewCustomizer);
 
   return {
     id: "dictionaries.labelFilters",
@@ -306,6 +310,7 @@ export const createExcludedLabelsSetting = algorithmId => {
         setting={s}
         get={get}
         set={set}
+        views={views}
         getActiveView={activeViewStore.get}
         setActiveView={activeViewStore.set}
       />
@@ -322,6 +327,8 @@ ${patternTypesHelp}`
 
 export const createExcludedWordsSetting = algorithmId => {
   const activeViewStore = createActiveViewStore(algorithmId, "wordExclusions");
+  const views = createExclusionViews();
+
   return {
     id: "dictionaries.wordFilters",
     label: "Stop words",
@@ -339,6 +346,7 @@ ${patternTypesHelp}`,
         setting={s}
         get={get}
         set={set}
+        views={views}
         getActiveView={activeViewStore.get}
         setActiveView={activeViewStore.set}
       />

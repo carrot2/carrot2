@@ -12,7 +12,7 @@ import { TextArea } from "@blueprintjs/core";
 import { ButtonLink } from "@carrotsearch/ui/ButtonLink.js";
 import { DescriptionPopover } from "@carrotsearch/ui/DescriptionPopover.js";
 
-const PlainTextExclusionSetting = view(({ setting, get, set, type }) => {
+const PlainTextExclusionEditor = view(({ setting, get, set, type }) => {
   const findEntry = () => {
     const array = get(setting);
     return array.find(e => Array.isArray(e[type]));
@@ -47,57 +47,67 @@ const PlainTextExclusionSetting = view(({ setting, get, set, type }) => {
   );
 });
 
-const createExclusionView = (type, helpLine, helpText) => {
+const createPlainTextExclusionEditor = (type, setting, get, set) => (
+  <PlainTextExclusionEditor setting={setting} get={get} set={set} type={type} />
+);
+
+const createExclusionView = (label, settingFactory, helpLine, helpText) => {
   return {
-    label: type,
-    createContentElement: (visible, { setting, get, set }) => {
-      return (
-        <>
-          <PlainTextExclusionSetting
-            setting={setting}
-            get={get}
-            set={set}
-            type={type}
-          />
-          <div className="ExclusionsSettingInlineHelp">
-            {helpLine},{" "}
-            <DescriptionPopover description={helpText}>
-              <ButtonLink>syntax help</ButtonLink>
-            </DescriptionPopover>
-          </div>
-        </>
-      );
-    }
+    label: label,
+    createContentElement: (visible, { setting, get, set }) => (
+      <>
+        {settingFactory(setting, get, set)}
+        <div className="ExclusionsSettingInlineHelp">
+          {helpLine},{" "}
+          <DescriptionPopover description={helpText}>
+            <ButtonLink>syntax help</ButtonLink>
+          </DescriptionPopover>
+        </div>
+      </>
+    )
   };
 };
 
-const exclusionViews = [
-  {
-    views: {
-      glob: createExclusionView(
-        "glob",
-        <span>
-          One pattern per line, separate words with spaces, <code>*</code> is
-          zero or more words
-        </span>,
-        globExclusionsHelpHtml
-      ),
-      exact: createExclusionView(
-        "exact",
-        <span>One label per line, exact matching</span>,
-        exactExclusionsHelpHtml
-      ),
-      regex: createExclusionView(
-        "regexp",
-        <span>One Java regex per line</span>,
-        regexpExclusionsHelpHtml
-      )
-    }
+export const createExclusionViews = customizer => {
+  const views = {
+    glob: createExclusionView(
+      "glob",
+      (setting, get, set) =>
+        createPlainTextExclusionEditor("glob", setting, get, set),
+      <span>
+        One pattern per line, separate words with spaces, <code>*</code> is zero
+        or more words
+      </span>,
+      globExclusionsHelpHtml
+    ),
+    exact: createExclusionView(
+      "exact",
+      (setting, get, set) =>
+        createPlainTextExclusionEditor("exact", setting, get, set),
+      <span>One label per line, exact matching</span>,
+      exactExclusionsHelpHtml
+    ),
+    regex: createExclusionView(
+      "regexp",
+      (setting, get, set) =>
+        createPlainTextExclusionEditor("regexp", setting, get, set),
+      <span>One Java regex per line</span>,
+      regexpExclusionsHelpHtml
+    )
+  };
+  if (customizer) {
+    customizer(views, createExclusionView);
   }
-];
+
+  return [
+    {
+      views: views
+    }
+  ];
+};
 
 export const ExclusionsSetting = view(
-  ({ setting, get, set, getActiveView, setActiveView }) => {
+  ({ setting, get, set, views, getActiveView, setActiveView }) => {
     const { label, description } = setting;
 
     return (
@@ -107,7 +117,7 @@ export const ExclusionsSetting = view(
         description={description}
       >
         <Views
-          views={exclusionViews}
+          views={views}
           activeView={getActiveView()}
           onViewChange={setActiveView}
           setting={setting}
