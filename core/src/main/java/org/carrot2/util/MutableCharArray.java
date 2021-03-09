@@ -156,30 +156,21 @@ public final class MutableCharArray implements CharSequence, Cloneable {
     return hash;
   }
 
-  /** See comments in the header of this class. */
   @Override
   public boolean equals(Object other) {
-    if (other == this) return true;
+    return other == this || getClass().isInstance(other) && equals(getClass().cast(other));
+  }
 
-    if (other instanceof MutableCharArray) {
-      final MutableCharArray otherArray = (MutableCharArray) other;
-
-      // Compare hashes first, then values.
-      if (this.length == otherArray.length && this.hashCode() == otherArray.hashCode()) {
-        int j = otherArray.start;
-        int k = start;
-
-        for (int i = this.length - 1; i >= 0; i--, j++, k++) {
-          if (otherArray.buffer[j] != buffer[k]) {
-            return false;
-          }
-        }
-
-        return true;
-      }
-    }
-
-    return false;
+  public final boolean equals(MutableCharArray other) {
+    return this.hash == other.hash
+        && this.length == other.length
+        && Arrays.equals(
+            this.buffer,
+            this.start,
+            this.start + this.length,
+            other.buffer,
+            other.start,
+            other.start + other.length);
   }
 
   /**
