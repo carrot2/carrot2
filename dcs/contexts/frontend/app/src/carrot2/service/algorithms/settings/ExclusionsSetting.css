@@ -24,3 +24,6 @@
   color: var(--text-color-lighter);
   margin-top: 0.25em;
 }
+.ExclusionsSettingInlineHelp .error {
+  color: var(--text-color-red);
+}

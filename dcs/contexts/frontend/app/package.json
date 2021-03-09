@@ -24,6 +24,8 @@
     "filesize": "6.1.0",
     "ky": "0.25.0",
     "lodash.set": "4.3.2",
+    "lodash.isplainobject": "4.0.6",
+    "lodash.isstring": "4.0.1",
     "lru-cache": "6.0.0",
     "mitt": "2.1.0",
     "path-to-regexp": "6.2.0",
