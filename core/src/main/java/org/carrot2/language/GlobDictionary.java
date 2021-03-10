@@ -29,12 +29,12 @@ import org.carrot2.util.StringUtils;
 /**
  * This dictionary implementation is a middle ground between the complexity of regular expressions
  * and sheer speed of plain text matching. It offers case sensitive and case insensitive matching,
- * as well as globs (wildcards matching any character sequence).
+ * as well as globs (wildcards matching any token sequence).
  */
 public class GlobDictionary implements Predicate<CharSequence> {
   private final Function<String, String> tokenNormalization = defaultTokenNormalization();
 
-  final Map<String, List<WordPattern>> keyToPatterns;
+  final Map<String, List<WordPattern>> tokenToPatterns;
 
   public GlobDictionary(Stream<WordPattern> patterns) {
     /*
@@ -46,7 +46,7 @@ public class GlobDictionary implements Predicate<CharSequence> {
      * This is similar in nature to this:
      * http://swtch.com/~rsc/regexp/regexp4.html
      */
-    keyToPatterns = compile(patterns, tokenNormalization);
+    tokenToPatterns = compile(patterns, tokenNormalization);
   }
 
   @Override
@@ -57,9 +57,9 @@ public class GlobDictionary implements Predicate<CharSequence> {
     String[] normalizedTerms = null;
 
     // Effectively an identity hash set of patterns checked so far.
-    HashSet<WordPattern> checkedPatterns = null;
-    for (String term : inputTerms) {
-      List<WordPattern> patterns = keyToPatterns.get(tokenNormalization.apply(term));
+    HashSet<WordPattern> checkedPatterns = new HashSet<>();
+    for (String token : inputTerms) {
+      List<WordPattern> patterns = tokenToPatterns.get(tokenNormalization.apply(token));
       if (patterns != null) {
         if (normalizedTerms == null) {
           normalizedTerms = new String[inputTerms.length];
@@ -69,16 +69,10 @@ public class GlobDictionary implements Predicate<CharSequence> {
         }
 
         for (WordPattern pattern : patterns) {
-          if (matches(pattern, inputTerms, normalizedTerms)) {
+          if (checkedPatterns.add(pattern) && matches(pattern, inputTerms, normalizedTerms)) {
             // Abort checking on first hit.
             return true;
           }
-        }
-
-        if (checkedPatterns == null) {
-          checkedPatterns = new HashSet<WordPattern>(patterns);
-        } else {
-          checkedPatterns.addAll(patterns);
         }
       }
     }
@@ -119,7 +113,7 @@ public class GlobDictionary implements Predicate<CharSequence> {
           tIndex++;
           break;
 
-        case WILDCARD:
+        case WILDCARD_ZERO_OR_MORE:
           if (pIndex + 1 == pMax) {
             // This is a trailing wildcard. The input matched, regardless
             // of any remaining tokens.
@@ -128,14 +122,14 @@ public class GlobDictionary implements Predicate<CharSequence> {
 
           // Reluctant match: seek for the next non-wildcard pattern's token.
           Token nextToken = patternTokens.get(++pIndex);
-          assert nextToken.matchType != MatchType.WILDCARD;
+          assert !nextToken.matchType.isWildcard();
           while (tIndex < tMax
               && !match(nextToken, verbatimTerms[tIndex], normalizedTerms[tIndex])) {
             tIndex++;
           }
 
           if (tIndex == tMax) {
-            // We didn't find next matching token.
+            // We didn't find the next matching token.
             return false;
           }
 
@@ -167,7 +161,7 @@ public class GlobDictionary implements Predicate<CharSequence> {
 
   @Override
   public String toString() {
-    return "GlobDictionary: " + this.keyToPatterns;
+    return "GlobDictionary: " + this.tokenToPatterns;
   }
 
   private static HashMap<String, List<WordPattern>> compile(
@@ -208,13 +202,10 @@ public class GlobDictionary implements Predicate<CharSequence> {
     patterns.forEach(
         (pattern) -> {
           for (Token t : pattern.tokens) {
-            if (t.matchType == MatchType.NORMALIZED || t.matchType == MatchType.VERBATIM) {
+            if (!t.matchType.isWildcard()) {
               String key = normalize.apply(t.image);
-              List<WordPattern> patternList = keyToPatterns.get(key);
-              if (patternList == null) {
-                patternList = new ArrayList<>();
-                keyToPatterns.put(key, patternList);
-              }
+              List<WordPattern> patternList =
+                  keyToPatterns.computeIfAbsent(key, k -> new ArrayList<>());
               patternList.add(pattern);
             }
           }
@@ -224,11 +215,11 @@ public class GlobDictionary implements Predicate<CharSequence> {
 
   private static void checkInvalid(WordPattern pattern) {
     if (pattern.tokens().isEmpty()) {
-      throw new IllegalArgumentException("Empty patterns make no sense.");
+      throw new IllegalArgumentException("Empty pattern is not valid.");
     }
 
-    if (pattern.tokens().size() == 1 && pattern.tokens().get(0).matchType() == MatchType.WILDCARD) {
-      throw new IllegalArgumentException("A wildcard pattern not allowed.");
+    if (pattern.tokens().size() == 1 && pattern.tokens().get(0).matchType().isWildcard()) {
+      throw new IllegalArgumentException("A wildcard-only pattern is not valid.");
     }
   }
 
@@ -257,6 +248,11 @@ public class GlobDictionary implements Predicate<CharSequence> {
     }
 
     @Override
+    public boolean equals(Object obj) {
+      return getClass().isInstance(obj) && compareTo((WordPattern) obj) == 0;
+    }
+
+    @Override
     public int compareTo(WordPattern other) {
       int v;
       List<Token> t1 = this.tokens;
@@ -274,11 +270,15 @@ public class GlobDictionary implements Predicate<CharSequence> {
 
   public static enum MatchType {
     /** Wildcard match (zero or more tokens). */
-    WILDCARD,
+    WILDCARD_ZERO_OR_MORE,
     /** Vermatim token image match. */
     VERBATIM,
     /** Normalized token image match. */
     NORMALIZED;
+
+    public boolean isWildcard() {
+      return this == WILDCARD_ZERO_OR_MORE;
+    }
   }
 
   public static final class Token implements Comparable<Token> {
@@ -312,9 +312,10 @@ public class GlobDictionary implements Predicate<CharSequence> {
         case NORMALIZED:
           return image();
         case VERBATIM:
-          return "+" + image();
-        case WILDCARD:
-          return "**";
+          return "'" + image() + "'";
+        case WILDCARD_ZERO_OR_MORE:
+          assert image().equals("*");
+          return image();
       }
       throw new RuntimeException();
     }
@@ -326,7 +327,7 @@ public class GlobDictionary implements Predicate<CharSequence> {
   }
 
   public static class PatternParser {
-    static final Token WILDCARD = new Token("*", MatchType.WILDCARD);
+    static final Token ZERO_OR_MORE = new Token("*", MatchType.WILDCARD_ZERO_OR_MORE);
 
     public WordPattern parse(String pattern) throws ParseException {
       ArrayList<Token> tokens = new ArrayList<>();
@@ -337,10 +338,11 @@ public class GlobDictionary implements Predicate<CharSequence> {
           break;
         }
 
-        switch (pattern.charAt(pos)) {
+        final char chr;
+        switch (chr = pattern.charAt(pos)) {
           case '*':
-            if (tokens.isEmpty() || tokens.get(tokens.size() - 1) != WILDCARD) {
-              tokens.add(WILDCARD);
+            if (tokens.isEmpty() || tokens.get(tokens.size() - 1) != ZERO_OR_MORE) {
+              tokens.add(ZERO_OR_MORE);
             }
             pos = spaceOrEnd(pattern, pos + 1);
             break;
@@ -352,7 +354,8 @@ public class GlobDictionary implements Predicate<CharSequence> {
             break;
 
           case '"':
-            pos = parseQuoted(pattern, pos + 1, tokens);
+          case '\'':
+            pos = parseQuoted(pattern, chr, pos + 1, tokens);
             pos = spaceOrEnd(pattern, pos);
             break;
 
@@ -373,7 +376,7 @@ public class GlobDictionary implements Predicate<CharSequence> {
         throw new ParseException("Empty patterns not allowed.", -1);
       }
 
-      if (tokens.size() == 1 && tokens.get(0).matchType == MatchType.WILDCARD) {
+      if (tokens.size() == 1 && tokens.get(0).matchType.isWildcard()) {
         throw new ParseException("Single wildcard patterns not allowed.", -1);
       }
     }
@@ -428,19 +431,26 @@ public class GlobDictionary implements Predicate<CharSequence> {
       return pos;
     }
 
-    private int parseQuoted(String pattern, int pos, ArrayList<Token> tokens)
+    private int parseQuoted(String pattern, char openingQuote, int pos, ArrayList<Token> tokens)
         throws ParseException {
       StringBuilder sb = new StringBuilder();
       int max = pattern.length();
       int quoteStart = pos;
 
       for (; pos < max; pos++) {
-        switch (pattern.charAt(pos)) {
+        final char chr = pattern.charAt(pos);
+        switch (chr) {
           case '"':
-            // Skip the quote.
-            pos++;
-            tokens.add(new Token(sb.toString(), MatchType.VERBATIM));
-            return pos;
+          case '\'':
+            // Skip the quote if it's consistent with the opening quote.
+            if (openingQuote == chr) {
+              pos++;
+              tokens.add(new Token(sb.toString(), MatchType.VERBATIM));
+              return pos;
+            } else {
+              sb.append(pattern.charAt(pos));
+            }
+            break;
 
           case '\\':
             pos++;

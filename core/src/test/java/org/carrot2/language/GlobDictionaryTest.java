@@ -12,6 +12,7 @@ package org.carrot2.language;
 
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -21,25 +22,13 @@ import org.junit.Test;
 
 public class GlobDictionaryTest extends TestBase {
   @Test
-  public void patternParser() throws ParseException {
+  public void patternParser() {
     GlobDictionary.PatternParser parser = new GlobDictionary.PatternParser();
     Function<String, String> toString =
         (in) -> {
           try {
             return parser.parse(in).tokens().stream()
-                .map(
-                    (t) -> {
-                      switch (t.matchType) {
-                        case NORMALIZED:
-                          return t.image;
-                        case VERBATIM:
-                          return '+' + t.image;
-                        case WILDCARD:
-                          return "**";
-                        default:
-                      }
-                      return null;
-                    })
+                .map(Objects::toString)
                 .collect(Collectors.joining(","));
           } catch (Exception e) {
             throw new RuntimeException(e);
@@ -52,28 +41,28 @@ public class GlobDictionaryTest extends TestBase {
     Assertions.assertThat(toString.apply(" foo")).isEqualTo("foo");
 
     // verbatim token.
-    Assertions.assertThat(toString.apply("\"Foo\"")).isEqualTo("+Foo");
-    Assertions.assertThat(toString.apply(" \"Foo\"")).isEqualTo("+Foo");
-    Assertions.assertThat(toString.apply("\"Foo\" ")).isEqualTo("+Foo");
+    Assertions.assertThat(toString.apply("\"Foo\"")).isEqualTo("'Foo'");
+    Assertions.assertThat(toString.apply(" \"Foo\"")).isEqualTo("'Foo'");
+    Assertions.assertThat(toString.apply("\"Foo\" ")).isEqualTo("'Foo'");
 
     // multiple tokens.
     Assertions.assertThat(toString.apply("foo bar")).isEqualTo("foo,bar");
-    Assertions.assertThat(toString.apply("foo bar \"Bar\"")).isEqualTo("foo,bar,+Bar");
+    Assertions.assertThat(toString.apply("foo bar \"Bar\"")).isEqualTo("foo,bar,'Bar'");
 
     // wildcards.
-    Assertions.assertThat(toString.apply("* bar")).isEqualTo("**,bar");
+    Assertions.assertThat(toString.apply("* bar")).isEqualTo("*,bar");
 
     // multiple wildcards in a sequence get optimized into a single one.
-    Assertions.assertThat(toString.apply("* * bar * *")).isEqualTo("**,bar,**");
+    Assertions.assertThat(toString.apply("* * bar * *")).isEqualTo("*,bar,*");
 
     // Quoted wildcard (verbatim match for the symbol).
-    Assertions.assertThat(toString.apply("bar \"*\"")).isEqualTo("bar,+*");
+    Assertions.assertThat(toString.apply("bar \"*\"")).isEqualTo("bar,'*'");
 
     // Whitespace inside the quoted token.
-    Assertions.assertThat(toString.apply("\"foo bar\"")).isEqualTo("+foo bar");
+    Assertions.assertThat(toString.apply("\"foo bar\"")).isEqualTo("'foo bar'");
 
     // Quote inside token.
-    Assertions.assertThat(toString.apply("foo\\\"bar")).isEqualTo("foo\"bar");
+    Assertions.assertThat(toString.apply("foo\\\"BAR")).isEqualTo("foo\"BAR");
 
     // Neither of these should match.
     for (String invalidPattern :
@@ -83,6 +72,8 @@ public class GlobDictionaryTest extends TestBase {
             "unbalancedright\"",
             "unbalancedright\" ",
             "\"internal\"nquote\" ",
+            "'unbalanced quote\"",
+            "\"unbalanced quote'",
             "foo\"bar",
             "*foo",
             "foo*",
@@ -132,6 +123,24 @@ public class GlobDictionaryTest extends TestBase {
     dictionaryOf("\"Upper\" \"Case\"", "case")
         .matchesAll("Upper Case", "case", "CASE")
         .doesNotMatchAny("upper case", "UPPER CASE", "Upper case");
+  }
+
+  @Test
+  public void verbatimTermsSingleQuotes() throws ParseException {
+    dictionaryOf("'Upper' Case")
+        .matchesAll("Upper Case", "Upper case", "Upper CASE")
+        .doesNotMatchAny("upper case", "UPPER CASE");
+
+    dictionaryOf("'Upper' 'Case'")
+        .matchesAll("Upper Case")
+        .doesNotMatchAny("upper case", "UPPER CASE", "Upper case");
+
+    dictionaryOf("'Upper' 'Case'", "case")
+        .matchesAll("Upper Case", "case", "CASE")
+        .doesNotMatchAny("upper case", "UPPER CASE", "Upper case");
+
+    dictionaryOf("'odd\"quote'").matchesAll("odd\"quote").doesNotMatchAny("ODD\"quote");
+    dictionaryOf("\"odd'quote\"").matchesAll("odd'quote").doesNotMatchAny("ODD'quote");
   }
 
   @Test
@@ -200,7 +209,7 @@ public class GlobDictionaryTest extends TestBase {
 
     // We don't follow the rules for Turkish, so this isn't correct, but we require consistency.
     // Here's what the output of normalizing "Iiİı" looks like: "iii̇ı", but it contains combining
-    // letters, which would require additional unicode canization/ normalization; see
+    // letters, which would require additional unicode canonization/ normalization; see
     // http://unicode.org/reports/tr15/
     Assertions.assertThat(f.apply("Iiİı"))
         .isEqualTo(
