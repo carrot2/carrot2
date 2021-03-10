@@ -39,7 +39,7 @@ export const Carrot2App = () => {
           component={SearchApp}
           default={true}
         >
-          <p>Clustering of search results public search engines.</p>
+          <p>Clustering of search results from public search engines.</p>
         </App>
 
         <App
