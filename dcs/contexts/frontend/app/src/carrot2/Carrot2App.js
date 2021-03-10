@@ -5,7 +5,6 @@ import "./Carrot2App.css";
 import { matchPath, Route, Switch } from "react-router-dom";
 
 import { faFlask, faInfo, faSearch } from "@fortawesome/pro-regular-svg-icons";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 import { routes } from "./routes.js";
 
