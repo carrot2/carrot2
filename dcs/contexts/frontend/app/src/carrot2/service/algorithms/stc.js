@@ -113,5 +113,5 @@ export const stc = {
   getLanguage: () => parameterStore.language,
   getDefaults: parameterStore.getDefaults,
   resetToDefaults: parameterStore.resetToDefaults,
-  applyQueryHint: (params, query) => params.queryHint = query
+  applyQueryHint: (params, query) => (params.queryHint = query)
 };
