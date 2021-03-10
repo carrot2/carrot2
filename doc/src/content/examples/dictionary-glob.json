@@ -1,0 +1,9 @@
+{
+  "glob": [
+    "more information",
+    "more information *",
+    "* about *",
+    "big ?",
+    "+ apple"
+  ]
+}

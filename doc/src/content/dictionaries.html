@@ -208,21 +208,7 @@
     </p>
 
     <figure>
-      <pre data-language="json">
-        {
-          "exact": [
-            "Literal case-sensitive match"
-          ],
-          "glob": [
-            "starts with phrase *",
-            "* contains words *"
-          ],
-          "regexp": [
-            "(?).+BadLabel.+",
-            "(?)^[0-9]\s*.*"
-          ]
-        }
-      </pre>
+      <pre data-embed="./examples/dictionary.json"></pre>
       <figcaption>
         <p>
           An example word or label filter dictionary with entries of three
@@ -271,14 +257,7 @@
       </p>
 
       <figure>
-        <pre data-language="json">
-          {
-            "exact": [
-              "DevOps",
-              "Windows 2000"
-            ]
-          }
-        </pre>
+        <pre data-embed="./examples/dictionary-exact.json"></pre>
         <figcaption>
           <p>
             An example label filter dictionary with two <code>exact</code> matcher entries.
@@ -311,17 +290,7 @@
       </p>
 
       <figure>
-        <pre data-language="json">
-          {
-            "glob": [
-              "more information",
-              "more information *",
-              "* about *",
-              "big ?",
-              "+ apple"
-            ]
-          }
-        </pre>
+        <pre data-embed="./examples/dictionary-glob.json"></pre>
         <figcaption>
           <p>
             An example label filter dictionary with <code>glob</code> matcher entries.
@@ -551,14 +520,7 @@
       </p>
 
       <figure>
-        <pre data-language="json">
-          {
-            "regexp": [
-              "Windows 9[58]",
-              "(?)^[0-9]\s*.*"
-            ]
-          }
-        </pre>
+        <pre data-embed="./examples/dictionary-regexp.json"></pre>
         <figcaption>
           <p>
             An example label filter dictionary with two <code>regexp</code> matcher entries.

@@ -1,0 +1,13 @@
+{
+  "exact": [
+    "Literal case-sensitive match"
+  ],
+  "glob": [
+    "starts with phrase *",
+    "* contains words *"
+  ],
+  "regexp": [
+    "(?).+BadLabel.+",
+    "(?)^[0-9]\\s*.*"
+  ]
+}
