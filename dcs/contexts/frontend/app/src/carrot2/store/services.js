@@ -42,7 +42,7 @@ export const clusterStore = store({
   }
 });
 
-export const buildRequestJson = (onlyNonDefault = false) => {
+export const buildRequestJson = (onlyNonDefault = false, query) => {
   const algorithm = algorithmStore.getAlgorithmInstance();
   const settings = algorithm.getSettings();
   const defaults = algorithm.getDefaults();
@@ -56,6 +56,9 @@ export const buildRequestJson = (onlyNonDefault = false) => {
         }
       : null
   );
+  if (query && query.trim().length > 0) {
+    algorithm.applyQueryHint(currentParams, query);
+  }
   const currentLanguage = algorithm.getLanguage();
 
   return {
@@ -83,8 +86,7 @@ const loadClusters = async function (searchResult) {
     try {
       const fieldsToCluster = searchResult.source.getFieldsToCluster();
 
-      const requestJson = buildRequestJson();
-      requestJson.parameters.queryHint = query;
+      const requestJson = buildRequestJson(false, query);
 
       const response = await fetchClusters(
         requestJson,

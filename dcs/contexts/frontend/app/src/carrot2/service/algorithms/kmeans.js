@@ -110,5 +110,6 @@ export const kmeans = {
   getSettings: () => settings,
   getLanguage: () => parameterStore.language,
   getDefaults: parameterStore.getDefaults,
-  resetToDefaults: parameterStore.resetToDefaults
+  resetToDefaults: parameterStore.resetToDefaults,
+  applyQueryHint: (params, query) => params.queryHint = query
 };
