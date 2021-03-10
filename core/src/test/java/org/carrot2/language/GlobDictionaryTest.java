@@ -51,8 +51,9 @@ public class GlobDictionaryTest extends TestBase {
 
     // wildcards.
     Assertions.assertThat(toString.apply("* bar")).isEqualTo("*,bar");
+    Assertions.assertThat(toString.apply("? bar")).isEqualTo("?,bar");
 
-    // multiple wildcards in a sequence get optimized into a single one.
+    // multiple wildcards in a sequence get rewritten into a single one.
     Assertions.assertThat(toString.apply("* * bar * *")).isEqualTo("*,bar,*");
 
     // Quoted wildcard (verbatim match for the symbol).
@@ -78,6 +79,8 @@ public class GlobDictionaryTest extends TestBase {
             "*foo",
             "foo*",
             "*",
+            "??",
+            "?",
             "")) {
       try {
         parser.parse(invalidPattern);
@@ -144,7 +147,7 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
-  public void leadingGlob() throws ParseException {
+  public void leadingZeroOrMore() throws ParseException {
     dictionaryOf("* foo")
         .matchesAll("foo", "bar foo", "bar bar foo")
         .matchesAll("Foo", "bar Foo", "bar bar FOO");
@@ -179,6 +182,81 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
+  public void anyTokenWildcard() throws ParseException {
+    dictionaryOf("? foo")
+        .matchesAll("bar foo", "baz foo")
+        .doesNotMatchAny("foo", "bar baz foo", "bar foo baz");
+
+    dictionaryOf("? ? foo")
+        .matchesAll("bar baz foo", "foo foo foo")
+        .doesNotMatchAny("foo", "bad bar baz foo", "bar baz foo baz");
+
+    dictionaryOf("? foo ?")
+        .matchesAll("bar foo baz", "foo foo foo")
+        .doesNotMatchAny("foo", "baz foo", "foo baz", "bar doo baz bar");
+
+    dictionaryOf("? foo ? bar")
+        .matchesAll("xxx foo xxx bar", "xxx foo yyy bar")
+        .doesNotMatchAny("xxx foo xxx baz", "xxx foo xxx bar foo");
+
+    // these two are different because * is reluctant.
+    dictionaryOf("? * foo")
+        .matchesAll("bar foo", "baz bar foo")
+        .doesNotMatchAny("foo", "foo baz", "foo foo foo");
+
+    dictionaryOf("foo ? *").matchesAll("foo bar", "foo baz bar").doesNotMatchAny("foo", "baz foo");
+
+    dictionaryOf("* ? foo")
+        .matchesAll("bar foo")
+        // * is reluctant, ? consumes baz, * consumes nothing, and "baz bar foo" doesn't match.
+        .doesNotMatchAny("baz bar foo")
+        .doesNotMatchAny("foo", "foo baz", "foo foo foo");
+  }
+
+  @Test
+  public void leadingOneOrMore() throws ParseException {
+    dictionaryOf("+ foo")
+        .matchesAll("bar foo", "bar bar foo")
+        .matchesAll("bar Foo", "bar bar FOO")
+        // + is reluctant, the first 'foo' is consumed, the remaining won't match.
+        .doesNotMatchAny("foo foo foo")
+        .doesNotMatchAny("foo");
+
+    dictionaryOf("+ \"FOO\"")
+        .matchesAll("bar FOO", "bar bar FOO")
+        .doesNotMatchAny("FOO", "foo", "bar foo", "bar bar Foo");
+  }
+
+  @Test
+  public void trailingOneOrMore() throws ParseException {
+    dictionaryOf("foo +")
+        .matchesAll("foo bar", "foo bar bar")
+        .matchesAll("Foo bar ", "FOO bar bar")
+        .doesNotMatchAny("foo", "Foo");
+
+    dictionaryOf("\"FOO\" +")
+        .matchesAll("FOO bar", "FOO bar bar")
+        .doesNotMatchAny("FOO", "foo", "foo bar", "Foo bar bar");
+  }
+
+  @Test
+  public void insideOneOrMore() throws ParseException {
+    dictionaryOf("foo + bar")
+        .matchesAll("foo xyz bar", "FOO xyz Bar")
+        .matchesAll("foo baz baz bar")
+        .doesNotMatchAny("foo bar");
+
+    // Reluctant matching.
+    dictionaryOf("foo + bar").doesNotMatchAny("foo bar bar bar");
+    dictionaryOf("foo + bar").matchesAll("foo bar bar");
+    dictionaryOf("foo + bar bar").matchesAll("foo baz bar bar", "foo baz xyz bar bar");
+
+    dictionaryOf("foo + bar + var")
+        .matchesAll("foo baz bar baz baz var", "foo x bar y var")
+        .doesNotMatchAny("foo x bar y var zzz");
+  }
+
+  @Test
   public void globInToken() throws ParseException {
     dictionaryOf("\"foo*\" bar").matchesAll("foo* bar", "foo* BAR");
   }
@@ -186,19 +264,6 @@ public class GlobDictionaryTest extends TestBase {
   @Test
   public void quoteInToken() throws ParseException {
     dictionaryOf("\\\"foo\\\" bar").matchesAll("\"foo\" bar", "\"FOO\" BAR");
-  }
-
-  private Stream<GlobDictionary.WordPattern> patternStream(String... patterns) {
-    GlobDictionary.PatternParser p = new GlobDictionary.PatternParser();
-    return Arrays.stream(patterns)
-        .map(
-            pat -> {
-              try {
-                return p.parse(pat);
-              } catch (ParseException e) {
-                throw new RuntimeException(e);
-              }
-            });
   }
 
   @Test

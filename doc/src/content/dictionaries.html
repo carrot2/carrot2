@@ -316,7 +316,9 @@
             "glob": [
               "more information",
               "more information *",
-              "* about *"
+              "* about *",
+              "big ?",
+              "+ apple"
             ]
           }
         </pre>
@@ -356,8 +358,25 @@
           </li>
           <li>
             <p>
+              The <code>?</code> token matches exactly one word (any word).
+            </p>
+          </li>
+          <li>
+            <p>
+              The <code>+</code> token matches one or more words. The <code>+</code> operator can
+              be seen as a syntactic sugar equivalent to: <code>? *</code>.
+            </p>
+          </li>
+          <li>
+            <p>
               The <code>*</code> wildcard character cannot be used to express prefixes or suffixes.
               For example <code>programm*</code>, is not supported.
+            </p>
+          </li>
+          <li>
+            <p>
+              Both <code>*</code> and <code>+</code> wildcards are <em>reluctant</em> matchers: that is,
+              they match the minimal sequence of tokens until the next token in the pattern.
             </p>
           </li>
           <li>
@@ -437,6 +456,18 @@
           </tr>
 
           <tr>
+            <td><code>+&nbsp;information</code></td>
+            <td>
+              <p><code>too much information</code></p>
+              <p><code>more information</code></p>
+            </td>
+            <td>
+              <p><code>information</code><span class="explanation"><code>+</code> wildcard requires at least one word before 'information'.</span></p>
+              <p><code>more information about</code><span class="explanation">'about' is an extra word not covered by the pattern.</span></p>
+            </td>
+          </tr>
+
+          <tr>
             <td><code>"Information"&nbsp;*</code></td>
             <td>
               <p><code>Information</code></p>
@@ -447,6 +478,17 @@
               <p><code>information</code><span class="explanation">&quot;Information&quot; token is case-sensitive, it does not match 'information'.</span></p>
               <p><code>information about</code><span class="explanation">&quot;Information&quot; token is case-sensitive, it does not match 'information'.</span></p>
               <p><code>Informations about</code><span class="explanation">'Informations' does not match pattern token &quot;Information&quot;.</span></p>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>data ?</code></td>
+            <td>
+              <p><code>data mining</code></p>
+            </td>
+            <td>
+              <p><code>data</code><span class="explanation"><code>?</code> operator requires a word after &quot;data&quot;.</span></p>
+              <p><code>data mining research</code><span class="explanation">&quot;research&quot; token does not match the pattern.</span></p>
             </td>
           </tr>
 
