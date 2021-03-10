@@ -151,6 +151,7 @@ export const SolrIntro = () => {
 export const solrSourceDescriptor = createLocalSearchSource({
   label: "Solr",
   descriptionHtml: "queries an Apache Solr instance.",
+  contentSummary: "Apache Solr search results",
   source: solrSource,
   getSettings: () => solrSettings,
   createError: async e => {

@@ -147,6 +147,7 @@ export const ElasticsearchIntro = () => {
 export const esSourceDescriptor = createLocalSearchSource({
   label: "Elasticsearch",
   descriptionHtml: "queries an Elasticsearch instance.",
+  contentSummary: "Elasticsearch results",
   source: esSource,
   getSettings: () => esSettings,
   createError: async e => {

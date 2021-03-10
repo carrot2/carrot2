@@ -231,6 +231,7 @@ export const pubmedSourceDescriptor = {
   label: "PubMed",
   descriptionHtml:
     "abstracts of medical papers from the PubMed database provided by NCBI.",
+  contentSummary: "PubMed abstracts",
   source: pubmedSource,
   createResult: props => <PubMedResult {...props} />,
   createError: props => <GenericSearchEngineErrorMessage {...props} />,

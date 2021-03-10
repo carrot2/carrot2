@@ -2,7 +2,10 @@
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr;
   grid-template-areas: "steps" "welcome";
+  min-width: 32rem;
   max-width: 64rem;
+  margin: 0 auto;
+  padding-top: 8%;
 }
 
 .WorkbenchIntroWelcome {
@@ -51,6 +54,7 @@
   padding-left: 3rem;
   padding-top: 0.75rem;
   margin-left: 1.5em;
+  margin-bottom: 2rem;
 }
 
 .WorkbenchIntroSteps > ol > li:before {
@@ -75,39 +79,6 @@
   font-size: 1.125rem;
   font-weight: normal;
   margin-top: 0;
-}
-
-.WorkbenchIntroSteps .DottedArrow {
-  position: absolute;
-  fill: var(--text-color-secondary);
-}
-
-.WorkbenchIntroSteps .SourceAlgorithmChoice {
-}
-
-.WorkbenchIntroSteps .SourceAlgorithmChoice .DottedArrowStraight {
-  left: -3rem;
-  top: -1rem;
-  width: 2.75rem;
-  transform: rotate(-70deg);
-}
-
-.WorkbenchIntroSteps .SourceConfiguration {
-  min-height: 12rem;
-}
-
-.WorkbenchIntroSteps .SourceConfiguration .DottedArrowAngled {
-  left: -2rem;
-  top: 3rem;
-  width: 3rem;
-  transform: scale(-1.25, 1);
-}
-
-.WorkbenchIntroSteps .ButtonPress .DottedArrowCurly {
-  left: -3.25rem;
-  top: -2rem;
-  width: 4.5em;
-  transform: scale(-1, 1) rotate(-70deg);
 }
 
 .WorkbenchIntroSteps ul {
