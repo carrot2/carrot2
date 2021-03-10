@@ -70,9 +70,7 @@ export const WorkbenchIntro = () => {
     <>
       <div className="WorkbenchIntroWelcome">
         <h2>Welcome to Clustering Workbench</h2>
-        <h3>
-          the expert-level {branding.createProductName()} application
-        </h3>
+        <h3>the expert-level {branding.createProductName()} application</h3>
       </div>
       <WorkbenchIntroSteps />
     </>

@@ -63,11 +63,7 @@ export const Carrot2App = () => {
           icon={faInfo}
           component={AboutApp}
         />
-        <App
-          icon={faGithub}
-          title="Source code on GitHub"
-          path="https://github.com/carrot2/carrot2"
-        />
+        {branding.createAppInfoNavLink()}
       </>
 
       <Switch>

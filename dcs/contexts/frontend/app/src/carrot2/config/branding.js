@@ -11,6 +11,8 @@ import { CarrotSearchText } from "@carrotsearch/ui/logo/CarrotSearchText.js";
 
 import { dcsServiceUrl, isCarrot2Distribution } from "../config.js";
 import { routes } from "../routes.js";
+import { App } from "@carrotsearch/ui/AppContainer.js";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 const carrot2 = isCarrot2Distribution();
 
@@ -23,6 +25,13 @@ const carrot2Branding = {
     </>
   ),
   createAppLogo: () => <CarrotLogo />,
+  createAppInfoNavLink: () => (
+    <App
+      icon={faGithub}
+      title="Source code on GitHub"
+      path="https://github.com/carrot2/carrot2"
+    />
+  ),
   createSlogan: () => (
     <>
       <a href="http://project.carrot2.org">
