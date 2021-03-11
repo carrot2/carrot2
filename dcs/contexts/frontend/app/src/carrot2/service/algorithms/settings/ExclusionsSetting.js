@@ -11,6 +11,9 @@ import { Views } from "@carrotsearch/ui/Views.js";
 import { TextArea } from "@blueprintjs/core";
 import { ButtonLink } from "@carrotsearch/ui/ButtonLink.js";
 import { DescriptionPopover } from "@carrotsearch/ui/DescriptionPopover.js";
+import { CopyToClipboard } from "@carrotsearch/ui/CopyToClipboard.js";
+import { faBracketsCurly } from "@fortawesome/pro-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const PlainTextExclusionEditor = view(({ setting, get, set, type }) => {
   const findEntry = () => {
@@ -51,13 +54,7 @@ const createPlainTextExclusionEditor = (type, setting, get, set) => (
   <PlainTextExclusionEditor setting={setting} get={get} set={set} type={type} />
 );
 
-const createExclusionView = (
-  label,
-  settingFactory,
-  helpLine,
-  helpText,
-  tools
-) => {
+const createExclusionView = (label, settingFactory, helpLine, helpText) => {
   return {
     label: label,
     createContentElement: (visible, { setting, get, set }) => (
@@ -71,7 +68,24 @@ const createExclusionView = (
         </div>
       </>
     ),
-    tools: tools || []
+    tools: [
+      {
+        createContentElement: ({ setting, get }) => {
+          return (
+            <CopyToClipboard
+              contentProvider={() => JSON.stringify(get(setting), null, 2)}
+              buttonText="Copy JSON"
+              buttonProps={{
+                small: true,
+                minimal: true,
+                title: "Copy dictionaries JSON",
+                icon: <FontAwesomeIcon icon={faBracketsCurly} />
+              }}
+            />
+          );
+        }
+      }
+    ]
   };
 };
 
