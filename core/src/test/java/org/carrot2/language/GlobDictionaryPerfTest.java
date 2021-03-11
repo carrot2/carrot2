@@ -104,13 +104,6 @@ public class GlobDictionaryPerfTest extends TestBase {
                 })
             .collect(Collectors.toList());
 
-    patterns.stream()
-        .collect(Collectors.groupingBy(p -> p.matchType))
-        .forEach(
-            (matchType, list) -> {
-              System.out.println(matchType + " => " + list.size());
-            });
-
     dictionary = new GlobDictionary(patterns.stream());
   }
 
@@ -295,7 +288,7 @@ public class GlobDictionaryPerfTest extends TestBase {
         if (line.size() < maxTokens) {
           tests++;
 
-          if (!dictionary.match(tokens, normalized, e -> true).isEmpty()) {
+          if (dictionary.find(tokens, normalized, null, e -> true)) {
             rejected++;
           }
         } else {
@@ -303,7 +296,7 @@ public class GlobDictionaryPerfTest extends TestBase {
             tests++;
             String[] tokenSublist = Arrays.copyOfRange(tokens, i, i + maxTokens);
             String[] normalizedSublist = Arrays.copyOfRange(normalized, i, i + maxTokens);
-            if (!dictionary.match(tokenSublist, normalizedSublist, e -> true).isEmpty()) {
+            if (dictionary.find(tokenSublist, normalizedSublist, null, e -> true)) {
               rejected++;
             }
           }

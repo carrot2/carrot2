@@ -12,6 +12,8 @@ package org.carrot2.language;
 
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -23,7 +25,11 @@ import org.junit.Test;
 public class GlobDictionaryTest extends TestBase {
   @Test
   public void patternParser() {
-    GlobDictionary.PatternParser parser = new GlobDictionary.PatternParser();
+    GlobDictionary.PatternParser parser =
+        new GlobDictionary.PatternParser(
+            Map.of(
+                "type1", 1,
+                "type2", 2));
     Function<String, String> toString =
         (in) -> {
           try {
@@ -65,9 +71,15 @@ public class GlobDictionaryTest extends TestBase {
     // Quote inside token.
     Assertions.assertThat(toString.apply("foo\\\"BAR")).isEqualTo("foo\"BAR");
 
+    // Types
+    Assertions.assertThat(toString.apply("foo {type1}")).isEqualTo("foo,{type1}");
+    Assertions.assertThat(toString.apply("foo {type1&type2}")).isEqualTo("foo,{type1&type2}");
+
     // Neither of these should match.
     for (String invalidPattern :
         Arrays.asList(
+            // unknown type.
+            "{unknownType}",
             "\"unbalancedleft",
             " \"unbalancedleft",
             "unbalancedright\"",
@@ -93,12 +105,12 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
-  public void empty() throws ParseException {
+  public void empty() {
     dictionaryOf().doesNotMatchAny("missing");
   }
 
   @Test
-  public void normalizedTerms() throws ParseException {
+  public void normalizedTerms() {
     dictionaryOf("foo bar")
         .matchesAll("foo bar", "FOO BAR", "Foo Bar")
         .doesNotMatchAny("foo", "bar");
@@ -114,7 +126,7 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
-  public void verbatimTerms() throws ParseException {
+  public void verbatimTerms() {
     dictionaryOf("\"Upper\" Case")
         .matchesAll("Upper Case", "Upper case", "Upper CASE")
         .doesNotMatchAny("upper case", "UPPER CASE");
@@ -129,7 +141,7 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
-  public void verbatimTermsSingleQuotes() throws ParseException {
+  public void verbatimTermsSingleQuotes() {
     dictionaryOf("'Upper' Case")
         .matchesAll("Upper Case", "Upper case", "Upper CASE")
         .doesNotMatchAny("upper case", "UPPER CASE");
@@ -147,7 +159,7 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
-  public void leadingZeroOrMore() throws ParseException {
+  public void leadingZeroOrMore() {
     dictionaryOf("* foo")
         .matchesAll("foo", "bar foo", "bar bar foo")
         .matchesAll("Foo", "bar Foo", "bar bar FOO");
@@ -158,7 +170,7 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
-  public void trailingGlob() throws ParseException {
+  public void trailingGlob() {
     dictionaryOf("foo *")
         .matchesAll("foo", "foo bar", "foo bar bar")
         .matchesAll("Foo", "Foo bar ", "FOO bar bar");
@@ -169,7 +181,7 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
-  public void insideGlob() throws ParseException {
+  public void insideGlob() {
     dictionaryOf("foo * bar").matchesAll("foo bar", "foo xyz bar", "FOO xyz Bar");
 
     // Reluctant matching.
@@ -182,7 +194,7 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
-  public void anyTokenWildcard() throws ParseException {
+  public void anyTokenWildcard() {
     dictionaryOf("? foo")
         .matchesAll("bar foo", "baz foo")
         .doesNotMatchAny("foo", "bar baz foo", "bar foo baz");
@@ -214,7 +226,7 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
-  public void leadingOneOrMore() throws ParseException {
+  public void leadingOneOrMore() {
     dictionaryOf("+ foo")
         .matchesAll("bar foo", "bar bar foo")
         .matchesAll("bar Foo", "bar bar FOO")
@@ -228,7 +240,7 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
-  public void trailingOneOrMore() throws ParseException {
+  public void trailingOneOrMore() {
     dictionaryOf("foo +")
         .matchesAll("foo bar", "foo bar bar")
         .matchesAll("Foo bar ", "FOO bar bar")
@@ -240,7 +252,7 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
-  public void insideOneOrMore() throws ParseException {
+  public void insideOneOrMore() {
     dictionaryOf("foo + bar")
         .matchesAll("foo xyz bar", "FOO xyz Bar")
         .matchesAll("foo baz baz bar")
@@ -257,12 +269,12 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
-  public void globInToken() throws ParseException {
+  public void globInToken() {
     dictionaryOf("\"foo*\" bar").matchesAll("foo* bar", "foo* BAR");
   }
 
   @Test
-  public void quoteInToken() throws ParseException {
+  public void quoteInToken() {
     dictionaryOf("\\\"foo\\\" bar").matchesAll("\"foo\" bar", "\"FOO\" BAR");
   }
 
@@ -284,14 +296,50 @@ public class GlobDictionaryTest extends TestBase {
                 5));
   }
 
-  private DictionaryAssert<GlobDictionary> dictionaryOf(String... entries) throws ParseException {
-    return DictionaryAssert.assertThat(new GlobDictionary(parse(entries)));
+  @Test
+  public void typeMatching() {
+    Map<String, Integer> typeMap =
+        Map.of(
+            "type1", 1,
+            "type2", 1 << 1,
+            "type3", 1 << 2);
+
+    dictionaryOf(typeMap, "foo {type1}")
+        .matchesAll("foo word:type1", "foo word:type1&type2")
+        .doesNotMatchAny("foo", "foo word:type2");
+
+    dictionaryOf(typeMap, "{type1} foo").matchesAll("word:type1 foo");
+    dictionaryOf(typeMap, "{type1} foo {type2}").matchesAll("word:type1 foo word:type2");
+    dictionaryOf(typeMap, "foo {type1} bar").matchesAll("foo word:type1&type2 bar");
+
+    dictionaryOf(typeMap, "foo {type1&type2}")
+        .matchesAll("foo word:type1&type2")
+        .doesNotMatchAny("foo word:type1", "foo word:type2", "foo word");
+
+    dictionaryOf(typeMap, "{type1}").matchesAll("word:type1").doesNotMatchAny("word:type2", "foo");
+    dictionaryOf(typeMap, "{type1&type2}")
+        .matchesAll("word:type1&type2")
+        .doesNotMatchAny("word:type2", "foo");
   }
 
-  private static Stream<GlobDictionary.WordPattern> parse(String[] patterns) {
-    GlobDictionary.PatternParser parser = new GlobDictionary.PatternParser();
+  private GlobDictionaryAssert dictionaryOf(String... entries) {
+    return GlobDictionaryAssert.assertThat(new GlobDictionary(parse(entries)));
+  }
+
+  private GlobDictionaryAssert dictionaryOf(Map<String, Integer> tokenTypes, String... entries) {
+    return GlobDictionaryAssert.assertThat(new GlobDictionary(parse(tokenTypes, entries)))
+        .withTypes(tokenTypes);
+  }
+
+  private static Stream<GlobDictionary.WordPattern> parse(String... patterns) {
+    return parse(Collections.emptyMap(), patterns);
+  }
+
+  private static Stream<GlobDictionary.WordPattern> parse(
+      Map<String, Integer> typeMap, String... patterns) {
+    GlobDictionary.PatternParser parser = new GlobDictionary.PatternParser(typeMap);
     return Arrays.stream(patterns)
-        .map((line) -> line.trim())
+        .map(String::trim)
         .filter((line) -> !line.isEmpty() && !line.startsWith("#"))
         .map(
             (pattern) -> {
