@@ -454,7 +454,7 @@ export const etoolsSourceDescriptor = {
   label: "Web",
   descriptionHtml:
     "web search results provided by <a href='https://etools.ch' target='_blank'>etools.ch</a>. Extensive use may require special arrangements with the <a href='mailto:sschmid@comcepta.com' target='_blank'>owner</a> of the etools.ch service.",
-  contentSummary: "web search results",
+  contentSummary: "Web search results",
   source: etoolsSource,
   createResult: props => <EToolsResult {...props} />,
   createError: error => {
