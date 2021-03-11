@@ -12,13 +12,14 @@ package org.carrot2.language;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -32,6 +33,7 @@ import org.carrot2.util.StringUtils;
  * as well as globs (wildcards matching any token sequence).
  */
 public class GlobDictionary implements Predicate<CharSequence> {
+  private static final List<WordPattern> EMPTY = new ArrayList<>();
   private final Function<String, String> tokenNormalization = defaultTokenNormalization();
 
   final Map<String, List<WordPattern>> tokenToPatterns;
@@ -53,116 +55,46 @@ public class GlobDictionary implements Predicate<CharSequence> {
   public boolean test(CharSequence input) {
     String[] inputTerms = splitTerms(input);
 
-    // Initialized lazily when matching is performed.
-    String[] normalizedTerms = null;
+    // normalized inputTerms
+    String[] normalizedTerms = normalize(inputTerms);
 
-    // Effectively an identity hash set of patterns checked so far.
-    HashSet<WordPattern> checkedPatterns = new HashSet<>();
-    for (String token : inputTerms) {
-      List<WordPattern> patterns = tokenToPatterns.get(tokenNormalization.apply(token));
+    List<WordPattern> matches = match(inputTerms, normalizedTerms, (p) -> true);
+    return matches != null && !matches.isEmpty();
+  }
+
+  public List<WordPattern> match(
+      String[] inputTerms, String[] normalizedTerms, Predicate<WordPattern> earlyAbort) {
+    // Already-checked terms and patterns, combined.
+    List<WordPattern> passing = null;
+    for (String normalizedToken : normalizedTerms) {
+      List<WordPattern> patterns = tokenToPatterns.get(normalizedToken);
       if (patterns != null) {
-        if (normalizedTerms == null) {
-          normalizedTerms = new String[inputTerms.length];
-          for (int i = 0; i < inputTerms.length; i++) {
-            normalizedTerms[i] = tokenNormalization.apply(inputTerms[i]);
-          }
-        }
-
         for (WordPattern pattern : patterns) {
-          if (checkedPatterns.add(pattern) && matches(pattern, inputTerms, normalizedTerms)) {
-            // Abort checking on first hit.
-            return true;
+          if (pattern.matches(inputTerms, normalizedTerms)) {
+            if (passing == null) {
+              passing = new ArrayList<>(2);
+            }
+            passing.add(pattern);
+
+            if (earlyAbort.test(pattern)) {
+              return passing;
+            }
           }
         }
       }
     }
 
-    return false;
+    // Use homogeneous return type.
+    assert EMPTY.isEmpty();
+    return passing == null ? EMPTY : passing;
   }
 
-  private boolean matches(WordPattern pattern, String[] verbatimTerms, String[] normalizedTerms) {
-    List<Token> patternTokens = pattern.tokens();
-    assert patternTokens.size() >= 1;
-    assert verbatimTerms.length == normalizedTerms.length;
-    assert verbatimTerms.length >= 1;
-
-    int tIndex = 0;
-    final int pMax = patternTokens.size();
-    final int tMax = verbatimTerms.length;
-    for (int pIndex = 0; ; ) {
-      // If the pattern ended and the tokens ended, we have a match.
-      if (pIndex == pMax) {
-        return tIndex == tMax;
-      }
-
-      Token pToken = patternTokens.get(pIndex);
-      switch (pToken.matchType) {
-        case NORMALIZED:
-          if (tIndex == tMax || !pToken.image.equals(normalizedTerms[tIndex])) {
-            return false;
-          }
-          pIndex++;
-          tIndex++;
-          break;
-
-        case VERBATIM:
-          if (tIndex == tMax || !pToken.image.equals(verbatimTerms[tIndex])) {
-            return false;
-          }
-          pIndex++;
-          tIndex++;
-          break;
-
-        case ANY:
-          if (tIndex == tMax) {
-            return false;
-          }
-          pIndex++;
-          tIndex++;
-          break;
-
-        case WILDCARD:
-          if (pIndex + 1 == pMax) {
-            // This is a trailing wildcard. The input matched, regardless
-            // of any remaining tokens.
-            return true;
-          }
-
-          // Reluctant match: seek for the next non-wildcard pattern's token.
-          Token nextToken = patternTokens.get(++pIndex);
-          assert nextToken.matchType != MatchType.WILDCARD;
-          while (tIndex < tMax
-              && !match(nextToken, verbatimTerms[tIndex], normalizedTerms[tIndex])) {
-            tIndex++;
-          }
-
-          if (tIndex == tMax) {
-            // We didn't find the next matching token.
-            return false;
-          }
-
-          // We know there's a match on the next token after a wildcard, so skip it immediately.
-          pIndex++;
-          tIndex++;
-          break;
-
-        default:
-          throw new RuntimeException();
-      }
+  public String[] normalize(String[] tokens) {
+    var normalized = new String[tokens.length];
+    for (int i = 0; i < tokens.length; i++) {
+      normalized[i] = tokenNormalization.apply(tokens[i]);
     }
-  }
-
-  private boolean match(Token nextToken, String verbatim, String normalized) {
-    switch (nextToken.matchType) {
-      case NORMALIZED:
-        return nextToken.image.equals(normalized);
-      case ANY:
-        return true;
-      case VERBATIM:
-        return nextToken.image.equals(verbatim);
-      default:
-        throw new RuntimeException("Unexpected token type: " + nextToken);
-    }
+    return normalized;
   }
 
   private static final Pattern SPACES = Pattern.compile("\\ +");
@@ -196,7 +128,7 @@ public class GlobDictionary implements Predicate<CharSequence> {
               // normalized image.
               pattern.tokens.replaceAll(
                   (t) -> {
-                    if (t.matchType == MatchType.NORMALIZED) {
+                    if (t.matchType == GlobDictionary.MatchType.NORMALIZED) {
                       return new Token(normalize.apply(t.image), t.matchType);
                     } else {
                       return t;
@@ -236,13 +168,76 @@ public class GlobDictionary implements Predicate<CharSequence> {
   }
 
   public static final class WordPattern implements Comparable<WordPattern> {
-    private List<Token> tokens;
+    private static final EnumSet<GlobDictionary.MatchType> FIXED_POSITION =
+        EnumSet.of(
+            GlobDictionary.MatchType.ANY,
+            GlobDictionary.MatchType.NORMALIZED,
+            GlobDictionary.MatchType.VERBATIM);
+
+    enum MatchType {
+      FIXED,
+      TRAILING,
+      FULL;
+    }
+
+    private final int concreteTokens;
+    private final List<Token> tokens;
+
+    private final BiPredicate<String[], String[]> matchTest;
+    public MatchType matchType;
 
     public WordPattern(List<Token> tokens) {
       if (tokens.isEmpty()) {
         throw new RuntimeException("Empty patterns not allowed.");
       }
+
+      this.concreteTokens =
+          (int) tokens.stream().filter(t -> FIXED_POSITION.contains(t.matchType)).count();
       this.tokens = tokens;
+      this.matchTest = determineMatchTest(tokens);
+    }
+
+    /** Determine if a quick-check is available for the pattern's token sequence. */
+    private BiPredicate<String[], String[]> determineMatchTest(List<Token> tokens) {
+      int tokenCount = tokens.size();
+
+      // Concrete token sequence or token sequence with single-position wildcards only.
+      if (concreteTokens == tokenCount) {
+        this.matchType = MatchType.FIXED;
+        return this::matchFixedSequence;
+      }
+
+      // If there is a non-zero trailing sequence of concrete tokens, check from the right side.
+      int rightConcrete = countRightFixedTokens(tokens);
+      if (rightConcrete > 0) {
+        this.matchType = MatchType.TRAILING;
+        return (verbatim, normalized) -> {
+          if (verbatim.length < concreteTokens) {
+            return false;
+          }
+          int tokMax = verbatim.length;
+          int tokIdx = tokMax - rightConcrete;
+          int patMax = tokenCount;
+          int patIdx = patMax - rightConcrete;
+          return matchSubrange(verbatim, normalized, tokIdx, tokMax, patIdx, patMax)
+              && matchCheckFull(verbatim, normalized);
+        };
+      }
+
+      // The input must have at least as many tokens as concrete token count.
+      this.matchType = MatchType.FULL;
+      return this::matchCheckFull;
+    }
+
+    private int countRightFixedTokens(List<Token> tokens) {
+      int count = 0;
+      for (int i = tokens.size(); --i >= 0; ) {
+        if (!FIXED_POSITION.contains(tokens.get(i).matchType)) {
+          break;
+        }
+        count++;
+      }
+      return count;
     }
 
     public List<Token> tokens() {
@@ -277,6 +272,120 @@ public class GlobDictionary implements Predicate<CharSequence> {
       }
 
       return Integer.compare(t1.size(), t2.size());
+    }
+
+    public boolean matches(String[] verbatimTerms, String[] normalizedTerms) {
+      return matchTest.test(verbatimTerms, normalizedTerms);
+    }
+
+    private boolean matchFixedSequence(String[] verbatimTerms, String[] normalizedTerms) {
+      if (tokens.size() != verbatimTerms.length) {
+        return false;
+      }
+
+      for (int i = 0; i < verbatimTerms.length; i++) {
+        if (!tokenMatches(tokens.get(i), verbatimTerms[i], normalizedTerms[i])) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    private boolean matchCheckFull(String[] verbatimTerms, String[] normalizedTerms) {
+      if (verbatimTerms.length < concreteTokens) {
+        return false;
+      }
+
+      List<Token> patternTokens = tokens();
+      assert patternTokens.size() >= 1;
+      assert verbatimTerms.length == normalizedTerms.length;
+      assert verbatimTerms.length >= 1;
+
+      int tIndex = 0;
+      int pIndex = 0;
+      final int tMax = verbatimTerms.length;
+      final int pMax = patternTokens.size();
+      return matchSubrange(verbatimTerms, normalizedTerms, tIndex, tMax, pIndex, pMax);
+    }
+
+    private boolean matchSubrange(
+        String[] verbatim, String[] normalized, int tokIdx, int tokMax, int patIdx, int patMax) {
+      List<Token> patternTokens = tokens();
+      while (true) {
+        // If the pattern ended and the tokens ended, we have a match.
+        if (patIdx == patMax) {
+          return tokIdx == tokMax;
+        }
+
+        Token pToken = patternTokens.get(patIdx);
+        switch (pToken.matchType) {
+          case NORMALIZED:
+            if (tokIdx == tokMax || !pToken.image.equals(normalized[tokIdx])) {
+              return false;
+            }
+            patIdx++;
+            tokIdx++;
+            break;
+
+          case VERBATIM:
+            if (tokIdx == tokMax || !pToken.image.equals(verbatim[tokIdx])) {
+              return false;
+            }
+            patIdx++;
+            tokIdx++;
+            break;
+
+          case ANY:
+            if (tokIdx == tokMax) {
+              return false;
+            }
+            patIdx++;
+            tokIdx++;
+            break;
+
+          case WILDCARD:
+            if (patIdx + 1 == patMax) {
+              // This is a trailing wildcard. The input matched, regardless
+              // of any remaining tokens.
+              return true;
+            }
+
+            // Reluctant match: seek for the next non-wildcard pattern's token.
+            Token nextToken = patternTokens.get(++patIdx);
+            assert nextToken.matchType != GlobDictionary.MatchType.WILDCARD;
+            while (tokIdx < tokMax
+                && !tokenMatches(nextToken, verbatim[tokIdx], normalized[tokIdx])) {
+              tokIdx++;
+            }
+
+            if (tokIdx == tokMax) {
+              // We didn't find the next matching token.
+              return false;
+            }
+
+            // We know there's a match on the next token after a wildcard, so skip it immediately.
+            patIdx++;
+            tokIdx++;
+            break;
+
+          default:
+            throw new RuntimeException();
+        }
+      }
+    }
+
+    private boolean tokenMatches(Token token, String verbatim, String normalized) {
+      switch (token.matchType) {
+        case ANY:
+          return true;
+        case NORMALIZED:
+          return token.image.equals(normalized);
+        case VERBATIM:
+          return token.image.equals(verbatim);
+        default:
+          throw new AssertionError("Unexpected token type: " + token);
+      }
     }
   }
 
@@ -344,8 +453,8 @@ public class GlobDictionary implements Predicate<CharSequence> {
   }
 
   public static class PatternParser {
-    static final Token ZERO_OR_MORE = new Token("*", MatchType.WILDCARD);
-    static final Token ANY = new Token("?", MatchType.ANY);
+    static final Token ZERO_OR_MORE = new Token("*", GlobDictionary.MatchType.WILDCARD);
+    static final Token ANY = new Token("?", GlobDictionary.MatchType.ANY);
 
     public WordPattern parse(String pattern) throws ParseException {
       ArrayList<Token> tokens = new ArrayList<>();
@@ -457,7 +566,7 @@ public class GlobDictionary implements Predicate<CharSequence> {
         }
       }
 
-      tokens.add(new Token(sb.toString(), MatchType.NORMALIZED));
+      tokens.add(new Token(sb.toString(), GlobDictionary.MatchType.NORMALIZED));
       return pos;
     }
 
@@ -475,7 +584,7 @@ public class GlobDictionary implements Predicate<CharSequence> {
             // Skip the quote if it's consistent with the opening quote.
             if (openingQuote == chr) {
               pos++;
-              tokens.add(new Token(sb.toString(), MatchType.VERBATIM));
+              tokens.add(new Token(sb.toString(), GlobDictionary.MatchType.VERBATIM));
               return pos;
             } else {
               sb.append(pattern.charAt(pos));

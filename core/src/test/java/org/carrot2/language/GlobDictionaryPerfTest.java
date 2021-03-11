@@ -11,12 +11,7 @@
 package org.carrot2.language;
 
 import com.carrotsearch.randomizedtesting.RandomizedTest;
-import org.carrot2.TestBase;
-import org.junit.AfterClass;
-import org.junit.Assume;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
+import com.carrotsearch.randomizedtesting.annotations.Seed;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -24,6 +19,7 @@ import java.nio.file.Paths;
 import java.text.BreakIterator;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,9 +29,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.carrot2.TestBase;
+import org.junit.AfterClass;
+import org.junit.Assume;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
+@Seed("deadbeef")
 public class GlobDictionaryPerfTest extends TestBase {
-  private static final int maxLines = 10_000;
+  private static final int maxLines = 50_000;
 
   private static List<List<String>> lines;
   private static GlobDictionary dictionary;
@@ -72,25 +74,44 @@ public class GlobDictionaryPerfTest extends TestBase {
     // Create a random dictionary of filters.
     List<String> rules = new ArrayList<>();
     var tokenRules = addFrequentTokenRules(500);
-    System.out.println("Token rules: " + tokenRules.size());
+    System.out.println(
+        "Token rules: "
+            + tokenRules.size()
+            + " [hash: "
+            + Long.toHexString(tokenRules.hashCode())
+            + "]");
     rules.addAll(tokenRules);
 
-    var longRules = addLongRules(5000);
-    System.out.println("Long rules: " + longRules.size());
+    var longRules = addLongRules(10000);
+    System.out.println(
+        "Long rules: "
+            + longRules.size()
+            + " [hash: "
+            + Long.toHexString(longRules.hashCode())
+            + "]");
     rules.addAll(longRules);
 
     GlobDictionary.PatternParser parser = new GlobDictionary.PatternParser();
-    dictionary =
-        new GlobDictionary(
-            rules.stream()
-                .map(
-                    p -> {
-                      try {
-                        return parser.parse(p);
-                      } catch (ParseException e) {
-                        throw new RuntimeException(e);
-                      }
-                    }));
+    List<GlobDictionary.WordPattern> patterns =
+        rules.stream()
+            .map(
+                p -> {
+                  try {
+                    return parser.parse(p);
+                  } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                  }
+                })
+            .collect(Collectors.toList());
+
+    patterns.stream()
+        .collect(Collectors.groupingBy(p -> p.matchType))
+        .forEach(
+            (matchType, list) -> {
+              System.out.println(matchType + " => " + list.size());
+            });
+
+    dictionary = new GlobDictionary(patterns.stream());
   }
 
   private static Set<String> addFrequentTokenRules(int howMany) {
@@ -268,15 +289,21 @@ public class GlobDictionaryPerfTest extends TestBase {
 
       int maxTokens = 6;
       for (var line : lines) {
+        String[] tokens = line.toArray(String[]::new);
+        String[] normalized = dictionary.normalize(tokens);
+
         if (line.size() < maxTokens) {
           tests++;
-          if (dictionary.test(String.join(" ", line))) {
+
+          if (!dictionary.match(tokens, normalized, e -> true).isEmpty()) {
             rejected++;
           }
         } else {
           for (int i = 0, max = line.size() - maxTokens; i < max; i++) {
             tests++;
-            if (dictionary.test(String.join(" ", line.subList(i, i + maxTokens)))) {
+            String[] tokenSublist = Arrays.copyOfRange(tokens, i, i + maxTokens);
+            String[] normalizedSublist = Arrays.copyOfRange(normalized, i, i + maxTokens);
+            if (!dictionary.match(tokenSublist, normalizedSublist, e -> true).isEmpty()) {
               rejected++;
             }
           }
