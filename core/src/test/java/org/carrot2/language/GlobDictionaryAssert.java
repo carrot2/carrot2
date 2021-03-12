@@ -10,9 +10,12 @@
  */
 package org.carrot2.language;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.ListAssert;
 
 class GlobDictionaryAssert {
   private final GlobDictionary dictionary;
@@ -74,5 +77,20 @@ class GlobDictionaryAssert {
   public GlobDictionaryAssert withTypes(Map<String, Integer> tokenTypes) {
     this.tokenTypes = tokenTypes;
     return this;
+  }
+
+  public ListAssert<Object> payloads(String input) {
+    var tokens = dictionary.split(input);
+    var normalized = dictionary.normalize(tokens);
+    List<GlobDictionary.WordPattern> rules = new ArrayList<>();
+    dictionary.find(
+        tokens,
+        normalized,
+        null,
+        (p) -> {
+          rules.add(p);
+          return false;
+        });
+    return Assertions.assertThat(rules.stream().map(GlobDictionary.WordPattern::getPayload));
   }
 }

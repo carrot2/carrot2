@@ -30,6 +30,7 @@ public class GlobDictionaryTest extends TestBase {
             Map.of(
                 "type1", 1,
                 "type2", 2));
+
     Function<String, String> toString =
         (in) -> {
           try {
@@ -322,6 +323,40 @@ public class GlobDictionaryTest extends TestBase {
         .doesNotMatchAny("word:type2", "foo");
   }
 
+  @Test
+  public void testStemmingUsedForNormalization() {
+    Map<String, String> lemmas =
+        Map.of(
+            "cows", "cow",
+            "mice", "mouse");
+
+    var normalizer =
+        GlobDictionary.defaultTokenNormalization().andThen(t -> lemmas.getOrDefault(t, t));
+    dictionaryOf(normalizer, "blue cow").matchesAll("blue cow", "blue cows");
+    dictionaryOf(normalizer, "blue cows").matchesAll("blue cow", "blue cows");
+    dictionaryOf(normalizer, "blue mice").matchesAll("blue mice", "blue mouse");
+    dictionaryOf(normalizer, "blue mouse").matchesAll("blue mice", "blue mouse");
+  }
+
+  @Test
+  public void testPayloads() {
+    var parser = new GlobDictionary.PatternParser();
+    var dict =
+        new GlobDictionary(
+            Map.of("one", 1, "two", "two").entrySet().stream()
+                .map(
+                    e -> {
+                      try {
+                        return parser.parse(e.getKey(), e.getValue());
+                      } catch (ParseException x) {
+                        throw new RuntimeException(x);
+                      }
+                    }));
+
+    GlobDictionaryAssert.assertThat(dict).payloads("one").containsExactly(1);
+    GlobDictionaryAssert.assertThat(dict).payloads("two").containsExactly("two");
+  }
+
   private GlobDictionaryAssert dictionaryOf(String... entries) {
     return GlobDictionaryAssert.assertThat(new GlobDictionary(parse(entries)));
   }
@@ -329,6 +364,12 @@ public class GlobDictionaryTest extends TestBase {
   private GlobDictionaryAssert dictionaryOf(Map<String, Integer> tokenTypes, String... entries) {
     return GlobDictionaryAssert.assertThat(new GlobDictionary(parse(tokenTypes, entries)))
         .withTypes(tokenTypes);
+  }
+
+  private GlobDictionaryAssert dictionaryOf(
+      Function<String, String> normalization, String... entries) {
+    return GlobDictionaryAssert.assertThat(
+        new GlobDictionary(parse(entries), normalization, GlobDictionary.defaultTermSplitter()));
   }
 
   private static Stream<GlobDictionary.WordPattern> parse(String... patterns) {

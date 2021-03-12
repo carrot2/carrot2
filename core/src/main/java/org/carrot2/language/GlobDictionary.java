@@ -56,7 +56,7 @@ public class GlobDictionary implements Predicate<CharSequence> {
     this(patterns, defaultTokenNormalization(), defaultTermSplitter());
   }
 
-  private static Function<CharSequence, String[]> defaultTermSplitter() {
+  public static Function<CharSequence, String[]> defaultTermSplitter() {
     return chs -> {
       var seq = chs.toString();
       List<String> tokens = new ArrayList<>();
@@ -170,25 +170,25 @@ public class GlobDictionary implements Predicate<CharSequence> {
           return cache.computeIfAbsent(normalized, (x) -> normalized);
         };
 
-    // Remove invalid inputs and normalize tokens.
+    // Fail on invalid inputs.
+    patterns = patterns.peek(GlobDictionary::checkInvalid);
+
+    // Rewrite patterns so that tokens with NORMALIZED matching have a prenormalized image.
     patterns =
         patterns.map(
             (pattern) -> {
-              // Handle invalid inputs.
-              checkInvalid(pattern);
+              List<Token> modifiedTokens = new ArrayList<>(pattern.tokens.size());
+              boolean hadChanges = false;
+              for (var t : pattern.tokens()) {
+                if (t.matchType == GlobDictionary.MatchType.NORMALIZED) {
+                  hadChanges = true;
+                  modifiedTokens.add(new Token(normalize.apply(t.image), t.matchType, t.typeBits));
+                } else {
+                  modifiedTokens.add(t);
+                }
+              }
 
-              // Rewrite the pattern so that tokens with NORMALIZED matching have a prenormalized
-              // image.
-              pattern.tokens.replaceAll(
-                  (t) -> {
-                    if (t.matchType == GlobDictionary.MatchType.NORMALIZED) {
-                      return new Token(normalize.apply(t.image), t.matchType, t.typeBits);
-                    } else {
-                      return t;
-                    }
-                  });
-
-              return pattern;
+              return hadChanges ? new WordPattern(modifiedTokens, pattern.payload) : pattern;
             });
 
     // Sort patterns on input for hash consistency.
@@ -261,8 +261,16 @@ public class GlobDictionary implements Predicate<CharSequence> {
             GlobDictionary.MatchType.NORMALIZED,
             GlobDictionary.MatchType.VERBATIM);
 
+    /** Any payload associated with the pattern. */
+    private final Object payload;
+
     private final int concreteTokens;
     private final List<Token> tokens;
+
+    @SuppressWarnings("unchecked")
+    public <T> T getPayload() {
+      return (T) payload;
+    }
 
     private interface MatchPredicate {
       boolean matches(String[] tokens, String[] normalized, int[] types);
@@ -271,13 +279,26 @@ public class GlobDictionary implements Predicate<CharSequence> {
     private final MatchPredicate matchTest;
 
     public WordPattern(List<Token> tokens) {
+      this(tokens, null);
+    }
+
+    public WordPattern(List<Token> tokens, Object payload) {
       if (tokens.isEmpty()) {
         throw new RuntimeException("Empty patterns not allowed.");
       }
 
+      this.payload = payload;
+
       this.concreteTokens =
           (int) tokens.stream().filter(t -> FIXED_POSITION.contains(t.matchType)).count();
-      this.tokens = tokens;
+
+      // If we're running with assertions (tests), make tokens immutable.
+      if (getClass().desiredAssertionStatus()) {
+        this.tokens = Collections.unmodifiableList(tokens);
+      } else {
+        this.tokens = tokens;
+      }
+
       this.matchTest = determineMatchTest(tokens);
     }
 
@@ -559,7 +580,7 @@ public class GlobDictionary implements Predicate<CharSequence> {
 
     @Override
     public int hashCode() {
-      return image.hashCode() + matchType.ordinal() + typeBits;
+      return image.hashCode() + 31 * matchType.ordinal() + 31 * typeBits;
     }
 
     @Override
@@ -592,6 +613,10 @@ public class GlobDictionary implements Predicate<CharSequence> {
     }
 
     public WordPattern parse(String pattern) throws ParseException {
+      return parse(pattern, null);
+    }
+
+    public WordPattern parse(String pattern, Object payload) throws ParseException {
       ArrayList<Token> tokens = new ArrayList<>();
 
       // A relatively simple state machine to avoid writing a full parser.
@@ -642,7 +667,7 @@ public class GlobDictionary implements Predicate<CharSequence> {
       // Handle the special odd cases.
       handleInvalid(tokens);
 
-      return new WordPattern(tokens);
+      return new WordPattern(tokens, payload);
     }
 
     private void handleInvalid(ArrayList<Token> tokens) throws ParseException {
@@ -766,7 +791,7 @@ public class GlobDictionary implements Predicate<CharSequence> {
     }
   }
 
-  static Function<String, String> defaultTokenNormalization() {
+  public static Function<String, String> defaultTokenNormalization() {
     return (s) -> s.toLowerCase(Locale.ROOT);
   }
 
