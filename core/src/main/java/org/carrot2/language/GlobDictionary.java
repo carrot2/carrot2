@@ -204,7 +204,9 @@ public class GlobDictionary implements Predicate<CharSequence> {
           for (Token t : pattern.tokens) {
             if (t.matchType.isIndexable() && t.matchType != MatchType.ANY_OF_TYPE) {
               indexed = true;
-              String key = normalize.apply(t.image);
+              // Normalized tokens already have normalized images.
+              String key =
+                  (t.matchType == MatchType.NORMALIZED ? t.image : normalize.apply(t.image));
               if (useKey.add(key)) {
                 tokenToPatterns.computeIfAbsent(key, k -> new ArrayList<>()).add(pattern);
               }

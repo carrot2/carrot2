@@ -19,8 +19,13 @@ public class AttrStringArray extends Attr<String[]> {
     super(value, label, constraint);
   }
 
-  public void set(String value, String... values) {
-    super.set(Stream.concat(Stream.of(value), Stream.of(values)).toArray(String[]::new));
+  @Override
+  public void set(String... value) {
+    super.set(value);
+  }
+
+  public void set(List<String> values) {
+    super.set(values.toArray(String[]::new));
   }
 
   /**
