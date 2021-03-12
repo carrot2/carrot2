@@ -106,6 +106,11 @@ public final class MutableCharArray implements CharSequence, Cloneable {
     this.hash = hashCode(buffer, start, length);
   }
 
+  /** Resets internal buffers to an empty string. */
+  public void reset() {
+    reset(EMPTY);
+  }
+
   /**
    * @return Returns the internal buffer <i>currently</i> used to store the content of this char
    *     sequence.
