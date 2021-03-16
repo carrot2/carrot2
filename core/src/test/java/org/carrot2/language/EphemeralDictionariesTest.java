@@ -61,7 +61,7 @@ public class EphemeralDictionariesTest extends TestBase {
   public void testDefaultFilterAttrImpl() {
     DefaultDictionaryImpl filter = new DefaultDictionaryImpl();
     filter.exact.set("word1", "word2");
-    filter.regexp.set("foo.+");
+    filter.regexp.set("^foo.+");
 
     LabelFilter labelFilter = filter.compileLabelFilter();
     Assertions.assertThat(labelFilter.test("word1")).isFalse();

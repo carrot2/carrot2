@@ -23,7 +23,16 @@
     <time datetime="not yet released"></time>
 
     <p>
+      This release enhances glob dictionaries with new wildcard operators,
+      brings GUI cleanups and improvements to the Workbench and fixes bugs
+      in the (low-level) algorithm loader API.
+    </p>
 
+    <p>
+      This release is not a drop-in replacement for Carrot<sup>2</sup> 4.1.x: if you
+      have any custom language components (dictionaries) they may need to be reviewed
+      because the behavior of the glob matcher and regular expression matcher
+      have changed.
     </p>
 
     <section id="4.2.0:new-features">
@@ -66,6 +75,27 @@
 
           <label class="java-api"></label>
           <a href="https://github.com/carrot2/carrot2/issues/94">#94</a>
+        </dd>
+
+        <dt id="4.2.0:api-changes:regexp-matcher">
+          Regular expression matchers match any substring
+        </dt>
+        <dd>
+          <p>
+            The
+            <a href="dictionaries.html#syntax:regular-expression-matcher">regular expression</a>
+            dictionary now triggers on any sub-sequence match (not entire label match). This behavior
+            was actually documented and was the default in Carrot<sup>2</sup> release prior to 2.0.0
+            so it's a regression.
+          </p>
+
+          <p>
+            If you need to revert to the previous behavior, add start and end requirement
+            directly to your regular expressions: <code>^(previous-regexp)$</code>.
+          </p>
+
+          <label class="java-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/81">#81</a>
         </dd>
       </dl>
     </section>

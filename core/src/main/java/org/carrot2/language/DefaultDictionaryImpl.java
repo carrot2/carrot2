@@ -75,7 +75,7 @@ public class DefaultDictionaryImpl extends AttrComposite
 
     if (!regexp.isEmpty()) {
       Pattern compiled = union(compile(toSet(regexp.get())));
-      predicates.add((label) -> compiled.matcher(label).matches());
+      predicates.add((label) -> compiled.matcher(label).find());
     }
 
     if (predicates.isEmpty()) {

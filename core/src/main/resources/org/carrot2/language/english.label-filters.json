@@ -92,10 +92,7 @@
     "information on *"
   ],
   "regexp": [
-    "(?i)(creates?|associates?|assists?|groups?|public|resources?|access(es)?|corp(oration)?s?|words?|development)",
-    "(?i).*(page|part|copyright) \\d+.*",
-    "(?i)(official|offer(ing)?s?|lists|uses?).*",
-    "(?i).*(known|information|offer(ing)?s?|a range)"
+    "(?i)(^.*(page|part|copyright) \\d+.*)"
   ],
   "exact": [
   ]
