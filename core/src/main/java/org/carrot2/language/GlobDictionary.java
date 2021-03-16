@@ -35,6 +35,24 @@ import org.carrot2.util.StringUtils;
  * This dictionary implementation is a middle ground between the complexity of regular expressions
  * and sheer speed of plain text matching. It offers case sensitive and case insensitive matching,
  * as well as globs (wildcards matching any token sequence).
+ *
+ * <p>The following wildcards are available:
+ *
+ * <ul>
+ *   <li>{@code *} - matches zero or more tokens (possessive match),
+ *   <li>{@code *?} - matches zero or more tokens (reluctant match),
+ *   <li>{@code +} - matches one or more tokens (possessive match),
+ *   <li>{@code +?} - matches zero or more tokens (reluctant match),
+ *   <li>{@code ?} - matches exactly one token (possessive).
+ * </ul>
+ *
+ * <p>In addition, a token <em>type</em> matching is provide in the form of:
+ *
+ * <ul>
+ *   <li>{@code {name}} - matches a token with flags named {@code name}.
+ * </ul>
+ *
+ * <p>Token flags are an int bitfield.
  */
 public class GlobDictionary implements Predicate<CharSequence> {
   private final Function<String, String> tokenNormalization;
@@ -464,23 +482,41 @@ public class GlobDictionary implements Predicate<CharSequence> {
             tokIdx++;
             break;
 
-          case WILDCARD:
+          case ZERO_OR_MORE_RELUCTANT:
+          case ZERO_OR_MORE_POSSESSIVE:
             if (patIdx + 1 == patMax) {
               // This is a trailing wildcard. The input matched, regardless
               // of any remaining tokens.
               return true;
             }
 
-            // Reluctant match: seek for the next non-wildcard pattern's token.
+            // Get the next non-wildcard token from the pattern.
             Token nextToken = patternTokens.get(++patIdx);
-            assert nextToken.matchType != GlobDictionary.MatchType.WILDCARD;
-            while (tokIdx < tokMax
-                && !tokenMatches(
-                    nextToken,
-                    verbatim[tokIdx],
-                    normalized[tokIdx],
-                    types == null ? 0 : types[tokIdx])) {
-              tokIdx++;
+            assert nextToken.matchType != MatchType.ZERO_OR_MORE_RELUCTANT
+                && nextToken.matchType != MatchType.ZERO_OR_MORE_POSSESSIVE;
+
+            boolean reluctant = pToken.matchType == MatchType.ZERO_OR_MORE_RELUCTANT;
+            if (reluctant) {
+              // Reluctant match: seek for the next non-wildcard pattern's token.
+              while (tokIdx < tokMax
+                  && !tokenMatches(
+                      nextToken,
+                      verbatim[tokIdx],
+                      normalized[tokIdx],
+                      types == null ? 0 : types[tokIdx])) {
+                tokIdx++;
+              }
+            } else {
+              // Possessive match: seek for the last non-wildcard pattern's token.
+              int min = tokIdx;
+              tokIdx = tokMax;
+              for (int i = tokMax - 1; i >= min; i--) {
+                if (tokenMatches(
+                    nextToken, verbatim[i], normalized[i], types == null ? 0 : types[i])) {
+                  tokIdx = i;
+                  break;
+                }
+              }
             }
 
             if (tokIdx == tokMax) {
@@ -516,18 +552,20 @@ public class GlobDictionary implements Predicate<CharSequence> {
   }
 
   public static enum MatchType {
-    /** Wildcard match (zero or more tokens). */
-    WILDCARD,
+    /** Wildcard match (zero or more tokens, possessive variant). */
+    ZERO_OR_MORE_POSSESSIVE,
+    /** Wildcard match (zero or more tokens, reluctant variant). */
+    ZERO_OR_MORE_RELUCTANT,
+    /** Any single token (possessive). */
+    ANY,
+    /** Any single token matching a type bitfield. */
+    ANY_OF_TYPE,
     /** Vermatim token image match. */
     VERBATIM,
     /** Normalized token image match. */
-    NORMALIZED,
-    /** Any single token. */
-    ANY,
-    /** Any single token matching a type bitfield. */
-    ANY_OF_TYPE;
+    NORMALIZED;
 
-    public boolean isIndexable() {
+    boolean isIndexable() {
       return this == VERBATIM || this == NORMALIZED || this == ANY_OF_TYPE;
     }
   }
@@ -570,8 +608,11 @@ public class GlobDictionary implements Predicate<CharSequence> {
           return image();
         case VERBATIM:
           return "'" + image() + "'";
-        case WILDCARD:
+        case ZERO_OR_MORE_POSSESSIVE:
           assert image().equals("*");
+          return "*";
+        case ZERO_OR_MORE_RELUCTANT:
+          assert image().equals("*?");
           return "*";
         case ANY:
           assert image().equals("?");
@@ -596,7 +637,10 @@ public class GlobDictionary implements Predicate<CharSequence> {
   }
 
   public static class PatternParser {
-    static final Token ZERO_OR_MORE = new Token("*", GlobDictionary.MatchType.WILDCARD, 0);
+    static final Token ZERO_OR_MORE_POSSESSIVE =
+        new Token("*", MatchType.ZERO_OR_MORE_POSSESSIVE, 0);
+    static final Token ZERO_OR_MORE_RELUCTANT =
+        new Token("*?", MatchType.ZERO_OR_MORE_RELUCTANT, 0);
     static final Token ANY = new Token("?", GlobDictionary.MatchType.ANY, 0);
 
     private final Map<String, Integer> typeMap;
@@ -635,17 +679,32 @@ public class GlobDictionary implements Predicate<CharSequence> {
             break;
 
           case '+':
-            // Syntactic sugar over "? *".
-            tokens.add(ANY);
-            tokens.add(ZERO_OR_MORE);
+            if (isReluctant(pattern, pos + 1)) {
+              pos++; // eat the '?'
+              noConsecutiveWildcards(pattern, pos, tokens);
+              // Syntactic sugar over "? *?".
+              tokens.add(ANY);
+              tokens.add(ZERO_OR_MORE_RELUCTANT);
+            } else {
+              noConsecutiveWildcards(pattern, pos, tokens);
+              // Syntactic sugar over "? *".
+              tokens.add(ANY);
+              tokens.add(ZERO_OR_MORE_POSSESSIVE);
+            }
             pos = spaceOrEnd(pattern, pos + 1);
             break;
 
           case '*':
-            if (tokens.isEmpty() || tokens.get(tokens.size() - 1) != ZERO_OR_MORE) {
-              tokens.add(ZERO_OR_MORE);
+            if (isReluctant(pattern, pos + 1)) {
+              pos++; // eat the '?'
+              noConsecutiveWildcards(pattern, pos, tokens);
+              tokens.add(ZERO_OR_MORE_RELUCTANT);
+              pos = spaceOrEnd(pattern, pos + 1);
+            } else {
+              noConsecutiveWildcards(pattern, pos, tokens);
+              tokens.add(ZERO_OR_MORE_POSSESSIVE);
+              pos = spaceOrEnd(pattern, pos + 1);
             }
-            pos = spaceOrEnd(pattern, pos + 1);
             break;
 
           case '\t':
@@ -670,6 +729,21 @@ public class GlobDictionary implements Predicate<CharSequence> {
       handleInvalid(tokens);
 
       return new WordPattern(tokens, payload);
+    }
+
+    private boolean isReluctant(String pattern, int pos) {
+      return pos < pattern.length() && pattern.charAt(pos) == '?';
+    }
+
+    private void noConsecutiveWildcards(String pattern, int pos, ArrayList<Token> tokens)
+        throws ParseException {
+      if (tokens.size() > 0) {
+        switch (tokens.get(tokens.size() - 1).matchType) {
+          case ZERO_OR_MORE_POSSESSIVE:
+          case ZERO_OR_MORE_RELUCTANT:
+            throw new ParseException("Consecutive wildcards not supported: " + pattern, pos);
+        }
+      }
     }
 
     private void handleInvalid(ArrayList<Token> tokens) throws ParseException {

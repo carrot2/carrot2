@@ -322,43 +322,80 @@
           </li>
           <li>
             <p>
-              The <code>*</code> token matches zero or more words.
+              A token put in single or double quotes, for example <code>"Rating***"</code> is taken literally: matching
+              is case-sensitive, <code>*</code> character inside quoted tokens is allowed and compared literally.
             </p>
           </li>
           <li>
             <p>
-              The <code>?</code> token matches exactly one word (any word).
-            </p>
-          </li>
-          <li>
-            <p>
-              The <code>+</code> token matches one or more words. The <code>+</code> operator can
-              be seen as a syntactic sugar equivalent to: <code>? *</code>.
-            </p>
-          </li>
-          <li>
-            <p>
-              The <code>*</code> wildcard character cannot be used to express prefixes or suffixes.
-              For example <code>programm*</code>, is not supported.
-            </p>
-          </li>
-          <li>
-            <p>
-              Both <code>*</code> and <code>+</code> wildcards are <em>reluctant</em> matchers: that is,
-              they match the minimal sequence of tokens until the next token in the pattern.
-            </p>
-          </li>
-          <li>
-            <p>
-              A token put in double quotes, for example <code>"Rating***"</code>  is taken literally: matching
-              is case-sensitive, <code>*</code> character is allowed and compared literally.
-            </p>
-          </li>
-          <li>
-            <p>
-              To include double quotes in the token, escape them with the <code>\</code> character,
+              To include quote characters in the token, escape them with the <code>\</code> character,
               for example: <code>\"information\"</code>.
             </p>
+          </li>
+          <li>
+            <p>
+              The following wildcard-matching tokens are recognized:
+            </p>
+            <ul>
+              <li>
+                <p>
+                  The <code>?</code> token matches exactly one (any) word (possessive operator).
+                </p>
+              </li>
+              <li>
+                <p>
+                  The <code>*</code> token matches zero or more words (possessive operator).
+                </p>
+              </li>
+              <li>
+                <p>
+                  The <code>*?</code> token matches zero or more words (reluctant operator).
+                </p>
+              </li>
+              <li>
+                <p>
+                  The <code>+</code> token matches one or more words (possessive operator). This operator
+                  is functionally equivalent to: <code>? *</code>.
+                </p>
+              </li>
+              <li>
+                <p>
+                  The <code>+?</code> token matches one or more words (reluctant operator). This operator
+                  is functionally equivalent to: <code>? *?</code>.
+                </p>
+              </li>
+            </ul>
+
+            <p>
+              A few restrictions apply to wildcard operators.
+            </p>
+            <ul>
+              <li>
+                <p>
+                  Wildcard characters (<code>*</code>, <code>+</code>) cannot be used to express prefixes or suffixes.
+                  For example, <code>programm*</code>, is not supported.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <code>*?</code> and <code>+?</code> wildcards are <em>reluctant</em> matchers in
+                  regular expression matching sense: that is, they match the <em>minimal</em>
+                  sequence of tokens until the next token in the pattern.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <code>*</code> and <code>+</code> wildcards are <em>possessive</em> matchers in
+                  regular expression matching sense: that is, they match the <em>maximum</em>
+                  sequence of tokens until the next token in the pattern.
+                </p>
+              </li>
+              <li>
+                <p>
+                  Greedy operators are not supported.
+                </p>
+              </li>
+            </ul>
           </li>
         </ul>
       </section>

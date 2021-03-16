@@ -1,0 +1,147 @@
+<article>
+  <h1>Carrot<sup>2</sup> 4.2.x</h1>
+
+  <p>
+    Release history for Carrot2 4.2.x and bugfix releases.
+  </p>
+
+  <!--
+  <section id="v4.x.y">
+    <h2>Version 4.x.y [unreleased]</h2>
+
+    <p>
+      This is a bugfix release.
+    </p>
+
+    <ul>
+    </ul>
+  </section>
+  -->
+
+  <section id="4.2.0" data-toc="omit-children">
+    <h2>Version 4.2.0</h2>
+    <time datetime="not yet released"></time>
+
+    <p>
+
+    </p>
+
+    <section id="4.2.0:new-features">
+      <h3>New features</h3>
+
+      <dl>
+        <dt id="4.2.0:new-features:glob-matcher">Improvements to glob dictionaries</dt>
+        <dd>
+          <p>
+            The <a href="dictionaries.html#syntax:glob-matcher">glob matcher dictionary</a> has been rewritten
+            and improved to support more operators (one-or-more, one, possessive and reluctant matches.
+          </p>
+
+          <p>
+            This feature does change the API (see API changes below).
+          </p>
+
+          <label class="java-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/94">#94</a>
+        </dd>
+      </dl>
+    </section>
+
+    <section id="4.2.0:api-changes">
+      <h3>API changes</h3>
+
+      <dl>
+        <dt id="4.2.0:api-changes:glob-matcher">
+          Glob matcher syntax changes
+        </dt>
+        <dd>
+          <p>
+            The new syntax added to the
+            <a href="#4.2.0:new-features:glob-matcher">glob matcher dictionary</a>
+            may cause small incompatibilities with any previously defined dictionaries.
+            The single <code>*</code> operator is now possessive (matches as many tokens
+            as possible) and the previous behavior is now available under a
+            reluctant variant of: <code>*?</code>.
+          </p>
+
+          <label class="java-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/94">#94</a>
+        </dd>
+      </dl>
+    </section>
+
+    <section id="4.2.0:improvements">
+      <h3>Improvements</h3>
+
+      <dl>
+        <!--
+        <dt></dt>
+        <dd>
+          <p>
+          </p>
+
+          <label class="java-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/xx">#xx</a>
+        </dd>
+        -->
+
+        <dt>Workbench improvements</dt>
+        <dd>
+          <p>
+            Numerous workbench user interface improvements and tweaks have been made.
+          </p>
+
+          <a href="https://github.com/carrot2/carrot2/issues/75">#75</a>
+          <a href="https://github.com/carrot2/carrot2/issues/76">#76</a>
+          <a href="https://github.com/carrot2/carrot2/issues/84">#84</a>
+        </dd>
+      </dl>
+    </section>
+
+    <section id="4.2.0:bug-fixes">
+      <h3>Bug fixes</h3>
+
+      <dl>
+        <!--
+        <dt></dt>
+        <dd>
+          <p>
+          </p>
+
+          <label class="rest-api"></label>
+          <label class="java-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/xx">#xx</a>
+        </dd>
+        -->
+
+        <dt>LanguageComponentsLoader improvements</dt>
+        <dd>
+          <p>
+            LanguageComponentsLoader now allows loading optional components for algorithms if providers support them.
+          </p>
+
+          <label class="java-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/85">#85</a>
+        </dd>
+      </dl>
+    </section>
+
+    <section id="4.2.0:infrastructure">
+      <h3>Infrastructure</h3>
+
+      <dl>
+        <!--
+        <dt></dt>
+        <dd>
+          <p>
+          </p>
+
+          <label class="rest-api"></label>
+          <label class="java-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/xx">#xx</a>
+        </dd>
+        -->
+      </dl>
+    </section>
+  </section>
+</article>

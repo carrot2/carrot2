@@ -10,6 +10,7 @@
  */
 package org.carrot2.language;
 
+import com.carrotsearch.randomizedtesting.annotations.TestCaseOrdering;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,6 +23,7 @@ import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
 import org.junit.Test;
 
+@TestCaseOrdering(TestCaseOrdering.AlphabeticOrder.class)
 public class GlobDictionaryTest extends TestBase {
   @Test
   public void patternParser() {
@@ -60,9 +62,6 @@ public class GlobDictionaryTest extends TestBase {
     Assertions.assertThat(toString.apply("* bar")).isEqualTo("*,bar");
     Assertions.assertThat(toString.apply("? bar")).isEqualTo("?,bar");
 
-    // multiple wildcards in a sequence get rewritten into a single one.
-    Assertions.assertThat(toString.apply("* * bar * *")).isEqualTo("*,bar,*");
-
     // Quoted wildcard (verbatim match for the symbol).
     Assertions.assertThat(toString.apply("bar \"*\"")).isEqualTo("bar,'*'");
 
@@ -79,6 +78,8 @@ public class GlobDictionaryTest extends TestBase {
     // Neither of these should match.
     for (String invalidPattern :
         Arrays.asList(
+            // multiple consecutive wildcards are invalid.
+            "* * bar * *",
             // unknown type.
             "{unknownType}",
             "\"unbalancedleft",
@@ -171,7 +172,18 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
-  public void trailingGlob() {
+  public void trailingZeroOrMoreReluctant() {
+    dictionaryOf("foo *?")
+        .matchesAll("foo", "foo bar", "foo bar bar")
+        .matchesAll("Foo", "Foo bar ", "FOO bar bar");
+
+    dictionaryOf("\"FOO\" *?")
+        .matchesAll("FOO", "FOO bar", "FOO bar bar")
+        .doesNotMatchAny("foo", "foo bar", "Foo bar bar");
+  }
+
+  @Test
+  public void trailingZeroOrMorePossessive() {
     dictionaryOf("foo *")
         .matchesAll("foo", "foo bar", "foo bar bar")
         .matchesAll("Foo", "Foo bar ", "FOO bar bar");
@@ -182,15 +194,28 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
-  public void insideGlob() {
-    dictionaryOf("foo * bar").matchesAll("foo bar", "foo xyz bar", "FOO xyz Bar");
+  public void insideGlobReluctant() {
+    dictionaryOf("foo *? bar").matchesAll("foo bar", "foo xyz bar", "FOO xyz Bar");
 
     // Reluctant matching.
-    dictionaryOf("foo * bar").doesNotMatchAny("foo bar bar");
-    dictionaryOf("foo * bar bar").matchesAll("foo bar bar", "foo xyz bar bar");
+    dictionaryOf("foo *? bar").doesNotMatchAny("foo bar bar");
+    dictionaryOf("foo *? bar bar").matchesAll("foo bar bar", "foo xyz bar bar");
+
+    dictionaryOf("foo *? bar *? var")
+        .matchesAll("foo bar var", "foo x bar y var")
+        .doesNotMatchAny("foo bar var zzz");
+  }
+
+  @Test
+  public void insideGlobPossesive() {
+    dictionaryOf("foo * bar").matchesAll("foo bar", "foo xyz bar", "FOO xyz Bar");
+
+    // Possessive matching.
+    dictionaryOf("foo * bar").matchesAll("foo bar bar");
+    dictionaryOf("foo * bar bar").doesNotMatchAny("foo bar bar", "foo xyz bar bar");
 
     dictionaryOf("foo * bar * var")
-        .matchesAll("foo bar var", "foo x bar y var")
+        .matchesAll("foo bar var", "foo x y bar y z var")
         .doesNotMatchAny("foo bar var zzz");
   }
 
@@ -212,27 +237,41 @@ public class GlobDictionaryTest extends TestBase {
         .matchesAll("xxx foo xxx bar", "xxx foo yyy bar")
         .doesNotMatchAny("xxx foo xxx baz", "xxx foo xxx bar foo");
 
-    // these two are different because * is reluctant.
-    dictionaryOf("? * foo")
+    // these two are different because *? is reluctant.
+    dictionaryOf("? *? foo")
         .matchesAll("bar foo", "baz bar foo")
         .doesNotMatchAny("foo", "foo baz", "foo foo foo");
 
+    dictionaryOf("? * foo")
+        .matchesAll("bar foo", "baz bar foo", "foo foo foo")
+        .doesNotMatchAny("foo", "foo baz");
+
     dictionaryOf("foo ? *").matchesAll("foo bar", "foo baz bar").doesNotMatchAny("foo", "baz foo");
 
-    dictionaryOf("* ? foo")
+    dictionaryOf("*? ? foo")
         .matchesAll("bar foo")
-        // * is reluctant, ? consumes baz, * consumes nothing, and "baz bar foo" doesn't match.
+        // *? is reluctant, ? consumes baz, * consumes nothing, and "baz bar foo" doesn't match.
         .doesNotMatchAny("baz bar foo")
         .doesNotMatchAny("foo", "foo baz", "foo foo foo");
+
+    dictionaryOf("* ? foo")
+        // * is possessive and the last matching token after * is ? which matches 'foo',
+        // which is consumed as part of possessive *; then ? doesn't match anything.
+        .doesNotMatchAny("bar foo")
+        // Similar case.
+        .doesNotMatchAny("foo foo foo")
+        // * is possessive, ? consumes baz, * consumes nothing, and "baz bar foo" doesn't match.
+        .doesNotMatchAny("baz bar foo")
+        .doesNotMatchAny("foo", "foo baz");
   }
 
   @Test
-  public void leadingOneOrMore() {
+  public void leadingOneOrMorePossesive() {
     dictionaryOf("+ foo")
         .matchesAll("bar foo", "bar bar foo")
         .matchesAll("bar Foo", "bar bar FOO")
-        // + is reluctant, the first 'foo' is consumed, the remaining won't match.
-        .doesNotMatchAny("foo foo foo")
+        // + is possessive, everything until the last 'foo' is consumed.
+        .matchesAll("foo foo foo")
         .doesNotMatchAny("foo");
 
     dictionaryOf("+ \"FOO\"")
@@ -241,7 +280,21 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
-  public void trailingOneOrMore() {
+  public void leadingOneOrMoreReluctant() {
+    dictionaryOf("+? foo")
+        .matchesAll("bar foo", "bar bar foo")
+        .matchesAll("bar Foo", "bar bar FOO")
+        // + is reluctant, the first 'foo' is consumed, the remaining won't match.
+        .doesNotMatchAny("foo foo foo")
+        .doesNotMatchAny("foo");
+
+    dictionaryOf("+? \"FOO\"")
+        .matchesAll("bar FOO", "bar bar FOO")
+        .doesNotMatchAny("FOO", "foo", "bar foo", "bar bar Foo");
+  }
+
+  @Test
+  public void trailingOneOrMorePossessive() {
     dictionaryOf("foo +")
         .matchesAll("foo bar", "foo bar bar")
         .matchesAll("Foo bar ", "FOO bar bar")
@@ -253,19 +306,54 @@ public class GlobDictionaryTest extends TestBase {
   }
 
   @Test
-  public void insideOneOrMore() {
-    dictionaryOf("foo + bar")
+  public void trailingOneOrMoreReluctant() {
+    dictionaryOf("foo +?")
+        .matchesAll("foo bar", "foo bar bar")
+        .matchesAll("Foo bar ", "FOO bar bar")
+        .doesNotMatchAny("foo", "Foo");
+
+    dictionaryOf("\"FOO\" +?")
+        .matchesAll("FOO bar", "FOO bar bar")
+        .doesNotMatchAny("FOO", "foo", "foo bar", "Foo bar bar");
+  }
+
+  @Test
+  public void insideOneOrMoreReluctant() {
+    dictionaryOf("foo +? bar")
         .matchesAll("foo xyz bar", "FOO xyz Bar")
         .matchesAll("foo baz baz bar")
         .doesNotMatchAny("foo bar");
 
     // Reluctant matching.
-    dictionaryOf("foo + bar").doesNotMatchAny("foo bar bar bar");
-    dictionaryOf("foo + bar").matchesAll("foo bar bar");
-    dictionaryOf("foo + bar bar").matchesAll("foo baz bar bar", "foo baz xyz bar bar");
+    dictionaryOf("foo +? bar").doesNotMatchAny("foo bar bar bar");
+    dictionaryOf("foo +? bar").matchesAll("foo bar bar");
+    dictionaryOf("foo +? bar bar").matchesAll("foo baz bar bar", "foo baz xyz bar bar");
+
+    dictionaryOf("foo +? bar +? var")
+        .matchesAll("foo baz bar baz baz var", "foo x bar y var")
+        .doesNotMatchAny("foo x bar y var zzz");
+  }
+
+  @Test
+  public void insideOneOrMorePossessive() {
+    dictionaryOf("foo + bar bar")
+        .doesNotMatchAny("foo xyz bar bar")
+        .doesNotMatchAny("foo baz baz bar")
+        .doesNotMatchAny("foo bar");
+
+    dictionaryOf("foo + bar")
+        .matchesAll("foo xyz bar", "FOO xyz Bar")
+        .matchesAll("foo baz baz bar")
+        .doesNotMatchAny("foo bar");
+
+    dictionaryOf("foo + bar")
+        .matchesAll("foo x bar", "foo bar bar", "foo bar bar bar")
+        .doesNotMatchAny("foo bar");
+    dictionaryOf("foo + bar bar")
+        .doesNotMatchAny("foo bar", "foo baz bar bar", "foo baz xyz bar bar");
 
     dictionaryOf("foo + bar + var")
-        .matchesAll("foo baz bar baz baz var", "foo x bar y var")
+        .matchesAll("foo x x bar y y var", "foo x bar y var")
         .doesNotMatchAny("foo x bar y var zzz");
   }
 
