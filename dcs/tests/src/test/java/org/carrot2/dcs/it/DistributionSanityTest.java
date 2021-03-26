@@ -46,7 +46,7 @@ public class DistributionSanityTest extends AbstractDistributionTest {
   public void checkFileMode() throws IOException {
     try (Stream<Path> s = Files.walk(getDistributionDir())) {
       for (Path p : s.collect(Collectors.toList())) {
-        if (p.getFileName().toString().endsWith(".sh")) {
+        if (p.getFileName().toString().endsWith("dcs")) {
           try {
             Assertions.assertThat(Files.getPosixFilePermissions(p))
                 .contains(PosixFilePermission.OWNER_EXECUTE);

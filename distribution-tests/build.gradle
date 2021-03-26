@@ -1,0 +1,34 @@
+plugins {
+  id('java-library')
+}
+
+configurations {
+  distribution
+  distributionZip
+}
+
+dependencies {
+  distribution project(path: ":distribution", configuration: "distDirArtifact")
+  distributionZip project(path: ":distribution", configuration: "distZipArtifact")
+
+  testImplementation "org.apache.commons:commons-compress"
+  testImplementation "org.carrot2.infra:tests"
+  testImplementation "com.carrotsearch:procfork"
+  testImplementation "com.carrotsearch.console:launcher"
+}
+
+test {
+  dependsOn configurations.distributionZip
+
+  shouldRunAfter ":core:test"
+
+  maxParallelForks 2
+
+  doFirst {
+    def distZip = configurations.distributionZip.singleFile
+    systemProperty("distribution.zip", distZip)
+    systemProperty("tests.slow", "true")
+
+    logger.lifecycle("Integration tests of: ${distZip}")
+  }
+}

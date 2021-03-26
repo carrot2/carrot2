@@ -28,4 +28,6 @@ include 'dcs:contexts:root'
 include 'dcs:contexts:javadoc'
 
 include 'distribution'
+include 'distribution-tests'
+
 include 'doc'

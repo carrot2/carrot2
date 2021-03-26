@@ -1,5 +1,4 @@
 import org.apache.tools.ant.filters.*
-import org.apache.tools.ant.taskdefs.condition.Os
 import java.nio.file.Files
 
 plugins {
@@ -7,8 +6,7 @@ plugins {
 }
 
 ext {
-  distTarget = file("$buildDir/dist")
-  distShadow = file("$buildDir/distCheck")
+  distDir = file("$buildDir/dist")
   distZip = file("$buildDir/distZip")
 }
 
@@ -16,6 +14,9 @@ configurations {
   dcs
   examples
   mavenArtifacts
+
+  distDirArtifact
+  distZipArtifact
 }
 
 dependencies {
@@ -51,39 +52,8 @@ task syncDist(type: Sync) {
     into "artifacts/"
   }
 
-  into distTarget
+  into distDir
 }
-
-task syncDistShadow(type: Sync) {
-  dependsOn syncDist
-  from distTarget
-  into distShadow
-}
-
-task checkExamples(type: Exec) {
-  dependsOn assemble, syncDistShadow
-
-  def args = []
-  if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-    args += ['cmd', '/c', 'gradlew']
-  } else {
-    args += ['./gradlew']
-  }
-  args += ['--no-daemon']
-  args += ['test']
-
-  workingDir file("${distShadow}/examples")
-  commandLine args
-}
-
-task checkDcsExamples(type: GradleBuild) {
-  dependsOn assemble, syncDistShadow
-  mustRunAfter checkExamples
-
-  dir = file("${distShadow}/dcs/examples")
-  tasks = ["compileJava"]
-}
-check.dependsOn(checkExamples, checkDcsExamples)
 
 task zip(type: Zip) {
   dependsOn syncDist
@@ -91,11 +61,13 @@ task zip(type: Zip) {
   archiveFileName = "carrot2-${project.version}.zip"
   destinationDirectory = distZip
 
-  from(distTarget, {
-    filesMatching("**/dcs", {
-      fileMode 0755
+  from(distDir, {
+    filesMatching(["**/dcs", "**/gradlew"], { copySpec ->
+      copySpec.mode = 0755
     })
   })
+
+  fileMode 0644
 
   into "carrot2-${project.version}/"
 }
@@ -118,3 +90,11 @@ task bambooProps {
 
 assemble.dependsOn bambooProps
 assemble.dependsOn zip
+
+artifacts {
+  distZipArtifact tasks.zip
+
+  distDirArtifact project.ext.distDir, {
+    builtBy tasks.syncDist
+  }
+}
