@@ -35,7 +35,7 @@ public class DistributionSanityTest extends AbstractDistributionTest {
         if (p.getFileName().toString().endsWith(".sh")) {
           String content = Files.readString(p);
           if (content.indexOf('\r') >= 0) {
-            throw new AssertionError(p + " contains carriage \r?");
+            throw new AssertionError(p + " contains carriage \\r?");
           }
         }
       }

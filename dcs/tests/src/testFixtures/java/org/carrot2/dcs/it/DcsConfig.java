@@ -16,13 +16,13 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 public class DcsConfig {
-  final String shutdownToken;
-  final Path distributionDir;
+  public final String shutdownToken;
+  public final Path distributionDir;
 
-  Path pidFile;
-  Integer maxThreads;
-  boolean enableTestServlet;
-  boolean useGzip;
+  public Path pidFile;
+  public Integer maxThreads;
+  public boolean enableTestServlet;
+  public boolean useGzip;
 
   public DcsConfig(Path distributionDir, String shutdownToken) {
     this.shutdownToken = Objects.requireNonNull(shutdownToken);

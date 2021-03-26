@@ -24,7 +24,7 @@ import java.util.function.Function;
 import org.assertj.core.api.Assertions;
 import org.carrot2.RestoreFolderStateRule;
 
-class DistMirrorRule extends TestRuleAdapter {
+public class DistMirrorRule extends TestRuleAdapter {
   private Path distribution;
   private Path mirrorPath;
 
@@ -52,6 +52,8 @@ class DistMirrorRule extends TestRuleAdapter {
             .apply(RandomizedTest.newTempDir(LifecycleScope.SUITE).toAbsolutePath().normalize());
 
     Files.createDirectories(mirrorPath);
+    createRestoreRule().restore();
+
     Loggers.CONSOLE.info("Using distribution from: {} mirrored to: {}", distribution, mirrorPath);
   }
 

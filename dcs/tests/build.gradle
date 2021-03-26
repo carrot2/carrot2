@@ -1,5 +1,6 @@
 
 apply plugin: 'java'
+apply plugin: 'java-test-fixtures'
 
 configurations {
     distribution
@@ -8,15 +9,19 @@ configurations {
 dependencies {
     distribution project(path: ":dcs:distribution", configuration: "distDir")
 
-    testImplementation project(":dcs:distribution")
     testImplementation project(":dcs:examples")
     testImplementation project(":dcs:model")
     testImplementation "com.fasterxml.jackson.core:jackson-databind"
 
+    // Duplicated to shut up palantir version check.
     testImplementation "com.carrotsearch:procfork"
-    testImplementation "com.carrotsearch.console:launcher"
-    testImplementation "org.eclipse.jetty:jetty-server"
-    testImplementation "org.eclipse.jetty:jetty-webapp"
+
+    testFixturesApi project(':infra:tests')
+    testFixturesApi project(":dcs:distribution")
+    testFixturesApi "com.carrotsearch:procfork"
+    testFixturesApi "com.carrotsearch.console:launcher"
+    testFixturesApi "org.eclipse.jetty:jetty-server"
+    testFixturesApi "org.eclipse.jetty:jetty-webapp"
 }
 
 test {

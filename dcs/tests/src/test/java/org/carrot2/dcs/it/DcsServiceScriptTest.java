@@ -26,7 +26,7 @@ public class DcsServiceScriptTest extends AbstractDistributionTest {
   @Test
   public void verifyShutdownToken() throws IOException, InterruptedException {
     try (DcsService service =
-        new ForkedDcs(new DcsConfig(createTempDistMirror.mirrorPath(), DCS_SHUTDOWN_TOKEN))) {
+        new ForkedDcs(new DcsConfig(getDistributionDir(), DCS_SHUTDOWN_TOKEN))) {
       try {
         HttpRequest.builder()
             .queryParam("token", DCS_SHUTDOWN_TOKEN)
@@ -58,8 +58,7 @@ public class DcsServiceScriptTest extends AbstractDistributionTest {
     Path pidFile = newTempFile();
     try (var service =
         new ForkedDcs(
-            new DcsConfig(createTempDistMirror.mirrorPath(), DCS_SHUTDOWN_TOKEN)
-                .withPidFile(pidFile))) {
+            new DcsConfig(getDistributionDir(), DCS_SHUTDOWN_TOKEN).withPidFile(pidFile))) {
 
       Assertions.assertThat(pidFile).isRegularFile();
       var pid = Long.parseLong(Files.readString(pidFile, StandardCharsets.UTF_8));

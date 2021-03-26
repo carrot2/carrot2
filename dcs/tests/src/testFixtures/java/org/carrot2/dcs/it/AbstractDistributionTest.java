@@ -18,15 +18,27 @@ import org.junit.Rule;
 import org.junit.rules.RuleChain;
 
 public abstract class AbstractDistributionTest extends TestBase {
-  @ClassRule public static DistMirrorRule createTempDistMirror = new DistMirrorRule();
+  private static DistMirrorRule createTempDistMirror;
 
-  protected final RestoreFolderStateRule restorePristineState;
+  @ClassRule
+  public static final RuleChain classRuleChain =
+      RuleChain.outerRule(createTempDistMirror = new DistMirrorRule());
+
+  private final RestoreFolderStateRule restorePristineState;
 
   @Rule public RuleChain testRuleChain;
 
   protected AbstractDistributionTest() {
-    restorePristineState = createTempDistMirror.createRestoreRule();
+    restorePristineState = createRestoreRule();
     testRuleChain = RuleChain.outerRule(restorePristineState);
+  }
+
+  protected static DistMirrorRule getDistMirrorRule() {
+    return createTempDistMirror;
+  }
+
+  protected static RestoreFolderStateRule createRestoreRule() {
+    return createTempDistMirror.createRestoreRule();
   }
 
   protected final Path getDistributionDir() {

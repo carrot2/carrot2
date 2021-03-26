@@ -25,8 +25,7 @@ public class DcsGzipTest extends AbstractDistributionTest {
   @Test
   public void verifyGzipCompression() throws IOException {
     DcsConfig config =
-        new DcsConfig(createTempDistMirror.mirrorPath(), AbstractDcsTest.DCS_SHUTDOWN_TOKEN)
-            .withGzip(true);
+        new DcsConfig(getDistributionDir(), AbstractDcsTest.DCS_SHUTDOWN_TOKEN).withGzip(true);
 
     byte[] requestBytes = resourceBytes("large.request.json");
 

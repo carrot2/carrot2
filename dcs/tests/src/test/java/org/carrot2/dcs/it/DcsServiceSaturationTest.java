@@ -35,7 +35,7 @@ public class DcsServiceSaturationTest extends AbstractDistributionTest {
     int connections = maxThreads + 20;
 
     DcsConfig config =
-        new DcsConfig(createTempDistMirror.mirrorPath(), DCS_SHUTDOWN_TOKEN)
+        new DcsConfig(getDistributionDir(), DCS_SHUTDOWN_TOKEN)
             .withMaxThreads(maxThreads)
             .withTestServlet(true);
 
