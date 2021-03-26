@@ -37,7 +37,8 @@ public class EmbeddedDcs implements DcsService {
             config.distributionDir.resolve("web"),
             config.shutdownToken,
             config.maxThreads,
-            config.useGzip);
+            config.useGzip,
+            null /* idle time */);
 
     try {
       container.start();

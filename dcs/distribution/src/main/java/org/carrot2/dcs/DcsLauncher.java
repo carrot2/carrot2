@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 @Parameters(
@@ -47,6 +48,7 @@ public class DcsLauncher extends Command<ExitCode> {
   public static final String OPT_MAX_THREADS = "--threads";
   public static final String OPT_USE_GZIP = "--gzip";
   public static final String OPT_PID_FILE = "--pid-file";
+  public static final String OPT_IDLE_TIME = "--idle-time";
 
   @Parameter(
       names = {"-p", OPT_PORT},
@@ -81,6 +83,12 @@ public class DcsLauncher extends Command<ExitCode> {
       required = false)
   public Path pidFile;
 
+  @Parameter(
+      names = {OPT_IDLE_TIME},
+      description = "Idle time before the connection is terminated, in milliseconds.",
+      required = false)
+  public Integer idleTime = Math.toIntExact(TimeUnit.SECONDS.toMillis(60));
+
   private final String tstamp =
       new DateTimeFormatterBuilder()
           .appendPattern("yyyy_MM_dd-HH_mm_ss-SSS")
@@ -96,7 +104,8 @@ public class DcsLauncher extends Command<ExitCode> {
       }
 
       JettyContainer c =
-          new JettyContainer(port, home.resolve("web"), shutdownToken, maxThreads, useGzip);
+          new JettyContainer(
+              port, home.resolve("web"), shutdownToken, maxThreads, useGzip, idleTime);
       c.start();
       c.join();
       return ExitCodes.SUCCESS;

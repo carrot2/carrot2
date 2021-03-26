@@ -49,14 +49,21 @@ public class JettyContainer {
   private Server server;
   private ServerConnector connector;
   private Integer maxThreads;
+  private Integer idleTime;
 
   public JettyContainer(
-      int port, Path contexts, String shutdownToken, Integer maxThreads, boolean useGzip) {
+      int port,
+      Path contexts,
+      String shutdownToken,
+      Integer maxThreads,
+      boolean useGzip,
+      Integer idleTime) {
     this.port = port;
     this.webappContexts = contexts;
     this.shutdownToken = shutdownToken;
     this.maxThreads = maxThreads;
     this.useGzip = useGzip;
+    this.idleTime = idleTime;
   }
 
   public void start() throws Exception {
@@ -223,6 +230,9 @@ public class JettyContainer {
     Server server = new Server(threadPool);
     connector = new ServerConnector(server);
     connector.setPort(port);
+    if (idleTime != null) {
+      connector.setIdleTimeout(idleTime);
+    }
     server.addConnector(connector);
     server.addLifeCycleListener(createLifecycleLogger(server, connector));
     return server;
