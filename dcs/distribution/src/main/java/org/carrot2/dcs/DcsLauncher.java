@@ -128,7 +128,7 @@ public class DcsLauncher extends Command<ExitCode> {
     home = home.toAbsolutePath();
 
     if (Files.exists(home.resolve("dcs.cmd"))
-        || Files.exists(home.resolve("dcs.sh"))
+        || Files.exists(home.resolve("dcs"))
         || Files.exists(home.resolve("web"))) {
       System.setProperty(DCS_HOME_SYSPROP, home.toString());
     } else {

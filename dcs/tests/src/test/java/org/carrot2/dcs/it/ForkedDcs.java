@@ -68,7 +68,7 @@ public class ForkedDcs implements DcsService {
             .cwd(config.distributionDir)
             .envvar("DCS_OPTS", String.join(" ", dcsOpts))
             .envvar("JAVA_CMD", javaCmd.toAbsolutePath().toString())
-            .executable(Paths.get(File.separatorChar == '\\' ? "dcs" : "./dcs.sh"))
+            .executable(Paths.get(File.separatorChar == '\\' ? "dcs" : "./dcs"))
             .args(args.toArray(new String[args.size()]))
             .viaShellLauncher()
             .execute();

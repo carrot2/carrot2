@@ -24,7 +24,7 @@ import org.junit.Test;
 public class DistributionSanityTest extends AbstractDistributionTest {
   @Test
   public void checkRequiredFiles() {
-    for (String file : Arrays.asList("carrot2.LICENSE", "dcs.cmd", "dcs.sh"))
+    for (String file : Arrays.asList("carrot2.LICENSE", "dcs.cmd", "dcs"))
       Assertions.assertThat(getDistributionDir().resolve(file)).isRegularFile();
   }
 

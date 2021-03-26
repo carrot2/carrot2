@@ -1,10 +1,10 @@
 #!/bin/sh
 
 # Determine installation home
-if [ -z "$SCRIPT_HOME" ]; then
-  SCRIPT_HOME=`dirname "$0"`
-  cd "$SCRIPT_HOME"
-  export SCRIPT_HOME="`pwd`"
+if [ -z "$DCS_HOME" ]; then
+  DCS_HOME=`dirname "$0"`
+  cd "$DCS_HOME"
+  export DCS_HOME="`pwd`"
   cd - >/dev/null
 fi
 
@@ -13,18 +13,13 @@ if [ -z "$DCS_OPTS" ]; then
   DCS_OPTS=""
 fi
 
-# Determine java command
-if [ -z "$JAVA_CMD" ]; then
-  JAVA_CMD="java"
-fi
-
 # Convert to real Windows paths from Unix-ish environments on Windows
 # because the java process will be Windows-native.
 SHELLNAME=`uname`
 case "$SHELLNAME" in
   CYGWIN*)
-    SCRIPT_HOME=`cygpath -m "$SCRIPT_HOME"`
-    echo "> DCS expects Windows paths in descriptors and arguments (Unix'ish shell detected: $SHELLNAME)"
+    DCS_HOME=`cygpath -m "$DCS_HOME"`
+    echo "> [WARNING] DCS expects Windows paths in descriptors and arguments (Unix'ish shell detected: $SHELLNAME)"
 
     if [ -t 1 ]; then
       # Java doesn't see CygWin as a console, so force it.
@@ -51,6 +46,9 @@ for arg in "$@" ; do
   all_args="$all_args \"$arg\""
 done
 
-# Launch DCS.
-eval $JAVA_CMD $DCS_OPTS -jar \"$SCRIPT_HOME/lib/dcs-launcher-${product.version}.jar\" "$all_args"
+# Set script name for help
+export SCRIPT_NAME="DCS ${product.version}"
+
+# Launch the DCS.
+eval java --illegal-access=deny $JVMARGS $DCS_OPTS -jar \"$DCS_HOME/lib/dcs-launcher-${product.version}.jar\" "$all_args"
 exit $?
