@@ -52,6 +52,11 @@ public class ForkedDcs implements DcsService {
     args.add(DcsLauncher.OPT_USE_GZIP);
     args.add(Boolean.toString(config.useGzip));
 
+    if (config.pidFile != null) {
+      args.add(DcsLauncher.OPT_PID_FILE);
+      args.add(config.pidFile.toAbsolutePath().toString());
+    }
+
     List<String> dcsOpts = new ArrayList<>();
     dcsOpts.add("-Xmx256m");
     if (config.enableTestServlet) {

@@ -19,6 +19,7 @@ import com.carrotsearch.console.launcher.Launcher;
 import com.carrotsearch.console.launcher.Loggers;
 import com.carrotsearch.console.launcher.ReportCommandException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,6 +46,7 @@ public class DcsLauncher extends Command<ExitCode> {
   public static final String OPT_HOME = "--home";
   public static final String OPT_MAX_THREADS = "--threads";
   public static final String OPT_USE_GZIP = "--gzip";
+  public static final String OPT_PID_FILE = "--pid-file";
 
   @Parameter(
       names = {"-p", OPT_PORT},
@@ -64,7 +66,7 @@ public class DcsLauncher extends Command<ExitCode> {
 
   @Parameter(
       names = {OPT_SHUTDOWN_TOKEN},
-      description = "Shutdown service's validation token.")
+      description = "The shutdown secret token. If empty, shutdown endpoint will be disabled.")
   public String shutdownToken;
 
   @Parameter(
@@ -72,6 +74,12 @@ public class DcsLauncher extends Command<ExitCode> {
       description = "Use GZIP compression for responses.",
       arity = 1)
   public boolean useGzip = true;
+
+  @Parameter(
+      names = {OPT_PID_FILE},
+      description = "Write process PID to a given file.",
+      required = false)
+  public Path pidFile;
 
   private final String tstamp =
       new DateTimeFormatterBuilder()
@@ -82,6 +90,11 @@ public class DcsLauncher extends Command<ExitCode> {
   @Override
   public ExitCode run() {
     try {
+      if (pidFile != null) {
+        Files.writeString(
+            pidFile, Long.toString(ProcessHandle.current().pid()), StandardCharsets.UTF_8);
+      }
+
       JettyContainer c =
           new JettyContainer(port, home.resolve("web"), shutdownToken, maxThreads, useGzip);
       c.start();

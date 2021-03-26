@@ -27,6 +27,10 @@ public class EmbeddedDcs implements DcsService {
       System.setProperty(SYSPROP_TESTSERVLET_ENABLE, "true");
     }
 
+    if (config.pidFile != null) {
+      throw new AssertionError("Can't run with pid file option on embedded DCS.");
+    }
+
     container =
         new JettyContainer(
             0,
@@ -34,6 +38,7 @@ public class EmbeddedDcs implements DcsService {
             config.shutdownToken,
             config.maxThreads,
             config.useGzip);
+
     try {
       container.start();
       serviceUri = URI.create("http://localhost:" + container.getPort());

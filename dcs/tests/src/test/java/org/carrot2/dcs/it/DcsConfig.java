@@ -10,6 +10,8 @@
  */
 package org.carrot2.dcs.it;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
@@ -17,6 +19,7 @@ public class DcsConfig {
   final String shutdownToken;
   final Path distributionDir;
 
+  Path pidFile;
   Integer maxThreads;
   boolean enableTestServlet;
   boolean useGzip;
@@ -38,6 +41,14 @@ public class DcsConfig {
 
   public DcsConfig withGzip(boolean flag) {
     this.useGzip = flag;
+    return this;
+  }
+
+  public DcsConfig withPidFile(Path path) throws IOException {
+    if (!Files.isDirectory(path.getParent())) {
+      throw new IOException("Not a directory: " + path);
+    }
+    this.pidFile = path;
     return this;
   }
 }

@@ -11,13 +11,16 @@
 package org.carrot2.dcs.it;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.apache.http.NoHttpResponseException;
 import org.apache.http.conn.HttpHostConnectException;
 import org.assertj.core.api.Assertions;
 import org.carrot2.HttpRequest;
 import org.junit.Test;
 
-public class DcsServiceShutdownTest extends AbstractDistributionTest {
+public class DcsServiceScriptTest extends AbstractDistributionTest {
   private static final String DCS_SHUTDOWN_TOKEN = "_shutdown_";
 
   @Test
@@ -47,6 +50,20 @@ public class DcsServiceShutdownTest extends AbstractDistributionTest {
 
       Assertions.fail("Expected the service to shut down cleanly.");
       Assertions.assertThat(service.isRunning()).isFalse();
+    }
+  }
+
+  @Test
+  public void verifyPidFileEmitted() throws IOException {
+    Path pidFile = newTempFile();
+    try (var service =
+        new ForkedDcs(
+            new DcsConfig(createTempDistMirror.mirrorPath(), DCS_SHUTDOWN_TOKEN)
+                .withPidFile(pidFile))) {
+
+      Assertions.assertThat(pidFile).isRegularFile();
+      var pid = Long.parseLong(Files.readString(pidFile, StandardCharsets.UTF_8));
+      Assertions.assertThat(ProcessHandle.of(pid).get().isAlive()).isTrue();
     }
   }
 }
