@@ -70,7 +70,7 @@ configure(subprojects.findAll { it.path in published }) {
         }
         maven {
           name = 'sonatype'
-          url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+          url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
           credentials {
             if (project.hasProperty('nexusUsername')) {
               username project.nexusUsername
@@ -88,7 +88,12 @@ configure(subprojects.findAll { it.path in published }) {
         //
         // https://github.com/palantir/gradle-consistent-versions/issues/550
         withXml {
-          asNode().dependencyManagement.replaceNode {
+          def node = asNode()
+          node.dependencyManagement.replaceNode {}
+          node.dependencies.'*'.findAll() {
+            it.groupId.text() == 'org.'
+          }.each() {
+            it.parent().remove(it)
           }
         }
 
