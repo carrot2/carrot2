@@ -144,7 +144,7 @@ task distZip(type: Zip) {
   destinationDirectory = file("$outputZip")
 
   from(distDir, {
-    filesMatching("**/*.sh", {
+    filesMatching("**/dcs", {
       fileMode 0755
     })
   })

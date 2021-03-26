@@ -92,7 +92,7 @@ task zip(type: Zip) {
   destinationDirectory = distZip
 
   from(distTarget, {
-    filesMatching("**/*.sh", {
+    filesMatching("**/dcs", {
       fileMode 0755
     })
   })
