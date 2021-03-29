@@ -44,7 +44,7 @@ org.hamcrest:hamcrest-core:1.3 (1 constraints: cc05fe3f)
 org.slf4j:slf4j-api:1.8.0-beta4 (4 constraints: b043118e)
 
 [Test dependencies]
-com.carrotsearch:procfork:1.0.5 (1 constraints: 0805f535)
+com.carrotsearch:procfork:1.0.6 (1 constraints: 0905f635)
 net.bytebuddy:byte-buddy:1.10.18 (1 constraints: 750ba8e9)
 net.bytebuddy:byte-buddy-agent:1.10.18 (1 constraints: 750ba8e9)
 org.apache.commons:commons-compress:1.19 (1 constraints: df04fa30)
