@@ -22,9 +22,6 @@ IF NOT "%DCS_OPTS%"=="" GOTO optsSet
 SET DCS_OPTS=
 :optsSet
 
-REM Set script name for help.
-SET SCRIPT_NAME=%~n0
-
 REM Use JAVA_CMD, if provided.
 IF NOT "%JAVA_CMD%"=="" GOTO javaSet
 SET JAVA_CMD=java
