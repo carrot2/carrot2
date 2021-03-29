@@ -13,10 +13,11 @@ plugins {
 }
 
 repositories {
+  mavenLocal()
   mavenCentral()
 }
 
-rootProject.version = '4.2.0'
+rootProject.version = '4.3.0-SNAPSHOT'
 ext {
   fullName = "Carrot2"
 

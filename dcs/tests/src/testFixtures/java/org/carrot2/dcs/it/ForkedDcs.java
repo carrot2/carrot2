@@ -13,7 +13,8 @@ package org.carrot2.dcs.it;
 import com.carrotsearch.console.launcher.Loggers;
 import com.carrotsearch.procfork.ForkedProcess;
 import com.carrotsearch.procfork.ProcessBuilderLauncher;
-import java.io.File;
+import com.carrotsearch.randomizedtesting.LifecycleScope;
+import com.carrotsearch.randomizedtesting.RandomizedTest;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
@@ -63,12 +64,14 @@ public class ForkedDcs implements DcsService {
       dcsOpts.add("-D" + SYSPROP_TESTSERVLET_ENABLE + "=true");
     }
 
+    var otherDir = RandomizedTest.newTempDir(LifecycleScope.SUITE);
+
     this.process =
         new ProcessBuilderLauncher()
-            .cwd(config.distributionDir)
+            .cwd(otherDir)
             .envvar("DCS_OPTS", String.join(" ", dcsOpts))
             .envvar("JAVA_CMD", javaCmd.toAbsolutePath().toString())
-            .executable(Paths.get(File.separatorChar == '\\' ? "dcs" : "./dcs"))
+            .executable(config.distributionDir.resolve("dcs"))
             .args(args.toArray(new String[args.size()]))
             .viaShellLauncher()
             .execute();
