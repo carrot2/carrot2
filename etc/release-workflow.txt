@@ -25,7 +25,7 @@ gradlew publishSonatype --max-workers=1
 
 * Go to sonatype, verify and ack the release.
 
-https://oss.sonatype.org/index.html#stagingRepositories
+https://s01.oss.sonatype.org/index.html#stagingRepositories
 
 * Tag the release.
 
