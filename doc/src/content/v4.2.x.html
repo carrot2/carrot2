@@ -27,10 +27,11 @@
   </section>
 
   <section id="v4.2.1">
-    <h2>Version 4.2.1 [unreleased]</h2>
+    <h2>Version 4.2.1</h2>
+    <time datetime="2021-03-29"></time>
 
     <p>
-      This is a bugfix release.
+      This is a bugfix release fixing DCS launch scripts.
     </p>
 
     <section id="4.2.1:bug-fixes">
@@ -52,9 +53,13 @@
         <dt>DCS scripts</dt>
         <dd>
           <p>
-            A regression bug introduced in v4.2.0 prevents dcs from
+            A regression bug introduced in v4.2.0 prevents the dcs from
             starting (SCRIPT_HOME variable set instead of DCS_HOME).
             Affects Linux script only.
+          </p>
+          <p>
+            A workaround of passing an explicit <code>--home</code> parameter
+            can be used for version 4.2.0.
           </p>
 
           <label class="dcs"></label>
