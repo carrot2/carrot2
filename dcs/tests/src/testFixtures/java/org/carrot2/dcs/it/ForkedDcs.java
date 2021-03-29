@@ -15,7 +15,6 @@ import com.carrotsearch.procfork.ForkedProcess;
 import com.carrotsearch.procfork.ProcessBuilderLauncher;
 import com.carrotsearch.randomizedtesting.LifecycleScope;
 import com.carrotsearch.randomizedtesting.RandomizedTest;
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;

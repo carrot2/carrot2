@@ -49,6 +49,11 @@ done
 # Set script name for help
 export SCRIPT_NAME="DCS ${product.version}"
 
+# Use JAVA_CMD, if provided.
+if [ -z "$JAVA_CMD" ]; then
+  JAVA_CMD="java"
+fi
+
 # Launch the DCS.
-eval java --illegal-access=deny $JVMARGS $DCS_OPTS -jar \"$DCS_HOME/lib/dcs-launcher-${product.version}.jar\" "$all_args"
+eval $JAVA_CMD --illegal-access=deny $JVMARGS $DCS_OPTS -jar \"$DCS_HOME/lib/dcs-launcher-${product.version}.jar\" "$all_args"
 exit $?

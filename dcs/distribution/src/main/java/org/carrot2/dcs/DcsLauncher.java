@@ -40,7 +40,7 @@ import java.util.stream.Stream;
     commandDescription = "Launch the Document Clustering Server.")
 public class DcsLauncher extends Command<ExitCode> {
   public static final String DCS_HOME_SYSPROP = "dcs.home";
-  public static final String ENV_SCRIPT_HOME = "SCRIPT_HOME";
+  public static final String ENV_SCRIPT_HOME = "DCS_HOME";
 
   public static final String OPT_SHUTDOWN_TOKEN = "--shutdown-token";
   public static final String OPT_PORT = "--port";

@@ -25,8 +25,13 @@ SET DCS_OPTS=
 REM Set script name for help.
 SET SCRIPT_NAME=%~n0
 
+REM Use JAVA_CMD, if provided.
+IF NOT "%JAVA_CMD%"=="" GOTO javaSet
+SET JAVA_CMD=java
+:javaSet
+
 REM Launch DCS.
-JAVA --illegal-access=deny %JVMARGS% %DCS_OPTS% -jar "%DCS_HOME%\lib\dcs-launcher-${product.version}.jar" %*
+%JAVA_CMD% --illegal-access=deny %JVMARGS% %DCS_OPTS% -jar "%DCS_HOME%\lib\dcs-launcher-${product.version}.jar" %*
 SET DCS_EXITVAL=%errorlevel%
 
 REM Set cmd's window title and return with the exit code.
