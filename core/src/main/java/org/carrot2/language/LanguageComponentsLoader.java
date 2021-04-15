@@ -90,9 +90,23 @@ public final class LanguageComponentsLoader {
       }
     }
 
+    // If we only have one language to support, remove any loaded unsupported languages.
+    // We can't do this in general because languages A and B may support a mutually
+    // exclusive subset of languages.
+    if (algorithmRestriction != null && algorithmRestriction.length == 1) {
+      var algorithm = algorithmRestriction[0];
+      preloadedSuppliers
+          .entrySet()
+          .removeIf(
+              e -> {
+                return !algorithm.supports(new LanguageComponents(e.getKey(), e.getValue()));
+              });
+    }
+
     return new LoadedLanguages(preloadedSuppliers);
   }
 
+  /** Limits the loaded components to just those required by the given list of languages. */
   public LanguageComponentsLoader limitToLanguages(String... languages) {
     if (this.languageRestrictions != null) {
       throw new RuntimeException("Method can be set once.");
@@ -101,6 +115,15 @@ public final class LanguageComponentsLoader {
     return this;
   }
 
+  /**
+   * Limits the loaded components to just those required by the given set of algorithms.
+   *
+   * <p>Note that there is no guarantee that all algorithms will have all the required components:
+   * the loaded set may contain a subset of the required components of each algorithm. This method
+   * exists to prevent unnecessary resources from being resolved and loaded.
+   *
+   * @see ClusteringAlgorithm#supports(LanguageComponents)
+   */
   public LanguageComponentsLoader limitToAlgorithms(ClusteringAlgorithm... algorithms) {
     if (this.algorithmRestriction != null) {
       throw new RuntimeException("Method can be set once.");

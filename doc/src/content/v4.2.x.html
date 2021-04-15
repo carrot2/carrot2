@@ -26,6 +26,35 @@
     </p>
   </section>
 
+  <section id="v4.2.2">
+    <h2>Version 4.2.2 [unreleased]</h2>
+
+    <p>
+      This is a bugfix release.
+    </p>
+
+    <section id="4.2.2:bug-fixes">
+      <h3>Bug fixes</h3>
+
+      <dl>
+        <dt>Language loader</dt>
+        <dd>
+          <p>
+            In case a single algorithm is passed as a restriction to language component loader,
+            the resulting list of languages is guaranteed to be supported by that algorithm.
+          </p>
+          <p>
+            If more than one algorithm is passed as a restriction, a follow-up check
+            of supported languages is still required.
+          </p>
+
+          <label class="java-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/108">#108</a>
+        </dd>
+      </dl>
+    </section>
+  </section>
+
   <section id="v4.2.1">
     <h2>Version 4.2.1</h2>
     <time datetime="2021-03-29"></time>
