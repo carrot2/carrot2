@@ -2,51 +2,45 @@
   "document": {
     "version": 1.0,
     "partner": "Carrot2Json",
-    "timestamp": "Fri Jan 11 22:25:24 CET 2019"
+    "timestamp": "Mon Apr 12 16:10:44 CEST 2021"
   },
   "request": {
-    "query": "json",
+    "query": "data mining",
     "country": "web",
-    "language": "all",
-    "safeSearch": false,
+    "language": "en",
+    "safeSearch": true,
     "dataSourceResults": 40,
-    "maxRecords": 102,
+    "maxRecords": 119,
     "timeoutMs": 2000,
     "sources": {
-      "count": 7,
-      "names": ["Ask", "Base", "Bing", "Faroo", "Google", "Wikipedia", "Yahoo"]
+      "count": 5,
+      "names": ["Base", "Bing", "Google", "Wikipedia", "Yahoo"]
     }
   },
   "response": {
-    "totalEstimatedRecords": 17101043,
-    "mergedRecords": 102,
-    "durationMs": 25,
+    "totalEstimatedRecords": 741213,
+    "mergedRecords": 119,
+    "durationMs": 28,
     "sources": {
-      "count": 7,
+      "count": 5,
       "detail": [
         {
-          "name": "Ask",
+          "name": "Base",
           "records": 40,
           "cached": true,
-          "url": "https://www.search.ask.com/web?q=json"
+          "url": "https://www.base-search.net/Search/Results?lookfor=data+mining&filter%5B%5D=f_dclang%3A%22eng%22&offset=40&type=all&ling=0"
         },
         {
-          "name": "Bing",
-          "records": 21,
+          "name": "Google",
+          "records": 40,
           "cached": true,
-          "url": "https://www.bing.com/search?q=%2Bjson%20language%3Aen&count=40&adlt=off"
-        },
-        {
-          "name": "Faroo",
-          "records": 10,
-          "cached": true,
-          "url": "http://www.faroo.com/#q=json&l=en&src=web&news=false"
+          "url": "https://www.google.ch/search?q=data+mining&lr=lang_en&hl=en&cr=&safe=active&num=40&nfpr=1"
         },
         {
           "name": "Wikipedia",
           "records": 40,
           "cached": true,
-          "url": "https://en.wikipedia.org/w/index.php?search=json&limit=40&fulltext=1"
+          "url": "https://en.wikipedia.org/w/index.php?search=data+mining&limit=40&fulltext=1"
         }
       ]
     },
@@ -54,818 +48,954 @@
       {
         "id": 1,
         "relevance": 10,
-        "title": "JSON - Wikipedia",
-        "text": "JSON grew out of a need for stateless, real-time server-to-browser communication protocol without using browser plugins such as Flash or Java applets, the dominant …",
-        "url": "https://en.wikipedia.org/wiki/JSON",
-        "sources": ["Ask", "Bing", "Wikipedia"]
+        "title": "Data mining - Wikipedia",
+        "text": "Data mining is a process of extracting and discovering patterns in large data sets involving methods at the intersection of machine learning, statistics, and … Examples of data mining · Educational data mining · Oracle Data Mining · Category …",
+        "url": "https://en.wikipedia.org/wiki/Data_mining",
+        "sources": ["Google", "Wikipedia"]
       },
       {
         "id": 2,
-        "relevance": 7,
-        "title": "JSON",
-        "text": "json element value object array string number \"true\" \"false\" \"null\" object '{' ws '}' '{' members '}' members member member ',' members …",
-        "url": "http://json.org/",
-        "sources": ["Bing", "Faroo"]
+        "relevance": 5,
+        "title": "Predictive Analytics Data Mining in Imbalanced Medical Dataset",
+        "text": "Predictive Analytics Data Mining in Imbalanced Medical Dataset",
+        "url": "https://www.neliti.com/publications/169347/predictive-analytics-data-mining-in-imbalanced-medical-dataset",
+        "sources": ["Base"]
       },
       {
         "id": 3,
         "relevance": 5,
-        "title": "json — JSON encoder and decoder — Python …",
-        "text": "30.10.2018 · JSON is a subset of YAML 1.2. The JSON produced by this module’s default settings (in particular, the default separators value) is also a subset of YAML …",
-        "url": "https://docs.python.org/3/library/json.html",
-        "sources": ["Bing"]
+        "title": "Data Mining Definition - Investopedia",
+        "text": "Data mining is a process used by companies to turn raw data into useful information. By using software to look for patterns in large batches of data, businesses can learn more about their customers to develop more effective marketing strategies, …",
+        "url": "https://www.investopedia.com/terms/d/datamining.asp",
+        "sources": ["Google"]
       },
       {
         "id": 4,
         "relevance": 5,
-        "title": "JSON Schema | The home of JSON Schema",
-        "text": "JSON Schema. Describes your existing data format(s). Provides clear human- and machine- readable documentation. Validates data which is useful for: …",
-        "url": "http://json-schema.org/",
-        "sources": ["Bing"]
+        "title": "Lift (data mining)",
+        "text": "In data mining and association rule learning, lift is a measure of the performance of a targeting model (association rule) at predicting or classifying …",
+        "url": "https://en.wikipedia.org/wiki/Lift_(data_mining)",
+        "sources": ["Wikipedia"]
       },
       {
         "id": 5,
         "relevance": 5,
-        "title": "PHP: json_encode - Manual",
-        "text": "Returns a string containing the JSON representation of the supplied value. The encoding is affected by the supplied options and additionally the encoding of float …",
-        "url": "http://php.net/manual/en/function.json-encode.php",
-        "sources": ["Bing"]
+        "title": "A Survey on Data Mining using Clustering Techniques",
+        "text": "Abstract-Data mining is the practice of automatically searching large stores of data to discover patterns and trends that go beyond simple analysis. Data mining uses sophisticated mathematical algorithms to segment the data and evaluate the…",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.302.4705",
+        "sources": ["Base"]
       },
       {
         "id": 6,
         "relevance": 5,
-        "title": "18.2. json — JSON encoder and decoder — …",
-        "text": "02.07.2015 · New in version 2.6. JSON is a subset of YAML 1.2. The JSON produced by this module’s default settings (in particular, the default separators value) is …",
-        "url": "https://docs.python.org/2/library/json.html",
-        "sources": ["Bing"]
+        "title": "What is data mining? | SAS",
+        "text": "Data mining is the process of finding anomalies, patterns and correlations within large data sets to predict outcomes. Using a broad range of techniques, you can​ …",
+        "url": "https://www.sas.com/en_us/insights/analytics/data-mining.html",
+        "sources": ["Google"]
       },
       {
         "id": 7,
         "relevance": 5,
-        "title": "Maven - Json-lib::Welcome",
-        "text": "JSON Java; string java.lang.String, java.lang.Character, char: number java.lang.Number, byte, short, int, long, float, double: true|false java.lang …",
-        "url": "http://json-lib.sourceforge.net/",
-        "sources": ["Bing"]
+        "title": "Cross-industry standard process for data mining",
+        "text": "standard process for data mining, known as CRISP-DM, is an open standard process model that describes common approaches used by data mining experts. It is the …",
+        "url": "https://en.wikipedia.org/wiki/Cross-industry_standard_process_for_data_mining",
+        "sources": ["Wikipedia"]
       },
       {
         "id": 8,
-        "relevance": 4,
-        "title": "JSON Editor Online - view, edit and format JSON …",
-        "text": "JSON Editor Online is a web-based tool to view, edit, and format JSON. It shows your data side by side in a clear, editable treeview and in a code editor.",
-        "url": "http://jsoneditoronline.org/",
-        "sources": ["Bing"]
+        "relevance": 5,
+        "title": "What is Data Mining?",
+        "text": "owledge presentation, where visualization and knowledge representation techniques are used to present the mined knowledge to the user. With the widely available relational database systems and data warehouses, the first four processes: data cleaning,…",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.53.9539",
+        "sources": ["Base"]
       },
       {
         "id": 9,
-        "relevance": 4,
-        "title": "GitHub - typicode/json-server: Get a full fake …",
-        "text": "Get a full fake REST API with zero coding in less than 30 seconds (seriously) - typicode/json-server …",
-        "url": "https://github.com/typicode/json-server",
-        "sources": ["Bing"]
+        "relevance": 5,
+        "title": "What is Data Mining? Definition of Data Mining, Data Mining …",
+        "text": "Definition: In simple words, data mining is defined as a process used to extract usable data from a larger set of any raw data. It implies analysing data patterns in​ …",
+        "url": "https://economictimes.indiatimes.com/definition/data-mining",
+        "sources": ["Google"]
       },
       {
         "id": 10,
-        "relevance": 4,
-        "title": "Standard ECMA-262 ECMAScript Language …",
-        "text": "04.01.2019 · Standard ECMA-262 ECMAScript ® 2018 Language Specification 9 th edition (June 2018) This Standard defines the ECMAScript 2018 general-purpose programming …",
-        "url": "http://www.ecma-international.org/publications/standards/Ecma-262.htm",
-        "sources": ["Bing"]
+        "relevance": 5,
+        "title": "Examples of data mining",
+        "text": "Data mining, the process of discovering patterns in large data sets, has been used in many applications. Since the early 1960s, with the availability of …",
+        "url": "https://en.wikipedia.org/wiki/Examples_of_data_mining",
+        "sources": ["Wikipedia"]
       },
       {
         "id": 11,
-        "relevance": 4,
-        "title": "JSON-LD",
-        "text": "JSON-LD (JavaScript Object Notation for Linked Data), is a method of encoding Linked Data using JSON. It was a goal to require as little effort as possible …",
-        "url": "https://en.wikipedia.org/wiki/JSON-LD",
-        "sources": ["Faroo", "Wikipedia"]
+        "relevance": 5,
+        "title": "Data Pre-processing of Web usage Mining-A Vital Stage in Information Retrieval",
+        "text": "The World Wide Web has an ocean of information helping every feature of our lives in modern era. Having enormous data, mining the right information becomes a challenging task. Web mining uses many data mining techniques but it is not an application…",
+        "url": "http://www.hindex.org/2016/article.php?page=361",
+        "sources": ["Base"]
       },
       {
         "id": 12,
-        "relevance": 4,
-        "title": "What is the correct JSON content type? - Stack …",
-        "text": "I've been messing around with JSON for some time, just pushing it out as text and it hasn't hurt anybody (that I know of), but I'd like to start doing things properly.",
-        "url": "https://stackoverflow.com/questions/477816/what-is-the-correct-json-content-type",
-        "sources": ["Bing"]
+        "relevance": 5,
+        "title": "Data Mining | Coursera",
+        "text": "About this Specialization … The Data Mining Specialization teaches data mining techniques for both structured data which conform to a clearly defined schema, and …",
+        "url": "https://www.coursera.org/specializations/data-mining",
+        "sources": ["Google"]
       },
       {
         "id": 13,
-        "relevance": 4,
-        "title": "COPY from JSON Format - Amazon Redshift",
-        "text": "Describes how to use the Amazon Redshift COPY command to load tables from data in JSON format.",
-        "url": "https://docs.aws.amazon.com/redshift/latest/dg/copy-usage_notes-copy-from-json.html?tag=comceptaag",
-        "sources": ["Bing"]
+        "relevance": 5,
+        "title": "Text mining",
+        "text": "Text mining, also referred to as text data mining, similar to text analytics, is the process of deriving high-quality information from text. It involves …",
+        "url": "https://en.wikipedia.org/wiki/Text_mining",
+        "sources": ["Wikipedia"]
       },
       {
         "id": 14,
-        "relevance": 4,
-        "title": "JSON Binding (JSON-B) - Home",
-        "text": "What is JSON-B? JSON-B is a standard binding layer for converting Java objects to/from JSON messages. It defines a default mapping algorithm for converting …",
-        "url": "http://json-b.net/",
-        "sources": ["Bing"]
+        "relevance": 5,
+        "title": "Data Mining @ Information Age",
+        "text": "In the information age, data turns to be the vital. Hence it is important to understand the data in order to face the future information challenges. This paper deals with the importance of data mining while explaining the concepts and life cycle…",
+        "url": "http://www.hindex.org/2016/article.php?page=1195",
+        "sources": ["Base"]
       },
       {
         "id": 15,
         "relevance": 4,
-        "title": "JSON Formatter & Validator",
-        "text": "The JSON Formatter & Validator helps debugging JSON data by formatting and validating JSON data so that it can easily be read by human beings.",
-        "url": "https://jsonformatter.curiousconcept.com/",
-        "sources": ["Ask", "Faroo"]
+        "title": "Data mining | computer science | Britannica",
+        "text": "Data mining, in computer science, the process of discovering interesting and useful patterns and relationships in large volumes of data. The field combines tools …",
+        "url": "https://www.britannica.com/technology/data-mining",
+        "sources": ["Google"]
       },
       {
         "id": 16,
         "relevance": 4,
-        "title": "JSLint: The JavaScript Code Quality Tool",
-        "text": "JSLint, The JavaScript Code Quality Tool. This file allows JSLint to be run from a web browser. It can accept a source program and analyze it without sending it …",
-        "url": "http://jslint.com/",
-        "sources": ["Bing"]
+        "title": "Web mining",
+        "text": "Web mining is the application of data mining techniques to discover patterns from the World Wide Web. As the name proposes, this is information gathered …",
+        "url": "https://en.wikipedia.org/wiki/Web_mining",
+        "sources": ["Wikipedia"]
       },
       {
         "id": 17,
         "relevance": 4,
-        "title": "GitHub - jakubroztocil/httpie: As easy as httpie …",
-        "text": "As easy as httpie /aitch-tee-tee-pie/ 🥧 Modern command line HTTP client – user-friendly curl alternative with intuitive UI, JSON support, syntax highlighting …",
-        "url": "https://github.com/jakubroztocil/httpie",
-        "sources": ["Bing"]
+        "title": "A Review Paper on Big Data and Data Mining Concepts and Techniques",
+        "text": "In the digital era like today the growth of data in the database is very rapid, all things related to technology have a large contribution to data growth as well as social media, financial technology and scientific data. Therefore, topics such as…",
+        "url": "https://www.neliti.com/publications/268914/a-review-paper-on-big-data-and-data-mining-concepts-and-techniques",
+        "sources": ["Base"]
       },
       {
         "id": 18,
-        "relevance": 3,
-        "title": "JSON Functions - Amazon Redshift",
-        "text": "Describes the JSON functions for SQL that Amazon Redshift supports.",
-        "url": "https://docs.aws.amazon.com/redshift/latest/dg/json-functions.html?tag=comceptaag",
-        "sources": ["Bing"]
+        "relevance": 4,
+        "title": "What is Data Mining? Definition and Examples - Talend",
+        "text": "Data mining is the process of analyzing massive volumes of data to discover business intelligence that helps companies solve problems, mitigate risks, and seize …",
+        "url": "https://www.talend.com/resources/what-is-data-mining/",
+        "sources": ["Google"]
       },
       {
         "id": 19,
-        "relevance": 3,
-        "title": "global.json overview - .NET Core CLI | Microsoft …",
-        "text": "18.11.2016 · Learn how to use the global.json file to set the .NET Core SDK version when running .NET Core CLI commands.",
-        "url": "https://docs.microsoft.com/en-us/dotnet/core/tools/global-json",
-        "sources": ["Bing"]
-      },
-      {
-        "id": 20,
-        "relevance": 3,
-        "title": "JSON Functions (Transact-SQL) - SQL Server | …",
-        "text": "30.03.2017 · Use the functions described on the pages in this section to validate or change JSON text or to extract simple or complex values. ISJSON Tests whether a …",
-        "url": "https://docs.microsoft.com/en-us/sql/t-sql/functions/json-functions-transact-sql",
-        "sources": ["Bing"]
-      },
-      {
-        "id": 21,
-        "relevance": 3,
-        "title": "Import Json to excel and export excel to Json - …",
-        "text": "Excel doesn't have built-in support for JSON. Learn how to parse JSON in Excel VBA, import JSON to Excel and export Excel data using VBA-JSON.",
-        "url": "https://codingislove.com/excel-json/",
-        "sources": ["Bing"]
-      },
-      {
-        "id": 22,
-        "relevance": 3,
-        "title": "index-of.es/",
-        "text": "z0ro Repository - Powered by z0ro … Copyright © 2013-2019 - index-of.es …",
-        "url": "http://index-of.es/",
-        "sources": ["Bing"]
-      },
-      {
-        "id": 23,
-        "relevance": 3,
-        "title": "JSON",
-        "text": "JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. It is easy for machines to parse and generate.",
-        "url": "https://www.json.org/",
-        "sources": ["Ask"]
-      },
-      {
-        "id": 24,
-        "relevance": 3,
-        "title": "JSON Web Token",
-        "text": "JSON Web Token (JWT, sometimes pronounced /dʒɒt/) is a JSON-based open standard (RFC 7519) for creating access tokens that assert some number of claims …",
-        "url": "https://en.wikipedia.org/wiki/JSON_Web_Token",
+        "relevance": 4,
+        "title": "Educational data mining",
+        "text": "Educational data mining (EDM) describes a research field concerned with the application of data mining, machine learning and statistics to information …",
+        "url": "https://en.wikipedia.org/wiki/Educational_data_mining",
         "sources": ["Wikipedia"]
       },
       {
+        "id": 20,
+        "relevance": 4,
+        "title": "Data Mining Architectures - A Comparative Study",
+        "text": "Data mining is the process of deriving knowledge from data. The architecture of a data mining system plays a significant role in the efficiency with which data is mined. It is probably as important as the algorithms used for the mining process.…",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.22.5785",
+        "sources": ["Base"]
+      },
+      {
+        "id": 21,
+        "relevance": 4,
+        "title": "Data mining, definition, examples and applications - Iberdrola",
+        "text": "Data mining is an automatic or semi-automatic technical process that analyses large amounts of scattered information to make sense of it and turn it into …",
+        "url": "https://www.iberdrola.com/innovation/data-mining-definition-examples-and-applications",
+        "sources": ["Google"]
+      },
+      {
+        "id": 22,
+        "relevance": 4,
+        "title": "Data Mining Extensions",
+        "text": "Data Mining Extensions (DMX) is a query language for data mining models supported by Microsoft's SQL Server Analysis Services product. Like SQL, it supports …",
+        "url": "https://en.wikipedia.org/wiki/Data_Mining_Extensions",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 23,
+        "relevance": 4,
+        "title": "Data Mining and Fuzzy Data Mining Using MapReduce Algorithms",
+        "text": "IntechOpen (E-Books)",
+        "url": "http://www.intechopen.com/articles/show/title/data-mining-and-fuzzy-data-mining-using-mapreduce-algorithms",
+        "sources": ["Base"]
+      },
+      {
+        "id": 24,
+        "relevance": 4,
+        "title": "Data Mining I – Machine Learning & Computational Biology Lab …",
+        "text": "The goal of the field of data mining is to find patterns and statistical dependencies in large databases and to gain an understanding of the underlying system …",
+        "url": "https://bsse.ethz.ch/mlcb/education/data-mining1.html",
+        "sources": ["Google"]
+      },
+      {
         "id": 25,
-        "relevance": 3,
-        "title": "Anthony Baker: How to Consume a JSON REST …",
-        "text": "In this article I’ll show you how simple it is to consume JSON based APIs from .NET. It requires just a few lines of code, is straight forward and will work across …",
-        "url": "http://blog.anthonybaker.me/2013/05/how-to-consume-json-rest-api-in-net.html",
-        "sources": ["Bing"]
+        "relevance": 4,
+        "title": "Data stream mining",
+        "text": "Data Stream Mining (also known as stream learning) is the process of extracting knowledge structures from continuous, rapid data records. A data stream …",
+        "url": "https://en.wikipedia.org/wiki/Data_stream_mining",
+        "sources": ["Wikipedia"]
       },
       {
         "id": 26,
-        "relevance": 3,
-        "title": "JSON Introduction - W3Schools",
-        "text": "Exchanging Data. When exchanging data between a browser and a server, the data can only be text. JSON is text, and we can convert any JavaScript object into …",
-        "url": "https://www.w3schools.com/js/js_json_intro.asp",
-        "sources": ["Ask"]
+        "relevance": 4,
+        "title": "Towards Data Quality and Data Mining Using Constraints in XML",
+        "text": "Quality data is necessary for different data mining techniques and reversely, data mining techniques can be utilized to measure quality of data. Data mining and data quality issues got much attention for relational data in past. But, as a massive…",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.424.5154",
+        "sources": ["Base"]
       },
       {
         "id": 27,
-        "relevance": 3,
-        "title": "JSON Syntax - W3Schools",
-        "text": "The JSON syntax is a subset of the JavaScript syntax. JSON Syntax Rules. JSON syntax is derived from JavaScript object notation syntax: Data is in name/value …",
-        "url": "https://www.w3schools.com/js/js_json_syntax.asp",
-        "sources": ["Ask"]
+        "relevance": 4,
+        "title": "What Is Data Mining? - Oracle Help Center",
+        "text": "What Is Data Mining? Data mining is the practice of automatically searching large stores of data to discover patterns and trends that go beyond simple analysis.",
+        "url": "https://docs.oracle.com/cd/B28359_01/datamine.111/b28129/process.htm",
+        "sources": ["Google"]
       },
       {
         "id": 28,
-        "relevance": 3,
-        "title": "GeoJSON",
-        "text": "GeoJSON is an open standard format designed for representing simple geographical features, along with their non-spatial attributes. It is based on JSON, …",
-        "url": "https://en.wikipedia.org/wiki/GeoJSON",
+        "relevance": 4,
+        "title": "Data pre-processing",
+        "text": "Data preprocessing is an important step in the data mining process. The phrase \"garbage in, garbage out\" is particularly applicable to data mining and …",
+        "url": "https://en.wikipedia.org/wiki/Data_pre-processing",
         "sources": ["Wikipedia"]
       },
       {
         "id": 29,
-        "relevance": 3,
-        "title": "JSON: What It Is, How It Works, & How to Use It - Copter Labs",
-        "text": "This week I want to cover a topic that I feel has become an important part of any developer's toolkit: the ability to load and manipulate JSON feeds from other …",
-        "url": "https://www.copterlabs.com/json-what-it-is-how-it-works-how-to-use-it/",
-        "sources": ["Ask"]
+        "relevance": 4,
+        "title": "A Survey of Data Mining Tasks",
+        "text": "Data Mining is the process of discovering patterns in large data sets and establish relationships to solve problems through data analysis. The main goal of data mining is to identifynbsp patterns and to transform them into a more understandable…",
+        "url": "https://www.neliti.com/publications/263117/a-survey-of-data-mining-tasks",
+        "sources": ["Base"]
       },
       {
         "id": 30,
-        "relevance": 3,
-        "title": "JSONP",
-        "text": "JSONP (JSON with Padding or JSON-P) is a javascript pattern to request data by loading a tag. It was proposed by Bob Ippolito in 2005. JSONP …",
-        "url": "https://en.wikipedia.org/wiki/JSONP",
-        "sources": ["Wikipedia"]
+        "relevance": 4,
+        "title": "What is data mining? - Definition from WhatIs.com - SearchSQLServer",
+        "text": "28 Mar 2017 · Data mining is the process of sorting through large data sets to identify patterns and establish …Duration: 2:40Posted: 28 Mar 2017 …",
+        "url": "https://searchsqlserver.techtarget.com/definition/data-mining",
+        "sources": ["Google"]
       },
       {
         "id": 31,
-        "relevance": 3,
-        "title": "JSON | MDN",
-        "text": "Dec 11, 2018 … The JSON object contains methods for parsing JavaScript Object Notation (JSON ) and converting values to JSON. It can't be called or …",
-        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
-        "sources": ["Ask"]
-      },
-      {
-        "id": 32,
-        "relevance": 3,
-        "title": "Ajax (programming)",
-        "text": "practice, modern implementations commonly utilize JSON instead of XML due to the advantages of JSON being native to JavaScript. Ajax is not a single technology …",
-        "url": "https://en.wikipedia.org/wiki/Ajax_(programming)",
+        "relevance": 4,
+        "title": "Process mining",
+        "text": "process mining is to turn event data into insights and actions. Process mining is an integral part of data science, fueled by the availability of data and …",
+        "url": "https://en.wikipedia.org/wiki/Process_mining",
         "sources": ["Wikipedia"]
       },
       {
+        "id": 32,
+        "relevance": 4,
+        "title": "Clickstream Data Mining and Market Segmentation",
+        "text": "Clickstream data is one of the most important sources of information in websites USAge and customers' behavior in Banks e-services. A number of web USAge mining scenarios are possible depending on the available information. While simple traffic…",
+        "url": "https://www.neliti.com/publications/283532/clickstream-data-mining-and-market-segmentation",
+        "sources": ["Base"]
+      },
+      {
         "id": 33,
-        "relevance": 3,
-        "title": "Working with JSON | MDN",
-        "text": "Dec 14, 2018 … JavaScript Object Notation (JSON) is a standard text-based format for representing structured data based on JavaScript object syntax.",
-        "url": "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON",
-        "sources": ["Ask"]
+        "relevance": 4,
+        "title": "Data Mining",
+        "text": "Data mining is a powerful new technology with great potential to help companies focus on the most important information in the data they have collected about … Data Mining: \"What's likely to happen to Boston unit sales next month? Why?\" Data …",
+        "url": "https://www.laits.utexas.edu/~norman/BUS.FOR/course.mat/Alex/",
+        "sources": ["Google"]
       },
       {
         "id": 34,
-        "relevance": 3,
-        "title": "JSON-RPC",
-        "text": "JSON-RPC is a remote procedure call protocol encoded in JSON. It is a very simple protocol (and very similar to XML-RPC), defining only a few data types …",
-        "url": "https://en.wikipedia.org/wiki/JSON-RPC",
+        "relevance": 4,
+        "title": "Oracle Data Mining",
+        "text": "Oracle Data Mining (ODM) is an option of Oracle Database Enterprise Edition. It contains several data mining and data analysis algorithms for classification …",
+        "url": "https://en.wikipedia.org/wiki/Oracle_Data_Mining",
         "sources": ["Wikipedia"]
       },
       {
         "id": 35,
-        "relevance": 2,
-        "title": "What Is JSON? — Squarespace Developers",
-        "text": "JSON, or JavaScript Object Notation, is a minimal, readable format for structuring data. It is used primarily to transmit data between a server and web application, …",
-        "url": "https://developers.squarespace.com/what-is-json",
-        "sources": ["Ask"]
+        "relevance": 4,
+        "title": "The application of data mining methods",
+        "text": "Data mining is becoming more and more important. The aim of this thesis is to study and research data mining, to clarify the background, knowledge and method of data mining, and research some specific areas applications. The aim is also to…",
+        "url": "http://www.theseus.fi/handle/10024/32591",
+        "sources": ["Base"]
       },
       {
         "id": 36,
-        "relevance": 2,
-        "title": "JSON streaming",
-        "text": "JSON streaming comprises communications protocols to delimit JSON objects built upon lower-level stream-oriented protocols (such as TCP), that ensures …",
-        "url": "https://en.wikipedia.org/wiki/JSON_streaming",
-        "sources": ["Wikipedia"]
+        "relevance": 4,
+        "title": "Data Mining Tutorial - Javatpoint",
+        "text": "Data mining is the act of automatically searching for large stores of information to find trends and patterns that go beyond simple analysis procedures. Data mining​ …",
+        "url": "https://www.javatpoint.com/data-mining",
+        "sources": ["Google"]
       },
       {
         "id": 37,
-        "relevance": 2,
-        "title": "Online JSON Viewer",
-        "text": "JSON Viewer - Convert JSON Strings to a Friendly Readable Format.",
-        "url": "http://jsonviewer.stack.hu/",
-        "sources": ["Ask"]
+        "relevance": 4,
+        "title": "Data wrangling",
+        "text": "that data mining does not use it, there are many use cases for data wrangling in data mining. Data wrangling can benefit data mining by removing data that …",
+        "url": "https://en.wikipedia.org/wiki/Data_wrangling",
+        "sources": ["Wikipedia"]
       },
       {
         "id": 38,
-        "relevance": 2,
-        "title": "JSON Web Encryption",
-        "text": "JSON Web Encryption (JWE) is an IETF standard providing a standardised syntax for the exchange of encrypted data, based on JSON and Base64. It is defined …",
-        "url": "https://en.wikipedia.org/wiki/JSON_Web_Encryption",
-        "sources": ["Wikipedia"]
+        "relevance": 4,
+        "title": "Two days National Conference -VISHWATECH 2014 Privacy Preserving Data Mining (PPDM) For Horizontally Partitioned Data",
+        "text": "Abstract:Due to the increase in sharing sensitive data through networks among businesses, governments and other parties, privacy preserving has become an important issue in data mining and knowledge discovery. Privacy concerns may prevent the…",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.1068.5614",
+        "sources": ["Base"]
       },
       {
         "id": 39,
-        "relevance": 2,
-        "title": "Json (rapper)",
-        "text": "by the stage name Json, is an American Christian hip hop musician. He was a member of Christian hip hop collective, 116 Clique. Json was born Jason Christopher …",
-        "url": "https://en.wikipedia.org/wiki/Json_(rapper)",
-        "sources": ["Wikipedia"]
+        "relevance": 4,
+        "title": "What is Data Mining? - YouTube",
+        "text": "25 May 2010 · NJIT School of Management professor Stephan P Kudyba describes what data mining is and …Duration: 3:23Posted: 25 May 2010 …",
+        "url": "https://www.youtube.com/watch?v=R-sGvh6tI04",
+        "sources": ["Google"]
       },
       {
         "id": 40,
-        "relevance": 2,
-        "title": "json.org",
-        "text": "",
-        "url": "//www.search.ask.com/web?page=1&q=json.org&tpr=5",
-        "sources": ["Ask"]
-      },
-      {
-        "id": 41,
-        "relevance": 2,
-        "title": "JSON Patch",
-        "text": "existing HTTP resources. The JSON Patch media type is application/json-patch+json. A JSON Patch document is structured as a JSON array of objects where each …",
-        "url": "https://en.wikipedia.org/wiki/JSON_Patch",
+        "relevance": 4,
+        "title": "Data science",
+        "text": "unstructured data, and apply knowledge and actionable insights from data across a broad range of application domains. Data science is related to data mining, machine …",
+        "url": "https://en.wikipedia.org/wiki/Data_science",
         "sources": ["Wikipedia"]
       },
       {
+        "id": 41,
+        "relevance": 4,
+        "title": "INFORMATION PRIVACY & SECURITY IN DATA MINING",
+        "text": "The rapid use of data mining technologies brings threat to the information security. For data processing we are using the traditional data mining algorithms, but use of traditional algorithms violate the privacy of sensitive data. To overcome on…",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.695.6912",
+        "sources": ["Base"]
+      },
+      {
         "id": 42,
-        "relevance": 2,
-        "title": "JSON Introduction",
-        "text": "",
-        "url": "//www.search.ask.com/web?page=1&q=JSON+Introduction&tpr=5",
-        "sources": ["Ask"]
+        "relevance": 3,
+        "title": "Data Mining: Practical Machine Learning Tools and Techniques",
+        "text": "DATA MINING · Highlights. Explains how machine learning algorithms for data mining work. · Translations. The book has been translated into German (first edition), …",
+        "url": "https://www.cs.waikato.ac.nz/~ml/weka/book.html",
+        "sources": ["Google"]
       },
       {
         "id": 43,
-        "relevance": 2,
-        "title": "Document-oriented database",
-        "text": "in some standard format or encoding. Encodings in use include XML, YAML, JSON, and BSON, as well as binary forms like PDF and Microsoft Office documents …",
-        "url": "https://en.wikipedia.org/wiki/Document-oriented_database",
+        "relevance": 3,
+        "title": "Evolutionary data mining",
+        "text": "Evolutionary data mining, or genetic data mining is an umbrella term for any data mining using evolutionary algorithms. While it can be used for mining data from …",
+        "url": "https://en.wikipedia.org/wiki/Evolutionary_data_mining",
         "sources": ["Wikipedia"]
       },
       {
         "id": 44,
-        "relevance": 2,
-        "title": "JSON Syntax",
-        "text": "",
-        "url": "//www.search.ask.com/web?page=1&q=JSON+Syntax&tpr=5",
-        "sources": ["Ask"]
+        "relevance": 3,
+        "title": "Data Mining Algorithms In R",
+        "text": "Dimensionality Reduction; Frequent Pattern Mining; Sequence Mining; Clustering; Classification; R Packages;",
+        "url": "http://doer.col.org/handle//123456789/4105",
+        "sources": ["Base"]
       },
       {
         "id": 45,
-        "relevance": 2,
-        "title": "YAML",
-        "text": "format that uses [] for lists and {} for maps making YAML 1.2 a superset of JSON. Custom data types are allowed, but YAML natively encodes scalars (such as …",
-        "url": "https://en.wikipedia.org/wiki/YAML",
-        "sources": ["Wikipedia"]
+        "relevance": 3,
+        "title": "Data Mining and Knowledge Discovery | Home - Springer",
+        "text": "The premier technical publication in the field, Data Mining and Knowledge Discovery is a resource collecting relevant common methods and techniques and a …",
+        "url": "https://www.springer.com/journal/10618",
+        "sources": ["Google"]
       },
       {
         "id": 46,
-        "relevance": 2,
-        "title": "Working with JSON",
-        "text": "",
-        "url": "//www.search.ask.com/web?page=1&q=Working+with+JSON&tpr=5",
-        "sources": ["Ask"]
-      },
-      {
-        "id": 47,
-        "relevance": 2,
-        "title": "UBJSON",
-        "text": "Universal Binary JSON (UBJSON) is a computer data interchange format. It is a binary form directly imitating JSON, but requiring fewer bytes of data. It …",
-        "url": "https://en.wikipedia.org/wiki/UBJSON",
+        "relevance": 3,
+        "title": "Wrapper (data mining)",
+        "text": "Wrapper in data mining is a program that extracts content of a particular information source and translates it into a relational form, so it can be more …",
+        "url": "https://en.wikipedia.org/wiki/Wrapper_(data_mining)",
         "sources": ["Wikipedia"]
       },
       {
+        "id": 47,
+        "relevance": 3,
+        "title": "Survey of electromagnetic and seismic noise related to mine rescue communications. Volume 1. Emergency and operational mine communications",
+        "text": "Sponsored by the United States Bureau of Mines grant H0122026, ; Introduction -- Part One. Assessment of Electromagnetic Noise Data and Definition of a New Measurement Program -- Part Two. Electromagnetic Through-the-Earth Mine Communications --…",
+        "url": "http://stacks.cdc.gov/view/cdc/8839/",
+        "sources": ["Base"]
+      },
+      {
         "id": 48,
-        "relevance": 2,
-        "title": "What Is JSON",
-        "text": "",
-        "url": "//www.search.ask.com/web?page=1&q=What+Is+JSON&tpr=5",
-        "sources": ["Ask"]
+        "relevance": 3,
+        "title": "Data Mining II – Machine Learning & Computational Biology Lab …",
+        "text": "In computational biology, data mining contributes to the analysis of vast experimental data generated by high-​throughput technologies, and thereby enables the …",
+        "url": "https://bsse.ethz.ch/mlcb/education/data-mining2.html",
+        "sources": ["Google"]
       },
       {
         "id": 49,
-        "relevance": 2,
-        "title": "VCard",
-        "text": "text/vcard+xml text/vcard+json All are oriented to \"Directory Information text\" (see RFC 2425). Other \"vCard variants\", oriented to XML and to JSON, are standard …",
-        "url": "https://en.wikipedia.org/wiki/VCard",
+        "relevance": 3,
+        "title": "Relational data mining",
+        "text": "Relational data mining is the data mining technique for relational databases. Unlike traditional data mining algorithms, which look for patterns in a …",
+        "url": "https://en.wikipedia.org/wiki/Relational_data_mining",
         "sources": ["Wikipedia"]
       },
       {
         "id": 50,
-        "relevance": 2,
-        "title": "Online JSON Viewer",
-        "text": "",
-        "url": "//www.search.ask.com/web?page=1&q=Online+JSON+Viewer&tpr=5",
-        "sources": ["Ask"]
+        "relevance": 3,
+        "title": "Research issues in web data mining",
+        "text": "In this paper, we discuss mining with respect to web data referred here as web data mining. In particular, our focus is on web data mining research in context of our web warehousing project called WHOWEDA (Warehouse of Web Data). We have categorized…",
+        "url": "https://ink.library.smu.edu.sg/sis_research/977",
+        "sources": ["Base"]
       },
       {
         "id": 51,
-        "relevance": 2,
-        "title": "JSON Web Signature",
-        "text": "A JSON Web Signature (abbreviated JWS) is an IETF proposed standard [RFC7515] for signing arbitrary data. This is used as the basis for a variety of web-based …",
-        "url": "https://en.wikipedia.org/wiki/JSON_Web_Signature",
-        "sources": ["Wikipedia"]
+        "relevance": 3,
+        "title": "Data Mining - an overview | ScienceDirect Topics",
+        "text": "Data mining is the process of identifying interesting and useful patterns in large databases by means of automated methods. The databases of interest in (human​) …",
+        "url": "https://www.sciencedirect.com/topics/earth-and-planetary-sciences/data-mining",
+        "sources": ["Google"]
       },
       {
         "id": 52,
-        "relevance": 2,
-        "title": "JSON Formatter & Validator",
-        "text": "",
-        "url": "//www.search.ask.com/web?page=1&q=JSON+Formatter+%26+Validator&tpr=5",
-        "sources": ["Ask"]
-      },
-      {
-        "id": 53,
-        "relevance": 2,
-        "title": "Schema.org",
-        "text": "propose using the schema.org vocabulary along with the Microdata, RDFa, or JSON-LD formats to mark up website content with metadata about itself. Such markup …",
-        "url": "https://en.wikipedia.org/wiki/Schema.org",
+        "relevance": 3,
+        "title": "Data analysis",
+        "text": "world, data analysis plays a role in making decisions more scientific and helping businesses operate more effectively. Data mining is a particular data analysis …",
+        "url": "https://en.wikipedia.org/wiki/Data_analysis",
         "sources": ["Wikipedia"]
       },
       {
+        "id": 53,
+        "relevance": 3,
+        "title": "Towards Interactive Clustering on Parallel Environment",
+        "text": "Abstract Clustering is one of the major data mining applications. An obvious characteristic of data mining distinguished from traditional data processing is that the conclusion of data mining cannot be predicted. Data mining is a multi-step process,…",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.470.6677",
+        "sources": ["Base"]
+      },
+      {
         "id": 54,
-        "relevance": 2,
-        "title": "json Media Type for JavaScript Object",
-        "text": "",
-        "url": "//www.search.ask.com/web?page=1&q=json+Media+Type+for+JavaScript+Object&tpr=5",
-        "sources": ["Ask"]
+        "relevance": 3,
+        "title": "10 Data Mining Techniques Every Data Scientist Should Know | Built …",
+        "text": "24 May 2019 · Thus, it'll be extremely valuable for any aspiring data scientists to learn data mining — the process where one structures the raw data and …",
+        "url": "https://builtin.com/data-science/10-data-mining-techniques-data-scientists-need-their-toolbox",
+        "sources": ["Google"]
       },
       {
         "id": 55,
-        "relevance": 2,
-        "title": "JSON-WSP",
-        "text": "searching for JSON-RPC or JSON Schema. JSON-WSP (JavaScript Object Notation Web-Service Protocol) is a web-service protocol that uses JSON for service description …",
-        "url": "https://en.wikipedia.org/wiki/JSON-WSP",
+        "relevance": 3,
+        "title": "Data mining in agriculture",
+        "text": "Data mining in agriculture is a very recent research topic. It consists in the application of data mining techniques to agriculture. Recent technologies …",
+        "url": "https://en.wikipedia.org/wiki/Data_mining_in_agriculture",
         "sources": ["Wikipedia"]
       },
       {
         "id": 56,
-        "relevance": 2,
-        "title": "The JSON Validator",
-        "text": "",
-        "url": "//www.search.ask.com/web?page=1&q=The+JSON+Validator&tpr=5",
-        "sources": ["Ask"]
+        "relevance": 3,
+        "title": "Towards Privacy-Preserving Data Mining in Law Enforcement",
+        "text": "For law enforcement to be effective, it needs to extract previously unknown knowledge from largeamounts of different types of data. Data mining is the most compelling tool for this task as it is motivated bysuccessful applications in numerous…",
+        "url": "https://www.neliti.com/publications/28766/towards-privacy-preserving-data-mining-in-law-enforcement",
+        "sources": ["Base"]
       },
       {
         "id": 57,
-        "relevance": 2,
-        "title": "Media type",
-        "text": "application/json application/x-www-form-urlencoded application/xml application/zip application/pdf application/sql application/graphql application/ld+json application/msword …",
-        "url": "https://en.wikipedia.org/wiki/Media_type",
-        "sources": ["Wikipedia"]
+        "relevance": 3,
+        "title": "Statistical Analysis and Data Mining: The ASA Data Science Journal …",
+        "text": "Statistical Analysis and Data Mining addresses the broad area of data analysis, including data mining algorithms, statistical approaches, and practical … 2019 Journal Citation Reports (Clarivate Analytics): 105/137 (Computer Science, Artificial …",
+        "url": "https://onlinelibrary.wiley.com/journal/19321872",
+        "sources": ["Google"]
       },
       {
         "id": 58,
-        "relevance": 2,
-        "title": "JSON-js",
-        "text": "",
-        "url": "//www.search.ask.com/web?page=1&q=JSON-js&tpr=5",
-        "sources": ["Ask"]
-      },
-      {
-        "id": 59,
-        "relevance": 2,
-        "title": "List of web service frameworks",
-        "text": "WS-SecurityPolicy SOAP1.1, SOAP1.2, MTOM, WSDL 1.1, WSDL 2.0, REST, XML-RPC, JSON, JSON-RPC, XML Java Web Services Development Pack / GlassFish Java Client/Server …",
-        "url": "https://en.wikipedia.org/wiki/List_of_web_service_frameworks",
+        "relevance": 3,
+        "title": "Domain driven data mining",
+        "text": "Domain driven data mining is a data mining methodology for discovering actionable knowledge and deliver actionable insights from complex data and behaviors …",
+        "url": "https://en.wikipedia.org/wiki/Domain_driven_data_mining",
         "sources": ["Wikipedia"]
       },
       {
+        "id": 59,
+        "relevance": 3,
+        "title": "Data preprocessing for data mining",
+        "text": "People have increasing amounts data in the current prosperous information age. In order to improve competitive power and work efficiency, discovering knowledge from data is becoming more and more important. Data mining, as an emerging…",
+        "url": "http://www.theseus.fi/handle/10024/62626",
+        "sources": ["Base"]
+      },
+      {
         "id": 60,
-        "relevance": 2,
-        "title": "JSON in JavaScript",
-        "text": "",
-        "url": "//www.search.ask.com/web?page=1&q=JSON+in+JavaScript&tpr=5",
-        "sources": ["Ask"]
+        "relevance": 3,
+        "title": "SUPSI - Uncertain Reasoning, Data Mining and Big Data",
+        "text": "Data mining is the field that enables computers to learn from data how to do predictions, diagnosis, recognition (and more), using very little human intervention.",
+        "url": "https://www.supsi.ch/idsia_en/research/ipg.html",
+        "sources": ["Google"]
       },
       {
         "id": 61,
-        "relevance": 2,
-        "title": "Resource Description Framework",
-        "text": "January 2014. \"JSON-LD 1.0: A JSON-based Serialization for Linked Data\". W3C. \"RDF 1.1 XML Syntax\". W3C. 25 February 2014. \"RDF 1.1 JSON Alternate Serialization …",
-        "url": "https://en.wikipedia.org/wiki/Resource_Description_Framework",
+        "relevance": 3,
+        "title": "Data",
+        "text": "data Data domain Data element Data farming Data governance Data integrity Data maintenance Data management Data mining Data modeling Data point Data visualization …",
+        "url": "https://en.wikipedia.org/wiki/Data",
         "sources": ["Wikipedia"]
       },
       {
         "id": 62,
-        "relevance": 2,
-        "title": "JSON Feed: Home",
-        "text": "We — Manton Reece and Brent Simmons — have noticed that JSON has become the developers’ choice for APIs, and that developers will often go out …",
-        "url": "https://jsonfeed.org/",
-        "sources": ["Faroo"]
+        "relevance": 3,
+        "title": "Economic Contributions from Industrial Mining in Madagascar",
+        "text": "The contribution of mining used to be seen essentially through taxes and royalties; it tends to be viewed now in a more integrated manner. This report, the result of a 2-year research project, attempts to improve that information and to structure…",
+        "url": "http://hdl.handle.net/10986/23021",
+        "sources": ["Base"]
       },
       {
         "id": 63,
-        "relevance": 2,
-        "title": "JSON-LD - JSON for Linking Data",
-        "text": "JSON-LD ( J ava S cript O bject N otation for L inking D ata) is a lightweight Linked Data format that gives your data context. It is easy for …",
-        "url": "http://json-ld.org/",
-        "sources": ["Faroo"]
+        "relevance": 3,
+        "title": "Contrast Data Mining: Concepts, Algorithms, and Applications - 1st Edi",
+        "text": "A Fruitful Field for Researching Data Mining Methodology and for Solving Real-​Life ProblemsContrast Data Mining: Concepts, Algorithms, and Applications …",
+        "url": "https://www.routledge.com/Contrast-Data-Mining-Concepts-Algorithms-and-Applications/Dong-Bailey/p/book/9781439854327",
+        "sources": ["Google"]
       },
       {
         "id": 64,
-        "relevance": 2,
-        "title": "JSON implementation for Ruby",
-        "text": "",
-        "url": "//www.search.ask.com/web?page=1&q=JSON+implementation+for+Ruby&tpr=5",
-        "sources": ["Ask"]
-      },
-      {
-        "id": 65,
-        "relevance": 2,
-        "title": "Web service",
-        "text": "specifically for transferring machine-readable file formats such as XML and JSON. In practice, a web service commonly provides an object-oriented web-based …",
-        "url": "https://en.wikipedia.org/wiki/Web_service",
+        "relevance": 3,
+        "title": "Java Data Mining",
+        "text": "Data Mining (JDM) is a standard Java API for developing data mining applications and tools. JDM defines an object model and Java API for data mining objects …",
+        "url": "https://en.wikipedia.org/wiki/Java_Data_Mining",
         "sources": ["Wikipedia"]
       },
       {
+        "id": 65,
+        "relevance": 3,
+        "title": "Oracle Data Mining. 7 Oracle10g – A Secure Platform for Data Mining. 8 Security in Oracle Data Mining.",
+        "text": "Java API. 8 - CiteSeerX",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.163.8306",
+        "sources": ["Base"]
+      },
+      {
         "id": 66,
-        "relevance": 2,
-        "title": "What is JSON YouTube",
-        "text": "",
-        "url": "//www.search.ask.com/web?page=1&q=What+is+JSON+YouTube&tpr=5",
-        "sources": ["Ask"]
+        "relevance": 3,
+        "title": "Data Mining and Machine Learning - HEC Lausanne - UNIL",
+        "text": "Data Mining and Machine Learning. Enseignant(s): M.Vlachos; Titre en français: Data mining et méthodes d'apprentissage; Cours donné en: anglais; Crédits …",
+        "url": "https://hecnet.unil.ch/hec/syllabus/descriptif/2457",
+        "sources": ["Google"]
       },
       {
         "id": 67,
-        "relevance": 2,
-        "title": "Douglas Crockford",
-        "text": "development of the JavaScript language, for having popularized the data format JSON (JavaScript Object Notation), and for developing various JavaScript related …",
-        "url": "https://en.wikipedia.org/wiki/Douglas_Crockford",
+        "relevance": 3,
+        "title": "Sequential pattern mining",
+        "text": "Sequential pattern mining is a topic of data mining concerned with finding statistically relevant patterns between data examples where the values are delivered …",
+        "url": "https://en.wikipedia.org/wiki/Sequential_pattern_mining",
         "sources": ["Wikipedia"]
       },
       {
         "id": 68,
-        "relevance": 2,
-        "title": "faroo_p2p: Our Web Search API now supports cross domain access for JSON, XML and RSS via CORS (Cross-Origin …",
-        "text": "faroo_p2p: Our Web Search API now supports cross domain access for JSON, XML and RSS via CORS (Cross-Origin Resource Sharing). http://t.",
-        "url": "http://twitter.com/faroo_p2p/statuses/228144071540084736",
-        "sources": ["Faroo"]
+        "relevance": 3,
+        "title": "Novel applications of Association Rule Mining- Data Stream Mining",
+        "text": "From the advent of association rule mining, it has become one of the most researched areas of data exploration schemes. In recent years, implementing association rule mining methods in extracting rules from a continuous flow of voluminous data,…",
+        "url": "http://hdl.handle.net/10292/826",
+        "sources": ["Base"]
       },
       {
         "id": 69,
         "relevance": 2,
-        "title": "The Twitter archive looks to be useful. Tweets are available in JSON and CSV formats. One file per month …",
-        "text": "… to Navjot Singh , we now have an archive to explore. Here's the readme.txt file from Navjot's archive. Here's the HTML view of the JSON archive. …",
-        "url": "http://1xe.r2.ly/",
-        "sources": ["Faroo"]
+        "title": "Data Mining International – Optimising evidence-based knowledge …",
+        "text": "Solutions. Data Mining Research, Evidence Modelling, Multi-Criteria Risk Assessment, Business Modelling, Health Technology Assessment (HTA), Value …",
+        "url": "http://www.datamining-international.com/",
+        "sources": ["Google"]
       },
       {
         "id": 70,
         "relevance": 2,
-        "title": "11.6 The JSON Data Type",
-        "text": "",
-        "url": "//www.search.ask.com/web?page=1&q=11.6+The+JSON+Data+Type&tpr=5",
-        "sources": ["Ask"]
+        "title": "BioData Mining",
+        "text": "BioData Mining is a peer-reviewed open access scientific journal covering data mining methods applied to computational biology and medicine, published …",
+        "url": "https://en.wikipedia.org/wiki/BioData_Mining",
+        "sources": ["Wikipedia"]
       },
       {
         "id": 71,
         "relevance": 2,
-        "title": "Serialization",
-        "text": "JavaScript has included the built-in JSON object and its methods JSON.parse() and JSON.stringify(). Although JSON is originally based on a subset of JavaScript …",
-        "url": "https://en.wikipedia.org/wiki/Serialization",
-        "sources": ["Wikipedia"]
+        "title": "Data Mining and Decision Support: An Integrative Approach",
+        "text": "DMDSS is a data mining application system which enables a decision support, based on the knowledge acquired from data mining models and their rules. The mission of DMDSS is to offer an easy-to-use tool which will enable business users to exploit…",
+        "url": "http://www.intechopen.com/articles/show/title/data-mining-and-decision-support-an-integrative-approach",
+        "sources": ["Base"]
       },
       {
         "id": 72,
         "relevance": 2,
-        "title": "XML and JSON — Advantages and Disadvantages?",
-        "text": "I recently heard about JavaScript Object Notation (JSON), and after looking it up, it seems like it's becoming rather popular as an alternative …",
-        "url": "http://stackoverflow.com/questions/5615352/xml-and-json-advantages-and-disadvantages",
-        "sources": ["Faroo"]
+        "title": "What is Data Mining? | IBM",
+        "text": "15 Jan 2021 · What is data mining? Data mining, also known as knowledge discovery in data (​KDD), is the process of uncovering patterns and other valuable …",
+        "url": "https://www.ibm.com/cloud/learn/data-mining",
+        "sources": ["Google"]
       },
       {
         "id": 73,
-        "relevance": 1,
-        "title": "App Store - JSON Designer",
-        "text": "Get JSON Designer on the App Store. See screenshots and ratings, and read customer reviews.",
-        "url": "http://itunes.apple.com/us/app/json-designer/id432736126?mt=8",
-        "sources": ["Faroo"]
+        "relevance": 2,
+        "title": "Exploratory data analysis",
+        "text": "Provide a basis for further data collection through surveys or experiments Many EDA techniques have been adopted into data mining. They are also being taught …",
+        "url": "https://en.wikipedia.org/wiki/Exploratory_data_analysis",
+        "sources": ["Wikipedia"]
       },
       {
         "id": 74,
-        "relevance": 1,
-        "title": "JSON Types",
-        "text": "",
-        "url": "//www.search.ask.com/web?page=1&q=JSON+Types&tpr=5",
-        "sources": ["Ask"]
+        "relevance": 2,
+        "title": "Why Data Mining Primitives and",
+        "text": "n Data mining primitives: What defines a data mining task? n A data mining query language n Design graphical user interfaces based on a data mining query language n Architecture of data mining systems n Summary",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.595.3978",
+        "sources": ["Base"]
       },
       {
         "id": 75,
-        "relevance": 1,
-        "title": "Web Application Description Language",
-        "text": "json\"/> json\"/> <representation …",
-        "url": "https://en.wikipedia.org/wiki/Web_Application_Description_Language",
-        "sources": ["Wikipedia"]
+        "relevance": 2,
+        "title": "Data Mining Basics - What is Data Mining? | Sisense",
+        "text": "What is Data Mining? Data mining is an automated analytical method that lets companies extract usable information from massive sets of raw data. Data mining​ …",
+        "url": "https://www.sisense.com/glossary/data-mining-basics/",
+        "sources": ["Google"]
       },
       {
         "id": 76,
-        "relevance": 1,
-        "title": "Flickr Services",
-        "text": "… to the world, securely and privately show content to your friends and family, or blog the photos and videos you take with a cameraphone. JSON, …",
-        "url": "http://www.flickr.com/services/api/response.json.html",
-        "sources": ["Faroo"]
-      },
-      {
-        "id": 77,
-        "relevance": 1,
-        "title": "json",
-        "text": "",
-        "url": "//www.search.ask.com/web?page=1&q=json&tpr=7",
-        "sources": ["Ask"]
-      },
-      {
-        "id": 78,
-        "relevance": 1,
-        "title": "Elasticsearch",
-        "text": "multitenant-capable full-text search engine with an HTTP web interface and schema-free JSON documents. Elasticsearch is developed in Java and is released as open source …",
-        "url": "https://en.wikipedia.org/wiki/Elasticsearch",
+        "relevance": 2,
+        "title": "Manifold Data Mining",
+        "text": "Manifold Data Mining is a Canadian company specializing in consumer data products, analytics, and predictive modeling. As a data and analytical service …",
+        "url": "https://en.wikipedia.org/wiki/Manifold_Data_Mining",
         "sources": ["Wikipedia"]
       },
       {
+        "id": 77,
+        "relevance": 2,
+        "title": "Knowledge Discovery Database (KDD)-Data Mining Application in Transportation",
+        "text": "In this paper, an understanding and a review of data mining (DM) development and its applications in logistics and specifically transportation are highlighted. Even though data mining has been successful in becoming a major component of various…",
+        "url": "https://www.neliti.com/publications/176445/knowledge-discovery-database-kdd-data-mining-application-in-transportation",
+        "sources": ["Base"]
+      },
+      {
+        "id": 78,
+        "relevance": 2,
+        "title": "Data Mining Tutorial: What is | Process | Techniques & Examples",
+        "text": "2 Mar 2021 · Data Mining is a process of finding potentially useful patterns from huge data sets​. It is a multi-disciplinary skill that uses machine learning, …",
+        "url": "https://www.guru99.com/data-mining-tutorial.html",
+        "sources": ["Google"]
+      },
+      {
         "id": 79,
-        "relevance": 1,
-        "title": "BSON",
-        "text": "superset of JSON types (JSON does not have a date or a byte array type, for example), with one exception of not having a universal \"number\" type as JSON does …",
-        "url": "https://en.wikipedia.org/wiki/BSON",
+        "relevance": 2,
+        "title": "Data Mining and Knowledge Discovery",
+        "text": "Data Mining and Knowledge Discovery is a bimonthly peer-reviewed scientific journal focusing on data mining published by Springer Science+Business Media …",
+        "url": "https://en.wikipedia.org/wiki/Data_Mining_and_Knowledge_Discovery",
         "sources": ["Wikipedia"]
       },
       {
         "id": 80,
-        "relevance": 1,
-        "title": "PHP: JSON - Manual",
-        "text": "json_decode — Decodes a JSON string; json_encode — Returns the JSON representation of a value; json_last_error_msg — Returns the error string of the last …",
-        "url": "http://php.net/manual/en/book.json.php",
-        "sources": ["Ask"]
+        "relevance": 2,
+        "title": "Towards On-line Analytical Mining in Large Databases",
+        "text": "Great e orts have been paid in the Intelligent Database Systems Research Lab for the research and development of e cient data mining methods and construction of on-line analytical data mining systems. Our work has been focused on the integration of…",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.415.45",
+        "sources": ["Base"]
       },
       {
         "id": 81,
-        "relevance": 1,
-        "title": "List of Bravest Warriors episodes",
-        "text": "Warriors', Season 1\" (JSON). YouTube. Retrieved 2013-12-08. CartoonHangover staff (2013-09-20). \"'Bravest Warriors' Minisodes\" (JSON). YouTube. Retrieved …",
-        "url": "https://en.wikipedia.org/wiki/List_of_Bravest_Warriors_episodes",
-        "sources": ["Wikipedia"]
+        "relevance": 2,
+        "title": "Text & Data Mining - LIBER Europe",
+        "text": "“Text and data mining (TDM) is the process of deriving information from machine-​read material. It works by copying large quantities of material, extracting the …",
+        "url": "https://libereurope.eu/topic/text-data-mining/",
+        "sources": ["Google"]
       },
       {
         "id": 82,
-        "relevance": 1,
-        "title": "RFC 7159 - The JavaScript Object Notation (JSON) Data Interchange …",
-        "text": "JSON defines a small set of formatting rules for the portable representation of structured data. This document removes inconsistencies with other specifications …",
-        "url": "https://tools.ietf.org/html/rfc7159",
-        "sources": ["Ask"]
-      },
-      {
-        "id": 83,
-        "relevance": 1,
-        "title": "Abstract Syntax Notation One",
-        "text": "new JSON Encoding Rules (JER), which specify how to encode ASN.1 abstract values in JSON, so that the resulting encodings can be read by any JSON reader …",
-        "url": "https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One",
+        "relevance": 2,
+        "title": "Data warehouse",
+        "text": "professionals for data mining, online analytical processing, market research and decision support. However, the means to retrieve and analyze data, to extract …",
+        "url": "https://en.wikipedia.org/wiki/Data_warehouse",
         "sources": ["Wikipedia"]
       },
       {
+        "id": 83,
+        "relevance": 2,
+        "title": "Towards an ontology of data mining investigations",
+        "text": "Abstract. Motivated by the need for unification of the domain of data mining and the demand for formalized representation of outcomes of data mining investigations, we address the task of constructing an ontology of data mining. In this paper we…",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.194.2796",
+        "sources": ["Base"]
+      },
+      {
         "id": 84,
-        "relevance": 1,
-        "title": "RFC 4627 - The application/json Media Type for JavaScript Object …",
-        "text": "The application/json Media Type for JavaScript Object Notation (JSON). Status of This Memo This memo provides information for the Internet community. It does …",
-        "url": "https://tools.ietf.org/html/rfc4627",
-        "sources": ["Ask"]
+        "relevance": 2,
+        "title": "Data Mining and Machine Learning - UniNE",
+        "text": "Introduction to Data Mining perspective; Association rules; Decision trees; Instance-based learning (nearest neighbors); clustering; Page Rank, HITS and spam.",
+        "url": "http://members.unine.ch/jacques.savoy/Lectures/CoursDataMining.html",
+        "sources": ["Google"]
       },
       {
         "id": 85,
-        "relevance": 1,
-        "title": "Jackson (API)",
-        "text": "In computing, Jackson is a high-performance JSON processor for Java. Its developers extol the combination of fast, correct, lightweight, and ergonomic …",
-        "url": "https://en.wikipedia.org/wiki/Jackson_(API)",
+        "relevance": 2,
+        "title": "Data integration",
+        "text": "coherent data store that provides synchronous data across a network of files for clients. A common use of data integration is in data mining when analyzing …",
+        "url": "https://en.wikipedia.org/wiki/Data_integration",
         "sources": ["Wikipedia"]
       },
       {
         "id": 86,
-        "relevance": 1,
-        "title": "What is JSON and why would I use it? - Stack Overflow",
-        "text": "JSON (JavaScript Object Notation) is a lightweight format that is used for data interchanging. It is based on a subset of JavaScript language (the way objects are …",
-        "url": "https://stackoverflow.com/questions/383692/what-is-json-and-why-would-i-use-it",
-        "sources": ["Ask"]
+        "relevance": 2,
+        "title": "Data mining for health executive decision support: an imperative with a daunting future!",
+        "text": "Data mining is highly profiled. It has the potential to enhance executive information systems. Such enhancement would mean better decision-making by management, which in turn would mean better services for customers. While the future of data mining…",
+        "url": "http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3598018",
+        "sources": ["Base"]
       },
       {
         "id": 87,
-        "relevance": 1,
-        "title": "Ion (serialization format)",
-        "text": "The text form is a superset of JSON; thus, any valid JSON document is also a valid Ion document. As a superset of JSON, Ion includes the following data …",
-        "url": "https://en.wikipedia.org/wiki/Ion_(serialization_format)",
-        "sources": ["Wikipedia"]
+        "relevance": 2,
+        "title": "What is Data Mining? Guide to Tools & Techniques | Tableau",
+        "text": "Data mining is the process of understanding data through cleaning raw data, finding patterns, creating models, and testing those models. It includes statistics …",
+        "url": "https://www.tableau.com/learn/articles/what-is-data-mining",
+        "sources": ["Google"]
       },
       {
         "id": 88,
-        "relevance": 1,
-        "title": "JSON:API — A specification for building APIs in JSON",
-        "text": "JSON:API v1.1 RC1 has been published! Please review and try out this upcoming version of the spec before its planned release date of January 31, 2019.",
-        "url": "https://jsonapi.org/",
-        "sources": ["Ask"]
-      },
-      {
-        "id": 89,
-        "relevance": 1,
-        "title": "List of web service protocols",
-        "text": "Protocol CTS - Canonical Text Services Protocol E-Business XML Hessian JSON-RPC JSON-WSP SOAP - outgrowth of XML-RPC, originally an acronym for Simple Object …",
-        "url": "https://en.wikipedia.org/wiki/List_of_web_service_protocols",
+        "relevance": 2,
+        "title": "Unstructured data",
+        "text": "sentiment analysis, voice of the customer mining, and call center optimization. The emergence of Big Data in the late 2000s led to a heightened interest …",
+        "url": "https://en.wikipedia.org/wiki/Unstructured_data",
         "sources": ["Wikipedia"]
       },
       {
+        "id": 89,
+        "relevance": 2,
+        "title": "Orange4WS environment for service-oriented data mining",
+        "text": "Novel data-mining tasks in e-science involve mining of distributed, highly heterogeneous data and knowledge sources. However, standard data mining platforms, such as Weka and Orange, involve only their own data mining algorithms in the process of…",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.645.7863",
+        "sources": ["Base"]
+      },
+      {
         "id": 90,
-        "relevance": 1,
-        "title": "JSONLint - The JSON Validator",
-        "text": "JSONLint is the free online validator and reformatter tool for JSON, a lightweight data-interchange format.",
-        "url": "https://jsonlint.com/",
-        "sources": ["Ask"]
+        "relevance": 2,
+        "title": "What is Data Mining? | Definition | Kaspersky",
+        "text": "Much like the way a prospector would sift through dirt to find nuggets of gold, data mining is the process of sifting through large sets of data to find pertinent …",
+        "url": "https://www.kaspersky.com/resource-center/definitions/data-mining",
+        "sources": ["Google"]
       },
       {
         "id": 91,
-        "relevance": 1,
-        "title": "Jq (programming language)",
-        "text": "programming language with support for backtracking and managing streams of JSON data. It is related to the Icon and Haskell programming languages. The jq …",
-        "url": "https://en.wikipedia.org/wiki/Jq_(programming_language)",
+        "relevance": 2,
+        "title": "Surveillance",
+        "text": "foreigners. Additionally, the NSA runs a program known as PRISM, which is a data mining system that gives the United States government direct access to information …",
+        "url": "https://en.wikipedia.org/wiki/Surveillance",
         "sources": ["Wikipedia"]
       },
       {
         "id": 92,
-        "relevance": 1,
-        "title": "GitHub - douglascrockford/JSON-js: JSON in JavaScript",
-        "text": "JSON in JavaScript. Contribute to douglascrockford/JSON-js development by creating an account on GitHub.",
-        "url": "https://github.com/douglascrockford/JSON-js",
-        "sources": ["Ask"]
+        "relevance": 2,
+        "title": "Development of Information Systems Professionals",
+        "text": "Data and the information culled from that data is an extremely valuable organizational re-source. Every data mining professional is aware of this, but few are well-educated on the im-pact that data mining could have on privacy and the laws…",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.552.9877",
+        "sources": ["Base"]
       },
       {
         "id": 93,
-        "relevance": 1,
-        "title": "Npm (software)",
-        "text": "command, all the dependencies of a project through the package.json file. In the package.json file, each dependency can specify a range of valid versions …",
-        "url": "https://en.wikipedia.org/wiki/Npm_(software)",
-        "sources": ["Wikipedia"]
+        "relevance": 2,
+        "title": "DATA MINING CUP - international student competition in data mining",
+        "text": "Use your knowledge to solve authentic tasks of a genuine company - prepare for your future career. Join the DATA MINING CUP in spring 2021.",
+        "url": "https://www.data-mining-cup.com/",
+        "sources": ["Google"]
       },
       {
         "id": 94,
-        "relevance": 1,
-        "title": "GitHub - flori/json: JSON implementation for Ruby",
-        "text": "JSON implementation for Ruby. Contribute to flori/json development by creating an account on GitHub.",
-        "url": "https://github.com/flori/json",
-        "sources": ["Ask"]
+        "relevance": 2,
+        "title": "Data analysis techniques for fraud detection",
+        "text": "methods exist in the areas of Knowledge Discovery in Databases (KDD), Data Mining, Machine Learning and Statistics. They offer applicable and successful …",
+        "url": "https://en.wikipedia.org/wiki/Data_analysis_techniques_for_fraud_detection",
+        "sources": ["Wikipedia"]
       },
       {
         "id": 95,
-        "relevance": 1,
-        "title": "JSONiq",
-        "text": "transform collections of hierarchical and heterogeneous data in format of JSON, XML, as well as unstructured, textual data. JSONiq is an open specification …",
-        "url": "https://en.wikipedia.org/wiki/JSONiq",
-        "sources": ["Wikipedia"]
+        "relevance": 2,
+        "title": "Advanced Review Data mining tools",
+        "text": "The development and application of data mining algorithms requires the use of powerful software tools. As the number of available tools continues to grow, the choice of themost suitable tool becomes increasinglydifficult. This paper attempts to…",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.454.7782",
+        "sources": ["Base"]
       },
       {
         "id": 96,
         "relevance": 1,
-        "title": "Module: JSON (Ruby 2.0.0) - Ruby-Doc.org",
-        "text": "JSON is a lightweight data-interchange format. It is easy for us humans to read and write. Plus, equally simple for machines to generate or parse. JSON is …",
-        "url": "http://ruby-doc.org/stdlib-2.0.0/libdoc/json/rdoc/JSON.html",
-        "sources": ["Ask"]
+        "title": "Journal of Data Mining & Digital Humanities - Home",
+        "text": "Data mining is an interdisciplinary subfield of computer science, involving the methods at the intersection of artificial intelligence, machine learning and database …",
+        "url": "https://jdmdh.episciences.org/",
+        "sources": ["Google"]
       },
       {
         "id": 97,
         "relevance": 1,
-        "title": "JWK",
-        "text": "1964), English actress sometimes credited as Joanne Whalley-Kilmer JSON Web Key in JSON Web Signature Warwick railway station, Perth, in Western Australia …",
-        "url": "https://en.wikipedia.org/wiki/JWK",
+        "title": "Special Interest Group on Knowledge Discovery and Data Mining",
+        "text": "Discovery and Data Mining, hosts an influential annual conference. The KDD Conference grew from KDD (Knowledge Discovery and Data Mining) workshops at …",
+        "url": "https://en.wikipedia.org/wiki/Special_Interest_Group_on_Knowledge_Discovery_and_Data_Mining",
         "sources": ["Wikipedia"]
       },
       {
         "id": 98,
         "relevance": 1,
-        "title": "What is JSON ? - YouTube",
-        "text": "Jun 26, 2017 … Learn Spring Boot : https://goo.gl/5Wgsk6 Restful Web Services Tutorial : https:// goo.gl/3mosnz Servlet and JSP complete playlist …",
-        "url": "https://www.youtube.com/watch?v=JuFdz8f-cT4",
-        "sources": ["Ask"]
+        "title": "Research Phases of University Data Mining Project Development",
+        "text": "Educational Data Mining becomes one of the challenging new research fields where data mining methods and tools could help universities in taking timely and data analysis based management decisions, thus contributing to gaining competitive advantages…",
+        "url": "http://hdl.handle.net/10867/70",
+        "sources": ["Base"]
       },
       {
         "id": 99,
         "relevance": 1,
-        "title": "Gson",
-        "text": "open-source Java library to serialize and deserialize Java objects to (and from) JSON. The Gson library was originally developed for internal purposes of Google …",
-        "url": "https://en.wikipedia.org/wiki/Gson",
-        "sources": ["Wikipedia"]
+        "title": "What Is Data Mining? Explanation of Data Mining | Xplenty",
+        "text": "1 Jul 2020 · Data Mining Techniques in Action. Businesses have access to more data than ever before. And all of this data can unearth patterns that are useful …",
+        "url": "https://www.xplenty.com/blog/what-is-data-mining-an-in-depth-explanation-of-data-mining/",
+        "sources": ["Google"]
       },
       {
         "id": 100,
         "relevance": 1,
-        "title": "J Son",
-        "text": "singer J'son (comics), Marvel Comics character Json (rapper) American Christian hip-hop musician JSON (JavaScript Object Notation), for data interchange …",
-        "url": "https://en.wikipedia.org/wiki/J_Son",
+        "title": "National Center for Data Mining",
+        "text": "The National Center for Data Mining (NCDM) is a center of the University of Illinois at Chicago (UIC), established in 1998 to serve as a resource for …",
+        "url": "https://en.wikipedia.org/wiki/National_Center_for_Data_Mining",
         "sources": ["Wikipedia"]
       },
       {
         "id": 101,
         "relevance": 1,
-        "title": "MessagePack",
-        "text": "than JSON, but imposes limitations on array and integer sizes. On the other hand, it allows binary data and non UTF-8 encoded strings. In JSON, map keys …",
-        "url": "https://en.wikipedia.org/wiki/MessagePack",
-        "sources": ["Wikipedia"]
+        "title": "Data Mining Techniques in Cancer Research Area",
+        "text": "In this paper we present an analysis of the prediction of survivability on different attributes, rate ofbreast cancer patients using data mining techniques. The data used is the real data. Thepreprocessed data set, which have all the available…",
+        "url": "http://www.arjournals.org/index.php/bjdmn/article/view/1603",
+        "sources": ["Base"]
       },
       {
         "id": 102,
         "relevance": 1,
-        "title": "Representational state transfer",
-        "text": "resource's URI will elicit a response with a payload formatted in HTML, XML, JSON, or some other format. The response can confirm that some alteration has …",
-        "url": "https://en.wikipedia.org/wiki/Representational_state_transfer",
+        "title": "Introduction to Data Mining",
+        "text": "Introduction to Data Mining (Second Edition). Introduction to Data Mining. Pang-​Ning Tan, Michigan State University, Michael Steinbach, University of Minnesota …",
+        "url": "https://www-users.cs.umn.edu/~kumar/dmbook/index.php",
+        "sources": ["Google"]
+      },
+      {
+        "id": 103,
+        "relevance": 1,
+        "title": "Big data",
+        "text": "data-mining activities. Targeting of consumers (for advertising by marketers) Data capture Data journalism: publishers and journalists use big data tools …",
+        "url": "https://en.wikipedia.org/wiki/Big_data",
         "sources": ["Wikipedia"]
+      },
+      {
+        "id": 104,
+        "relevance": 1,
+        "title": "Review of web usage of data mining in web mining",
+        "text": "The WWW (World Wide Web) contain a huge amount of data that is rising in both dimension and volume day by day. Data mining process has been in use in almost every field of business. Nowadays, various data mining processes use web mining techniques…",
+        "url": "http://www.ijarcs.info/index.php/Ijarcs/article/view/4128",
+        "sources": ["Base"]
+      },
+      {
+        "id": 105,
+        "relevance": 1,
+        "title": "Data Mining Call For Papers for Conferences, Workshops and …",
+        "text": "Data Mining Calls For Papers (CFP) for international conferences, workshops, meetings, seminars, events, journals and book chapters.",
+        "url": "http://www.wikicfp.com/cfp/call?conference=data%20mining",
+        "sources": ["Google"]
+      },
+      {
+        "id": 106,
+        "relevance": 1,
+        "title": "Chief data officer",
+        "text": "utilization of information as an asset, via data processing, analysis, data mining, information trading and other means. CDOs usually report to the chief …",
+        "url": "https://en.wikipedia.org/wiki/Chief_data_officer",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 107,
+        "relevance": 1,
+        "title": "DATA MINING VIA CELLULAR NEURAL NETWORKS IN THE GSM SECTOR",
+        "text": "New age telecommunication sector (GSM) has been based on new customer acquisition plans and tactics. For this purpose, evaluation of the call traffic data from the data warehouses and making some predictions by data mining algorithms are so…",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.101.8516",
+        "sources": ["Base"]
+      },
+      {
+        "id": 108,
+        "relevance": 1,
+        "title": "Data Mining: Practical Machine Learning Tools and Techniques …",
+        "text": "Rating 5.0 …",
+        "url": "https://www.elsevier.com/books/data-mining-practical-machine-learning-tools-and-techniques/witten/978-0-12-374856-0",
+        "sources": ["Google"]
+      },
+      {
+        "id": 109,
+        "relevance": 1,
+        "title": "Data set",
+        "text": "authors. The Bupa liver data – Used in several papers in the machine learning (data mining) literature. Anscombe's quartet – Small data set illustrating the …",
+        "url": "https://en.wikipedia.org/wiki/Data_set",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 110,
+        "relevance": 1,
+        "title": "Uniqueness of Medical Data Mining",
+        "text": "This article emphasizes the uniqueness of medical data mining. This is a position paper, in which the authors' intent, based on their medical and data mining experience, is to alert the data mining community to the unique features of medical data…",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.16.5229",
+        "sources": ["Base"]
+      },
+      {
+        "id": 111,
+        "relevance": 1,
+        "title": "SIGKDD",
+        "text": "SIGKDD: The community for data mining, data science and analytics … promote the rapid maturation of the field of knowledge discovery in data and data-mining.",
+        "url": "https://www.kdd.org/",
+        "sources": ["Google"]
+      },
+      {
+        "id": 112,
+        "relevance": 1,
+        "title": "Predictive Model Markup Language",
+        "text": "Dr. Robert Lee Grossman, then the director of the National Center for Data Mining at the University of Illinois at Chicago. PMML provides a way for analytic …",
+        "url": "https://en.wikipedia.org/wiki/Predictive_Model_Markup_Language",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 113,
+        "relevance": 1,
+        "title": "A Study on Some of Data Warehouses and Data Mining (Case Study of Data Mining for Environmental Problems)",
+        "text": "We live in a world where vast amounts of data are collected daily. Data warehouses and Data mining given the important concepts analyzing such data. In this section we will gain a multidimensional view of data mining and data warehousing. In this…",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.680.4497",
+        "sources": ["Base"]
+      },
+      {
+        "id": 114,
+        "relevance": 1,
+        "title": "Statoo Consulting, Switzerland (www.statoo.com/en/datamining/)",
+        "text": "1 Nov 2019 · Data mining (now rebranded as data science) is the non-trivial process of identifying valid, novel, potentially useful, and ultimately …",
+        "url": "http://www.statoo.com/en/datamining/",
+        "sources": ["Google"]
+      },
+      {
+        "id": 115,
+        "relevance": 1,
+        "title": "Social media mining",
+        "text": "Social media mining is the process of obtaining big data from user-generated content on social media sites and mobile apps in order to extract patterns …",
+        "url": "https://en.wikipedia.org/wiki/Social_media_mining",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 116,
+        "relevance": 1,
+        "title": "Title not available",
+        "text": "CiteSeerX",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.440.1135",
+        "sources": ["Base"]
+      },
+      {
+        "id": 117,
+        "relevance": 1,
+        "title": "Top 21 Data Mining Tools - Imaginary Cloud",
+        "text": "8 Mar 2021 · What is data mining? Data mining is a process that encompasses statistics, artificial intelligence, and machine learning. By using intelligent …",
+        "url": "https://www.imaginarycloud.com/blog/data-mining-tools/",
+        "sources": ["Google"]
+      },
+      {
+        "id": 118,
+        "relevance": 1,
+        "title": "DMX",
+        "text": "of enterprise storage arrays by EMC Corporation Data Mining Extensions, a query language for data mining models DMX, a protocol for DFFN (Discrete Fault …",
+        "url": "https://en.wikipedia.org/wiki/DMX",
+        "sources": ["Wikipedia"]
+      },
+      {
+        "id": 119,
+        "relevance": 1,
+        "title": "Data Mining and KDD: A Shifting Mosaic file:///E|/FrontPage Webs/Content/EISWEB/DMKDD.html The Idea of Data Mining Data Mining and KDD: A Shifting Mosaic By",
+        "text": "Data Mining is an idea based on a simple analogy. The growth of data warehousing has created mountains of data. The mountains represent a valuable resource to the enterprise. But to extract value from these data mountains, we must \"mine \" for…",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.93.9314",
+        "sources": ["Base"]
       }
     ]
   }
