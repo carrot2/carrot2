@@ -1,5 +1,7 @@
 import org.eclipse.jgit.storage.file.*
 import org.eclipse.jgit.api.*
+import org.eclipse.jgit.lib.*
+import org.eclipse.jgit.submodule.*
 
 buildscript {
   repositories {
@@ -23,14 +25,24 @@ def gitStatus(dir) {
   ]
 
   try {
-    def repo = new FileRepositoryBuilder()
+    Repository repo = new FileRepositoryBuilder()
         .findGitDir(file(dir))
         .build()
-    def git = new Git(repo)
-    def head = repo.findRef("HEAD")
+    Git git = new Git(repo)
 
-    def st = git.status().call()
-    def commit = head.getObjectId()
+    Map<String, SubmoduleStatus> submodules = git.submoduleStatus().call()
+    gradle.taskGraph.whenReady { graph ->
+      submodules.each { path, st ->
+        if (st.type != SubmoduleStatusType.INITIALIZED) {
+          throw new GradleException("Suspicious submodule status: ${path} ${st.type}")
+        }
+      }
+    }
+
+    Ref head = repo.findRef("HEAD")
+
+    Status st = git.status().call()
+    ObjectId commit = head.getObjectId()
     status.fullRev = commit.name()
     status.abbrRev = commit.abbreviate(8).name()
     status.clean = st.clean
