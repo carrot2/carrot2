@@ -268,7 +268,7 @@ components:
               type: string
         templates:
           description: >-
-            An map of named request templates and their template body content.
+            A map of named request templates and their template body content.
           example: {
             "templates": {
               "template-name": {
