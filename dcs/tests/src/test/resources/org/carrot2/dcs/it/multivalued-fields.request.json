@@ -1,0 +1,24 @@
+{
+  "language": "English",
+  "algorithm": "Lingo",
+  "parameters": {
+  },
+  "documents": [
+    {
+      "title": "Data Mining in Python",
+      "snippet": "Collection of libraries useful for machine learning ..."
+    },
+    {
+      "title": "K-State KDD Lab",
+      "snippet": "... we are interested in knowledge discovery from large ..."
+    },
+    {
+      "title": "Data Mining",
+      "snippet": [
+        "Data mining uses machine learning ...",
+        "... automated knowledge discovery tools."
+      ]
+    }
+  ]
+}
+
