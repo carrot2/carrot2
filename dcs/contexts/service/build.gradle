@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.*
+
 plugins {
   id 'java'
   id 'war'
@@ -32,6 +34,16 @@ configurations.implementation.dependencies.each { module ->
 }
 
 war {
+  def antPrj = new org.apache.tools.ant.Project()
+  antPrj.setProperty("project.version", project.version)
+  inputs.property("injected.project.version", project.version)
+
+  filesMatching(["**/dcs.yaml"], {
+    filteringCharset = 'UTF-8'
+    filter(ExpandProperties, project: antPrj)
+    filter(FixCrLfFilter, eol: FixCrLfFilter.CrLf.newInstance("lf"))
+  })
+
   from(configurations.langResources, {
     into "resources"
   })
