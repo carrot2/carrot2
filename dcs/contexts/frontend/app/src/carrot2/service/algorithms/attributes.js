@@ -297,14 +297,18 @@ const patternTypesHelp = `
   Combine some or all pattern types as required.
 </p>`;
 
-export const createExcludedLabelsSetting = (algorithmId, viewCustomizer) => {
+export const createExcludedLabelsSetting = (
+  algorithmId,
+  viewCustomizer,
+  restPath = "dictionaries.labelFilters"
+) => {
   const activeViewStore = createActiveViewStore(algorithmId, "labelExclusions");
   const views = createExclusionViews(viewCustomizer);
 
   return {
     id: "dictionaries.labelFilters",
     label: "Excluded label patterns",
-    pathRest: "dictionaries.labelFilters",
+    pathRest: restPath,
     factory: (s, get, set) => (
       <ExclusionsSetting
         setting={s}
