@@ -36,6 +36,7 @@ body.light figure img.dark {
 
 .logo {
   --logo-height: 1.2rem;
+  padding-top: 2pt;
 }
 @media (min-width: 768px) {
   .logo {
@@ -137,7 +138,6 @@ footer .copyright {
   }
 }
 
-
 .spreadsheet {
   border-collapse: collapse;
   position: relative;
@@ -195,6 +195,16 @@ footer .copyright {
   font-weight: bold;
 }
 
+ul ul, ol ul, ul ol, ol ol {
+  margin-top: var(--leading);
+  margin-bottom: var(--leading);
+}
+
+ol > li > ol {
+  list-style: lower-alpha;
+}
+
+
 time:after {
   content: attr(datetime);
   font-size: var(--small-font-size);
@@ -205,6 +215,18 @@ time:after {
   display: block;
   color: var(--text-color-light);
   font-size: var(--small-font-size);
+}
+
+.glob-examples p:first-child {
+  margin-top: 0;
+}
+
+.glob-examples p {
+  margin-top: calc(0.5 * var(--leading));
+}
+
+.glob-examples td {
+  border-bottom: 1pt solid var(--hr-color-muted);
 }
 
 .dictionaries tr td:nth-child(n+2) {

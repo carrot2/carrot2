@@ -1,4 +1,5 @@
 article table {
+  font-size: var(--small-font-size);
   border-top: 2pt solid gray;
   border-bottom: 2pt solid gray;
 }
