@@ -203,7 +203,6 @@ autoEffect(async () => {
 autoEffect(() => {
   if (searchResultStore.loading) {
     clusterStore.loading = true;
-    clusterStore.clusters = EMPTY_ARRAY;
   }
 });
 
