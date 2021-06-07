@@ -103,8 +103,8 @@ const availableLanguages = {
   }
 };
 
-export const createLanguageSetting = (id, algorithm, overrides) => {
-  const languages = availableLanguages.algorithms[algorithm];
+export const createLanguageSetting = (id, algorithm, overrides, langs) => {
+  const languages = langs || availableLanguages.algorithms[algorithm];
 
   return {
     id: `${id}:language`,
