@@ -188,9 +188,8 @@ const SettingFiltersButton = view(() => {
       onClick={() =>
         (settingsStateStore.showFilters = !settingsStateStore.showFilters)
       }
-      accessKey="f"
     >
-      <u>F</u>ilters
+      Filters
     </Button>
   );
 });
