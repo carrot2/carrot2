@@ -309,7 +309,7 @@ export const createExcludedLabelsSetting = (
     id: "dictionaries.labelFilters",
     label: "Excluded label patterns",
     pathRest: restPath,
-    factory: (s, get, set) => (
+    factory: (s, get, set, search) => (
       <ExclusionsSetting
         setting={s}
         get={get}
@@ -317,6 +317,7 @@ export const createExcludedLabelsSetting = (
         views={views}
         getActiveView={activeViewStore.get}
         setActiveView={activeViewStore.set}
+        search={search}
       />
     ),
     description: `
@@ -345,7 +346,7 @@ export const createExcludedWordsSetting = algorithmId => {
 </p>
 
 ${patternTypesHelp}`,
-    factory: (s, get, set) => (
+    factory: (s, get, set, search) => (
       <ExclusionsSetting
         setting={s}
         get={get}
@@ -353,6 +354,7 @@ ${patternTypesHelp}`,
         views={views}
         getActiveView={activeViewStore.get}
         setActiveView={activeViewStore.set}
+        search={search}
       />
     )
   };

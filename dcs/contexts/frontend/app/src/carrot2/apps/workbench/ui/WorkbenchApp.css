@@ -39,12 +39,20 @@
   margin-top: var(--leading);
 }
 
-.WorkbenchApp .AppSide .SettingsTools button {
-  width: 2em;
+.WorkbenchApp .AppSide .SettingsToolsButtons {
+  display: flex;
 }
 
-.WorkbenchApp .AppSide .SettingsTools button:not(:last-child) {
+.WorkbenchApp .AppSide .SettingsToolsButtons button:not(:last-child) {
   margin-right: 0.25em;
+}
+
+.SettingFiltersButton {
+  margin-left: auto;
+}
+
+.SettingFilters {
+  margin-top: calc(0.5 * var(--leading));
 }
 
 /** Main area */

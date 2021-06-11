@@ -48,6 +48,7 @@ export const ExportParameters = () => {
         icon={<FontAwesomeIcon icon={faBracketsCurly} />}
         title="Clustering parameters as JSON"
         small={true}
+        minimal={true}
       />
       <ExportParametersBody />
     </ToolPopover>

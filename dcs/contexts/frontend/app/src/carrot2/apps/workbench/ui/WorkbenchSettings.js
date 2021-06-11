@@ -1,20 +1,24 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+
+import debounce from "lodash.debounce";
 
 import { autoEffect, batch, store, view } from "@risingstack/react-easy-state";
 
-import { Button } from "@blueprintjs/core";
+import { Button, InputGroup } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBookSpells,
   faCompressAlt,
   faExpandAlt,
+  faFilter,
   faUndoAlt
 } from "@fortawesome/pro-regular-svg-icons";
 
 import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
 import {
   addAdvancedSettingsVisibility,
-  addGroupFolding
+  addGroupFolding,
+  addSettingsSearch
 } from "@carrotsearch/ui/settings/Settings.js";
 
 import { sources } from "../../../sources.js";
@@ -28,6 +32,7 @@ import {
 
 import { queryStore } from "../store/query-store.js";
 import { ExportParameters } from "./ExportParameters.js";
+import { displayNoneIf } from "@carrotsearch/ui/Optional.js";
 
 // Settings of all sources and algorithms, combined. We'll show and hide
 // the right settings based on the source and algorithm selection.
@@ -124,15 +129,35 @@ autoEffect(() => {
 });
 
 // Setting tools buttons
-const settingsStateStore = persistentStore("workbench:settings:state", {
-  showAdvancedSettings: false
+export const settingsStateStore = persistentStore("workbench:settings:state", {
+  showAdvancedSettings: false,
+  showFilters: false,
+  search: ""
 });
+
+export const debouncedSettingSearchStore = store({
+  search: settingsStateStore.search,
+  setSearch: debounce(
+    search => (debouncedSettingSearchStore.search = search),
+    250
+  ),
+  getSearch: () => {
+    return settingsStateStore.showFilters
+      ? debouncedSettingSearchStore.search
+      : "";
+  }
+});
+autoEffect(() => {
+  debouncedSettingSearchStore.setSearch(settingsStateStore.search);
+});
+
 const AdvancedSettingsButton = view(() => {
   return (
     <Button
       icon={<FontAwesomeIcon icon={faBookSpells} />}
       title="Show advanced settings"
       small={true}
+      minimal={true}
       active={settingsStateStore.showAdvancedSettings}
       onClick={() =>
         (settingsStateStore.showAdvancedSettings = !settingsStateStore.showAdvancedSettings)
@@ -147,28 +172,79 @@ const FoldSettingsButton = view(() => {
       icon={<FontAwesomeIcon icon={allFolded ? faExpandAlt : faCompressAlt} />}
       title={`${allFolded ? "Expand" : "Fold"} all setting groups`}
       small={true}
+      minimal={true}
       onClick={() => (allFolded ? expandAll() : foldAll())}
     />
   );
 });
+const SettingFiltersButton = view(() => {
+  return (
+    <Button
+      className="SettingFiltersButton"
+      icon={<FontAwesomeIcon icon={faFilter} />}
+      small={true}
+      minimal={true}
+      active={settingsStateStore.showFilters}
+      onClick={() =>
+        (settingsStateStore.showFilters = !settingsStateStore.showFilters)
+      }
+      accessKey="f"
+    >
+      <u>F</u>ilters
+    </Button>
+  );
+});
+
+const SettingFilters = view(() => {
+  const input = useRef();
+  useEffect(() => {
+    if (settingsStateStore.showFilters) {
+      input.current.focus();
+    }
+  });
+
+  return (
+    <div
+      className="SettingFilters"
+      style={displayNoneIf(!settingsStateStore.showFilters)}
+    >
+      <InputGroup
+        value={settingsStateStore.search}
+        onChange={e => (settingsStateStore.search = e.target.value)}
+        placeholder="parameter name"
+        inputRef={input}
+      />
+    </div>
+  );
+});
+
 export const SettingsTools = () => {
   return (
     <div className="SettingsTools">
-      <Button
-        icon={<FontAwesomeIcon icon={faUndoAlt} />}
-        title="Reset all settings to defaults"
-        small={true}
-        onClick={algorithmStore.getAlgorithmInstance().resetToDefaults}
-      />
-      <AdvancedSettingsButton />
-      <FoldSettingsButton />
-      <ExportParameters />
+      <div className="SettingsToolsButtons">
+        <Button
+          icon={<FontAwesomeIcon icon={faUndoAlt} />}
+          title="Reset all settings to defaults"
+          small={true}
+          minimal={true}
+          onClick={algorithmStore.getAlgorithmInstance().resetToDefaults}
+        />
+        <AdvancedSettingsButton />
+        <FoldSettingsButton />
+        <ExportParameters />
+        <SettingFiltersButton />
+      </div>
+
+      <SettingFilters />
     </div>
   );
 };
 addAdvancedSettingsVisibility(
   settings.settings,
   () => settingsStateStore.showAdvancedSettings
+);
+addSettingsSearch(settings.settings, () =>
+  debouncedSettingSearchStore.getSearch()
 );
 
 export const runSearch = () => {

@@ -24,6 +24,7 @@ import { ExportResults } from "./ExportResults.js";
 import { workbenchViewStore } from "../store/view-store.js";
 import { WorkbenchSourceAlgorithm } from "./WorkbenchSourceAlgorithm.js";
 import {
+  debouncedSettingSearchStore,
   parametersStateStore,
   runSearch,
   settings,
@@ -151,7 +152,13 @@ export const WorkbenchApp = view(() => {
           <SettingsTools />
         </>
       }
-      sideMain={<Settings settings={settings} defer={true} />}
+      sideMain={
+        <Settings
+          settings={settings}
+          defer={true}
+          search={debouncedSettingSearchStore.getSearch()}
+        />
+      }
       stats={<ResultStats />}
       globalActions={<ExportResults />}
       main={<WorkbenchMain />}

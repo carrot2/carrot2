@@ -128,7 +128,7 @@ export const createExclusionViews = customizer => {
 };
 
 export const ExclusionsSetting = view(
-  ({ setting, get, set, views, getActiveView, setActiveView }) => {
+  ({ setting, get, set, views, getActiveView, setActiveView, search }) => {
     const { label, description } = setting;
 
     return (
@@ -136,6 +136,8 @@ export const ExclusionsSetting = view(
         className="ExclusionsSetting"
         label={label}
         description={description}
+        search={search}
+        labelSearchTarget={setting.labelSearchTarget}
       >
         <Views
           views={views}
