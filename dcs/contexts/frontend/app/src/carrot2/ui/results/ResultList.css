@@ -32,9 +32,9 @@ a.Result:hover {
 .Result > strong {
   display: block;
 }
-.Result > strong > span,
-.Result > div > p > span,
-.Result > .tags > span,
+.Result > strong > span:first-child,
+.Result > div > p:first-child > span:first-child,
+.Result > .tags > span:first-child,
 .Result > .properties > dt,
 .Result > .keywords > span,
 .Result > .sources > span {
@@ -48,9 +48,9 @@ a.Result:hover {
   border-radius: 0.125rem;
   color: var(--text-color-secondary);
 }
-.Result > div > p > span,
-.Result > .keywords > span,
-.Result > .tags > span,
+.Result > div > p:first-child > span:first-child,
+.Result > .keywords > span:first-child,
+.Result > .tags > span:first-child,
 .Result > .properties > dt,
 .Result > .sources > span {
   background-color: hsla(258, 10%, 38%, 0.03);
@@ -119,4 +119,10 @@ a.Result:hover {
   display: flex;
   justify-content: space-between;
   line-height: 26px; /** to match button height */
+}
+
+.Result b.hl {
+  font-weight: inherit;
+  background-color:           var(--text-highlight-background-color);
+  border-bottom:    2px solid var(--text-highlight-border-color);
 }

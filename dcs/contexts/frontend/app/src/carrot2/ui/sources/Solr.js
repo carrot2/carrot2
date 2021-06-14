@@ -12,6 +12,7 @@ import { queryStore } from "../../apps/workbench/store/query-store.js";
 
 const {
   serviceConfigStore,
+  schemaInfoStore,
   isSearchPossible,
   settings,
   afterSuccessfulSearch,
@@ -21,7 +22,8 @@ const {
   serviceName: "Solr",
   configOverrides: {
     serviceUrl: "http://localhost:8983/solr",
-    extraHttpGetParams: ""
+    extraHttpGetParams: "",
+    useHighlightedResults: false
   },
 
   querySetting: id => ({
@@ -32,7 +34,7 @@ const {
     description: `
 <p>
   The search query to pass to Solr. Use 
-  <a target=_blank href="https://lucene.apache.org/solr/guide/8_6/the-standard-query-parser.html#specifying-terms-for-the-standard-query-parser">Solr query syntax</a>.
+  <a target="_blank" href="https://lucene.apache.org/solr/guide/8_6/the-standard-query-parser.html#specifying-terms-for-the-standard-query-parser">Solr query syntax</a>.
 </p>`,
     visible: () => isSearchPossible()
   }),
@@ -47,10 +49,16 @@ const {
 
     return Object.keys(cores.status);
   },
-  fetchResultsForSchemaInference: async () => searchCurrentCore("*:*", 50)
+  fetchResultsForSchemaInference: async () =>
+    searchCurrentCore("*:*", 50, {}, false)
 });
 
-const searchCurrentCore = async (query, results = 50, extraParams) => {
+const searchCurrentCore = async (
+  query,
+  results = 50,
+  extraParams,
+  allowHighlighting
+) => {
   const url = serviceConfigStore.serviceUrl;
   const core = serviceConfigStore.collection;
 
@@ -62,16 +70,41 @@ const searchCurrentCore = async (query, results = 50, extraParams) => {
     };
   }
 
+  const hlParams = {}, hlForcedParams = {};
+  const useHighlighting = allowHighlighting && serviceConfigStore.useHighlightedResults;
+  if (useHighlighting) {
+    hlParams["hl"] = true;
+    hlParams["hl.fl"] = Array.from(schemaInfoStore.fieldsToCluster).join(",");
+    hlForcedParams["hl.tag.pre"] = "<b class='hl'>";
+    hlForcedParams["hl.simple.pre"] = hlForcedParams["hl.tag.pre"];
+    hlForcedParams["hl.tag.post"] = "</b>";
+    hlForcedParams["hl.simple.post"] = hlForcedParams["hl.tag.post"];
+  }
+
   const result = await ky
     .get(`${core}/select`, {
       prefixUrl: url,
       timeout: 4000,
-      searchParams: Object.assign({}, extraParams, {
+      searchParams: Object.assign({}, hlParams, extraParams, {
         q: query,
         rows: results
-      })
+      }, hlForcedParams)
     })
     .json();
+
+  // If the user requests highlighting, overwrite the complete field value
+  // with the highlighted version. A further optimization would be to
+  // skip the download of the complete field value.
+  if (useHighlighting) {
+    result.response.docs.forEach(doc => {
+      const hl = result.highlighting[doc.id];
+      if (hl) {
+        Object.keys(hl).forEach(h => {
+          doc[h] = hl[h];
+        });
+      }
+    });
+  }
 
   return {
     documents: result.response.docs,
@@ -80,6 +113,7 @@ const searchCurrentCore = async (query, results = 50, extraParams) => {
   };
 };
 
+const extraGetParametersLabel = "Additional search request parameters";
 const solrSettings = [
   {
     id: "solr",
@@ -89,10 +123,26 @@ const solrSettings = [
     settings: [
       ...settings,
       {
+        id: "solr:useHighlightedResults",
+        type: "boolean",
+        label: "Use highlights for clustering",
+        description: `
+<p>
+  If enabled, Workbench will request Solr to highlight query occurrences
+  in search results and use the contextual snippets for clustering. 
+</p>
+<p>
+  Use the <strong>${extraGetParametersLabel}</strong> parameter to configure
+  the details of highlighting.
+</p>`,
+        visible: () => isSearchPossible(),
+        ...storeAccessors(serviceConfigStore, "useHighlightedResults")
+      },
+      {
         id: "solr:extraParameters",
         type: "string",
         advanced: true,
-        label: "Additional search request parameters",
+        label: extraGetParametersLabel,
         description: `
 <p>
   The extra HTTP GET parameters to pass to the <code>/select</code> endpoint, for example: 
@@ -113,12 +163,15 @@ const solrSource = async query => {
     }
   );
 
-  return searchCurrentCore(query, serviceConfigStore.maxResults, params).then(
-    result => {
-      afterSuccessfulSearch();
-      return result;
-    }
-  );
+  return searchCurrentCore(
+    query,
+    serviceConfigStore.maxResults,
+    params,
+    true
+  ).then(result => {
+    afterSuccessfulSearch();
+    return result;
+  });
 };
 
 export const SolrIntro = () => {

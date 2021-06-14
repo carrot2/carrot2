@@ -130,6 +130,7 @@ export const createLocalSearch = ({
   return {
     serviceConfigStore,
     serviceStateStore,
+    schemaInfoStore,
     isSearchPossible,
     settings,
     afterSuccessfulSearch,

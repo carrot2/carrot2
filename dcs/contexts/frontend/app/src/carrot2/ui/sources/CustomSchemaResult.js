@@ -9,7 +9,7 @@ import { persistentLruStore } from "@carrotsearch/ui/store/persistent-store.js";
 import { isEmpty } from "@carrotsearch/ui/lang/objects.js";
 import { displayNoneIf } from "@carrotsearch/ui/Optional.js";
 
-import { TitleAndRank } from "../results/Result.js";
+import { SanitizedHtml, TitleAndRank } from "../results/Result.js";
 
 import { resultListConfigStore } from "../results/ResultListConfig.js";
 
@@ -260,7 +260,7 @@ export const CustomSchemaResult = view(({ document, rank, configStore }) => {
             return (
               <p key={index}>
                 {label}
-                {text}
+                <SanitizedHtml text={text} />
               </p>
             );
           },

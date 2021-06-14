@@ -35,7 +35,8 @@
     "react-dropzone": "11.2.4",
     "react-router-dom": "5.2.0",
     "typeface-cabin-condensed": "0.0.72",
-    "xlsx": "0.16.9"
+    "xlsx": "0.16.9",
+    "xss": "1.0.9"
   },
   "devDependencies": {
     "@craco/craco": "5.8.0",
