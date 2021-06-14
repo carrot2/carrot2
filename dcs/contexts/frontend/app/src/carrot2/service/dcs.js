@@ -9,7 +9,7 @@ export function fetchClusters(requestJson, documents, fields) {
       return fields.reduce((obj, key) => {
         return {
           ...obj,
-          [key]: doc[key] + ""
+          [key]: Array.isArray(doc[key]) ? doc[key] : doc[key] + ""
         };
       }, {});
     })
