@@ -140,7 +140,8 @@ const solrSettings = [
   in search results and use the contextual snippets for clustering. 
 </p>
 <p>
-  Use the <strong>${extraGetParametersLabel}</strong> parameter to configure
+  Use the <strong>${extraGetParametersLabel}</strong> parameter to
+  <a href="https://solr.apache.org/guide/8_8/highlighting.html" target="_blank">configure</a>
   the details of highlighting.
 </p>`,
         visible: () => isSearchPossible(),
