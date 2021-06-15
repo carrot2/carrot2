@@ -123,6 +123,6 @@ a.Result:hover {
 
 .Result b.hl {
   font-weight: inherit;
-  background-color:           var(--text-highlight-background-color);
-  border-bottom:    2px solid var(--text-highlight-border-color);
+  background-color: var(--text-highlight-background-color);
+  border-bottom: 2px solid var(--text-highlight-border-color);
 }

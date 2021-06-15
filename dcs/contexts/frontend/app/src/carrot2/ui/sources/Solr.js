@@ -70,8 +70,10 @@ const searchCurrentCore = async (
     };
   }
 
-  const hlParams = {}, hlForcedParams = {};
-  const useHighlighting = allowHighlighting && serviceConfigStore.useHighlightedResults;
+  const hlParams = {},
+    hlForcedParams = {};
+  const useHighlighting =
+    allowHighlighting && serviceConfigStore.useHighlightedResults;
   if (useHighlighting) {
     hlParams["hl"] = true;
     hlParams["hl.fl"] = Array.from(schemaInfoStore.fieldsToCluster).join(",");
@@ -85,10 +87,16 @@ const searchCurrentCore = async (
     .get(`${core}/select`, {
       prefixUrl: url,
       timeout: 4000,
-      searchParams: Object.assign({}, hlParams, extraParams, {
-        q: query,
-        rows: results
-      }, hlForcedParams)
+      searchParams: Object.assign(
+        {},
+        hlParams,
+        extraParams,
+        {
+          q: query,
+          rows: results
+        },
+        hlForcedParams
+      )
     })
     .json();
 
