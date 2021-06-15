@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import "./ResultList.css";
 
@@ -20,6 +20,7 @@ import {
 
 import { clusterSelectionStore } from "../../store/selection.js";
 import { resultListConfigStore } from "./ResultListConfig.js";
+import { useScrollReset } from "@carrotsearch/ui/hooks/scroll-reset.js";
 
 const ResultClusters = view(props => {
   const selectionStore = clusterSelectionStore;
@@ -168,19 +169,6 @@ const usePaging = ({ enabled, maxPerPage, results, onChange }) => {
   };
 };
 
-/**
- * Captures a reference to an element and exposes a method for resetting its scrollbar.
- */
-const useScrollReset = () => {
-  const container = useRef(undefined);
-  const scrollReset = useCallback(() => {
-    if (container.current) {
-      container.current.scrollTop = 0;
-    }
-  }, []);
-  return { container, scrollReset };
-};
-
 const MAX_RESULTS_FOR_REACTIVE_DISPLAY = 200;
 
 const ResultListImpl = view(props => {
@@ -240,6 +228,11 @@ const ResultListImpl = view(props => {
     reset();
   }, [reset, scrollReset]);
   useSelectionChange(r);
+
+  // Reset scroll on new search result.
+  useEffect(() => {
+    scrollReset();
+  }, [allResults, scrollReset]);
 
   const limitedResults = props.limit ? results.slice(0, 5) : results;
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import "./ClusterList.css";
 
@@ -10,6 +10,7 @@ import { view } from "@risingstack/react-easy-state";
 
 import { clusterStore } from "../../store/services.js";
 import { clusterSelectionStore } from "../../store/selection.js";
+import { useScrollReset } from "@carrotsearch/ui/hooks/scroll-reset.js";
 
 function TopCluster(props) {
   const cluster = props.cluster;
@@ -90,8 +91,18 @@ export const ClusterList = () => {
     return flat && (!c.clusters || c.clusters.length === 0);
   }, true);
 
+  const { container, scrollReset } = useScrollReset();
+
+  // Reset scroll on new cluster list.
+  useEffect(() => {
+    scrollReset();
+  }, [clusters, scrollReset]);
+
   return (
-    <div className={"ClusterList" + (flatClusters ? " flat" : "")}>
+    <div
+      className={"ClusterList" + (flatClusters ? " flat" : "")}
+      ref={container}
+    >
       <div>
         {clusters.length > 0 ? (
           clusters.map(cluster => (
