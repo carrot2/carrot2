@@ -4,6 +4,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-    <display-name>DCS Search frontend</display-name>
-    <description>DCS Search frontend example</description>
+    <display-name>End-user apps</display-name>
+    <description>End-user apps, including Search Result Clustering and Clustering Workbench.</description>
 </web-app>
