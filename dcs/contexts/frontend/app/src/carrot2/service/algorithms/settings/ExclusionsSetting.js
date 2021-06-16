@@ -29,6 +29,11 @@ const PlainTextExclusionEditor = view(({ setting, get, set, type }) => {
 
   const setExclusions = val => {
     const entry = findEntry();
+
+    // We can't remove empty entries at this point because this would prevent
+    // the user from creating new lines in the text area. Instead, we allow
+    // empty lines here and remove invalid entries when submitting the request.
+    // See removeEmptyEntries() below.
     const split = val.trim().length > 0 ? val.split("\n") : [];
     if (entry) {
       entry[type] = split;
@@ -73,7 +78,9 @@ const createExclusionView = (label, settingFactory, helpLine, helpText) => {
         createContentElement: ({ setting, get }) => {
           return (
             <CopyToClipboard
-              contentProvider={() => JSON.stringify(get(setting), null, 2)}
+              contentProvider={() =>
+                JSON.stringify(removeEmptyEntries(get(setting)), null, 2)
+              }
               buttonText="Copy JSON"
               buttonProps={{
                 small: true,
@@ -125,6 +132,15 @@ export const createExclusionViews = customizer => {
       views: views
     }
   ];
+};
+
+export const removeEmptyEntries = dictionaries => {
+  return dictionaries.map(dictionary => {
+    return Object.keys(dictionary).reduce((map, type) => {
+      map[type] = dictionary[type].filter(e => e.trim().length > 0);
+      return map;
+    }, {});
+  });
 };
 
 export const ExclusionsSetting = view(

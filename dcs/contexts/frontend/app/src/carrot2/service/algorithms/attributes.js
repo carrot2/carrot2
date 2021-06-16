@@ -7,7 +7,7 @@ import _set from "lodash.set";
 import { firstField } from "@carrotsearch/ui/lang/objects.js";
 import {
   createExclusionViews,
-  ExclusionsSetting
+  ExclusionsSetting, removeEmptyEntries
 } from "@carrot2/app/service/algorithms/settings/ExclusionsSetting.js";
 import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
 
@@ -244,7 +244,9 @@ export const collectParameters = (settings, getter, filter) =>
       setting.settings.reduce(collect, params);
     } else {
       if (setting.pathRest) {
-        const value = getter(setting);
+        const value = setting.transformer
+          ? setting.transformer(getter(setting))
+          : getter(setting);
         if (!filter || filter(setting, value)) {
           _set(params, setting.pathRest, value);
         }
@@ -309,6 +311,7 @@ export const createExcludedLabelsSetting = (
     id: "dictionaries.labelFilters",
     label: "Excluded label patterns",
     pathRest: restPath,
+    transformer: removeEmptyEntries,
     factory: (s, get, set, search) => (
       <ExclusionsSetting
         setting={s}
