@@ -1,6 +1,10 @@
 import React from "react";
 
-import { faCog, faQuestionCircle } from "@fortawesome/pro-regular-svg-icons";
+import {
+  faCog,
+  faFolderTree,
+  faQuestionCircle
+} from "@fortawesome/pro-regular-svg-icons";
 
 import { autoEffect, store, view } from "@risingstack/react-easy-state";
 import { Lazy } from "@carrotsearch/ui/Lazy.js";
@@ -21,17 +25,22 @@ import {
   clusterSelectionStore,
   documentVisibilityStore
 } from "./store/selection.js";
+import { VisualizationWithList } from "@carrot2/app/ui/clusters/VisualizationWithList.js";
+import { Button } from "@blueprintjs/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ClusterListView = view(ClusterList);
 
 const treemapConfigStore = persistentStore("treemapConfig", {
   layout: "relaxed",
   stacking: "hierarchical",
-  includeResults: true
+  includeResults: true,
+  showClusterList: false
 });
 
 const pieChartConfigStore = persistentStore("pieChartConfig", {
-  includeResults: true
+  includeResults: true,
+  showClusterList: false
 });
 
 // A mechanism for capturing the "loading" state of visualizations, which should include
@@ -107,7 +116,13 @@ export const clusterViews = [
             configStore: treemapConfigStore,
             implRef: treemapImplRef
           };
-          return <Lazy loader={treemapLoader} props={treemapProps} />;
+          return (
+            <VisualizationWithList
+              isClusterListVisible={() => treemapConfigStore.showClusterList}
+            >
+              <Lazy loader={treemapLoader} props={treemapProps} />
+            </VisualizationWithList>
+          );
         },
         tools: [
           {
@@ -131,9 +146,21 @@ export const clusterViews = [
             title: "Export treemap as JPEG"
           },
           {
+            id: "showClusterList",
+            createContentElement: () => {
+              return (
+                <ShowClusterList
+                  isEnabled={() => treemapConfigStore.showClusterList}
+                  setEnabled={v => (treemapConfigStore.showClusterList = v)}
+                />
+              );
+            },
+            title: "Show cluster list"
+          },
+          {
             id: "config",
             icon: faCog,
-            createContentElement: props => {
+            createContentElement: () => {
               return <TreemapConfig store={treemapConfigStore} />;
             },
             title: "Treemap settings"
@@ -150,7 +177,13 @@ export const clusterViews = [
             configStore: pieChartConfigStore,
             implRef: piechartImplRef
           };
-          return <Lazy loader={piechartLoader} props={piechartProps} />;
+          return (
+            <VisualizationWithList
+              isClusterListVisible={() => pieChartConfigStore.showClusterList}
+            >
+              <Lazy loader={piechartLoader} props={piechartProps} />
+            </VisualizationWithList>
+          );
         },
         tools: [
           {
@@ -171,6 +204,18 @@ export const clusterViews = [
               );
             },
             title: "Export pie-chart as JPEG"
+          },
+          {
+            id: "showClusterList",
+            createContentElement: () => {
+              return (
+                <ShowClusterList
+                  isEnabled={() => pieChartConfigStore.showClusterList}
+                  setEnabled={v => (pieChartConfigStore.showClusterList = v)}
+                />
+              );
+            },
+            title: "Show cluster list"
           },
           {
             id: "config",
@@ -218,3 +263,14 @@ export const resultsViews = [
     }
   }
 ];
+
+export const ShowClusterList = view(({ isEnabled, setEnabled }) => {
+  return (
+    <Button
+      icon={<FontAwesomeIcon icon={faFolderTree} />}
+      minimal={true}
+      active={isEnabled()}
+      onClick={() => setEnabled(!isEnabled())}
+    />
+  );
+});

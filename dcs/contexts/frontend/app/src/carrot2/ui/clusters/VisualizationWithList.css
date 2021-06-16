@@ -1,0 +1,15 @@
+.VisualizationWithList {
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-columns: auto;
+  grid-column-gap: calc(0.25 * var(--leading));
+}
+.VisualizationWithList.ListVisible {
+  grid-template-columns: auto 16em;
+}
+
+.VisualizationWithList > div {
+  position: relative;
+  overflow: hidden;
+}
