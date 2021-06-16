@@ -7,7 +7,8 @@ import _set from "lodash.set";
 import { firstField } from "@carrotsearch/ui/lang/objects.js";
 import {
   createExclusionViews,
-  ExclusionsSetting, removeEmptyEntries
+  ExclusionsSetting,
+  removeEmptyEntries
 } from "@carrot2/app/service/algorithms/settings/ExclusionsSetting.js";
 import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
 
@@ -179,7 +180,7 @@ export const settingFromDescriptorRecursive = (
           return {
             type: "group",
             id: descriptor.id + ":" + k,
-            visible: () => getterProvider()(rootSetting) === k,
+            enabled: () => getterProvider()(rootSetting) === k,
             settings: Object.keys(implAttributes)
               .map(ak => {
                 return settingFromDescriptorRecursive(
@@ -237,7 +238,7 @@ export const collectDefaults = (map, settings) =>
 
 export const collectParameters = (settings, getter, filter) =>
   settings.reduce(function collect(params, setting) {
-    if (setting.visible && !setting.visible()) {
+    if (setting.enabled && !setting.enabled()) {
       return params;
     }
     if (setting.type === "group") {
