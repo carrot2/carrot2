@@ -76,7 +76,7 @@ const TopCluster = props => {
     <div
       ref={element}
       className={className}
-      onClick={() => clusterSelectionStore.toggleSelection(cluster)}
+      onClick={(e) => clusterSelectionStore.toggleSelection(cluster, e.ctrlKey)}
     >
       <FontAwesomeIcon className="icon" icon={faLightbulb} />
       <span className="labels">{labels}</span>{" "}
@@ -118,7 +118,7 @@ const SubCluster = props => {
       className={className}
       onClick={e => {
         e.stopPropagation();
-        clusterSelectionStore.toggleSelection(cluster);
+        clusterSelectionStore.toggleSelection(cluster, e.ctrlKey);
       }}
     >
       <span className="icon">
