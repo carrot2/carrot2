@@ -80,7 +80,7 @@ const TopCluster = props => {
     >
       <FontAwesomeIcon className="icon" icon={faLightbulb} />
       <span className="labels">{labels}</span>{" "}
-      <span className="meta">{meta}</span>
+      <span className="meta" dir="ltr">{meta}</span>
       <div className="subclusters">
         {subclusters.map(subcluster => (
           <SubClusterView
@@ -127,7 +127,7 @@ const SubCluster = props => {
       </span>
       <span className="labels">{labels}</span>
       {"\u00a0"}
-      <span className="meta" title={metaTitle}>
+      <span className="meta" title={metaTitle} dir="ltr">
         {meta}
       </span>{" "}
     </span>
