@@ -309,7 +309,7 @@ export const createExcludedLabelsSetting = (
   const views = createExclusionViews(viewCustomizer);
 
   return {
-    id: "dictionaries.labelFilters",
+    id: restPath,
     label: "Excluded label patterns",
     pathRest: restPath,
     transformer: removeEmptyEntries,
