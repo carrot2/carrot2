@@ -76,11 +76,13 @@ const TopCluster = props => {
     <div
       ref={element}
       className={className}
-      onClick={(e) => clusterSelectionStore.toggleSelection(cluster, e.ctrlKey)}
+      onClick={e => clusterSelectionStore.toggleSelection(cluster, e.ctrlKey)}
     >
       <FontAwesomeIcon className="icon" icon={faLightbulb} />
       <span className="labels">{labels}</span>{" "}
-      <span className="meta" dir="ltr">{meta}</span>
+      <span className="meta" dir="ltr">
+        {meta}
+      </span>
       <div className="subclusters">
         {subclusters.map(subcluster => (
           <SubClusterView
