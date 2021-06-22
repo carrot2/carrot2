@@ -33,7 +33,7 @@ a.Result:hover {
   display: block;
 }
 .Result > strong > span:first-child,
-.Result > div > p:first-child > span:first-child,
+.Result > div > p > span:first-child,
 .Result > .tags > span:first-child,
 .Result > .properties > dt,
 .Result > .keywords > span,
@@ -48,7 +48,7 @@ a.Result:hover {
   border-radius: 0.125rem;
   color: var(--text-color-secondary);
 }
-.Result > div > p:first-child > span:first-child,
+.Result > div > p > span:first-child,
 .Result > .keywords > span:first-child,
 .Result > .tags > span:first-child,
 .Result > .properties > dt,
