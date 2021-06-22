@@ -35,6 +35,14 @@ ext {
     '**/*.label-filters.json',
     '**/*.word-filters.json',
   ]
+
+  devMode = { ->
+    if (rootProject.hasProperty('dev')) {
+      return (rootProject.dev == '' || Boolean.parseBoolean(rootProject.dev))
+    } else {
+      return false
+    }
+  }.call()
 }
 
 apply from: file('gradle/validation/check-environment.gradle')

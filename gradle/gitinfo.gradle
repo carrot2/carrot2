@@ -30,14 +30,18 @@ def gitStatus(dir) {
         .build()
     Git git = new Git(repo)
 
-    Map<String, SubmoduleStatus> submodules = git.submoduleStatus().call()
-    gradle.taskGraph.whenReady { graph ->
-      submodules.each { path, st ->
-        if (st.type != SubmoduleStatusType.INITIALIZED) {
-          throw new GradleException("Suspicious submodule status: ${path} ${st.type}")
+      Map<String, SubmoduleStatus> submodules = git.submoduleStatus().call()
+      gradle.taskGraph.whenReady { graph ->
+        submodules.each { path, st ->
+          if (st.type == SubmoduleStatusType.REV_CHECKED_OUT && rootProject.ext.devMode) {
+            // Allow new commits in submodules while assembling development-mode stuff.
+            return
+          }
+          if (st.type != SubmoduleStatusType.INITIALIZED) {
+            throw new GradleException("Suspicious submodule status: ${path} ${st.type}")
+          }
         }
       }
-    }
 
     Ref head = repo.findRef("HEAD")
 
