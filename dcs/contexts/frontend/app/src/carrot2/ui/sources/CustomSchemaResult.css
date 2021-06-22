@@ -45,7 +45,10 @@
 .CustomSchemeResultConfig .FieldConfigs {
   display: flex;
 }
-.CustomSchemeResultConfig .FieldConfigs .bp3-form-group {
+.CustomSchemeResultConfig .FieldConfigs .bp3-form-group:not(:last-of-type) {
   margin-bottom: 0;
   margin-right: 2em;
+}
+.CustomSchemeResultConfig .FieldConfigs .bp3-input-group {
+  max-width: 4em;
 }
