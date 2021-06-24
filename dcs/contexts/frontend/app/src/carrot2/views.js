@@ -191,7 +191,8 @@ export const clusterViews = [
             icon: faQuestionCircle,
             createContentElement: props => {
               return <PieChartHints />;
-            }
+            },
+            title: "Pie-chart interaction help"
           },
           {
             id: "export-image",
@@ -222,7 +223,8 @@ export const clusterViews = [
             icon: faCog,
             createContentElement: props => {
               return <PieChartConfig store={pieChartConfigStore} />;
-            }
+            },
+            title: "Pie-chart settings"
           }
         ]
       }
@@ -250,6 +252,7 @@ export const resultsViews = [
           {
             id: "config",
             icon: faCog,
+            title: "Result list settings",
             createContentElement: props => {
               return (
                 <ResultListConfig>
