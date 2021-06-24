@@ -11,7 +11,7 @@
   color: var(--text-color-lightest);
 }
 .CustomSchemeResultConfig .ResultPreview {
-  width: 24em;
+  width: 20em;
   padding: 0.25em;
 }
 .CustomSchemeResultConfig .FieldRoles {
