@@ -17,16 +17,6 @@ git commit -am "Bumping version."
 
 gradlew clean assemble check
 
-* Publish to sonatype staging repo. The max workers
-  limit is set there because otherwise Nexus creates multiple
-  repositories automatically for all parallel threads (sigh).
-
-gradlew publishSonatype --max-workers=1
-
-* Go to sonatype, verify and ack the release.
-
-https://s01.oss.sonatype.org/index.html#stagingRepositories
-
 * Tag the release.
 
 export VERSION=xxx
@@ -53,9 +43,21 @@ Attach release binaries from:
   distribution/build/distZip/*.zip
 
 * Redeploy public DCS demo frontend. Go to the build plan, locate build for 
-version xxx, create a new deployment and promote to production server.
+this version, create a new deployment and promote to production server.
 
 https://builds.carrotsearch.com/browse/C2-C2DCS
+
+NOTE: the staging environment requires the vps node to be (manually) started at ramnode.
+
+* Publish to sonatype staging repo. The max workers
+  limit is set there because otherwise Nexus creates multiple
+  repositories automatically for all parallel threads (sigh).
+
+gradlew publishSonatype --max-workers=1
+
+* Go to sonatype, verify and ack the release.
+
+https://s01.oss.sonatype.org/index.html#stagingRepositories
 
 * Bump version number strings to the subsequent version, commit.
 
