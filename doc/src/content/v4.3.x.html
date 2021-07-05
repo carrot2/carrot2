@@ -1,0 +1,92 @@
+<article>
+  <h1>Carrot<sup>2</sup> 4.3.x</h1>
+
+  <p>
+    Release history for Carrot2 4.3.0 and bugfix releases.
+  </p>
+
+  <!--
+  <section id="v4.x.y">
+    <h2>Version 4.x.y [unreleased]</h2>
+
+    <p>
+      This is a bugfix release.
+    </p>
+
+    <ul>
+    </ul>
+  </section>
+  -->
+
+  <section id="v4.3.0">
+    <h2>Version 4.3.0</h2>
+    <time datetime="2021-07-05"></time>
+
+    <p>
+      This is a bugfix and maintenance release with minor changes to the API.
+    </p>
+
+    <section id="4.3.0:bug-fixes">
+      <h3>Bug fixes</h3>
+
+      <dl>
+        <dt>Language loader</dt>
+        <dd>
+          <p>
+            In case a single algorithm is passed as a restriction to language component loader,
+            the resulting list of languages is guaranteed to be supported by that algorithm.
+          </p>
+          <p>
+            If more than one algorithm is passed as a restriction, a follow-up check
+            of supported languages is still required.
+          </p>
+
+          <label class="java-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/108">#108</a>
+        </dd>
+      </dl>
+    </section>
+
+    <section id="4.3.0:improvements">
+      <h3>Improvements</h3>
+
+      <dl>
+        <!--
+        <dt></dt>
+        <dd>
+          <p>
+          </p>
+
+          <label class="java-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/xx">#xx</a>
+        </dd>
+        -->
+        <dt>Lucene and Jetty upgrades</dt>
+        <dd>
+          <p>
+            Lucene dependency has been upgraded to version 8.8.2. Jetty has been
+            upgraded to version 9.4.35.v20201120.
+          </p>
+
+          <label class="java-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/xx">#xx</a>
+        </dd>
+
+        <dt>Workbench improvements</dt>
+        <dd>
+          <p>
+            Numerous workbench user interface improvements and tweaks have been made.
+          </p>
+
+          <a href="https://github.com/carrot2/carrot2/issues/109">#109</a>
+          <a href="https://github.com/carrot2/carrot2/issues/104">#104</a>
+          <a href="https://github.com/carrot2/carrot2/issues/124">#124</a>
+          <a href="https://github.com/carrot2/carrot2/issues/123">#123</a>
+          <a href="https://github.com/carrot2/carrot2/issues/63">#63</a>
+          <a href="https://github.com/carrot2/carrot2/issues/73">#73</a>
+          <a href="https://github.com/carrot2/carrot2/issues/84">#84</a>
+        </dd>
+      </dl>
+    </section>
+  </section>
+</article>
