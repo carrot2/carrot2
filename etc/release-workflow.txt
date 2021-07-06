@@ -33,6 +33,7 @@ cd build/carrot2.github.io/
 git add -A .
 git commit -am "Documentation for version $VERSION"
 git push
+cd ../..
 
 * Go to github, find the release tag and create a release for it.
 
