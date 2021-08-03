@@ -2,7 +2,7 @@ plugins {
   id 'base'
 
   id "com.github.node-gradle.node" version "2.2.4" apply false
-  id "com.palantir.consistent-versions" version '1.27.0'
+  id "com.palantir.consistent-versions" version '2.0.0'
 
   id 'com.diffplug.spotless' version "5.8.2" apply false
   id "com.github.ben-manes.versions" version "0.36.0"
