@@ -16,12 +16,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
-import java.util.logging.Logger;
 import org.carrot2.attrs.Attrs;
 import org.carrot2.internal.nanojson.JsonParser;
 import org.carrot2.internal.nanojson.JsonParserException;
@@ -53,8 +51,6 @@ public class DefaultLexicalDataProvider implements LanguageComponentsProvider {
     }
 
     String langPrefix = language.toLowerCase(Locale.ROOT);
-
-    // Load and precompile legacy defaults.
     return Map.of(
         StopwordFilter.class, readDefaultWordFilters(langPrefix, resourceLookup),
         LabelFilter.class, readDefaultLabelFilters(langPrefix, resourceLookup));
@@ -68,11 +64,6 @@ public class DefaultLexicalDataProvider implements LanguageComponentsProvider {
   public static Supplier<LabelFilter> readDefaultLabelFilters(
       String langPrefix, ResourceLookup resourceLookup) throws IOException {
     langPrefix = langPrefix.toLowerCase(Locale.ROOT);
-
-    String legacyDictionary = String.format(Locale.ROOT, "%s.stoplabels.utf8", langPrefix);
-    if (resourceLookup.exists(legacyDictionary)) {
-      return legacyLabelFilters(resourceLookup, legacyDictionary);
-    }
 
     String filterDictionary = String.format(Locale.ROOT, "%s.label-filters.json", langPrefix);
     try (InputStream is = resourceLookup.open(filterDictionary);
@@ -97,36 +88,9 @@ public class DefaultLexicalDataProvider implements LanguageComponentsProvider {
     }
   }
 
-  private static Supplier<LabelFilter> legacyLabelFilters(
-      ResourceLookup resourceLookup, String legacyDictionary) throws IOException {
-    Logger.getGlobal()
-        .warning(
-            "Will use the existing legacy label filters, please upgrade resources to use JSON dictionaries: "
-                + resourceLookup.pathOf(legacyDictionary));
-    DefaultDictionaryImpl attr = new DefaultDictionaryImpl();
-    Set<String> regexps = readLines(resourceLookup, legacyDictionary);
-    attr.regexp.set(regexps.toArray(String[]::new));
-    LabelFilter labelFilter = attr.compileLabelFilter();
-    return () -> labelFilter;
-  }
-
-  private static Supplier<StopwordFilter> legacyWordFilters(
-      ResourceLookup resourceLookup, String legacyDictionary) throws IOException {
-    DefaultDictionaryImpl attr = new DefaultDictionaryImpl();
-    Set<String> words = readLines(resourceLookup, legacyDictionary);
-    attr.exact.set(words.toArray(String[]::new));
-    StopwordFilter wordFilter1 = attr.compileStopwordFilter();
-    return () -> wordFilter1;
-  }
-
   public static Supplier<StopwordFilter> readDefaultWordFilters(
       String langPrefix, ResourceLookup resourceLookup) throws IOException {
     langPrefix = langPrefix.toLowerCase(Locale.ROOT);
-
-    String legacyDictionary = String.format(Locale.ROOT, "%s.stopwords.utf8", langPrefix);
-    if (resourceLookup.exists(legacyDictionary)) {
-      return legacyWordFilters(resourceLookup, legacyDictionary);
-    }
 
     String filterDictionary = String.format(Locale.ROOT, "%s.word-filters.json", langPrefix);
     try (InputStream is = resourceLookup.open(filterDictionary);
@@ -149,28 +113,5 @@ public class DefaultLexicalDataProvider implements LanguageComponentsProvider {
             e);
       }
     }
-  }
-
-  private static Set<String> readLines(ResourceLookup resourceLookup, String resource)
-      throws IOException {
-    try (InputStream is = resourceLookup.open(resource)) {
-      return readLines(new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)));
-    }
-  }
-
-  /**
-   * Loads words from a given resource (UTF-8, one word per line, #-starting lines are considered
-   * comments).
-   */
-  public static Set<String> readLines(BufferedReader reader) throws IOException {
-    final LinkedHashSet<String> words = new LinkedHashSet<>();
-    String line;
-    while ((line = reader.readLine()) != null) {
-      line = line.trim();
-      if (!line.startsWith("#") && !line.isEmpty()) {
-        words.add(line);
-      }
-    }
-    return words;
   }
 }
