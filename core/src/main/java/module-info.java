@@ -1,6 +1,6 @@
 @SuppressWarnings("module")
 module org.carrot2.core {
-  requires com.carrotsearch.hppc;
+  requires transitive com.carrotsearch.hppc;
 
   exports org.carrot2.attrs;
   exports org.carrot2.clustering.kmeans;
