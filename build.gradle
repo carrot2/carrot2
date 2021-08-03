@@ -5,7 +5,7 @@ plugins {
   id "com.palantir.consistent-versions" version '2.0.0'
 
   id 'com.diffplug.spotless' version "5.14.2" apply false
-  id "com.github.ben-manes.versions" version "0.36.0"
+  id "com.github.ben-manes.versions" version "0.39.0"
 
   id 'de.thetaphi.forbiddenapis' version '3.1' apply false
 
@@ -22,7 +22,7 @@ ext {
   fullName = "Carrot2"
 
   versions = [
-    node: '14.15.3',
+    node: '14.17.4',
     yarn: '1.22.5',
   ]
 
