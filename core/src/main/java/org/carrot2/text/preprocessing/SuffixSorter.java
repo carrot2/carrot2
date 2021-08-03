@@ -10,22 +10,22 @@
  */
 package org.carrot2.text.preprocessing;
 
-import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
+import java.util.function.IntBinaryOperator;
 
 /**
  * A simple suffix sorting utility based on the generic sorting routines from {@link IndirectSort}.
  */
 final class SuffixSorter {
   /** An int comparator that enables suffix sorting. */
-  private static class SuffixComparator implements IndirectComparator {
+  private static class SuffixComparator implements IntBinaryOperator {
     private int[] suffixData;
 
     public SuffixComparator(int[] suffixData) {
       this.suffixData = suffixData;
     }
 
-    public int compare(int suffixA, int suffixB) {
+    public int applyAsInt(int suffixA, int suffixB) {
       if (suffixA == suffixB) {
         return 0;
       }

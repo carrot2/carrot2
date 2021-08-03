@@ -11,7 +11,8 @@
 package org.carrot2.text.suffixtree;
 
 import com.carrotsearch.hppc.IntArrayList;
-import com.carrotsearch.hppc.LongIntScatterMap;
+import com.carrotsearch.hppc.LongIntHashMap;
+import com.carrotsearch.hppc.LongIntMap;
 import com.carrotsearch.hppc.cursors.LongIntCursor;
 
 /**
@@ -56,7 +57,7 @@ public final class SuffixTree {
    * combination of state (upper 32 bits) and symbol (lower 32 bits). The value is an index in the
    * transitions array.
    */
-  private final LongIntScatterMap transitions_map = new LongIntScatterMap();
+  private final LongIntMap transitions_map = new LongIntHashMap();
 
   /**
    * An array of all transitions.

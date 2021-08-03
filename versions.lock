@@ -1,5 +1,5 @@
 # Run ./gradlew --write-locks to regenerate this file
-com.carrotsearch:hppc:0.8.2 (1 constraints: 0c050536)
+com.carrotsearch:hppc:0.9.0 (1 constraints: 0b050636)
 com.carrotsearch.console:launcher:1.0.4 (1 constraints: 0705f435)
 com.carrotsearch.progresso:progresso:1.7.0 (3 constraints: e939c2b2)
 com.carrotsearch.progresso:progresso-consolewidth-unixish:1.7.0 (1 constraints: bb0e445b)

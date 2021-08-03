@@ -15,7 +15,6 @@ import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.IntIntMap;
 import com.carrotsearch.hppc.cursors.IntCursor;
 import com.carrotsearch.hppc.cursors.IntIntCursor;
-import com.carrotsearch.hppc.sorting.IndirectComparator;
 import com.carrotsearch.hppc.sorting.IndirectSort;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -302,16 +301,8 @@ public class BisectingKMeansClusteringAlgorithm extends AttrComposite
 
     final int[] order =
         IndirectSort.mergesort(
-            0,
-            centroid.size(),
-            new IndirectComparator() {
-              @Override
-              public int compare(int a, int b) {
-                final double valueA = centroid.get(a);
-                final double valueB = centroid.get(b);
-                return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
-              }
-            });
+            0, centroid.size(), (a, b) -> Double.compare(centroid.get(a), centroid.get(b)));
+
     final double minValueForLabel =
         centroid.get(order[order.length - Math.min(labelCount.get(), order.length)]);
 

@@ -10,9 +10,8 @@
  */
 package org.carrot2.math.matrix;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import com.carrotsearch.hppc.sorting.IndirectComparator;
 import org.assertj.core.data.Offset;
 import org.carrot2.TestBase;
 import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
@@ -184,7 +183,7 @@ public class MatrixUtilsTest extends TestBase {
     final int[] order = new int[] {2, 1, 0};
 
     MatrixAssertions.assertThat(
-            MatrixUtils.sortedRowsView(input, new IndirectComparator.AscendingIntComparator(order)))
+            MatrixUtils.sortedRowsView(input, (a, b) -> Double.compare(order[a], order[b])))
         .isEquivalentTo(
             new double[][] {
               {3, -3},
