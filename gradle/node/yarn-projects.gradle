@@ -1,3 +1,4 @@
+import java.time.Instant
 
 // Configure node/ yarn projects
 
@@ -12,7 +13,8 @@ configure([
   ext {
     yarnEnv = [
       'REACT_APP_VERSION'   : rootProject.replaceTokens['product.version'],
-      'REACT_APP_BUILD_DATE': rootProject.replaceTokens['product.buildDate'],
+      //'REACT_APP_BUILD_DATE': rootProject.replaceTokens['product.buildDate'],
+      'REACT_APP_BUILD_DATE': Instant.now().toString(),
       'REACT_APP_GIT_REV'   : rootProject.replaceTokens['product.gitrev']
     ]
   }
@@ -53,11 +55,15 @@ configure([
     group 'build'
     dependsOn yarnInstall
 
-    afterEvaluate {
-      inputs.file('package.json')
-      inputs.file('yarn.lock')
-      inputs.files { jsSources }
+    inputs.file('package.json')
+    inputs.file('yarn.lock')
+    inputs.files { jsSources }
 
+    outputs.dir { jsBuildDir }
+
+    def nonInputProperties = ["REACT_APP_BUILD_DATE", "REACT_APP_GIT_REV"] as Set
+
+    afterEvaluate {
       project.properties.each { k,v ->
         if (k.startsWith("REACT_APP_")) {
           yarnEnv.put(k, v)
@@ -69,22 +75,26 @@ configure([
           yarnEnv.put(k, v)
         }
       }
-
-      inputs.properties (yarnEnv.findAll {
-        it.key != "REACT_APP_BUILD_DATE" &&
-            it.key != "REACT_APP_GIT_REV"
-      })
     }
 
-    outputs.dir { jsBuildDir }
+    environment.putAll(project.provider {
+      return yarnEnv.findAll { k,v -> !nonInputProperties.contains(k) }
+          .collectEntries { k,v -> [k, Objects.toString(v)] }
+    })
 
-    // Set the environment once the task runs, otherwise variables trigger task
-    // changed events and rebuilds.
-    doFirst {
-      environment = yarnEnv
+    // Pass non-input trigering environment variables separately so that builds
+    // are not triggered when they change.
+    // https://github.com/node-gradle/gradle-node-plugin/issues/187
+    execOverrides { ExecSpec spec ->
+      yarnEnv.findAll { k, v -> nonInputProperties.contains(k) }.each { k, v ->
+        spec.environment(k, v)
+      }
 
-      yarnEnv.each { k,v ->
-        logger.lifecycle("Using yarn env variable $k=$v")
+      // Dump environment variables used, for debugging purposes.
+      spec.environment.each { k,v ->
+        if (yarnEnv.containsKey(k)) {
+          logger.lifecycle("Using yarn env variable $k=$v")
+        }
       }
     }
 
