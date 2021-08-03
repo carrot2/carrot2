@@ -35,7 +35,7 @@ task jflex {
           configurations.jflex
         }
 
-        main = "jflex.Main"
+        mainClass = "jflex.Main"
         args = [
           "-nobak",
           "--encoding",
