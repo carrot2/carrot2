@@ -76,6 +76,8 @@ task jsonJavadoc(type: Javadoc, dependsOn: compileJava) {
   }
 }
 
+compileJava.dependsOn jflex
+
 artifacts {
   jsonJavadoc jsonJavadocDir, {
     builtBy jsonJavadoc

@@ -259,7 +259,7 @@ public final class JsonWriter {
 	/**
 	 * Escape a string value.
 	 * 
-	 * @param value
+	 * @param value The input string value.
 	 * @return the escaped JSON value
 	 */
 	public static String escape(String value) {

@@ -1,7 +1,6 @@
 package org.carrot2.language;
 
 /** JFlex-generated scanner. */
-@SuppressWarnings("all")
 %%
 
 %public
@@ -16,7 +15,7 @@ package org.carrot2.language;
 %{
 	public final int yychar()
 	{
-	    return yychar;
+	    return Math.toIntExact(yychar);
 	}
 %}
 
