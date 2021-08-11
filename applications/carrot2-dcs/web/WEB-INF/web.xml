@@ -14,4 +14,14 @@
         <servlet-name>RestProcessor</servlet-name>
         <url-pattern>/dcs/*</url-pattern>
     </servlet-mapping>
+
+    <!-- Don't allow directory listings and don't use mmap buffers for serving static content. -->
+    <context-param>
+        <param-name>org.eclipse.jetty.servlet.Default.dirAllowed</param-name>
+        <param-value>false</param-value>
+    </context-param>    
+    <context-param>
+        <param-name>org.eclipse.jetty.servlet.Default.useFileMappedBuffer</param-name>
+        <param-value>false</param-value>
+    </context-param>    
 </web-app>
