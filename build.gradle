@@ -7,7 +7,7 @@ plugins {
   id 'com.diffplug.spotless' version "5.14.3" apply false
   id "com.github.ben-manes.versions" version "0.39.0"
 
-  id 'de.thetaphi.forbiddenapis' version '3.1' apply false
+  id 'de.thetaphi.forbiddenapis' version '3.2' apply false
 
   id 'com.carrotsearch.gradle.randomizedtesting' version '0.0.5' apply false
 }
