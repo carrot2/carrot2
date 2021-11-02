@@ -16,7 +16,6 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.LowerCaseFilter;
 import org.apache.lucene.analysis.StopFilter;
 import org.apache.lucene.analysis.StopwordAnalyzerBase;
@@ -38,35 +37,11 @@ import org.carrot2.text.preprocessing.LabelFormatterImpl;
 public class JapaneseLanguageComponents extends SingleLanguageComponentsProviderImpl {
   public static final String NAME = "Japanese";
 
-  private static UserDictionary userDict;
-
-  static {
-    try (Reader reader =
-        new InputStreamReader(
-            JapaneseLanguageComponents.class
-                .getClassLoader()
-                .getResourceAsStream("org/carrot2/language/japanese/japanese.userdict.utf8"),
-            StandardCharsets.UTF_8)) {
-      userDict = UserDictionary.open(reader);
-    } catch (IOException | NullPointerException e) {
-      // shouldn't happen
-      throw new RuntimeException("Cannot load user dictionary.", e);
-    }
-  }
-
   public JapaneseLanguageComponents() {
     super("Carrot2 (Japanese via Apache Lucene components)", NAME);
     registerResourceless(Stemmer.class, () -> (word) -> null);
     registerResourceless(
-        Tokenizer.class,
-        () ->
-            new LuceneAnalyzerTokenizerAdapter(
-                new ExtendedJapaneseAnalyzer(
-                    userDict,
-                    JapaneseTokenizer.Mode.NORMAL,
-                    JapaneseAnalyzer.getDefaultStopSet(),
-                    JapaneseAnalyzer.getDefaultStopTags(),
-                    Set.of("名詞-"))));
+        Tokenizer.class, () -> new LuceneAnalyzerTokenizerAdapter(new ExtendedJapaneseAnalyzer()));
     registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
     registerDefaultLexicalData();
   }
@@ -76,22 +51,30 @@ public class JapaneseLanguageComponents extends SingleLanguageComponentsProvider
    * well for arbitrary texts as it is, but is supposed to be an extension point.
    */
   static class ExtendedJapaneseAnalyzer extends StopwordAnalyzerBase {
-    private final JapaneseTokenizer.Mode mode;
-    private final Set<String> stoptags;
-    private final Set<String> keeptags;
-    private final UserDictionary userDict;
+    private static UserDictionary userDict;
 
-    public ExtendedJapaneseAnalyzer(
-        UserDictionary userDict,
-        JapaneseTokenizer.Mode mode,
-        CharArraySet stopwords,
-        Set<String> stoptags,
-        Set<String> keeptags) {
-      super(stopwords);
-      this.userDict = userDict;
-      this.mode = mode;
-      this.stoptags = stoptags;
-      this.keeptags = keeptags;
+    static {
+      try (Reader reader =
+          new InputStreamReader(
+              JapaneseLanguageComponents.class
+                  .getClassLoader()
+                  .getResourceAsStream("org/carrot2/language/japanese/japanese.userdict.utf8"),
+              StandardCharsets.UTF_8)) {
+        userDict = UserDictionary.open(reader);
+      } catch (IOException | NullPointerException e) {
+        // shouldn't happen
+        throw new RuntimeException("Cannot load user dictionary.", e);
+      }
+    }
+
+    private final JapaneseTokenizer.Mode mode = JapaneseTokenizer.Mode.NORMAL;
+    private final Set<String> stoptags = JapaneseAnalyzer.getDefaultStopTags();
+    private final Set<String> keeptags = Set.of("名詞-");
+    private final int minTokenLength = 2;
+    private final int maxTokenLength = Integer.MAX_VALUE;
+
+    public ExtendedJapaneseAnalyzer() {
+      super(JapaneseAnalyzer.getDefaultStopSet());
     }
 
     @Override
@@ -102,7 +85,7 @@ public class JapaneseLanguageComponents extends SingleLanguageComponentsProvider
       stream = new JapanesePartOfSpeechKeepFilter(stream, keeptags);
       // stream = new JapanesePartOfSpeechStopFilter(stream, stoptags);
 
-      stream = new LengthFilter(stream, 2, Integer.MAX_VALUE);
+      stream = new LengthFilter(stream, minTokenLength, maxTokenLength);
       stream = new StopFilter(stream, stopwords);
       stream = new JapaneseKatakanaStemFilter(stream);
       stream = new LowerCaseFilter(stream);
