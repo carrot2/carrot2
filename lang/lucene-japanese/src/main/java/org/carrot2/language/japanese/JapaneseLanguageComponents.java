@@ -49,7 +49,8 @@ public class JapaneseLanguageComponents extends SingleLanguageComponentsProvider
             StandardCharsets.UTF_8)) {
       userDict = UserDictionary.open(reader);
     } catch (IOException | NullPointerException e) {
-      // TODO
+      // shouldn't happen
+      throw new RuntimeException("Cannot load user dictionary.", e);
     }
   }
 
