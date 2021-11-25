@@ -22,6 +22,9 @@
     <!-- <time datetime="2021-07-05"></time> -->
 
     <p>
+      This is a maintenance release that upgrades third-party dependencies,
+      the build system and removes deprecated support
+      for legacy dictionary formats.
     </p>
 
     <section id="4.4.0:improvements">
@@ -41,8 +44,9 @@
         <dt>Dependency upgrades</dt>
         <dd>
           <p>
-            Upgraded library dependencies: HPPC 9.0.0, jackson 2.12.4,
-            commons-compress 1.21, log4j 2.14.1, jetty 9.4.43.v20210629.
+            Upgraded library dependencies: HPPC 9.0.0, jackson 2.13.0,
+            commons-compress 1.21, log4j 2.14.1, Lucene 8.11.0,
+            jetty 9.4.44.v20210927.
           </p>
 
           <a href="https://github.com/carrot2/carrot2/issues/131">#131</a>
@@ -58,6 +62,23 @@
           <label class="java-api"></label>
           <a href="https://github.com/carrot2/carrot2/issues/125">#125</a>
           <a href="https://github.com/carrot2/carrot2/issues/132">#132</a>
+        </dd>
+      </dl>
+    </section>
+
+
+    <section id="4.3.0:deprecations">
+      <h3>Deprecations</h3>
+
+      <dl>
+        <dt>Legacy dictionaries</dt>
+        <dd>
+          <p>
+            Support for legacy *.utf8 dictionaries have been removed.
+          </p>
+
+          <label class="java-api"></label>
+          <a href="https://github.com/carrot2/carrot2/issues/56">#56</a>
         </dd>
       </dl>
     </section>
