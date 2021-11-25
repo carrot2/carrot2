@@ -1,45 +1,64 @@
-name: Gradle Check
+name: On Commit Checks
 
 on: 
   pull_request:
     branches:
-      - '*' 
+      - master
+
   push:
     branches:
-      - '*' 
+      - master
 
 jobs:
-  check:
-    name: gradle check w/ Java 11
+  tests:
+    name: gradle check (JDK ${{ matrix.java }} on ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
 
-    runs-on: ubuntu-latest
+    strategy:
+      # Check on latest ubuntu with the lowest supported JDK. Everything else
+      # is handled by subsequent nightly tests.
+      matrix:
+        os: [ ubuntu-latest ]
+        java: [ '11', '17' ]
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Correct git autocrlf
+        run: git config --global core.autocrlf false
+
+      - name: Git checkout
+        uses: actions/checkout@v2
         with:
           submodules: recursive
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
+      - name: Set up JDK
+        uses: actions/setup-java@v2
         with:
-          java-version: 11
+          distribution: 'adopt-hotspot'
+          java-version: ${{ matrix.java }}
+          java-package: jdk
 
-      - name: Gradle wrapper integrity check
-        uses: gradle/wrapper-validation-action@v1
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - uses: actions/cache@v2
+      - name: Cache/Restore Gradle files
+        uses: actions/cache@v2
         with:
           path: |
             ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('versions.lock') }}
+            ~/.gradle/jdks
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('versions.lock', '**/gradle-wrapper.properties') }}
           restore-keys: |
-            ${{ runner.os }}-gradle
+            ${{ runner.os }}-gradle-caches-
 
-      - name: Build with Gradle
-        run: ./gradlew check
+      - name: Quick checks (gradle check -x test)
+        run: ./gradlew --max-workers 4 check -x test
+
+      - name: Tests (./gradlew ... test itest)
+        run: ./gradlew --max-workers 4 check
+
+      - name: Store failed test outputs
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: failed-test-outputs
+          path: '**/OUTPUT-*.txt'
 
       - name: Archive distribution artifacts
         uses: actions/upload-artifact@v2
