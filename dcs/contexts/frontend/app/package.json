@@ -54,11 +54,6 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "resolutions": {
-    "lodash": "4.17.21",
-    "immer": "9.0.6",
-    "set-value": "2.0.1"
-  },
   "browserslist": [
     ">0.2%",
     "not dead",
