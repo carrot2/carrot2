@@ -23,6 +23,7 @@
     "file-saver": "2.0.5",
     "filesize": "8.0.6",
     "ky": "0.28.7",
+    "lodash.debounce": "4.0.8",
     "lodash.isplainobject": "4.0.6",
     "lodash.isstring": "4.0.1",
     "lodash.set": "4.3.2",
@@ -40,10 +41,12 @@
   },
   "devDependencies": {
     "@craco/craco": "6.4.2",
+    "eslint-config-react-app": "6.0.0",
     "glob": "7.2.0",
     "madge": "5.0.1",
     "prettier": "2.5.0",
-    "react-scripts": "4.0.3"
+    "react-scripts": "4.0.3",
+    "webpack": "4.44.2"
   },
   "scripts": {
     "start": "craco start",

@@ -3676,11 +3676,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@blueprintjs/core@npm:3.38.1":
-  version: 3.38.1
-  resolution: "@blueprintjs/core@npm:3.38.1"
+"@blueprintjs/core@npm:3.50.4":
+  version: 3.50.4
+  resolution: "@blueprintjs/core@npm:3.50.4"
   dependencies:
-    "@blueprintjs/icons": ^3.24.0
+    "@blueprintjs/colors": ^4.0.0-alpha.1
+    "@blueprintjs/icons": ^3.30.2
     "@types/dom4": ^2.0.1
     classnames: ^2.2
     dom4: ^2.1.5
@@ -3697,7 +3698,7 @@ __metadata:
   bin:
     upgrade-blueprint-2.0.0-rename: scripts/upgrade-blueprint-2.0.0-rename.sh
     upgrade-blueprint-3.0.0-rename: scripts/upgrade-blueprint-3.0.0-rename.sh
-  checksum: ab5c1dfa76b7ab845d26884a657b48e77322ce34381941059dd9564dd6fb18372bdc25bae90b973bc422103a7162a00b84600a390158c3a3b5c9336a9d997170
+  checksum: 3c5bda16614d596b3611cf6341a9dc46a3020ce282b7064be11af63081652fcbc0136763cb1c93a071e7ab587317a41e57b3895ec75dd53025af66e1c388abfd
   languageName: node
   linkType: hard
 
@@ -3727,17 +3728,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@blueprintjs/icons@npm:^3.24.0":
-  version: 3.24.0
-  resolution: "@blueprintjs/icons@npm:3.24.0"
-  dependencies:
-    classnames: ^2.2
-    tslib: ~1.13.0
-  checksum: 0a359c04e887daa51479ed1d14ce48747ff0a0fbdf47bb10cab7f0a5d85f08f10f14a544cdd3d843d1af9269fd66e476dcaa4c1683989871601a49260c7a7bbe
-  languageName: node
-  linkType: hard
-
-"@blueprintjs/icons@npm:^3.31.0":
+"@blueprintjs/icons@npm:^3.30.2, @blueprintjs/icons@npm:^3.31.0":
   version: 3.31.0
   resolution: "@blueprintjs/icons@npm:3.31.0"
   dependencies:
@@ -3774,15 +3765,32 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@carrotsearch/ui@workspace:ui"
   dependencies:
-    "@blueprintjs/core": 3.38.1
+    "@blueprintjs/core": 3.50.4
+    "@carrotsearch/circles": 2.3.8
+    "@carrotsearch/foamtree": 3.5.0
     "@carrotsearch/theme": 0.1.0
+    "@fortawesome/fontawesome-pro": 5.15.4
+    "@fortawesome/fontawesome-svg-core": 1.2.36
+    "@fortawesome/pro-duotone-svg-icons": 5.15.4
+    "@fortawesome/pro-light-svg-icons": 5.15.4
+    "@fortawesome/pro-regular-svg-icons": 5.15.4
+    "@fortawesome/react-fontawesome": 0.1.15
+    "@risingstack/react-easy-state": 7.0.0-alpha.1
+    classnames: 2.3.1
     clipboard-copy: 4.0.1
+    filesize: 8.0.3
     fuzzysort: 1.1.4
     json-format-highlight: 1.0.4
     lodash.debounce: 4.0.8
-    react-dropzone: 11.2.4
+    lru-cache: 6.0.0
+    prop-types: 15.7.2
+    react: 17.0.2
+    react-dom: 17.0.2
+    react-dropzone: 11.4.2
+    react-refresh: 0.10.0
+    react-router-dom: 5.3.0
     store2: 2.12.0
-    three-dots: 0.2.0
+    three-dots: 0.2.1
   languageName: unknown
   linkType: soft
 
@@ -3912,6 +3920,18 @@ __metadata:
   dependencies:
     "@fortawesome/fontawesome-common-types": ^0.2.36
   checksum: 599352bc81aad5fbb2b7a39d36361841cbc5d0d02cb341b046db53c8a28e22edb6fd6ff679409546b3e62b8834e7dee619a450f7fe6eaeb4234adacd50de9b7d
+  languageName: node
+  linkType: hard
+
+"@fortawesome/react-fontawesome@npm:0.1.15":
+  version: 0.1.15
+  resolution: "@fortawesome/react-fontawesome@npm:0.1.15::__archiveUrl=https%3A%2F%2Fnpm.fontawesome.com%2F%40fortawesome%2Freact-fontawesome%2F-%2F0.1.15%2Freact-fontawesome-0.1.15.tgz"
+  dependencies:
+    prop-types: ^15.7.2
+  peerDependencies:
+    "@fortawesome/fontawesome-svg-core": ^1.2.32
+    react: ">=16.x"
+  checksum: 88670e1af943aed33463a258d1be7323f51ef3b50de98f0e8ae56dbd65871b77488570dd02ac6548126989c73af4d115098f12969354988992aff8c4985e92b0
   languageName: node
   linkType: hard
 
@@ -5646,12 +5666,14 @@ __metadata:
     "@fortawesome/react-fontawesome": 0.1.16
     "@risingstack/react-easy-state": 7.0.0-alpha.1
     classnames: 2.3.1
+    eslint-config-react-app: 6.0.0
     fast-stats: 0.0.6
     fast-xml-parser: 3.21.1
     file-saver: 2.0.5
     filesize: 8.0.6
     glob: 7.2.0
     ky: 0.28.7
+    lodash.debounce: 4.0.8
     lodash.isplainobject: 4.0.6
     lodash.isstring: 4.0.1
     lodash.set: 4.3.2
@@ -5667,6 +5689,7 @@ __metadata:
     react-router-dom: 5.3.0
     react-scripts: 4.0.3
     typeface-cabin-condensed: 0.0.72
+    webpack: 4.44.2
     xlsx: 0.17.4
     xss: 1.0.10
   languageName: unknown
@@ -9087,7 +9110,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-react-app@npm:^6.0.0":
+"eslint-config-react-app@npm:6.0.0, eslint-config-react-app@npm:^6.0.0":
   version: 6.0.0
   resolution: "eslint-config-react-app@npm:6.0.0"
   dependencies:
@@ -9814,6 +9837,13 @@ __metadata:
   version: 6.1.0
   resolution: "filesize@npm:6.1.0"
   checksum: c46d644cb562fba7b7e837d5cd339394492abaa06722018b91a97d2a63b6c753ef30653de5c03bf178c631185bf55c3561c28fa9ccc4e9755f42d853c6ed4d09
+  languageName: node
+  linkType: hard
+
+"filesize@npm:8.0.3":
+  version: 8.0.3
+  resolution: "filesize@npm:8.0.3"
+  checksum: 0ce128184b0786bc2e955e37d8289c3cfe232f9275b5268434f514edd0571698f3d641dbabad68d7a573a46ac7acef7e7364bacc92ac4173c0d0b18c24387e7f
   languageName: node
   linkType: hard
 
@@ -16291,19 +16321,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dropzone@npm:11.2.4":
-  version: 11.2.4
-  resolution: "react-dropzone@npm:11.2.4"
-  dependencies:
-    attr-accept: ^2.2.1
-    file-selector: ^0.2.2
-    prop-types: ^15.7.2
-  peerDependencies:
-    react: ">= 16.8"
-  checksum: 09ef3f78e811dbf7572d6669b1a731f903cbbcc40cc7d63f667ba5555983453a5f7d110a4a9040056bf072e9ff6c2cf0121ccdf8f2321d23dfdd083b2c9bfc50
-  languageName: node
-  linkType: hard
-
 "react-dropzone@npm:11.4.2":
   version: 11.4.2
   resolution: "react-dropzone@npm:11.4.2"
@@ -16359,6 +16376,13 @@ __metadata:
   peerDependencies:
     react: 0.14.x || ^15.0.0 || ^16.0.0
   checksum: 9ba10e852d6a6d8d8b0a8e5482307b656254addec66c37969ff14516067f564281e6a54ca4a18a7c790cbafbf405d0d152f288729e61cb28274371838923da59
+  languageName: node
+  linkType: hard
+
+"react-refresh@npm:0.10.0":
+  version: 0.10.0
+  resolution: "react-refresh@npm:0.10.0"
+  checksum: 089b8ea9ad8038046c0467a2476595eedab9e30620f50daa50e844c81d626de43a44a6a628256ae58e68885d5fe1d7e05074ddfd99ece3808b013d043f0c6030
   languageName: node
   linkType: hard
 
@@ -18753,10 +18777,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"three-dots@npm:0.2.0":
-  version: 0.2.0
-  resolution: "three-dots@npm:0.2.0"
-  checksum: dea32313ba5b38edb2e054ec4f4cfeb69d7c698ac73247145883a73e65a674017f9a6b904bcbd96bb14c485533b067ddc46690953cf74ebeb657e08e86e2ede6
+"three-dots@npm:0.2.1":
+  version: 0.2.1
+  resolution: "three-dots@npm:0.2.1"
+  checksum: 1b00e5de859f275b414a93fcd72ecf1e1fea1c285d7e3d0224e80c6ef57c1977a4579cad6c28dc9848f15c9a66aeb7f4618d1cb8aeb2f6529f0b81741afaeb45
   languageName: node
   linkType: hard
 
