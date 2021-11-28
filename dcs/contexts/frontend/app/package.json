@@ -23,9 +23,9 @@
     "file-saver": "2.0.5",
     "filesize": "8.0.6",
     "ky": "0.28.7",
-    "lodash.set": "4.3.2",
     "lodash.isplainobject": "4.0.6",
     "lodash.isstring": "4.0.1",
+    "lodash.set": "4.3.2",
     "lru-cache": "6.0.0",
     "mitt": "3.0.0",
     "path-to-regexp": "6.2.0",
@@ -40,10 +40,10 @@
   },
   "devDependencies": {
     "@craco/craco": "6.4.2",
-    "react-scripts": "4.0.3",
+    "glob": "7.2.0",
     "madge": "5.0.1",
     "prettier": "2.5.0",
-    "glob": "7.2.0"
+    "react-scripts": "4.0.3"
   },
   "scripts": {
     "start": "craco start",
