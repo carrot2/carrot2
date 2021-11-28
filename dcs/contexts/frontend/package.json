@@ -1,7 +1,9 @@
 {
   "private": true,
   "workspaces": [
-    "app", "theme", "ui"
+    "app",
+    "theme",
+    "ui"
   ],
   "devDependencies": {
     "prettier": "2.2.1"
@@ -11,5 +13,6 @@
     "build": "yarn workspace app build",
     "test": "yarn workspace app test",
     "prettier": "prettier -w app/src/ ui/ theme/"
-  }
+  },
+  "packageManager": "yarn@3.1.1"
 }
