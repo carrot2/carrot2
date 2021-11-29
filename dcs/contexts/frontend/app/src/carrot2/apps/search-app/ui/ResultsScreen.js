@@ -96,11 +96,7 @@ export const ResultsScreen = ({ match, history }) => {
         </Views>
       </div>
       <div className="docs">
-        <Views
-          views={resultsViews}
-          activeView="list"
-          onViewChange={() => {}}
-        >
+        <Views views={resultsViews} activeView="list" onViewChange={() => {}}>
           <Loading isLoading={() => searchResultStore.loading} />
         </Views>
       </div>
