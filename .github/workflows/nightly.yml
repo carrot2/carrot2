@@ -1,13 +1,11 @@
-name: On Commit Checks
+name: Nightly Checks
 
 on: 
-  pull_request:
-    branches:
-      - master
-
-  push:
-    branches:
-      - master
+  # Allow manual triggers.
+  workflow_dispatch:
+  # But typically run on this schedule.
+  schedule:
+    - cron: '0 5 * * *'
 
 jobs:
   tests:
@@ -15,11 +13,13 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
-      # Check on latest ubuntu with the lowest supported JDK. Everything else
-      # is handled by subsequent nightly tests.
+      # Check on all supported operating systems, with the highest supported JDK.
       matrix:
         os: [ ubuntu-latest ]
         java: [ '11' ]
+        include:
+          - os: windows-2019
+            java: '17'
 
     steps:
       - name: Correct git autocrlf
@@ -42,13 +42,10 @@ jobs:
         with:
           path: |
             ~/.gradle/caches
-            ~/.gradle/jdks
+              ~/.gradle/jdks
           key: ${{ runner.os }}-gradle-caches-${{ hashFiles('versions.lock', '**/gradle-wrapper.properties') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-caches-
-
-      - name: Quick checks (gradle check -x test)
-        run: ./gradlew --max-workers 4 check -x test
+              ${{ runner.os }}-gradle-caches-
 
       - name: Tests (./gradlew ... check)
         run: ./gradlew --max-workers 4 check
