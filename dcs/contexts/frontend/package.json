@@ -8,6 +8,10 @@
   "devDependencies": {
     "prettier": "2.2.1"
   },
+  "resolutions": {
+    "react-dev-utils/immer": "9.0.6",
+    "set-value": "2.0.1"
+  },
   "scripts": {
     "start": "yarn workspace app start",
     "build": "yarn workspace app build",

@@ -11063,10 +11063,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"immer@npm:8.0.1":
-  version: 8.0.1
-  resolution: "immer@npm:8.0.1"
-  checksum: 63d875c04882b862481a0a692816e5982975a47a57619698bc1bb52963ad3b624911991708b2b81a7af6fdac15083d408e43932d83a6a61216e5a4503efd4095
+"immer@npm:9.0.6":
+  version: 9.0.6
+  resolution: "immer@npm:9.0.6"
+  checksum: 75da22f3b32f3f14604eb389b4f50e84a14f2e42f306f0cbe4d2969aed54ec7fda9a7e9ca42ebae2ba73ec9bb6ec1001fafbac535accaf03860054ab0f7e8388
   languageName: node
   linkType: hard
 
@@ -11611,7 +11611,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-plain-object@npm:^2.0.1, is-plain-object@npm:^2.0.3, is-plain-object@npm:^2.0.4":
+"is-plain-object@npm:^2.0.3, is-plain-object@npm:^2.0.4":
   version: 2.0.4
   resolution: "is-plain-object@npm:2.0.4"
   dependencies:
@@ -17598,27 +17598,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"set-value@npm:^0.4.3":
-  version: 0.4.3
-  resolution: "set-value@npm:0.4.3"
-  dependencies:
-    extend-shallow: ^2.0.1
-    is-extendable: ^0.1.1
-    is-plain-object: ^2.0.1
-    to-object-path: ^0.3.0
-  checksum: 0fdc194489d9182322cafbe71d7606e6f96bdbb7b8e459d8b749e57699a87857afa4a00683ab4cede03dbbd857f9282998c2661e8c13a98a6caf2be58f773965
-  languageName: node
-  linkType: hard
-
-"set-value@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "set-value@npm:2.0.0"
+"set-value@npm:2.0.1":
+  version: 2.0.1
+  resolution: "set-value@npm:2.0.1"
   dependencies:
     extend-shallow: ^2.0.1
     is-extendable: ^0.1.1
     is-plain-object: ^2.0.3
     split-string: ^3.0.1
-  checksum: b5dc5919bca5e6ca09835b367bd281b165ea2a1e55f69f3dc1f88d2708bfb3ad3fdaf490f7e8fbe3d0068fd1a362b8543587d7e8f43fce1a15c33f71586f0cd6
+  checksum: 09a4bc72c94641aeae950eb60dc2755943b863780fcc32e441eda964b64df5e3f50603d5ebdd33394ede722528bd55ed43aae26e9df469b4d32e2292b427b601
   languageName: node
   linkType: hard
 
