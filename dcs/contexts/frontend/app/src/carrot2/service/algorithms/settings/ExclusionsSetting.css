@@ -5,7 +5,38 @@
 
 .ExclusionsSetting .ViewsContent {
   overflow: visible; /* to avoid clipping of the focus ring */
-  margin-top: 0.125em;
+  margin-top: 0.25em;
+}
+
+.ExclusionsSetting .ViewsContent > div {
+  /**
+   * View content is by default positioned absolutely,
+   * which makes sense for views taking all available
+   * space. In this case, the view should take as much
+   * space as required by the height of the textarea,
+   * so we switch to relative positioning instead.
+   */
+  position: relative;
+  top: unset;
+  bottom: unset;
+  left: unset;
+  right: unset;
+  height: 100%;
+}
+
+.ExclusionsSetting .ViewsContent > div.ViewHidden {
+  /**
+   * Views are by default made invisible by setting visibility: hidden
+   * to avoid reflows while switching. Here we need to hide the views,
+   * otherwise they'd create empty vertical spaces.
+   */
+  display: none;
+}
+
+.ExclusionsSetting .ViewsContent > div > textarea {
+  min-width: 100%;
+  max-width: 100%;
+  height: 8rem;
 }
 
 .ExclusionsSetting .ViewsTabs {
@@ -24,6 +55,7 @@
   color: var(--text-color-lighter);
   margin-top: 0.25em;
 }
+
 .ExclusionsSettingInlineHelp .error {
   color: var(--text-color-red);
 }

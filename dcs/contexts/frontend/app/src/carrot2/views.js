@@ -232,16 +232,23 @@ export const clusterViews = [
   }
 ];
 
+const SourceConfig = view(() => {
+  return (
+    <ResultListConfig>
+      {searchResultStore.searchResult.source?.createConfig()}
+    </ResultListConfig>
+  );
+});
+
 export const resultsViews = [
   {
     label: "Results",
     views: {
       list: {
         label: "list",
-        createContentElement: props => {
+        createContentElement: visible => {
           return (
             <ResultList
-              {...props}
               store={searchResultStore}
               visibilityStore={documentVisibilityStore}
               clusterSelectionStore={clusterSelectionStore}
@@ -253,12 +260,8 @@ export const resultsViews = [
             id: "config",
             icon: faCog,
             title: "Result list settings",
-            createContentElement: props => {
-              return (
-                <ResultListConfig>
-                  {props.source.createConfig()}
-                </ResultListConfig>
-              );
+            createContentElement: () => {
+              return <SourceConfig />;
             }
           }
         ]

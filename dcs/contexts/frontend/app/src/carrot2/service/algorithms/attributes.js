@@ -306,8 +306,6 @@ export const createExcludedLabelsSetting = (
   restPath = "dictionaries.labelFilters"
 ) => {
   const activeViewStore = createActiveViewStore(algorithmId, "labelExclusions");
-  const views = createExclusionViews(viewCustomizer);
-
   return {
     id: restPath,
     label: "Excluded label patterns",
@@ -318,7 +316,7 @@ export const createExcludedLabelsSetting = (
         setting={s}
         get={get}
         set={set}
-        views={views}
+        views={createExclusionViews(s, get, set, viewCustomizer)}
         getActiveView={activeViewStore.get}
         setActiveView={activeViewStore.set}
         search={search}
@@ -336,7 +334,6 @@ ${patternTypesHelp}`
 
 export const createExcludedWordsSetting = algorithmId => {
   const activeViewStore = createActiveViewStore(algorithmId, "wordExclusions");
-  const views = createExclusionViews();
 
   return {
     id: "dictionaries.wordFilters",
@@ -355,7 +352,7 @@ ${patternTypesHelp}`,
         setting={s}
         get={get}
         set={set}
-        views={views}
+        views={createExclusionViews(s, get, set)}
         getActiveView={activeViewStore.get}
         setActiveView={activeViewStore.set}
         search={search}

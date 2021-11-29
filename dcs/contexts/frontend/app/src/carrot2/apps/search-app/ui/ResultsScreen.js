@@ -100,7 +100,6 @@ export const ResultsScreen = ({ match, history }) => {
           views={resultsViews}
           activeView="list"
           onViewChange={() => {}}
-          source={sources[source]}
         >
           <Loading isLoading={() => searchResultStore.loading} />
         </Views>

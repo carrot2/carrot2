@@ -48,7 +48,6 @@ const PlainTextExclusionEditor = view(({ setting, get, set, type }) => {
 
   return (
     <TextArea
-      style={{ width: "100%", minHeight: "8rem" }}
       value={getExclusions()}
       onChange={e => setExclusions(e.target.value)}
     />
@@ -59,12 +58,20 @@ const createPlainTextExclusionEditor = (type, setting, get, set) => (
   <PlainTextExclusionEditor setting={setting} get={get} set={set} type={type} />
 );
 
-const createExclusionView = (label, settingFactory, helpLine, helpText) => {
+const createExclusionView = (
+  setting,
+  get,
+  set,
+  label,
+  editorFactory,
+  helpLine,
+  helpText
+) => {
   return {
     label: label,
-    createContentElement: (visible, { setting, get, set }) => (
+    createContentElement: visible => (
       <>
-        {settingFactory(setting, get, set)}
+        {editorFactory()}
         <div className="ExclusionsSettingInlineHelp">
           {helpLine},{" "}
           <DescriptionPopover description={helpText}>
@@ -75,7 +82,7 @@ const createExclusionView = (label, settingFactory, helpLine, helpText) => {
     ),
     tools: [
       {
-        createContentElement: ({ setting, get }) => {
+        createContentElement: () => {
           return (
             <CopyToClipboard
               contentProvider={() =>
@@ -96,12 +103,14 @@ const createExclusionView = (label, settingFactory, helpLine, helpText) => {
   };
 };
 
-export const createExclusionViews = customizer => {
+export const createExclusionViews = (setting, get, set, customizer) => {
   const views = {
     glob: createExclusionView(
+      setting,
+      get,
+      set,
       "glob",
-      (setting, get, set) =>
-        createPlainTextExclusionEditor("glob", setting, get, set),
+      () => createPlainTextExclusionEditor("glob", setting, get, set),
       <span>
         One pattern per line, separate words with spaces, <code>*</code> is zero
         or more words
@@ -109,16 +118,20 @@ export const createExclusionViews = customizer => {
       globExclusionsHelpHtml
     ),
     exact: createExclusionView(
+      setting,
+      get,
+      set,
       "exact",
-      (setting, get, set) =>
-        createPlainTextExclusionEditor("exact", setting, get, set),
+      () => createPlainTextExclusionEditor("exact", setting, get, set),
       <span>One label per line, exact matching</span>,
       exactExclusionsHelpHtml
     ),
     regex: createExclusionView(
+      setting,
+      get,
+      set,
       "regexp",
-      (setting, get, set) =>
-        createPlainTextExclusionEditor("regexp", setting, get, set),
+      () => createPlainTextExclusionEditor("regexp", setting, get, set),
       <span>One Java regex per line</span>,
       regexpExclusionsHelpHtml
     )
