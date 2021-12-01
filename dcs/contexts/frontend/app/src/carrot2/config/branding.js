@@ -7,7 +7,6 @@ import { faFlask, faSearch } from "@fortawesome/pro-regular-svg-icons";
 
 import { CarrotLogo } from "@carrotsearch/ui/logo/CarrotLogo.js";
 import { Carrot2Text } from "@carrotsearch/ui/logo/Carrot2Text.js";
-import { CarrotSearchText } from "@carrotsearch/ui/logo/CarrotSearchText.js";
 
 import { dcsServiceUrl } from "../config.js";
 import { routes } from "../routes.js";
