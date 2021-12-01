@@ -9,12 +9,10 @@ import { CarrotLogo } from "@carrotsearch/ui/logo/CarrotLogo.js";
 import { Carrot2Text } from "@carrotsearch/ui/logo/Carrot2Text.js";
 import { CarrotSearchText } from "@carrotsearch/ui/logo/CarrotSearchText.js";
 
-import { dcsServiceUrl, isCarrot2Distribution } from "../config.js";
+import { dcsServiceUrl } from "../config.js";
 import { routes } from "../routes.js";
 import { App } from "@carrotsearch/ui/AppContainer.js";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-
-const carrot2 = isCarrot2Distribution();
 
 const carrot2Branding = {
   product: "Carrot2",
@@ -209,4 +207,4 @@ const lingo3gBranding = {
   }
 };
 
-export const branding = carrot2 ? carrot2Branding : lingo3gBranding;
+export const branding = carrot2Branding;
