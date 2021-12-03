@@ -25,6 +25,7 @@ dependencies {
   examples     project(path: ":dcs:examples", configuration: "distribution")
 
   implementation "com.carrotsearch.console:launcher"
+  implementation "com.carrotsearch.progresso:progresso-jvmversion"
   implementation "org.eclipse.jetty:jetty-server"
   implementation "org.eclipse.jetty:jetty-webapp"
 }

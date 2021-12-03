@@ -32,6 +32,19 @@ case "$SHELLNAME" in
   ;;
 esac
 
+# Determine JVM version and set any extra JVM options accordingly.
+JVMVERSION=`java -jar "$DCS_HOME/lib/progresso-jvmversion-1.7.3.jar"`
+JVMARGS=""
+case "$JVMVERSION" in
+   "7"|"8"|"9"|"10")
+      echo "> [ERROR] DCS requires at least Java 11 ($JVMVERSION detected)."
+      exit 1
+   ;;
+   "10"|"12"|"13"|"14"|"15")
+      JVMARGS="--illegal-access=deny"
+   ;;
+esac
+
 # Try to determine terminal size.
 if [ -z "$COLUMNS" ]; then
   COLUMNS=$(stty size 2>/dev/null)
@@ -52,5 +65,5 @@ if [ -z "$JAVA_CMD" ]; then
 fi
 
 # Launch the DCS.
-eval $JAVA_CMD --illegal-access=deny $JVMARGS $DCS_OPTS -jar \"$DCS_HOME/lib/dcs-launcher-${product.version}.jar\" "$all_args"
+eval $JAVA_CMD $JVMARGS $DCS_OPTS -jar \"$DCS_HOME/lib/dcs-launcher-${product.version}.jar\" "$all_args"
 exit $?
