@@ -36,11 +36,11 @@ esac
 JVMVERSION=`java -jar "$DCS_HOME/lib/progresso-jvmversion-1.7.3.jar"`
 JVMARGS=""
 case "$JVMVERSION" in
-   "7"|"8"|"9"|"10")
+   "6"|"7"|"8"|"9"|"10")
       echo "> [ERROR] DCS requires at least Java 11 ($JVMVERSION detected)."
       exit 1
    ;;
-   "10"|"12"|"13"|"14"|"15")
+   "11"|"12"|"13"|"14"|"15")
       JVMARGS="--illegal-access=deny"
    ;;
 esac

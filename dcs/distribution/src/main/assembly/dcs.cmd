@@ -25,8 +25,9 @@ SET DCS_OPTS=
 REM Determine JVM version and set any extra JVM options accordingly.
 FOR /F "usebackq delims=" %%i IN (`java -jar "%%DCS_HOME%%\lib\progresso-jvmversion-1.7.3.jar"`) DO SET JVMVERSION=%%i
 
-IF "%JVMVERSION%"=="1.7"  GOTO jvmUnsupported
-IF "%JVMVERSION%"=="1.8"  GOTO jvmUnsupported
+IF "%JVMVERSION%"=="6"    GOTO jvmUnsupported
+IF "%JVMVERSION%"=="7"    GOTO jvmUnsupported
+IF "%JVMVERSION%"=="8"    GOTO jvmUnsupported
 IF "%JVMVERSION%"=="9"    GOTO jvmUnsupported
 IF "%JVMVERSION%"=="10"   GOTO jvmUnsupported
 
