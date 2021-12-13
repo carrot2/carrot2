@@ -33,6 +33,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.jar.Manifest;
 import java.util.stream.Stream;
 
 @Parameters(
@@ -49,6 +50,7 @@ public class DcsLauncher extends Command<ExitCode> {
   public static final String OPT_USE_GZIP = "--gzip";
   public static final String OPT_PID_FILE = "--pid-file";
   public static final String OPT_IDLE_TIME = "--idle-time";
+  public static final String OPT_VERSION = "--version";
 
   @Parameter(
       names = {"-p", OPT_PORT},
@@ -89,6 +91,12 @@ public class DcsLauncher extends Command<ExitCode> {
       required = false)
   public Integer idleTime = Math.toIntExact(TimeUnit.SECONDS.toMillis(60));
 
+  @Parameter(
+      names = {OPT_VERSION},
+      hidden = true,
+      description = "Prints the software version and exits.")
+  public boolean version;
+
   private final String tstamp =
       new DateTimeFormatterBuilder()
           .appendPattern("yyyy_MM_dd-HH_mm_ss-SSS")
@@ -101,6 +109,23 @@ public class DcsLauncher extends Command<ExitCode> {
       if (pidFile != null) {
         Files.writeString(
             pidFile, Long.toString(ProcessHandle.current().pid()), StandardCharsets.UTF_8);
+      }
+
+      if (version) {
+        try (var is = getClass().getResourceAsStream("/META-INF/MANIFEST.MF")) {
+          if (is == null) {
+            Loggers.CONSOLE.info("Version unknown (manifest can't be read).");
+          } else {
+            Manifest mf = new Manifest(is);
+            var mainAttrs = mf.getMainAttributes();
+            Loggers.CONSOLE.info(
+                "Document Clustering Server, {}",
+                Objects.requireNonNullElse(
+                    mainAttrs.getValue("Implementation-Version"), "(unknown)"));
+          }
+        }
+
+        return ExitCodes.SUCCESS;
       }
 
       JettyContainer c =

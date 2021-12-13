@@ -60,6 +60,10 @@ task collectScripts(type: Sync) {
     replaceTokens.each { k, v -> antPrj.setProperty(k.toString(), v.toString()) }
   }
 
+  doFirst {
+    antPrj.setProperty("jvmversion.version", getVersion("com.carrotsearch.progresso:progresso-jvmversion"))
+  }
+
   inputs.properties replaceTokensTrigger
 
   from(files('src/main/assembly'), {
