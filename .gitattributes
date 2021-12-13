@@ -1,3 +1,4 @@
 versions.lock     text eol=lf
 *.gradle          text eol=lf
 *.md              text eol=lf
+*.java            text eol=lf
