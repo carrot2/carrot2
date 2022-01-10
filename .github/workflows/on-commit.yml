@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - master
+      - bugfix/4.4.x
 
 jobs:
   tests:
