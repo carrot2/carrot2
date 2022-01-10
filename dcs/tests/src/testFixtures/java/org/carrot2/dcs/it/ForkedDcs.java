@@ -79,7 +79,7 @@ public class ForkedDcs implements DcsService {
     // Wait for the process to become alive.
     Loggers.CONSOLE.info("Launching DCS at: {}", config.distributionDir);
     Path stdout = process.getProcessOutputFile();
-    Instant deadline = Instant.now().plusSeconds(15);
+    Instant deadline = Instant.now().plusSeconds(60);
     Pattern pattern =
         Pattern.compile(Pattern.quote(JettyContainer.SERVICE_STARTED_ON) + "(?<port>[0-9]+)");
     while (Instant.now().isBefore(deadline) && process.getProcess().isAlive()) {
