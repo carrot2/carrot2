@@ -39,6 +39,7 @@ configure(projectList) {
 
   tasks.withType(YarnTask) {
     environment.put("GRADLE_YARNRC", "false")
+    environment.put("CI", Objects.requireNonNullElse(System.getenv("CI"), "false"))
   }
 
   task yarnInstall(type: YarnTask) {
