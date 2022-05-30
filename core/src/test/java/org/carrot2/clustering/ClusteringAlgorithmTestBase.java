@@ -13,7 +13,6 @@ package org.carrot2.clustering;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.carrotsearch.randomizedtesting.RandomizedTest;
-import com.carrotsearch.randomizedtesting.annotations.Nightly;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
 import java.util.*;
 import java.util.concurrent.Callable;
