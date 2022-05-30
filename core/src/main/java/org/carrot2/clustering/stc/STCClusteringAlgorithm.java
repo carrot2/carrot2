@@ -617,7 +617,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     /*
      * Combine cluster labels and try to find the best description for the cluster.
      */
-    final ArrayList<PhraseCandidate> phrases = new ArrayList<PhraseCandidate>(mergeList.size());
+    final ArrayList<PhraseCandidate> phrases = new ArrayList<>(mergeList.size());
     for (int i = 0; i < mergeList.size(); i++) {
       final ClusterCandidate cc = baseClusters.get(mergeList.get(i));
       final float coverage = cc.cardinality / (float) result.cardinality;
