@@ -48,7 +48,7 @@ jobs:
               ${{ runner.os }}-gradle-caches-
 
       - name: Tests (./gradlew ... check)
-        run: ./gradlew --max-workers 4 check "-Ptests.slow=true"
+        run: ./gradlew --max-workers 4 check "-Ptests.slow=true" "-Ptests.nightly=true"
 
       - name: Store failed test outputs
         if: failure()
