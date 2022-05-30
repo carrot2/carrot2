@@ -181,7 +181,6 @@ public abstract class ClusteringAlgorithmTestBase<E extends ClusteringAlgorithm 
   }
 
   /** Runs the algorithm concurrently, verifying stability of results. */
-  @Nightly
   @Test
   @ThreadLeakLingering(linger = 5000)
   public void testResultsStableFromSameOrder() throws Exception {
@@ -231,7 +230,6 @@ public abstract class ClusteringAlgorithmTestBase<E extends ClusteringAlgorithm 
   }
 
   /** Runs the algorithm concurrently, verifying stability of results. */
-  @Nightly
   @Test
   @ThreadLeakLingering(linger = 5000)
   public void testResultsStableFromRandomShuffle() throws Exception {
