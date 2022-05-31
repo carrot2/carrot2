@@ -19,7 +19,6 @@ import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.assertj.core.api.Assertions;
-import org.carrot2.AwaitsFix;
 import org.carrot2.clustering.*;
 import org.carrot2.clustering.Cluster;
 import org.carrot2.clustering.Document;
@@ -142,7 +141,6 @@ public class STCClusteringAlgorithmTest
   }
 
   @Override
-  @AwaitsFix("https://github.com/carrot2/carrot2/issues/149")
   public void testResultsStableFromRandomShuffle() throws Exception {
     super.testResultsStableFromRandomShuffle();
   }
