@@ -38,7 +38,7 @@ public class BrazilianLanguageComponents extends SingleLanguageComponentsProvide
       String word = new String(chars, 0, len);
       String stem = super.stem(word);
 
-      if (Objects.equals(word, stem)) {
+      if (stem == null || Objects.equals(word, stem)) {
         return len;
       } else {
         stem.getChars(0, stem.length(), chars, 0);

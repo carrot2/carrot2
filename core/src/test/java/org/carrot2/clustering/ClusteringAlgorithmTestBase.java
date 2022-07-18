@@ -13,7 +13,6 @@ package org.carrot2.clustering;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.carrotsearch.randomizedtesting.RandomizedTest;
-import com.carrotsearch.randomizedtesting.annotations.Nightly;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -181,7 +180,6 @@ public abstract class ClusteringAlgorithmTestBase<E extends ClusteringAlgorithm 
   }
 
   /** Runs the algorithm concurrently, verifying stability of results. */
-  @Nightly
   @Test
   @ThreadLeakLingering(linger = 5000)
   public void testResultsStableFromSameOrder() throws Exception {
@@ -231,7 +229,6 @@ public abstract class ClusteringAlgorithmTestBase<E extends ClusteringAlgorithm 
   }
 
   /** Runs the algorithm concurrently, verifying stability of results. */
-  @Nightly
   @Test
   @ThreadLeakLingering(linger = 5000)
   public void testResultsStableFromRandomShuffle() throws Exception {

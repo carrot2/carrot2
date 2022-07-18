@@ -57,7 +57,13 @@ public final class SuffixTree {
    * combination of state (upper 32 bits) and symbol (lower 32 bits). The value is an index in the
    * transitions array.
    */
-  private final LongIntMap transitions_map = new LongIntHashMap();
+  private final LongIntMap transitions_map =
+      new LongIntHashMap() {
+        @Override
+        protected int nextIterationSeed() {
+          return 0xdeadbeef;
+        }
+      };
 
   /**
    * An array of all transitions.

@@ -17,6 +17,7 @@ import com.carrotsearch.hppc.IntStack;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -250,6 +251,9 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
   private static final class PhraseCandidate {
     final ClusterCandidate cluster;
     final float coverage;
+
+    /** Pre-rendered label used for sorting (to make the results more consistent). */
+    String renderedLabel;
 
     /** If <code>false</code> the phrase should not be selected (various criteria). */
     boolean selected = true;
@@ -617,7 +621,7 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     /*
      * Combine cluster labels and try to find the best description for the cluster.
      */
-    final ArrayList<PhraseCandidate> phrases = new ArrayList<PhraseCandidate>(mergeList.size());
+    final ArrayList<PhraseCandidate> phrases = new ArrayList<>(mergeList.size());
     for (int i = 0; i < mergeList.size(); i++) {
       final ClusterCandidate cc = baseClusters.get(mergeList.get(i));
       final float coverage = cc.cardinality / (float) result.cardinality;
@@ -630,12 +634,18 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     markOverlappingPhrases(context, phrases);
     phrases.removeIf(NOT_SELECTED);
 
-    phrases.sort(
-        (p1, p2) -> {
-          if (p1.coverage < p2.coverage) return 1;
-          if (p1.coverage > p2.coverage) return -1;
-          return 0;
-        });
+    for (PhraseCandidate p : phrases) {
+      p.renderedLabel = buildLabel(p.cluster.phrases.get(0));
+    }
+
+    Comparator<PhraseCandidate> comparator =
+        Comparator.<PhraseCandidate>comparingDouble(p -> p.coverage)
+            .reversed()
+            .thenComparingInt(p -> p.renderedLabel.length())
+            .reversed()
+            .thenComparing(p -> p.renderedLabel);
+
+    phrases.sort(comparator);
 
     int max = maxPhrasesPerLabel.get();
     for (PhraseCandidate p : phrases) {

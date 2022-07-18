@@ -140,6 +140,11 @@ public class STCClusteringAlgorithmTest
     Assertions.assertThat(collect.contains("Guns") && collect.contains("Gun")).isFalse();
   }
 
+  @Override
+  public void testResultsStableFromRandomShuffle() throws Exception {
+    super.testResultsStableFromRandomShuffle();
+  }
+
   private Stream<Element> elementStream(Element parent, String childName) {
     NodeList list = parent.getElementsByTagName(childName);
     return IntStream.range(0, list.getLength()).mapToObj(i -> (Element) list.item(i));
