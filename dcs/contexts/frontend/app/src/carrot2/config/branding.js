@@ -2,16 +2,14 @@ import React from "react";
 
 import { NavLink } from "react-router-dom";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFlask, faSearch } from "@fortawesome/pro-regular-svg-icons";
-
 import { CarrotLogo } from "@carrotsearch/ui/logo/CarrotLogo.js";
 import { Carrot2Text } from "@carrotsearch/ui/logo/Carrot2Text.js";
 
 import { dcsServiceUrl } from "../config.js";
 import { routes } from "../routes.js";
 import { App } from "@carrotsearch/ui/AppContainer.js";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
+
+import { VscGithubInverted, VscBeaker, VscSearch } from "react-icons/vsc";
 
 const carrot2Branding = {
   product: "Carrot2",
@@ -24,7 +22,7 @@ const carrot2Branding = {
   createAppLogo: () => <CarrotLogo />,
   createAppInfoNavLink: () => (
     <App
-      icon={faGithub}
+      icon={<VscGithubInverted size="2.2em" />}
       title="Source code on GitHub"
       path="https://github.com/carrot2/carrot2"
     />
@@ -61,7 +59,7 @@ const carrot2Branding = {
         <li>
           <strong>
             <NavLink to={routes.searchStart.path}>
-              <FontAwesomeIcon icon={faSearch} />
+              <VscSearch />
               Web Search Clustering
             </NavLink>
           </strong>{" "}
@@ -71,7 +69,7 @@ const carrot2Branding = {
         <li>
           <strong>
             <NavLink to={routes.workbench.path}>
-              <FontAwesomeIcon icon={faFlask} />
+              <VscBeaker />
               Clustering Workbench
             </NavLink>
           </strong>{" "}

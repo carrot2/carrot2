@@ -4,8 +4,8 @@ import "./ClusterList.css";
 
 import classNames from "classnames";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFolder, faLightbulb } from "@fortawesome/pro-regular-svg-icons";
+import { VscFolder, VscLightbulb } from "react-icons/vsc";
+
 import { view } from "@risingstack/react-easy-state";
 
 import { clusterStore } from "../../store/services.js";
@@ -78,7 +78,7 @@ const TopCluster = props => {
       className={className}
       onClick={e => clusterSelectionStore.toggleSelection(cluster, e.ctrlKey)}
     >
-      <FontAwesomeIcon className="icon" icon={faLightbulb} />
+      <VscLightbulb className="icon" />
       <span className="labels">{labels}</span>{" "}
       <span className="meta" dir="ltr">
         {meta}
@@ -124,7 +124,7 @@ const SubCluster = props => {
       }}
     >
       <span className="icon">
-        <FontAwesomeIcon icon={faFolder} />
+        <VscFolder className="icon" />
         {"\u00a0"}
       </span>
       <span className="labels">{labels}</span>

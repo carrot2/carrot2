@@ -4,8 +4,7 @@ import "./ClusterSelectionSummary.css";
 
 import { view } from "@risingstack/react-easy-state";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFolder, faLightbulb } from "@fortawesome/pro-regular-svg-icons";
+import { VscFolder, VscLightbulb } from "react-icons/vsc";
 
 import { pluralize } from "@carrotsearch/ui/lang/humanize.js";
 
@@ -29,10 +28,7 @@ export const ClusterInSummary = props => {
         props.onClick && props.onClick();
       }}
     >
-      <FontAwesomeIcon
-        icon={hasSubclusters ? faLightbulb : faFolder}
-        className="icon"
-      />{" "}
+      {hasSubclusters ? <VscLightbulb /> : <VscFolder />}{" "}
       <span className="labels">{labels}</span>
     </span>
   );
