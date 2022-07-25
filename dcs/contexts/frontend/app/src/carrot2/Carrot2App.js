@@ -4,7 +4,7 @@ import "./Carrot2App.css";
 
 import { matchPath, Route, Switch } from "react-router-dom";
 
-import { faFlask, faInfo, faSearch } from "@fortawesome/pro-regular-svg-icons";
+import { VscBeaker, VscInfo, VscSearch } from "react-icons/vsc";
 
 import { routes } from "./routes.js";
 
@@ -34,7 +34,7 @@ export const Carrot2App = () => {
         <App
           path={routes.search.path}
           title="Web search clustering"
-          icon={faSearch}
+          icon={<VscSearch size="2.2em" />}
           component={SearchApp}
           default={true}
         >
@@ -44,7 +44,7 @@ export const Carrot2App = () => {
         <App
           path={routes.workbench.path}
           title="Clustering workbench"
-          icon={faFlask}
+          icon={<VscBeaker size="2.2em" />}
           component={WorkbenchApp}
         >
           <ul className="WorkbenchLinkPopover">
@@ -59,7 +59,7 @@ export const Carrot2App = () => {
         <App
           path={routes.about.path}
           title="About this application"
-          icon={faInfo}
+          icon={<VscInfo size="2.2em" />}
           component={AboutApp}
         />
         {branding.createAppInfoNavLink()}

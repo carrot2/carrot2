@@ -1,10 +1,6 @@
 import React from "react";
 
-import {
-  faCog,
-  faFolderTree,
-  faQuestionCircle
-} from "@fortawesome/pro-regular-svg-icons";
+import { VscListTree, VscSettings, VscQuestion } from "react-icons/vsc";
 
 import { autoEffect, store, view } from "@risingstack/react-easy-state";
 import { Lazy } from "@carrotsearch/ui/Lazy.js";
@@ -27,7 +23,6 @@ import {
 } from "./store/selection.js";
 import { VisualizationWithList } from "@carrot2/app/ui/clusters/VisualizationWithList.js";
 import { Button } from "@blueprintjs/core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ClusterListView = view(ClusterList);
 
@@ -127,7 +122,7 @@ export const clusterViews = [
         tools: [
           {
             id: "interaction",
-            icon: faQuestionCircle,
+            icon: <VscQuestion />,
             createContentElement: props => {
               return <TreemapHints />;
             },
@@ -159,7 +154,7 @@ export const clusterViews = [
           },
           {
             id: "config",
-            icon: faCog,
+            icon: <VscSettings />,
             createContentElement: () => {
               return <TreemapConfig store={treemapConfigStore} />;
             },
@@ -188,7 +183,7 @@ export const clusterViews = [
         tools: [
           {
             id: "interaction",
-            icon: faQuestionCircle,
+            icon: <VscQuestion />,
             createContentElement: props => {
               return <PieChartHints />;
             },
@@ -220,7 +215,7 @@ export const clusterViews = [
           },
           {
             id: "config",
-            icon: faCog,
+            icon: <VscSettings />,
             createContentElement: props => {
               return <PieChartConfig store={pieChartConfigStore} />;
             },
@@ -258,7 +253,7 @@ export const resultsViews = [
         tools: [
           {
             id: "config",
-            icon: faCog,
+            icon: <VscSettings />,
             title: "Result list settings",
             createContentElement: () => {
               return <SourceConfig />;
@@ -273,7 +268,7 @@ export const resultsViews = [
 export const ShowClusterList = view(({ isEnabled, setEnabled }) => {
   return (
     <Button
-      icon={<FontAwesomeIcon icon={faFolderTree} />}
+      icon={<VscListTree />}
       minimal={true}
       active={isEnabled()}
       onClick={() => setEnabled(!isEnabled())}

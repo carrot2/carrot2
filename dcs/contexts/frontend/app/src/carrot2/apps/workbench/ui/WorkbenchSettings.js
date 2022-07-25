@@ -5,14 +5,8 @@ import debounce from "lodash.debounce";
 import { autoEffect, batch, store, view } from "@risingstack/react-easy-state";
 
 import { Button, InputGroup } from "@blueprintjs/core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBookSpells,
-  faCompressAlt,
-  faExpandAlt,
-  faFilter,
-  faUndoAlt
-} from "@fortawesome/pro-regular-svg-icons";
+
+import { VscWand, VscFold, VscDiscard, VscFilter } from "react-icons/vsc";
 
 import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
 import {
@@ -154,13 +148,14 @@ autoEffect(() => {
 const AdvancedSettingsButton = view(() => {
   return (
     <Button
-      icon={<FontAwesomeIcon icon={faBookSpells} />}
+      icon={<VscWand />}
       title="Show advanced settings"
       small={true}
       minimal={true}
       active={settingsStateStore.showAdvancedSettings}
       onClick={() =>
-        (settingsStateStore.showAdvancedSettings = !settingsStateStore.showAdvancedSettings)
+        (settingsStateStore.showAdvancedSettings =
+          !settingsStateStore.showAdvancedSettings)
       }
     />
   );
@@ -169,7 +164,7 @@ const FoldSettingsButton = view(() => {
   const allFolded = isAllFolded();
   return (
     <Button
-      icon={<FontAwesomeIcon icon={allFolded ? faExpandAlt : faCompressAlt} />}
+      icon={allFolded ? <VscFold /> : <VscFold />}
       title={`${allFolded ? "Expand" : "Fold"} all setting groups`}
       small={true}
       minimal={true}
@@ -181,7 +176,7 @@ const SettingFiltersButton = view(() => {
   return (
     <Button
       className="SettingFiltersButton"
-      icon={<FontAwesomeIcon icon={faFilter} />}
+      icon={<VscFilter />}
       small={true}
       minimal={true}
       active={settingsStateStore.showFilters}
@@ -222,7 +217,7 @@ export const SettingsTools = () => {
     <div className="SettingsTools">
       <div className="SettingsToolsButtons">
         <Button
-          icon={<FontAwesomeIcon icon={faUndoAlt} />}
+          icon={<VscDiscard />}
           title="Reset all settings to defaults"
           small={true}
           minimal={true}

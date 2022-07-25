@@ -12,8 +12,8 @@ import { TextArea } from "@blueprintjs/core";
 import { ButtonLink } from "@carrotsearch/ui/ButtonLink.js";
 import { DescriptionPopover } from "@carrotsearch/ui/DescriptionPopover.js";
 import { CopyToClipboard } from "@carrotsearch/ui/CopyToClipboard.js";
-import { faBracketsCurly } from "@fortawesome/pro-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { VscJson } from "react-icons/vsc";
 
 const PlainTextExclusionEditor = view(({ setting, get, set, type }) => {
   const findEntry = () => {
@@ -93,7 +93,7 @@ const createExclusionView = (
                 small: true,
                 minimal: true,
                 title: "Copy dictionaries JSON",
-                icon: <FontAwesomeIcon icon={faBracketsCurly} />
+                icon: <VscJson />
               }}
             />
           );

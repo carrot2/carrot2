@@ -4,8 +4,7 @@ import "./StartScreen.css";
 
 import { NavLink, Redirect } from "react-router-dom";
 
-import { faFlask } from "@fortawesome/pro-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { VscBeaker } from "react-icons/vsc";
 
 import { sources } from "../../../sources.js";
 import { clusterViews } from "../../../views.js";
@@ -48,7 +47,7 @@ export const StartScreen = ({ match, history }) => {
       <div className="WorkbenchHint">
         New! Try{" "}
         <NavLink to={routes.workbench.path}>
-          <FontAwesomeIcon icon={faFlask} /> Clustering Workbench
+          <VscBeaker /> Clustering Workbench
         </NavLink>{" "}
         to process data from local files, Solr, Elasticsearch.
       </div>

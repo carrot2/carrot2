@@ -80,7 +80,8 @@ const parsers = {
   },
 
   "application/vnd.oasis.opendocument.spreadsheet": parseSheet,
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": parseSheet,
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+    parseSheet,
   "application/vnd.ms-excel": parseSheet
 };
 

@@ -11,8 +11,8 @@ import { persistentStore } from "@carrotsearch/ui/store/persistent-store.js";
 import { StoreCheckbox } from "@carrotsearch/ui/form/StoreCheckbox.js";
 import { ToolPopover } from "@carrotsearch/ui/ToolPopover.js";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileExcel } from "@fortawesome/pro-regular-svg-icons";
+import { VscSave } from "react-icons/vsc";
+
 import { buildFileName, clusterStore } from "../../../store/services.js";
 import { branding } from "@carrot2/config/branding.js";
 
@@ -213,7 +213,7 @@ export const ExportResults = () => {
         small={true}
         text="Export"
         open={true}
-        icon={<FontAwesomeIcon icon={faFileExcel} />}
+        icon={<VscSave />}
       />
       <ExportBody />
     </ToolPopover>
