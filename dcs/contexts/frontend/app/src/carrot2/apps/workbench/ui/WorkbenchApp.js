@@ -4,7 +4,7 @@ import "./WorkbenchApp.css";
 
 import { view } from "@risingstack/react-easy-state";
 
-import { faLightbulbOn } from "@fortawesome/pro-regular-svg-icons";
+import { VscRocket } from "react-icons/vsc";
 
 import { humanizeDuration } from "@carrotsearch/ui/lang/humanize.js";
 import { Stats } from "@carrotsearch/ui/Stats.js";
@@ -62,7 +62,7 @@ export const ClusterButton = view(() => {
           ? "primary"
           : "none"
       }
-      icon={faLightbulbOn}
+      icon={<VscRocket />}
       title="Press Ctrl+Enter to perform clustering"
       onClick={runSearch}
       loading={searchResultStore.loading || clusterStore.loading}

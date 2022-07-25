@@ -11,8 +11,9 @@ import { JsonHighlighted } from "@carrotsearch/ui/JsonHighlighted.js";
 import { ToolPopover } from "@carrotsearch/ui/ToolPopover.js";
 
 import { Button, Position } from "@blueprintjs/core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBracketsCurly } from "@fortawesome/pro-regular-svg-icons";
+
+import { VscJson } from "react-icons/vsc";
+
 import { buildRequestJson } from "../../../store/services.js";
 
 const config = persistentStore("workbench:parameterExport:config", {
@@ -45,7 +46,7 @@ export const ExportParameters = () => {
       popoverClassName="ExportParameters"
     >
       <Button
-        icon={<FontAwesomeIcon icon={faBracketsCurly} />}
+        icon={<VscJson />}
         title="Clustering parameters as JSON"
         small={true}
         minimal={true}

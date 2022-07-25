@@ -3,9 +3,9 @@ import * as PropTypes from "prop-types";
 
 import "./SearchForm.css";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faWrench } from "@fortawesome/free-solid-svg-icons";
 import { ToolPopover } from "@carrotsearch/ui/ToolPopover.js";
+
+import { VscTools, VscSearch } from "react-icons/vsc";
 
 import {
   Button,
@@ -80,7 +80,7 @@ export const SearchForm = ({
         popoverClassName="SearchAppSettingsContainer"
       >
         <Button
-          icon={<FontAwesomeIcon icon={faWrench} />}
+          icon={<VscTools />}
           minimal={true}
           title="Clustering algorithm"
         />
@@ -102,7 +102,7 @@ export const SearchForm = ({
           />
           <Button
             className={Classes.FIXED}
-            icon={<FontAwesomeIcon icon={faSearch} />}
+            icon={<VscSearch />}
             type="submit"
             text="Search"
           />

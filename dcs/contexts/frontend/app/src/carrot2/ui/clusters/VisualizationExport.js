@@ -3,8 +3,8 @@ import React from "react";
 import { saveAs } from "file-saver";
 
 import { Button } from "@blueprintjs/core";
-import { faSave } from "@fortawesome/pro-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { VscSave } from "react-icons/vsc";
 
 import { buildFileName } from "../../store/services.js";
 
@@ -60,7 +60,7 @@ const save = (impl, fileNameSuffix, type) => {
 export const VisualizationExport = props => {
   return (
     <Button
-      icon={<FontAwesomeIcon icon={faSave} />}
+      icon={<VscSave />}
       minimal={true}
       onClick={e =>
         save(
