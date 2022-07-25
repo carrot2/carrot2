@@ -14,8 +14,9 @@ import { GenericSearchEngineErrorMessage } from "../../apps/search-app/ui/ErrorM
 
 const resultConfigStore = createResultConfigStore("localFile");
 
-const { schemaInfoStore, resultHolder } =
-  createSchemaExtractorStores("localFile");
+const { schemaInfoStore, resultHolder } = createSchemaExtractorStores(
+  "localFile"
+);
 
 const LocalFileFormatInfo = () => {
   const jsonString =

@@ -154,8 +154,7 @@ const AdvancedSettingsButton = view(() => {
       minimal={true}
       active={settingsStateStore.showAdvancedSettings}
       onClick={() =>
-        (settingsStateStore.showAdvancedSettings =
-          !settingsStateStore.showAdvancedSettings)
+        (settingsStateStore.showAdvancedSettings = !settingsStateStore.showAdvancedSettings)
       }
     />
   );
