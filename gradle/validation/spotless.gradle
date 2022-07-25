@@ -30,37 +30,45 @@ allprojects { prj ->
   }
 }
 
-// Verify if npm is available. We can't reuse local npm:
-// https://github.com/diffplug/spotless/issues/728
-def os = org.gradle.internal.os.OperatingSystem.current()
-def nodePath = os.findInPath("node")
-def enableSpotlessJs = project.hasProperty("enableSpotlessJs") ? Boolean.valueOf(project.property("enableSpotlessJs") as String) : nodePath != null
-
+// Don't use spotlessjs because it's terribly slow. Run prettier via npm.
 configure(project(":dcs:contexts:frontend")) { prj ->
-  prj.apply plugin: 'com.diffplug.spotless'
+  prj.apply plugin: 'com.github.node-gradle.node'
 
-  if (enableSpotlessJs) {
-    spotless {
-      format 'js', {
-        target "app/src/**", "ui/**", "theme/**"
+  task prettierCheck(type: YarnTask) {
+    group 'verification'
+    description 'Runs npm prettier check'
 
-        targetExclude "**/*.svg",
-          "**/*.html",
-          "**/LICENSE",
-          "**/README*",
-          "**/package.json",
-          "**/descriptors/**",
-          "**/node_modules/**"
-
-        prettier('2.2.1').configFile('.prettierrc.json')
-
-        lineEndings 'UNIX'
-        endWithNewline()
-      }
-    }
-  } else {
-    logger.warn("Spotless is skipping javascript checks (npm not found in path).")
+    args = ['prettier-check']
   }
+
+  task prettierApply(type: YarnTask) {
+    group 'verification'
+    description 'Runs npm prettier'
+
+    args = ['prettier']
+  }
+
+  // Configure common stuff.
+  configure([prettierCheck, prettierApply]) { task ->
+    dependsOn "yarnInstall"
+
+    File tsOutput = file("${buildDir}/prettier/${task.name}.txt")
+
+    inputs.files(fileTree(dir: ".",
+        // narrow down the list so that node_modules isn't scanned.
+        includes: [ "app/**", "theme/**", "ui/**" ],
+        // Apply the same exclusions as in .prettierignore.
+        excludes: file(".prettierignore").readLines("UTF-8").findAll { !it.isBlank() } ))
+    outputs.file(tsOutput)
+
+    doLast {
+      tsOutput.setText("Dummy output for incremental mode.", "UTF-8")
+    }
+  }
+
+  // Attach to convention tasks.
+  tasks.check.dependsOn prettierCheck
+  tasks.tidy.dependsOn prettierApply
 }
 
 configure(project(":gradle")) { prj ->

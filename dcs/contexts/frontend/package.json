@@ -37,6 +37,7 @@
     "build": "yarn workspace app build",
     "test": "yarn workspace app test",
     "prettier": "prettier -w app/src/ ui/ theme/",
+    "prettier-check": "prettier --check app/src/ ui/ theme/",
     "audit": "yarn npm audit --recursive --all",
     "audit-resolutions": "./etc/audit-to-resolutions.sh"
   },

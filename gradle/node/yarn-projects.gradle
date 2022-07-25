@@ -145,11 +145,15 @@ afterEvaluate {
 
   List<Task> taskOrder = []
   taskOrder += projectList.collectMany { subproject ->
-    [subproject.path + ":yarnInstall", subproject.path + ":yarnBuild"]
+    [ subproject.path + ":yarnInstall",
+      subproject.path + ":yarnBuild"
+    ]
   }.collect { tasks.findByPath(it as String) }
-  taskOrder << yarnOrdering
+  taskOrder += [ tasks.findByPath(":dcs:contexts:frontend:prettierApply"),
+                 tasks.findByPath(":dcs:contexts:frontend:prettierCheck") ]
+  taskOrder += yarnOrdering
 
-  List<Task> sequence = []
+  List<?> sequence = []
   taskOrder.each { task ->
     task.mustRunAfter(sequence)
     sequence += task
