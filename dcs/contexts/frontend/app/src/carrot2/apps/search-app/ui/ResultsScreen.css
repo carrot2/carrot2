@@ -13,7 +13,7 @@
 
 .ResultsScreen,
 .ViewsTabs {
-  background-color: var(--background-color-secondary);
+  background-color: var(--background-color-tertiary);
 }
 
 .ResultsScreen .docs .ViewsTabs,
