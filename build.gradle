@@ -17,7 +17,7 @@ repositories {
   mavenCentral()
 }
 
-rootProject.version = '4.4.3-SNAPSHOT'
+rootProject.version = '4.4.3'
 ext {
   fullName = "Carrot2"
 
