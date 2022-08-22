@@ -13,7 +13,7 @@ commit changes.
 
 git commit -am "Bumping version."
 
-* Build and check the entire distribution.
+* Build and check the entire distribution. Or wait for the GH action(s) to pass
 
 gradlew clean assemble check
 
@@ -30,6 +30,10 @@ mkdir build/carrot2.github.io/release/$VERSION/
 cp -R distribution/build/dist/dcs/web/doc     build/carrot2.github.io/release/$VERSION/
 cp -R distribution/build/dist/dcs/web/javadoc build/carrot2.github.io/release/$VERSION/
 cd build/carrot2.github.io/
+
+* update the 'latest' link in:
+vi release/latest/index.html
+
 git add -A .
 git commit -am "Documentation for version $VERSION"
 git push
@@ -67,4 +71,4 @@ https://s01.oss.sonatype.org/index.html#stagingRepositories
   - Wikipedia page. https://en.wikipedia.org/wiki/Carrot2
 
 * Consider upgrading &C2; in dependent projects
-
+ 
