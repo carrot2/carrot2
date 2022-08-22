@@ -33,7 +33,6 @@ import org.eclipse.jetty.server.handler.ShutdownHandler;
 import org.eclipse.jetty.server.handler.gzip.GzipHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
-import org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -122,7 +121,7 @@ public class JettyContainer {
     }
 
     server.addLifeCycleListener(
-        new AbstractLifeCycleListener() {
+        new LifeCycle.Listener() {
           @Override
           public void lifeCycleStarted(LifeCycle event) {
             CONSOLE.info(
