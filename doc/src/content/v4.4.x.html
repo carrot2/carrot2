@@ -17,7 +17,65 @@
     </ul>
   </section>
   -->
-  
+
+  <section id="v4.4.3">
+    <h2>Version 4.4.3</h2>
+    <time datetime="2022-08-22"></time>
+
+    <p>
+      This is a bugfix release updating third
+      party dependencies and fixing a results-consistency
+      bug in STC.
+    </p>
+
+    <dl>
+      <dt>STC output not stable</dt>
+      <dd>
+        <p>
+          STC clustering could emit different labels for the same input.
+        </p>
+
+        <label class="bug"></label>
+        <a href="https://github.com/carrot2/carrot2/issues/149">#149</a>
+      </dd>
+
+      <dt>NPE when clustering in Brazilian</dt>
+      <dd>
+        <p>
+          Clustering in Brazilian could result in an NPE when the returned
+          stem was <code>null</code>.
+        </p>
+
+        <label class="bug"></label>
+        <a href="https://github.com/carrot2/carrot2/issues/152">#152</a>
+      </dd>
+
+      <dt>Dependency upgrades</dt>
+      <dd>
+        <p>
+          Upgraded library dependencies: carrotsearch-console to 1.0.8, HPPC to 0.9.1,
+          Jackson to 2.13.3, Morfologik to 2.1.9 and Jetty to 9.4.48.v20220622.
+        </p>
+
+        <a href="https://github.com/carrot2/carrot2/issues/158">#158</a>
+      </dd>
+
+      <dt>Infrastructure improvements</dt>
+      <dd>
+        <p>
+          Run prettier via npm (build speedup), render the documentation with free fonts,
+          enable nightly tests on github, upgrade gradle and build plugins.
+        </p>
+
+        <label class="infrastructure"></label>
+        <a href="https://github.com/carrot2/carrot2/issues/156">#156</a>
+        <a href="https://github.com/carrot2/carrot2/issues/154">#154</a>
+        <a href="https://github.com/carrot2/carrot2/issues/148">#148</a>
+        <a href="https://github.com/carrot2/carrot2/issues/150">#150</a>
+      </dd>
+    </dl>
+  </section>
+
   <section id="v4.4.2">
     <h2>Version 4.4.2</h2>
     <time datetime="2022-01-10"></time>
