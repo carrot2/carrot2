@@ -71,9 +71,13 @@ public class KMeansMatrixFactorization extends IterativeMatrixFactorizationBase 
         }
 
         // Divide
-        U.viewColumn(c).assign(Mult.div(count));
-        MatrixUtils.normalizeColumnL2(U, null);
+        if (count > 0) {
+          U.viewColumn(c).assign(Mult.div(count));
+        } else {
+          U.viewColumn(c).assign(0);
+        }
       }
+      MatrixUtils.normalizeColumnL2(U, null);
     }
   }
 
