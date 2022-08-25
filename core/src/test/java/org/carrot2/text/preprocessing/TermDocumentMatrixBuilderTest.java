@@ -200,6 +200,7 @@ public class TermDocumentMatrixBuilderTest extends TermDocumentMatrixBuilderTest
       expectedStemToRowIndex.put(expectedTdMatrixStemIndices[i], i);
     }
 
-    Assertions.assertThat((Object) vsmContext.stemToRowIndex).isEqualTo(expectedStemToRowIndex);
+    Assertions.assertThat((Object) new IntIntHashMap(vsmContext.stemToRowIndex))
+        .isEqualTo(expectedStemToRowIndex);
   }
 }

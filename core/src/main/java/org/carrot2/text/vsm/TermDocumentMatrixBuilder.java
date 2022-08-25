@@ -178,7 +178,7 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
     }
 
     // Convert stemsToInclude into tdMatrixStemIndices
-    final IntIntHashMap stemToRowIndex = new IntIntHashMap();
+    final IntIntHashMap stemToRowIndex = contantOrderIntIntHashMap(0xdeadbeef);
     for (int i = 0; i < stemWeightOrder.length && i < tdMatrix.rows(); i++) {
       stemToRowIndex.put(stemsToInclude[stemWeightOrder[i]], i);
     }
@@ -186,6 +186,14 @@ public class TermDocumentMatrixBuilder extends AttrComposite {
     // Store the results
     vsmContext.termDocumentMatrix = tdMatrix;
     vsmContext.stemToRowIndex = stemToRowIndex;
+  }
+
+  public static final IntIntHashMap contantOrderIntIntHashMap(int seed) {
+    return new IntIntHashMap() {
+      {
+        super.iterationSeed = seed;
+      }
+    };
   }
 
   /**
