@@ -13,8 +13,6 @@ package org.carrot2.clustering.lingo;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
-
-import com.carrotsearch.randomizedtesting.annotations.Repeat;
 import org.assertj.core.api.Assertions;
 import org.carrot2.AwaitsFix;
 import org.carrot2.attrs.AliasMapper;
@@ -66,7 +64,7 @@ public class LingoClusteringAlgorithmTest
   }
 
   // https://github.com/carrot2/carrot2/issues/159
-  @Test @Repeat(iterations = 100)
+  @Test
   public void testKMeansMatrixFactorizationFactoryBug() {
     LingoClusteringAlgorithm algorithm = algorithm();
     algorithm.preprocessing.documentAssigner.minClusterSize.set(5);
@@ -130,7 +128,7 @@ public class LingoClusteringAlgorithmTest
         algorithm.cluster(documents, CachedLangComponents.loadCached("English"));
 
     Assertions.assertThat(clusterLabels(clusters))
-        .containsOnly("transformation", "insurance industry");
+        .containsOnly("significant", "experience", "insurance industry");
   }
 
   @Test
