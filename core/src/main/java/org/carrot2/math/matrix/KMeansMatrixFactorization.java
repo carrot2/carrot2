@@ -15,6 +15,8 @@ import org.carrot2.math.mahout.function.Mult;
 import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 import org.carrot2.math.mahout.matrix.impl.DenseDoubleMatrix2D;
 
+import java.util.Arrays;
+
 /**
  * Performs matrix factorization using the K-means clustering algorithm. This kind of factorization
  * is sometimes referred to as Concept Decomposition Factorization.
@@ -71,9 +73,13 @@ public class KMeansMatrixFactorization extends IterativeMatrixFactorizationBase 
         }
 
         // Divide
-        U.viewColumn(c).assign(Mult.div(count));
-        MatrixUtils.normalizeColumnL2(U, null);
+        if (count > 0) {
+          U.viewColumn(c).assign(Mult.div(count));
+        } else {
+          U.viewColumn(c).assign(0);
+        }
       }
+      MatrixUtils.normalizeColumnL2(U, null);
     }
   }
 

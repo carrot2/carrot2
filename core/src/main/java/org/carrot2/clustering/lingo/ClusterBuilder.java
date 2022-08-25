@@ -202,6 +202,7 @@ public class ClusterBuilder extends AttrComposite {
     }
 
     // Assign labels to base vectors
+    System.out.println(Arrays.deepToString(stemCos.toArray()));
     labelAssigner.assignLabels(context, stemCos, filteredRowToStemIndex, phraseCos);
   }
 
