@@ -103,6 +103,13 @@
 09:47:32: DCS context initialized [algorithms: [Bisecting K-Means, Lingo, STC], templates: [frontend-default, lingo, stc, bkmeans]]
 09:47:32: Service started on port 8080.
 </pre>
+
+        <p>
+          If you need to increate the
+          default JVM options (for example increase the heap), define the <code>DCS_OPTS</code>
+          environment variable and pass any required Java JVM options there. For example (Linux):
+        </p>
+        <pre data-language="shell">$ export DCS_OPTS=-Xmx2g</pre>
       </li>
 
       <li>
