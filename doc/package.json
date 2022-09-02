@@ -12,8 +12,8 @@
     "test": "html-validate src/content/*.html"
   },
   "dependencies": {
-    "@carrotsearch/gatsby-theme-apidocs": "3.0.10",
-    "gatsby": "3.14.6",
+    "@carrotsearch/gatsby-theme-apidocs": "4.0.2",
+    "gatsby": "4.22.0",
     "react": "17.0.2",
     "react-dom": "17.0.2"
   },
