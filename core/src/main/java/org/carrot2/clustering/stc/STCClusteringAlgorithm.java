@@ -258,10 +258,14 @@ public final class STCClusteringAlgorithm extends AttrComposite implements Clust
     /** If <code>false</code> the phrase should not be selected (various criteria). */
     boolean selected = true;
 
-    /** @see STCClusteringAlgorithm#markSubSuperPhrases(ArrayList) */
+    /**
+     * @see STCClusteringAlgorithm#markSubSuperPhrases(ArrayList)
+     */
     boolean mostGeneral = true;
 
-    /** @see STCClusteringAlgorithm#markSubSuperPhrases(ArrayList) */
+    /**
+     * @see STCClusteringAlgorithm#markSubSuperPhrases(ArrayList)
+     */
     boolean mostSpecific = true;
 
     PhraseCandidate(ClusterCandidate c, float coverage) {

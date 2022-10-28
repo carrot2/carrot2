@@ -338,12 +338,16 @@ public final class SuffixTree {
     return ((long) i1) << 32 | (i2 & 0xffffffffL);
   }
 
-  /** @return Return the number of transitions (edges) in the tree. */
+  /**
+   * @return Return the number of transitions (edges) in the tree.
+   */
   public final int getTransitionsCount() {
     return (this.transitions.size() / slots_per_transition) - 1;
   }
 
-  /** @return Return the number of states in the tree. */
+  /**
+   * @return Return the number of states in the tree.
+   */
   public final int getStatesCount() {
     return this.states.size() - 1;
   }

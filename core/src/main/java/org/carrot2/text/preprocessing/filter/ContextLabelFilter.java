@@ -43,7 +43,9 @@ public abstract class ContextLabelFilter extends AttrComposite {
   public abstract void filter(
       PreprocessingContext context, boolean[] acceptedStems, boolean[] acceptedPhrases);
 
-  /** @return {@code true} if the filter is enabled. */
+  /**
+   * @return {@code true} if the filter is enabled.
+   */
   public final boolean isEnabled() {
     return enabled.get();
   }

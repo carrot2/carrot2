@@ -27,7 +27,9 @@ public final class SuffixTreeBuilder {
   /* */
   private SuffixTree.IProgressCallback progressCallback;
 
-  /** @see #from(Sequence) */
+  /**
+   * @see #from(Sequence)
+   */
   private SuffixTreeBuilder(Sequence sequence) {
     this.sequence = sequence;
   }

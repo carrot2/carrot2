@@ -29,7 +29,9 @@ public class Cluster<T> {
   /** This cluster's "score", interpretation left to algorithms. */
   private Double score;
 
-  /** @return Returns a list of labels describing this cluster. */
+  /**
+   * @return Returns a list of labels describing this cluster.
+   */
   public List<String> getLabels() {
     return labels;
   }
