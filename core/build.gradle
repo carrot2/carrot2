@@ -1,4 +1,5 @@
 apply plugin: 'java-library'
+apply plugin: 'com.diffplug.spotless' 
 
 apply from: rootProject.file("gradle/jflex.gradle")
 
