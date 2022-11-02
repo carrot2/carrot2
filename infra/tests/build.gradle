@@ -10,6 +10,6 @@ dependencies {
   api "org.apache.httpcomponents:httpclient"
 
   api "org.apache.logging.log4j:log4j-core"
-  api "org.apache.logging.log4j:log4j-slf4j18-impl"
+  api "org.apache.logging.log4j:log4j-slf4j2-impl"
 }
 

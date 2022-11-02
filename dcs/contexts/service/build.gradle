@@ -25,7 +25,7 @@ dependencies {
   compileOnly "org.slf4j:slf4j-api"
 
   testImplementation "org.mockito:mockito-core"
-  testImplementation "org.apache.logging.log4j:log4j-slf4j18-impl"
+  testImplementation "org.apache.logging.log4j:log4j-slf4j2-impl"
 }
 
 // Exclude slf4j from any dependency, it should be provided as part of the container.
