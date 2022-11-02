@@ -13,13 +13,13 @@ package org.carrot2.language.extras;
 import java.util.Arrays;
 import org.carrot2.language.Stemmer;
 import org.carrot2.util.MutableCharArray;
-import org.tartarus.snowball.SnowballProgram;
+import org.tartarus.snowball.SnowballStemmer;
 
 /** An adapter converting Snowball programs into {@link Stemmer} interface. */
 public final class LuceneSnowballStemmerAdapter implements Stemmer {
-  private final SnowballProgram s;
+  private final SnowballStemmer s;
 
-  public LuceneSnowballStemmerAdapter(SnowballProgram s) {
+  public LuceneSnowballStemmerAdapter(SnowballStemmer s) {
     this.s = s;
   }
 

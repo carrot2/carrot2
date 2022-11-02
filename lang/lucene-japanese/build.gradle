@@ -7,7 +7,7 @@ configurations {
 dependencies {
   implementation project(':core')
   implementation project(':lang:lucene')
-  implementation "org.apache.lucene:lucene-analyzers-kuromoji"
+  implementation "org.apache.lucene:lucene-analysis-kuromoji"
 
   langResources fileTree(dir: 'src/main/resources', includes: langResourcePatterns)
 }

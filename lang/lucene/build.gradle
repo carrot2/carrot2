@@ -6,7 +6,7 @@ configurations {
 
 dependencies {
   implementation project(':core')
-  implementation "org.apache.lucene:lucene-analyzers-common"
+  implementation "org.apache.lucene:lucene-analysis-common"
 
   langResources fileTree(dir: 'src/main/resources', includes: langResourcePatterns)
 }
