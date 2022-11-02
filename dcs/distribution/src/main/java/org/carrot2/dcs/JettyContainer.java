@@ -173,8 +173,8 @@ public class JettyContainer {
     server.setHandler(handlers);
   }
 
-  private LifeCycle.Listener createLifecycleLogger(Server server, ServerConnector connector) {
-    return new AbstractLifeCycle.AbstractLifeCycleListener() {
+  private LifeCycle.Listener createLifecycleLogger(ServerConnector connector) {
+    return new LifeCycle.Listener() {
       @Override
       public void lifeCycleStarted(LifeCycle event) {
         CONSOLE.info("{}{}.", SERVICE_STARTED_ON, connector.getLocalPort());
@@ -233,7 +233,7 @@ public class JettyContainer {
       connector.setIdleTimeout(idleTime);
     }
     server.addConnector(connector);
-    server.addLifeCycleListener(createLifecycleLogger(server, connector));
+    server.addLifeCycleListener(createLifecycleLogger(connector));
     return server;
   }
 }
