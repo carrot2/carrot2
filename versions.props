@@ -1,8 +1,8 @@
-com.carrotsearch.console:*=1.1.1
+com.carrotsearch.console:*=1.1.2
 com.carrotsearch.randomizedtesting:*=2.8.1
 com.carrotsearch:hppc=0.9.1
 com.carrotsearch:procfork=1.0.6
-com.carrotsearch.progresso:*=1.8.1
+com.carrotsearch.progresso:*=1.8.2
 com.fasterxml.jackson.*:jackson-*=2.13.4
 de.jflex:jflex=1.8.2
 javax.servlet:javax.servlet-api=3.1.0
