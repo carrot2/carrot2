@@ -82,7 +82,8 @@ const parsers = {
   "application/vnd.oasis.opendocument.spreadsheet": parseSheet,
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
     parseSheet,
-  "application/vnd.ms-excel": parseSheet
+  "application/vnd.ms-excel": parseSheet,
+  "text/csv": parseSheet
 };
 
 export const parseFile = async (file, logger) => {
