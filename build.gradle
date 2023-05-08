@@ -1,7 +1,7 @@
 plugins {
   id 'base'
 
-  id "com.github.node-gradle.node" version "3.3.0" apply false
+  id "com.github.node-gradle.node" version "3.5.0" apply false
   id "com.palantir.consistent-versions" version '2.11.0'
 
   id 'com.diffplug.spotless' version "6.6.0" apply false
