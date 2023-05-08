@@ -1,3 +1,5 @@
+![Github Build Status](https://github.com/carrot2/carrot2/workflows/Gradle%20Check/badge.svg)
+
 Carrot2
 =======
 
@@ -10,9 +12,6 @@ groups like these:
 
 ![Search result titles and snippets and corresponding cluster labels (right).](doc/src/content/images/carrot2-intro-example-light.png "")
 
-![Github Build Status](https://github.com/carrot2/carrot2/workflows/Gradle%20Check/badge.svg)
-
-https://github.com/carrot2/carrot2/workflows/Gradle%20Check/badge.svg
 
 Installation
 ------------
