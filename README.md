@@ -10,8 +10,6 @@ groups like these:
 
 ![Search result titles and snippets and corresponding cluster labels (right).](doc/src/content/images/carrot2-intro-example-light.png "")
 
-
-[![Travis Build Status](https://travis-ci.org/carrot2/carrot2.svg?branch=master)](https://travis-ci.org/carrot2/carrot2)
 ![Github Build Status](https://github.com/carrot2/carrot2/workflows/Gradle%20Check/badge.svg)
 
 https://github.com/carrot2/carrot2/workflows/Gradle%20Check/badge.svg
@@ -29,6 +27,17 @@ ship with a HTTP/JSON REST API service called the DCS
 Integration with document retrieval services is possible
 via [Apache Solr plugin](https://lucene.apache.org/solr/guide/result-clustering.html) 
 and [Elasticsearch plugin](https://github.com/carrot2/elasticsearch-carrot2).
+
+
+Building from Sources
+---------------------
+
+If you need to build the distribution from sources, run:
+```
+./gradlew -p distribution assemble
+```
+The distribution is placed under distribution/build/dist/ and a compressed
+version is available at distribution/build/distZip/
 
 
 Documentation
