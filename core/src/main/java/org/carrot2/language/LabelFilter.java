@@ -1,7 +1,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2022, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2023, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -27,6 +27,7 @@ public interface LabelFilter extends Predicate<CharSequence> {
    * @return Return {@code false} if the label candidate should be ignored in processing.
    */
   boolean test(CharSequence label);
+
   // fragment-end{label-filter}
 
   @Override

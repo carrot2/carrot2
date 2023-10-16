@@ -1,7 +1,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2022, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2023, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -25,10 +25,13 @@ import org.carrot2.util.ObjectUtils;
 public class PreprocessingContextAssert {
   /** missing word constant. */
   public static final String MW = "<MW>";
+
   /** document separator constant. */
   public static final String DS = "<DS>";
+
   /** field separator constant. */
   public static final String FS = "<FS>";
+
   /** end of stream constant. */
   public static final String EOS = "<EOS>";
 

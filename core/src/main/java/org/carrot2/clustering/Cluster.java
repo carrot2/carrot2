@@ -1,7 +1,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2022, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2023, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
@@ -47,6 +47,7 @@ public class Cluster<T> {
   public List<T> getDocuments() {
     return documents;
   }
+
   // fragment-end{get-documents}
 
   /** Add a single document to this cluster. */
@@ -60,6 +61,7 @@ public class Cluster<T> {
   public List<Cluster<T>> getClusters() {
     return clusters;
   }
+
   // fragment-end{get-clusters}
 
   /** Adds a child cluster to this cluster. */
