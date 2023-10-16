@@ -2,7 +2,7 @@ plugins {
   id 'base'
 
   alias(deps.plugins.dependencychecks)
-  alias(deps.plugins.benmanes.versions) apply false
+  alias(deps.plugins.benmanes.versions)
   alias(deps.plugins.forbiddenapis) apply false
   alias(deps.plugins.randomizedtesting.plugin) apply false
   alias(deps.plugins.spotless) apply false
