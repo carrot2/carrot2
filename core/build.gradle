@@ -13,7 +13,7 @@ configurations {
 }
 
 dependencies {
-  api "com.carrotsearch:hppc"
+  api deps.carrotsearch.hppc
   
   langResources fileTree(dir: 'src/main/resources', includes: langResourcePatterns)
 

@@ -2,7 +2,7 @@ apply plugin: 'java-library'
 
 dependencies {
   implementation project(":infra:jsondoclet-model")
-  implementation "org.apache.commons:commons-text"
+  implementation deps.commons.text
 }
 
 forbiddenApisMain {

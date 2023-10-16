@@ -7,8 +7,8 @@ dependencies {
   implementation project(':core')
   testImplementation project(':lang:polish')
   testImplementation project(':lang:lucene')
-  testImplementation "org.apache.lucene:lucene-analysis-icu"
-  testImplementation "junit:junit"
+  testImplementation deps.lucene.analysis.icu
+  testImplementation deps.junit
 }
 
 configurations {
@@ -16,6 +16,8 @@ configurations {
 }
 
 task buildDistribution(type: Sync) {
+  dependsOn configurations.testRuntimeClasspath
+
   def antPrj = new org.apache.tools.ant.Project()
   afterEvaluate {
     replaceTokens.each { k, v -> antPrj.setProperty(k.toString(), v.toString()) }
@@ -24,8 +26,14 @@ task buildDistribution(type: Sync) {
   inputs.properties replaceTokensTrigger
 
   doFirst {
-    antPrj.setProperty("version.lucene-analysis-icu", getVersion("org.apache.lucene:lucene-analysis-icu"))
-    antPrj.setProperty("version.junit", getVersion("junit:junit"))
+    antPrj.setProperty("version.lucene-analysis-icu", getResolvedVersion(
+            configurations.testRuntimeClasspath,
+            deps.lucene.analysis.icu.get()
+    ))
+    antPrj.setProperty("version.junit", getResolvedVersion(
+            configurations.testRuntimeClasspath,
+            deps.junit.get()
+    ))
   }
 
   from(project.projectDir, {

@@ -11,10 +11,10 @@ dependencies {
   distribution project(path: ":distribution", configuration: "distDirArtifact")
   distributionZip project(path: ":distribution", configuration: "distZipArtifact")
 
-  testImplementation "org.apache.commons:commons-compress"
+  testImplementation deps.commons.compress
   testImplementation "org.carrot2.infra:tests"
-  testImplementation "com.carrotsearch:procfork"
-  testImplementation "com.carrotsearch.console:launcher"
+  testImplementation deps.carrotsearch.procfork
+  testImplementation deps.carrotsearch.console.launcher
 }
 
 test {

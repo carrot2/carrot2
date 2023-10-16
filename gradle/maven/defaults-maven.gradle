@@ -83,20 +83,6 @@ configure(subprojects.findAll { it.path in published }) {
       }
 
       def configurePom = {
-        // Remove dependencyManagement section created by a combination of
-        // Palantir and the publishing plugin
-        //
-        // https://github.com/palantir/gradle-consistent-versions/issues/550
-        withXml {
-          def node = asNode()
-          node.dependencyManagement.replaceNode {}
-          node.dependencies.'*'.findAll() {
-            it.groupId.text() == 'org.'
-          }.each() {
-            it.parent().remove(it)
-          }
-        }
-
         name = "Carrot2 (${project.name})"
         description = "Carrot2 Text Clustering Library"
         url = 'https://project.carrot2.org'

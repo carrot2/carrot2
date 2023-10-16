@@ -7,9 +7,9 @@ dependencies {
   implementation project(':core')
   implementation project(':dcs:model')
 
-  implementation "com.fasterxml.jackson.core:jackson-databind"
-  implementation "org.apache.httpcomponents:httpclient"
-  implementation "com.carrotsearch.console:launcher"
+  implementation deps.jackson.databind
+  implementation deps.httpclient
+  implementation deps.carrotsearch.console.launcher
 }
 
 configurations {
@@ -24,10 +24,21 @@ task buildDistribution(type: Sync) {
 
   inputs.properties replaceTokensTrigger
 
+  dependsOn configurations.runtimeClasspath
+
   doFirst {
-    antPrj.setProperty("version.jackson-databind", getVersion("com.fasterxml.jackson.core:jackson-databind"))
-    antPrj.setProperty("version.httpclient", getVersion("org.apache.httpcomponents:httpclient"))
-    antPrj.setProperty("version.launcher", getVersion("com.carrotsearch.console:launcher"))
+    antPrj.setProperty("version.jackson-databind", getResolvedVersion(
+            configurations.runtimeClasspath,
+            deps.jackson.databind.get()
+    ))
+    antPrj.setProperty("version.httpclient", getResolvedVersion(
+            configurations.runtimeClasspath,
+            deps.httpclient.get()
+    ))
+    antPrj.setProperty("version.launcher", getResolvedVersion(
+            configurations.runtimeClasspath,
+            deps.carrotsearch.console.launcher.get()
+    ))
   }
 
   from(project.projectDir, {

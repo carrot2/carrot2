@@ -7,8 +7,8 @@ configurations {
 dependencies {
   implementation project(':core')
   implementation project(':lang:lucene')
-  implementation "org.apache.lucene:lucene-analysis-smartcn"
-  implementation "org.apache.lucene:lucene-analysis-icu"
+  implementation deps.lucene.analysis.smartcn
+  implementation deps.lucene.analysis.icu
 
   langResources fileTree(dir: 'src/main/resources', includes: langResourcePatterns)
 }

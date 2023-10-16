@@ -1,15 +1,12 @@
 plugins {
   id 'base'
 
-  id "com.github.node-gradle.node" version "3.5.0" apply false
-  id "com.palantir.consistent-versions" version '2.11.0'
-
-  id 'com.diffplug.spotless' version "6.6.0" apply false
-  id "com.github.ben-manes.versions" version "0.42.0"
-
-  id 'de.thetaphi.forbiddenapis' version '3.4' apply false
-
-  id 'com.carrotsearch.gradle.randomizedtesting' version '0.0.5' apply false
+  alias(deps.plugins.dependencychecks)
+  alias(deps.plugins.benmanes.versions) apply false
+  alias(deps.plugins.forbiddenapis) apply false
+  alias(deps.plugins.randomizedtesting.plugin) apply false
+  alias(deps.plugins.spotless) apply false
+  alias(deps.plugins.node.gradle) apply false
 }
 
 repositories {
@@ -43,10 +40,21 @@ ext {
       return false
     }
   }.call()
+
+  getResolvedVersion = { Configuration configuration, MinimalExternalModuleDependency dep ->
+    return configuration.resolvedConfiguration.resolvedArtifacts.find {
+      if (it.id.componentIdentifier instanceof ModuleComponentIdentifier) {
+        def other = ((ModuleComponentIdentifier) it.id.componentIdentifier)
+        return other.moduleIdentifier.name == dep.name && other.group == dep.group
+      }
+      return false
+    }.moduleVersion.id.version
+  }
 }
 
 apply from: file('gradle/validation/check-environment.gradle')
 
+apply from: file('gradle/dependencies.gradle')
 apply from: file('gradle/defaults.gradle')
 apply from: file('gradle/cleanall.gradle')
 apply from: file('gradle/gitinfo.gradle')

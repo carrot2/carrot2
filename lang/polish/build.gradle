@@ -6,7 +6,7 @@ configurations {
 
 dependencies {
   implementation project(':core')
-  implementation "org.carrot2:morfologik-polish"
+  implementation deps.morfologik.polish
 
   langResources fileTree(dir: 'src/main/resources', includes: langResourcePatterns)
 }

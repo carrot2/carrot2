@@ -2,5 +2,5 @@ apply plugin: 'java-library'
 
 dependencies {
   api project(":core")
-  api "com.fasterxml.jackson.core:jackson-databind"
+  api deps.jackson.databind
 }

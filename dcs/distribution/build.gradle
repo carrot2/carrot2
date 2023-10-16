@@ -24,10 +24,10 @@ dependencies {
 
   examples     project(path: ":dcs:examples", configuration: "distribution")
 
-  implementation "com.carrotsearch.console:launcher"
-  implementation "com.carrotsearch.progresso:progresso-jvmversion"
-  implementation "org.eclipse.jetty:jetty-server"
-  implementation "org.eclipse.jetty:jetty-webapp"
+  implementation deps.carrotsearch.console.launcher
+  implementation deps.carrotsearch.progresso.jvmversion
+  implementation deps.jetty.server
+  implementation deps.jetty.webapp
 }
 
 ext {
@@ -55,13 +55,15 @@ task collectDependencies(type: Sync) {
 }
 
 task collectScripts(type: Sync) {
+  dependsOn configurations.runtimeClasspath
   def antPrj = new org.apache.tools.ant.Project()
   afterEvaluate {
     replaceTokens.each { k, v -> antPrj.setProperty(k.toString(), v.toString()) }
   }
 
   doFirst {
-    antPrj.setProperty("jvmversion.version", getVersion("com.carrotsearch.progresso:progresso-jvmversion"))
+    def foo = deps.carrotsearch.progresso.jvmversion
+    antPrj.setProperty("jvmversion.version", getResolvedVersion(configurations.runtimeClasspath, deps.carrotsearch.progresso.jvmversion.get()))
   }
 
   inputs.properties replaceTokensTrigger

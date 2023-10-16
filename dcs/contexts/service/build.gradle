@@ -10,7 +10,7 @@ configurations {
 }
 
 dependencies {
-  implementation "com.fasterxml.jackson.core:jackson-databind"
+  implementation deps.jackson.databind
   implementation(project(':dcs:model'))
 
   [
@@ -22,10 +22,10 @@ dependencies {
     langResources project(path: prj, configuration: 'langResources')
   }
 
-  compileOnly "org.slf4j:slf4j-api"
+  compileOnly deps.slf4j.api
 
-  testImplementation "org.mockito:mockito-core"
-  testImplementation "org.apache.logging.log4j:log4j-slf4j2-impl"
+  testImplementation deps.mockito.core
+  testImplementation deps.log4j.slf4j2
 }
 
 // Exclude slf4j from any dependency, it should be provided as part of the container.
