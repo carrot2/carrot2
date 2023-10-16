@@ -20,7 +20,7 @@ allprojects { prj ->
 
     spotless {
       java {
-        googleJavaFormat('1.15.0')
+        googleJavaFormat('1.18.1')
 
         licenseHeaderFile licenseHeader
         lineEndings 'UNIX'
