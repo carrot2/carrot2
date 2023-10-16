@@ -5,7 +5,7 @@ import org.gradle.util.GradleVersion
 
 configure(rootProject) {
   ext {
-    expectedGradleVersion = '7.6.3'
+    expectedGradleVersion = '8.4'
     expectedJavaVersion = JavaVersion.VERSION_11
   }
 

@@ -120,7 +120,7 @@ configure(subprojects.findAll { it.path in published }) {
         jars(MavenPublication) {
           from components.java
           group = project.group
-          artifactId = project.archivesBaseName
+          artifactId = project.base.archivesName.get()
 
           suppressPomMetadataWarningsFor('sourcesElements')
 
@@ -130,7 +130,7 @@ configure(subprojects.findAll { it.path in published }) {
         maven(MavenPublication) {
           from components.java
           group = project.group
-          artifactId = project.archivesBaseName
+          artifactId = project.base.archivesName.get()
 
           suppressPomMetadataWarningsFor('sourcesElements')
 

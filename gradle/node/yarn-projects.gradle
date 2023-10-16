@@ -12,7 +12,7 @@ def projectList = [
 // Now apply the same configuration to all projects.
 configure(projectList) {
   apply plugin: 'base'
-  apply plugin: 'com.github.node-gradle.node'
+  apply plugin: deps.plugins.node.gradle.get().pluginId
 
   ext {
     yarnEnv = [
@@ -23,7 +23,8 @@ configure(projectList) {
   }
 
   configurations {
-    it.default.extendsFrom archives
+    yarnOutput {
+    }
   }
 
   // Change the default build directory for gradle so that
@@ -115,7 +116,7 @@ configure(projectList) {
   }
 
   artifacts {
-    archives provider { jsBuildDir }, {
+    yarnOutput provider { jsBuildDir }, {
       if (project.hasProperty("fast")) {
         builtBy fastBuild
       } else {
@@ -124,7 +125,7 @@ configure(projectList) {
     }
   }
 
-  assemble.dependsOn configurations.archives
+  assemble.dependsOn configurations.yarnOutput
 
   clean {
     doLast {

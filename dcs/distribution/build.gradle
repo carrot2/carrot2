@@ -19,8 +19,8 @@ dependencies {
   ctxService   project(path: ":dcs:contexts:service", configuration: 'war')
   ctxRoot      project(path: ":dcs:contexts:root", configuration: 'war')
   ctxJavadoc   project(path: ":dcs:contexts:javadoc", configuration: 'war')
-  ctxFrontend  project(path: ":dcs:contexts:frontend", configuration: 'archives')
-  ctxDoc       project(path: ":doc", configuration: 'archives')
+  ctxFrontend  project(path: ":dcs:contexts:frontend", configuration: 'yarnOutput')
+  ctxDoc       project(path: ":doc", configuration: 'yarnOutput')
 
   examples     project(path: ":dcs:examples", configuration: "distribution")
 
@@ -161,11 +161,11 @@ task distZip(type: Zip) {
 
   from(distDir, {
     filesMatching("**/dcs", {
-      fileMode 0755
+      setMode(0755)
     })
   })
 
-  into "${archivesBaseName}/"
+  into "${base.archivesName}/"
 }
 
 assemble.dependsOn distDir

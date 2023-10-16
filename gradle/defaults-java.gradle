@@ -1,9 +1,11 @@
 allprojects {
   plugins.withType(JavaPlugin) {
-    sourceCompatibility = 11
-    targetCompatibility = 11
+    java {
+      sourceCompatibility = 11
+      targetCompatibility = 11
+    }
 
-    archivesBaseName = "carrot2" + project.path.replace(':', '-')
+    base.archivesName = "carrot2" + project.path.replace(':', '-')
 
     tasks.withType(JavaCompile) {
       options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
