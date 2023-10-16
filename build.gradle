@@ -18,11 +18,6 @@ rootProject.version = '4.5.2-SNAPSHOT'
 ext {
   fullName = "Carrot2"
 
-  versions = [
-    node: '16.13.0',
-    yarn: '1.22.15',
-  ]
-
   licenseHeader = file("etc/spotless/license-header.txt")
   legal = files('carrot2.LICENSE')
 
@@ -102,8 +97,7 @@ allprojects { prj ->
     }
 
     dependencies {
-      // A bug (?) in palantir prevents versionless dependency here.
-      providedCompile "javax.servlet:javax.servlet-api:3.1.0"
+      providedCompile deps.servlet.api
     }
   }
 }

@@ -32,8 +32,8 @@ configure(projectList) {
 
   // Configure node and yarn versions.
   node {
-    version = "${rootProject.versions.node}"
-    yarnVersion = "${rootProject.versions.yarn}"
+    version = deps.versions.node.get()
+    yarnVersion = deps.versions.yarn.get()
     download = true
   }
 
