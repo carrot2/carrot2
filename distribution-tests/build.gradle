@@ -11,8 +11,8 @@ dependencies {
   distribution project(path: ":distribution", configuration: "distDirArtifact")
   distributionZip project(path: ":distribution", configuration: "distZipArtifact")
 
+  testImplementation project(path: ":infra:tests")
   testImplementation deps.commons.compress
-  testImplementation "org.carrot2.infra:tests"
   testImplementation deps.carrotsearch.procfork
   testImplementation deps.carrotsearch.console.launcher
 }
