@@ -78,7 +78,7 @@ configure(project(":gradle")) { prj ->
   spotless {
     groovy {
       excludeJava()
-      greclipse()
+      greclipse("4.27")
 
       licenseHeaderFile licenseHeader
       lineEndings 'UNIX'
