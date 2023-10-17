@@ -165,7 +165,7 @@ task distZip(type: Zip) {
     })
   })
 
-  into "${base.archivesName}/"
+  into "${base.archivesName.get()}/"
 }
 
 assemble.dependsOn distDir
