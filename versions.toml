@@ -1,4 +1,6 @@
 [versions]
+carrot2 = "4.5.2-SNAPSHOT"
+
 node = "16.13.0"
 yarn = "1.22.15"
 
