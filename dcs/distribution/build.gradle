@@ -63,7 +63,7 @@ task collectScripts(type: Sync) {
 
   doFirst {
     def foo = deps.carrotsearch.progresso.jvmversion
-    antPrj.setProperty("jvmversion.version", getResolvedVersion(configurations.runtimeClasspath, deps.carrotsearch.progresso.jvmversion.get()))
+    antPrj.setProperty("jvmversion.version", getResolvedVersion(deps.carrotsearch.progresso.jvmversion.get(), configurations.runtimeClasspath))
   }
 
   inputs.properties replaceTokensTrigger

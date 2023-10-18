@@ -50,7 +50,7 @@ slf4j-api = { module = "org.slf4j:slf4j-api", version.strictly = "2.0.7" }
 benmanes-versions = "com.github.ben-manes.versions:0.49.0"
 carrotsearch-opts = "com.carrotsearch.gradle.opts:0.0.6"
 com-intershop-gradle-javacc = "com.intershop.gradle.javacc:4.0.0"
-dependencychecks = "com.carrotsearch.gradle.dependencychecks:0.0.4"
+dependencychecks = "com.carrotsearch.gradle.dependencychecks:0.0.5"
 forbiddenapis = "de.thetaphi.forbiddenapis:3.6"
 javacc = "com.intershop.gradle.javacc:4.0.3"
 node-gradle = "com.github.node-gradle.node:7.0.1"

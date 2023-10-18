@@ -35,16 +35,6 @@ ext {
       return false
     }
   }.call()
-
-  getResolvedVersion = { Configuration configuration, MinimalExternalModuleDependency dep ->
-    return configuration.resolvedConfiguration.resolvedArtifacts.find {
-      if (it.id.componentIdentifier instanceof ModuleComponentIdentifier) {
-        def other = ((ModuleComponentIdentifier) it.id.componentIdentifier)
-        return other.moduleIdentifier.name == dep.name && other.group == dep.group
-      }
-      return false
-    }.moduleVersion.id.version
-  }
 }
 
 apply from: file('gradle/validation/check-environment.gradle')

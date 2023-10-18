@@ -27,12 +27,12 @@ task buildDistribution(type: Sync) {
 
   doFirst {
     antPrj.setProperty("version.lucene-analysis-icu", getResolvedVersion(
-            configurations.testRuntimeClasspath,
-            deps.lucene.analysis.icu.get()
+            deps.lucene.analysis.icu.get(),
+            configurations.testRuntimeClasspath
     ))
     antPrj.setProperty("version.junit", getResolvedVersion(
-            configurations.testRuntimeClasspath,
-            deps.junit.get()
+            deps.junit.get(),
+            configurations.testRuntimeClasspath
     ))
   }
 

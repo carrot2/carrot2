@@ -28,16 +28,16 @@ task buildDistribution(type: Sync) {
 
   doFirst {
     antPrj.setProperty("version.jackson-databind", getResolvedVersion(
-            configurations.runtimeClasspath,
-            deps.jackson.databind.get()
+            deps.jackson.databind.get(),
+            configurations.runtimeClasspath
     ))
     antPrj.setProperty("version.httpclient", getResolvedVersion(
-            configurations.runtimeClasspath,
-            deps.httpclient.get()
+            deps.httpclient.get(),
+            configurations.runtimeClasspath
     ))
     antPrj.setProperty("version.launcher", getResolvedVersion(
-            configurations.runtimeClasspath,
-            deps.carrotsearch.console.launcher.get()
+            deps.carrotsearch.console.launcher.get(),
+            configurations.runtimeClasspath
     ))
   }
 
