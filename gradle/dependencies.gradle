@@ -41,3 +41,44 @@ allprojects {
     }
   }
 }
+
+// Configure version catalog cleanups.
+configure(rootProject) {
+  apply plugin: deps.plugins.versionCatalogUpdate.get().pluginId
+
+  versionCatalogUpdate {
+    sortByKey = false
+    keep {
+      versions = [
+        "node",
+        "yarn",
+        "carrot2"
+      ]
+    }
+
+    versionCatalogs {
+      deps {
+        catalogFile = file("versions.toml")
+      }
+    }
+  }
+
+  tasks.matching { it.name == "tidy" }.configureEach {
+    it.dependsOn(":versionCatalogFormatDeps")
+  }
+
+  tasks.matching {
+    it.path in [
+      ":versionCatalogUpdateDeps"
+    ]
+  }.configureEach {
+    it.interactive = true
+  }
+
+  tasks.register("updateTomls", {
+    group "Version catalog update"
+    description "Update dependencies (saves update candidates to versions.updates.toml)"
+
+    dependsOn ":versionCatalogUpdateDeps"
+  })
+}
