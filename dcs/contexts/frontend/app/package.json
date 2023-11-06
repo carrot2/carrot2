@@ -39,12 +39,12 @@
     "madge": "5.0.1",
     "prettier": "2.5.0",
     "react-scripts": "4.0.3",
-    "webpack": "4.44.2"
+    "webpack": "4.47.0"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test",
+    "start": "craco --openssl-legacy-provider start",
+    "build": "craco --openssl-legacy-provider build",
+    "test": "craco --openssl-legacy-provider test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
