@@ -11,6 +11,9 @@
     "serve": "gatsby serve",
     "test": "html-validate src/content/*.html"
   },
+  "resolutions": {
+    "@babel/traverse": "7.23.2"
+  },
   "dependencies": {
     "@carrotsearch/gatsby-theme-apidocs": "4.0.2",
     "gatsby": "4.22.0",
