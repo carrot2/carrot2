@@ -1,17 +1,21 @@
 Release steps
 -------------
 
+* Check if the documentation contains version the soon-to-be-published
+  entry and if it's complete.
+
 * Check if all the issues are resolved
 
 https://github.com/carrot2/carrot2/issues
 
-* Bump version number to a non-snapshot version (rootProject.version = "...")
+* Bump version number to a non-snapshot version ([versions] -> carrot2)
 
-vi build.gradle
+vi versions.toml
 
 commit changes.
 
 git commit -am "Bumping version."
+git push
 
 * Build and check the entire distribution. Or wait for the GH action(s) to pass
 
@@ -25,8 +29,12 @@ git push origin release/$VERSION
 
 * Update statically published documentation:
 
-git clone git@github.com:carrot2/carrot2.github.io build/carrot2.github.io
+rm -rf build/carrot2.github.io
+git clone --depth 1 git@github.com:carrot2/carrot2.github.io build/carrot2.github.io
+
+rm -rf build/carrot2.github.io/release/$VERSION/
 mkdir build/carrot2.github.io/release/$VERSION/
+
 cp -R distribution/build/dist/dcs/web/doc     build/carrot2.github.io/release/$VERSION/
 cp -R distribution/build/dist/dcs/web/javadoc build/carrot2.github.io/release/$VERSION/
 cd build/carrot2.github.io/
@@ -71,4 +79,3 @@ https://s01.oss.sonatype.org/index.html#stagingRepositories
   - Wikipedia page. https://en.wikipedia.org/wiki/Carrot2
 
 * Consider upgrading &C2; in dependent projects
- 
