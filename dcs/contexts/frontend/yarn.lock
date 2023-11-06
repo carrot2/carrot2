@@ -3365,7 +3365,7 @@ __metadata:
     classnames: 2.3.1
     eslint-config-react-app: 6.0.0
     fast-stats: 0.0.6
-    fast-xml-parser: 3.21.1
+    fast-xml-parser: 4.2.5
     file-saver: 2.0.5
     filesize: 8.0.6
     glob: 7.2.0
