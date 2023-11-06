@@ -1,7 +1,7 @@
 [versions]
 carrot2 = "4.5.3-SNAPSHOT"
 node = "16.13.0"
-yarn = "1.22.15"
+yarn = "1.22.19"
 carrotsearch-console = "1.1.3"
 jackson = "2.15.3"
 jetty = "9.4.53.v20231009"
