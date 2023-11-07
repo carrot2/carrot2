@@ -11,10 +11,10 @@
 package org.carrot2.dcs.it;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.zip.GZIPInputStream;
-import javax.servlet.http.HttpServletResponse;
 import org.assertj.core.api.Assertions;
 import org.carrot2.HttpRequest;
 import org.carrot2.HttpResponse;

@@ -10,13 +10,13 @@
  */
 package org.carrot2.dcs.servlets;
 
+import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
 import java.util.Objects;
-import javax.servlet.ServletContext;
 import org.carrot2.util.ResourceLookup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

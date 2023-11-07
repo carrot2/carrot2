@@ -12,14 +12,14 @@ package org.carrot2.dcs.servlets;
 
 import static org.mockito.Mockito.when;
 
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.Function;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.carrot2.TestBase;
 import org.junit.After;
 import org.junit.Before;

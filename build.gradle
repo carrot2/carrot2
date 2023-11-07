@@ -88,7 +88,7 @@ allprojects { prj ->
     }
 
     dependencies {
-      providedCompile deps.servlet.api
+      providedCompile deps.jetty.toolchain.servlet.api
     }
   }
 }

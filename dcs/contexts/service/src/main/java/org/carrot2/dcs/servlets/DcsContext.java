@@ -12,6 +12,8 @@ package org.carrot2.dcs.servlets;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,8 +31,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import org.carrot2.clustering.ClusteringAlgorithm;
 import org.carrot2.clustering.ClusteringAlgorithmProvider;
 import org.carrot2.dcs.model.ClusterRequest;

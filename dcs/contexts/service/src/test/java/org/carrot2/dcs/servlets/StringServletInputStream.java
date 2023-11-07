@@ -10,13 +10,13 @@
  */
 package org.carrot2.dcs.servlets;
 
+import jakarta.servlet.ReadListener;
+import jakarta.servlet.ServletInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
-import javax.servlet.ReadListener;
-import javax.servlet.ServletInputStream;
 
 class StringServletInputStream extends ServletInputStream {
   private final InputStream delegate;

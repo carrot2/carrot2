@@ -120,7 +120,7 @@ public class JettyContainer {
       ctxHandlers.add(ctx);
     }
 
-    server.addLifeCycleListener(
+    server.addEventListener(
         new LifeCycle.Listener() {
           @Override
           public void lifeCycleStarted(LifeCycle event) {
@@ -233,7 +233,7 @@ public class JettyContainer {
       connector.setIdleTimeout(idleTime);
     }
     server.addConnector(connector);
-    server.addLifeCycleListener(createLifecycleLogger(connector));
+    server.addEventListener(createLifecycleLogger(connector));
     return server;
   }
 }
