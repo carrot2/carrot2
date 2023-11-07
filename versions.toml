@@ -23,7 +23,7 @@ jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", ver
 jetty-server = { module = "org.eclipse.jetty:jetty-server", version.ref = "jetty" }
 jetty-webapp = { module = "org.eclipse.jetty:jetty-webapp", version.ref = "jetty" }
 jetty-toolchain-servlet-api = "org.eclipse.jetty.toolchain:jetty-jakarta-servlet-api:5.0.2"
-jflex = "de.jflex:jflex:1.8.2"
+jflex = "de.jflex:jflex:1.9.1"
 junit = { module = "junit:junit", version = { strictly = "4.13.2" } }
 log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
 log4j-slf4j2 = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version.ref = "log4j" }
