@@ -17,7 +17,7 @@ carrotsearch-hppc = "com.carrotsearch:hppc:0.9.1"
 carrotsearch-procfork = "com.carrotsearch:procfork:1.0.6"
 carrotsearch-progresso-jvmversion = "com.carrotsearch.progresso:progresso-jvmversion:1.8.2"
 commons-compress = "org.apache.commons:commons-compress:1.24.0"
-commons-text = "org.apache.commons:commons-text:1.10.0"
+commons-text = "org.apache.commons:commons-text:1.11.0"
 httpclient = "org.apache.httpcomponents:httpclient:4.5.14"
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jetty-server = { module = "org.eclipse.jetty:jetty-server", version.ref = "jetty" }
