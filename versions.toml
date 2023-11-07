@@ -35,7 +35,7 @@ lucene-analysis-smartcn = { module = "org.apache.lucene:lucene-analysis-smartcn"
 lucene-queries = { module = "org.apache.lucene:lucene-queries", version.ref = "lucene" }
 lucene-queryparser = { module = "org.apache.lucene:lucene-queryparser", version.ref = "lucene" }
 lucene-testFramework = { module = "org.apache.lucene:lucene-test-framework", version.ref = "lucene" }
-mockito-core = "org.mockito:mockito-core:4.8.1"
+mockito-core = "org.mockito:mockito-core:5.7.0"
 morfologik-polish = "org.carrot2:morfologik-polish:2.1.9"
 randomizedtesting-runner = "com.carrotsearch.randomizedtesting:randomizedtesting-runner:2.8.1"
 slf4j-api = { module = "org.slf4j:slf4j-api", version = { strictly = "2.0.9" } }

@@ -18,8 +18,8 @@
       "commons-codec:commons-codec:1.11" : "8beb2115",
       "commons-logging:commons-logging:1.2" : "8beb2115",
       "junit:junit:4.13.2" : "b3b6b06b",
-      "net.bytebuddy:byte-buddy:1.12.16" : "08b247e6",
-      "net.bytebuddy:byte-buddy-agent:1.12.16" : "08b247e6",
+      "net.bytebuddy:byte-buddy:1.14.9" : "08b247e6",
+      "net.bytebuddy:byte-buddy-agent:1.14.9" : "08b247e6",
       "org.apache.commons:commons-compress:1.24.0" : "cf59ff86",
       "org.apache.commons:commons-lang3:3.13.0" : "3cb719cb",
       "org.apache.commons:commons-text:1.11.0" : "3cb719cb",
@@ -48,8 +48,8 @@
       "org.eclipse.jetty:jetty-webapp:11.0.18" : "7d23fd46",
       "org.eclipse.jetty:jetty-xml:11.0.18" : "7d23fd46",
       "org.hamcrest:hamcrest-core:1.3" : "b3b6b06b",
-      "org.mockito:mockito-core:4.8.1" : "08b247e6",
-      "org.objenesis:objenesis:3.2" : "d2915842",
+      "org.mockito:mockito-core:5.7.0" : "08b247e6",
+      "org.objenesis:objenesis:3.3" : "d2915842",
       "org.slf4j:slf4j-api:2.0.9" : "b1bf56db"
     }
   },
