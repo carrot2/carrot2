@@ -82,3 +82,21 @@ configure(rootProject) {
     dependsOn ":versionCatalogUpdateDeps"
   })
 }
+
+// Configure dependency updates to not accept any odd versions.
+
+def isNonStable = { String version ->
+  def stableKeyword = [
+    'RELEASE',
+    'FINAL',
+    'GA'
+  ].any { it -> version.toUpperCase(Locale.ROOT).contains(it) }
+  def regex = /^[0-9,.v-]+(-r)?$/
+  return !stableKeyword && !(version ==~ regex)
+}
+
+tasks.named("dependencyUpdates").configure {
+  rejectVersionIf {
+    isNonStable(it.candidate.version)
+  }
+}
