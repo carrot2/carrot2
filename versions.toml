@@ -1,5 +1,5 @@
 [versions]
-carrot2 = "4.5.3-SNAPSHOT"
+carrot2 = "4.5.3"
 node = "18.18.2"
 yarn = "1.22.19"
 carrotsearch-console = "1.1.3"
