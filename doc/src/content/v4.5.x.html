@@ -17,6 +17,48 @@
     </ul>
   </section>
   -->
+  <section id="v4.5.3">
+    <h2>Version 4.5.3</h2>
+
+    <time datetime="2023-11-08"></time>
+
+    <p>
+      This release includes an upgrade of jetty
+      and an option to bind to a particular network
+      interface in the DCS.
+    </p>
+
+    <dl>
+      <dt>DCS <code>--host</code> option</dt>
+      <dd>
+        <p>
+          The DCS now accepts <code>--host name</code> option, which
+          can be used to designate the network interface (name or address)
+          to bind to.
+        </p>
+
+        <p>
+          The default value <code>0.0.0.0</code> binds the service to all network interfaces.
+        </p>
+
+        <a href="https://github.com/carrot2/carrot2/issues/212">#212</a>
+      </dd>
+
+      <dt>Dependency upgrades</dt>
+      <dd>
+        <p>
+          Jetty to 11.0.18,
+          commons-text to 1.11.0,
+          slf4j to 2.0.9.
+        </p>
+
+        <a href="https://github.com/carrot2/carrot2/issues/209">#209</a>,
+        <a href="https://github.com/carrot2/carrot2/issues/206">#206</a>,
+        <a href="https://github.com/carrot2/carrot2/issues/205">#205</a>
+      </dd>
+    </dl>
+  </section>
+
   <section id="v4.5.2">
     <h2>Version 4.5.2</h2>
 
@@ -34,7 +76,7 @@
           Most notable dependency upgrades: 
           jackson to 2.15.3,
           lucene to 9.8.0,
-          jetty from to 9.4.53.v20231009.
+          jetty to 9.4.53.v20231009.
         </p>
         
         <p>
