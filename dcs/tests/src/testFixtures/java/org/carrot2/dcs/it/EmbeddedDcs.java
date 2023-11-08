@@ -34,6 +34,7 @@ public class EmbeddedDcs implements DcsService {
     container =
         new JettyContainer(
             0,
+            null,
             config.distributionDir.resolve("web"),
             config.shutdownToken,
             config.maxThreads,
