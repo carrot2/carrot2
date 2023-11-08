@@ -24,7 +24,8 @@ public class JapaneseLanguageComponentsTest extends AbstractLanguageComponentsTe
   public void testTokenization() throws IOException {
     Tokenizer tokenizer = components.get(Tokenizer.class);
 
-    Assertions.assertThat(tokenize(tokenizer, "シニアソフトウェアエンジニア"))
-        .containsExactly("シニア", "ソフトウェア", "エンジニア");
+    Assertions.assertThat(tokenize(tokenizer, "シニアソフトウェアエンジニア")).containsExactly("シニアソフトウェアエンジニア");
+
+    Assertions.assertThat(tokenize(tokenizer, "個人情報の保護等に関する")).containsExactly("個人情報", ".", "保護");
   }
 }
