@@ -18,6 +18,8 @@ import com.carrotsearch.console.launcher.ExitCodes;
 import com.carrotsearch.console.launcher.Launcher;
 import com.carrotsearch.console.launcher.Loggers;
 import com.carrotsearch.console.launcher.ReportCommandException;
+import java.io.IOException;
+import java.net.BindException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -45,6 +47,7 @@ public class DcsLauncher extends Command<ExitCode> {
 
   public static final String OPT_SHUTDOWN_TOKEN = "--shutdown-token";
   public static final String OPT_PORT = "--port";
+  public static final String OPT_HOST = "--host";
   public static final String OPT_HOME = "--home";
   public static final String OPT_MAX_THREADS = "--threads";
   public static final String OPT_USE_GZIP = "--gzip";
@@ -56,6 +59,12 @@ public class DcsLauncher extends Command<ExitCode> {
       names = {"-p", OPT_PORT},
       description = "Port number to bind to.")
   public int port = 8080;
+
+  @Parameter(
+      names = {OPT_HOST},
+      description =
+          "The network interface this connector binds to as an IP address or a hostname (by default binds on all interfaces).")
+  public String host;
 
   @Parameter(
       names = {OPT_HOME},
@@ -130,12 +139,20 @@ public class DcsLauncher extends Command<ExitCode> {
 
       JettyContainer c =
           new JettyContainer(
-              port, home.resolve("web"), shutdownToken, maxThreads, useGzip, idleTime);
-      c.start();
+              port, host, home.resolve("web"), shutdownToken, maxThreads, useGzip, idleTime);
+      try {
+        c.start();
+      } catch (IOException e) {
+        if (e.getCause() instanceof BindException) {
+          Loggers.CONSOLE.error(
+              "The built-in HTTP server could not start on port {}: {}", port, e.getMessage());
+          return ExitCodes.ERROR_INTERNAL;
+        }
+      }
       c.join();
       return ExitCodes.SUCCESS;
     } catch (Exception e) {
-      Loggers.CONSOLE.error("Built-in HTTP server ended with an exception.", e);
+      Loggers.CONSOLE.error("The built-in HTTP server stopped unexpectedly.", e);
       return ExitCodes.ERROR_INTERNAL;
     }
   }

@@ -13,13 +13,9 @@ package org.carrot2.dcs;
 import static com.carrotsearch.console.launcher.Loggers.CONSOLE;
 
 import java.io.IOException;
-import java.net.BindException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -41,6 +37,7 @@ public class JettyContainer {
   public static final String SERVICE_STARTED_ON = "Service started on port ";
 
   private final int port;
+  private final String host;
   private final Path webappContexts;
   private final String shutdownToken;
   private final boolean useGzip;
@@ -52,11 +49,13 @@ public class JettyContainer {
 
   public JettyContainer(
       int port,
+      String host,
       Path contexts,
       String shutdownToken,
       Integer maxThreads,
       boolean useGzip,
       Integer idleTime) {
+    this.host = host;
     this.port = port;
     this.webappContexts = contexts;
     this.shutdownToken = shutdownToken;
@@ -177,7 +176,11 @@ public class JettyContainer {
     return new LifeCycle.Listener() {
       @Override
       public void lifeCycleStarted(LifeCycle event) {
-        CONSOLE.info("{}{}.", SERVICE_STARTED_ON, connector.getLocalPort());
+        CONSOLE.info(
+            "{}{}{}.",
+            SERVICE_STARTED_ON,
+            connector.getLocalPort(),
+            connector.getHost() == null ? "" : " of interface " + connector.getHost());
       }
 
       @Override
@@ -191,12 +194,8 @@ public class JettyContainer {
       }
 
       @Override
-      public void lifeCycleFailure(LifeCycle event, Throwable cause) {
-        if (cause instanceof BindException) {
-          CONSOLE.error("Network port binding error: " + cause.getMessage());
-        } else {
-          CONSOLE.error("Server failed to start.", cause);
-        }
+      public void lifeCycleFailure(LifeCycle event, Throwable ex) {
+        CONSOLE.trace("Server failed to start.", ex);
 
         try {
           JettyContainer.this.stop();
@@ -229,6 +228,7 @@ public class JettyContainer {
     Server server = new Server(threadPool);
     connector = new ServerConnector(server);
     connector.setPort(port);
+    connector.setHost(host);
     if (idleTime != null) {
       connector.setIdleTimeout(idleTime);
     }
