@@ -46,7 +46,6 @@ javadoc {
     overview = file("src/main/java/overview.html")
     linksOffline('https://docs.oracle.com/en/java/javase/11/docs/api/',
       rootProject.file('etc/javadoc/11').toString())
-    footer "(git: ${gitStatus.abbrRev})"
   }
 }
 
