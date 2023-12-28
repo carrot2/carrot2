@@ -10506,14 +10506,14 @@ __metadata:
   linkType: hard
 
 "msgpackr@npm:^1.5.4":
-  version: 1.9.1
-  resolution: "msgpackr@npm:1.9.1"
+  version: 1.10.1
+  resolution: "msgpackr@npm:1.10.1"
   dependencies:
     msgpackr-extract: ^3.0.2
   dependenciesMeta:
     msgpackr-extract:
       optional: true
-  checksum: 514993bfad40e123bbbe0238b7424f4f3945c69b1414b37d126e731a9c2709eb96d3475cdec874836462f53e67f82f615d3dbb5b4860af854969fb9502e9820f
+  checksum: e422d18b01051598b23701eebeb4b9e2c686b9c7826b20f564724837ba2b5cd4af74c91a549eaeaf8186645cc95e8196274a4a19442aa3286ac611b98069c194
   languageName: node
   linkType: hard
 
