@@ -12,7 +12,7 @@ minJava = "11"
 # @keep This is GJF version for spotless/ tidy.
 googleJavaFormat = "1.22.0"
 # @keep spotless formatting of groovy/gradle files
-greclipse = "4.27"
+greclipse = "4.26"
 
 [libraries]
 assertj = { module = "org.assertj:assertj-core", version = { strictly = "3.21.0" } }
