@@ -75,7 +75,7 @@ configure(rootProject) {
     it.interactive = true
   }
 
-  tasks.register("updateTomls", {
+  tasks.register("updateDeps", {
     group "Version catalog update"
     description "Update dependencies (saves update candidates to versions.updates.toml)"
 

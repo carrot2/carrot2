@@ -20,7 +20,7 @@ allprojects { prj ->
 
     spotless {
       java {
-        googleJavaFormat('1.18.1')
+        googleJavaFormat(deps.versions.googleJavaFormat.get())
 
         licenseHeaderFile licenseHeader
         lineEndings 'UNIX'
@@ -78,7 +78,7 @@ configure(project(":gradle")) { prj ->
   spotless {
     groovy {
       excludeJava()
-      greclipse("4.26")
+      greclipse(deps.versions.greclipse.get())
 
       licenseHeaderFile licenseHeader
       lineEndings 'UNIX'
@@ -88,7 +88,7 @@ configure(project(":gradle")) { prj ->
     groovyGradle {
       target '*.gradle', 'gradle/**/*.gradle'
 
-      greclipse("4.26").configFile rootProject.files(
+      greclipse(deps.versions.greclipse.get()).configFile rootProject.files(
           'gradle/validation/spotless/spotless.eclipseformat.xml',
           'gradle/validation/spotless/spotless.groovyformat.prefs')
     }

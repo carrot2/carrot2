@@ -11,3 +11,5 @@ build-gradle/
 .idea/
 *.iml
 /dcs/contexts/frontend/.eslintcache
+
+versions.updates.toml
