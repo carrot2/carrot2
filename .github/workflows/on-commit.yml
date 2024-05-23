@@ -32,21 +32,14 @@ jobs:
           submodules: recursive
 
       - name: Set up JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
-          distribution: 'adopt-hotspot'
+          distribution: 'temurin'
           java-version: ${{ matrix.java }}
           java-package: jdk
 
-      - name: Cache/Restore Gradle files
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/jdks
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('versions.lock', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-caches-
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
 
       - name: Quick checks (gradle check -x test)
         run: ./gradlew --max-workers 4 check -x test
@@ -56,13 +49,13 @@ jobs:
 
       - name: Store failed test outputs
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: failed-test-outputs
           path: '**/OUTPUT-*.txt'
 
       - name: Archive distribution artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: distribution
           path: |
