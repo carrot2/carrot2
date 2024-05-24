@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Configuration xmlns:xi="http://www.w3.org/2001/XInclude" 
-               status="WARN" 
-               packages="org.carrot2.dcs">
+               status="WARN">
 
   <Appenders>
     <xi:include href="appender-console-warn.xml" />

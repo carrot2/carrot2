@@ -28,6 +28,8 @@ dependencies {
   implementation deps.carrotsearch.progresso.jvmversion
   implementation deps.jetty.server
   implementation deps.jetty.webapp
+
+  annotationProcessor deps.log4j.core
 }
 
 ext {

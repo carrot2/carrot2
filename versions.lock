@@ -25,9 +25,9 @@
       "org.apache.commons:commons-text:1.12.0" : "c783940b,refs=4",
       "org.apache.httpcomponents:httpclient:4.5.14" : "fd978ea5,refs=40",
       "org.apache.httpcomponents:httpcore:4.4.16" : "fd978ea5,refs=40",
-      "org.apache.logging.log4j:log4j-api:2.21.1" : "d9e8216f,refs=44",
-      "org.apache.logging.log4j:log4j-core:2.21.1" : "d9e8216f,refs=44",
-      "org.apache.logging.log4j:log4j-slf4j2-impl:2.21.1" : "d9e8216f,refs=44",
+      "org.apache.logging.log4j:log4j-api:2.23.1" : "f3936fda,refs=45",
+      "org.apache.logging.log4j:log4j-core:2.23.1" : "f3936fda,refs=45",
+      "org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1" : "d9e8216f,refs=44",
       "org.apache.lucene:lucene-analysis-common:9.10.0" : "f7d5257c,refs=20",
       "org.apache.lucene:lucene-analysis-icu:9.10.0" : "e3b72610,refs=6",
       "org.apache.lucene:lucene-analysis-kuromoji:9.10.0" : "c0ff0acb,refs=4",
@@ -1380,6 +1380,188 @@
       {
         "configuration" : "testRuntimeClasspath",
         "projectPath" : ":dcs:tests"
+      }
+    ],
+    "f3936fda" : [
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":core"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":core"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":distribution-tests"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":distribution-tests"
+      },
+      {
+        "configuration" : "annotationProcessor",
+        "projectPath" : ":dcs:distribution"
+      },
+      {
+        "configuration" : "compileClasspath",
+        "projectPath" : ":dcs:distribution"
+      },
+      {
+        "configuration" : "runtimeClasspath",
+        "projectPath" : ":dcs:distribution"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":dcs:distribution"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":dcs:distribution"
+      },
+      {
+        "configuration" : "compileClasspath",
+        "projectPath" : ":dcs:examples"
+      },
+      {
+        "configuration" : "runtimeClasspath",
+        "projectPath" : ":dcs:examples"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":dcs:examples"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":dcs:examples"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":dcs:model"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":dcs:model"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":dcs:tests"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":dcs:tests"
+      },
+      {
+        "configuration" : "compileClasspath",
+        "projectPath" : ":infra:docattrs"
+      },
+      {
+        "configuration" : "runtimeClasspath",
+        "projectPath" : ":infra:docattrs"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":infra:docattrs"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":infra:docattrs"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":infra:jsondoclet"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":infra:jsondoclet"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":infra:jsondoclet-model"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":infra:jsondoclet-model"
+      },
+      {
+        "configuration" : "compileClasspath",
+        "projectPath" : ":infra:tests"
+      },
+      {
+        "configuration" : "runtimeClasspath",
+        "projectPath" : ":infra:tests"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":infra:tests"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":infra:tests"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":lang:lucene"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":lang:lucene"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":lang:lucene-chinese"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":lang:lucene-chinese"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":lang:lucene-japanese"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":lang:lucene-japanese"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":lang:lucene-korean"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":lang:lucene-korean"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":lang:polish"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":lang:polish"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":dcs:contexts:javadoc"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":dcs:contexts:javadoc"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":dcs:contexts:root"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":dcs:contexts:root"
+      },
+      {
+        "configuration" : "testCompileClasspath",
+        "projectPath" : ":dcs:contexts:service"
+      },
+      {
+        "configuration" : "testRuntimeClasspath",
+        "projectPath" : ":dcs:contexts:service"
       }
     ],
     "f7d5257c" : [
