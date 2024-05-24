@@ -47,10 +47,11 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: failed-test-outputs
+          name: failed-test-outputs-${{ matrix.os }}
           path: '**/OUTPUT-*.txt'
 
       - name: Archive distribution artifacts
+        if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v4
         with:
           name: distribution
