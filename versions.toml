@@ -2,7 +2,7 @@
 carrot2 = "4.6.0-SNAPSHOT"
 node = "18.18.2"
 yarn = "1.22.19"
-carrotsearch-console = "1.1.3"
+carrotsearch-console = "1.1.4"
 jackson = "2.17.1"
 jetty = "11.0.21"
 log4j = { strictly = "2.23.1" }
