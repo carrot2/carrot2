@@ -58,7 +58,7 @@ Attach release binaries from:
 * Redeploy public DCS demo frontend. Go to the build plan, locate build for 
 this version, create a new deployment and promote to production server.
 
-https://builds.carrotsearch.com/browse/C2-C2DCS
+https://github.com/carrotsearch/infra/actions/workflows/publish-carrot2-dcs-demo.yml
 
 NOTE: the staging environment requires the vps node to be (manually) started at ramnode.
 
