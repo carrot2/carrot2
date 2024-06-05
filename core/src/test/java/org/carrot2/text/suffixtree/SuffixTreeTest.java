@@ -137,8 +137,8 @@ public class SuffixTreeTest extends TestBase {
               if (stree.isLeaf(state)) buffer.append(" [leaf]");
               nodes.add(buffer.toString());
 
-              states.remove(states.size() - 1);
-              states.remove(states.size() - 1);
+              states.removeAt(states.size() - 1);
+              states.removeAt(states.size() - 1);
             }
           }
 

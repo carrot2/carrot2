@@ -8,7 +8,7 @@
       "com.carrotsearch.progresso:progresso-jvmversion:1.8.2" : "6b84f99f,refs=5",
       "com.carrotsearch.progresso:progresso-log4j2:1.8.2" : "3085ce09,refs=16",
       "com.carrotsearch.randomizedtesting:randomizedtesting-runner:2.8.1" : "a3d81b60,refs=38",
-      "com.carrotsearch:hppc:0.9.1" : "00554234,refs=46",
+      "com.carrotsearch:hppc:0.10.0" : "00554234,refs=46",
       "com.carrotsearch:procfork:1.0.6" : "f0b7ec6b,refs=4",
       "com.fasterxml.jackson.core:jackson-annotations:2.17.1" : "16bd81c2,refs=26",
       "com.fasterxml.jackson.core:jackson-core:2.17.1" : "16bd81c2,refs=26",
@@ -18,8 +18,8 @@
       "commons-codec:commons-codec:1.11" : "fd978ea5,refs=40",
       "commons-logging:commons-logging:1.2" : "fd978ea5,refs=40",
       "junit:junit:4.13.2" : "a13feae5,refs=40",
-      "net.bytebuddy:byte-buddy:1.14.9" : "e8a33386,refs=2",
-      "net.bytebuddy:byte-buddy-agent:1.14.9" : "e8a33386,refs=2",
+      "net.bytebuddy:byte-buddy:1.14.15" : "e8a33386,refs=2",
+      "net.bytebuddy:byte-buddy-agent:1.14.15" : "e8a33386,refs=2",
       "org.apache.commons:commons-compress:1.24.0" : "e62c9de6,refs=2",
       "org.apache.commons:commons-lang3:3.14.0" : "c783940b,refs=4",
       "org.apache.commons:commons-text:1.12.0" : "c783940b,refs=4",
@@ -48,7 +48,7 @@
       "org.eclipse.jetty:jetty-webapp:11.0.21" : "b12a6290,refs=6",
       "org.eclipse.jetty:jetty-xml:11.0.21" : "b12a6290,refs=6",
       "org.hamcrest:hamcrest-core:1.3" : "a13feae5,refs=40",
-      "org.mockito:mockito-core:5.7.0" : "e8a33386,refs=2",
+      "org.mockito:mockito-core:5.12.0" : "e8a33386,refs=2",
       "org.objenesis:objenesis:3.3" : "944569a7,refs=1",
       "org.slf4j:slf4j-api:2.0.13" : "bd5c2eb0,refs=45"
     }
