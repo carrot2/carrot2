@@ -38,7 +38,7 @@ jobs:
           java-package: jdk
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Tests (./gradlew ... check)
         run: ./gradlew --max-workers 4 check "-Ptests.slow=true" "-Ptests.nightly=true"
