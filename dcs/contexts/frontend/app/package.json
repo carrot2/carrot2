@@ -39,7 +39,7 @@
     "madge": "5.0.1",
     "prettier": "2.5.0",
     "react-scripts": "4.0.3",
-    "webpack": "4.47.0"
+    "webpack": "5.94.0"
   },
   "scripts": {
     "start": "craco --openssl-legacy-provider start",
