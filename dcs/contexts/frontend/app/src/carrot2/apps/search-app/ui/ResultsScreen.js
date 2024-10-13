@@ -15,9 +15,9 @@ import { sources } from "../../../sources.js";
 
 import { SearchForm } from "./SearchForm.js";
 
-const decodeQueryParam = (p) => {
+const decodeQueryParam = p => {
   return decodeURIComponent(p.replace(/\+/g, " "));
-}
+};
 
 export const ResultsScreen = ({ match, history }) => {
   const source = decodeQueryParam(match.params.source);
