@@ -15,9 +15,13 @@ import { sources } from "../../../sources.js";
 
 import { SearchForm } from "./SearchForm.js";
 
+const decodeQueryParam = (p) => {
+  return decodeURIComponent(p.replace(/\+/g, " "));
+}
+
 export const ResultsScreen = ({ match, history }) => {
-  const source = decodeURIComponent(match.params.source);
-  const query = decodeURIComponent(match.params.query);
+  const source = decodeQueryParam(match.params.source);
+  const query = decodeQueryParam(match.params.query);
 
   const runSearch = useCallback(() => {
     searchResultStore.load(source, sources[source], query);
