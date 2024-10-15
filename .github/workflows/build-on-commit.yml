@@ -21,9 +21,9 @@ jobs:
         os: [ ubuntu-latest ]
         jdk-version: [ '11' ]
 
-      uses: ./.github/workflows/build-and-test.yml
-      secrets: inherit
-      with:
-        gradle-options:
-        os: ${{ matrix.os }}
-        jdk-version: ${{ matrix.jdk-version }}
+    uses: ./.github/workflows/build-and-test.yml
+    secrets: inherit
+    with:
+      gradle-options:
+      os: ${{ matrix.os }}
+      jdk-version: ${{ matrix.jdk-version }}
