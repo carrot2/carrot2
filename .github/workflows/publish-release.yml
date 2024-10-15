@@ -80,20 +80,22 @@ jobs:
           cp -R $RELEASE_DIR/dcs/web/doc     release/${{steps.build-properties.outputs.PRODUCT_VERSION}}/
           cp -R $RELEASE_DIR/dcs/web/javadoc release/${{steps.build-properties.outputs.PRODUCT_VERSION}}/
 
-          if "${{ inputs.updateLatestSymlink }}"; then
-            cat >> release/latest/index.html << EOF
-              <!DOCTYPE html>
-              <html>
-                <head>
-                	<meta charset="UTF-8">
-                  <meta http-equiv="refresh" content="0; URL=../${{steps.build-properties.outputs.PRODUCT_VERSION}}/doc/">
-                </head>
+          cat >> /tmp/index.html << EOF
+            <!DOCTYPE html>
+            <html>
+              <head>
+              	<meta charset="UTF-8">
+                <meta http-equiv="refresh" content="0; URL=../${{steps.build-properties.outputs.PRODUCT_VERSION}}/doc/">
+              </head>
 
-                <body>
-                  Redirecting to the latest Carrot2 release documentation.
-                </body>
-              </html>
-            EOF
+              <body>
+                Redirecting to the latest Carrot2 release documentation.
+              </body>
+            </html>
+          EOF
+
+          if "${{ inputs.updateLatestSymlink }}"; then
+            mv /tmp/index.html release/latest/index.html
           fi
 
           git add -A .
