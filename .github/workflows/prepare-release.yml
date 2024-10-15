@@ -93,7 +93,7 @@ jobs:
       DIST_DIR: /tmp/artifacts
 
     steps:
-      - uses: .github/actions/prepare-git-clone
+      - uses: ./.github/actions/prepare-git-clone
         with:
           token: ${{ secrets.GH_ACCESS_TOKEN }}
 

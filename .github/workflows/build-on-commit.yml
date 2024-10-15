@@ -1,0 +1,37 @@
+name: Build and test (on commits and PRs)
+
+on: 
+  pull_request:
+    branches:
+      - master
+
+  push:
+    branches:
+      - master
+      - bugfix/4.4.x
+
+jobs:
+  tests:
+    name: run checks
+
+    # Check on latest ubuntu with the lowest supported JDK. Everything else
+    # is handled by subsequent nightly tests.
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        jdk-version: [ '11' ]
+
+    steps:
+      - uses: ./.github/workflows/build-and-test.yml
+        secrets: inherit
+        with:
+          gradle-options:
+          os: ${{ matrix.os }}
+          jdk-version: ${{ matrix.jdk-version }}
+
+      - name: Archive distribution artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: distribution
+          path: |
+            distribution/build/distZip/*.zip
