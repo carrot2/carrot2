@@ -67,7 +67,7 @@ jobs:
           popd
           
       - name: Add and commit a new version to secure.carrotsearch.com
-        if: ${{ inputs.publish-docs == true && inputs.dry-run == false }}
+        if: ${{ inputs.publish-docs == true }}
         run: |
           RELEASE_DIR=`realpath ${{ env.RELEASE_ARTIFACTS_DIR }}/carrot2-${{steps.build-properties.outputs.PRODUCT_VERSION}}`
           pushd carrot2.github.io
@@ -80,6 +80,24 @@ jobs:
           cp -R $RELEASE_DIR/dcs/web/doc     release/${{steps.build-properties.outputs.PRODUCT_VERSION}}/
           cp -R $RELEASE_DIR/dcs/web/javadoc release/${{steps.build-properties.outputs.PRODUCT_VERSION}}/
 
+          cat >> release/latest/index.html << EOF
+            <!DOCTYPE html>
+            <html>
+              <head>
+              	<meta charset="UTF-8">
+                <meta http-equiv="refresh" content="0; URL=../${{steps.build-properties.outputs.PRODUCT_VERSION}}/doc/">
+              </head>
+
+              <body>
+                Redirecting to the latest Carrot2 release documentation.
+              </body>
+            </html>
+          EOF
+
           git add -A .
           git commit -am "Carrot2 ${{steps.build-properties.outputs.PRODUCT_VERSION}} (gh publishing action)"
-          git push
+
+          echo "1: ${{ inputs.dry-run == false }}"
+          echo "2: ${{ inputs.dry-run == false }}"
+
+          // git push
