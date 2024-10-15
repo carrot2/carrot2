@@ -28,25 +28,11 @@ https://github.com/carrot2/carrot2/actions/workflows/prepare-release.yml
 click on "Run workflow" and pick the desired branch to release from (and tag to annotate
 the release with).
 
-* Update statically published documentation:
+* Review the created release content.
 
-rm -rf build/carrot2.github.io
-git clone --depth 1 git@github.com:carrot2/carrot2.github.io build/carrot2.github.io
+* Publish static documentation using this workflow:
 
-rm -rf build/carrot2.github.io/release/$VERSION/
-mkdir build/carrot2.github.io/release/$VERSION/
-
-cp -R distribution/build/dist/dcs/web/doc     build/carrot2.github.io/release/$VERSION/
-cp -R distribution/build/dist/dcs/web/javadoc build/carrot2.github.io/release/$VERSION/
-cd build/carrot2.github.io/
-
-* update the 'latest' link in:
-vi release/latest/index.html
-
-git add -A .
-git commit -am "Documentation for version $VERSION"
-git push
-cd ../..
+https://github.com/carrot2/carrot2/actions/workflows/publish-release.yml
 
 * Redeploy public DCS demo frontend. Go to the build plan, locate build for 
 this version, create a new deployment and promote to production server.
@@ -55,9 +41,7 @@ https://github.com/carrotsearch/infra/actions/workflows/publish-carrot2-dcs-demo
 
 NOTE: the staging environment requires the vps node to be (manually) started at ramnode.
 
-* Publish to sonatype staging repo. The max workers
-  limit is set there because otherwise Nexus creates multiple
-  repositories automatically for all parallel threads (sigh).
+* Publish to sonatype staging repo.
 
 gradlew publishSonatype --max-workers=1
 
