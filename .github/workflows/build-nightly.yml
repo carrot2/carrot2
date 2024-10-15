@@ -1,0 +1,26 @@
+name: Build and test (nightly)
+
+on:
+  workflow_dispatch:
+    # Allow manual dispatch.
+
+  schedule:
+    # But typically run on this schedule.
+    - cron: '0 5 * * *'
+
+jobs:
+  tests:
+    name: run full checks
+
+    # Check on all supported operating systems, with the highest supported JDK.
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        jdk-version: [ '11', '17' ]
+
+    uses: ./.github/workflows/build-and-test.yml
+    secrets: inherit
+    with:
+      gradle-options: '"-Ptests.slow=true" "-Ptests.nightly=true"'
+      os: ${{ matrix.os }}
+      jdk-version: ${{ matrix.jdk-version }}
