@@ -35,11 +35,11 @@ jobs:
       CI: true
 
     steps:
-      - uses: ./.github/actions/prepare-git-clone
+      - uses: carrotsearch/infra-public/.github/actions/prepare-git-clone@master
         with:
           token: ${{ secrets.GH_ACCESS_TOKEN }}
 
-      - uses: ./.github/actions/prepare-gradle-build
+      - uses: carrotsearch/infra-public/.github/actions/prepare-gradle-build@master
         with:
           jdk-version: ${{ inputs.jdk-version }}
 
