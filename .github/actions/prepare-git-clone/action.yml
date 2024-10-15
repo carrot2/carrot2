@@ -1,0 +1,21 @@
+name: "Prepare local git clone"
+description: "Prepare local git clone"
+
+inputs:
+  token:
+    description: "Github token."
+    required: false
+
+runs:
+ using: "composite"
+ steps:
+    - name: Correct git autocrlf
+      shell: bash
+      run: git config --global core.autocrlf false
+
+    - name: Git checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
+        submodules: recursive
+        token: ${{ inputs.token || github.token }}

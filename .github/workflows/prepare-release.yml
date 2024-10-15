@@ -1,0 +1,117 @@
+name: Prepare release
+run-name: "Prepare release: ${{ inputs.tag }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g. release/x.y.z)'
+        required: true
+
+      removeExistingReleaseAndTag:
+        description: 'Remove existing release and tag'
+        type: boolean
+        required: false
+        default: false
+
+      name:
+        description: 'Release name (leave empty to use the tag)'
+        required: false
+
+      jdk-version:
+        description: "JDK version to use for release"
+        type: string
+        required: false
+        default: "11"
+
+      run-tests:
+        description: "Run full tests prior to assembling release"
+        type: boolean
+        required: false
+        default: true
+
+jobs:
+  tests:
+    name: run full checks
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        jdk-version: [ "11" ]
+
+    uses: ./.github/workflows/build-and-test.yml
+    secrets: inherit
+    with:
+      gradle-options: '"-Ptests.slow=true"'
+      os: ${{ matrix.os }}
+      jdk-version: ${{ matrix.jdk-version }}
+      run-tests: ${{ inputs.run-tests }}
+
+  distribution-artifacts:
+    name: Distribution artifacts
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    outputs:
+      PRODUCT_VERSION: ${{ steps.build-dist-zip.outputs.PRODUCT_VERSION }}
+
+    steps:
+      - uses: ./.github/actions/prepare-git-clone
+        with:
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
+
+      - uses: ./.github/actions/prepare-gradle-build
+        with:
+          jdk-version: ${{ inputs.jdk-version }}
+
+      - name: Build distribution ZIP
+        id: build-dist-zip
+        run: |
+          ./gradlew assemble
+ 
+      - name: Store distribution ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: distribution
+          path: 'distribution/build/distZip/*.zip'
+          if-no-files-found: error
+
+      - name: Store build info
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-properties
+          path: 'distribution/build/build.properties'
+          if-no-files-found: error
+
+  create-release:
+    name: Release creation
+    needs: [ tests, distribution-artifacts ]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      DIST_DIR: /tmp/artifacts
+
+    steps:
+      - uses: .github/actions/prepare-git-clone
+        with:
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
+
+      - name: Download distribution ZIP
+        uses: actions/download-artifact@v4
+        with:
+          name: distribution
+          path: ${{ env.DIST_DIR }}
+
+      - name: Download build properties
+        uses: actions/download-artifact@v4
+        with:
+          name: build-properties
+          path: ${{ env.DIST_DIR }}
+
+      - uses: ./.github/actions/create-and-tag-release
+        with:
+          tag: ${{ inputs.tag }}
+          name: ${{ inputs.name }}
+          removeExistingReleaseAndTag: ${{ inputs.removeExistingReleaseAndTag }}
+          artifacts: ${{ env.DIST_DIR }}/*

@@ -1,0 +1,58 @@
+name: Build, test and validate (reusable workflow)
+
+on:
+  workflow_call:
+    inputs:
+      gradle-options:
+        type: string
+        description: "Any extra options to be passed to gradle"
+        required: false
+        default: ""
+
+      os:
+        type: string
+        description: "OS to run on."
+        required: true
+        default: "ubuntu-latest"
+
+      jdk-version:
+        type: string
+        required: true
+        description: "JDK version to use." 
+
+      run-tests:
+        description: "Run tests"
+        type: boolean
+        default: true
+
+jobs:
+  build-and-test:
+    name: test and assemble (JDK ${{ inputs.jdk-version }} on ${{ inputs.os }})
+    runs-on: ${{ inputs.os }}
+    timeout-minutes: 30
+
+    env:
+      CI: true
+
+    steps:
+      - uses: ./.github/actions/prepare-git-clone
+        with:
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
+
+      - uses: ./.github/actions/prepare-gradle-build
+        with:
+          jdk-version: ${{ inputs.jdk-version }}
+
+      - name: Validation checks (gradle check -x test)
+        run: ./gradlew --max-workers 4 check -x test "-Ptasks.times=true" ${{ inputs.gradle-options }}
+
+      - name: Tests and assembly (./gradlew ... check)
+        if: ${{ inputs.run-tests }}
+        run: ./gradlew --max-workers 4 check assemble "-Ptasks.times=true" ${{ inputs.gradle-options }}
+
+      - name: Store failed test outputs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failed-test-outputs-jdk${{ inputs.jdk-version }}-os${{ inputs.os }}
+          path: '**/OUTPUT-*.txt'

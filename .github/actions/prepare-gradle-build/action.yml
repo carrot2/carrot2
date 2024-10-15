@@ -1,0 +1,47 @@
+name: "Prepare Gradle and Java build"
+description: "Prepare Gradle and Java build"
+
+inputs:
+   jdk-version:
+     required: true
+     description: "JDK version to set up"
+
+   jdk-distribution:
+     required: false
+     default: "temurin"
+     description: "JDK distribution"
+
+runs:
+ using: "composite"
+ steps:
+   - name: "Set up JDK (${{ inputs.jdk-distribution }}, ${{ inputs.jdk-version }}) [buildjet]"
+     if: ${{ contains(runner.name, 'buildjet') }}
+     uses: buildjet/setup-java@v4
+     with:
+       distribution: ${{ inputs.jdk-distribution }}
+       java-version: ${{ inputs.jdk-version }}
+       java-package: jdk
+
+   - name: "Set up JDK (${{ inputs.jdk-distribution }}, ${{ inputs.jdk-version }}) [blacksmith]"
+     if: ${{ contains(runner.name, 'blacksmith') }}
+     uses: useblacksmith/setup-java@v5
+     with:
+       distribution: ${{ inputs.jdk-distribution }}
+       java-version: ${{ inputs.jdk-version }}
+       java-package: jdk
+
+   - name: "Set up JDK (${{ inputs.jdk-distribution }}, ${{ inputs.jdk-version }}) [github]"
+     if: ${{ !contains(runner.name, 'buildjet') && !contains(runner.name, 'blacksmith') }}
+     uses: actions/setup-java@v4
+     with:
+       distribution: ${{ inputs.jdk-distribution }}
+       java-version: ${{ inputs.jdk-version }}
+       java-package: jdk
+
+   - name: Setup Gradle [blacksmith]
+     if: ${{ contains(runner.name, 'blacksmith') }}
+     uses: useblacksmith/setup-gradle/setup-gradle@v5
+
+   - name: Setup Gradle
+     if: ${{ !contains(runner.name, 'buildjet') && !contains(runner.name, 'blacksmith') }}
+     uses: gradle/actions/setup-gradle@v3
