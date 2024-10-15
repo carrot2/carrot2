@@ -56,11 +56,11 @@ jobs:
       PRODUCT_VERSION: ${{ steps.build-dist-zip.outputs.PRODUCT_VERSION }}
 
     steps:
-      - uses: ./.github/actions/prepare-git-clone
+      - uses: carrotsearch/infra-public/.github/actions/prepare-git-clone@master
         with:
           token: ${{ secrets.GH_ACCESS_TOKEN }}
 
-      - uses: ./.github/actions/prepare-gradle-build
+      - uses: carrotsearch/infra-public/.github/actions/prepare-gradle-build@master
         with:
           jdk-version: ${{ inputs.jdk-version }}
 
@@ -93,7 +93,7 @@ jobs:
       DIST_DIR: /tmp/artifacts
 
     steps:
-      - uses: ./.github/actions/prepare-git-clone
+      - uses: carrotsearch/infra-public/.github/actions/prepare-git-clone@master
         with:
           token: ${{ secrets.GH_ACCESS_TOKEN }}
 
@@ -109,7 +109,7 @@ jobs:
           name: build-properties
           path: ${{ env.DIST_DIR }}
 
-      - uses: ./.github/actions/create-and-tag-release
+      - uses: carrotsearch/infra-public/.github/actions/create-and-tag-release@master
         with:
           tag: ${{ inputs.tag }}
           name: ${{ inputs.name }}
