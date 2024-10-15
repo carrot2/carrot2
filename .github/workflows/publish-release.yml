@@ -69,7 +69,7 @@ jobs:
       - name: Add and commit a new version to secure.carrotsearch.com
         if: ${{ inputs.publish-docs == true && inputs.dry-run == false }}
         run: |
-          RELEASE_DIR=`realpath ${{ env.RELEASE_ARTIFACTS_DIR }}`
+          RELEASE_DIR=`realpath ${{ env.RELEASE_ARTIFACTS_DIR }}/carrot2-${{steps.build-properties.outputs.PRODUCT_VERSION}}`
           pushd carrot2.github.io
           git config --global user.email "gh-action@carrotsearch.com"
           git config --global user.name "Carrot2 publishing workflow (gh action)"
