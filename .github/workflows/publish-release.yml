@@ -96,6 +96,7 @@ jobs:
 
           if "${{ inputs.updateLatestSymlink }}"; then
             mv /tmp/index.html release/latest/index.html
+            git diff release/latest/index.html
           fi
 
           git add -A .
