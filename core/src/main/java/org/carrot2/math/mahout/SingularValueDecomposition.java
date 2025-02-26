@@ -298,7 +298,7 @@ public class SingularValueDecomposition {
 
       switch (kase) {
 
-          // Deflate negligible s(p).
+        // Deflate negligible s(p).
 
         case 1:
           {
@@ -324,7 +324,7 @@ public class SingularValueDecomposition {
           }
           break;
 
-          // Split at negligible s(k).
+        // Split at negligible s(k).
 
         case 2:
           {
@@ -348,7 +348,7 @@ public class SingularValueDecomposition {
           }
           break;
 
-          // Perform one qr step.
+        // Perform one qr step.
 
         case 3:
           {
@@ -421,7 +421,7 @@ public class SingularValueDecomposition {
           }
           break;
 
-          // Convergence.
+        // Convergence.
 
         case 4:
           {
