@@ -120,7 +120,7 @@
         </p>
 
         <pre data-language="shell">
-          docker run --rm -v "$(pwd)/dcs:/dcs" -p 8080:8080 eclipse-temurin:21-jre-alpine /dcs/dcs
+          docker run -it --rm -v "$(pwd)/dcs:/dcs" -p 8080:8080 eclipse-temurin:21-jre-alpine /dcs/dcs
         </pre>
 
         <p>
