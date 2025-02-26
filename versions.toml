@@ -8,9 +8,9 @@ jetty = "11.0.24"
 log4j = { strictly = "2.23.1" }
 lucene = "9.12.1"
 # @keep This is the minimum required Java version.
-minJava = "11"
+minJava = "17"
 # @keep This is GJF version for spotless/ tidy.
-googleJavaFormat = "1.24.0"
+googleJavaFormat = "1.25.2"
 # @keep spotless formatting of groovy/gradle files
 greclipse = "4.26"
 

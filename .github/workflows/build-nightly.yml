@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
-        jdk-version: [ '11', '21', '23' ]
+        jdk-version: [ '17', '21', '23' ]
 
     uses: ./.github/workflows/build-and-test.yml
     secrets: inherit

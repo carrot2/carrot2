@@ -30,6 +30,12 @@ IF "%JVMVERSION%"=="7"    GOTO jvmUnsupported
 IF "%JVMVERSION%"=="8"    GOTO jvmUnsupported
 IF "%JVMVERSION%"=="9"    GOTO jvmUnsupported
 IF "%JVMVERSION%"=="10"   GOTO jvmUnsupported
+IF "%JVMVERSION%"=="11"   GOTO jvmUnsupported
+IF "%JVMVERSION%"=="12"   GOTO jvmUnsupported
+IF "%JVMVERSION%"=="13"   GOTO jvmUnsupported
+IF "%JVMVERSION%"=="14"   GOTO jvmUnsupported
+IF "%JVMVERSION%"=="15"   GOTO jvmUnsupported
+IF "%JVMVERSION%"=="16"   GOTO jvmUnsupported
 
 SET JVMARGS=
 IF /I "%JVMVERSION%" GEQ "16"   GOTO jdk16OrLater
@@ -53,5 +59,5 @@ TITLE %comspec%
 exit /b %DCS_EXITVAL%
 
 :jvmUnsupported
-ECHO ^> [ERROR] ${product.name} requires at least Java 11 (%JVMVERSION% detected).
+ECHO ^> [ERROR] ${product.name} requires at least Java 17 (%JVMVERSION% detected).
 exit /b 1
