@@ -12,6 +12,10 @@ Run the DCS (includes built-in HTTP server):
   cd dcs
   ./dcs
 
+Run the DCS using docker:
+
+  docker run --rm -v "$(pwd)/dcs:/dcs" -p 8080:8080 eclipse-temurin:21-jre-alpine /dcs/dcs
+
 then:
   * Developer documentation:   http://localhost:8080/doc
   * Java API JavaDoc:          http://localhost:8080/javadoc

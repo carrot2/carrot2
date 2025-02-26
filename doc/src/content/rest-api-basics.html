@@ -72,7 +72,8 @@
     <ol>
       <li>
         <p>
-          Make sure you have Java 17 or later available in your system.
+          Make sure you have Java 17 or later available in your system or use a docker
+          container to run the DCS.
         </p>
       </li>
 
@@ -95,7 +96,7 @@
         </pre>
 
         <p>
-          By default the DCS will bind to port 8080. To change the port number, use
+          By default, the DCS will bind to port 8080. To change the port number, use
           the <code>--port</code> command line parameter.
         </p>
 
@@ -105,11 +106,27 @@
 </pre>
 
         <p>
-          If you need to increate the
+          If you need to alter the
           default JVM options (for example increase the heap), define the <code>DCS_OPTS</code>
           environment variable and pass any required Java JVM options there. For example (Linux):
         </p>
         <pre data-language="shell">$ export DCS_OPTS=-Xmx2g</pre>
+      </li>
+
+      <li>
+        <p>
+          Alternatively, you may use a docker container to run the DCS. Here is an example using
+          Java 21 and alpine linux:
+        </p>
+
+        <pre data-language="shell">
+          docker run --rm -v "$(pwd)/dcs:/dcs" -p 8080:8080 eclipse-temurin:21-jre-alpine /dcs/dcs
+        </pre>
+
+        <p>
+          The <code>-p 8080:8080</code> maps the container's default port 8080 to the host's
+          port 8080.
+        </p>
       </li>
 
       <li>
