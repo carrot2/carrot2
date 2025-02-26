@@ -22,7 +22,7 @@ on:
         default: false
 
       publish-docs:
-        description: "Publish stagic documentation to carrot2.github.io"
+        description: "Publish static documentation to carrot2.github.io"
         type: boolean
         default: true 
 
