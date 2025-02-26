@@ -1,7 +1,7 @@
 /*
  * Carrot2 project.
  *
- * Copyright (C) 2002-2023, Dawid Weiss, Stanisław Osiński.
+ * Copyright (C) 2002-2025, Dawid Weiss, Stanisław Osiński.
  * All rights reserved.
  *
  * Refer to the full license file "carrot2.LICENSE"
