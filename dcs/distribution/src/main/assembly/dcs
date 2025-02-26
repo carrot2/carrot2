@@ -36,8 +36,8 @@ esac
 JVMVERSION=`java -jar "$DCS_HOME/lib/progresso-jvmversion-${jvmversion.version}.jar"`
 JVMARGS=""
 case "$JVMVERSION" in
-   "6"|"7"|"8"|"9"|"10")
-      echo "> [ERROR] DCS requires at least Java 11 ($JVMVERSION detected)."
+   "6"|"7"|"8"|"9"|"10"|"11"|"12"|"13"|"14"|"15"|"16")
+      echo "> [ERROR] DCS requires at least Java 17 ($JVMVERSION detected)."
       exit 1
    ;;
    "11"|"12"|"13"|"14"|"15")

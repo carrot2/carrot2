@@ -22,7 +22,7 @@ on:
         description: "JDK version to use for release"
         type: string
         required: false
-        default: "11"
+        default: "17"
 
       run-tests:
         description: "Run full tests prior to assembling release"
@@ -37,7 +37,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
-        jdk-version: [ "11" ]
+        jdk-version: [ "17" ]
 
     uses: ./.github/workflows/build-and-test.yml
     secrets: inherit
