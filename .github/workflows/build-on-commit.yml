@@ -1,6 +1,9 @@
 name: Build and test (on commits and PRs)
 
 on: 
+  workflow_dispatch:
+    # Allow manual dispatch.
+
   pull_request:
     branches:
       - master
