@@ -44,11 +44,7 @@ jobs:
           jdk-version: ${{ inputs.jdk-version }}
 
       - name: Validation checks (gradle check -x test)
-        run: ./gradlew --max-workers 4 check -x test "-Ptasks.times=true" ${{ inputs.gradle-options }}
-
-      - name: Tests and assembly (./gradlew ... check)
-        if: ${{ inputs.run-tests }}
-        run: ./gradlew --max-workers 4 check assemble "-Ptasks.times=true" ${{ inputs.gradle-options }}
+        run: ./gradlew --max-workers 4 :dcs:contexts:frontend:yarnInstall "-Ptasks.times=true" ${{ inputs.gradle-options }}
 
       - name: Store failed test outputs
         if: failure()

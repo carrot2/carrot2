@@ -18,7 +18,7 @@ jobs:
     # is handled by subsequent nightly tests.
     strategy:
       matrix:
-        os: [ ubuntu-latest ]
+        os: [ macos-13, macos-14, macos-15 ]
         jdk-version: [ '17' ]
 
     uses: ./.github/workflows/build-and-test.yml
