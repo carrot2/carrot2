@@ -1,6 +1,9 @@
 [versions]
+# @keep
 carrot2 = "4.8.0-SNAPSHOT"
+# @keep
 node = "18.18.2"
+# @keep
 yarn = "1.22.19"
 carrotsearch-console = "1.2.0"
 jackson = "2.19.0"

@@ -35,7 +35,7 @@ ext {
   }.call()
 }
 
-// apply from: file('gradle/dependencies.gradle')
+apply from: file('gradle/dependencies.gradle')
 apply from: file('gradle/defaults.gradle')
 apply from: file('gradle/cleanall.gradle')
 apply from: file('gradle/gitinfo.gradle')
