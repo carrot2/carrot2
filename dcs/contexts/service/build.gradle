@@ -10,7 +10,7 @@ configurations {
 }
 
 dependencies {
-  implementation deps.jackson.databind
+  implementation libs.jackson.databind
   implementation(project(':dcs:model'))
 
   [
@@ -22,10 +22,10 @@ dependencies {
     langResources project(path: prj, configuration: 'langResources')
   }
 
-  compileOnly deps.slf4j.api
+  compileOnly libs.slf4j.api
 
-  testImplementation deps.mockito.core
-  testImplementation deps.log4j.slf4j2
+  testImplementation libs.mockito.core
+  testImplementation libs.log4j.slf4j2
 }
 
 // Exclude slf4j from any dependency, it should be provided as part of the container.

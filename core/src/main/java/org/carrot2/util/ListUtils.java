@@ -10,7 +10,9 @@
  */
 package org.carrot2.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /** Utility methods for working with {@link List}s. */
 public final class ListUtils {

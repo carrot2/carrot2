@@ -6,7 +6,7 @@ configurations {
 
 dependencies {
   implementation project(':core')
-  implementation deps.morfologik.polish
+  implementation libs.morfologik.polish
 
   langResources fileTree(dir: 'src/main/resources', includes: langResourcePatterns)
 }

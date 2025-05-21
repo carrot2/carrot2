@@ -10,7 +10,7 @@
  */
 package org.carrot2.clustering.stc;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 
 import com.carrotsearch.hppc.BitSet;
 import com.carrotsearch.hppc.IntStack;

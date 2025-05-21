@@ -11,7 +11,7 @@
 package org.carrot2.math.matrix;
 
 import org.carrot2.attrs.AcceptingVisitor;
-import org.carrot2.math.mahout.matrix.*;
+import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 
 /** A factory of {@link MatrixFactorization}s. */
 public interface MatrixFactorizationFactory extends AcceptingVisitor {

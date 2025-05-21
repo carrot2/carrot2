@@ -4,7 +4,7 @@ import proguard.gradle.ProGuardTask
 buildscript {
   dependencies {
     classpath files(rootProject.layout.projectDirectory.file("etc/proguard/proguard.jar"))
-    classpath deps.proguard.gradle
+    classpath libs.proguard.gradle
   }
   repositories {
     mavenCentral()
@@ -20,12 +20,12 @@ configurations {
 
 dependencies {
   implementation project(':core')
-  implementation deps.lucene.core
-  implementation deps.lucene.analysis.common
+  implementation libs.lucene.core
+  implementation libs.lucene.analysis.common
 
   langResources fileTree(dir: 'src/main/resources', includes: langResourcePatterns)
 
-  luceneResources(deps.lucene.analysis.common, {
+  luceneResources(libs.lucene.analysis.common, {
     transitive = false
   })
 }
@@ -44,8 +44,8 @@ tasks.register("repackageLuceneAnalysisClasses", ProGuardTask, {
   dontwarn
 
   injars(filter: [
-          '**/*.class',
-          '**/galician.rslp'
+    '**/*.class',
+    '**/galician.rslp'
   ].join(","), files(configurations.luceneResources))
   outjars repackagedJar.get().asFile
 })

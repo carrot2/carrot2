@@ -10,7 +10,7 @@
  */
 package org.carrot2.math.matrix;
 
-import org.carrot2.math.mahout.matrix.*;
+import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 
 /** Matrix seeding based on the k-means algorithms. */
 public class KMeansSeedingStrategy implements SeedingStrategy {

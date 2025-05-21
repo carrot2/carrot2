@@ -10,7 +10,8 @@
  */
 package org.carrot2.text.preprocessing;
 
-import com.carrotsearch.hppc.*;
+import com.carrotsearch.hppc.BitSet;
+import com.carrotsearch.hppc.ObjectHashSet;
 import java.io.Closeable;
 import java.io.StringWriter;
 import java.util.Arrays;

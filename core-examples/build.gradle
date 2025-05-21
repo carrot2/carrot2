@@ -7,33 +7,31 @@ dependencies {
   implementation project(':core')
   testImplementation project(':lang:polish')
   testImplementation project(':lang:lucene')
-  testImplementation deps.lucene.analysis.icu
-  testImplementation deps.junit
+  testImplementation libs.lucene.analysis.icu
+  testImplementation libs.junit
 }
 
 configurations {
   distribution
 }
 
-task buildDistribution(type: Sync) {
+def buildDistribution = tasks.register("buildDistribution", Sync, {
   dependsOn configurations.testRuntimeClasspath
 
   def antPrj = new org.apache.tools.ant.Project()
-  afterEvaluate {
-    replaceTokens.each { k, v -> antPrj.setProperty(k.toString(), v.toString()) }
-  }
 
   inputs.properties replaceTokensTrigger
 
   doFirst {
+    replaceTokens.each { k, v -> antPrj.setProperty(k.toString(), v.toString()) }
     antPrj.setProperty("version.lucene-analysis-icu", getResolvedVersion(
-            deps.lucene.analysis.icu.get(),
-            configurations.testRuntimeClasspath
-    ))
+        libs.lucene.analysis.icu.get(),
+        configurations.testRuntimeClasspath
+        ))
     antPrj.setProperty("version.junit", getResolvedVersion(
-            deps.junit.get(),
-            configurations.testRuntimeClasspath
-    ))
+        libs.junit.get(),
+        configurations.testRuntimeClasspath
+        ))
   }
 
   from(project.projectDir, {
@@ -55,10 +53,10 @@ task buildDistribution(type: Sync) {
   })
 
   into "$buildDir/distribution"
-}
+})
 
 artifacts {
   distribution file("$buildDir/distribution"), {
-    builtBy tasks.buildDistribution
+    builtBy buildDistribution
   }
 }

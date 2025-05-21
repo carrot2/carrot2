@@ -1,6 +1,9 @@
 [versions]
+# @keep
 carrot2 = "4.8.0-SNAPSHOT"
+# @keep
 node = "18.18.2"
+# @keep
 yarn = "1.22.19"
 carrotsearch-console = "1.2.0"
 jackson = "2.19.0"
@@ -51,10 +54,5 @@ slf4j-api = "org.slf4j:slf4j-api:2.0.17"
 proguard-gradle = { module = "com.guardsquare:proguard-gradle", version.ref = "proguard" }
 
 [plugins]
-benmanes-versions = "com.github.ben-manes.versions:0.52.0"
-dependencychecks = "com.carrotsearch.gradle.dependencychecks:0.0.9"
-forbiddenapis = "de.thetaphi.forbiddenapis:3.9"
 node-gradle = "com.github.node-gradle.node:7.1.0"
-randomizedtesting-plugin = "com.carrotsearch.gradle.randomizedtesting:0.0.6"
-spotless = "com.diffplug.spotless:7.0.3"
-versionCatalogUpdate = "nl.littlerobots.version-catalog-update:1.0.0"
+buildinfra = "com.carrotsearch.gradle.buildinfra:0.0.10"

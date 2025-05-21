@@ -3,7 +3,7 @@ configurations {
 }
 
 dependencies {
-  jflex deps.jflex
+  jflex libs.jflex
 }
 
 sourceSets {

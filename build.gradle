@@ -1,13 +1,8 @@
 plugins {
   id 'base'
 
-  alias(deps.plugins.dependencychecks)
-  alias(deps.plugins.benmanes.versions)
-  alias(deps.plugins.forbiddenapis) apply false
-  alias(deps.plugins.randomizedtesting.plugin) apply false
-  alias(deps.plugins.spotless) apply false
-  alias(deps.plugins.node.gradle) apply false
-  alias(deps.plugins.versionCatalogUpdate) apply false
+  alias(libs.plugins.buildinfra)
+  alias(libs.plugins.node.gradle) apply false
 }
 
 repositories {
@@ -15,7 +10,7 @@ repositories {
   mavenCentral()
 }
 
-rootProject.version = deps.versions.carrot2.get()
+rootProject.version = libs.versions.carrot2.get()
 ext {
   fullName = "Carrot2"
 
@@ -29,7 +24,9 @@ ext {
     '**/*.word-filters.json',
   ]
 
-  devMode = { ->
+  devMode = {
+
+    ->
     if (rootProject.hasProperty('dev')) {
       return (rootProject.dev == '' || Boolean.parseBoolean(rootProject.dev))
     } else {
@@ -37,8 +34,6 @@ ext {
     }
   }.call()
 }
-
-apply from: file('gradle/validation/check-environment.gradle')
 
 apply from: file('gradle/dependencies.gradle')
 apply from: file('gradle/defaults.gradle')
@@ -50,26 +45,21 @@ apply from: file('gradle/defaults-java.gradle')
 apply from: file('gradle/node/yarn-projects.gradle')
 
 apply from: file('gradle/ide/idea.gradle')
+apply from: file("gradle/validation/spotless.gradle")
 
 apply from: file("gradle/testing/defaults-tests.gradle")
 apply from: file("gradle/testing/per-project-summary.gradle")
 apply from: file("gradle/testing/slowest-tests-at-end.gradle")
 
-apply from: file("gradle/validation/forbidden-apis.gradle")
-apply from: file("gradle/validation/spotless.gradle")
-
 apply from: file('gradle/maven/defaults-maven.gradle')
 
 subprojects {
   if (project.file("src/main/java").exists() ||
-  project.file("src/test/java").exists() ||
-  project.file("src/main/webapp").exists()) {
+      project.file("src/test/java").exists() ||
+      project.file("src/main/webapp").exists()) {
     apply plugin: 'java-library'
-    apply plugin: 'com.carrotsearch.gradle.randomizedtesting'
 
-    if (![
-      ":core-examples"
-    ].contains(project.path)) {
+    if (![":core-examples"].contains(project.path)) {
       dependencies {
         testImplementation project(':infra:tests')
       }
@@ -88,7 +78,7 @@ allprojects { prj ->
     }
 
     dependencies {
-      providedCompile deps.jetty.toolchain.servlet.api
+      providedCompile libs.jetty.toolchain.servlet.api
     }
   }
 }

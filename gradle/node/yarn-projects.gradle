@@ -1,8 +1,8 @@
 // Configure node/ yarn projects
 
 def projectList = [
-    ":dcs:contexts:frontend",
-    ":doc"
+  ":dcs:contexts:frontend",
+  ":doc"
 ].findAll { projectName ->
   subprojects.any({
     it.path == projectName
@@ -12,7 +12,7 @@ def projectList = [
 // Now apply the same configuration to all projects.
 configure(projectList) {
   apply plugin: 'base'
-  apply plugin: deps.plugins.node.gradle.get().pluginId
+  apply plugin: libs.plugins.node.gradle.get().pluginId
 
   ext {
     yarnEnv = [
@@ -20,6 +20,8 @@ configure(projectList) {
       'REACT_APP_BUILD_DATE': rootProject.replaceTokens['product.buildDate'],
       'REACT_APP_GIT_REV'   : rootProject.replaceTokens['product.gitrev']
     ]
+
+    jsBuildDir = objects.fileProperty()
   }
 
   configurations {
@@ -33,8 +35,8 @@ configure(projectList) {
 
   // Configure node and yarn versions.
   node {
-    version = deps.versions.node.get()
-    yarnVersion = deps.versions.yarn.get()
+    version = libs.versions.node.get()
+    yarnVersion = libs.versions.yarn.get()
     download = true
   }
 
@@ -51,8 +53,8 @@ configure(projectList) {
     outputs.file('.yarn/install-state.gz')
 
     args = [
-        'install',
-        '--immutable'
+      'install',
+      '--immutable'
     ]
   }
 
@@ -61,8 +63,8 @@ configure(projectList) {
     dependsOn yarnInstall
 
     def nonInputProperties = [
-        "REACT_APP_BUILD_DATE",
-        "REACT_APP_GIT_REV",
+      "REACT_APP_BUILD_DATE",
+      "REACT_APP_GIT_REV",
     ] as Set
 
     afterEvaluate {
@@ -83,11 +85,11 @@ configure(projectList) {
     inputs.file('package.json')
     inputs.file('yarn.lock')
 
-    outputs.dir { project.jsBuildDir }
+    outputs.dir project.ext.jsBuildDir
 
     environment.putAll(project.provider {
       return yarnEnv.findAll { k, v -> !nonInputProperties.contains(k) }
-          .collectEntries { k, v -> [k, Objects.toString(v)] }
+      .collectEntries { k, v -> [k, Objects.toString(v)] }
     })
 
     // Pass non-input trigering environment variables separately so that builds
@@ -115,12 +117,14 @@ configure(projectList) {
     }
   }
 
-  artifacts {
-    yarnOutput provider { jsBuildDir }, {
-      if (project.hasProperty("fast")) {
-        builtBy fastBuild
-      } else {
-        builtBy yarnBuild
+  afterEvaluate {
+    artifacts {
+      yarnOutput project.ext.jsBuildDir, {
+        if (project.hasProperty("fast")) {
+          builtBy fastBuild
+        } else {
+          builtBy yarnBuild
+        }
       }
     }
   }
@@ -129,7 +133,7 @@ configure(projectList) {
 
   clean {
     doLast {
-      project.delete project.files(project.jsBuildDir)
+      project.delete project.files(project.ext.jsBuildDir)
     }
   }
 
@@ -146,12 +150,15 @@ afterEvaluate {
 
   List<Task> taskOrder = []
   taskOrder += projectList.collectMany { subproject ->
-    [ subproject.path + ":yarnInstall",
+    [
+      subproject.path + ":yarnInstall",
       subproject.path + ":yarnBuild"
     ]
   }.collect { tasks.findByPath(it as String) }
-  taskOrder += [ tasks.findByPath(":dcs:contexts:frontend:prettierApply"),
-                 tasks.findByPath(":dcs:contexts:frontend:prettierCheck") ]
+  taskOrder += [
+    tasks.findByPath(":dcs:contexts:frontend:prettierApply"),
+    tasks.findByPath(":dcs:contexts:frontend:prettierCheck")
+  ]
   taskOrder += yarnOrdering
 
   List<?> sequence = []

@@ -10,7 +10,7 @@
  */
 package org.carrot2.math.matrix;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.assertj.core.data.Offset;
 import org.carrot2.math.mahout.matrix.DoubleMatrix1D;

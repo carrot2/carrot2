@@ -10,7 +10,7 @@
  */
 package org.carrot2.math.matrix;
 
-import org.carrot2.math.mahout.matrix.*;
+import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 
 /** Defines the seeding routine to be used as part of a matrix factorization algorithm. */
 public interface SeedingStrategy {

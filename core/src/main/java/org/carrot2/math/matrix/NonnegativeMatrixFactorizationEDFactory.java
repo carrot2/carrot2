@@ -10,7 +10,7 @@
  */
 package org.carrot2.math.matrix;
 
-import org.carrot2.math.mahout.matrix.*;
+import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 
 /**
  * Performs matrix factorization using the Non-negative Matrix Factorization algorithm with

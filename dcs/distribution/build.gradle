@@ -24,12 +24,12 @@ dependencies {
 
   examples     project(path: ":dcs:examples", configuration: "distribution")
 
-  implementation deps.carrotsearch.console.launcher
-  implementation deps.carrotsearch.progresso.jvmversion
-  implementation deps.jetty.server
-  implementation deps.jetty.webapp
+  implementation libs.carrotsearch.console.launcher
+  implementation libs.carrotsearch.progresso.jvmversion
+  implementation libs.jetty.server
+  implementation libs.jetty.webapp
 
-  annotationProcessor deps.log4j.core
+  annotationProcessor libs.log4j.core
 }
 
 ext {
@@ -64,8 +64,8 @@ task collectScripts(type: Sync) {
   }
 
   doFirst {
-    def foo = deps.carrotsearch.progresso.jvmversion
-    antPrj.setProperty("jvmversion.version", getResolvedVersion(deps.carrotsearch.progresso.jvmversion.get(), configurations.runtimeClasspath))
+    def foo = libs.carrotsearch.progresso.jvmversion
+    antPrj.setProperty("jvmversion.version", getResolvedVersion(libs.carrotsearch.progresso.jvmversion.get(), configurations.runtimeClasspath))
   }
 
   inputs.properties replaceTokensTrigger
@@ -143,12 +143,12 @@ task distDirBare {
 
 task distDir {
   dependsOn collectScripts,
-            collectDependencies,
-            collectCtxService,
-            collectCtxRoot,
-            collectCtxJavadoc,
-            collectCtxFrontend,
-            collectExamples
+      collectDependencies,
+      collectCtxService,
+      collectCtxRoot,
+      collectCtxJavadoc,
+      collectCtxFrontend,
+      collectExamples
 
   if (!project.hasProperty("intellij.launch.skipDocs")) {
     dependsOn collectCtxDoc

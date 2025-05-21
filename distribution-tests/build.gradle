@@ -12,9 +12,9 @@ dependencies {
   distributionZip project(path: ":distribution", configuration: "distZipArtifact")
 
   testImplementation project(path: ":infra:tests")
-  testImplementation deps.commons.compress
-  testImplementation deps.carrotsearch.procfork
-  testImplementation deps.carrotsearch.console.launcher
+  testImplementation libs.commons.compress
+  testImplementation libs.carrotsearch.procfork
+  testImplementation libs.carrotsearch.console.launcher
 }
 
 test {

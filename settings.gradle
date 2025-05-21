@@ -1,14 +1,12 @@
 dependencyResolutionManagement {
   versionCatalogs {
-    deps {
+    libs {
       from(files('versions.toml'))
     }
   }
 }
 
 rootProject.name = 'carrot2'
-
-include 'gradle'
 
 include 'core'
 include 'core-examples'

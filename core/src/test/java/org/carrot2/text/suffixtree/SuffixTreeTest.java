@@ -10,7 +10,10 @@
  */
 package org.carrot2.text.suffixtree;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import com.carrotsearch.hppc.IntArrayList;
 import java.util.ArrayList;

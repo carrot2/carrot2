@@ -10,7 +10,9 @@
  */
 package org.carrot2.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.carrot2.TestBase;
 import org.junit.Test;

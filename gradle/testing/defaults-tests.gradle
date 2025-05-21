@@ -10,24 +10,25 @@ allprojects {
     }
   }
 
-  plugins.withId("com.carrotsearch.gradle.opts") {
+  buildOptions {
+    addBooleanOption("tests.slow", "Enable @Slow tests")
+    addBooleanOption("tests.veryslow", "Enable @VerySlow tests")
+    addBooleanOption("tests.nightly", "Enable @Nightly tests")
+  }
 
-    def sysPropOpts = [
-        opts.option([name: "tests.slow", defaultValue: false, description: "Enable @Slow tests"]),
-        opts.option([name: "tests.veryslow", defaultValue: false, description: "Enable @VerySlow tests"]),
-        opts.option([name: "tests.nightly", defaultValue: false, description: "Enable @Nightly tests."]),
-        opts.option([name: "tests.filter", defaultValue: null, description: "Test filtering expression."])
-    ]
-
-    tasks.withType(Test).configureEach { task ->
-      sysPropOpts.each { opt ->
-        if (opt.value != null) {
-          task.systemProperty(opt.name, opt.value)
-        }
+  tasks.withType(Test).configureEach { task ->
+    [
+      "tests.slow",
+      "tests.veryslow",
+      "tests.nightly"
+    ].each { key ->
+      def opt = buildOptions {}.getOption(key)
+      if (opt.isPresent()) {
+        task.systemProperty(opt.name, opt.asStringProvider().get())
       }
-
-      task.jvmArgs("-XX:+HeapDumpOnOutOfMemoryError")
     }
+
+    task.jvmArgs("-XX:+HeapDumpOnOutOfMemoryError")
   }
 }
 

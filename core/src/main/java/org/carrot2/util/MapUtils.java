@@ -10,7 +10,9 @@
  */
 package org.carrot2.util;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /** Utilities for working with {@link Map}s. */
 public class MapUtils {
