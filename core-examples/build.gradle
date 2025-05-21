@@ -15,17 +15,15 @@ configurations {
   distribution
 }
 
-task buildDistribution(type: Sync) {
+def buildDistribution = tasks.register("buildDistribution", Sync, {
   dependsOn configurations.testRuntimeClasspath
 
   def antPrj = new org.apache.tools.ant.Project()
-  afterEvaluate {
-    replaceTokens.each { k, v -> antPrj.setProperty(k.toString(), v.toString()) }
-  }
 
   inputs.properties replaceTokensTrigger
 
   doFirst {
+    replaceTokens.each { k, v -> antPrj.setProperty(k.toString(), v.toString()) }
     antPrj.setProperty("version.lucene-analysis-icu", getResolvedVersion(
         libs.lucene.analysis.icu.get(),
         configurations.testRuntimeClasspath
@@ -55,10 +53,10 @@ task buildDistribution(type: Sync) {
   })
 
   into "$buildDir/distribution"
-}
+})
 
 artifacts {
   distribution file("$buildDir/distribution"), {
-    builtBy tasks.buildDistribution
+    builtBy buildDistribution
   }
 }

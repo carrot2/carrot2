@@ -1,5 +1,4 @@
 apply plugin: 'java-library'
-apply plugin: 'com.diffplug.spotless'
 
 apply from: rootProject.file("gradle/jflex.gradle")
 
@@ -43,13 +42,13 @@ javadoc {
   title = "Carrot<sup>2</sup>, Public Java API v${version} (${project.group}:${project.name})"
 
   (options as StandardJavadocDocletOptions).with {
-    overview = file("src/main/java/overview.html")
-    linksOffline('https://docs.oracle.com/en/java/javase/11/docs/api/',
-        rootProject.file('etc/javadoc/11').toString())
+    overview(file("src/main/java/overview.html").toString())
+    linksOffline('https://docs.oracle.com/en/java/javase/21/docs/api/',
+        rootProject.file('etc/javadoc/21').toString())
   }
 }
 
-task jsonJavadoc(type: Javadoc, dependsOn: compileJava) {
+def jsonJavadoc = tasks.register("jsonJavadoc", Javadoc, {
   dependsOn compileJava
   dependsOn configurations.jsonDoclet
 
@@ -74,15 +73,15 @@ task jsonJavadoc(type: Javadoc, dependsOn: compileJava) {
     // standard doclet).
     (options as StandardJavadocDocletOptions).noTimestamp = false
   }
-}
+})
 
 compileJava.dependsOn jflex
 sourcesJar.dependsOn jflex
 
 artifacts {
-  jsonJavadoc jsonJavadocDir, {
+  add("jsonJavadoc", jsonJavadocDir, {
     builtBy jsonJavadoc
-  }
+  })
 
   coreJavadoc javadoc.destinationDir, {
     builtBy javadoc
