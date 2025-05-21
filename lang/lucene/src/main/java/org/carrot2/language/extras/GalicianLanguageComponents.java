@@ -10,12 +10,11 @@
  */
 package org.carrot2.language.extras;
 
-import org.apache.lucene.analysis.gl.GalicianStemmer;
 import org.carrot2.language.ExtendedWhitespaceTokenizer;
 import org.carrot2.language.SingleLanguageComponentsProviderImpl;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
-import org.carrot2.language.extras.LuceneStemmerAdapter.StemmingFunction;
+import org.carrot2.lucene.analysis.LuceneAccessBypass;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.LabelFormatterImpl;
 
@@ -29,15 +28,6 @@ public class GalicianLanguageComponents extends SingleLanguageComponentsProvider
     registerResourceless(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
     registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
     registerDefaultLexicalData();
-    registerResourceless(Stemmer.class, () -> new LuceneStemmerAdapter(new GalicianStemming(), 1));
-  }
-
-  private class GalicianStemming implements StemmingFunction {
-    final GalicianStemmer stemmer = new GalicianStemmer();
-
-    @Override
-    public int apply(char[] word, int len) {
-      return stemmer.stem(word, len);
-    }
+    registerResourceless(Stemmer.class, LuceneAccessBypass::getGalicianStemmer);
   }
 }

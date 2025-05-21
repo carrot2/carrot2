@@ -10,12 +10,11 @@
  */
 package org.carrot2.language.extras;
 
-import java.util.Objects;
-import org.apache.lucene.analysis.br.BrazilianStemmer;
 import org.carrot2.language.ExtendedWhitespaceTokenizer;
 import org.carrot2.language.SingleLanguageComponentsProviderImpl;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
+import org.carrot2.lucene.analysis.LuceneAccessBypass;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.LabelFormatterImpl;
 
@@ -29,21 +28,6 @@ public class BrazilianLanguageComponents extends SingleLanguageComponentsProvide
     registerResourceless(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
     registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
     registerDefaultLexicalData();
-    registerResourceless(
-        Stemmer.class, () -> new LuceneStemmerAdapter(new BrazilianStemmerAdapter()::stems, 5));
-  }
-
-  private class BrazilianStemmerAdapter extends BrazilianStemmer {
-    public int stems(char[] chars, int len) {
-      String word = new String(chars, 0, len);
-      String stem = super.stem(word);
-
-      if (stem == null || Objects.equals(word, stem)) {
-        return len;
-      } else {
-        stem.getChars(0, stem.length(), chars, 0);
-        return stem.length();
-      }
-    }
+    registerResourceless(Stemmer.class, LuceneAccessBypass::getBrazilianStemmer);
   }
 }

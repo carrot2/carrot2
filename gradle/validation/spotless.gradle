@@ -23,7 +23,7 @@ allprojects { prj ->
         googleJavaFormat(deps.versions.googleJavaFormat.get())
 
         licenseHeaderFile licenseHeader
-        lineEndings 'UNIX'
+        lineEndings = 'UNIX'
         endWithNewline()
       }
     }
@@ -81,7 +81,7 @@ configure(project(":gradle")) { prj ->
       greclipse(deps.versions.greclipse.get())
 
       licenseHeaderFile licenseHeader
-      lineEndings 'UNIX'
+      lineEndings = 'UNIX'
       endWithNewline()
     }
 

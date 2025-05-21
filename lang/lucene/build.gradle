@@ -1,12 +1,67 @@
+import java.nio.file.Files
+import proguard.gradle.ProGuardTask
+
+buildscript {
+  dependencies {
+    classpath files(rootProject.layout.projectDirectory.file("etc/proguard/proguard.jar"))
+    classpath deps.proguard.gradle
+  }
+  repositories {
+    mavenCentral()
+  }
+}
+
 apply plugin: 'java-library'
 
 configurations {
   langResources
+  luceneResources
 }
 
 dependencies {
   implementation project(':core')
+  implementation deps.lucene.core
   implementation deps.lucene.analysis.common
 
   langResources fileTree(dir: 'src/main/resources', includes: langResourcePatterns)
+
+  luceneResources(deps.lucene.analysis.common, {
+    transitive = false
+  })
 }
+
+def repackagedJar = project.layout.buildDirectory.file("lucene-analysis-common-repackaged.jar")
+
+tasks.register("repackageLuceneAnalysisClasses", ProGuardTask, {
+  dependsOn configurations.luceneResources
+
+  configuration file('repackage-lucene-analysis.pro')
+
+  forceprocessing
+  verbose
+
+  dontnote
+  dontwarn
+
+  injars(filter: [
+          '**/*.class',
+          '**/galician.rslp'
+  ].join(","), files(configurations.luceneResources))
+  outjars repackagedJar.get().asFile
+})
+
+jar.configure {
+  from zipTree(repackagedJar)
+}
+
+test.configure {
+  classpath += jar.outputs.files
+  classpath -= sourceSets.main.output.classesDirs
+}
+
+dependencies {
+  compileOnly files(repackagedJar.get().asFile)
+}
+
+compileJava.dependsOn repackageLuceneAnalysisClasses
+sourcesJar.dependsOn repackageLuceneAnalysisClasses

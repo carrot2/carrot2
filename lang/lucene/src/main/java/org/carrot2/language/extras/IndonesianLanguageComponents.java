@@ -10,12 +10,11 @@
  */
 package org.carrot2.language.extras;
 
-import org.apache.lucene.analysis.id.IndonesianStemmer;
 import org.carrot2.language.ExtendedWhitespaceTokenizer;
 import org.carrot2.language.SingleLanguageComponentsProviderImpl;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
-import org.carrot2.language.extras.LuceneStemmerAdapter.StemmingFunction;
+import org.carrot2.lucene.analysis.LuceneAccessBypass;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.LabelFormatterImpl;
 
@@ -29,15 +28,6 @@ public class IndonesianLanguageComponents extends SingleLanguageComponentsProvid
     registerResourceless(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
     registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
     registerDefaultLexicalData();
-    registerResourceless(Stemmer.class, () -> new LuceneStemmerAdapter(new IndonesianStemming()));
-  }
-
-  private class IndonesianStemming implements StemmingFunction {
-    private final IndonesianStemmer stemmer = new IndonesianStemmer();
-
-    @Override
-    public int apply(char[] buffer, int length) {
-      return stemmer.stem(buffer, length, true);
-    }
+    registerResourceless(Stemmer.class, LuceneAccessBypass::getIndonesianStemmer);
   }
 }
