@@ -3,5 +3,6 @@ allprojects {
     mavenCentral()
   }
 
+  version = rootProject.version
   group "org." + project.group
 }
