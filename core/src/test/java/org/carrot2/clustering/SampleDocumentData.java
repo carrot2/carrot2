@@ -10,7 +10,9 @@
  */
 package org.carrot2.clustering;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A set of sample documents returned for the query <i>data mining</i>. This set is hard-coded so

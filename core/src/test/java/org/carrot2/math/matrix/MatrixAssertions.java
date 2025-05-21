@@ -10,7 +10,8 @@
  */
 package org.carrot2.math.matrix;
 
-import org.carrot2.math.mahout.matrix.*;
+import org.carrot2.math.mahout.matrix.DoubleMatrix1D;
+import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 
 /** FEST-style assertions for Colt matrices. */
 public class MatrixAssertions {

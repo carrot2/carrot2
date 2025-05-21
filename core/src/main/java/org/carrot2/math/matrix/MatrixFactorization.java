@@ -10,7 +10,7 @@
  */
 package org.carrot2.math.matrix;
 
-import org.carrot2.math.mahout.matrix.*;
+import org.carrot2.math.mahout.matrix.DoubleMatrix2D;
 
 /**
  * For an <i>m</i> &times; <i>n</i> matrix <i>A</i> and given <i>k</i>, computes an <i>m </i>

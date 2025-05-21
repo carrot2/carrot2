@@ -10,7 +10,7 @@
  */
 package com.carrotsearch.lingo3g.it;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.carrotsearch.progresso.GenericTask;
 import com.carrotsearch.progresso.Task;

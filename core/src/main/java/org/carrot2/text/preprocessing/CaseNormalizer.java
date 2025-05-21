@@ -10,7 +10,11 @@
  */
 package org.carrot2.text.preprocessing;
 
-import com.carrotsearch.hppc.*;
+import com.carrotsearch.hppc.BitSet;
+import com.carrotsearch.hppc.ByteArrayList;
+import com.carrotsearch.hppc.IntArrayList;
+import com.carrotsearch.hppc.IntStack;
+import com.carrotsearch.hppc.ShortArrayList;
 import com.carrotsearch.hppc.sorting.IndirectSort;
 import java.util.ArrayList;
 import java.util.Arrays;

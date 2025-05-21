@@ -44,8 +44,8 @@ tasks.register("repackageLuceneAnalysisClasses", ProGuardTask, {
   dontwarn
 
   injars(filter: [
-          '**/*.class',
-          '**/galician.rslp'
+    '**/*.class',
+    '**/galician.rslp'
   ].join(","), files(configurations.luceneResources))
   outjars repackagedJar.get().asFile
 })

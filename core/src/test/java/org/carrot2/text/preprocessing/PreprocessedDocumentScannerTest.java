@@ -10,7 +10,7 @@
  */
 package org.carrot2.text.preprocessing;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.Arrays;

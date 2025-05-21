@@ -17,7 +17,10 @@ import java.util.Arrays;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.carrot2.AwaitsFix;
-import org.carrot2.clustering.*;
+import org.carrot2.clustering.CachedLangComponents;
+import org.carrot2.clustering.Cluster;
+import org.carrot2.clustering.ClusteringAlgorithmTestBase;
+import org.carrot2.clustering.TestDocument;
 import org.carrot2.language.TestsLanguageComponentsFactoryVariant1;
 import org.junit.Test;
 

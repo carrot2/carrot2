@@ -3,29 +3,29 @@ apply plugin: 'java'
 apply plugin: 'java-test-fixtures'
 
 configurations {
-    distribution
+  distribution
 }
 
 dependencies {
-    distribution project(path: ":dcs:distribution", configuration: "distDir")
+  distribution project(path: ":dcs:distribution", configuration: "distDir")
 
-    testImplementation project(":dcs:examples")
-    testImplementation project(":dcs:model")
-    testImplementation libs.jackson.databind
+  testImplementation project(":dcs:examples")
+  testImplementation project(":dcs:model")
+  testImplementation libs.jackson.databind
 
-    testFixturesApi project(':infra:tests')
-    testFixturesApi project(":dcs:distribution")
-    testFixturesApi libs.carrotsearch.procfork
-    testFixturesApi libs.carrotsearch.console.launcher
-    testFixturesApi libs.jetty.server
-    testFixturesApi libs.jetty.webapp
+  testFixturesApi project(':infra:tests')
+  testFixturesApi project(":dcs:distribution")
+  testFixturesApi libs.carrotsearch.procfork
+  testFixturesApi libs.carrotsearch.console.launcher
+  testFixturesApi libs.jetty.server
+  testFixturesApi libs.jetty.webapp
 }
 
 test {
-    dependsOn configurations.distribution
-    maxParallelForks = 1
+  dependsOn configurations.distribution
+  maxParallelForks = 1
 
-    doFirst {
-        systemProperty "dist", "${configurations.distribution.singleFile}"
-    }
+  doFirst {
+    systemProperty "dist", "${configurations.distribution.singleFile}"
+  }
 }

@@ -6,9 +6,16 @@ dependencies {
 }
 
 forbiddenApisMain {
-  bundledSignatures -= ['jdk-internal', 'jdk-non-portable', 'jdk-system-out']
+  bundledSignatures -= [
+    'jdk-internal',
+    'jdk-non-portable',
+    'jdk-system-out'
+  ]
 }
 
 forbiddenApisTest {
-  bundledSignatures -= ['jdk-internal', 'jdk-non-portable']
+  bundledSignatures -= [
+    'jdk-internal',
+    'jdk-non-portable'
+  ]
 }

@@ -10,7 +10,7 @@
  */
 package org.carrot2.text.preprocessing.filter;
 
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /** Filters out phrases that are not left complete. */

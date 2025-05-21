@@ -12,7 +12,11 @@ package org.carrot2.text.preprocessing;
 
 import com.carrotsearch.hppc.IntIntHashMap;
 import com.carrotsearch.hppc.procedures.IntIntProcedure;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.carrot2.language.TokenTypeUtils;
 import org.carrot2.text.preprocessing.PreprocessingContext.AllPhrases;

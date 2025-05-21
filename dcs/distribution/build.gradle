@@ -143,12 +143,12 @@ task distDirBare {
 
 task distDir {
   dependsOn collectScripts,
-            collectDependencies,
-            collectCtxService,
-            collectCtxRoot,
-            collectCtxJavadoc,
-            collectCtxFrontend,
-            collectExamples
+      collectDependencies,
+      collectCtxService,
+      collectCtxRoot,
+      collectCtxJavadoc,
+      collectCtxFrontend,
+      collectExamples
 
   if (!project.hasProperty("intellij.launch.skipDocs")) {
     dependsOn collectCtxDoc

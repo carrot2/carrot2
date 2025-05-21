@@ -10,7 +10,12 @@
  */
 package org.carrot2.text.preprocessing;
 
-import static org.carrot2.text.preprocessing.PreprocessingContextAssert.*;
+import static org.carrot2.text.preprocessing.PreprocessingContextAssert.DS;
+import static org.carrot2.text.preprocessing.PreprocessingContextAssert.EOS;
+import static org.carrot2.text.preprocessing.PreprocessingContextAssert.FS;
+import static org.carrot2.text.preprocessing.PreprocessingContextAssert.MW;
+import static org.carrot2.text.preprocessing.PreprocessingContextAssert.assertThat;
+import static org.carrot2.text.preprocessing.PreprocessingContextAssert.tokens;
 
 import org.assertj.core.api.Assertions;
 import org.carrot2.TestBase;
