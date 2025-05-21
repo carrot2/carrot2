@@ -1,5 +1,5 @@
 apply plugin: 'java-library'
-apply plugin: 'com.diffplug.spotless' 
+apply plugin: 'com.diffplug.spotless'
 
 apply from: rootProject.file("gradle/jflex.gradle")
 
@@ -13,8 +13,8 @@ configurations {
 }
 
 dependencies {
-  api deps.carrotsearch.hppc
-  
+  api libs.carrotsearch.hppc
+
   langResources fileTree(dir: 'src/main/resources', includes: langResourcePatterns)
 
   jsonDoclet project(":infra:jsondoclet")
@@ -45,7 +45,7 @@ javadoc {
   (options as StandardJavadocDocletOptions).with {
     overview = file("src/main/java/overview.html")
     linksOffline('https://docs.oracle.com/en/java/javase/11/docs/api/',
-      rootProject.file('etc/javadoc/11').toString())
+        rootProject.file('etc/javadoc/11').toString())
   }
 }
 

@@ -1,35 +1,4 @@
 
-allprojects {
-  task tidy() {
-    description "Applies formatters and cleanups to sources (if configured)."
-    group "verification"
-  }
-
-  tasks.matching { task -> task.name == "spotlessApply" }.configureEach { v ->
-    tidy.dependsOn v
-  }
-
-  tasks.matching { task -> task.name == "spotlessCheck" }.configureEach { v ->
-    check.dependsOn v
-  }
-}
-
-allprojects { prj ->
-  plugins.withType(JavaPlugin) {
-    prj.apply plugin: 'com.diffplug.spotless'
-
-    spotless {
-      java {
-        googleJavaFormat(deps.versions.googleJavaFormat.get())
-
-        licenseHeaderFile licenseHeader
-        lineEndings = 'UNIX'
-        endWithNewline()
-      }
-    }
-  }
-}
-
 // Don't use spotlessjs because it's terribly slow. Run prettier via npm.
 configure(project(":dcs:contexts:frontend")) { prj ->
   prj.apply plugin: 'com.github.node-gradle.node'
@@ -55,10 +24,14 @@ configure(project(":dcs:contexts:frontend")) { prj ->
     File tsOutput = file("${buildDir}/prettier/${task.name}.txt")
 
     inputs.files(fileTree(dir: ".",
-        // narrow down the list so that node_modules isn't scanned.
-        includes: [ "app/**", "theme/**", "ui/**" ],
-        // Apply the same exclusions as in .prettierignore.
-        excludes: file(".prettierignore").readLines("UTF-8").findAll { !it.isBlank() } ))
+    // narrow down the list so that node_modules isn't scanned.
+    includes: [
+      "app/**",
+      "theme/**",
+      "ui/**"
+    ],
+    // Apply the same exclusions as in .prettierignore.
+    excludes: file(".prettierignore").readLines("UTF-8").findAll { !it.isBlank() } ))
     outputs.file(tsOutput)
 
     doLast {
@@ -69,28 +42,4 @@ configure(project(":dcs:contexts:frontend")) { prj ->
   // Attach to convention tasks.
   tasks.check.dependsOn prettierCheck
   tasks.tidy.dependsOn prettierApply
-}
-
-configure(project(":gradle")) { prj ->
-  prj.apply plugin: 'groovy'
-  prj.apply plugin: 'com.diffplug.spotless'
-
-  spotless {
-    groovy {
-      excludeJava()
-      greclipse(deps.versions.greclipse.get())
-
-      licenseHeaderFile licenseHeader
-      lineEndings = 'UNIX'
-      endWithNewline()
-    }
-
-    groovyGradle {
-      target '*.gradle', 'gradle/**/*.gradle'
-
-      greclipse(deps.versions.greclipse.get()).configFile rootProject.files(
-          'gradle/validation/spotless/spotless.eclipseformat.xml',
-          'gradle/validation/spotless/spotless.groovyformat.prefs')
-    }
-  }
 }

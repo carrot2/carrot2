@@ -1,11 +1,5 @@
-def minJavaVersion = JavaVersion.toVersion(deps.versions.minJava.get())
-
 allprojects {
   plugins.withType(JavaPlugin) {
-    java {
-      sourceCompatibility = minJavaVersion
-      targetCompatibility = minJavaVersion
-    }
 
     base.archivesName = "carrot2" + project.path.replace(':', '-')
 

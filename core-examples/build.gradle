@@ -7,8 +7,8 @@ dependencies {
   implementation project(':core')
   testImplementation project(':lang:polish')
   testImplementation project(':lang:lucene')
-  testImplementation deps.lucene.analysis.icu
-  testImplementation deps.junit
+  testImplementation libs.lucene.analysis.icu
+  testImplementation libs.junit
 }
 
 configurations {
@@ -27,13 +27,13 @@ task buildDistribution(type: Sync) {
 
   doFirst {
     antPrj.setProperty("version.lucene-analysis-icu", getResolvedVersion(
-            deps.lucene.analysis.icu.get(),
-            configurations.testRuntimeClasspath
-    ))
+        libs.lucene.analysis.icu.get(),
+        configurations.testRuntimeClasspath
+        ))
     antPrj.setProperty("version.junit", getResolvedVersion(
-            deps.junit.get(),
-            configurations.testRuntimeClasspath
-    ))
+        libs.junit.get(),
+        configurations.testRuntimeClasspath
+        ))
   }
 
   from(project.projectDir, {

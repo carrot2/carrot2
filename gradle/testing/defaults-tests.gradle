@@ -13,10 +13,10 @@ allprojects {
   plugins.withId("com.carrotsearch.gradle.opts") {
 
     def sysPropOpts = [
-        opts.option([name: "tests.slow", defaultValue: false, description: "Enable @Slow tests"]),
-        opts.option([name: "tests.veryslow", defaultValue: false, description: "Enable @VerySlow tests"]),
-        opts.option([name: "tests.nightly", defaultValue: false, description: "Enable @Nightly tests."]),
-        opts.option([name: "tests.filter", defaultValue: null, description: "Test filtering expression."])
+      opts.option([name: "tests.slow", defaultValue: false, description: "Enable @Slow tests"]),
+      opts.option([name: "tests.veryslow", defaultValue: false, description: "Enable @VerySlow tests"]),
+      opts.option([name: "tests.nightly", defaultValue: false, description: "Enable @Nightly tests."]),
+      opts.option([name: "tests.filter", defaultValue: null, description: "Test filtering expression."])
     ]
 
     tasks.withType(Test).configureEach { task ->

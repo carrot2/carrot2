@@ -1,7 +1,6 @@
 // Add test duration summary at the end of the build.
 
-def allTests = [
-]
+def allTests = []
 
 allprojects {
   tasks.withType(Test) { task ->

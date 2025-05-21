@@ -8,8 +8,8 @@ configurations {
 dependencies {
   implementation project(":core")
   implementation project(":infra:jsondoclet-model")
-  implementation deps.carrotsearch.console.launcher
-  implementation deps.jackson.databind
+  implementation libs.carrotsearch.console.launcher
+  implementation libs.jackson.databind
 
   jsonJavadocs project(path: ":core", configuration: "jsonJavadoc")
 }

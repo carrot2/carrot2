@@ -11,14 +11,14 @@ dependencies {
 
     testImplementation project(":dcs:examples")
     testImplementation project(":dcs:model")
-    testImplementation deps.jackson.databind
+    testImplementation libs.jackson.databind
 
     testFixturesApi project(':infra:tests')
     testFixturesApi project(":dcs:distribution")
-    testFixturesApi deps.carrotsearch.procfork
-    testFixturesApi deps.carrotsearch.console.launcher
-    testFixturesApi deps.jetty.server
-    testFixturesApi deps.jetty.webapp
+    testFixturesApi libs.carrotsearch.procfork
+    testFixturesApi libs.carrotsearch.console.launcher
+    testFixturesApi libs.jetty.server
+    testFixturesApi libs.jetty.webapp
 }
 
 test {

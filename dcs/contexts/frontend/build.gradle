@@ -9,7 +9,7 @@ dependencies {
 ext {
   descriptorsDir = file("app/src/carrot2/service/algorithms/descriptors")
   jsSources = fileTree('app/src') + fileTree('app/public')
-  jsBuildDir = file("app/build")
+  jsBuildDir.set(file("app/build"))
 }
 
 task descriptors(type: Sync) {

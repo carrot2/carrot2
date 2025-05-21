@@ -2,5 +2,5 @@ apply plugin: 'java-library'
 
 dependencies {
   api project(":core")
-  api deps.jackson.databind
+  api libs.jackson.databind
 }

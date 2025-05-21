@@ -7,9 +7,9 @@ dependencies {
   implementation project(':core')
   implementation project(':dcs:model')
 
-  implementation deps.jackson.databind
-  implementation deps.httpclient
-  implementation deps.carrotsearch.console.launcher
+  implementation libs.jackson.databind
+  implementation libs.httpclient
+  implementation libs.carrotsearch.console.launcher
 }
 
 configurations {
@@ -28,15 +28,15 @@ task buildDistribution(type: Sync) {
 
   doFirst {
     antPrj.setProperty("version.jackson-databind", getResolvedVersion(
-            deps.jackson.databind.get(),
+            libs.jackson.databind.get(),
             configurations.runtimeClasspath
     ))
     antPrj.setProperty("version.httpclient", getResolvedVersion(
-            deps.httpclient.get(),
+            libs.httpclient.get(),
             configurations.runtimeClasspath
     ))
     antPrj.setProperty("version.launcher", getResolvedVersion(
-            deps.carrotsearch.console.launcher.get(),
+            libs.carrotsearch.console.launcher.get(),
             configurations.runtimeClasspath
     ))
   }

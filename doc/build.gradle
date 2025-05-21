@@ -14,7 +14,7 @@ ext {
 
   // Gatsby has a non-configurable output folder, sigh.
   // https://github.com/gatsbyjs/gatsby/issues/1878
-  jsBuildDir = file("public")
+  jsBuildDir.set(file("public"))
 }
 
 task descriptors(type: Sync) {
