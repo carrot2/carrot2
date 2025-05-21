@@ -17,7 +17,11 @@ allprojects {
   }
 
   tasks.withType(Test).configureEach { task ->
-    ["tests.slow", "tests.veryslow", "tests.nightly"].each { key ->
+    [
+      "tests.slow",
+      "tests.veryslow",
+      "tests.nightly"
+    ].each { key ->
       def opt = buildOptions {}.getOption(key)
       if (opt.isPresent()) {
         task.systemProperty(opt.name, opt.asStringProvider().get())
