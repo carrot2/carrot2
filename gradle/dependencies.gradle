@@ -37,6 +37,9 @@ allprojects {
         add(conf.name, deps.junit, {
           because("Use consistent JUnit version.")
         })
+        add(conf.name, deps.bytebuddy, {
+          because("Use consistent ByteBuddy version.")
+        })
       }
     }
   }
