@@ -22,7 +22,7 @@ test {
 
   shouldRunAfter ":core:test"
 
-  maxParallelForks 2
+  maxParallelForks = 2
 
   doFirst {
     def distZip = configurations.distributionZip.singleFile

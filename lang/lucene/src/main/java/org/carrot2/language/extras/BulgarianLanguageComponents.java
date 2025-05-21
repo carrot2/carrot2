@@ -10,11 +10,11 @@
  */
 package org.carrot2.language.extras;
 
-import org.apache.lucene.analysis.bg.BulgarianStemmer;
 import org.carrot2.language.ExtendedWhitespaceTokenizer;
 import org.carrot2.language.SingleLanguageComponentsProviderImpl;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
+import org.carrot2.lucene.analysis.LuceneAccessBypass;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.LabelFormatterImpl;
 
@@ -28,7 +28,6 @@ public class BulgarianLanguageComponents extends SingleLanguageComponentsProvide
     registerResourceless(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
     registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
     registerDefaultLexicalData();
-    registerResourceless(
-        Stemmer.class, () -> new LuceneStemmerAdapter(new BulgarianStemmer()::stem));
+    registerResourceless(Stemmer.class, LuceneAccessBypass::getBulgarianStemmer);
   }
 }

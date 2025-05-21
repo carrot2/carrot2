@@ -10,12 +10,11 @@
  */
 package org.carrot2.language.extras;
 
-import org.apache.lucene.analysis.ar.ArabicNormalizer;
-import org.apache.lucene.analysis.ar.ArabicStemmer;
 import org.carrot2.language.ExtendedWhitespaceTokenizer;
 import org.carrot2.language.SingleLanguageComponentsProviderImpl;
 import org.carrot2.language.Stemmer;
 import org.carrot2.language.Tokenizer;
+import org.carrot2.lucene.analysis.LuceneAccessBypass;
 import org.carrot2.text.preprocessing.LabelFormatter;
 import org.carrot2.text.preprocessing.LabelFormatterImpl;
 
@@ -29,17 +28,6 @@ public class ArabicLanguageComponents extends SingleLanguageComponentsProviderIm
     registerResourceless(Tokenizer.class, ExtendedWhitespaceTokenizer::new);
     registerResourceless(LabelFormatter.class, () -> new LabelFormatterImpl(" "));
     registerDefaultLexicalData();
-    registerResourceless(
-        Stemmer.class,
-        () -> {
-          final ArabicStemmer stemmer = new ArabicStemmer();
-          final ArabicNormalizer normalizer = new ArabicNormalizer();
-          return new LuceneStemmerAdapter(
-              (word, len) -> {
-                int newLen = normalizer.normalize(word, len);
-                newLen = stemmer.stem(word, newLen);
-                return newLen;
-              });
-        });
+    registerResourceless(Stemmer.class, LuceneAccessBypass::getArabicStemmer);
   }
 }
