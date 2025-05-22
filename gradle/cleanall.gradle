@@ -4,7 +4,7 @@ allprojects {
     group = "build"
   }
 
-  tasks.matching { it.name == "clean" }.all { task ->
+  tasks.matching { it.name == "clean" }.configureEach { task ->
     cleanall.dependsOn clean
   }
 }

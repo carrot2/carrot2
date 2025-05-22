@@ -63,11 +63,15 @@ task zip(type: Zip) {
 
   from(distDir, {
     filesMatching(["**/dcs", "**/gradlew"], { copySpec ->
-      copySpec.mode = 0755
+      copySpec.permissions {
+        it.unix(0755)
+      }
     })
   })
 
-  fileMode 0644
+  filePermissions {
+    unix(0644)
+  }
 
   into "carrot2-${project.version}/"
 }

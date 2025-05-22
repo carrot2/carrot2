@@ -37,7 +37,7 @@ def buildDistribution = tasks.register("buildDistribution", Sync, {
   from(project.projectDir, {
     include 'src/**'
     exclude 'src/main/assembly/**'
-    includeEmptyDirs false
+    includeEmptyDirs = false
     filteringCharset = 'UTF-8'
     filter(LineContains, negate: true, contains: ['fragment-start{'])
     filter(LineContains, negate: true, contains: ['fragment-end{'])

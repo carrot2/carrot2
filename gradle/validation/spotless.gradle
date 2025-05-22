@@ -4,15 +4,15 @@ configure(project(":dcs:contexts:frontend")) { prj ->
   prj.apply plugin: 'com.github.node-gradle.node'
 
   task prettierCheck(type: YarnTask) {
-    group 'verification'
-    description 'Runs npm prettier check'
+    group = 'verification'
+    description = 'Runs npm prettier check'
 
     args = ['prettier-check']
   }
 
   task prettierApply(type: YarnTask) {
-    group 'verification'
-    description 'Runs npm prettier'
+    group = 'verification'
+    description = 'Runs npm prettier'
 
     args = ['prettier']
   }

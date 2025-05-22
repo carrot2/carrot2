@@ -22,8 +22,8 @@ configure(rootProject) {
   }
 
   task publishLocal() {
-    group "Publishing"
-    description "Publish Maven artifacts locally to " + file(mavenBuildRepo)
+    group = "Publishing"
+    description = "Publish Maven artifacts locally to " + file(mavenBuildRepo)
   }
 
   task isGitClean() {
@@ -36,8 +36,8 @@ configure(rootProject) {
 
   task publishSonatype() {
     dependsOn isGitClean
-    group "Publishing"
-    description "Publish Maven artifacts to Sonatype OSS Nexus"
+    group = "Publishing"
+    description = "Publish Maven artifacts to Sonatype OSS Nexus"
   }
 
   artifacts {
@@ -70,13 +70,13 @@ configure(subprojects.findAll { it.path in published }) {
         }
         maven {
           name = 'sonatype'
-          url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
+          url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
           credentials {
             if (project.hasProperty('nexusUsername')) {
-              username project.nexusUsername
+              username = project.nexusUsername
             }
             if (project.hasProperty('nexusPassword')) {
-              password project.nexusPassword
+              password = project.nexusPassword
             }
           }
         }

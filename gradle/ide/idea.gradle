@@ -16,8 +16,8 @@ allprojects {
 
   idea {
     module {
-      outputDir file('build/idea/classes/main')
-      testOutputDir file('build/idea/classes/test')
+      outputDir = file('build/idea/classes/main')
+      testOutputDir = file('build/idea/classes/test')
       downloadSources = true
     }
   }

@@ -46,7 +46,7 @@ configure(projectList) {
   }
 
   task yarnInstall(type: YarnTask) {
-    group 'build'
+    group = 'build'
 
     inputs.file('package.json')
     inputs.file('yarn.lock')
@@ -59,7 +59,7 @@ configure(projectList) {
   }
 
   task yarnBuild(type: YarnTask) {
-    group 'build'
+    group = 'build'
     dependsOn yarnInstall
 
     def nonInputProperties = [
@@ -131,10 +131,12 @@ configure(projectList) {
 
   assemble.dependsOn configurations.yarnOutput
 
+  def cleanJsBuildDir = tasks.register("cleanJsBuildDir", Delete, {
+    delete project.files(project.ext.jsBuildDir)
+  })
+
   clean {
-    doLast {
-      project.delete project.files(project.ext.jsBuildDir)
-    }
+    dependsOn cleanJsBuildDir
   }
 
   task cleanNodeDirs(type: Delete) {

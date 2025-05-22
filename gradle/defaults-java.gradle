@@ -1,14 +1,14 @@
 allprojects {
-  plugins.withType(JavaPlugin) {
+  plugins.withType(JavaPlugin).configureEach {
 
     base.archivesName = "carrot2" + project.path.replace(':', '-')
 
-    tasks.withType(JavaCompile) {
-      options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    tasks.withType(JavaCompile).configureEach {
+      options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation" << "-XDsuppressNotes"
       options.encoding = "UTF-8"
     }
 
-    tasks.withType(Jar) {
+    tasks.withType(Jar).configureEach {
       manifest {
         attributes(
             "Implementation-Vendor": "Carrot2 (https://carrot2.org)",
@@ -17,11 +17,11 @@ allprojects {
       }
     }
 
-    tasks.withType(Javadoc) {
+    tasks.withType(Javadoc).configureEach {
       options.encoding = 'UTF-8'
     }
 
-    tasks.matching { it.name == "javadoc" }.all {
+    tasks.matching { it.name == "javadoc" }.configureEach {
       title = "${project.name} ${project.version} API Documentation"
 
       options.addBooleanOption('html5', true)
@@ -32,7 +32,7 @@ allprojects {
 }
 
 subprojects {
-  plugins.withType(JavaPlugin) {
+  plugins.withType(JavaPlugin).configureEach {
     def moduleName = "${project.group}.${project.name.replaceAll('-', '.')}"
     jar {
       manifest {

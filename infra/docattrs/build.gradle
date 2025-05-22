@@ -46,8 +46,10 @@ task generateDescriptors(type: JavaExec) {
       configurations.jsonJavadocs.singleFile
     ]
 
-    project.delete(descriptorsDir)
     descriptorsDir.mkdirs()
+    ((File) descriptorsDir).listFiles().each {
+      it.delete()
+    }
   }
 }
 

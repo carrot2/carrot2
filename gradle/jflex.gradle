@@ -16,9 +16,9 @@ sourceSets {
   }
 }
 
-task jflex {
-  description "Recompile jflex grammar files."
-  group "build"
+tasks.register("jflex", {
+  description = "Recompile jflex grammar files."
+  group = "build"
 
   def jflexSource = file('src/main/jflex').toPath()
   def jflexTarget = file('src/main/java-jflex').toPath()
@@ -30,7 +30,7 @@ task jflex {
     inputs.files.forEach { path ->
       def relative = jflexSource.relativize(path.toPath())
 
-      javaexec {
+      buildinfra.execOps.javaexec {
         classpath {
           configurations.jflex
         }
@@ -47,4 +47,4 @@ task jflex {
       }
     }
   }
-}
+})
