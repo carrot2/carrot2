@@ -1,9 +1,13 @@
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
+  - package-ecosystem: github-actions
     directory: "/"
+    commit-message:
+      prefix: deps(ghactions)
     schedule:
       interval: "weekly"
+    labels: [dependencies]
+
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -11,3 +15,12 @@ updates:
     allow:
       - dependency-type: "production"
     open-pull-requests-limit: 0
+
+  - package-ecosystem: gradle
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: deps(java)
+    labels: [dependencies]
