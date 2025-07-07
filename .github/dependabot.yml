@@ -10,3 +10,4 @@ updates:
       interval: "weekly"
     allow:
       - dependency-type: "production"
+    open-pull-requests-limit: 0
