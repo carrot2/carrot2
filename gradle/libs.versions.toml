@@ -55,4 +55,4 @@ proguard-gradle = { module = "com.guardsquare:proguard-gradle", version.ref = "p
 
 [plugins]
 node-gradle = "com.github.node-gradle.node:7.1.0"
-buildinfra = "com.carrotsearch.gradle.buildinfra:0.0.16"
+buildinfra = "com.carrotsearch.gradle.buildinfra:0.0.17"
