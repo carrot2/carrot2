@@ -1701,17 +1701,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@carrotsearch/circles@npm:2.3.8":
-  version: 2.3.8
-  resolution: "@carrotsearch/circles@npm:2.3.8"
-  checksum: 6f05a423ead49be1acdede357f45a61d6ad136a7afbf29d5342e8ceaf0c61724e9dc5492620554407e7ea7ce41bb2064af95d3e32f113e244818bf4bf10b9f6a
+"@carrotsearch/circles@npm:2.3.10":
+  version: 2.3.10
+  resolution: "@carrotsearch/circles@npm:2.3.10"
+  checksum: 55a16576b156b210dbe22bfe633bbfa71a13ee3f175aa4188a81d6856da0e331c6f89b837033dc14e8f4938f1f254747fb23844af1c667dcdfb6a97cbebbe258
   languageName: node
   linkType: hard
 
-"@carrotsearch/foamtree@npm:3.5.0":
-  version: 3.5.0
-  resolution: "@carrotsearch/foamtree@npm:3.5.0"
-  checksum: b8c62258d998b8d86276b9cf4b0af64fcd56f5246ae5cc81585aabbc5842eff75e45d495337df438f0d4293fc877e104baf3de6296e8ab87a737292ccd508537
+"@carrotsearch/foamtree@npm:3.5.4":
+  version: 3.5.4
+  resolution: "@carrotsearch/foamtree@npm:3.5.4"
+  checksum: 6b704595d0831ad0a6c429d0165c457e99749788213dd61da3496a2c046647f9d0d7d4837e61fa25df773ca0dd666c007a4f57702cd878fe27fa8fd6f3f96ed9
   languageName: node
   linkType: hard
 
@@ -1729,8 +1729,8 @@ __metadata:
   resolution: "@carrotsearch/ui@workspace:ui"
   dependencies:
     "@blueprintjs/core": 3.50.4
-    "@carrotsearch/circles": 2.3.8
-    "@carrotsearch/foamtree": 3.5.0
+    "@carrotsearch/circles": 2.3.10
+    "@carrotsearch/foamtree": 3.5.4
     "@carrotsearch/theme": 0.1.0
     "@risingstack/react-easy-state": 7.0.0-alpha.1
     classnames: 2.3.1
@@ -3357,8 +3357,8 @@ __metadata:
   resolution: "app@workspace:app"
   dependencies:
     "@blueprintjs/core": 3.51.3
-    "@carrotsearch/circles": 2.3.8
-    "@carrotsearch/foamtree": 3.5.0
+    "@carrotsearch/circles": 2.3.10
+    "@carrotsearch/foamtree": 3.5.4
     "@carrotsearch/ui": 0.1.0
     "@craco/craco": 6.4.2
     "@risingstack/react-easy-state": 7.0.0-alpha.1
