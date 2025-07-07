@@ -8,7 +8,7 @@ yarn = "1.22.19"
 carrotsearch-console = "1.2.0"
 jackson = "2.19.0"
 jetty = "11.0.25"
-log4j = "2.24.3"
+log4j = "2.25.0"
 lucene = "10.2.1"
 # @keep This is the minimum required Java version.
 minJava = "21"
