@@ -1,11 +1,3 @@
-dependencyResolutionManagement {
-  versionCatalogs {
-    libs {
-      from(files('versions.toml'))
-    }
-  }
-}
-
 rootProject.name = 'carrot2'
 
 include 'core'
