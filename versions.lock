@@ -18,7 +18,7 @@
       "commons-codec:commons-codec:1.11" : "fd978ea5,refs=40",
       "commons-logging:commons-logging:1.2" : "fd978ea5,refs=40",
       "junit:junit:4.13.2" : "a13feae5,refs=40",
-      "net.bytebuddy:byte-buddy:1.17.5" : "a3d81b60,refs=38",
+      "net.bytebuddy:byte-buddy:1.17.6" : "a3d81b60,refs=38",
       "net.bytebuddy:byte-buddy-agent:1.17.5" : "e8a33386,refs=2",
       "org.apache.commons:commons-compress:1.24.0" : "e62c9de6,refs=2",
       "org.apache.commons:commons-lang3:3.17.0" : "c783940b,refs=4",
