@@ -198,7 +198,9 @@ configure(subprojects.findAll { it.path in published }) {
 
     signing {
       sign publishing.publications.maven
-      sign publishing.publications.jars
+      if (project.hasProperty("signing.keyId")) {
+        sign publishing.publications.jars
+      }
     }
   }
 }
