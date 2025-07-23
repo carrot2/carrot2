@@ -70,7 +70,7 @@ configure(subprojects.findAll { it.path in published }) {
         }
         maven {
           name = 'sonatype'
-          url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
+          url = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2"
           credentials {
             if (project.hasProperty('nexusUsername')) {
               username = project.nexusUsername
@@ -146,6 +146,7 @@ configure(subprojects.findAll { it.path in published }) {
 
     signing {
       sign publishing.publications.maven
+      sign publishing.publications.jars
     }
   }
 }
