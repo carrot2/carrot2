@@ -10,7 +10,7 @@ https://github.com/carrot2/carrot2/issues
 
 * Bump version number to a non-snapshot version ([versions] -> carrot2)
 
-vi versions.toml
+vi gradle/libs.versions.toml
 
 commit changes.
 
@@ -43,11 +43,12 @@ NOTE: the staging environment requires the vps node to be (manually) started at 
 
 * Publish to sonatype staging repo.
 
-gradlew publishSonatype --max-workers=1
+./gradlew publishSonatype --max-workers=1
+./gradlew promoteToMavenCentral
 
-* Go to sonatype, verify and ack the release.
+* Go to maven central publisher, verify the release is published (~10 mins).
 
-https://s01.oss.sonatype.org/index.html#stagingRepositories
+https://central.sonatype.com/publishing/deployments
 
 * Bump version number strings to the subsequent version, commit.
 

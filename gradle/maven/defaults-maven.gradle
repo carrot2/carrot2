@@ -45,6 +45,58 @@ configure(rootProject) {
       builtBy tasks.publishLocal
     }
   }
+
+  task promoteToMavenCentral {
+    group = 'publishing'
+    description = 'Promotes staged artifacts to Maven Central'
+
+    onlyIf {
+      project.hasProperty('nexusUsername') &&
+          project.hasProperty('nexusPassword') &&
+          !project.version.endsWith('-SNAPSHOT')
+    }
+
+    doLast {
+      def username = project.properties['nexusUsername']
+      def password = project.properties['nexusPassword']
+
+      // Create base64 encoded token for authentication
+      def token = "${username}:${password}".bytes.encodeBase64().toString()
+
+      // Get open staging repositories
+      def response = new URL("https://ossrh-staging-api.central.sonatype.com/manual/search/repositories").openConnection()
+      response.setRequestProperty("Authorization", "Basic ${token}")
+      response.setRequestProperty("Content-Type", "application/json")
+
+      def repositories = new groovy.json.JsonSlurper().parse(response.inputStream)
+
+      // Promote each open repository
+      repositories.repositories.each { repo ->
+        println("Repo: ${repo.key} -> ${repo.state}")
+
+        if (repo.state == "open") {
+          project.logger.lifecycle("Promoting repository ${repo.key}")
+
+          def promoteUrl = new URL("https://ossrh-staging-api.central.sonatype.com/manual/upload/repository/${repo.key}?publishing_type=automatic")
+          def connection = promoteUrl.openConnection()
+          connection.setRequestMethod("POST")
+          connection.setRequestProperty("Authorization", "Basic ${token}")
+          connection.setRequestProperty("Content-Type", "application/json")
+
+          def responseCode = connection.responseCode
+          if (responseCode == 200) {
+            project.logger.lifecycle("Successfully promoted repository ${repo.key}")
+          } else {
+            def errorStream = connection.errorStream
+            def errorBody = errorStream ? errorStream.text : "No error body available"
+            def errorMessage = "Failed to promote repository ${repo.key}. Response code: ${responseCode}. Response message: ${connection.responseMessage}. Error body: ${errorBody}"
+            project.logger.error(errorMessage)
+            throw new GradleException(errorMessage)
+          }
+        }
+      }
+    }
+  }
 }
 
 configure(subprojects.findAll { it.path in published }) {
