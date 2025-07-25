@@ -36,11 +36,10 @@ IF "%JVMVERSION%"=="13"   GOTO jvmUnsupported
 IF "%JVMVERSION%"=="14"   GOTO jvmUnsupported
 IF "%JVMVERSION%"=="15"   GOTO jvmUnsupported
 IF "%JVMVERSION%"=="16"   GOTO jvmUnsupported
-
-SET JVMARGS=
-IF /I "%JVMVERSION%" GEQ "16"   GOTO jdk16OrLater
-SET JVMARGS=--illegal-access=deny
-:jdk16OrLater
+IF "%JVMVERSION%"=="17"   GOTO jvmUnsupported
+IF "%JVMVERSION%"=="18"   GOTO jvmUnsupported
+IF "%JVMVERSION%"=="19"   GOTO jvmUnsupported
+IF "%JVMVERSION%"=="20"   GOTO jvmUnsupported
 
 REM Set script name for help.
 SET SCRIPT_NAME=%~n0
@@ -51,7 +50,7 @@ SET JAVA_CMD=java
 :javaSet
 
 REM Launch DCS.
-%JAVA_CMD% %JVMARGS% %DCS_OPTS% -jar "%DCS_HOME%\lib\dcs-launcher-${product.version}.jar" %*
+%JAVA_CMD% %DCS_OPTS% -jar "%DCS_HOME%\lib\dcs-launcher-${product.version}.jar" %*
 SET DCS_EXITVAL=%errorlevel%
 
 REM Set cmd's window title and return with the exit code.
@@ -59,5 +58,5 @@ TITLE %comspec%
 exit /b %DCS_EXITVAL%
 
 :jvmUnsupported
-ECHO ^> [ERROR] ${product.name} requires at least Java 17 (%JVMVERSION% detected).
+ECHO ^> [ERROR] ${product.name} requires at least Java 21 (%JVMVERSION% detected).
 exit /b 1
