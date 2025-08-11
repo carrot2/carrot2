@@ -51,7 +51,7 @@ jobs:
           PRODUCT_VERSION=`cat ${{ env.RELEASE_ARTIFACTS_DIR }}/build.properties | grep "product\.version" | cut -d= -f2`
           echo "PRODUCT_VERSION=${PRODUCT_VERSION}" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         if: ${{ inputs.publish-docs }}
         with:
           repository: carrot2/carrot2.github.io.git
