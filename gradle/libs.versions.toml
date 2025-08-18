@@ -19,7 +19,7 @@ greclipse = "4.26"
 proguard = "7.7.0"
 
 [libraries]
-bytebuddy = "net.bytebuddy:byte-buddy:1.17.6"
+bytebuddy = "net.bytebuddy:byte-buddy:1.17.7"
 assertj = "org.assertj:assertj-core:4.0.0-M1"
 carrotsearch-console-formatters = { module = "com.carrotsearch.console:formatters", version.ref = "carrotsearch-console" }
 carrotsearch-console-launcher = { module = "com.carrotsearch.console:launcher", version.ref = "carrotsearch-console" }
