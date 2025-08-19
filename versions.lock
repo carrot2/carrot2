@@ -18,8 +18,8 @@
       "commons-codec:commons-codec:1.11" : "fd978ea5,refs=40",
       "commons-logging:commons-logging:1.2" : "fd978ea5,refs=40",
       "junit:junit:4.13.2" : "a13feae5,refs=40",
-      "net.bytebuddy:byte-buddy:1.17.6" : "a3d81b60,refs=38",
-      "net.bytebuddy:byte-buddy-agent:1.17.5" : "e8a33386,refs=2",
+      "net.bytebuddy:byte-buddy:1.17.7" : "a3d81b60,refs=38",
+      "net.bytebuddy:byte-buddy-agent:1.17.6" : "e8a33386,refs=2",
       "org.apache.commons:commons-compress:1.24.0" : "e62c9de6,refs=2",
       "org.apache.commons:commons-lang3:3.18.0" : "c783940b,refs=4",
       "org.apache.commons:commons-text:1.14.0" : "c783940b,refs=4",
@@ -48,7 +48,7 @@
       "org.eclipse.jetty:jetty-webapp:11.0.25" : "b12a6290,refs=6",
       "org.eclipse.jetty:jetty-xml:11.0.25" : "b12a6290,refs=6",
       "org.hamcrest:hamcrest-core:1.3" : "a13feae5,refs=40",
-      "org.mockito:mockito-core:5.18.0" : "e8a33386,refs=2",
+      "org.mockito:mockito-core:5.19.0" : "e8a33386,refs=2",
       "org.objenesis:objenesis:3.3" : "944569a7,refs=1",
       "org.slf4j:slf4j-api:2.0.17" : "bd5c2eb0,refs=45"
     }
