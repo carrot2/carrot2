@@ -159,12 +159,17 @@ export const etoolsSettings = [
 
 export const etoolsSource = query => {
   const store = etoolsSourceConfigStore;
-  return etools(query, {
+  let params = {
     safeSearch: store.safeSearch,
     dataSources: store.dataSources,
     language: store.language,
     country: store.country
-  });
+  };
+
+  if (store.customerId && store.customerId.length > 0) {
+    params.customerId = store.customerId;
+  }
+  return etools(query, params);
 };
 
 /**
