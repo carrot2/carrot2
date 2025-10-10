@@ -169,6 +169,9 @@ export const etoolsSource = query => {
   if (store.customerId && store.customerId.length > 0) {
     params.customerId = store.customerId;
   }
+  if (store.partner && store.partner.length > 0) {
+    params.partner = store.partner;
+  }
   return etools(query, params);
 };
 
