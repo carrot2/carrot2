@@ -98,13 +98,13 @@ jobs:
           token: ${{ secrets.GH_ACCESS_TOKEN }}
 
       - name: Download distribution ZIP
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: distribution
           path: ${{ env.DIST_DIR }}
 
       - name: Download build properties
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: build-properties
           path: ${{ env.DIST_DIR }}
