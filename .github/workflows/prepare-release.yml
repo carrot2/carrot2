@@ -70,14 +70,14 @@ jobs:
           ./gradlew assemble
  
       - name: Store distribution ZIP
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: distribution
           path: 'distribution/build/distZip/*.zip'
           if-no-files-found: error
 
       - name: Store build info
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: build-properties
           path: 'distribution/build/build.properties'
