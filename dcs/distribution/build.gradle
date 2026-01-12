@@ -65,6 +65,7 @@ task collectScripts(type: Sync) {
 
   doFirst {
     def foo = libs.carrotsearch.progresso.jvmversion
+    antPrj.setProperty("minjava", libs.versions.minJava.get())
     antPrj.setProperty("jvmversion.version", getResolvedVersion(libs.carrotsearch.progresso.jvmversion.get(), configurations.runtimeClasspath))
   }
 

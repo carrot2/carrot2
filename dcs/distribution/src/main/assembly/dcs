@@ -35,12 +35,16 @@ esac
 # Determine JVM version and set any extra JVM options accordingly.
 JVMVERSION=`java -jar "$DCS_HOME/lib/progresso-jvmversion-${jvmversion.version}.jar"`
 JVMARGS=""
-case "$JVMVERSION" in
-   "6"|"7"|"8"|"9"|"10"|"11"|"12"|"13"|"14"|"15"|"16"|"17"|"18"|"19"|"20")
-      echo "> [ERROR] DCS requires at least Java 21 ($JVMVERSION detected)."
-      exit 1
-   ;;
-esac
+MINJAVA=${minjava}
+if [ $JVMVERSION -lt $MINJAVA ]; then
+  echo "> [ERROR] DCS requires at least Java $MINJAVA ($JVMVERSION detected)."
+  exit 1
+elif [ $JVMVERSION -le 25 ]; then
+  JVMARGS="--add-modules jdk.incubator.vector --enable-native-access=ALL-UNNAMED"
+else
+  # We don't know what's going to be supported. Don't pass the incubator module.
+  JVMARGS=
+fi
 
 # Try to determine terminal size.
 if [ -z "$COLUMNS" ]; then
@@ -50,7 +54,7 @@ if [ -z "$COLUMNS" ]; then
   fi
 fi
 
-# Collect and quote each arg. 
+# Collect and quote each arg.
 all_args=
 for arg in "$@" ; do
   all_args="$all_args \"$arg\""
@@ -60,6 +64,9 @@ done
 if [ -z "$JAVA_CMD" ]; then
   JAVA_CMD="java"
 fi
+
+# Set script name for help
+export SCRIPT_NAME="l4g"
 
 # Launch the DCS.
 eval $JAVA_CMD $JVMARGS $DCS_OPTS -jar \"$DCS_HOME/lib/dcs-launcher-${product.version}.jar\" "$all_args"

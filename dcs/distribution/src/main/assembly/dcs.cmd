@@ -25,21 +25,19 @@ SET DCS_OPTS=
 REM Determine JVM version and set any extra JVM options accordingly.
 FOR /F "usebackq delims=" %%i IN (`java -jar "%%DCS_HOME%%\lib\progresso-jvmversion-${jvmversion.version}.jar"`) DO SET JVMVERSION=%%i
 
-IF "%JVMVERSION%"=="6"    GOTO jvmUnsupported
-IF "%JVMVERSION%"=="7"    GOTO jvmUnsupported
-IF "%JVMVERSION%"=="8"    GOTO jvmUnsupported
-IF "%JVMVERSION%"=="9"    GOTO jvmUnsupported
-IF "%JVMVERSION%"=="10"   GOTO jvmUnsupported
-IF "%JVMVERSION%"=="11"   GOTO jvmUnsupported
-IF "%JVMVERSION%"=="12"   GOTO jvmUnsupported
-IF "%JVMVERSION%"=="13"   GOTO jvmUnsupported
-IF "%JVMVERSION%"=="14"   GOTO jvmUnsupported
-IF "%JVMVERSION%"=="15"   GOTO jvmUnsupported
-IF "%JVMVERSION%"=="16"   GOTO jvmUnsupported
-IF "%JVMVERSION%"=="17"   GOTO jvmUnsupported
-IF "%JVMVERSION%"=="18"   GOTO jvmUnsupported
-IF "%JVMVERSION%"=="19"   GOTO jvmUnsupported
-IF "%JVMVERSION%"=="20"   GOTO jvmUnsupported
+SET MINJAVA=${minjava}
+
+IF %JVMVERSION% LSS %MINJAVA% GOTO jvmUnsupported
+
+IF %JVMVERSION% LEQ 25 (
+  SET JVMARGS=--add-modules jdk.incubator.vector --enable-native-access=ALL-UNNAMED
+  GOTO :jvmoptsDone
+)
+
+REM We don't know what's going to be supported. Don't pass the incubator module.
+SET JVMARGS=
+
+:jvmoptsDone
 
 REM Set script name for help.
 SET SCRIPT_NAME=%~n0
@@ -58,5 +56,5 @@ TITLE %comspec%
 exit /b %DCS_EXITVAL%
 
 :jvmUnsupported
-ECHO ^> [ERROR] ${product.name} requires at least Java 21 (%JVMVERSION% detected).
+ECHO ^> [ERROR] ${product.name} requires at least Java %MINJAVA% (%JVMVERSION% detected).
 exit /b 1
