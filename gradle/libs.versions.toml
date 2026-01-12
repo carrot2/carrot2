@@ -1,6 +1,6 @@
 [versions]
 # @keep
-carrot2 = "4.8.4"
+carrot2 = "4.8.5-SNAPSHOT"
 # @keep
 node = "18.18.2"
 # @keep
