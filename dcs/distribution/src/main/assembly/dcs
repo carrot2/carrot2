@@ -40,10 +40,9 @@ if [ $JVMVERSION -lt $MINJAVA ]; then
   echo "> [ERROR] DCS requires at least Java $MINJAVA ($JVMVERSION detected)."
   exit 1
 elif [ $JVMVERSION -le 25 ]; then
-  JVMARGS="--add-modules jdk.incubator.vector --enable-native-access=ALL-UNNAMED"
+  JVMARGS=""
 else
-  # We don't know what's going to be supported. Don't pass the incubator module.
-  JVMARGS=
+  JVMARGS=""
 fi
 
 # Try to determine terminal size.

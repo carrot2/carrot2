@@ -30,11 +30,10 @@ SET MINJAVA=${minjava}
 IF %JVMVERSION% LSS %MINJAVA% GOTO jvmUnsupported
 
 IF %JVMVERSION% LEQ 25 (
-  SET JVMARGS=--add-modules jdk.incubator.vector --enable-native-access=ALL-UNNAMED
+  SET JVMARGS=
   GOTO :jvmoptsDone
 )
 
-REM We don't know what's going to be supported. Don't pass the incubator module.
 SET JVMARGS=
 
 :jvmoptsDone
