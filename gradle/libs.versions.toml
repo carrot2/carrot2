@@ -5,9 +5,9 @@ carrot2 = "4.8.2-SNAPSHOT"
 node = "18.18.2"
 # @keep
 yarn = "1.22.19"
-carrotsearch-console = "1.2.0"
-jackson = "2.19.2"
-jetty = "11.0.25"
+carrotsearch-console = "1.4.3"
+jackson = "2.20.1"
+jetty = "11.0.26"
 log4j = "2.24.3"
 lucene = "10.2.2"
 # @keep This is the minimum required Java version.
@@ -16,7 +16,7 @@ minJava = "21"
 googleJavaFormat = "1.27.0"
 # @keep spotless formatting of groovy/gradle files
 greclipse = "4.26"
-proguard = "7.7.0"
+proguard = "7.8.2"
 
 [libraries]
 bytebuddy = "net.bytebuddy:byte-buddy:1.17.7"
@@ -26,7 +26,7 @@ carrotsearch-console-launcher = { module = "com.carrotsearch.console:launcher", 
 carrotsearch-console-testing = { module = "com.carrotsearch.console:testing", version.ref = "carrotsearch-console" }
 carrotsearch-hppc = "com.carrotsearch:hppc:0.10.0"
 carrotsearch-procfork = "com.carrotsearch:procfork:1.0.6"
-carrotsearch-progresso-jvmversion = "com.carrotsearch.progresso:progresso-jvmversion:1.8.3"
+carrotsearch-progresso-jvmversion = "com.carrotsearch.progresso:progresso-jvmversion:1.8.6"
 commons-compress = "org.apache.commons:commons-compress:1.24.0"
 commons-text = "org.apache.commons:commons-text:1.14.0"
 httpclient = "org.apache.httpcomponents:httpclient:4.5.14"
@@ -47,7 +47,7 @@ lucene-analysis-smartcn = { module = "org.apache.lucene:lucene-analysis-smartcn"
 lucene-queries = { module = "org.apache.lucene:lucene-queries", version.ref = "lucene" }
 lucene-queryparser = { module = "org.apache.lucene:lucene-queryparser", version.ref = "lucene" }
 lucene-testFramework = { module = "org.apache.lucene:lucene-test-framework", version.ref = "lucene" }
-mockito-core = "org.mockito:mockito-core:5.19.0"
+mockito-core = "org.mockito:mockito-core:5.21.0"
 morfologik-polish = "org.carrot2:morfologik-polish:2.1.9"
 randomizedtesting-runner = "com.carrotsearch.randomizedtesting:randomizedtesting-runner:2.8.3"
 slf4j-api = "org.slf4j:slf4j-api:2.0.17"
