@@ -13,7 +13,7 @@ lucene = "10.3.2"
 # @keep This is the minimum required Java version.
 minJava = "21"
 # @keep This is GJF version for spotless/ tidy.
-googleJavaFormat = "1.27.0"
+googleJavaFormat = "1.33.0"
 # @keep spotless formatting of groovy/gradle files
 greclipse = "4.26"
 proguard = "7.8.2"
