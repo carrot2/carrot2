@@ -9,7 +9,7 @@ carrotsearch-console = "1.4.3"
 jackson = "2.20.1"
 jetty = "11.0.26"
 log4j = "2.24.3"
-lucene = "10.2.2"
+lucene = "10.3.2"
 # @keep This is the minimum required Java version.
 minJava = "21"
 # @keep This is GJF version for spotless/ tidy.
@@ -28,7 +28,7 @@ carrotsearch-hppc = "com.carrotsearch:hppc:0.10.0"
 carrotsearch-procfork = "com.carrotsearch:procfork:1.0.6"
 carrotsearch-progresso-jvmversion = "com.carrotsearch.progresso:progresso-jvmversion:1.8.6"
 commons-compress = "org.apache.commons:commons-compress:1.24.0"
-commons-text = "org.apache.commons:commons-text:1.14.0"
+commons-text = "org.apache.commons:commons-text:1.15.0"
 httpclient = "org.apache.httpcomponents:httpclient:4.5.14"
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jetty-server = { module = "org.eclipse.jetty:jetty-server", version.ref = "jetty" }
