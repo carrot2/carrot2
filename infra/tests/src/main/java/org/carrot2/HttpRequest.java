@@ -93,11 +93,11 @@ public class HttpRequest {
         for (KeyValue qp : queryParams) {
           builder.addParameter(qp.key, qp.value);
         }
-          try {
-              path = builder.build();
-          } catch (URISyntaxException e) {
-              throw new IOException(e);
-          }
+        try {
+          path = builder.build();
+        } catch (URISyntaxException e) {
+          throw new IOException(e);
+        }
       } else {
         for (KeyValue qp : queryParams) {
           rb.addParameter(qp.key, qp.value);
