@@ -91,7 +91,7 @@ public class BasicIT extends DistributionTestBase {
     Path base = getDistributionBasePath();
 
     Set<String> PERMITTED_LICENSES =
-        new HashSet<>(Arrays.asList("PUBLIC-DOMAIN", "ASL", "CDDL", "BSD", "MIT", "MPL"));
+        new HashSet<>(Arrays.asList("PUBLIC-DOMAIN", "EPL", "ASL", "CDDL", "BSD", "MIT", "MPL"));
 
     // Collect *-LICENSE*.txt files.
     Pattern licenseFileName = Pattern.compile("(?<prefix>.+?)-LICENSE-(?<type>.+?)\\.txt");
