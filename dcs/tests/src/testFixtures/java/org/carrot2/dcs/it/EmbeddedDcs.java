@@ -13,15 +13,12 @@ package org.carrot2.dcs.it;
 import java.io.IOException;
 import java.net.URI;
 import org.carrot2.dcs.JettyContainer;
-import org.eclipse.jetty.util.resource.Resource;
 
 public class EmbeddedDcs implements DcsService {
   private final JettyContainer container;
   private final URI serviceUri;
 
   public EmbeddedDcs(DcsConfig config) throws IOException {
-    // Disable JAR caches, otherwise we get locked files on Windows.
-    Resource.setDefaultUseCaches(false);
 
     if (config.enableTestServlet) {
       System.setProperty(SYSPROP_TESTSERVLET_ENABLE, "true");

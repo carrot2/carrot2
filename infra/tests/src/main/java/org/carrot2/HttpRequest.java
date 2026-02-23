@@ -12,6 +12,7 @@ package org.carrot2;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +21,10 @@ import org.apache.http.HttpEntity;
 import org.apache.http.StatusLine;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -85,8 +88,20 @@ public class HttpRequest {
     private HttpResponse sendRequest(URI path, RequestBuilder rb) throws IOException {
       checkPath(path);
 
-      for (KeyValue qp : queryParams) {
-        rb.addParameter(qp.key, qp.value);
+      if (HttpPost.METHOD_NAME.equals(rb.getMethod())) {
+        var builder = new URIBuilder(path);
+        for (KeyValue qp : queryParams) {
+          builder.addParameter(qp.key, qp.value);
+        }
+          try {
+              path = builder.build();
+          } catch (URISyntaxException e) {
+              throw new IOException(e);
+          }
+      } else {
+        for (KeyValue qp : queryParams) {
+          rb.addParameter(qp.key, qp.value);
+        }
       }
 
       for (KeyValue qp : headers) {

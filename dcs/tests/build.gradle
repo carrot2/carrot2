@@ -19,6 +19,7 @@ dependencies {
   testFixturesApi libs.carrotsearch.console.launcher
   testFixturesApi libs.jetty.server
   testFixturesApi libs.jetty.webapp
+  testFixturesApi libs.jetty.gzip
 }
 
 test {

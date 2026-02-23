@@ -124,6 +124,7 @@ public class ForkedDcs implements DcsService {
                     // We don't care about the result of /shutdown call since
                     // there's an internal race condition inside the shutdown handler's
                     // code that may cause the request to be dropped.
+                    Loggers.CONSOLE.info("/shutdown call resulted in an exception.", e);
                   }
                 })
             .start();
@@ -149,7 +150,10 @@ public class ForkedDcs implements DcsService {
       }
 
       if (process.getProcess().isAlive()) {
-        throw new IOException("Forked Jetty didn't shut down properly within the timeout.");
+        Path stdout = process.getProcessOutputFile();
+        throw new IOException(
+            "Forked Jetty didn't shut down properly within the timeout, stdout: "
+                + Files.readString(stdout));
       }
     } finally {
       process.close();

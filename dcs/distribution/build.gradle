@@ -28,6 +28,8 @@ dependencies {
   implementation libs.carrotsearch.progresso.jvmversion
   implementation libs.jetty.server
   implementation libs.jetty.webapp
+  implementation libs.jetty.gzip
+  implementation libs.jetty.compression
 
   annotationProcessor libs.log4j.core
 }

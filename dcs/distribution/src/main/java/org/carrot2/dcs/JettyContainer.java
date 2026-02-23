@@ -22,19 +22,20 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.eclipse.jetty.compression.gzip.GzipCompression;
+import org.eclipse.jetty.compression.server.CompressionConfig;
+import org.eclipse.jetty.compression.server.CompressionHandler;
+import org.eclipse.jetty.ee11.servlet.DefaultServlet;
+import org.eclipse.jetty.ee11.webapp.WebAppContext;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ShutdownHandler;
-import org.eclipse.jetty.server.handler.gzip.GzipHandler;
-import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import org.eclipse.jetty.webapp.WebAppContext;
 
 public class JettyContainer {
   public static final String SERVICE_STARTED_ON = "Service started on port ";
@@ -95,7 +96,7 @@ public class JettyContainer {
     try (Stream<Path> list = Files.list(contexts)) {
       webapps =
           list.filter(dir -> !Files.isDirectory(dir.resolve("WEB-INF").resolve("web.xml")))
-              .collect(Collectors.toList());
+              .toList();
     }
 
     ArrayList<WebAppContext> ctxHandlers = new ArrayList<>();
@@ -116,7 +117,7 @@ public class JettyContainer {
 
       // Don't allow directory listings and don't use mmap buffers for serving static content.
       ctx.setInitParameter(DefaultServlet.CONTEXT_INIT + "dirAllowed", "false");
-      ctx.setInitParameter(DefaultServlet.CONTEXT_INIT + "useFileMappedBuffer", "false");
+      ctx.setInitParameter(DefaultServlet.CONTEXT_INIT + "minMappedFileSize", "0");
 
       CONSOLE.debug("Deploying context '{}' at: {}.", ctxName, ctxPath);
       ctxHandlers.add(ctx);
@@ -145,34 +146,42 @@ public class JettyContainer {
           }
         });
 
-    HandlerList handlers = new HandlerList();
-    if (shutdownToken != null && !shutdownToken.trim().isEmpty()) {
-      handlers.addHandler(new ShutdownHandler(shutdownToken, false, false));
-    }
-
     Handler contentHandler =
         new ContextHandlerCollection(ctxHandlers.toArray(new ContextHandler[0]));
+
+    Handler topHandler;
     if (useGzip) {
-      GzipHandler gzipHandler = new GzipHandler();
-      gzipHandler.setHandler(contentHandler);
-      gzipHandler.setMinGzipSize(1024);
-      gzipHandler.setIncludedMethods("GET", "POST");
-      gzipHandler.addIncludedMimeTypes(
-          "application/json",
-          "application/javascript",
-          "application/x-javascript",
-          "application/xml",
-          "font/woff2",
-          "text/css",
-          "text/jsx",
-          "text/html",
-          "image/svg+xml");
-      handlers.addHandler(gzipHandler);
+      GzipCompression gzip = new GzipCompression();
+      gzip.setMinCompressSize(1024);
+
+      CompressionConfig config =
+          CompressionConfig.builder()
+              .compressIncludeMethod("GET")
+              .compressIncludeMethod("POST")
+              .compressIncludeMimeType("application/json")
+              .compressIncludeMimeType("application/javascript")
+              .compressIncludeMimeType("application/x-javascript")
+              .compressIncludeMimeType("application/xml")
+              .compressIncludeMimeType("font/woff2")
+              .compressIncludeMimeType("text/css")
+              .compressIncludeMimeType("text/jsx")
+              .compressIncludeMimeType("text/html")
+              .compressIncludeMimeType("image/svg+xml")
+              .build();
+
+      CompressionHandler compressionHandler = new CompressionHandler(contentHandler);
+      compressionHandler.putCompression(gzip);
+      compressionHandler.putConfiguration("/*", config);
+      topHandler = compressionHandler;
     } else {
-      handlers.addHandler(contentHandler);
+      topHandler = contentHandler;
     }
 
-    server.setHandler(handlers);
+    if (shutdownToken != null && !shutdownToken.trim().isEmpty()) {
+      topHandler = new ShutdownHandler(topHandler, null, shutdownToken, false);
+    }
+
+    server.setHandler(topHandler);
   }
 
   private LifeCycle.Listener createLifecycleLogger(ServerConnector connector) {
