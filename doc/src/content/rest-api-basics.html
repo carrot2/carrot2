@@ -106,6 +106,19 @@
 </pre>
 
         <p>
+          To start the DCS with only the <code>/service</code> REST API context,
+          omitting the demo web application, Clustering Workbench and documentation,
+          use the <code>--service-only</code> option:
+        </p>
+
+        <pre data-language="shell">$ dcs --service-only</pre>
+
+        <p>
+          This is useful when deploying the DCS in production environments where
+          the bundled web applications are not needed.
+        </p>
+
+        <p>
           If you need to alter the
           default JVM options (for example increase the heap), define the <code>DCS_OPTS</code>
           environment variable and pass any required Java JVM options there. For example (Linux):
