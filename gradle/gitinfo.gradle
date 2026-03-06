@@ -9,7 +9,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'org.eclipse.jgit:org.eclipse.jgit:5.9.0.202009080501-r'
+    classpath 'org.eclipse.jgit:org.eclipse.jgit:7.5.0.202512021534-r'
     classpath 'commons-codec:commons-codec:1.6'
   }
 }
@@ -57,7 +57,7 @@ def gitStatus(dir) {
       status.id += '-dirty'
 
       logger.warn("Git status indicates dirty checkout (run with --info for verbose git status)")
-      logger.info("Git status is: added={}, changed={}, conflicting={}, ignored={}, missing={}, modified={}, removed={}, untracked={}, untrackedFolders={}",
+      logger.warn("Git status is: added={}, changed={}, conflicting={}, ignored={}, missing={}, modified={}, removed={}, untracked={}, untrackedFolders={}",
           st.added,
           st.changed,
           st.conflicting,

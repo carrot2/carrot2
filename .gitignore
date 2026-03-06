@@ -13,3 +13,5 @@ build-gradle/
 /dcs/contexts/frontend/.eslintcache
 
 versions.updates.toml
+
+/.claude/
