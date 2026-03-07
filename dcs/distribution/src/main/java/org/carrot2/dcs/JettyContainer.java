@@ -12,12 +12,21 @@ package org.carrot2.dcs;
 
 import static com.carrotsearch.console.launcher.Loggers.CONSOLE;
 
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -27,6 +36,7 @@ import org.eclipse.jetty.compression.gzip.GzipCompression;
 import org.eclipse.jetty.compression.server.CompressionConfig;
 import org.eclipse.jetty.compression.server.CompressionHandler;
 import org.eclipse.jetty.ee11.servlet.DefaultServlet;
+import org.eclipse.jetty.ee11.servlet.FilterHolder;
 import org.eclipse.jetty.ee11.webapp.WebAppContext;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.HttpConfiguration;
@@ -48,6 +58,7 @@ public class JettyContainer {
   private final List<Path> webappContexts;
   private final String shutdownToken;
   private final boolean useGzip;
+  private final boolean serviceContextOnly;
 
   private Server server;
   private ServerConnector connector;
@@ -61,7 +72,8 @@ public class JettyContainer {
       String shutdownToken,
       Integer maxThreads,
       boolean useGzip,
-      Integer idleTime) {
+      Integer idleTime,
+      boolean serviceContextOnly) {
     this.host = host;
     this.port = port;
     this.webappContexts = contexts;
@@ -69,6 +81,7 @@ public class JettyContainer {
     this.maxThreads = maxThreads;
     this.useGzip = useGzip;
     this.idleTime = idleTime;
+    this.serviceContextOnly = serviceContextOnly;
   }
 
   public JettyContainer(
@@ -78,7 +91,8 @@ public class JettyContainer {
       String shutdownToken,
       Integer maxThreads,
       boolean useGzip,
-      Integer idleTime) {
+      Integer idleTime,
+      boolean serviceContextOnly) {
     this.host = host;
     this.port = port;
     this.webappContexts = listWebappContexts(contextRoot);
@@ -86,6 +100,7 @@ public class JettyContainer {
     this.maxThreads = maxThreads;
     this.useGzip = useGzip;
     this.idleTime = idleTime;
+    this.serviceContextOnly = serviceContextOnly;
   }
 
   public static List<Path> listWebappContexts(Path webappRoot) {
@@ -140,6 +155,14 @@ public class JettyContainer {
       // Don't allow directory listings and don't use mmap buffers for serving static content.
       ctx.setInitParameter(DefaultServlet.CONTEXT_INIT + "dirAllowed", "false");
       ctx.setInitParameter(DefaultServlet.CONTEXT_INIT + "minMappedFileSize", "0");
+
+      // When running in service-only mode, block static resources and only allow API endpoints.
+      if (serviceContextOnly && "service".equals(ctxName)) {
+        ctx.addFilter(
+            new FilterHolder(new ServiceEndpointsOnlyFilter()),
+            "/*",
+            EnumSet.of(DispatcherType.REQUEST));
+      }
 
       CONSOLE.debug("Deploying context '{}' at: {}.", ctxName, ctxPath);
       ctxHandlers.add(ctx);
@@ -274,5 +297,23 @@ public class JettyContainer {
     server.addConnector(connector);
     server.addEventListener(createLifecycleLogger(connector));
     return server;
+  }
+
+  /**
+   * A filter that only allows requests to API endpoints, blocking static resources like index.html
+   * and openapi documentation.
+   */
+  private static class ServiceEndpointsOnlyFilter implements Filter {
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+        throws IOException, ServletException {
+      HttpServletRequest req = (HttpServletRequest) request;
+      String path = req.getServletPath();
+      if (path.startsWith("/cluster") || path.startsWith("/list") || path.startsWith("/test")) {
+        chain.doFilter(request, response);
+      } else {
+        ((HttpServletResponse) response).sendError(HttpServletResponse.SC_NOT_FOUND);
+      }
+    }
   }
 }

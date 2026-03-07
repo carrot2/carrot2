@@ -153,7 +153,14 @@ public class DcsLauncher extends Command<ExitCode> {
 
       JettyContainer c =
           new JettyContainer(
-              port, host, webappContexts, shutdownToken, maxThreads, useGzip, idleTime);
+              port,
+              host,
+              webappContexts,
+              shutdownToken,
+              maxThreads,
+              useGzip,
+              idleTime,
+              serviceContextOnly);
       try {
         c.start();
       } catch (IOException e) {

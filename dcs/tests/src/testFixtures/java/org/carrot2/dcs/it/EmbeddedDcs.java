@@ -40,7 +40,8 @@ public class EmbeddedDcs implements DcsService {
             config.shutdownToken,
             config.maxThreads,
             config.useGzip,
-            null /* idle time */);
+            null /* idle time */,
+            false /* serviceContextOnly */);
 
     try {
       container.start();
