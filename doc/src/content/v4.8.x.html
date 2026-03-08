@@ -11,7 +11,22 @@
     <!-- <time datetime=""></time> -->
 
     <p>
+      This release enhances the <code>--service-only</code> option
+      to also exclude static pages from the service context.
     </p>
+
+    <dl>
+      <dt><code>--service-only</code> excludes static pages</dt>
+      <dd>
+        <p>
+          When using the <code>--service-only</code> option, the DCS now also
+          blocks access to static resources in the <code>/service</code> context
+          (such as <code>index.html</code> and OpenAPI documentation).
+          Only the API endpoints (<code>/cluster</code>, <code>/list</code>,
+          <code>/test</code>) remain accessible.
+        </p>
+      </dd>
+    </dl>
   </section>
 
   <section id="v4.8.5">
