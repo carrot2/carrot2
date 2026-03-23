@@ -16,7 +16,7 @@ minJava = "21"
 googleJavaFormat = "1.33.0"
 # @keep spotless formatting of groovy/gradle files
 greclipse = "4.26"
-proguard = "7.8.2"
+proguard = "7.9.0"
 
 [libraries]
 bytebuddy = "net.bytebuddy:byte-buddy:1.18.7"
