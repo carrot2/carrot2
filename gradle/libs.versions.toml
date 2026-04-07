@@ -6,8 +6,8 @@ node = "18.18.2"
 # @keep
 yarn = "1.22.19"
 carrotsearch-console = "1.4.3"
-jackson = "2.21.1"
-jetty = "12.1.6"
+jackson = "2.21.2"
+jetty = "12.1.8"
 log4j = "2.24.3"
 lucene = "10.4.0"
 # @keep This is the minimum required Java version.
@@ -19,7 +19,7 @@ greclipse = "4.26"
 proguard = "7.9.0"
 
 [libraries]
-bytebuddy = "net.bytebuddy:byte-buddy:1.18.7"
+bytebuddy = "net.bytebuddy:byte-buddy:1.18.8"
 assertj = "org.assertj:assertj-core:4.0.0-M1"
 carrotsearch-console-formatters = { module = "com.carrotsearch.console:formatters", version.ref = "carrotsearch-console" }
 carrotsearch-console-launcher = { module = "com.carrotsearch.console:launcher", version.ref = "carrotsearch-console" }
@@ -50,7 +50,7 @@ lucene-analysis-smartcn = { module = "org.apache.lucene:lucene-analysis-smartcn"
 lucene-queries = { module = "org.apache.lucene:lucene-queries", version.ref = "lucene" }
 lucene-queryparser = { module = "org.apache.lucene:lucene-queryparser", version.ref = "lucene" }
 lucene-testFramework = { module = "org.apache.lucene:lucene-test-framework", version.ref = "lucene" }
-mockito-core = "org.mockito:mockito-core:5.22.0"
+mockito-core = "org.mockito:mockito-core:5.23.0"
 morfologik-polish = "org.carrot2:morfologik-polish:2.1.9"
 randomizedtesting-runner = "com.carrotsearch.randomizedtesting:randomizedtesting-runner:2.8.4"
 slf4j-api = "org.slf4j:slf4j-api:2.0.17"
