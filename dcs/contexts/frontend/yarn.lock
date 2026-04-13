@@ -1708,10 +1708,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@carrotsearch/foamtree@npm:3.6.1-rc1":
-  version: 3.6.1-rc1
-  resolution: "@carrotsearch/foamtree@npm:3.6.1-rc1"
-  checksum: 171a7cf2a8ea1c898e7eef572fdf73d0ca00cd4105e9116eef1b1f75ce7c8fdbed634ad453dd27cf45e42f5210feb639948cb0effec6d09a9bea6bd64b049b50
+"@carrotsearch/foamtree@npm:3.6.1":
+  version: 3.6.1
+  resolution: "@carrotsearch/foamtree@npm:3.6.1"
+  checksum: 1dba81612d1b987e6703cdf83b6fa4e33d389062bc7af38a69ce8c065a7a71d0e9b30695f20efb3826f3be5362abd854061831498d1650e0df5a3b9d898df0e9
   languageName: node
   linkType: hard
 
@@ -1730,7 +1730,7 @@ __metadata:
   dependencies:
     "@blueprintjs/core": 3.50.4
     "@carrotsearch/circles": 2.3.10
-    "@carrotsearch/foamtree": 3.6.1-rc1
+    "@carrotsearch/foamtree": 3.6.1
     "@carrotsearch/theme": 0.1.0
     "@risingstack/react-easy-state": 7.0.0-alpha.1
     classnames: 2.3.1
@@ -3358,7 +3358,7 @@ __metadata:
   dependencies:
     "@blueprintjs/core": 3.51.3
     "@carrotsearch/circles": 2.3.10
-    "@carrotsearch/foamtree": 3.6.1-rc1
+    "@carrotsearch/foamtree": 3.6.1
     "@carrotsearch/ui": 0.1.0
     "@craco/craco": 6.4.2
     "@risingstack/react-easy-state": 7.0.0-alpha.1
