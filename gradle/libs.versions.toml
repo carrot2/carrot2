@@ -6,7 +6,7 @@ node = "18.18.2"
 # @keep
 yarn = "1.22.19"
 carrotsearch-console = "1.4.3"
-jackson = "2.21.2"
+jackson = "2.21.3"
 jetty = "12.1.8"
 log4j = "2.24.3"
 lucene = "10.4.0"
