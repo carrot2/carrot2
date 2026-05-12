@@ -5,6 +5,8 @@ allprojects {
 
     tasks.withType(JavaCompile).configureEach {
       options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation" << "-XDsuppressNotes"
+      options.compilerArgs << "-Alog4j.graalvm.groupId=${project.group}"
+      options.compilerArgs << "-Alog4j.graalvm.artifactId=${project.base.archivesName.get()}"
       options.encoding = "UTF-8"
     }
 
