@@ -1,4 +1,15 @@
 allprojects {
+  // Annotation-only JARs pulled in transitively by log4j 2.26.0 — not needed at runtime.
+  configurations.all {
+    exclude group: 'biz.aQute.bnd', module: 'biz.aQute.bnd.annotation'
+    exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
+    exclude group: 'org.jspecify', module: 'jspecify'
+    exclude group: 'org.osgi', module: 'org.osgi.annotation.bundle'
+    exclude group: 'org.osgi', module: 'org.osgi.annotation.versioning'
+    exclude group: 'org.osgi', module: 'org.osgi.resource'
+    exclude group: 'org.osgi', module: 'org.osgi.service.serviceloader'
+  }
+
   def consolidatedConfigurations = project.configurations.matching {
     it.name in [
       "annotationProcessor",
