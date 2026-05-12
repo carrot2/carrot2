@@ -7,6 +7,9 @@ updates:
     schedule:
       interval: "weekly"
     labels: [dependencies]
+    groups:
+      github-actions:
+        patterns: ["*"]
 
   - package-ecosystem: gradle
     directory: /
@@ -16,4 +19,7 @@ updates:
     commit-message:
       prefix: deps(java)
     labels: [dependencies]
+    groups:
+      java-deps:
+        patterns: ["*"]
 
