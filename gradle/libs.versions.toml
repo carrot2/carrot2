@@ -8,8 +8,8 @@ yarn = "1.22.19"
 carrotsearch-console = "1.4.3"
 jackson = "2.22.0"
 jetty = "12.1.10"
-log4j = "2.26.0"
-lucene = "10.4.0"
+log4j = "2.26.1"
+lucene = "10.5.0"
 # @keep This is the minimum required Java version.
 minJava = "21"
 # @keep This is GJF version for spotless/ tidy.
@@ -19,7 +19,7 @@ greclipse = "4.26"
 proguard = "7.9.1"
 
 [libraries]
-bytebuddy = "net.bytebuddy:byte-buddy:1.18.9"
+bytebuddy = "net.bytebuddy:byte-buddy:1.18.11"
 assertj = "org.assertj:assertj-core:4.0.0-M1"
 carrotsearch-console-formatters = { module = "com.carrotsearch.console:formatters", version.ref = "carrotsearch-console" }
 carrotsearch-console-launcher = { module = "com.carrotsearch.console:launcher", version.ref = "carrotsearch-console" }
@@ -51,7 +51,7 @@ lucene-queries = { module = "org.apache.lucene:lucene-queries", version.ref = "l
 lucene-queryparser = { module = "org.apache.lucene:lucene-queryparser", version.ref = "lucene" }
 lucene-testFramework = { module = "org.apache.lucene:lucene-test-framework", version.ref = "lucene" }
 mockito-core = "org.mockito:mockito-core:5.23.0"
-morfologik-polish = "org.carrot2:morfologik-polish:2.1.9"
+morfologik-polish = "org.carrot2:morfologik-polish:2.2.0"
 randomizedtesting-runner = "com.carrotsearch.randomizedtesting:randomizedtesting-runner:2.9.1"
 slf4j-api = "org.slf4j:slf4j-api:2.0.18"
 proguard-gradle = { module = "com.guardsquare:proguard-gradle", version.ref = "proguard" }
