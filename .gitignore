@@ -14,4 +14,6 @@ build-gradle/
 
 versions.updates.toml
 
-/.claude/
+# Ignore local Claude Code settings but keep shared project skills.
+/.claude/*
+!/.claude/skills/
