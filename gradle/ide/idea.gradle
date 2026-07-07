@@ -2,8 +2,8 @@
 // Try to detect IntelliJ model loader early.
 rootProject.ext {
   isIdea = System.getProperty("idea.active") != null ||
-      gradle.startParameter.taskNames.contains('idea') ||
-      gradle.startParameter.taskNames.contains('cleanIdea')
+  gradle.startParameter.taskNames.contains('idea') ||
+  gradle.startParameter.taskNames.contains('cleanIdea')
 
   if (isIdea) {
     logger.lifecycle("IntelliJ Idea IDE detected.")

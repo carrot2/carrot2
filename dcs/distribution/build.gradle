@@ -139,21 +139,21 @@ task collectExamples(type: Sync) {
 
 task distDirBare {
   dependsOn collectScripts,
-      collectDependencies,
-      collectCtxService,
-      collectCtxRoot
+  collectDependencies,
+  collectCtxService,
+  collectCtxRoot
 
   outputs.file("$outputDir")
 }
 
 task distDir {
   dependsOn collectScripts,
-      collectDependencies,
-      collectCtxService,
-      collectCtxRoot,
-      collectCtxJavadoc,
-      collectCtxFrontend,
-      collectExamples
+  collectDependencies,
+  collectCtxService,
+  collectCtxRoot,
+  collectCtxJavadoc,
+  collectCtxFrontend,
+  collectExamples
 
   if (!project.hasProperty("intellij.launch.skipDocs")) {
     dependsOn collectCtxDoc

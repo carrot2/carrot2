@@ -52,8 +52,8 @@ configure(rootProject) {
 
     onlyIf {
       project.hasProperty('nexusUsername') &&
-          project.hasProperty('nexusPassword') &&
-          !project.version.endsWith('-SNAPSHOT')
+      project.hasProperty('nexusPassword') &&
+      !project.version.endsWith('-SNAPSHOT')
     }
 
     doLast {
