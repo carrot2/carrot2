@@ -24,7 +24,7 @@ assertj = "org.assertj:assertj-core:4.0.0-M1"
 carrotsearch-console-formatters = { module = "com.carrotsearch.console:formatters", version.ref = "carrotsearch-console" }
 carrotsearch-console-launcher = { module = "com.carrotsearch.console:launcher", version.ref = "carrotsearch-console" }
 carrotsearch-console-testing = { module = "com.carrotsearch.console:testing", version.ref = "carrotsearch-console" }
-carrotsearch-hppc = "com.carrotsearch:hppc:0.10.0"
+carrotsearch-hppc = "com.carrotsearch:hppc:0.11.1"
 carrotsearch-procfork = "com.carrotsearch:procfork:1.0.6"
 carrotsearch-progresso-jvmversion = "com.carrotsearch.progresso:progresso-jvmversion:1.8.6"
 commons-compress = "org.apache.commons:commons-compress:1.24.0"
