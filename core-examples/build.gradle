@@ -23,15 +23,17 @@ def buildDistribution = tasks.register("buildDistribution", Sync, {
   inputs.properties replaceTokensTrigger
 
   doFirst {
-    replaceTokens.each { k, v -> antPrj.setProperty(k.toString(), v.toString()) }
+    replaceTokens.each { k, v ->
+      antPrj.setProperty(k.toString(), v.toString())
+    }
     antPrj.setProperty("version.lucene-analysis-icu", getResolvedVersion(
-        libs.lucene.analysis.icu.get(),
-        configurations.testRuntimeClasspath
-        ))
+            libs.lucene.analysis.icu.get(),
+            configurations.testRuntimeClasspath
+            ))
     antPrj.setProperty("version.junit", getResolvedVersion(
-        libs.junit.get(),
-        configurations.testRuntimeClasspath
-        ))
+            libs.junit.get(),
+            configurations.testRuntimeClasspath
+            ))
   }
 
   from(project.projectDir, {

@@ -7,7 +7,7 @@ configurations {
 }
 
 dependencies {
-  coreJavadoc  project(path: ":core", configuration: "coreJavadoc")
+  coreJavadoc project(path: ":core", configuration: "coreJavadoc")
 }
 
 war {

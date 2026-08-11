@@ -31,7 +31,9 @@ configure(project(":dcs:contexts:frontend")) { prj ->
       "ui/**"
     ],
     // Apply the same exclusions as in .prettierignore.
-    excludes: file(".prettierignore").readLines("UTF-8").findAll { !it.isBlank() } ))
+    excludes: file(".prettierignore").readLines("UTF-8").findAll {
+      !it.isBlank()
+    }))
     outputs.file(tsOutput)
 
     doLast {

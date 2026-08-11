@@ -19,9 +19,9 @@ def gitStatus(dir) {
   def status = [
     abbrRev: "[unset]",
     fullRev: "[unset]",
-    clean  : false,
+    clean : false,
     branch : "[unset]",
-    id     : "[unset]"
+    id : "[unset]"
   ]
 
   try {

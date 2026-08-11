@@ -20,15 +20,17 @@ configurations {
 }
 
 dependencies {
-  dcs project(path: ":dcs:distribution", configuration: "distDir" )
-  examples project(path: ":core-examples", configuration: "distribution" )
+  dcs project(path: ":dcs:distribution", configuration: "distDir")
+  examples project(path: ":core-examples", configuration: "distribution")
   mavenArtifacts project(path: ":", configuration: "mavenArtifacts")
 }
 
 task syncDist(type: Sync) {
   def antPrj = new org.apache.tools.ant.Project()
   afterEvaluate {
-    replaceTokens.each { k, v -> antPrj.setProperty(k.toString(), v.toString()) }
+    replaceTokens.each { k, v ->
+      antPrj.setProperty(k.toString(), v.toString())
+    }
   }
 
   inputs.properties replaceTokensTrigger
@@ -77,7 +79,7 @@ task zip(type: Zip) {
 }
 
 task bambooProps {
-  def storedProps = replaceTokens.collectEntries { k,v -> [k, v.toString()] }
+  def storedProps = replaceTokens.collectEntries { k, v -> [k, v.toString()] }
   def bambooPropsFile = file("${buildDir}/build.properties")
 
   inputs.properties(storedProps)
