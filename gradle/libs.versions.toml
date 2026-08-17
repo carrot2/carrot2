@@ -6,10 +6,10 @@ node = "18.18.2"
 # @keep
 yarn = "1.22.19"
 carrotsearch-console = "1.4.3"
-jackson = "2.22.0"
-jetty = "12.1.10"
+jackson = "2.22.1"
+jetty = "12.1.12"
 log4j = "2.26.1"
-lucene = "10.5.0"
+lucene = "10.5.1"
 # @keep This is the minimum required Java version.
 minJava = "21"
 # @keep This is GJF version for spotless/ tidy.
@@ -58,4 +58,4 @@ proguard-gradle = { module = "com.guardsquare:proguard-gradle", version.ref = "p
 
 [plugins]
 node-gradle = "com.github.node-gradle.node:7.1.0"
-buildinfra = "com.carrotsearch.gradle.buildinfra:0.0.22"
+buildinfra = "com.carrotsearch.gradle.buildinfra:0.0.25"
