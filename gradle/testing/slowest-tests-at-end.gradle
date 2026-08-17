@@ -3,15 +3,22 @@
 def allTests = []
 
 allprojects {
-  tasks.withType(Test) { task ->
-    afterTest { desc, result ->
-      def duration = (result.getEndTime() - result.getStartTime())
+  tasks.withType(Test).configureEach { task ->
+    def projectPath = task.project.path
+    addTestListener(new TestListener() {
+          void beforeSuite(TestDescriptor desc) {}
+          void afterSuite(TestDescriptor desc, TestResult result) {}
+          void beforeTest(TestDescriptor desc) {}
 
-      allTests << [
-        name : "${desc.className.replaceAll('.+\\.', "")}.${desc.name} (${project.path})",
-        duration: duration
-      ]
-    }
+          void afterTest(TestDescriptor desc, TestResult result) {
+            def duration = (result.getEndTime() - result.getStartTime())
+
+            allTests << [
+              name : "${desc.className.replaceAll('.+\\.', "")}.${desc.name} (${projectPath})",
+              duration: duration
+            ]
+          }
+        })
   }
 }
 

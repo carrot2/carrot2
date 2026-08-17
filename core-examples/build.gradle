@@ -20,10 +20,10 @@ def buildDistribution = tasks.register("buildDistribution", Sync, {
 
   def antPrj = new org.apache.tools.ant.Project()
 
-  inputs.properties replaceTokensTrigger
+  inputs.properties rootProject.replaceTokensTrigger
 
   doFirst {
-    replaceTokens.each { k, v ->
+    rootProject.replaceTokens.each { k, v ->
       antPrj.setProperty(k.toString(), v.toString())
     }
     antPrj.setProperty("version.lucene-analysis-icu", getResolvedVersion(

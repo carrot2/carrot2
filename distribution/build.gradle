@@ -28,14 +28,14 @@ dependencies {
 task syncDist(type: Sync) {
   def antPrj = new org.apache.tools.ant.Project()
   afterEvaluate {
-    replaceTokens.each { k, v ->
+    rootProject.replaceTokens.each { k, v ->
       antPrj.setProperty(k.toString(), v.toString())
     }
   }
 
-  inputs.properties replaceTokensTrigger
+  inputs.properties rootProject.replaceTokensTrigger
 
-  from legal
+  from rootProject.legal
 
   from(files('src/main/assembly'), {
     filteringCharset = 'UTF-8'
@@ -79,7 +79,9 @@ task zip(type: Zip) {
 }
 
 task bambooProps {
-  def storedProps = replaceTokens.collectEntries { k, v -> [k, v.toString()] }
+  def storedProps = rootProject.replaceTokens.collectEntries { k, v ->
+    [k, v.toString()]
+  }
   def bambooPropsFile = file("${buildDir}/build.properties")
 
   inputs.properties(storedProps)

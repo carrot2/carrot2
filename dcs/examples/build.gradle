@@ -19,12 +19,12 @@ configurations {
 task buildDistribution(type: Sync) {
   def antPrj = new org.apache.tools.ant.Project()
   afterEvaluate {
-    replaceTokens.each { k, v ->
+    rootProject.replaceTokens.each { k, v ->
       antPrj.setProperty(k.toString(), v.toString())
     }
   }
 
-  inputs.properties replaceTokensTrigger
+  inputs.properties rootProject.replaceTokensTrigger
 
   dependsOn configurations.runtimeClasspath
 

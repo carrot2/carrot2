@@ -10,5 +10,5 @@ dependencies {
   implementation libs.lucene.analysis.smartcn
   implementation libs.lucene.analysis.icu
 
-  langResources fileTree(dir: 'src/main/resources', includes: langResourcePatterns)
+  langResources fileTree(dir: 'src/main/resources', includes: rootProject.langResourcePatterns)
 }

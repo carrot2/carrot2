@@ -23,7 +23,7 @@ dependencies {
   implementation libs.lucene.core
   implementation libs.lucene.analysis.common
 
-  langResources fileTree(dir: 'src/main/resources', includes: langResourcePatterns)
+  langResources fileTree(dir: 'src/main/resources', includes: rootProject.langResourcePatterns)
 
   luceneResources(libs.lucene.analysis.common, {
     transitive = false

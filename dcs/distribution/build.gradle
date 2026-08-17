@@ -64,7 +64,7 @@ task collectScripts(type: Sync) {
   dependsOn configurations.runtimeClasspath
   def antPrj = new org.apache.tools.ant.Project()
   afterEvaluate {
-    replaceTokens.each { k, v ->
+    rootProject.replaceTokens.each { k, v ->
       antPrj.setProperty(k.toString(), v.toString())
     }
   }
@@ -75,7 +75,7 @@ task collectScripts(type: Sync) {
     antPrj.setProperty("jvmversion.version", getResolvedVersion(libs.carrotsearch.progresso.jvmversion.get(), configurations.runtimeClasspath))
   }
 
-  inputs.properties replaceTokensTrigger
+  inputs.properties rootProject.replaceTokensTrigger
 
   from(files('src/main/assembly'), {
     filesMatching(["dcs"], {
@@ -93,7 +93,7 @@ task collectScripts(type: Sync) {
     })
   })
 
-  from legal
+  from rootProject.legal
 
   into "$outputDir"
   preserve {

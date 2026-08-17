@@ -1,3 +1,7 @@
+// Capture the version catalog from the root project explicitly: closures below fire during
+// root evaluation, before subprojects register their own catalog extension.
+def libs = rootProject.extensions.getByName("libs")
+
 allprojects {
   // Annotation-only JARs pulled in transitively by log4j 2.26.0 — not needed at runtime.
   configurations.all {

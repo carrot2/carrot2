@@ -30,7 +30,7 @@ tasks.register("jflex", {
     inputs.files.forEach { path ->
       def relative = jflexSource.relativize(path.toPath())
 
-      buildinfra.execOps.javaexec {
+      rootProject.buildinfra.execOps.javaexec {
         classpath {
           configurations.jflex
         }

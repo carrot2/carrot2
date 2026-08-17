@@ -14,7 +14,7 @@ configurations {
 dependencies {
   api libs.carrotsearch.hppc
 
-  langResources fileTree(dir: 'src/main/resources', includes: langResourcePatterns)
+  langResources fileTree(dir: 'src/main/resources', includes: rootProject.langResourcePatterns)
 
   jsonDoclet project(":infra:jsondoclet")
 }

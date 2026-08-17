@@ -8,5 +8,5 @@ dependencies {
   implementation project(':core')
   implementation libs.morfologik.polish
 
-  langResources fileTree(dir: 'src/main/resources', includes: langResourcePatterns)
+  langResources fileTree(dir: 'src/main/resources', includes: rootProject.langResourcePatterns)
 }

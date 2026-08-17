@@ -1,5 +1,9 @@
 // Configure node/ yarn projects
 
+// Capture the version catalog from the root project explicitly: the configure() block below
+// runs during root evaluation, before subprojects register their own catalog extension.
+def libs = rootProject.extensions.getByName("libs")
+
 def projectList = [
   ":dcs:contexts:frontend",
   ":doc"
@@ -67,19 +71,12 @@ configure(projectList) {
       "REACT_APP_GIT_REV",
     ] as Set
 
-    afterEvaluate {
-      project.properties.each { k, v ->
-        if (k.startsWith("REACT_APP_")) {
-          yarnEnv.put(k, v)
+    // Defaults from yarnEnv, overridden by -PREACT_APP_* gradle properties, then REACT_APP_* env variables.
+    def effectiveYarnEnv = providers.gradlePropertiesPrefixedBy("REACT_APP_")
+        .zip(providers.environmentVariablesPrefixedBy("REACT_APP_")) { props, env ->
+          props + env
         }
-      }
-
-      System.getenv().each { k, v ->
-        if (k.startsWith("REACT_APP_")) {
-          yarnEnv.put(k, v)
-        }
-      }
-    }
+        .map { overrides -> yarnEnv + overrides }
 
     inputs.files { jsSources }
     inputs.file('package.json')
@@ -87,8 +84,8 @@ configure(projectList) {
 
     outputs.dir project.ext.jsBuildDir
 
-    environment.putAll(project.provider {
-      return yarnEnv.findAll { k, v -> !nonInputProperties.contains(k) }
+    environment.putAll(effectiveYarnEnv.map { env ->
+      env.findAll { k, v -> !nonInputProperties.contains(k) }
       .collectEntries { k, v -> [k, Objects.toString(v)] }
     })
 
@@ -96,13 +93,14 @@ configure(projectList) {
     // are not triggered when they change.
     // https://github.com/node-gradle/gradle-node-plugin/issues/187
     execOverrides { ExecSpec spec ->
-      yarnEnv.findAll { k, v -> nonInputProperties.contains(k) }.each { k, v ->
+      def env = effectiveYarnEnv.get()
+      env.findAll { k, v -> nonInputProperties.contains(k) }.each { k, v ->
         spec.environment(k, v)
       }
 
       // Dump environment variables used, for debugging purposes.
       spec.environment.each { k, v ->
-        if (yarnEnv.containsKey(k)) {
+        if (env.containsKey(k)) {
           logger.lifecycle("Using yarn env variable $k=$v")
         }
       }

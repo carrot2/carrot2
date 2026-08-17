@@ -15,7 +15,7 @@ allprojects {
         attributes(
         "Implementation-Vendor": "Carrot2 (https://carrot2.org)",
         "Implementation-Title": "Carrot2 ${project.name}",
-        "Implementation-Version": "${project.version} (${replaceTokens['product.gitrev']}, ${replaceTokens['product.buildDate']})")
+        "Implementation-Version": "${project.version} (${rootProject.replaceTokens['product.gitrev']}, ${rootProject.replaceTokens['product.buildDate']})")
       }
     }
 
