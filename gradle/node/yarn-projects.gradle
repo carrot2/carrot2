@@ -16,9 +16,9 @@ configure(projectList) {
 
   ext {
     yarnEnv = [
-      'REACT_APP_VERSION'   : rootProject.replaceTokens['product.version'],
+      'REACT_APP_VERSION' : rootProject.replaceTokens['product.version'],
       'REACT_APP_BUILD_DATE': rootProject.replaceTokens['product.buildDate'],
-      'REACT_APP_GIT_REV'   : rootProject.replaceTokens['product.gitrev']
+      'REACT_APP_GIT_REV' : rootProject.replaceTokens['product.gitrev']
     ]
 
     jsBuildDir = objects.fileProperty()

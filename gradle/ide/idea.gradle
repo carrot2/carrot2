@@ -27,7 +27,9 @@ allprojects {
 //
 // The exception is when we're launching something - then it's very likely
 // we'll need to build packages from scratch.
-if (rootProject.isIdea && !rootProject.properties.keySet().any {it.startsWith("intellij.launch") }) {
+if (rootProject.isIdea && !rootProject.properties.keySet().any {
+      it.startsWith("intellij.launch")
+    }) {
   gradle.taskGraph.whenReady { taskGraph ->
     def tasks = taskGraph.getAllTasks()
 

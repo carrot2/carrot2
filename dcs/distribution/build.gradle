@@ -16,13 +16,13 @@ configurations {
 }
 
 dependencies {
-  ctxService   project(path: ":dcs:contexts:service", configuration: 'war')
-  ctxRoot      project(path: ":dcs:contexts:root", configuration: 'war')
-  ctxJavadoc   project(path: ":dcs:contexts:javadoc", configuration: 'war')
-  ctxFrontend  project(path: ":dcs:contexts:frontend", configuration: 'yarnOutput')
-  ctxDoc       project(path: ":doc", configuration: 'yarnOutput')
+  ctxService project(path: ":dcs:contexts:service", configuration: 'war')
+  ctxRoot project(path: ":dcs:contexts:root", configuration: 'war')
+  ctxJavadoc project(path: ":dcs:contexts:javadoc", configuration: 'war')
+  ctxFrontend project(path: ":dcs:contexts:frontend", configuration: 'yarnOutput')
+  ctxDoc project(path: ":doc", configuration: 'yarnOutput')
 
-  examples     project(path: ":dcs:examples", configuration: "distribution")
+  examples project(path: ":dcs:examples", configuration: "distribution")
 
   implementation libs.carrotsearch.console.launcher
   implementation libs.carrotsearch.progresso.jvmversion
@@ -46,7 +46,9 @@ jar {
   doFirst {
     manifest {
       attributes("Main-Class": "com.carrotsearch.console.launcher.Launcher")
-      attributes("Class-Path": configurations.runtimeClasspath.collect { it.getName() }.join(' '))
+      attributes("Class-Path": configurations.runtimeClasspath.collect {
+        it.getName()
+      }.join(' '))
     }
   }
 }
@@ -62,7 +64,9 @@ task collectScripts(type: Sync) {
   dependsOn configurations.runtimeClasspath
   def antPrj = new org.apache.tools.ant.Project()
   afterEvaluate {
-    replaceTokens.each { k, v -> antPrj.setProperty(k.toString(), v.toString()) }
+    replaceTokens.each { k, v ->
+      antPrj.setProperty(k.toString(), v.toString())
+    }
   }
 
   doFirst {
