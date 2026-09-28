@@ -14,10 +14,7 @@ rootProject.version = libs.versions.carrot2.get()
 ext {
   fullName = "Carrot2"
 
-  licenseHeader = file("etc/spotless/license-header.txt")
   legal = files('carrot2.LICENSE')
-
-  forbiddenApiRulesDir = file("etc/forbidden-apis")
 
   langResourcePatterns = [
     '**/*.label-filters.json',
@@ -48,8 +45,6 @@ apply from: file('gradle/ide/idea.gradle')
 apply from: file("gradle/validation/spotless.gradle")
 
 apply from: file("gradle/testing/defaults-tests.gradle")
-apply from: file("gradle/testing/per-project-summary.gradle")
-apply from: file("gradle/testing/slowest-tests-at-end.gradle")
 
 apply from: file('gradle/maven/defaults-maven.gradle')
 
