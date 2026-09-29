@@ -65,7 +65,7 @@ public class RestoreDistributionStateRule extends TestRuleAdapter {
   protected void before() throws Throwable {
     super.before();
 
-    this.distributionZipFile = new ZipFile(distributionZip.toFile());
+    this.distributionZipFile = ZipFile.builder().setPath(distributionZip).get();
     this.distributionBasePath = syncTempDistributionState();
   }
 

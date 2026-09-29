@@ -43,12 +43,17 @@ ext {
 jar {
   archiveBaseName = jarname.toString()
 
+  // The manifest's Class-Path must be a task input: a change in dependency versions
+  // has to re-create the jar (otherwise the launcher points at stale jar names).
+  def manifestClassPath = configurations.runtimeClasspath.elements.map { files ->
+    files.collect { it.asFile.name }.join(' ')
+  }
+  inputs.property("manifestClassPath", manifestClassPath)
+
   doFirst {
     manifest {
       attributes("Main-Class": "com.carrotsearch.console.launcher.Launcher")
-      attributes("Class-Path": configurations.runtimeClasspath.collect {
-        it.getName()
-      }.join(' '))
+      attributes("Class-Path": manifestClassPath.get())
     }
   }
 }

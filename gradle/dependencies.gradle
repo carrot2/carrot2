@@ -57,6 +57,12 @@ allprojects {
         add(conf.name, libs.bytebuddy, {
           because("Use consistent ByteBuddy version.")
         })
+        add(conf.name, libs.commons.codec, {
+          because("Use consistent commons-codec version (commons-compress vs. httpclient).")
+        })
+        add(conf.name, libs.commons.lang3, {
+          because("Use consistent commons-lang3 version.")
+        })
       }
     }
   }

@@ -38,7 +38,7 @@ import org.junit.Test;
 public class BasicIT extends DistributionTestBase {
   @Test
   public void checkScriptsExecutableInZip() throws Exception {
-    try (ZipFile zf = new ZipFile(getDistributionZip().toFile())) {
+    try (ZipFile zf = ZipFile.builder().setPath(getDistributionZip()).get()) {
       final Enumeration<ZipArchiveEntry> entries = zf.getEntries();
       final Map<String, String> zipInfos = new TreeMap<>();
 
