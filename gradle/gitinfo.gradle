@@ -1,78 +1,46 @@
-import org.eclipse.jgit.storage.file.*
-import org.eclipse.jgit.api.*
-import org.eclipse.jgit.lib.*
-import org.eclipse.jgit.submodule.*
+// Current checkout's status (ext.gitStatus), based on buildinfra's gitinfo extension,
+// plus a sanity check of submodule states. All values are providers evaluated lazily,
+// so this is compatible with the configuration cache.
 
-buildscript {
-  repositories {
-    mavenCentral()
-  }
+def gitInfo = rootProject.gitinfo.gitInfo
 
-  dependencies {
-    classpath 'org.eclipse.jgit:org.eclipse.jgit:7.5.0.202512021534-r'
-    classpath 'commons-codec:commons-codec:1.6'
+def branch = providers.exec {
+  commandLine 'git', 'rev-parse', '--abbrev-ref', 'HEAD'
+}.standardOutput.asText.map { it.trim() }
+
+def submoduleStatus = providers.exec {
+  commandLine 'git', 'submodule', 'status'
+}.standardOutput.asText
+
+def status = [
+  fullRev: gitInfo.getting("git.commit").get(),
+  abbrRev: gitInfo.getting("git.commit-short").get(),
+  clean : Boolean.parseBoolean(gitInfo.getting("git.clean").get()),
+  branch : branch.get(),
+]
+status.id = status.branch + "/" + status.abbrRev + (status.clean ? "" : "-dirty")
+
+if (!status.clean) {
+  // Changed files are reported in git's porcelain v2 format; keep the paths only.
+  def changedFiles = gitInfo.getting("git.changed-files").get().readLines()
+      .findAll { !it.isBlank() }
+      .collect { it.split(/\s+/).last() }
+  logger.warn("Git status indicates dirty checkout, changed files: {}", changedFiles)
+}
+
+// Fail on suspicious submodule states ('-' not initialized, 'U' conflicts, '+' a commit
+// other than the recorded one - allowed in development mode).
+gradle.taskGraph.whenReady { graph ->
+  submoduleStatus.get().readLines().findAll { !it.isBlank() }.each { line ->
+    def type = line.charAt(0)
+    def path = line.substring(1).trim().split(/\s+/)[1]
+    if (type == '+' && rootProject.ext.devMode) {
+      return
+    }
+    if (type != ' ') {
+      throw new GradleException("Suspicious submodule status: ${path} '${type}'")
+    }
   }
 }
 
-/** Return the current checkout's status. */
-def gitStatus(dir) {
-  def status = [
-    abbrRev: "[unset]",
-    fullRev: "[unset]",
-    clean : false,
-    branch : "[unset]",
-    id : "[unset]"
-  ]
-
-  try {
-    Repository repo = new FileRepositoryBuilder()
-        .findGitDir(file(dir))
-        .build()
-    Git git = new Git(repo)
-
-    Map<String, SubmoduleStatus> submodules = git.submoduleStatus().call()
-    gradle.taskGraph.whenReady { graph ->
-      submodules.each { path, st ->
-        if (st.type == SubmoduleStatusType.REV_CHECKED_OUT && rootProject.ext.devMode) {
-          // Allow new commits in submodules while assembling development-mode stuff.
-          return
-        }
-        if (st.type != SubmoduleStatusType.INITIALIZED) {
-          throw new GradleException("Suspicious submodule status: ${path} ${st.type}")
-        }
-      }
-    }
-
-    Ref head = repo.findRef("HEAD")
-
-    Status st = git.status().call()
-    ObjectId commit = head.getObjectId()
-    status.fullRev = commit.name()
-    status.abbrRev = commit.abbreviate(8).name()
-    status.clean = st.clean
-    status.branch = repo.branch
-
-    status.id = status.branch + "/" + status.abbrRev
-    if (!status.clean) {
-      status.id += '-dirty'
-
-      logger.warn("Git status indicates dirty checkout (run with --info for verbose git status)")
-      logger.warn("Git status is: added={}, changed={}, conflicting={}, ignored={}, missing={}, modified={}, removed={}, untracked={}, untrackedFolders={}",
-          st.added,
-          st.changed,
-          st.conflicting,
-          st.ignoredNotInIndex,
-          st.missing,
-          st.modified,
-          st.removed,
-          st.untracked,
-          st.untrackedFolders)
-    }
-  } catch (Exception e) {
-    throw e // Break the build if not under a repo.
-  }
-
-  return status
-}
-
-ext.gitStatus = gitStatus(".")
+ext.gitStatus = status
