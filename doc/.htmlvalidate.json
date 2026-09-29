@@ -1,5 +1,6 @@
 {
   "root": true,
+
   "extends": [
     "htmlvalidate:recommended"
   ],
@@ -7,9 +8,20 @@
   "rules": {
     "element-required-attributes": "warn",
     "no-inline-style": "off",
+    "valid-id": "off",
+    "id-pattern": [
+      "error",
+      {
+        "pattern": "^[a-zA-Z0-9/]([a-zA-Z0-9:\\.\\-/{}_])*$"
+      }
+    ],
+    "void-style": "off",
+    "wcag/h63": "off",
     "no-trailing-whitespace": "off"
   },
-  "elements": ["html5",
+
+  "elements": [
+    "html5",
     {
       "th": {
         "inherit": "th",

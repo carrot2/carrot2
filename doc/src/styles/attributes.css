@@ -1,4 +1,4 @@
-.gatsby-highlight .attribute {
+.attribute-outline .attribute {
   margin-left: 2ch;
 }
 .implementation:not(:last-child) {
@@ -10,7 +10,7 @@
 .implementation > .attribute {
   margin-left: 1.5ch;
 }
-.multiple.implementations.note {
+.implementations-note {
   font-family: var(--text-font-family);
   font-size: var(--small-font-size);
   font-weight: 300;

@@ -18,14 +18,14 @@
     <pre data-language="xml"><dependency>
   <groupId>org.carrot2</groupId>
   <artifactId>carrot2-core</artifactId>
-  <version>%PROJECT_VERSION%</version>
+  <version>$PROJECT_VERSION$</version>
 </dependency></pre>
 
     <p>
       A corresponding Gradle dependency would look like this:
     </p>
 
-    <pre data-language="groovy">implementation "org.carrot2:carrot2-core:%PROJECT_VERSION%"</pre>
+    <pre data-language="java">implementation "org.carrot2:carrot2-core:$PROJECT_VERSION$"</pre>
 
     <div class="warning">
       <strong>Clustering non-English languages</strong>
@@ -101,7 +101,7 @@
         any subsequent calls to clustering algorithms.
       </p>
 
-      <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
+      <pre data-embed="../../build-gradle/java-examples/E01_ClusteringBasics.java"
            data-fragment="setup-heavy-components"></pre>
 
       <p>
@@ -109,7 +109,7 @@
         Let's pick the Lingo algorithm explicitly:
       </p>
 
-      <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
+      <pre data-embed="../../build-gradle/java-examples/E01_ClusteringBasics.java"
            data-fragment="setup-lightweight-components"></pre>
 
       <p>
@@ -118,7 +118,7 @@
         single method that presents its clusterable text fields to the algorithm:
       </p>
 
-      <pre data-embed="%CORE%/org/carrot2/clustering/Document.java"
+      <pre data-embed="../../build-gradle/core/org/carrot2/clustering/Document.java"
            data-fragment="visitor-method"></pre>
 
       <p>
@@ -126,7 +126,7 @@
         <code>ExamplesData</code> class:
       </p>
 
-      <pre data-embed="%JAVA_EXAMPLES%/ExamplesData.java"
+      <pre data-embed="../../build-gradle/java-examples/ExamplesData.java"
            data-fragment="search-results-array"></pre>
 
       <p>
@@ -136,7 +136,7 @@
         it is not really clusterable text content.
       </p>
 
-      <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
+      <pre data-embed="../../build-gradle/java-examples/E01_ClusteringBasics.java"
            data-fragment="clustering-document-stream"></pre>
 
       <p>
@@ -144,7 +144,7 @@
         Here we just print the top-level cluster labels and document counts to the console:
       </p>
 
-      <pre data-embed="%JAVA_EXAMPLES%/E01_ClusteringBasics.java"
+      <pre data-embed="../../build-gradle/java-examples/E01_ClusteringBasics.java"
            data-fragment="clustering"></pre>
 
       <p>
@@ -168,7 +168,7 @@ Data Mining Techniques, documents: 11</pre>
       documentation, that allow direct changes of an algorithm's settings. For example:
     </p>
 
-    <pre data-embed="%JAVA_EXAMPLES%/E02_TweakingParameters.java"
+    <pre data-embed="../../build-gradle/java-examples/E02_TweakingParameters.java"
          data-fragment="parameters"></pre>
 
     <p>
@@ -186,7 +186,7 @@ Data Mining Techniques, documents: 11</pre>
       typing:
     </p>
 
-    <pre data-embed="%JAVA_EXAMPLES%/E02_TweakingParameters.java"
+    <pre data-embed="../../build-gradle/java-examples/E02_TweakingParameters.java"
          data-fragment="complex-parameters"></pre>
 
     <p>
@@ -210,7 +210,7 @@ Data Mining Techniques, documents: 11</pre>
     </p>
 
     <figure>
-      <pre data-embed="%JAVA_EXAMPLES%/E03_Languages.java"
+      <pre data-embed="../../build-gradle/java-examples/E03_Languages.java"
            data-fragment="custom-english-resources"></pre>
       <figcaption>
         Loading English language resources from a class-relative classpath location.

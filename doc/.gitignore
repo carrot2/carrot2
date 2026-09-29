@@ -1,7 +1,6 @@
 /node_modules/
 /.idea/
-/.cache/
-/public/
+/_site/
 /src/descriptors/
 
 .pnp.*

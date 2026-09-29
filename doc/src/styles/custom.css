@@ -1,13 +1,12 @@
-@import "vs-code.css";
-
-body,
-body.light {
-  --info-background-color: hsla(90, 80%, 95%, 1.0);
-  --info-border-color: hsla(90, 70%, 50%, 1.0);
-}
-body.dark {
-  --info-background-color: hsla(90, 30%, 24%, 1.0);
-  --info-border-color: hsla(90, 100%, 13%, 1.0);
+:root {
+  --info-background-color: light-dark(
+    hsla(90, 80%, 95%, 1),
+    hsla(90, 30%, 24%, 1)
+  );
+  --info-border-color: light-dark(
+    hsla(90, 70%, 50%, 1),
+    hsla(90, 100%, 13%, 1)
+  );
 }
 
 article .info {
@@ -18,15 +17,6 @@ article .info {
 figure.round .preview,
 figure.round img {
   border-radius: calc(0.125 * var(--leading));
-}
-
-body.dark figure .preview.light,
-body.dark figure img.light {
-  display: none;
-}
-body.light figure .preview.dark,
-body.light figure img.dark {
-  display: none;
 }
 
 .logo > a {
@@ -146,18 +136,17 @@ footer .copyright {
   margin: 2em auto;
   border: none;
 
-  --spreadsheet-cell-border-color: #d4d4d4;
-  --spreadsheet-header-border-color: #999999;
-  --spreadsheet-header-background-color: #e6e6e6;
-  --spreadsheet-triangle-color: #b4b4b4;
-  --spreadsheet-highlight-background-color: hsl(80, 70%, 95%);
-}
-.dark .spreadsheet {
-  --spreadsheet-cell-border-color: hsla(0, 0%, 100%, 0.10);
-  --spreadsheet-header-border-color: hsla(0, 0%, 100%, 0.20);
-  --spreadsheet-header-background-color: hsla(207, 28%, 1%, 0.3);
-  --spreadsheet-triangle-color: hsla(207, 28%, 20%, 1);
-  --spreadsheet-highlight-background-color: hsl(80, 60%, 15%);
+  --spreadsheet-cell-border-color: light-dark(#d4d4d4, hsla(0, 0%, 100%, 0.1));
+  --spreadsheet-header-border-color: light-dark(#999999, hsla(0, 0%, 100%, 0.2));
+  --spreadsheet-header-background-color: light-dark(
+    #e6e6e6,
+    hsla(207, 28%, 1%, 0.3)
+  );
+  --spreadsheet-triangle-color: light-dark(#b4b4b4, hsla(207, 28%, 20%, 1));
+  --spreadsheet-highlight-background-color: light-dark(
+    hsl(80, 70%, 95%),
+    hsl(80, 60%, 15%)
+  );
 }
 .spreadsheet th,
 .spreadsheet td {
@@ -204,12 +193,6 @@ ol > li > ol {
 }
 
 
-time:after {
-  content: attr(datetime);
-  font-size: var(--small-font-size);
-  color: var(--text-color-light);
-}
-
 .glob-examples .explanation {
   display: block;
   color: var(--text-color-light);
@@ -255,60 +238,35 @@ dd label:first-of-type:before {
 
 dd label.java-api:after {
   content: "Java API";
-  color: hsl(359, 45%, 60%);
-  border-color: hsl(359, 45%, 75%);
-  background-color: hsla(359, 98%, 36%, 0.1);
-}
-.dark dd label.java-api:after {
-  color: hsl(359, 70%, 70%);
-  border-color: hsl(359, 55%, 30%);
-  background-color: hsla(359, 98%, 36%, 0.2);
+  color: light-dark(hsl(359, 45%, 60%), hsl(359, 70%, 70%));
+  border-color: light-dark(hsl(359, 45%, 75%), hsl(359, 55%, 30%));
+  background-color: light-dark(hsla(359, 98%, 36%, 0.1), hsla(359, 98%, 36%, 0.2));
 }
 
 dd label.rest-api:after {
   content: "REST API";
-  color: hsl(35, 45%, 45%);
-  border-color: hsl(35, 45%, 75%);
-  background-color: hsla(35, 50%, 55%, 0.1);
-}
-.dark dd label.rest-api:after {
-  color: hsl(35, 70%, 60%);
-  border-color: hsl(35, 60%, 30%);
-  background-color: hsla(35, 89%, 62%, 0.1);
+  color: light-dark(hsl(35, 45%, 45%), hsl(35, 70%, 60%));
+  border-color: light-dark(hsl(35, 45%, 75%), hsl(35, 60%, 30%));
+  background-color: light-dark(hsla(35, 50%, 55%, 0.1), hsla(35, 89%, 62%, 0.1));
 }
 
 dd label.frontend:after {
   content: "Front-end";
-  color: hsl(131, 45%, 45%);
-  border-color: hsl(131, 45%, 75%);
-  background-color: hsla(131, 50%, 55%, 0.1);
-}
-.dark dd label.frontend:after {
-  color: hsl(131, 65%, 55%);
-  border-color: hsl(131, 55%, 25%);
-  background-color: hsla(131, 89%, 62%, 0.1);
+  color: light-dark(hsl(131, 45%, 45%), hsl(131, 65%, 55%));
+  border-color: light-dark(hsl(131, 45%, 75%), hsl(131, 55%, 25%));
+  background-color: light-dark(hsla(131, 50%, 55%, 0.1), hsla(131, 89%, 62%, 0.1));
 }
 
 dd label.build:after {
   content: "Build";
-  color: hsl(185, 40%, 45%);
-  border-color: hsl(185, 35%, 70%);
-  background-color: hsla(185, 50%, 55%, 0.1);
-}
-.dark dd label.build:after {
-  color: hsl(185, 100%, 45%);
-  border-color: hsl(185, 100%, 23%);
-  background-color: hsla(185, 100%, 23%, 0.2);
+  color: light-dark(hsl(185, 40%, 45%), hsl(185, 100%, 45%));
+  border-color: light-dark(hsl(185, 35%, 70%), hsl(185, 100%, 23%));
+  background-color: light-dark(hsla(185, 50%, 55%, 0.1), hsla(185, 100%, 23%, 0.2));
 }
 
 dd label.dependencies:after {
   content: "Dependencies";
-  color: hsl(230, 40%, 45%);
-  border-color: hsl(230, 35%, 70%);
-  background-color: hsla(230, 50%, 55%, 0.1);
-}
-.dark dd label.dependencies:after {
-  color: hsl(230, 80%, 70%);
-  border-color: hsl(230, 80%, 40%);
-  background-color: hsla(230, 80%, 23%, 0.2);
+  color: light-dark(hsl(230, 40%, 45%), hsl(230, 80%, 70%));
+  border-color: light-dark(hsl(230, 35%, 70%), hsl(230, 80%, 40%));
+  background-color: light-dark(hsla(230, 50%, 55%, 0.1), hsla(230, 80%, 23%, 0.2));
 }

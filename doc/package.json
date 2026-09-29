@@ -1,27 +1,27 @@
 {
-  "name": "gatsby-starter-apidocs",
+  "name": "carrot2-doc",
   "private": true,
   "description": "Carrot2 manual.",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
-    "build": "gatsby build --prefix-paths",
-    "clean": "gatsby clean",
-    "develop": "gatsby develop",
-    "start": "npm run develop",
-    "serve": "gatsby serve",
-    "test": "html-validate src/content/*.html"
-  },
-  "resolutions": {
-    "@babel/traverse": "7.23.2"
+    "build": "eleventy",
+    "dev": "eleventy --serve --incremental --quiet",
+    "preview": "http-server _site -p 3000 -c-1",
+    "clean": "rm -rf _site",
+    "check:html": "html-validate src/content/*.html",
+    "check:links": "link-checker --disable-external=true src/content",
+    "check:external-links": "link-checker --http-redirects=1 --disable-external=false src/content"
   },
   "dependencies": {
-    "@carrotsearch/gatsby-theme-apidocs": "4.0.2",
-    "gatsby": "4.22.0",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "@carrotsearch/eleventy-apidocs": "^0.1.18",
+    "escape-html": "1.0.3"
   },
   "devDependencies": {
-    "html-validate": "4.1.0"
+    "@11ty/eleventy": "^3.0.0",
+    "html-validate": "7.12.2",
+    "http-server": "^14.1.1",
+    "link-checker": "dweiss/link-checker#de006213ddbe3d892d998c9e14dd5465aa71206c"
   },
-  "packageManager": "yarn@3.1.1"
+  "packageManager": "yarn@3.5.0"
 }
