@@ -1,0 +1,69 @@
+/* These stylesheets were written for @carrotsearch/gatsby-theme-apidocs. Map its variable
+   names onto the eleventy-apidocs design tokens (the new theme switches light/dark via the
+   [data-theme] attribute or prefers-color-scheme, not body classes). */
+:root {
+  --text-color-light: var(--fg-muted);
+  --text-color-muted: var(--fg-muted);
+  --text-color-inverted: var(--bg);
+
+  --small-font-size: var(--small);
+  --text-font-family: var(--font-body);
+  --monospace-font-family: var(--font-mono);
+  --heading-font-family: var(--font-body);
+  --hr-color: var(--rule);
+  --hr-color-muted: var(--rule-faint);
+}
+
+/* Show the image variant matching the active theme. */
+:root[data-theme="dark"] figure .preview.light,
+:root[data-theme="dark"] figure img.light,
+:root[data-theme="light"] figure .preview.dark,
+:root[data-theme="light"] figure img.dark {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) figure .preview.light,
+  :root:not([data-theme]) figure img.light {
+    display: none;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) figure .preview.dark,
+  :root:not([data-theme]) figure img.dark {
+    display: none;
+  }
+}
+
+/* The parameter outline is pre-tokenized markup (see src/js/attributes-outline.js),
+   rendered in a plain <pre> and styled here like the theme's code boxes. */
+.attribute-outline {
+  display: block;
+  margin-block: var(--leading);
+  margin-inline: calc(-1 * var(--leading));
+  padding: var(--leading);
+  border-radius: 0.5em;
+  overflow-x: auto;
+  background: var(--code-bg);
+  color: var(--code-fg);
+  font-family: var(--font-mono);
+  font-size: var(--small);
+  line-height: var(--leading);
+}
+
+.attribute-outline .token.property a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+}
+
+.attribute-outline .token.string,
+.attribute-outline .token.number,
+.attribute-outline .token.keyword {
+  opacity: 0.8;
+}
+
+.attribute-outline .token.punctuation {
+  opacity: 0.6;
+}

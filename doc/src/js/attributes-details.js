@@ -1,6 +1,6 @@
-const escapeForHtml = require('escape-html');
+import escapeForHtml from "escape-html";
 
-const attributeOutlineHtml = require("./attributes-outline").attributeOutlineHtml;
+import { attributeOutlineHtml } from "./attributes-outline.js";
 
 const depthFirstAttributes = descriptor => {
   const collect = (descriptor, target) => {
@@ -45,7 +45,7 @@ const descriptionText = attribute => {
   }
 };
 
-const implementationDetailsHtml = implementation => (`<li>
+const implementationDetailsHtml = implementation => `<li>
   <p><code>${implementation.name}</code></p>
   
   <p>
@@ -55,7 +55,7 @@ const implementationDetailsHtml = implementation => (`<li>
   ${childAttributesOutline(implementation)}
   
   ${allAttributeDetailsHtml(implementation)}
-</li>`);
+</li>`;
 
 const childAttributesOutline = descriptor => {
   if (Object.keys(descriptor.attributes).length > 0) {
@@ -65,15 +65,16 @@ const childAttributesOutline = descriptor => {
   }
 };
 
-const allImplementationDetailsHtml = attribute => (`<p>Available implementations:</p>
+const allImplementationDetailsHtml =
+  attribute => `<p>Available implementations:</p>
 <ol>
 ${Object.keys(attribute.implementations)
-    .map(k => attribute.implementations[k])
-    .map(implementationDetailsHtml)
-    .join("")}
-</ol>`);
+  .map(k => attribute.implementations[k])
+  .map(implementationDetailsHtml)
+  .join("")}
+</ol>`;
 
-const attributeDetailsHtml = (attribute) => {
+const attributeDetailsHtml = attribute => {
   const name = attribute.pathRest.split(".").pop();
 
   let implementationsHtml = "";
@@ -91,14 +92,14 @@ const attributeDetailsHtml = (attribute) => {
     }
   }
 
-  // We need to double-escape the content due to HTML escaping mess in cheerio:
-  // https://github.com/cheeriojs/cheerio/issues/1198. I'll clean this up once
-  // they make the fixed 1.0.0 release.
-  const constraintsHtml = attribute.constraints ?
-      `<dt>Constraints</dt><dd>${escapeForHtml(escapeForHtml(attribute.constraints.join(" and ")))}</dd>`
-      : "";
+  const constraintsHtml = attribute.constraints
+    ? `<dt>Constraints</dt><dd>${escapeForHtml(
+        attribute.constraints.join(" and ")
+      )}</dd>`
+    : "";
 
-  return `<section id="${attribute.id}" class="api attribute">
+  // data-toc="omit": hundreds of parameters would flood the page outline.
+  return `<section id="${attribute.id}" class="api attribute" data-toc="omit">
   <h3>${name}</h3>
   
   <dl class="compact narrow">
@@ -120,11 +121,11 @@ const attributeDetailsHtml = (attribute) => {
   ${outline}
   
   ${implementationsHtml}
-</section>`
+</section>`;
 };
 
 const allAttributeDetailsHtml = descriptor => {
   return depthFirstAttributes(descriptor).map(attributeDetailsHtml).join("");
 };
 
-exports.attributeDetailsHtml = allAttributeDetailsHtml;
+export { allAttributeDetailsHtml as attributeDetailsHtml };

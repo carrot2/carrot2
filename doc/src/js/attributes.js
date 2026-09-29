@@ -1,40 +1,35 @@
-const path = require("path");
-const fs = require("fs");
+import fs from "node:fs/promises";
+import path from "node:path";
 
-exports.isContainer = descriptor => {
-  return false;
-};
+import { attributeOutlineHtml } from "./attributes-outline.js";
+import { attributeDetailsHtml } from "./attributes-details.js";
 
-const attributeOutlineHtml = require("./attributes-outline").attributeOutlineHtml;
-const attributeDetailsHtml = require("./attributes-details").attributeDetailsHtml;
+/**
+ * Replaces <div data-section="outline|details" data-parameters="descriptor.json">
+ * with the rendered parameter outline or details. The descriptor path is relative
+ * to the directory of the page.
+ */
+export const create = () => async ($, ctx) => {
+  for (const el of $("div[data-parameters]").toArray()) {
+    const $el = $(el);
+    const file = path.resolve(
+      ctx.sourceDir || ".",
+      $el.attr("data-parameters")
+    );
+    const spec = JSON.parse(await fs.readFile(file, "utf8"));
 
-exports.attributeTransformer = ($, {dir, variables, reporter, loadEmbeddedContent}) => {
-  $("div[data-parameters]")
-      .replaceWith((i, el) => {
-        const $el = $(el);
-        const rawContent = loadEmbeddedContent($el.data("parameters"), dir, variables, reporter);
-        if (rawContent === undefined) {
-          return "";
-        }
-        const spec = JSON.parse(rawContent);
-
-        const section = $el.data("section");
-        switch (section) {
-          case "outline":
-            return attributeOutlineHtml(spec);
-
-          case "details":
-            return attributeDetailsHtml(spec);
-
-          default:
-            reporter.warn(`Unknown attribute section: ${section}.`);
-        }
-
-        return "";
-      });
-  return $;
-};
-
-exports.attributeOutlineHtml = spec => {
-  return attributeOutlineHtml(spec) + attributeDetailsHtml(spec);
+    const section = $el.attr("data-section");
+    let html = "";
+    switch (section) {
+      case "outline":
+        html = attributeOutlineHtml(spec);
+        break;
+      case "details":
+        html = attributeDetailsHtml(spec);
+        break;
+      default:
+        console.warn(`[carrot2-doc] Unknown attribute section: ${section}.`);
+    }
+    $el.replaceWith(html);
+  }
 };

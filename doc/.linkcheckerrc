@@ -1,0 +1,8 @@
+{
+  "allow-hash-href": true,
+  "url-ignore": [
+    "https?://(127|localhost)",
+    "^(lingo|stc|kmeans)-parameters\\.html#"
+  ],
+  "_comment": "Anchors on the *-parameters.html pages are generated at build time (validated by the built-site link check)."
+}

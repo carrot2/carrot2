@@ -6,15 +6,19 @@ dependencies {
   descriptors project(path: ":infra:docattrs", configuration: "descriptors")
 }
 
+node {
+  // eleventy-apidocs requires Node >= 20.11; the shared catalog version is older.
+  version = "24.11.0"
+}
+
 ext {
   descriptorsDir = file("src/descriptors")
 
   // Input sources (for incremental checks).
-  jsSources = fileTree('src') + fileTree('static')
+  jsSources = fileTree('src') + fileTree('static') + files('eleventy.config.js')
 
-  // Gatsby has a non-configurable output folder, sigh.
-  // https://github.com/gatsbyjs/gatsby/issues/1878
-  jsBuildDir.set(file("public"))
+  // Eleventy's default output folder.
+  jsBuildDir.set(file("_site"))
 }
 
 task descriptors(type: Sync) {
@@ -22,8 +26,46 @@ task descriptors(type: Sync) {
   into descriptorsDir
 }
 
-yarnBuild.dependsOn descriptors
-
-clean {
-  delete ".cache"
+// Files embedded by the manual must live under doc/ (eleventy-apidocs refuses embed
+// paths that escape the project root), so sources from other projects are staged
+// under the build directory. Content refers to these copies (../../build-gradle/...).
+task copyJavaExamples(type: Sync) {
+  from rootProject.file("core-examples/src/test/java/org/carrot2/examples")
+  into layout.buildDirectory.dir("java-examples")
 }
+
+task copyDcsExamples(type: Sync) {
+  from rootProject.file("dcs/examples/src/main/java/org/carrot2/dcs/examples")
+  into layout.buildDirectory.dir("dcs-examples")
+}
+
+task copyCoreSources(type: Sync) {
+  from(rootProject.file("core/src/main/java"), {
+    include "org/carrot2/clustering/Document.java"
+    include "org/carrot2/language/StopwordFilter.java"
+    include "org/carrot2/language/LabelFilter.java"
+  })
+  into layout.buildDirectory.dir("core")
+}
+
+// Staged sources (task outputs used as inputs imply the dependencies).
+yarnBuild.inputs.files(descriptors, copyJavaExamples, copyDcsExamples, copyCoreSources)
+
+task checkHtml(type: YarnTask) {
+  group = 'verification'
+  description = 'Runs yarn check:html'
+  dependsOn yarnInstall
+  args = ['check:html']
+}
+
+task checkLinks(type: YarnTask) {
+  group = 'verification'
+  description = 'Runs yarn check:links'
+  dependsOn yarnInstall
+  args = ['check:links']
+}
+
+check.dependsOn checkHtml, checkLinks
+// The built-site link check runs as part of the full build (assemble itself does not
+// trigger yarnBuild; the yarnOutput artifact is built on demand by its consumers).
+check.dependsOn yarnBuild
