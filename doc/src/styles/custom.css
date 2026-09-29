@@ -22,10 +22,15 @@ figure.round img {
 .logo > a {
   text-decoration: none;
   display: flex;
+  align-items: center;
+  gap: 0.3em;
+  /* Brand navy on light backgrounds, plain text color on dark (as in the previous theme). */
+  color: light-dark(#1d2b4e, var(--fg));
 }
 
 .logo {
   --logo-height: 1.2rem;
+  padding-top: 2pt;
 }
 @media (min-width: 768px) {
   .logo {
@@ -35,20 +40,16 @@ figure.round img {
 
 .logo svg {
   height: var(--logo-height);
+  /* The SVG has no fills of its own; follow the logo color. */
+  fill: currentColor;
 }
 .logo span {
-  font-size: var(--logo-height);
+  font-size: calc(0.85 * var(--logo-height));
   line-height: var(--logo-height);
-  position: static;
-}
-@media (min-width: 768px) {
-  .logo svg,
-  .logo span {
-    font-size: var(--logo-height);
-  }
-  .logo span {
-    line-height: var(--logo-height);
-  }
+  opacity: 0.7;
+  /* Sit the label on the logotype's baseline, which lies ~8% of the SVG height above its bottom edge. */
+  position: relative;
+  top: calc(0.078 * var(--logo-height));
 }
 
 footer .about .logo {
