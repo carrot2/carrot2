@@ -19,7 +19,7 @@ greclipse = "4.26"
 proguard = "7.10.0"
 
 [libraries]
-bytebuddy = "net.bytebuddy:byte-buddy:1.18.12"
+bytebuddy = "net.bytebuddy:byte-buddy:1.18.14"
 assertj = "org.assertj:assertj-core:4.0.0-M1"
 carrotsearch-console-formatters = { module = "com.carrotsearch.console:formatters", version.ref = "carrotsearch-console" }
 carrotsearch-console-launcher = { module = "com.carrotsearch.console:launcher", version.ref = "carrotsearch-console" }
@@ -27,9 +27,9 @@ carrotsearch-console-testing = { module = "com.carrotsearch.console:testing", ve
 carrotsearch-hppc = "com.carrotsearch:hppc:0.12.0"
 carrotsearch-procfork = "com.carrotsearch:procfork:1.0.6"
 carrotsearch-progresso-jvmversion = "com.carrotsearch.progresso:progresso-jvmversion:1.9.0"
-commons-codec = "commons-codec:commons-codec:1.19.0"
+commons-codec = "commons-codec:commons-codec:1.22.1"
 commons-compress = "org.apache.commons:commons-compress:1.28.0"
-commons-lang3 = "org.apache.commons:commons-lang3:3.20.0"
+commons-lang3 = "org.apache.commons:commons-lang3:3.21.0"
 commons-text = "org.apache.commons:commons-text:1.15.0"
 httpclient = "org.apache.httpcomponents:httpclient:4.5.14"
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
