@@ -14,7 +14,7 @@
     "check:external-links": "link-checker --http-redirects=1 --disable-external=false src/content"
   },
   "dependencies": {
-    "@carrotsearch/eleventy-apidocs": "^0.1.18",
+    "@carrotsearch/eleventy-apidocs": "^0.2.0",
     "escape-html": "1.0.3"
   },
   "devDependencies": {
