@@ -1701,10 +1701,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@carrotsearch/circles@npm:2.3.10":
-  version: 2.3.10
-  resolution: "@carrotsearch/circles@npm:2.3.10"
-  checksum: 55a16576b156b210dbe22bfe633bbfa71a13ee3f175aa4188a81d6856da0e331c6f89b837033dc14e8f4938f1f254747fb23844af1c667dcdfb6a97cbebbe258
+"@carrotsearch/circles@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@carrotsearch/circles@npm:3.0.0"
+  checksum: e70a0db7f29786d70ad91ef74e29db72bd78323da5bb24e182bcb36335bb7a2f9d821eec0c768b157d80b50435aa4cd71e6dde9961fc5acfd46a86789e342b2e
   languageName: node
   linkType: hard
 
@@ -1729,7 +1729,7 @@ __metadata:
   resolution: "@carrotsearch/ui@workspace:ui"
   dependencies:
     "@blueprintjs/core": 3.50.4
-    "@carrotsearch/circles": 2.3.10
+    "@carrotsearch/circles": 3.0.0
     "@carrotsearch/foamtree": 3.6.1
     "@carrotsearch/theme": 0.1.0
     "@risingstack/react-easy-state": 7.0.0-alpha.1
@@ -3357,7 +3357,7 @@ __metadata:
   resolution: "app@workspace:app"
   dependencies:
     "@blueprintjs/core": 3.51.3
-    "@carrotsearch/circles": 2.3.10
+    "@carrotsearch/circles": 3.0.0
     "@carrotsearch/foamtree": 3.6.1
     "@carrotsearch/ui": 0.1.0
     "@craco/craco": 6.4.2
