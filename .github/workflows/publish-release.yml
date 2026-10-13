@@ -1,5 +1,5 @@
 name: Publish release
-run-name: "Published release: ${{ inputs.release }}, by ${{ github.actor }}, #${{ github.run_number }}" 
+run-name: "Published release: ${{ inputs.release }}, by ${{ github.actor }}, #${{ github.run_number }}"
 
 on:
   workflow_dispatch:
@@ -24,17 +24,30 @@ on:
       publish-docs:
         description: "Publish static documentation to carrot2.github.io"
         type: boolean
-        default: true 
+        default: true
 
 env:
   RELEASE_ARTIFACTS_DIR: './release'
   DRY_RUN: "${{ inputs.dry-run == true && '--dry-run' || '' }}"
 
+# The documentation is pushed to carrot2.github.io with a dedicated token; the workflow token
+# only needs to read this repository.
+permissions:
+  contents: read
+
+# Publications are serialized; a run in progress is never cancelled.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 jobs:
   deploy:
+    name: Publish the release
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment: production
+    permissions:
+      contents: read
 
     steps:
       - name: Download release artifacts
@@ -47,45 +60,57 @@ jobs:
       - name: Extract metadata from build.properties
         id: build-properties
         run: |
-          cat ${{ env.RELEASE_ARTIFACTS_DIR }}/build.properties
-          PRODUCT_VERSION=`cat ${{ env.RELEASE_ARTIFACTS_DIR }}/build.properties | grep "product\.version" | cut -d= -f2`
+          cat "${RELEASE_ARTIFACTS_DIR}/build.properties"
+          PRODUCT_VERSION=$(grep "product\.version" "${RELEASE_ARTIFACTS_DIR}/build.properties" | cut -d= -f2)
           echo "PRODUCT_VERSION=${PRODUCT_VERSION}" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/checkout@v7
+      # Credentials are persisted deliberately: the last step pushes to carrot2.github.io with
+      # this token.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         if: ${{ inputs.publish-docs }}
-        with:
+        with: # zizmor: ignore[artipacked]
           repository: carrot2/carrot2.github.io.git
           ref: 'master'
           path: carrot2.github.io
-          token:  ${{ secrets.GH_ACCESS_TOKEN_CARROT2_GITHUB_IO }}
+          token: ${{ secrets.GH_ACCESS_TOKEN_CARROT2_GITHUB_IO }}
 
       - name: Publish static documentation
         if: ${{ inputs.publish-docs }}
+        # Passed through the environment rather than expanded into the script, see
+        # https://docs.zizmor.sh/audits/#template-injection
+        env:
+          PRODUCT_VERSION: ${{ steps.build-properties.outputs.PRODUCT_VERSION }}
         run: |
-          pushd ${{ env.RELEASE_ARTIFACTS_DIR }}
-          unzip -q carrot2-${{steps.build-properties.outputs.PRODUCT_VERSION}}.zip
+          pushd "${RELEASE_ARTIFACTS_DIR}"
+          unzip -q "carrot2-${PRODUCT_VERSION}.zip"
           popd
-          
+
       - name: Add and commit a new version to secure.carrotsearch.com
         if: ${{ inputs.publish-docs == true }}
+        # Passed through the environment rather than expanded into the script, see
+        # https://docs.zizmor.sh/audits/#template-injection
+        env:
+          PRODUCT_VERSION: ${{ steps.build-properties.outputs.PRODUCT_VERSION }}
+          UPDATE_LATEST_SYMLINK: ${{ inputs.updateLatestSymlink }}
+          DRY_RUN_MODE: ${{ inputs.dry-run }}
         run: |
-          RELEASE_DIR=`realpath ${{ env.RELEASE_ARTIFACTS_DIR }}/carrot2-${{steps.build-properties.outputs.PRODUCT_VERSION}}`
+          RELEASE_DIR=$(realpath "${RELEASE_ARTIFACTS_DIR}/carrot2-${PRODUCT_VERSION}")
           pushd carrot2.github.io
           git config --global user.email "gh-action@carrotsearch.com"
           git config --global user.name "Carrot2 publishing workflow (gh action)"
 
-          rm -rf release/${{steps.build-properties.outputs.PRODUCT_VERSION}}/
-          mkdir  release/${{steps.build-properties.outputs.PRODUCT_VERSION}}/
+          rm -rf "release/${PRODUCT_VERSION}/"
+          mkdir  "release/${PRODUCT_VERSION}/"
 
-          cp -R $RELEASE_DIR/dcs/web/doc     release/${{steps.build-properties.outputs.PRODUCT_VERSION}}/
-          cp -R $RELEASE_DIR/dcs/web/javadoc release/${{steps.build-properties.outputs.PRODUCT_VERSION}}/
+          cp -R "$RELEASE_DIR/dcs/web/doc"     "release/${PRODUCT_VERSION}/"
+          cp -R "$RELEASE_DIR/dcs/web/javadoc" "release/${PRODUCT_VERSION}/"
 
           cat >> /tmp/index.html << EOF
             <!DOCTYPE html>
             <html>
               <head>
               	<meta charset="UTF-8">
-                <meta http-equiv="refresh" content="0; URL=../${{steps.build-properties.outputs.PRODUCT_VERSION}}/doc/">
+                <meta http-equiv="refresh" content="0; URL=../${PRODUCT_VERSION}/doc/">
               </head>
 
               <body>
@@ -94,15 +119,14 @@ jobs:
             </html>
           EOF
 
-          if "${{ inputs.updateLatestSymlink }}"; then
+          if [ "${UPDATE_LATEST_SYMLINK}" = "true" ]; then
             mv /tmp/index.html release/latest/index.html
             git diff release/latest/index.html
           fi
 
           git add -A .
-          git commit -am "Carrot2 ${{steps.build-properties.outputs.PRODUCT_VERSION}} (gh publishing action)"
+          git commit -am "Carrot2 ${PRODUCT_VERSION} (gh publishing action)"
 
-          if "${{ inputs.dry-run == false }}"; then
+          if [ "${DRY_RUN_MODE}" != "true" ]; then
             git push
           fi
-

@@ -1,6 +1,7 @@
 name: Build, test and validate (reusable workflow)
 
-on:
+# Concurrency is set by the calling workflow.
+on: # zizmor: ignore[concurrency-limits]
   workflow_call:
     inputs:
       gradle-options:
@@ -18,21 +19,35 @@ on:
       jdk-version:
         type: string
         required: true
-        description: "JDK version to use." 
+        description: "JDK version to use."
 
       run-tests:
         description: "Run tests"
         type: boolean
         default: true
 
+    secrets:
+      GH_ACCESS_TOKEN:
+        description: "Token used to clone the repository and its submodules."
+        required: true
+
+# The build only reads the repository.
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     name: test and assemble (JDK ${{ inputs.jdk-version }} on ${{ inputs.os }})
     runs-on: ${{ inputs.os }}
     timeout-minutes: 30
+    permissions:
+      contents: read
 
     env:
       CI: true
+      # Passed through the environment rather than expanded into the script, see
+      # https://docs.zizmor.sh/audits/#template-injection
+      GRADLE_OPTIONS: ${{ inputs.gradle-options }}
 
     steps:
       - uses: carrotsearch/infra-public/.github/actions/prepare-git-clone@master
@@ -44,15 +59,15 @@ jobs:
           jdk-version: ${{ inputs.jdk-version }}
 
       - name: Validation checks (gradle check -x test)
-        run: ./gradlew --max-workers 4 check -x test "-Pbuildinfra.taskTimes=true" ${{ inputs.gradle-options }}
+        run: ./gradlew --max-workers 4 check -x test "-Pbuildinfra.taskTimes=true" ${GRADLE_OPTIONS}
 
       - name: Tests and assembly (./gradlew ... check)
         if: ${{ inputs.run-tests }}
-        run: ./gradlew --max-workers 4 check assemble "-Pbuildinfra.taskTimes=true" ${{ inputs.gradle-options }}
+        run: ./gradlew --max-workers 4 check assemble "-Pbuildinfra.taskTimes=true" ${GRADLE_OPTIONS}
 
       - name: Store failed test outputs
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: failed-test-outputs-jdk${{ inputs.jdk-version }}-os${{ inputs.os }}
           path: '**/OUTPUT-*.txt'
