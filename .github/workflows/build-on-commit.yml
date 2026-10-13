@@ -1,6 +1,6 @@
 name: Build and test (on commits and PRs)
 
-on: 
+on:
   workflow_dispatch:
     # Allow manual dispatch.
 
@@ -13,6 +13,15 @@ on:
       - master
       - bugfix/4.4.x
 
+# The build only reads the repository.
+permissions:
+  contents: read
+
+# A newer push to the same branch or pull request supersedes a run still in progress.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   tests:
     name: run checks
@@ -24,9 +33,10 @@ jobs:
         os: [ ubuntu-latest ]
         jdk-version: [ '21' ]
 
-    uses: ./.github/workflows/build-and-test.yml
-    secrets: inherit
+    uses: $/.github/workflows/build-and-test.yml
     with:
       gradle-options:
       os: ${{ matrix.os }}
       jdk-version: ${{ matrix.jdk-version }}
+    secrets:
+      GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}

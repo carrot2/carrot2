@@ -8,6 +8,15 @@ on:
     # But typically run on this schedule.
     - cron: '0 5 * * *'
 
+# The build only reads the repository.
+permissions:
+  contents: read
+
+# Nightly runs are serialized; a run in progress is never cancelled.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 jobs:
   tests:
     name: run full checks
@@ -18,9 +27,10 @@ jobs:
         os: [ ubuntu-latest ]
         jdk-version: [ '21', '25' ]
 
-    uses: ./.github/workflows/build-and-test.yml
-    secrets: inherit
+    uses: $/.github/workflows/build-and-test.yml
     with:
       gradle-options: '"-Ptests.slow=true" "-Ptests.nightly=true"'
       os: ${{ matrix.os }}
       jdk-version: ${{ matrix.jdk-version }}
+    secrets:
+      GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}

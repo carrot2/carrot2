@@ -7,6 +7,8 @@ updates:
     schedule:
       interval: "weekly"
     labels: [dependencies]
+    cooldown:
+      default-days: 7
     groups:
       github-actions:
         patterns: ["*"]
@@ -19,7 +21,8 @@ updates:
     commit-message:
       prefix: deps(java)
     labels: [dependencies]
+    cooldown:
+      default-days: 7
     groups:
       java-deps:
         patterns: ["*"]
-
