@@ -7,9 +7,9 @@ node = "18.18.2"
 yarn = "1.22.19"
 carrotsearch-console = "1.4.4"
 jackson = "2.22.3"
-jetty = "12.1.13"
+jetty = "12.1.14"
 log4j = "2.26.1"
-lucene = "10.5.1"
+lucene = "10.5.2"
 # @keep This is the minimum required Java version.
 minJava = "21"
 # @keep This is GJF version for spotless/ tidy.
