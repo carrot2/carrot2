@@ -50,7 +50,7 @@ jobs:
 
     uses: $/.github/workflows/build-and-test.yml
     with:
-      gradle-options: '"-Ptests.slow=true"'
+      gradle-options: '-Ptests.slow=true'
       os: ${{ matrix.os }}
       jdk-version: ${{ matrix.jdk-version }}
       run-tests: ${{ inputs.run-tests }}
