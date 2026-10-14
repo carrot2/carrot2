@@ -6,7 +6,7 @@ on: # zizmor: ignore[concurrency-limits]
     inputs:
       gradle-options:
         type: string
-        description: "Any extra options to be passed to gradle"
+        description: "Any extra options to be passed to gradle (split on whitespace, do not quote)"
         required: false
         default: ""
 
