@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 
 import { themeStore } from "@carrotsearch/ui/ThemeSwitch.js";
 import { Circles } from "@carrotsearch/ui/visualizations/Circles.js";
+import { branding } from "@carrot2/config/branding.js";
 
 import { clusterStore } from "../../store/services.js";
 import {
@@ -82,7 +83,10 @@ export const PieChart = ({ visible, configStore, implRef }) => {
     dataObject
   );
 
-  const [options, setOptions] = useState({});
+  // The license key is only passed at embedding: setting it again would reload the model.
+  const [options, setOptions] = useState({
+    licenseKey: branding.circlesLicenseKey
+  });
   const theme = themeStore.theme;
   useEffect(() => {
     setOptions(

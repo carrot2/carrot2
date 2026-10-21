@@ -5,7 +5,7 @@
   "homepage": "./",
   "dependencies": {
     "@blueprintjs/core": "3.51.3",
-    "@carrotsearch/circles": "3.0.0",
+    "@carrotsearch/circles": "3.1.1",
     "@carrotsearch/foamtree": "3.6.2",
     "@carrotsearch/ui": "0.1.0",
     "@risingstack/react-easy-state": "7.0.0-alpha.1",
