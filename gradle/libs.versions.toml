@@ -6,7 +6,7 @@ node = "18.18.2"
 # @keep
 yarn = "1.22.19"
 carrotsearch-console = "1.4.4"
-jackson = "2.22.3"
+jackson = "2.22.4"
 jetty = "12.1.14"
 log4j = "2.26.1"
 lucene = "10.5.2"
@@ -19,7 +19,7 @@ greclipse = "4.26"
 proguard = "7.10.0"
 
 [libraries]
-bytebuddy = "net.bytebuddy:byte-buddy:1.18.14"
+bytebuddy = "net.bytebuddy:byte-buddy:1.18.15"
 assertj = "org.assertj:assertj-core:4.0.0-M1"
 carrotsearch-console-formatters = { module = "com.carrotsearch.console:formatters", version.ref = "carrotsearch-console" }
 carrotsearch-console-launcher = { module = "com.carrotsearch.console:launcher", version.ref = "carrotsearch-console" }
@@ -27,7 +27,7 @@ carrotsearch-console-testing = { module = "com.carrotsearch.console:testing", ve
 carrotsearch-hppc = "com.carrotsearch:hppc:0.12.0"
 carrotsearch-procfork = "com.carrotsearch:procfork:1.0.6"
 carrotsearch-progresso-jvmversion = "com.carrotsearch.progresso:progresso-jvmversion:1.9.0"
-commons-codec = "commons-codec:commons-codec:1.22.1"
+commons-codec = "commons-codec:commons-codec:1.23.0"
 commons-compress = "org.apache.commons:commons-compress:1.28.0"
 commons-lang3 = "org.apache.commons:commons-lang3:3.21.0"
 commons-text = "org.apache.commons:commons-text:1.15.0"
