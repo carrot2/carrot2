@@ -5,6 +5,7 @@ carrot2 = "4.8.7-SNAPSHOT"
 node = "18.18.2"
 # @keep
 yarn = "1.22.19"
+carrotsearch-progresso = "2.0.0"
 carrotsearch-console = "1.5.0"
 jackson = "2.22.4"
 jetty = "12.1.14"
@@ -26,7 +27,8 @@ carrotsearch-console-launcher = { module = "com.carrotsearch.console:launcher", 
 carrotsearch-console-testing = { module = "com.carrotsearch.console:testing", version.ref = "carrotsearch-console" }
 carrotsearch-hppc = "com.carrotsearch:hppc:0.12.0"
 carrotsearch-procfork = "com.carrotsearch:procfork:1.0.6"
-carrotsearch-progresso-jvmversion = "com.carrotsearch.progresso:progresso-jvmversion:2.0.0"
+carrotsearch-progresso-jvmversion = { module = "com.carrotsearch.progresso:progresso-jvmversion", version.ref = "carrotsearch-progresso" }
+carrotsearch-progresso-core = { module = "com.carrotsearch.progresso:progresso", version.ref = "carrotsearch-progresso" }
 commons-codec = "commons-codec:commons-codec:1.23.0"
 commons-compress = "org.apache.commons:commons-compress:1.28.0"
 commons-lang3 = "org.apache.commons:commons-lang3:3.21.0"

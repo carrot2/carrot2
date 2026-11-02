@@ -15,6 +15,7 @@ dependencies {
   testImplementation libs.commons.compress
   testImplementation libs.carrotsearch.procfork
   testImplementation libs.carrotsearch.console.launcher
+  testImplementation libs.carrotsearch.progresso.core
 }
 
 test {
