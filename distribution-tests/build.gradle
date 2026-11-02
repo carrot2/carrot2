@@ -18,7 +18,15 @@ dependencies {
   testImplementation libs.carrotsearch.progresso.core
 }
 
+// progresso requires Java 25. This only affects the test code: the distribution
+// is forked using java from PATH/JAVA_HOME and doesn't ship progresso.
+tasks.withType(JavaCompile).configureEach {
+  javaCompiler = javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(25) }
+}
+
 test {
+  javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+
   dependsOn configurations.distributionZip
 
   shouldRunAfter ":core:test"
