@@ -5,12 +5,12 @@ carrot2 = "4.8.7-SNAPSHOT"
 node = "18.18.2"
 # @keep
 yarn = "1.22.19"
-carrotsearch-progresso = "2.0.0"
+carrotsearch-progresso = "2.0.1"
 carrotsearch-console = "1.5.0"
 jackson = "2.22.4"
 jetty = "12.1.14"
 log4j = "2.26.1"
-lucene = "10.5.2"
+lucene = "10.6.0"
 # @keep This is the minimum required Java version.
 minJava = "21"
 # @keep This is GJF version for spotless/ tidy.
@@ -20,7 +20,7 @@ greclipse = "4.26"
 proguard = "7.10.0"
 
 [libraries]
-bytebuddy = "net.bytebuddy:byte-buddy:1.18.16"
+bytebuddy = "net.bytebuddy:byte-buddy:1.18.17"
 assertj = "org.assertj:assertj-core:4.0.0-M1"
 carrotsearch-console-formatters = { module = "com.carrotsearch.console:formatters", version.ref = "carrotsearch-console" }
 carrotsearch-console-launcher = { module = "com.carrotsearch.console:launcher", version.ref = "carrotsearch-console" }
