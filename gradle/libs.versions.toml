@@ -5,12 +5,12 @@ carrot2 = "4.8.7-SNAPSHOT"
 node = "18.18.2"
 # @keep
 yarn = "1.22.19"
-carrotsearch-progresso = "2.0.0"
+carrotsearch-progresso = "2.0.1"
 carrotsearch-console = "1.5.0"
-jackson = "2.22.4"
-jetty = "12.1.14"
+jackson = "2.23.0"
+jetty = "12.1.15"
 log4j = "2.26.1"
-lucene = "10.5.2"
+lucene = "10.6.0"
 # @keep This is the minimum required Java version.
 minJava = "21"
 # @keep This is GJF version for spotless/ tidy.
@@ -20,18 +20,18 @@ greclipse = "4.26"
 proguard = "7.10.0"
 
 [libraries]
-bytebuddy = "net.bytebuddy:byte-buddy:1.18.16"
+bytebuddy = "net.bytebuddy:byte-buddy:1.18.17"
 assertj = "org.assertj:assertj-core:4.0.0-M1"
 carrotsearch-console-formatters = { module = "com.carrotsearch.console:formatters", version.ref = "carrotsearch-console" }
 carrotsearch-console-launcher = { module = "com.carrotsearch.console:launcher", version.ref = "carrotsearch-console" }
 carrotsearch-console-testing = { module = "com.carrotsearch.console:testing", version.ref = "carrotsearch-console" }
-carrotsearch-hppc = "com.carrotsearch:hppc:0.12.0"
+carrotsearch-hppc = "com.carrotsearch:hppc:0.13.0"
 carrotsearch-procfork = "com.carrotsearch:procfork:1.0.6"
 carrotsearch-progresso-jvmversion = { module = "com.carrotsearch.progresso:progresso-jvmversion", version.ref = "carrotsearch-progresso" }
 carrotsearch-progresso-core = { module = "com.carrotsearch.progresso:progresso", version.ref = "carrotsearch-progresso" }
 commons-codec = "commons-codec:commons-codec:1.23.0"
 commons-compress = "org.apache.commons:commons-compress:1.28.0"
-commons-lang3 = "org.apache.commons:commons-lang3:3.21.0"
+commons-lang3 = "org.apache.commons:commons-lang3:3.22.0"
 commons-text = "org.apache.commons:commons-text:1.15.0"
 httpclient = "org.apache.httpcomponents:httpclient:4.5.14"
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
