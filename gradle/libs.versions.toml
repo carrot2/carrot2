@@ -21,7 +21,7 @@ proguard = "7.10.0"
 
 [libraries]
 bytebuddy = "net.bytebuddy:byte-buddy:1.18.17"
-assertj = "org.assertj:assertj-core:4.0.0-M1"
+assertj = "org.assertj:assertj-core:3.27.7"
 carrotsearch-console-formatters = { module = "com.carrotsearch.console:formatters", version.ref = "carrotsearch-console" }
 carrotsearch-console-launcher = { module = "com.carrotsearch.console:launcher", version.ref = "carrotsearch-console" }
 carrotsearch-console-testing = { module = "com.carrotsearch.console:testing", version.ref = "carrotsearch-console" }
